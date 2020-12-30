@@ -4,7 +4,7 @@ const typecheck = '{global}'
 
 describe('guard(source, config)', () => {
   describe('guard(source, {filter: store})', () => {
-    it('return new event', () => {
+    it('return new event (should pass)', () => {
       const trigger: Event<number> = createEvent()
       const allow = createStore<boolean>(false)
 
@@ -16,7 +16,7 @@ describe('guard(source, config)', () => {
         "
       `)
     })
-    it('support any unit', () => {
+    it('support any unit (should pass)', () => {
       const trigger: Store<number[]> = createStore([1])
       const allow = createStore<boolean>(false)
 
@@ -28,7 +28,7 @@ describe('guard(source, config)', () => {
         "
       `)
     })
-    it('show error when store is not boolean', () => {
+    test('store is not boolean (should fail)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
@@ -46,7 +46,7 @@ describe('guard(source, config)', () => {
         "
       `)
     })
-    it('show error in case of result type mismatch', () => {
+    test('result type mismatch (should fail)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
@@ -69,7 +69,7 @@ describe('guard(source, config)', () => {
       `)
     })
     describe('support target field', () => {
-      it('allow to pass target field', () => {
+      it('allow to pass target field (should pass)', () => {
         const trigger: Event<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: Store<number> = createStore(0)
@@ -84,7 +84,7 @@ describe('guard(source, config)', () => {
           "
         `)
       })
-      it('show error in case of type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         const trigger: Event<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: Store<string> = createStore('no')
@@ -107,7 +107,7 @@ describe('guard(source, config)', () => {
     })
   })
   describe('guard(source, {filter: fn})', () => {
-    it('returns new event', () => {
+    it('returns new event (should pass)', () => {
       const trigger: Event<number> = createEvent()
       const result: Event<number> = guard(trigger, {filter: n => n > 0})
 
@@ -117,7 +117,7 @@ describe('guard(source, config)', () => {
         "
       `)
     })
-    it('show error in case of result type mismatch', () => {
+    test('result type mismatch (should fail)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
@@ -131,7 +131,7 @@ describe('guard(source, config)', () => {
       `)
     })
     describe('support target field', () => {
-      it('allow to pass target field', () => {
+      it('allow to pass target field (should pass)', () => {
         const trigger: Event<number> = createEvent()
         const target: Store<number> = createStore(0)
 
@@ -145,7 +145,7 @@ describe('guard(source, config)', () => {
           "
         `)
       })
-      it('show error in case of type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         const trigger: Event<number> = createEvent()
         const target: Store<string> = createStore('no')
 
@@ -165,7 +165,7 @@ describe('guard(source, config)', () => {
     })
   })
   describe('guard(source, {filter: Boolean})', () => {
-    it('returns new event', () => {
+    it('returns new event (should pass)', () => {
       type User = {name: string}
       const trigger: Event<User | null> = createEvent()
       const result: Event<User> = guard(trigger, {filter: Boolean})
@@ -176,7 +176,7 @@ describe('guard(source, config)', () => {
         "
       `)
     })
-    it('show error in case of result type mismatch', () => {
+    test('result type mismatch (should fail)', () => {
       type User = {name: string}
       const trigger: Event<User | null> = createEvent()
 
@@ -195,7 +195,7 @@ describe('guard(source, config)', () => {
       `)
     })
     describe('support target field', () => {
-      it('allow to pass target field', () => {
+      it('allow to pass target field (should pass)', () => {
         type User = {name: string}
         const trigger: Event<User | null> = createEvent()
         const target = createStore<User>({name: 'alice'})
@@ -210,7 +210,7 @@ describe('guard(source, config)', () => {
           "
         `)
       })
-      it('show error in case of type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         type User = {name: string}
         const trigger: Event<User | null> = createEvent()
         const target: Store<string> = createStore('no')
@@ -236,7 +236,7 @@ describe('guard(source, config)', () => {
 
 describe('guard(config)', () => {
   describe('guard({source, filter: store})', () => {
-    it('return new event', () => {
+    it('return new event (should pass)', () => {
       const trigger: Event<number> = createEvent()
       const allow = createStore<boolean>(false)
 
@@ -251,7 +251,7 @@ describe('guard(config)', () => {
         "
       `)
     })
-    it('support any unit', () => {
+    it('support any unit (should pass)', () => {
       const trigger: Store<number[]> = createStore([1])
       const allow = createStore<boolean>(false)
 
@@ -266,7 +266,7 @@ describe('guard(config)', () => {
         "
       `)
     })
-    it('show error when store is not boolean', () => {
+    test('store is not boolean (should fail)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
@@ -285,7 +285,7 @@ describe('guard(config)', () => {
         "
       `)
     })
-    it('show error in case of result type mismatch', () => {
+    test('result type mismatch (should fail)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
@@ -307,7 +307,7 @@ describe('guard(config)', () => {
       `)
     })
     describe('support target field', () => {
-      it('allow to pass target field', () => {
+      it('allow to pass target field (should pass)', () => {
         const trigger: Event<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: Store<number> = createStore(0)
@@ -323,7 +323,7 @@ describe('guard(config)', () => {
           "
         `)
       })
-      it('show error in case of type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         const trigger: Event<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: Store<string> = createStore('no')
@@ -345,7 +345,7 @@ describe('guard(config)', () => {
     })
   })
   describe('guard({source, filter: fn})', () => {
-    it('returns new event', () => {
+    it('returns new event (should pass)', () => {
       const trigger: Event<number> = createEvent()
       const result: Event<number> = guard({
         source: trigger,
@@ -358,7 +358,7 @@ describe('guard(config)', () => {
         "
       `)
     })
-    it('show error in case of result type mismatch', () => {
+    test('result type mismatch (should fail)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
@@ -375,7 +375,7 @@ describe('guard(config)', () => {
       `)
     })
     describe('support target field', () => {
-      it('allow to pass target field', () => {
+      it('allow to pass target field (should pass)', () => {
         const trigger: Event<number> = createEvent()
         const target: Store<number> = createStore(0)
 
@@ -390,7 +390,7 @@ describe('guard(config)', () => {
           "
         `)
       })
-      it('show error in case of type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         const trigger: Event<number> = createEvent()
         const target: Store<string> = createStore('no')
 
@@ -408,7 +408,7 @@ describe('guard(config)', () => {
           "
         `)
       })
-      test('nullable type support', () => {
+      test('nullable type support (should pass)', () => {
         const event = createEvent()
         const source = createStore<string | null>('test').on(event, () => null)
         const filter = createStore(true)
@@ -427,7 +427,7 @@ describe('guard(config)', () => {
         `)
       })
       describe('any to void', () => {
-        test('with store', () => {
+        test('with store (should pass)', () => {
           const filter = createStore(true)
           const source = createEvent<string>()
           const target = createEvent<void>()
@@ -443,7 +443,7 @@ describe('guard(config)', () => {
             "
           `)
         })
-        test('with function', () => {
+        test('with function (should pass)', () => {
           const source = createEvent<{pass: boolean}>()
           const target = createEvent<void>()
 
@@ -462,7 +462,7 @@ describe('guard(config)', () => {
     })
   })
   describe('guard({source, filter: Boolean})', () => {
-    it('returns new event', () => {
+    it('returns new event (should pass)', () => {
       type User = {name: string}
       const trigger: Event<User | null> = createEvent()
       const result: Event<User> = guard({
@@ -476,7 +476,7 @@ describe('guard(config)', () => {
         "
       `)
     })
-    it('show error in case of result type mismatch', () => {
+    test('result type mismatch (should fail)', () => {
       type User = {name: string}
       const trigger: Event<User> = createEvent()
 
@@ -498,7 +498,7 @@ describe('guard(config)', () => {
       `)
     })
     describe('support target field', () => {
-      it('allow to pass target field', () => {
+      it('allow to pass target field (should pass)', () => {
         type User = {name: string}
         const trigger: Event<User | null> = createEvent()
         const target: Store<User> = createStore({name: 'alice'})
@@ -514,7 +514,7 @@ describe('guard(config)', () => {
           "
         `)
       })
-      it('show error in case of type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         type User = {name: string}
         const trigger: Event<User> = createEvent()
         const target: Store<string> = createStore('no')
@@ -535,7 +535,7 @@ describe('guard(config)', () => {
           "
         `)
       })
-      test('any to void', () => {
+      test('any to void (should pass)', () => {
         const source = createEvent<{pass: boolean}>()
         const target = createEvent<void>()
 
@@ -554,7 +554,7 @@ describe('guard(config)', () => {
   })
 })
 
-test('guard return type supports union types', () => {
+test('guard return type supports union types (should pass)', () => {
   const trigger: Event<{a: 1} | {a: 2}> = createEvent()
   const allow = createStore<boolean>(false)
 

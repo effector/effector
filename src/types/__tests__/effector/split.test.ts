@@ -3,7 +3,7 @@ import {createEvent, createStore, Event, split} from 'effector'
 
 const typecheck = '{global}'
 
-it('should infer type by given predicate', () => {
+it('infer type by given predicate (should pass)', () => {
   const event: Event<number | string> = createEvent()
   const {onlyNumbers} = split(event, {
     onlyNumbers: (value): value is number => typeof value === 'number',

@@ -146,7 +146,7 @@ test('store by store with handler', () => {
   `)
 })
 describe('sample(Store<T>):Store<T>', () => {
-  test('correct case', () => {
+  test('correct case (should pass)', () => {
     const a = createStore('')
     const sample_s_correct: Store<string> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
@@ -155,7 +155,7 @@ describe('sample(Store<T>):Store<T>', () => {
       "
     `)
   })
-  test('incorrect case', () => {
+  test('incorrect case (should fail)', () => {
     const a = createStore('')
     //@ts-expect-error
     const sample_s_incorrect: Store<number> = sample(a)
@@ -166,7 +166,7 @@ describe('sample(Store<T>):Store<T>', () => {
     `)
   })
   describe('edge case', () => {
-    test('correct case', () => {
+    test('correct case (should pass)', () => {
       const a = createStore('')
       const clock = createEvent()
       const sample_s_edge_correct: Event<string> = sample(a, clock)
@@ -176,7 +176,7 @@ describe('sample(Store<T>):Store<T>', () => {
         "
       `)
     })
-    test('incorrect case', () => {
+    test('incorrect case (should fail)', () => {
       const a = createStore('')
       const clock = createEvent()
       //@ts-expect-error
@@ -191,7 +191,7 @@ describe('sample(Store<T>):Store<T>', () => {
 })
 
 describe('sample + guard (should pass)', () => {
-  test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn`", () => {
+  test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn` (should pass)", () => {
     const source = createStore(0)
     const clock = createEvent<number>()
 
@@ -211,7 +211,7 @@ describe('sample + guard (should pass)', () => {
   })
 })
 describe('without clock', () => {
-  test('with fn', () => {
+  test('with fn (should pass)', () => {
     const source = createStore([{foo: 'ok', bar: 0}])
     const target = createStore({foo: '...', bar: 1})
 
@@ -228,7 +228,7 @@ describe('without clock', () => {
     `)
   })
 
-  test('without fn', () => {
+  test('without fn (should pass)', () => {
     const source = createEvent()
     const fx = createEffect<void, void, any>()
 
@@ -242,7 +242,7 @@ describe('without clock', () => {
       "
     `)
   })
-  test('without fn, any to void', () => {
+  test('without fn, any to void (should pass)', () => {
     const source = createEvent<string>()
     const target = createEvent<void>()
     sample({

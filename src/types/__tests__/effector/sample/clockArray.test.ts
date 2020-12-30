@@ -71,7 +71,7 @@ describe('with target', () => {
   describe('with fn and combinable source (should pass)', () => {
     describe('with explicitly typed arguments', () => {
       describe('with second argument in fn', () => {
-        test('with unification to any', () => {
+        test('with unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string; clock: any}>()
           const a = createStore('')
           const b = createStore('')
@@ -91,7 +91,7 @@ describe('with target', () => {
             "
           `)
         })
-        test('without unification to any', () => {
+        test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string; clock: any}>()
           const a = createStore('')
           const b = createStore('')
@@ -121,7 +121,7 @@ describe('with target', () => {
         })
       })
       describe('without second argument in fn', () => {
-        test('with unification to any', () => {
+        test('with unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
           const a = createStore('')
           const b = createStore('')
@@ -141,7 +141,7 @@ describe('with target', () => {
             "
           `)
         })
-        test('without unification to any', () => {
+        test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
           const a = createStore('')
           const b = createStore('')
@@ -173,7 +173,7 @@ describe('with target', () => {
     })
     describe('with implicitly typed arguments', () => {
       describe('with second argument in fn', () => {
-        test('with unification to any', () => {
+        test('with unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string; clock: any}>()
           const a = createStore('')
           const b = createStore('')
@@ -195,7 +195,7 @@ describe('with target', () => {
             "
           `)
         })
-        test('without unification to any', () => {
+        test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string; clock: any}>()
           const a = createStore('')
           const b = createStore('')
@@ -228,7 +228,7 @@ describe('with target', () => {
         })
       })
       describe('without second argument in fn', () => {
-        test('with unification to any', () => {
+        test('with unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
           const a = createStore('')
           const b = createStore('')
@@ -249,7 +249,7 @@ describe('with target', () => {
             "
           `)
         })
-        test('without unification to any', () => {
+        test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
           const a = createStore('')
           const b = createStore('')

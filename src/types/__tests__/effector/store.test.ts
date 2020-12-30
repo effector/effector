@@ -224,7 +224,7 @@ test('#on', () => {
   `)
 })
 
-test('#on triggers[]', () => {
+test('#on triggers[] (should pass)', () => {
   const event = createEvent<string>()
   const another = createStore('')
   const store = createStore(0)
@@ -255,7 +255,7 @@ test('#on triggers[] failing', () => {
   `)
 })
 
-test('.on(sample()) inline', () => {
+test('.on(sample()) inline (should pass)', () => {
   const store = createStore('111')
   const event = createEvent<any>()
 

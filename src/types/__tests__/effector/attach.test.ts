@@ -4,7 +4,7 @@ import {createStore, createEffect, attach, Effect} from 'effector'
 const typecheck = '{global}'
 
 describe('with source', () => {
-  test('with single store', () => {
+  test('with single store (should pass)', () => {
     const foo = createStore<string>('foo')
     //prettier-ignore
     const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
@@ -19,7 +19,7 @@ describe('with source', () => {
       "
     `)
   })
-  test('with shape', () => {
+  test('with shape (should pass)', () => {
     const foo = createStore<string>('foo')
     //prettier-ignore
     const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
@@ -36,7 +36,7 @@ describe('with source', () => {
   })
 })
 
-test('without source', () => {
+test('without source (should pass)', () => {
   //prettier-ignore
   const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
   const fx: Effect<string, string, {message: string}> = attach({
@@ -71,7 +71,7 @@ test('mapParams without arguments (should pass)', () => {
   `)
 })
 
-test('without source and mapParams', () => {
+test('without source and mapParams (should pass)', () => {
   const effect: Effect<number, string, boolean> = createEffect()
   const fx: Effect<number, string, boolean> = attach({effect})
   expect(typecheck).toMatchInlineSnapshot(`

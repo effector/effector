@@ -72,7 +72,7 @@ describe('forward with subtyping', () => {
       "
     `)
   })
-  it('same types (should be ok)', () => {
+  it('same types (should pass)', () => {
     forward({from: str, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -80,7 +80,7 @@ describe('forward with subtyping', () => {
       "
     `)
   })
-  it('more strict -> less strict type (should be ok)', () => {
+  it('more strict -> less strict type (should pass)', () => {
     forward({from: str, to: strOrNum})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -144,7 +144,7 @@ describe('forward with subtyping', () => {
 })
 
 describe('any to void support', () => {
-  it('should forward from `Unit<*>` to `Unit<void>`', () => {
+  it('should forward from `Unit<*>` to `Unit<void>` (should pass)', () => {
     const from = createEvent<string>()
     const to = createEvent<void>()
 
@@ -156,7 +156,7 @@ describe('any to void support', () => {
       "
     `)
   })
-  it('should forward from `Unit<*>[]` to `Unit<void>[]`', () => {
+  it('should forward from `Unit<*>[]` to `Unit<void>[]` (should pass)', () => {
     const from = createEvent<string>()
     const to = createEvent<void>()
 
@@ -168,7 +168,7 @@ describe('any to void support', () => {
       "
     `)
   })
-  it('should forward from `Unit<*>` to `Unit<void>[]`', () => {
+  it('should forward from `Unit<*>` to `Unit<void>[]` (should pass)', () => {
     const from = createEvent<string>()
     const to = createEvent<void>()
 
@@ -203,7 +203,7 @@ describe('any to void support', () => {
       "
     `)
   })
-  it('should forward from `Unit<*>[]` to `Unit<void>`', () => {
+  it('should forward from `Unit<*>[]` to `Unit<void>` (should pass)', () => {
     const from = createEvent<string>()
     const to = createEvent<void>()
 
@@ -272,7 +272,7 @@ test('edge case #1 (should fail)', () => {
 
 describe('array support', () => {
   describe('forward to array', () => {
-    test('valid', () => {
+    test('valid (should pass)', () => {
       const s1 = createEvent<string>()
       const t1 = createEvent<string>()
       const t2 = createEvent<string>()
@@ -287,7 +287,7 @@ describe('array support', () => {
       `)
     })
     describe('invalid', () => {
-      test('type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         const s1 = createEvent<number>()
         const t1 = createEvent<string>()
         const t2 = createEvent<string>()
@@ -306,7 +306,7 @@ describe('array support', () => {
           "
         `)
       })
-      test('array mismatch', () => {
+      test('array mismatch (should fail)', () => {
         const s1 = createEvent<string>()
         const t1 = createEvent<string>()
         const t2 = createEvent<number>()
@@ -327,7 +327,7 @@ describe('array support', () => {
     })
   })
   describe('forward from array', () => {
-    test('valid', () => {
+    test('valid (should pass)', () => {
       const s1 = createEvent<string>()
       const s2 = createEvent<string>()
       const t1 = createEvent<string>()
@@ -342,7 +342,7 @@ describe('array support', () => {
       `)
     })
     describe('invalid', () => {
-      test('type mismatch', () => {
+      test('type mismatch (should fail)', () => {
         const s1 = createEvent<string>()
         const s2 = createEvent<string>()
         const t1 = createEvent<number>()
@@ -359,7 +359,7 @@ describe('array support', () => {
           "
         `)
       })
-      test('array mismatch', () => {
+      test('array mismatch (should fail)', () => {
         const s1 = createEvent<string>()
         const s2 = createEvent<number>()
         const t1 = createEvent<string>()

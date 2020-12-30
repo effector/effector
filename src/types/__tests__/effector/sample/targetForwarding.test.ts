@@ -11,7 +11,7 @@ import {
 
 const typecheck = '{global}'
 
-it('should pass when a target receives a more strict value type from a source', () => {
+test('a target receives a more strict value type from a source (should pass)', () => {
   const source = createStore({a: '', b: ''})
   const clock = createEvent()
   const target = createEvent<{a: string}>()
@@ -25,7 +25,7 @@ it('should pass when a target receives a more strict value type from a source', 
   `)
 })
 
-it('should pass when a target receives an equal value type from a source', () => {
+test('a target receives an equal value type from a source (should pass)', () => {
   const source = createStore<{a: string; b?: string}>({a: '', b: ''})
   const clock = createEvent()
   const target = createEvent<{a: string; b?: string}>()
@@ -39,7 +39,7 @@ it('should pass when a target receives an equal value type from a source', () =>
   `)
 })
 
-it('should pass when a target receives a more strict (or equal) value type from a mapping fn', () => {
+test('a target receives a more strict (or equal) value type from a mapping fn (should pass)', () => {
   const source = createStore(null)
   const clock = createEvent()
   const fn = () => ({a: '', b: ''})
@@ -54,7 +54,7 @@ it('should pass when a target receives a more strict (or equal) value type from 
   `)
 })
 
-it('should fail when a target receives a more loose value type from a source', () => {
+test('when a target receives a more loose value type from a source (should fail)', () => {
   const source = createStore({a: ''})
   const clock = createEvent()
   const target = createEvent<{a: string; b: string}>()
@@ -81,7 +81,7 @@ it('should fail when a target receives a more loose value type from a source', (
   `)
 })
 
-it('should fail when a target receives a more loose value type from a mapping fn', () => {
+test('when a target receives a more loose value type from a mapping fn (should fail)', () => {
   const source = createStore(null)
   const clock = createEvent()
   const fn = () => ({a: ''})
@@ -108,8 +108,8 @@ it('should fail when a target receives a more loose value type from a mapping fn
     "
   `)
 })
-describe('should fail when nullable field passed to strict target', () => {
-  test('without clock', () => {
+describe('when nullable field passed to strict target (should fail)', () => {
+  test('without clock (should fail)', () => {
     const source = createStore<{foo: string; bar: string | null}>({
       foo: '',
       bar: null,
@@ -138,7 +138,7 @@ describe('should fail when nullable field passed to strict target', () => {
       "
     `)
   })
-  test('with clock store', () => {
+  test('with clock store (should fail)', () => {
     const source = createStore<{foo: string; bar: string | null}>({
       foo: '',
       bar: null,
@@ -171,7 +171,7 @@ describe('should fail when nullable field passed to strict target', () => {
   })
 })
 describe('edge case for {} type', () => {
-  it('should fail when a target receives a more loose value type from a source', () => {
+  test('when a target receives a more loose value type from a source (should fail)', () => {
     const source = createStore({})
     const clock = createEvent()
     const target = createEvent<{a: string; b: string}>()
@@ -198,7 +198,7 @@ describe('edge case for {} type', () => {
     `)
   })
 
-  it('should fail when a target receives a more loose value type from a mapping fn', () => {
+  test('when a target receives a more loose value type from a mapping fn (should fail)', () => {
     const source = createStore(null)
     const clock = createEvent()
     const fn = () => ({})
