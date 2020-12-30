@@ -51,6 +51,7 @@ test('clearNode(domain)', () => {
 
 test('clearNode(incorrect)', () => {
   try {
+    //@ts-expect-error
     clearNode(null)
   } catch (err) {}
 

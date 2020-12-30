@@ -181,6 +181,7 @@ describe('error inference (should fail with number -> string error)', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
+    //@ts-expect-error
     const store: Store<{R: string; G: string; B: string}> = combine({R, G, B})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -194,6 +195,7 @@ describe('error inference (should fail with number -> string error)', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
+    //@ts-expect-error
     const store: Store<[string, string, string]> = combine([R, G, B])
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -205,6 +207,7 @@ describe('error inference (should fail with number -> string error)', () => {
   })
   test('combine({Color})', () => {
     const Color = createStore('#e95801')
+    //@ts-expect-error
     const store: Store<{Color: number}> = combine({Color})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -216,6 +219,7 @@ describe('error inference (should fail with number -> string error)', () => {
   })
   test('combine([Color])', () => {
     const Color = createStore('#e95801')
+    //@ts-expect-error
     const store: Store<[number]> = combine([Color])
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -229,6 +233,7 @@ describe('error inference (should fail with number -> string error)', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
+    //@ts-expect-error
     const store: Store<number> = combine(
       {R, G, B},
       ({R, G, B}) =>
@@ -249,6 +254,7 @@ describe('error inference (should fail with number -> string error)', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
+    //@ts-expect-error
     const store: Store<number> = combine(
       [R, G, B],
       ([R, G, B]) =>
@@ -265,6 +271,7 @@ describe('error inference (should fail with number -> string error)', () => {
   })
   test(`combine({Color}, ({Color}) => '~')`, () => {
     const Color = createStore('#e95801')
+    //@ts-expect-error
     const store: Store<number> = combine({Color}, ({Color}) => Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -274,6 +281,7 @@ describe('error inference (should fail with number -> string error)', () => {
   })
   test(`combine([Color], ([Color]) => '~')`, () => {
     const Color = createStore('#e95801')
+    //@ts-expect-error
     const store: Store<number> = combine([Color], ([Color]) => Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -283,6 +291,7 @@ describe('error inference (should fail with number -> string error)', () => {
   })
   test(`combine(Color, (Color) => '~')`, () => {
     const Color = createStore('#e95801')
+    //@ts-expect-error
     const store: Store<number> = combine(Color, Color => Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -294,6 +303,7 @@ describe('error inference (should fail with number -> string error)', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
+    //@ts-expect-error
     const store: Store<number> = combine(
       R,
       G,
@@ -314,6 +324,7 @@ describe('error inference (should fail with number -> string error)', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
+    //@ts-expect-error
     const store: Store<[string, string, string]> = combine(R, G, B)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -323,6 +334,7 @@ describe('error inference (should fail with number -> string error)', () => {
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
+    //@ts-expect-error
     const store: Store<number> = combine(Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "

@@ -17,6 +17,7 @@ test('event by event', () => {
   const c = sample(a, b)
 
   const sample_ee_check1: Event<number> = c
+  //@ts-expect-error
   const sample_ee_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -30,6 +31,7 @@ test('event by event with handler', () => {
   const c = sample(a, b, (a, b) => ({a, b}))
 
   const sample_eeh_check1: Event<{a: string; b: boolean}> = c
+  //@ts-expect-error
   const sample_eeh_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -49,6 +51,7 @@ test('store by event', () => {
   const e = sample(d, b)
 
   const sample_se_check1: Event<number> = e
+  //@ts-expect-error
   const sample_se_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -62,6 +65,7 @@ test('store by event with handler', () => {
   const e = sample(d, b, (a, b) => ({a, b}))
 
   const sample_seh_check1: Event<{a: string; b: boolean}> = e
+  //@ts-expect-error
   const sample_seh_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -81,6 +85,7 @@ test('effect by event', () => {
   const g = sample(f, b)
 
   const sample_efe_check1: Event<string> = g
+  //@ts-expect-error
   const sample_efe_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -94,6 +99,7 @@ test('effect by event with handler', () => {
   const g = sample(f, b, (a, b) => ({a, b}))
 
   const sample_efeh_check1: Event<{a: string; b: boolean}> = g
+  //@ts-expect-error
   const sample_efeh_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -113,6 +119,7 @@ test('store by store', () => {
   const c = sample(a, b)
 
   const sample_ss_check1: Store<boolean> = c
+  //@ts-expect-error
   const sample_ss_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -128,6 +135,7 @@ test('store by store with handler', () => {
   const c = sample(a, b, (a, b) => ({a, b}))
 
   const sample_ssh_check1: Store<{a: string; b: boolean}> = c
+  //@ts-expect-error
   const sample_ssh_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -149,6 +157,7 @@ describe('sample(Store<T>):Store<T>', () => {
   })
   test('incorrect case', () => {
     const a = createStore('')
+    //@ts-expect-error
     const sample_s_incorrect: Store<number> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -170,6 +179,7 @@ describe('sample(Store<T>):Store<T>', () => {
     test('incorrect case', () => {
       const a = createStore('')
       const clock = createEvent()
+      //@ts-expect-error
       const sample_s_edge_incorrect: Event<number> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "

@@ -60,6 +60,7 @@ describe('forward with subtyping', () => {
   const strOrNum: Event<string | number> = createEvent()
   const num: Event<number> = createEvent()
   it('incompatible (should fail)', () => {
+    //@ts-expect-error
     forward({from: str, to: num})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -88,6 +89,7 @@ describe('forward with subtyping', () => {
     `)
   })
   it('less strict -> more strict type (should fail)', () => {
+    //@ts-expect-error
     forward({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -109,6 +111,7 @@ describe('forward with subtyping', () => {
     `)
   })
   it('generic to (should fail)', () => {
+    //@ts-expect-error
     forward<string>({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -129,6 +132,7 @@ describe('forward with subtyping', () => {
     `)
   })
   it('generics `to` and `from` (should fail on providing generics)', () => {
+    //@ts-expect-error
     forward<string, string | number>({to: str, from: strOrNum})
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -176,7 +180,7 @@ describe('any to void support', () => {
       "
     `)
   })
-  it('should forward from `Unit<*>` to array with mixed units', () => {
+  it('should forward from `Unit<*>` to array with mixed units (should pass)', () => {
     const from = createEvent<string>()
     const to1 = createEvent<void>()
     const to2 = createEvent<string>()
@@ -250,6 +254,7 @@ test('edge case #1 (should fail)', () => {
   const event2 = createEvent<{value: string}>()
 
   forward({
+    //@ts-expect-error
     from: event1,
     to: event2.map(value => ({value})),
   })
@@ -287,6 +292,7 @@ describe('array support', () => {
         const t1 = createEvent<string>()
         const t2 = createEvent<string>()
         forward({
+          //@ts-expect-error
           from: s1,
           to: [t1, t2],
         })
@@ -305,7 +311,9 @@ describe('array support', () => {
         const t1 = createEvent<string>()
         const t2 = createEvent<number>()
         forward({
+          //@ts-expect-error
           from: s1,
+          //@ts-expect-error
           to: [t1, t2],
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -339,6 +347,7 @@ describe('array support', () => {
         const s2 = createEvent<string>()
         const t1 = createEvent<number>()
         forward({
+          //@ts-expect-error
           from: [s1, s2],
           to: t1,
         })
@@ -355,6 +364,7 @@ describe('array support', () => {
         const s2 = createEvent<number>()
         const t1 = createEvent<string>()
         forward({
+          //@ts-expect-error
           from: [s1, s2],
           to: t1,
         })

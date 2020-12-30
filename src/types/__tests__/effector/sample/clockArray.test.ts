@@ -282,7 +282,7 @@ describe('with target', () => {
       })
     })
   })
-  it('should detect incorrect arguments in fn with combinable source (should fail)', () => {
+  test('detect incorrect arguments in fn with combinable source (should fail)', () => {
     const target = createEvent<{a: string; clock: any}>()
     const a = createStore('')
     const clockA = createEvent()
@@ -290,8 +290,10 @@ describe('with target', () => {
     const clockC = createEvent<string>()
 
     sample({
+      //@ts-expect-error
       source: {a},
       clock: [clockA, clockB, clockC],
+      //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
       target,
     })
@@ -310,13 +312,14 @@ describe('with target', () => {
       "
     `)
   })
-  it('should detect too wide type of clocks (should fail)', () => {
+  test('detect too wide type of clocks (should fail)', () => {
     const target = createEvent<{a: string; b: string; clock: string}>()
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
     const clockC = createEvent<string>()
 
     sample({
+      //@ts-expect-error
       source,
       clock: [clockA, clockC],
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
@@ -428,9 +431,12 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
+    //@ts-expect-error
     const target: Event<{a: string; clock: any}> = sample({
+      //@ts-expect-error
       source: {a},
       clock: [clockA, clockB, clockC],
+      //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -447,7 +453,9 @@ describe('without target', () => {
     const clockA = createEvent()
     const clockC = createEvent<string>()
 
+    //@ts-expect-error
     const target: Event<{a: string; b: string; clock: string}> = sample({
+      //@ts-expect-error
       source,
       clock: [clockA, clockC],
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),

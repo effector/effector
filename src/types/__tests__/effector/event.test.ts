@@ -41,6 +41,7 @@ test('#map', () => {
   const computed = event.map(() => 'foo')
 
   //const check1: Event<string> = computed
+  //@ts-expect-error
   const event_map_check2: Event<number> = computed
   event(2)
   computed('')
@@ -84,6 +85,7 @@ describe('#filterMap', () => {
   })
   test('#filterMap incorrect', () => {
     const event: Event<number> = createEvent()
+    //@ts-expect-error
     const filteredEvent_error: Event<number> = event.filterMap(n => {
       if (n % 2) return n.toString()
     })
@@ -129,6 +131,7 @@ describe('#prepend', () => {
   test('argument type mismatch', () => {
     const event = createEvent<string>()
     const prepended = event.prepend((arg: number) => 'foo')
+    //@ts-expect-error
     prepended('')
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -156,6 +159,7 @@ describe('#prepend', () => {
   })
   test('target event type mismatch', () => {
     const event = createEvent<number>()
+    //@ts-expect-error
     const prepended = event.prepend((arg: boolean) => 'foo')
     prepended(true)
     expect(typecheck).toMatchInlineSnapshot(`
@@ -200,6 +204,7 @@ test('void function interop (should pass)', () => {
 })
 test('call event without params', () => {
   const event = createEvent<number>()
+  //@ts-expect-error
   event()
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -211,6 +216,7 @@ test('call event without params (unknown)', () => {
   /*:: type unknown = any; */
   // Expects 1 unknown argument
   const event = createEvent<unknown>()
+  //@ts-expect-error
   event()
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -222,6 +228,7 @@ test('call event without params (never)', () => {
   /*:: type never = any; */
   // Should never be called
   const event = createEvent<never>()
+  //@ts-expect-error
   event()
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -238,7 +245,7 @@ test('assign event to a function (should pass)', () => {
   `)
 })
 test('assign event to a function (should fail)', () => {
-  /*:: type unknown = any; */
+  //@ts-expect-error
   const fn1: (event: number) => unknown = createEvent<string>()
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -252,6 +259,7 @@ describe('event as function argument', () => {
   test('direct pass', () => {
     function fn(arg: (_: number) => number) {}
     const event = createEvent<string>()
+    //@ts-expect-error
     fn(event)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -264,6 +272,7 @@ describe('event as function argument', () => {
   test('indirect pass', () => {
     function fn(arg: (_: number) => number) {}
     const event = createEvent<string>()
+    //@ts-expect-error
     fn(e => event(e))
     expect(typecheck).toMatchInlineSnapshot(`
       "

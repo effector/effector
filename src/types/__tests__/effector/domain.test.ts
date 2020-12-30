@@ -6,7 +6,9 @@ const typecheck = '{global}'
 test('createDomain', () => {
   const domain = createDomain()
   const domain2 = createDomain('hello')
+  //@ts-expect-error
   const domain3 = createDomain(234)
+  //@ts-expect-error
   const domain4 = createDomain({foo: true})
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -86,10 +88,12 @@ describe('#effect', () => {
     })
     const handler: any = () => {}
     effect1.use(handler)
+    //@ts-expect-error
     effect2(20)
     const effect3 = domain.effect('', {
       handler: effect1,
     })
+    //@ts-expect-error
     effect3(20)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -152,10 +156,12 @@ describe('#createEffect', () => {
     })
     const handler: any = () => {}
     effect1.use(handler)
+    //@ts-expect-error
     effect2(20)
     const effect3 = domain.createEffect('', {
       handler: effect1,
     })
+    //@ts-expect-error
     effect3(20)
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -186,11 +192,11 @@ describe('#createEffect', () => {
     const domain = createDomain()
     const fx = domain.createEffect({
       name: 'fx',
-      async handler(params) {},
+      async handler(params: number) {},
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Parameter 'params' implicitly has an 'any' type.
+      no errors
       "
     `)
   })

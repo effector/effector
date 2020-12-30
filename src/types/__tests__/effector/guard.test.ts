@@ -32,6 +32,7 @@ describe('guard(source, config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
+      //@ts-expect-error
       guard(trigger, {filter: allow})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -49,6 +50,7 @@ describe('guard(source, config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
+      //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: allow})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -89,6 +91,7 @@ describe('guard(source, config)', () => {
 
         guard(trigger, {
           filter: allow,
+          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -118,6 +121,7 @@ describe('guard(source, config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
+      //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: x => x > 0})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -147,6 +151,7 @@ describe('guard(source, config)', () => {
 
         guard(trigger, {
           filter: x => x > 0,
+          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -175,6 +180,7 @@ describe('guard(source, config)', () => {
       type User = {name: string}
       const trigger: Event<User | null> = createEvent()
 
+      //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: Boolean})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -211,6 +217,7 @@ describe('guard(source, config)', () => {
 
         guard(trigger, {
           filter: Boolean,
+          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -265,6 +272,7 @@ describe('guard(config)', () => {
 
       guard({
         source: trigger,
+        //@ts-expect-error
         filter: allow,
       })
 
@@ -281,8 +289,10 @@ describe('guard(config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
+      //@ts-expect-error
       const result: Event<string> = guard({
         source: trigger,
+        //@ts-expect-error
         filter: allow,
       })
 
@@ -321,6 +331,7 @@ describe('guard(config)', () => {
         guard({
           source: trigger,
           filter: allow,
+          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -351,6 +362,7 @@ describe('guard(config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
+      //@ts-expect-error
       const result: Event<string> = guard({
         source: trigger,
         filter: n => n > 0,
@@ -385,6 +397,7 @@ describe('guard(config)', () => {
         guard({
           source: trigger,
           filter: x => x > 0,
+          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -467,6 +480,7 @@ describe('guard(config)', () => {
       type User = {name: string}
       const trigger: Event<User> = createEvent()
 
+      //@ts-expect-error
       const result: Event<string> = guard({
         source: trigger,
         filter: Boolean,
@@ -508,6 +522,7 @@ describe('guard(config)', () => {
         guard({
           source: trigger,
           filter: Boolean,
+          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`

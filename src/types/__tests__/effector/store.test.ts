@@ -18,6 +18,7 @@ const typecheck = '{global}'
 
 test('createStore', () => {
   const createStore_store1: Store<number> = createStore(0)
+  //@ts-expect-error
   const createStore_store2: Store<string> = createStore(0)
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -58,6 +59,7 @@ describe('createApi', () => {
     const {event} = createApi(store, {
       event: (n, x: number) => x,
     })
+    //@ts-expect-error
     const createApi_check2: Event<string> = event
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -69,6 +71,7 @@ describe('createApi', () => {
     const {event} = createApi(store, {
       event: (n, x) => x,
     })
+    //@ts-expect-error
     const createApi_check3: Event<string> = event
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -160,7 +163,7 @@ test('#map', () => {
   const computed = store.map(() => 'hello')
 
   const map_check1: Store<string> = computed
-
+  //@ts-expect-error
   const map_check2: Store<number> = computed
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -238,7 +241,7 @@ test('#on triggers[] failing', () => {
   const event = createEvent<number>()
   const another = createStore('')
   const store = createStore(0)
-
+  //@ts-expect-error
   store.on([event, another], (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
     "

@@ -59,7 +59,9 @@ describe('split', () => {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
         })
+        //@ts-expect-error
         const split_result__nofpos__user_defined_1: Event<number> = emptyList
+        //@ts-expect-error
         const split_result__nofpos__user_defined_2: null = oneElement
         expect(typecheck).toMatchInlineSnapshot(`
           "
@@ -79,6 +81,7 @@ describe('split', () => {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
         })
+        //@ts-expect-error
         const split_result__nofpos__defaults_1: Event<number> = __
         expect(typecheck).toMatchInlineSnapshot(`
           "
@@ -92,6 +95,7 @@ describe('split', () => {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
         })
+        //@ts-expect-error
         const split_result__nofpos__defaults_2: null = __
         expect(typecheck).toMatchInlineSnapshot(`
           "
@@ -105,8 +109,11 @@ describe('split', () => {
   test('split arguments no false-positive', () => {
     const source: Event<string[]> = createEvent()
     split(source, {
+      //@ts-expect-error
       wrongResult: list => null,
+      //@ts-expect-error
       wrongArg_1: (list: null) => true,
+      //@ts-expect-error
       wrongArg_2: (list: number[]) => true,
     })
     expect(typecheck).toMatchInlineSnapshot(`

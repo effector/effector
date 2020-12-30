@@ -40,6 +40,7 @@ describe('serialize cases (should fail)', () => {
     const event = app.createEvent()
 
     const scope = fork(app)
+    //@ts-expect-error
     const values: {[sid: string]: any} = serialize(scope, {ignore: [event]})
 
     expect(typecheck).toMatchInlineSnapshot(`

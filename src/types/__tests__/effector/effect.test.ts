@@ -232,6 +232,7 @@ test('#use', () => {
   const foo = createEffect<number, string, any>()
 
   effect1.use(arg => Promise.resolve('foo'))
+  //@ts-expect-error
   effect1.use(foo)
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -262,6 +263,7 @@ describe('#filter', () => {
     const fx = createEffect<number, string, any>()
     fx.use(params => String(params))
 
+    //@ts-expect-error
     const filteredEvent: Event<boolean> = fx.filter({
       fn: params => params % 2 === 0,
     })
@@ -301,6 +303,7 @@ describe('#filterMap', () => {
     const fx = createEffect<string, string, any>()
     fx.use(params => String(params))
 
+    //@ts-expect-error
     const filteredEvent: Event<number | void> = fx.filterMap(params => {
       if (params.length > 0) {
         return params.length
@@ -345,6 +348,7 @@ describe('void params', () => {
     test('createEffect(config)', () => {
       const handler = async () => 'ok'
       const effect = createEffect({handler})
+      //@ts-expect-error
       effect(1)
       effect()
       expect(typecheck).toMatchInlineSnapshot(`
@@ -356,6 +360,7 @@ describe('void params', () => {
     test('createEffect(name, config)', () => {
       const handler = async () => 'ok'
       const effect = createEffect('effect', {handler})
+      //@ts-expect-error
       effect(1)
       effect()
       expect(typecheck).toMatchInlineSnapshot(`
@@ -401,6 +406,7 @@ describe('void params', () => {
     test('void params should allow only call without arguments', () => {
       const fx = createEffect(() => 'ok')
       fx()
+      //@ts-expect-error
       fx(1)
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -424,6 +430,7 @@ describe('void params', () => {
     test('void params should allow only call without arguments', () => {
       const fx = createEffect<void, string, TypeError>(() => 'ok')
       fx()
+      //@ts-expect-error
       fx(1)
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -460,6 +467,7 @@ describe('nested effects', () => {
     })
     test('no false-positive (should be type error)', () => {
       const nestedEffect: Effect<string, string> = createEffect()
+      //@ts-expect-error
       const parentEffect: Effect<number, number> = createEffect(
         'should not throw',
         {

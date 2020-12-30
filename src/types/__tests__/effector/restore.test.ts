@@ -95,6 +95,7 @@ describe('restore cases (should pass)', () => {
 describe('restore cases (should fail)', () => {
   test('restore(Event<number>, string)', () => {
     const ev = createEvent<number>()
+    //@ts-expect-error
     restore(ev, 'initial')
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -107,6 +108,7 @@ describe('restore cases (should fail)', () => {
   })
   test('restore(Effect<any,number,Error>, string)', () => {
     const eff = createEffect<any, number, Error>()
+    //@ts-expect-error
     restore(eff, 'initial')
 
     expect(typecheck).toMatchInlineSnapshot(`

@@ -69,6 +69,7 @@ test('case store case mismatch (should fail)', () => {
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
+  //@ts-expect-error
   split({
     source,
     match: caseStore,
@@ -120,6 +121,7 @@ test('case function case mismatch (should fail)', () => {
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
+  //@ts-expect-error
   split({
     source,
     match: x => (x > 0 ? 'a' : 'c'),

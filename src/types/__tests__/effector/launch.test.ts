@@ -23,6 +23,7 @@ test('launch(unit, payload)', () => {
       }),
     ],
   })
+  //@ts-expect-error
   launch(foo, '')
   launch(foo, 0)
   launch(customNode, 100)
@@ -52,6 +53,7 @@ test('launch({target: unit})', () => {
       }),
     ],
   })
+  //@ts-expect-error
   launch({target: foo, params: ''})
   launch({target: foo, params: 0})
   launch({target: customNode, params: 100})
