@@ -11,6 +11,51 @@ const {
 
 const WRITE_RAW_REPORTS = false
 
+async function syncDirs(from, to, filter) {
+  const fromRoot = from
+  const toRoot = to
+  async function writeFileOnChange(from, to, map) {
+    try {
+      const [source, target] = await Promise.all([
+        readFile(from, 'utf8'),
+        readFile(to, 'utf8').catch(err => 'ERROR'),
+      ])
+      const mappedSource = map(source)
+      if (target === 'ERROR' || mappedSource !== target) {
+        await outputFile(to, mappedSource, 'utf8')
+      }
+    } catch (err) {
+      console.log(err)
+      return
+    }
+  }
+  // @ts-expect-error
+  const reqs = []
+  async function readDirRec(dir) {
+    const relativeSuffix = relative(fromRoot, dir)
+    const targetDir = resolve(toRoot, relativeSuffix)
+    const dirents = await readdir(dir, {withFileTypes: true})
+    for (const dirent of dirents) {
+      const name = dirent.name
+      const fullName = resolve(dir, name)
+      const fullTargetName = resolve(targetDir, name)
+      if (dirent.isFile()) {
+        if (filter(fullName, fullTargetName)) {
+          reqs.push(
+            writeFileOnChange(fullName, fullTargetName, code =>
+              code.replace(/\@ts\-expect\-error/gm, ''),
+            ),
+          )
+        }
+      } else {
+        reqs.push(readDirRec(fullName))
+      }
+    }
+  }
+  reqs.push(readDirRec(from))
+  await Promise.all(reqs)
+}
+
 module.exports = async function() {
   const reportPath = resolve(
     __dirname,
@@ -23,44 +68,22 @@ module.exports = async function() {
   const tsTestDir = resolve(__dirname, '..', '__fixtures__', '.typescript')
   const flowTemplateDir = resolve(__dirname, '..', '__fixtures__', 'flow')
   const tsTemplateDir = resolve(__dirname, '..', '__fixtures__', 'typescript')
-  const {files: testFiles, dirs} = await getTestFiles(testsDir)
+  const [{files: testFiles, dirs}] = await Promise.all([
+    getTestFiles(testsDir),
+    ensureDir(tsTestDir),
+  ])
   await Promise.all([
-    (async function() {
-      await ensureDir(tsTestDir)
-      await copy(tsTemplateDir, tsTestDir, {
-        overwrite: true,
-        errorOnExist: false,
-        recursive: false,
-      })
-      await copy(testsDir, tsTestDir, {
-        overwrite: true,
-        errorOnExist: false,
-        recursive: true,
-        preserveTimestamps: true,
-        filter(filePath, to) {
-          if (extname(filePath) === '') return true
-          const fileMeta = testFiles.find(file => file.fullPath === filePath)
-          if (!fileMeta) return false
-          return fileMeta.type === 'ts'
-        },
-      })
-      await Promise.all(
-        testFiles
-          .filter(({type}) => type === 'both')
-          .map(fileMeta => {
-            const ext = extname(fileMeta.fullPath)
-            const newExt = ext === '.js' ? '.ts' : '.tsx'
-            const newFullPath = fileMeta.fullPath.replace(ext, newExt)
-            const relativePath = relative(testsDir, newFullPath)
-            const target = join(tsTestDir, relativePath)
-            return copy(fileMeta.fullPath, target, {
-              overwrite: true,
-              errorOnExist: false,
-              preserveTimestamps: true,
-            })
-          }),
-      )
-    })(),
+    copy(tsTemplateDir, tsTestDir, {
+      overwrite: true,
+      errorOnExist: false,
+      recursive: false,
+    }),
+    syncDirs(testsDir, tsTestDir, (filePath, to) => {
+      if (extname(filePath) === '') return true
+      const fileMeta = testFiles.find(file => file.fullPath === filePath)
+      if (!fileMeta) return false
+      return fileMeta.type === 'ts'
+    }),
   ])
   const tsReport = await runTypeScript(testFiles)
   const fileTypes = {
