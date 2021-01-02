@@ -1,8 +1,8 @@
-import {Graph, StateRef} from './index.h'
+import {Node, StateRef} from './index.h'
 
-export const getGraph = (graph: any): Graph => graph.graphite || graph
-export const getOwners = (node: Graph) => node.family.owners
-export const getLinks = (node: Graph) => node.family.links
+export const getGraph = (graph: any): Node => graph.graphite || graph
+export const getOwners = (node: Node) => node.family.owners
+export const getLinks = (node: Node) => node.family.links
 export const getStoreState = (store: any): StateRef => store.stateRef
 export const getConfig = (opts: any) => opts.config
 export const getNestedConfig = (opts: any) => opts.ɔ

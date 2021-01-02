@@ -31,24 +31,24 @@ export type Config = {
   handler?: Function
 }
 
-export type Graph = {
+export type Node = {
   id: ID
-  next: Array<Graph>
+  next: Array<Node>
   seq: Array<Cmd>
   scope: {[key: string]: any}
   reg: {[id: string]: StateRef}
   meta: {[tag: string]: any}
   family: {
     type: 'regular' | 'crosslink' | 'domain'
-    links: Graph[]
-    owners: Graph[]
+    links: Node[]
+    owners: Node[]
   }
 }
 
-export type Graphite = {graphite: Graph} | Graph
+export type NodeUnit = {graphite: Node} | Node
 
 export interface Unit {
-  graphite: Graph
+  graphite: Node
 }
 
 export type Subscriber<A> = {

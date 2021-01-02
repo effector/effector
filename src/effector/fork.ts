@@ -8,7 +8,7 @@ import {launch, forkPage, setForkPage, currentPage} from './kernel'
 import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
-import {Graph, StateRef} from './index.h'
+import {Node, StateRef} from './index.h'
 import {removeItem, forEach, includes, forIn} from './collection'
 import {DOMAIN, STORE, EVENT, EFFECT, SAMPLER, MAP, FORK_COUNTER} from './tag'
 
@@ -30,7 +30,7 @@ export function hydrate(domain: Domain, {values}: {values: any}) {
     throwError('values property should be an object')
   }
   const normalizedValues = normalizeValues(values)
-  let storeWatches: Graph[]
+  let storeWatches: Node[]
   let storeWatchesRefs: any[]
   if (isScope) {
     storeWatches = []
@@ -66,11 +66,11 @@ function fillValues({
   values,
   collectWatches,
 }: {
-  flatGraphUnits: Graph[]
+  flatGraphUnits: Node[]
   values: Record<string, any>
   collectWatches: boolean
 }) {
-  const storeWatches: Graph[] = []
+  const storeWatches: Node[] = []
   const storeWatchesRefs: StateRef[] = []
   const refsMap = {} as Record<string, StateRef>
   const predefinedRefs = new Set()
@@ -425,7 +425,7 @@ export function allSettled(
   return defer.req
 }
 function flatGraph(unit: any) {
-  const list = [] as Graph[]
+  const list = [] as Node[]
   ;(function traverse(node) {
     if (includes(list, node)) return
     list.push(node)
@@ -486,8 +486,8 @@ function cloneGraph(unit: any) {
     ],
     meta: {unit: FORK_COUNTER},
   })
-  const nodeMap = {} as Record<string, Graph>
-  const sidMap = {} as Record<string, Graph>
+  const nodeMap = {} as Record<string, Node>
+  const sidMap = {} as Record<string, Node>
   const clones = list.map(node => {
     const {seq, next, meta, scope} = node
     const result = createNode({
@@ -586,7 +586,7 @@ function cloneGraph(unit: any) {
   }
 }
 
-function wrapStore(node: Graph) {
+function wrapStore(node: Node) {
   return {
     kind: STORE,
     getState: () => node.reg[node.scope.state.id].current,
@@ -598,8 +598,8 @@ function wrapStore(node: Graph) {
   }
 }
 function forEachRelatedNode(
-  node: Graph,
-  cb: (node: Graph, index: number, siblings: Graph[]) => void,
+  node: Node,
+  cb: (node: Node, index: number, siblings: Node[]) => void,
 ) {
   const unit = node.meta.unit
   if (unit === 'fork' || unit === FORK_COUNTER) return

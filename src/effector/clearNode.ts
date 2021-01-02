@@ -1,16 +1,16 @@
-import {Graph, Graphite} from './index.h'
+import {Node, NodeUnit} from './index.h'
 import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
 import {removeItem} from './collection'
 import {CROSSLINK} from './tag'
 
-const removeFromNode = (currentNode: Graph, targetNode: Graph) => {
+const removeFromNode = (currentNode: Node, targetNode: Node) => {
   removeItem(currentNode.next, targetNode)
   removeItem(getOwners(currentNode), targetNode)
   removeItem(getLinks(currentNode), targetNode)
 }
 const clearNodeNormalized = (
-  targetNode: Graph,
+  targetNode: Node,
   deep: boolean,
   isDomainUnit: boolean,
 ) => {
@@ -48,7 +48,7 @@ const clearNodeNormalized = (
 }
 const clearMap = (map: any) => map.clear()
 export const clearNode = (
-  graphite: Graphite,
+  graphite: NodeUnit,
   {
     deep,
   }: {

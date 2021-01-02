@@ -1,10 +1,10 @@
-import {Event, Store} from './unit.h'
-import {Graphite, Unit, Cmd} from './index.h'
+import {Event} from './unit.h'
+import {NodeUnit, Cmd} from './index.h'
 import {is, isFunction, isObject} from './is'
 import {forIn, includes} from './collection'
 import {createStateRef} from './stateRef'
 import {addToRegion, readTemplate} from './region'
-import {forward, createLinkNode} from './forward'
+import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
 import {step} from './typedef'
 import {createNode} from './createNode'
@@ -15,7 +15,7 @@ import {throwError} from './throw'
 import {createEvent} from './createUnit'
 
 const launchCase = (
-  scopeTargets: Record<string, Graphite>,
+  scopeTargets: Record<string, NodeUnit>,
   field: string,
   data: any,
   stack: any,
@@ -31,7 +31,7 @@ const launchCase = (
 }
 
 export function split(...args: any[]): any {
-  let targets: Record<string, Event<any> | Graphite>
+  let targets: Record<string, Event<any> | NodeUnit>
   let [[source, match], metadata] = processArgsToConfig(args)
   const knownCases = !match
   if (knownCases) {
@@ -54,7 +54,7 @@ export function split(...args: any[]): any {
   //@ts-ignore
   const template = readTemplate()
   const owners = new Set(
-    ([] as Graphite[]).concat(source, Object.values(targets)),
+    ([] as NodeUnit[]).concat(source, Object.values(targets)),
   )
   const caseNames = Object.keys(
     matchIsUnit || matchIsFunction ? targets : match,

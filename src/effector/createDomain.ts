@@ -1,7 +1,7 @@
 import {Store, Event, Effect, Domain} from './unit.h'
 import {own} from './own'
 import {createNode} from './createNode'
-import {Config} from './index.h'
+import {Config, NodeUnit} from './index.h'
 import {
   createEvent,
   createStore,
@@ -112,7 +112,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   addToRegion(result)
   const parent = getParent(result)
   if (parent) {
-    forIn(result.hooks, (from, key) => {
+    forIn(result.hooks, (from: NodeUnit, key) => {
       forward({from, to: parent.hooks[key]})
     })
     parent.hooks.domain(result)

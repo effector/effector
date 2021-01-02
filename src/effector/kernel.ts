@@ -1,4 +1,4 @@
-import {Graph, Graphite} from './index.h'
+import {Node, NodeUnit} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
@@ -18,7 +18,7 @@ type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
 /**
  * Position in the current branch,
  * including call stack, priority type
- * and index of next step in the executed Graph
+ * and index of next step in the executed Node
  */
 type Layer = {
   idx: number
@@ -33,7 +33,7 @@ type Stack = {
   a: any
   b: any
   parent: Stack | null
-  node: Graph
+  node: Node
   page: {[id: string]: any} | null
   forkPage?: any
 }
@@ -126,7 +126,7 @@ const deleteMin = () => {
 const pushFirstHeapItem = (
   type: PriorityTag,
   page: {[id: string]: any} | null,
-  node: Graph,
+  node: Node,
   parent: Stack | null,
   value: any,
   forkPage: any | void,
@@ -341,20 +341,20 @@ const getPageForRef = (page: any, id: string) => {
   }
   return null
 }
-const getPageRef = (page: any, graph: Graph, id: string) => {
+const getPageRef = (page: any, graph: Node, id: string) => {
   const pageForRef = getPageForRef(page, id)
   return (pageForRef ? pageForRef : graph).reg[id]
 }
 
 export function launch(config: {
-  target: Graphite | Graphite[]
+  target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
   page?: any
   forkPage?: any
   stack?: Stack
 }): void
-export function launch(unit: Graphite, payload?: any, upsert?: boolean): void
+export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
 export function launch(unit: any, payload?: any, upsert?: boolean) {
   let page = currentPage
   let stack = null

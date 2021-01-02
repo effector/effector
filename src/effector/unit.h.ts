@@ -1,7 +1,7 @@
 import {
   Subscription,
   Subscriber,
-  Graph,
+  Node,
   kind,
   StateRef,
   Unit,
@@ -26,7 +26,7 @@ export interface Event<E> extends Unit {
   getType(): string
   shortName: string
   domainName?: CompositeName
-  graphite: Graph
+  graphite: Node
   compositeName: CompositeName
 }
 
@@ -85,7 +85,7 @@ export interface Store<State> extends Unit {
   shortName: string
   domainName?: CompositeName
   sid: string | null
-  graphite: Graph
+  graphite: Node
   updates: Event<State>
   compositeName?: CompositeName
 }
@@ -141,7 +141,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   kind: kind
   shortName: string
   domainName?: CompositeName
-  graphite: Graph
+  graphite: Node
   compositeName: CompositeName
 }
 
@@ -161,5 +161,5 @@ export interface Domain extends Unit {
   compositeName: CompositeName
   getType(): string
   kind: kind
-  graphite: Graph
+  graphite: Node
 }

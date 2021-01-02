@@ -1,11 +1,11 @@
-import {Graph, Graphite, Cmd, StateRef} from './index.h'
+import {Node, NodeUnit, Cmd, StateRef} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 import {nextNodeID} from './id'
 import {CROSSLINK, STORE} from './tag'
 
 const arrifyNodes = (
-  list: Graphite | Array<Graphite | Graphite[]> = [],
-): Graph[] => {
+  list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
+): Node[] => {
   const result = []
   if (Array.isArray(list)) {
     for (let i = 0; i < list.length; i++) {
@@ -44,20 +44,20 @@ export function createNode({
   family: familyRaw = {type: 'regular'},
 }: {
   node?: Array<Cmd | false | void | null>
-  from?: Graphite | Graphite[]
-  source?: Graphite | Graphite[]
-  parent?: Graphite | Graphite[]
-  to?: Graphite | Graphite[]
-  target?: Graphite | Graphite[]
-  child?: Graphite | Graphite[]
+  from?: NodeUnit | NodeUnit[]
+  source?: NodeUnit | NodeUnit[]
+  parent?: NodeUnit | NodeUnit[]
+  to?: NodeUnit | NodeUnit[]
+  target?: NodeUnit | NodeUnit[]
+  child?: NodeUnit | NodeUnit[]
   scope?: {[name: string]: any}
   meta?: {[name: string]: any}
   family?: {
     type?: 'regular' | 'crosslink' | 'domain'
-    links?: Graphite | Graphite[]
-    owners?: Graphite | Array<Graphite | Graphite[]>
+    links?: NodeUnit | NodeUnit[]
+    owners?: NodeUnit | Array<NodeUnit | NodeUnit[]>
   }
-} = {}): Graph {
+} = {}): Node {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
   const owners = arrifyNodes(familyRaw.owners)
@@ -69,7 +69,7 @@ export function createNode({
     seq.push(item)
     addToReg(item, reg)
   }
-  const result: Graph = {
+  const result: Node = {
     id: nextNodeID(),
     seq,
     next: arrifyNodes(child),

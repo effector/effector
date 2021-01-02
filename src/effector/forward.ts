@@ -1,13 +1,13 @@
 import {onConfigNesting} from './config'
 import {createNode} from './createNode'
-import {Subscription, Graphite, Cmd} from './index.h'
+import {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {throwError} from './throw'
 import {addToRegion} from './region'
 
 export const createLinkNode = (
-  parent: Graphite,
-  child: Graphite | Graphite[],
+  parent: NodeUnit,
+  child: NodeUnit | NodeUnit[],
   {
     node,
     scope,
@@ -32,8 +32,8 @@ export const createLinkNode = (
     }),
   )
 export const forward = (opts: {
-  from: Graphite | Graphite[]
-  to: Graphite | Graphite[]
+  from: NodeUnit | NodeUnit[]
+  to: NodeUnit | NodeUnit[]
   meta?: Record<string, any>
 }): Subscription => {
   let config
