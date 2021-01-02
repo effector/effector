@@ -206,29 +206,88 @@ export const setCurrentPage = (newPage: any) => {
   currentPage = newPage
 }
 
-/** main execution method */
-const exec = () => {
+const getPageForRef = (page: any, id: string) => {
+  if (page) {
+    while (page && !page.reg[id]) {
+      page = getParent(page)
+    }
+    if (page) return page
+  }
+  return null
+}
+const getPageRef = (page: any, node: Node, id: string) => {
+  const pageForRef = getPageForRef(page, id)
+  return (pageForRef ? pageForRef : node).reg[id]
+}
+
+export function launch(config: {
+  target: NodeUnit | NodeUnit[]
+  params?: any
+  defer?: boolean
+  page?: any
+  forkPage?: any
+  stack?: Stack
+}): void
+export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
+export function launch(unit: any, payload?: any, upsert?: boolean) {
+  let pageForLaunch = currentPage
+  let stackForLaunch = null
+  let forkPageForLaunch = forkPage
+  if (unit.target) {
+    payload = unit.params
+    upsert = unit.defer
+    pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
+    if (unit[STACK]) stackForLaunch = unit[STACK]
+    forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
+    unit = unit.target
+  }
+  if (forkPageForLaunch && forkPage && forkPageForLaunch !== forkPage) {
+    forkPage = null
+  }
+  if (Array.isArray(unit)) {
+    for (let i = 0; i < unit.length; i++) {
+      pushFirstHeapItem(
+        'pure',
+        pageForLaunch,
+        getGraph(unit[i]),
+        stackForLaunch,
+        payload[i],
+        forkPageForLaunch,
+      )
+    }
+  } else {
+    pushFirstHeapItem(
+      'pure',
+      pageForLaunch,
+      getGraph(unit),
+      stackForLaunch,
+      payload,
+      forkPageForLaunch,
+    )
+  }
+  if (upsert && !isRoot) return
+  /** main execution code */
   const lastStartedState = {isRoot, currentPage, forkPage, isWatch}
   isRoot = false
   let stop
   let skip
-  let graph
+  let node
   let value
   let page
   let reg
-  mem: while ((value = deleteMin())) {
+  kernelLoop: while ((value = deleteMin())) {
     const {idx, stack, type} = value
-    graph = stack.node
+    node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
-    reg = (page ? page : graph).reg
+    reg = (page ? page : node).reg
     const local: Local = {
       fail: false,
-      scope: graph.scope,
+      scope: node.scope,
     }
     stop = skip = false
-    for (let stepn = idx; stepn < graph.seq.length && !stop; stepn++) {
-      const step = graph.seq[stepn]
+    for (let stepn = idx; stepn < node.seq.length && !stop; stepn++) {
+      const step = node.seq[stepn]
       const data = step.data
       switch (step.type) {
         case BARRIER: {
@@ -242,7 +301,7 @@ const exec = () => {
               barriers.add(id)
               pushHeap(stepn, stack, priority, id)
             }
-            continue mem
+            continue kernelLoop
           }
           barriers.delete(id)
           break
@@ -261,10 +320,10 @@ const exec = () => {
               if (!reg[data.store.id]) {
                 // if (!page.parent) {
                 stack.page = page = getPageForRef(page, data.store.id)
-                reg = page ? page.reg : graph.reg
+                reg = page ? page.reg : node.reg
                 // }
               }
-              // value = getPageRef(page, graph, data.store.id).current
+              // value = getPageRef(page, node, data.store.id).current
               value = readRef(reg[data.store.id])
               break
           }
@@ -276,7 +335,7 @@ const exec = () => {
               stack[data.to] = value
               break
             case STORE:
-              getPageRef(page, graph, data.target.id).current = value
+              getPageRef(page, node, data.target.id).current = value
               break
           }
           break
@@ -289,7 +348,7 @@ const exec = () => {
             case 'changed':
               skip =
                 getValue(stack) ===
-                readRef(getPageRef(page, graph, data.store.id))
+                readRef(getPageRef(page, node, data.store.id))
               break
           }
           break
@@ -305,10 +364,10 @@ const exec = () => {
           /** exec 'compute' step when stepn === idx */
           if (stepn !== idx || type !== EFFECT) {
             pushHeap(stepn, stack, EFFECT)
-            continue mem
+            continue kernelLoop
           }
         case 'compute':
-          isWatch = graph.meta.op === 'watch'
+          isWatch = node.meta.op === 'watch'
           stack.value = tryRun(local, data, stack)
           isWatch = lastStartedState.isWatch
           break
@@ -316,11 +375,11 @@ const exec = () => {
       stop = local.fail || skip
     }
     if (!stop) {
-      for (let stepn = 0; stepn < graph.next.length; stepn++) {
+      for (let stepn = 0; stepn < node.next.length; stepn++) {
         pushFirstHeapItem(
           'child',
           page,
-          graph.next[stepn],
+          node.next[stepn],
           stack,
           getValue(stack),
           getForkPage(stack),
@@ -331,61 +390,6 @@ const exec = () => {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
-}
-const getPageForRef = (page: any, id: string) => {
-  if (page) {
-    while (page && !page.reg[id]) {
-      page = getParent(page)
-    }
-    if (page) return page
-  }
-  return null
-}
-const getPageRef = (page: any, graph: Node, id: string) => {
-  const pageForRef = getPageForRef(page, id)
-  return (pageForRef ? pageForRef : graph).reg[id]
-}
-
-export function launch(config: {
-  target: NodeUnit | NodeUnit[]
-  params?: any
-  defer?: boolean
-  page?: any
-  forkPage?: any
-  stack?: Stack
-}): void
-export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
-export function launch(unit: any, payload?: any, upsert?: boolean) {
-  let page = currentPage
-  let stack = null
-  let forkedPage = forkPage
-  if (unit.target) {
-    payload = unit.params
-    upsert = unit.defer
-    page = 'page' in unit ? unit.page : page
-    if (unit[STACK]) stack = unit[STACK]
-    forkedPage = getForkPage(unit) || forkedPage
-    unit = unit.target
-  }
-  if (forkedPage && forkPage && forkedPage !== forkPage) {
-    forkPage = null
-  }
-  if (Array.isArray(unit)) {
-    for (let i = 0; i < unit.length; i++) {
-      pushFirstHeapItem(
-        'pure',
-        page,
-        getGraph(unit[i]),
-        stack,
-        payload[i],
-        forkedPage,
-      )
-    }
-  } else {
-    pushFirstHeapItem('pure', page, getGraph(unit), stack, payload, forkedPage)
-  }
-  if (upsert && !isRoot) return
-  exec()
 }
 
 /** try catch for external functions */
