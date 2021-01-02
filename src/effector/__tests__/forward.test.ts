@@ -1,5 +1,3 @@
-
-
 import {forward, createEvent, createStore, createNode} from 'effector'
 
 it('should forward data from one event to another', () => {
@@ -71,7 +69,7 @@ it('should stop forwarding after unsubscribe', () => {
   ])
 })
 
-it('should unsubscribe only from relevant watchers', async() => {
+it('should unsubscribe only from relevant watchers', async () => {
   const dispatch = createEvent()
   const store = createStore([])
   store.on(dispatch, (state, text) => [...state, text])
@@ -158,16 +156,16 @@ it('should validate arguments', () => {
   expect(() => {
     forward({})
   }).toThrowErrorMatchingInlineSnapshot(
-    `"from and to fields should be defined"`,
+    `"forward: expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
   )
   expect(() => {
     forward({from: createStore(null)})
   }).toThrowErrorMatchingInlineSnapshot(
-    `"from and to fields should be defined"`,
+    `"forward: expect \\"to\\" to be a unit (store, event or effect) or array of units"`,
   )
   expect(() => {
     forward({to: createStore(null)})
   }).toThrowErrorMatchingInlineSnapshot(
-    `"from and to fields should be defined"`,
+    `"forward: expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
   )
 })

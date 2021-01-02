@@ -1,6 +1,6 @@
 import {observableSymbol} from './observable'
 
-import {is, isObject, isFunction, assertObject} from './is'
+import {is, isObject, isFunction, assertObject, assertNodeSet} from './is'
 import {Store, Event} from './unit.h'
 
 import {step} from './typedef'
@@ -256,13 +256,14 @@ export function createStore<State>(
       for (const unit of units) store.on(unit, () => store.defaultState)
       return store
     },
-    on(events: any, fn: Function) {
-      if (Array.isArray(events)) {
-        for (const event of events) {
+    on(nodeSet: any, fn: Function) {
+      assertNodeSet(nodeSet, '.on', 'first argument')
+      if (Array.isArray(nodeSet)) {
+        for (const event of nodeSet) {
           onEvent(event, fn)
         }
       } else {
-        onEvent(events, fn)
+        onEvent(nodeSet, fn)
       }
       return store
     },

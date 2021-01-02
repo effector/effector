@@ -5,7 +5,7 @@ import {createEvent} from './createUnit'
 import {combine} from './combine'
 import {step} from './typedef'
 import {callStack} from './caller'
-import {is, isFunction} from './is'
+import {assertNodeSet, is, isFunction} from './is'
 import {createNode} from './createNode'
 import {addToRegion} from './region'
 import {throwError} from './throw'
@@ -25,7 +25,11 @@ export function guard(...args: any[]) {
   const {filter, greedy, clock, name = rawName} = config
   const target = config.target || createEvent(name, meta.config)
   if (!is.unit(source)) source = combine(source)
-  if (clock) source = sample({source, clock, greedy})
+  if (clock) {
+    assertNodeSet(clock, 'guard', 'clock')
+    source = sample({source, clock, greedy})
+  }
+  assertNodeSet(target, 'guard', 'target')
   if (is.unit(filter)) {
     sample({
       source: filter,

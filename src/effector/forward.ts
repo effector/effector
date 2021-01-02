@@ -4,6 +4,7 @@ import {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {throwError} from './throw'
 import {addToRegion} from './region'
+import {assertNodeSet} from './is'
 
 export const createLinkNode = (
   parent: NodeUnit,
@@ -42,7 +43,8 @@ export const forward = (opts: {
     opts = userConfig
   })
   const {from, to, meta = {op: 'forward'}} = opts
-  if (!from || !to) throwError('from and to fields should be defined')
+  assertNodeSet(from, 'forward', '"from"')
+  assertNodeSet(to, 'forward', '"to"')
   if (config) meta.config = config
   return createSubscription(
     addToRegion(

@@ -5,7 +5,7 @@ import {callStackAReg, callARegStack} from './caller'
 import {processArgsToConfig} from './config'
 import {getStoreState, getGraph} from './getter'
 import {own} from './own'
-import {is} from './is'
+import {assertNodeSet, is} from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
@@ -41,6 +41,7 @@ export function sample(...args: any): any {
     //still undefined!
     clock = source
   }
+  assertNodeSet(clock, 'sample', 'clock')
   name = metadata || name || source.shortName
   const template = readTemplate()
   const isUpward = !!target
