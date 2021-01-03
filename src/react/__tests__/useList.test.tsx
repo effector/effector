@@ -270,7 +270,7 @@ describe('zombie childrens are not allowed', () => {
     await render(<List />)
     await act(async () => {
       removeMember('bob')
-      // addMember('carol')
+      addMember('carol')
       // await 0
       addMember('bob')
     })
@@ -281,6 +281,9 @@ describe('zombie childrens are not allowed', () => {
           alice
         </div>
         <div>
+          carol
+        </div>
+        <div>
           bob
         </div>
       </div>
@@ -288,6 +291,7 @@ describe('zombie childrens are not allowed', () => {
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         "alice",
+        "bob",
         "bob",
       ]
     `)
