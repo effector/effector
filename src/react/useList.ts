@@ -11,14 +11,17 @@ export function useList<T>(
     | {
         keys?: any[]
         fn(item: T, index: number): React.ReactNode
+        getKey?: (item: T) => string
       }
     | ((item: T, index: number) => React.ReactNode),
 ): React.ReactNode {
   let keys = [] as any[]
   let fn
+  let getKey: (item: T) => string
   if (typeof renderItem === 'object' && renderItem !== null) {
     if (renderItem.keys) keys = renderItem.keys
     fn = renderItem.fn
+    if (renderItem.getKey) getKey = renderItem.getKey
   } else {
     fn = renderItem
   }
@@ -29,30 +32,47 @@ export function useList<T>(
   const Item = React.useMemo(() => {
     const Item = withDisplayName(
       `${list.shortName || 'Unknown'}.Item`,
-      ({index, keys}: {index: number; keys: any[]}) => {
+      (props: {index: number; keys: any[]; keyVal?: string}) => {
+        const {index, keys, keyVal} = props
         const item = useStoreMap({
           store: list,
           keys: [index, ...keys],
           fn: (list, keys) => list[keys[0]],
         })
-        return fnRef.current(item, index)
+        return fnRef.current(item, 'keyVal' in props ? (keyVal as any) : index)
       },
     )
     return React.memo(Item)
   }, [list])
-  const length = useStoreMap({
-    store: list,
-    keys: [list],
-    fn: list => list.length,
-  })
   const fnRef = React.useRef(fn)
   fnRef.current = fn
   const keysSelfMemo = React.useMemo(() => keys, keys)
-  return Array.from({length}, (_, i) =>
-    React.createElement(Item, {
-      index: i,
-      key: i,
-      keys: keysSelfMemo,
-    }),
-  )
+  if (getKey!) {
+    const keysList = useStoreMap({
+      store: list,
+      keys: [list],
+      fn: list => list.map(getKey),
+    })
+    return Array.from(keysList, (key, i) =>
+      React.createElement(Item, {
+        index: i,
+        keyVal: key,
+        key,
+        keys: keysSelfMemo,
+      }),
+    )
+  } else {
+    const length = useStoreMap({
+      store: list,
+      keys: [list],
+      fn: list => list.length,
+    })
+    return Array.from({length}, (_, i) =>
+      React.createElement(Item, {
+        index: i,
+        key: i,
+        keys: keysSelfMemo,
+      }),
+    )
+  }
 }
