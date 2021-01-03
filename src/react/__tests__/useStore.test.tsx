@@ -90,6 +90,32 @@ describe('useStore', () => {
       ]
     `)
   })
+  it('should correct work, when store contains function', async () => {
+    const fn = jest.fn()
+    const changeStore = createEvent()
+    const $store = createStore(() => 'initial').on(
+      changeStore,
+      (_, data) => p => data[p] || 'initial',
+    )
+
+    const Display = () => {
+      const store = useStore($store)
+      fn()
+      return store('key')
+    }
+
+    await render(<Display />)
+
+    expect(container.firstChild).toMatchInlineSnapshot(`initial`)
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      changeStore({key: 'value'})
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`value`)
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
   it('should subscribe before any react hook will change store', async () => {
     const fn = jest.fn()
     const fx = createEffect({

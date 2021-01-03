@@ -6,7 +6,7 @@ import {throwError} from './throw'
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
   const currentStore = React.useRef(store)
-  const setState = React.useState(store.getState())[1]
+  const setState = React.useReducer((_, action) => action, store.getState())[1];
   useIsomorphicLayoutEffect(() => {
     if (currentStore.current === store) {
       setState(store.getState())
