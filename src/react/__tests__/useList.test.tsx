@@ -256,7 +256,7 @@ describe('zombie childrens are not allowed', () => {
       <div>
         {useList(members, {
           //@ts-ignore
-          // getKey: ({name}) => name,
+          getKey: ({name}) => name,
           fn({name}) {
             React.useLayoutEffect(() => {
               sendWelcomeMessage(name)
@@ -292,7 +292,7 @@ describe('zombie childrens are not allowed', () => {
       Array [
         "alice",
         "bob",
-        "bob",
+        "carol",
       ]
     `)
   })
