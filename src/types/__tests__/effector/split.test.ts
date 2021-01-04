@@ -16,7 +16,7 @@ it('infer type by given predicate (should pass)', () => {
   `)
 })
 
-test('condition stores (should pass)', () => {
+test('case stores / case functions (should pass)', () => {
   const source: Event<number | string> = createEvent()
   const firstBool = createStore(true)
   const firstTarget: Event<number | string> = createEvent()
@@ -41,7 +41,7 @@ test('condition stores (should pass)', () => {
   `)
 })
 
-test('case store (should pass)', () => {
+test('matcher store (should pass)', () => {
   const source: Event<number> = createEvent()
   const caseStore = createStore<'a' | 'b'>('a')
   const firstTarget: Event<number> = createEvent()
@@ -63,7 +63,7 @@ test('case store (should pass)', () => {
   `)
 })
 
-test('case store case mismatch (should fail)', () => {
+test('matcher store case mismatch (should fail)', () => {
   const source: Event<number> = createEvent()
   const caseStore = createStore<'a' | 'c'>('a')
   const firstTarget: Event<number> = createEvent()
@@ -95,7 +95,7 @@ test('case store case mismatch (should fail)', () => {
   `)
 })
 
-test('case function (should pass)', () => {
+test('matcher function (should pass)', () => {
   const source: Event<number> = createEvent()
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
@@ -116,7 +116,7 @@ test('case function (should pass)', () => {
   `)
 })
 
-test('case function case mismatch (should fail)', () => {
+test('matcher function case mismatch (should fail)', () => {
   const source: Event<number> = createEvent()
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
