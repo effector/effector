@@ -1,5 +1,3 @@
-
-
 import {argumentHistory} from 'effector/fixtures'
 import {createEvent, createStore} from 'effector'
 
@@ -282,4 +280,15 @@ it('supports array of stores and events', () => {
       },
     ]
   `)
+})
+describe('validation', () => {
+  test('validation of first argument', () => {
+    const foo = createStore(0)
+    expect(() => {
+      //@ts-ignore
+      foo.on(x => x + 1)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".on: expect first argument to be a unit (store, event or effect) or array of units"`,
+    )
+  })
 })
