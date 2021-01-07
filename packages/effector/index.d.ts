@@ -562,7 +562,6 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 }
 
 export function createDomain(domainName?: string): Domain
-
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
@@ -665,6 +664,53 @@ export function sample<A extends Combinable, B, C>(
   clock: Event<B> | Effect<B, any, any>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
 ): Event<C>
+type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
+
+type IsUnion<T, Yes, No> = [T] extends [UnionToIntersection<T>] ? No : Yes
+export function sample<
+  Source extends (Combinable | Unit<any>),
+  Clock extends (Unit<any> | ReadonlyArray<Unit<any>>),
+  Target,
+  Fn extends ((v: SourceValue<Source>, clk: UnitValue<Clock extends Array<infer S> ? S : Clock>) => Target)
+>(config: {
+  source: Source
+  clock: Clock
+  fn: Fn extends ((v: SourceValue<Source>, clk: infer Clk) => infer Ret)
+    ? Ret extends Target
+      ? Clk extends (UnitValue<Clock extends Array<infer S> ? UnionToIntersection<S> : Clock>)
+        ? Fn
+        : never
+      : never
+    : never
+  target: Unit<Target>
+}): Unit<Target>
+export function sample<
+  Source extends (Combinable | Unit<any>),
+  Target,
+  Fn extends ((v: SourceValue<Source>) => Target)
+>(config: {
+  source: Source
+  clock: Unit<any> | ReadonlyArray<Unit<any>>
+  fn: Fn extends ((v: SourceValue<Source>) => infer Ret)
+    ? Ret extends Target
+      ? Fn
+      : never
+    : never
+  target: Unit<Target>
+}): Unit<Target>
+
+export function sample<Target, Fn extends (() => void)>(config: {
+  source: Combinable | Unit<any>
+  clock: Unit<any> | ReadonlyArray<Unit<any>>
+  fn: Fn extends (() => infer Ret)
+    ? Ret extends Target
+      ? Fn
+      : never
+    : never
+  target: Unit<Target>
+}): Unit<Target>
+
 export function sample<A extends Combinable>(config: {
   source: A
   clock: Store<any>
@@ -704,6 +750,31 @@ export function sample<A extends Combinable, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
+type SourceValue<Source extends (Combinable | Unit<any>)> = Source extends Unit<infer T> ? T : GetCombinedValue<Source>
+
+// export function sample<Source extends (Combinable | Unit<any>), Clock extends (Unit<any> | Array<Unit<any>>), Target extends Unit<any>>(config: {
+//   source: Source
+//   clock: Clock
+//   fn: (source: SourceValue<Source>, clock: UnitValue<Clock extends Array<infer S> ? S : Clock>) => UnitValue<Target>
+//   target: Target
+// }): Target
+// type IsNever<T, Yes, No> = [T] extends [never] ? Yes : No
+// type IsEmptyObject<T, Yes, No> = T extends object
+//   ? IsNever<keyof T, never, Yes>
+//   : No
+// export function sample<Source extends (Combinable | Unit<any>), Target extends Unit<SourceValue<Source>>>(config: {
+//   source: Source
+//   clock: Unit<any> | Array<Unit<any>>
+//   target: SourceValue<Source> 
+//     ? SourceValue<Source> extends {}
+//       ?
+//         UnitValue<Target> extends SourceValue<Source>
+//           ? Target
+//           : never
+//       : never
+//     : Target
+// }): Target
+
 
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
