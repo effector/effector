@@ -24,13 +24,19 @@ export function guard(...args: any[]) {
   }
   const {filter, greedy, clock, name = rawName} = config
   const target = config.target || createEvent(name, meta.config)
+  const filterIsUnit = is.unit(filter)
   if (!is.unit(source)) source = combine(source)
   if (clock) {
     assertNodeSet(clock, 'guard', 'clock')
-    source = sample({source, clock, greedy})
+    source = sample({
+      source,
+      clock,
+      greedy,
+      fn: filterIsUnit ? null : (source: any, clock: any) => ({source, clock}),
+    })
   }
   assertNodeSet(target, 'guard', 'target')
-  if (is.unit(filter)) {
+  if (filterIsUnit) {
     sample({
       source: filter,
       clock: source,
@@ -60,7 +66,16 @@ export function guard(...args: any[]) {
     if (!isFunction(filter)) throwError('`filter` should be function or unit')
     createLinkNode(source, target, {
       scope: {fn: filter},
-      node: [step.filter({fn: callStack})],
+      node: clock
+        ? [
+            step.filter({
+              fn: ({source, clock}, {fn}) => fn(source, clock),
+            }),
+            step.compute({
+              fn: ({source}) => source,
+            }),
+          ]
+        : [step.filter({fn: callStack})],
       meta,
     })
   }

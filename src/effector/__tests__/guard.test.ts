@@ -230,4 +230,35 @@ describe('clock support', () => {
       ]
     `)
   })
+  test('value from clock will be passed to second argument of filter', () => {
+    const fn = jest.fn()
+    const trigger = createEvent<{n: number}>()
+    const target = createEvent<{n: number}>()
+    const source = createStore({n: 0}).on(target, (src, {n}) => ({
+      n: src.n + n,
+    }))
+    source.updates.watch(fn)
+    sample({
+      source: trigger,
+      clock: guard({
+        source,
+        clock: trigger,
+        filter: (source, clock) => (source.n + clock.n) % 2 === 0,
+      }),
+      target,
+    })
+    trigger({n: 6})
+    trigger({n: 5})
+    trigger({n: 4})
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "n": 6,
+        },
+        Object {
+          "n": 10,
+        },
+      ]
+    `)
+  })
 })
