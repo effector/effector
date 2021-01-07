@@ -41,6 +41,7 @@ function generateCase({
   explicitArgumentTypes,
   unificationToAny,
   fnClockTypeAssertion,
+  fnWithoutArgs,
 }) {
   description = `${description} (should ${pass ? 'pass' : 'fail'})`
   const clock = printArray(clockItems)
@@ -84,12 +85,31 @@ function generateCase({
   target,
 })`,
       ]
-    } else if (fn && !secondArgument && !explicitArgumentTypes) {
+    } else if (
+      fn &&
+      !secondArgument &&
+      !explicitArgumentTypes &&
+      !fnWithoutArgs
+    ) {
       body = [
         `sample({
   source: {a, b},
   clock: ${clock},`,
         `  fn: ({a, b}) => ({a, b}),
+  target,
+})`,
+      ]
+    } else if (
+      fn &&
+      !secondArgument &&
+      !explicitArgumentTypes &&
+      fnWithoutArgs
+    ) {
+      body = [
+        `sample({
+  source: {a, b},
+  clock: ${clock},`,
+        `  fn: () => ({a: '', b: 2}),
   target,
 })`,
       ]
@@ -139,12 +159,31 @@ function generateCase({
   target,
 })`,
       ]
-    } else if (fn && !secondArgument && !explicitArgumentTypes) {
+    } else if (
+      fn &&
+      !secondArgument &&
+      !explicitArgumentTypes &&
+      !fnWithoutArgs
+    ) {
       body = [
         `sample({
   source: a,
   clock: ${clock},`,
         `  fn: (a) => ({a}),
+  target,
+})`,
+      ]
+    } else if (
+      fn &&
+      !secondArgument &&
+      !explicitArgumentTypes &&
+      fnWithoutArgs
+    ) {
+      body = [
+        `sample({
+  source: a,
+  clock: ${clock},`,
+        `  fn: () => ({a: ''}),
   target,
 })`,
       ]
@@ -175,6 +214,7 @@ function generateCases({
   explicitArgumentTypes,
   unificationToAny,
   fnClockTypeAssertion,
+  fnWithoutArgs,
 }) {
   const cases = []
   if (!unificationToAny) {
@@ -190,6 +230,7 @@ function generateCases({
           explicitArgumentTypes,
           unificationToAny,
           fnClockTypeAssertion,
+          fnWithoutArgs,
         }),
       )
     }
@@ -206,6 +247,7 @@ function generateCases({
         explicitArgumentTypes,
         unificationToAny,
         fnClockTypeAssertion,
+        fnWithoutArgs,
       }),
     )
   }
@@ -254,6 +296,15 @@ const generatedCases = generateCaseSet({
     item =>
       item.fnClockTypeAssertion &&
       (!item.fn || !item.secondArgument || !item.explicitArgumentTypes),
+    ({
+      fn,
+      fnClockTypeAssertion,
+      fnWithoutArgs,
+      secondArgument,
+      explicitArgumentTypes,
+    }) =>
+      fnWithoutArgs &&
+      (!fn || fnClockTypeAssertion || secondArgument || explicitArgumentTypes),
   ],
   shape: {
     combinable: boolField(),
@@ -262,6 +313,7 @@ const generatedCases = generateCaseSet({
     explicitArgumentTypes: boolField(),
     unificationToAny: boolField(),
     fnClockTypeAssertion: boolField(),
+    fnWithoutArgs: boolField(),
     pass: dependent(({fnClockTypeAssertion}) => !fnClockTypeAssertion),
     clock: dependent(({unificationToAny, fnClockTypeAssertion}) =>
       unificationToAny
@@ -276,6 +328,7 @@ const generatedCases = generateCaseSet({
       shape.explicitArgumentTypes && res.push('typedFn')
       shape.unificationToAny && res.push('unificationToAny')
       shape.fnClockTypeAssertion && res.push('assertFnType')
+      shape.fnWithoutArgs && res.push('fnWithoutArgs')
 
       return res.join(', ')
     }),

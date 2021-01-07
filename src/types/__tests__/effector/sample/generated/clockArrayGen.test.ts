@@ -2354,6 +2354,168 @@ describe('fn', () => {
         `)
       })
     })
+    describe('plain, fn, fnWithoutArgs', () => {
+      test('plain, fn, fnWithoutArgs, single [voidt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [voidt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, fnWithoutArgs, single [stringt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [stringt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, fnWithoutArgs [voidt, stringt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [voidt, stringt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Combinable'.
+                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Combinable'.
+                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          "
+        `)
+      })
+      test('plain, fn, fnWithoutArgs [stringt, voidt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [stringt, voidt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Combinable'.
+                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Combinable'.
+                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          "
+        `)
+      })
+    })
+    describe('plain, fn, unificationToAny, fnWithoutArgs', () => {
+      test('plain, fn, unificationToAny, fnWithoutArgs [anyt, voidt, stringt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [anyt, voidt, stringt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, unificationToAny, fnWithoutArgs [anyt, stringt, voidt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [anyt, stringt, voidt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, unificationToAny, fnWithoutArgs [voidt, anyt, stringt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [voidt, anyt, stringt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, unificationToAny, fnWithoutArgs [voidt, stringt, anyt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [voidt, stringt, anyt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, unificationToAny, fnWithoutArgs [stringt, anyt, voidt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [stringt, anyt, voidt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('plain, fn, unificationToAny, fnWithoutArgs [stringt, voidt, anyt] (should pass)', () => {
+        const target = createEvent<{a: string}>()
+        sample({
+          source: a,
+          clock: [stringt, voidt, anyt],
+          fn: () => ({a: ''}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+    })
   })
   describe('combinable source', () => {
     describe('combinable, fn', () => {
@@ -3222,6 +3384,154 @@ describe('fn', () => {
             The last overload gave the following error.
               Type 'Event<number>' is not assignable to type 'Unit<string>'.
                 Type 'Event<void>' is not assignable to type 'Unit<string>'.
+          "
+        `)
+      })
+    })
+    describe('combinable, fn, fnWithoutArgs', () => {
+      test('combinable, fn, fnWithoutArgs, single [voidt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [voidt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, fnWithoutArgs, single [stringt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [stringt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, fnWithoutArgs [voidt, stringt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [voidt, stringt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          "
+        `)
+      })
+      test('combinable, fn, fnWithoutArgs [stringt, voidt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [stringt, voidt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          "
+        `)
+      })
+    })
+    describe('combinable, fn, unificationToAny, fnWithoutArgs', () => {
+      test('combinable, fn, unificationToAny, fnWithoutArgs [anyt, voidt, stringt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [anyt, voidt, stringt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, unificationToAny, fnWithoutArgs [anyt, stringt, voidt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [anyt, stringt, voidt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, unificationToAny, fnWithoutArgs [voidt, anyt, stringt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [voidt, anyt, stringt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, unificationToAny, fnWithoutArgs [voidt, stringt, anyt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [voidt, stringt, anyt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, unificationToAny, fnWithoutArgs [stringt, anyt, voidt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [stringt, anyt, voidt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+      test('combinable, fn, unificationToAny, fnWithoutArgs [stringt, voidt, anyt] (should pass)', () => {
+        const target = createEvent<{a: string; b: number}>()
+        sample({
+          source: {a, b},
+          clock: [stringt, voidt, anyt],
+          fn: () => ({a: '', b: 2}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
           "
         `)
       })
