@@ -1,3 +1,7 @@
+//@ts-check
+const {promises} = require('fs')
+const {resolve} = require('path')
+
 /**
 fn:
 - with fn with second argument
@@ -36,20 +40,14 @@ function generateCase({
   secondArgument,
   explicitArgumentTypes,
   unificationToAny,
+  fnClockTypeAssertion,
 }) {
   description = `${description} (should ${pass ? 'pass' : 'fail'})`
   const clock = printArray(clockItems)
-  const headers = [
-    'const voidt = createEvent()',
-    'const stringt = createEvent<string>()',
-  ]
-  if (unificationToAny) {
-    headers.push('const anyt = createEvent<any>()')
-  }
+  const headers = []
   let body = []
   const footer = ['expect(typecheck).toMatchInlineSnapshot()']
   if (combinable) {
-    headers.push(`const a = createStore('')`, 'const b = createStore(0)')
     if (fn && secondArgument) {
       headers.push(
         'const target = createEvent<{a: string; b: number; clock: any}>()',
@@ -62,7 +60,9 @@ function generateCase({
         `sample({
   source: {a, b},
   clock: ${clock},`,
-        `  fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
+        `  fn: ({a, b}: {a: string; b: number}, clock: ${
+          fnClockTypeAssertion ? 'string' : 'any'
+        }) => ({a, b, clock}),
   target,
 })`,
       ]
@@ -103,7 +103,6 @@ function generateCase({
       ]
     }
   } else {
-    headers.push(`const a = createStore('')`)
     if (fn && secondArgument) {
       headers.push('const target = createEvent<{a: string; clock: any}>()')
     } else if (fn && !secondArgument) {
@@ -116,7 +115,9 @@ function generateCase({
         `sample({
   source: a,
   clock: ${clock},`,
-        `  fn: (a: string, clock: any) => ({a, clock}),
+        `  fn: (a: string, clock: ${
+          fnClockTypeAssertion ? 'string' : 'any'
+        }) => ({a, clock}),
   target,
 })`,
       ]
@@ -173,6 +174,7 @@ function generateCases({
   secondArgument,
   explicitArgumentTypes,
   unificationToAny,
+  fnClockTypeAssertion,
 }) {
   const cases = []
   if (!unificationToAny) {
@@ -187,6 +189,7 @@ function generateCases({
           secondArgument,
           explicitArgumentTypes,
           unificationToAny,
+          fnClockTypeAssertion,
         }),
       )
     }
@@ -202,6 +205,7 @@ function generateCases({
         secondArgument,
         explicitArgumentTypes,
         unificationToAny,
+        fnClockTypeAssertion,
       }),
     )
   }
@@ -240,223 +244,192 @@ function permute(items) {
   return result
 }
 
-const testCases = []
-const clockUni = ['anyt', 'voidt', 'stringt']
-const clockNoUni = ['voidt', 'stringt']
-testCases.push(
-  `/* eslint-disable no-unused-vars */
+const generatedCases = generateCaseSet({
+  groupBy: ['fn', 'combinable'],
+  groupDescriptions: {
+    fn: val => (val ? 'fn' : 'no fn'),
+    combinable: val => (val ? 'combinable source' : 'plain source'),
+  },
+  ignore: [
+    item =>
+      item.fnClockTypeAssertion &&
+      (!item.fn || !item.secondArgument || !item.explicitArgumentTypes),
+  ],
+  shape: {
+    combinable: boolField(),
+    fn: boolField(),
+    secondArgument: boolField(),
+    explicitArgumentTypes: boolField(),
+    unificationToAny: boolField(),
+    fnClockTypeAssertion: boolField(),
+    pass: dependent(({fnClockTypeAssertion}) => !fnClockTypeAssertion),
+    clock: dependent(({unificationToAny, fnClockTypeAssertion}) =>
+      unificationToAny
+        ? ['anyt', 'voidt', fnClockTypeAssertion ? 'numt' : 'stringt']
+        : ['voidt', fnClockTypeAssertion ? 'numt' : 'stringt'],
+    ),
+    description: dependent(shape => {
+      const res = []
+      shape.combinable ? res.push('combinable') : res.push('plain')
+      shape.fn && res.push('fn')
+      shape.secondArgument && res.push('fnClock')
+      shape.explicitArgumentTypes && res.push('typedFn')
+      shape.unificationToAny && res.push('unificationToAny')
+      shape.fnClockTypeAssertion && res.push('assertFnType')
+
+      return res.join(', ')
+    }),
+  },
+})
+
+writeTestSuite('clockArrayGen', generatedCases)
+
+function boolField() {
+  return {type: 'bool'}
+}
+function dependent(config) {
+  if (typeof config === 'function') config = {fn: config, resultType: 'plain'}
+  return {
+    type: 'dependent',
+    fn: config.fn,
+    resultType: config.resultType || 'plain',
+  }
+}
+function groupBy(field, descriptionFn) {
+  return {type: 'groupBy', field, descriptionFn}
+}
+
+function generateCaseSet({
+  groupBy = [],
+  ignore = [],
+  groupDescriptions = {},
+  shape,
+}) {
+  groupBy = groupBy.map(val => (typeof val === 'string' ? {field: val} : val))
+  const groupByFields = groupBy.map(({field}) => field)
+  const valueSet = {}
+  const plainShape = {}
+  const generationSeq = []
+  for (const fieldName in shape) {
+    const field = shape[fieldName]
+    if (field && field.type) {
+      switch (field.type) {
+        case 'bool': {
+          valueSet[fieldName] = [false, true]
+          break
+        }
+        case 'dependent': {
+          generationSeq.push(shape => ({
+            ...shape,
+            [fieldName]: field.fn(shape),
+          }))
+          break
+        }
+      }
+    } else {
+      plainShape[fieldName] = shape[fieldName]
+    }
+  }
+  let results = [{...plainShape}]
+  for (const field in valueSet) {
+    const newResults = []
+    for (const value of valueSet[field]) {
+      newResults.push(...results.map(val => ({...val, [field]: value})))
+    }
+    results = newResults
+  }
+
+  const resultsFlat = results
+    .map(item => {
+      item = generationSeq.reduce((item, fn) => fn(item), item)
+      return item
+    })
+    .filter(item => {
+      if (ignore.length === 0) return true
+      return ignore.every(fn => !fn(item))
+    })
+  const testSuite = []
+  for (const resultItem of resultsFlat) {
+    const groupValues = groupBy.map(({field}) => ({
+      field,
+      value: resultItem[field],
+    }))
+    if (groupValues.length === 0) {
+      testSuite.push({type: 'item', value: resultItem})
+    } else {
+      let currentParent = testSuite
+      for (let i = 0; i < groupValues.length; i++) {
+        const {field, value} = groupValues[i]
+        let newParent = currentParent.find(
+          e => e.type === 'group' && e.name === field && e.value === value,
+        )
+        if (!newParent) {
+          newParent = {
+            type: 'group',
+            name: field,
+            value,
+            child: [],
+          }
+          currentParent.push(newParent)
+        }
+        currentParent = newParent.child
+        if (i === groupValues.length - 1) {
+          currentParent.push({type: 'item', value: resultItem})
+        }
+      }
+    }
+  }
+  const testSuiteText = iterateSuite(testSuite).join(`\n`)
+  return testSuiteText
+  function iterateSuite(suite) {
+    const results = []
+    for (const item of suite) {
+      switch (item.type) {
+        case 'item': {
+          results.push(generateCases(item.value))
+          break
+        }
+        case 'group': {
+          const descriptionFn = groupDescriptions[item.name]
+          let description = `${item.name}: ${item.value}`
+          if (descriptionFn) description = descriptionFn(item.value)
+          if (item.child.length === 0) continue
+          results.push(
+            wrapText(
+              `describe('${description}', () => {`,
+              iterateSuite(item.child),
+            ),
+          )
+          break
+        }
+      }
+    }
+    return results
+  }
+}
+
+async function writeTestSuite(file, suite) {
+  const content = `/* eslint-disable no-unused-vars */
 import {createStore, createEvent, sample} from 'effector'
-const typecheck = '{global}'`,
-  wrapText(`describe('plain source', () => {`, [
-    generateCases({
-      description: 'plain',
-      pass: true,
-      clock: clockNoUni,
-      combinable: false,
-      fn: false,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'plain, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: false,
-      fn: false,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: true,
-    }),
+const typecheck = '{global}'
 
-    generateCases({
-      description: 'plain, fn',
-      pass: true,
-      clock: clockNoUni,
-      combinable: false,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'plain, fn, secondArgument',
-      pass: true,
-      clock: clockNoUni,
-      combinable: false,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: false,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'plain, fn, explicitArgumentTypes',
-      pass: true,
-      clock: clockNoUni,
-      combinable: false,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: true,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'plain, fn, secondArgument, explicitArgumentTypes',
-      pass: true,
-      clock: clockNoUni,
-      combinable: false,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: true,
-      unificationToAny: false,
-    }),
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const stringt = createEvent<string>()
+const numt = createEvent<number>()
+const a = createStore('')
+const b = createStore(0)
 
-    generateCases({
-      description: 'plain, fn, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: false,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: true,
-    }),
-    generateCases({
-      description: 'plain, fn, secondArgument, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: false,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: false,
-      unificationToAny: true,
-    }),
-    generateCases({
-      description: 'plain, fn, explicitArgumentTypes, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: false,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: true,
-      unificationToAny: true,
-    }),
-    generateCases({
-      description:
-        'plain, fn, secondArgument, explicitArgumentTypes, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: false,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: true,
-      unificationToAny: true,
-    }),
-  ]),
-  wrapText(`describe('combinable source', () => {`, [
-    generateCases({
-      description: 'combinable',
-      pass: true,
-      clock: clockNoUni,
-      combinable: true,
-      fn: false,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'combinable, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: true,
-      fn: false,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: true,
-    }),
+${suite}`
 
-    generateCases({
-      description: 'combinable, fn',
-      pass: true,
-      clock: clockNoUni,
-      combinable: true,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'combinable, fn, secondArgument',
-      pass: true,
-      clock: clockNoUni,
-      combinable: true,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: false,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'combinable, fn, explicitArgumentTypes',
-      pass: true,
-      clock: clockNoUni,
-      combinable: true,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: true,
-      unificationToAny: false,
-    }),
-    generateCases({
-      description: 'combinable, fn, secondArgument, explicitArgumentTypes',
-      pass: true,
-      clock: clockNoUni,
-      combinable: true,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: true,
-      unificationToAny: false,
-    }),
-
-    generateCases({
-      description: 'combinable, fn, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: true,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: false,
-      unificationToAny: true,
-    }),
-    generateCases({
-      description: 'combinable, fn, secondArgument, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: true,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: false,
-      unificationToAny: true,
-    }),
-    generateCases({
-      description: 'combinable, fn, explicitArgumentTypes, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: true,
-      fn: true,
-      secondArgument: false,
-      explicitArgumentTypes: true,
-      unificationToAny: true,
-    }),
-    generateCases({
-      description:
-        'combinable, fn, secondArgument, explicitArgumentTypes, unificationToAny',
-      pass: true,
-      clock: clockUni,
-      combinable: true,
-      fn: true,
-      secondArgument: true,
-      explicitArgumentTypes: true,
-      unificationToAny: true,
-    }),
-  ]),
-)
-
-console.log(testCases.join(`\n`))
+  const srcRoot = resolve(
+    __dirname,
+    '..',
+    '__tests__',
+    'effector',
+    'sample',
+    'generated',
+  )
+  const fullFileName = resolve(srcRoot, `${file}.test.ts`)
+  await promises.writeFile(fullFileName, content)
+}
