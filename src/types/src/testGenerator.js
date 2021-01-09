@@ -204,55 +204,6 @@ function generateCase({
   ])
 }
 
-function generateCases({
-  description,
-  pass,
-  clock,
-  combinable,
-  fn,
-  secondArgument,
-  explicitArgumentTypes,
-  unificationToAny,
-  fnClockTypeAssertion,
-  fnWithoutArgs,
-}) {
-  const cases = []
-  if (!unificationToAny) {
-    for (const clockItem of clock) {
-      cases.push(
-        generateCase({
-          description: `${description}, single ${printArray([clockItem])}`,
-          pass,
-          clock: [clockItem],
-          combinable,
-          fn,
-          secondArgument,
-          explicitArgumentTypes,
-          unificationToAny,
-          fnClockTypeAssertion,
-          fnWithoutArgs,
-        }),
-      )
-    }
-  }
-  for (const permutation of permute(clock)) {
-    cases.push(
-      generateCase({
-        description: `${description} ${printArray(permutation)}`,
-        pass,
-        clock: permutation,
-        combinable,
-        fn,
-        secondArgument,
-        explicitArgumentTypes,
-        unificationToAny,
-        fnClockTypeAssertion,
-        fnWithoutArgs,
-      }),
-    )
-  }
-  return wrapText(`describe('${description}', () => {`, [...cases])
-}
 function printArray(array) {
   return `[${array.join(', ')}]`
 }
@@ -333,9 +284,73 @@ const generatedCases = generateCaseSet({
       return res.join(', ')
     }),
   },
+  generateCases({
+    description,
+    pass,
+    clock,
+    combinable,
+    fn,
+    secondArgument,
+    explicitArgumentTypes,
+    unificationToAny,
+    fnClockTypeAssertion,
+    fnWithoutArgs,
+  }) {
+    const cases = []
+    if (!unificationToAny) {
+      for (const clockItem of clock) {
+        cases.push(
+          generateCase({
+            description: `${description}, single ${printArray([clockItem])}`,
+            pass,
+            clock: [clockItem],
+            combinable,
+            fn,
+            secondArgument,
+            explicitArgumentTypes,
+            unificationToAny,
+            fnClockTypeAssertion,
+            fnWithoutArgs,
+          }),
+        )
+      }
+    }
+    for (const permutation of permute(clock)) {
+      cases.push(
+        generateCase({
+          description: `${description} ${printArray(permutation)}`,
+          pass,
+          clock: permutation,
+          combinable,
+          fn,
+          secondArgument,
+          explicitArgumentTypes,
+          unificationToAny,
+          fnClockTypeAssertion,
+          fnWithoutArgs,
+        }),
+      )
+    }
+    return {
+      description,
+      cases,
+    }
+  },
 })
 
-writeTestSuite('clockArrayGen', generatedCases)
+writeTestSuite({
+  file: 'clockArrayGen',
+  suite: generatedCases,
+  usedMethods: ['createStore', 'createEvent', 'sample'],
+  header: `
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const stringt = createEvent<string>()
+const numt = createEvent<number>()
+const a = createStore('')
+const b = createStore(0)
+`,
+})
 
 function boolField() {
   return {type: 'bool'}
@@ -357,6 +372,7 @@ function generateCaseSet({
   ignore = [],
   groupDescriptions = {},
   shape,
+  generateCases,
 }) {
   groupBy = groupBy.map(val => (typeof val === 'string' ? {field: val} : val))
   const groupByFields = groupBy.map(({field}) => field)
@@ -439,7 +455,10 @@ function generateCaseSet({
     for (const item of suite) {
       switch (item.type) {
         case 'item': {
-          results.push(generateCases(item.value))
+          const {description, cases} = generateCases(item.value)
+          results.push(
+            wrapText(`describe('${description}', () => {`, [...cases]),
+          )
           break
         }
         case 'group': {
@@ -461,17 +480,12 @@ function generateCaseSet({
   }
 }
 
-async function writeTestSuite(file, suite) {
+async function writeTestSuite({file, suite, usedMethods = [], header = ''}) {
   const content = `/* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample} from 'effector'
+import {${usedMethods.join(', ')}} from 'effector'
 const typecheck = '{global}'
 
-const voidt = createEvent()
-const anyt = createEvent<any>()
-const stringt = createEvent<string>()
-const numt = createEvent<number>()
-const a = createStore('')
-const b = createStore(0)
+${header.trim()}
 
 ${suite}`
 
