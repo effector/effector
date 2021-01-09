@@ -10,7 +10,7 @@ import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
-import {addToRegion, readTemplate} from './region'
+import {readTemplate} from './region'
 import {throwError} from './throw'
 import {includes} from './collection'
 import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
@@ -94,24 +94,23 @@ export function sample(...args: any): any {
     if (template) {
       template.plain.push(hasSource, sourceState, clockState)
     }
-    addToRegion(
-      createNode({
-        parent: source,
-        node: [
-          step.update({store: sourceState}),
-          step.mov({
-            from: VALUE,
-            store: true,
-            target: hasSource,
-          }),
-        ],
-        family: {
-          owners: [source, target, clock],
-          links: target,
-        },
-        meta: {op: SAMPLE, sample: 'source'},
-      }),
-    )
+    createNode({
+      parent: source,
+      node: [
+        step.update({store: sourceState}),
+        step.mov({
+          from: VALUE,
+          store: true,
+          target: hasSource,
+        }),
+      ],
+      family: {
+        owners: [source, target, clock],
+        links: target,
+      },
+      meta: {op: SAMPLE, sample: 'source'},
+      regional: true,
+    })
     own(source, [
       createLinkNode(clock, target, {
         scope: {

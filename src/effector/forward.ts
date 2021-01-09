@@ -2,8 +2,6 @@ import {onConfigNesting} from './config'
 import {createNode} from './createNode'
 import {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
-import {throwError} from './throw'
-import {addToRegion} from './region'
 import {assertNodeSet} from './is'
 
 export const createLinkNode = (
@@ -19,19 +17,18 @@ export const createLinkNode = (
     meta?: {[name: string]: any}
   },
 ) =>
-  addToRegion(
-    createNode({
-      node,
-      parent,
-      child,
-      scope,
-      meta,
-      family: {
-        owners: [parent, child],
-        links: child,
-      },
-    }),
-  )
+  createNode({
+    node,
+    parent,
+    child,
+    scope,
+    meta,
+    family: {
+      owners: [parent, child],
+      links: child,
+    },
+    regional: true,
+  })
 export const forward = (opts: {
   from: NodeUnit | NodeUnit[]
   to: NodeUnit | NodeUnit[]
@@ -47,13 +44,12 @@ export const forward = (opts: {
   assertNodeSet(to, 'forward', '"to"')
   if (config) meta.config = config
   return createSubscription(
-    addToRegion(
-      createNode({
-        parent: from,
-        child: to,
-        meta,
-        family: {},
-      }),
-    ),
+    createNode({
+      parent: from,
+      child: to,
+      meta,
+      family: {},
+      regional: true,
+    }),
   )
 }

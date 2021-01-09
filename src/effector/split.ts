@@ -3,7 +3,7 @@ import {NodeUnit, Cmd} from './index.h'
 import {is, isFunction, isObject} from './is'
 import {forIn, includes} from './collection'
 import {createStateRef} from './stateRef'
-import {addToRegion, readTemplate} from './region'
+import {readTemplate} from './region'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
 import {step} from './typedef'
@@ -152,20 +152,19 @@ export function split(...args: any[]): any {
   } else {
     throwError('expect match to be unit, function or object')
   }
-  const linkNode = addToRegion(
-    createNode({
-      meta: {
-        onCopy: Object.keys(targets),
-        op: 'split',
-      },
-      parent: source,
-      scope: targets,
-      node: splitterSeq!,
-      family: {
-        type: 'crosslink',
-        owners: [...owners],
-      },
-    }),
-  )
+  createNode({
+    meta: {
+      onCopy: Object.keys(targets),
+      op: 'split',
+    },
+    parent: source,
+    scope: targets,
+    node: splitterSeq!,
+    family: {
+      type: 'crosslink',
+      owners: [...owners],
+    },
+    regional: true,
+  })
   if (!knownCases) return targets
 }

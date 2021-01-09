@@ -17,7 +17,7 @@ import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
-import {addToRegion, readTemplate, readSidRoot} from './region'
+import {readTemplate, readSidRoot} from './region'
 import {
   getSubscribers,
   getConfig,
@@ -161,6 +161,7 @@ export function createEvent<Payload = any>(
   }
   event.graphite = createNode({
     meta: initUnit(EVENT, event, maybeConfig, nameOrConfig),
+    regional: true,
   })
   //eslint-disable-next-line no-unused-vars
   event.create = (params: any, _: any) => {
@@ -203,7 +204,7 @@ export function createEvent<Payload = any>(
     return contramapped
   }
   const template = readTemplate()
-  return addToRegion(event)
+  return event
 }
 
 export function createStore<State>(
@@ -366,11 +367,12 @@ export function createStore<State>(
     ],
     child: updates,
     meta,
+    regional: true,
   })
   if (isStrict && defaultState === undefined)
     throwError("current state can't be undefined, use null instead")
   own(store, [updates])
-  return addToRegion(store)
+  return store
 }
 
 const updateStore = (

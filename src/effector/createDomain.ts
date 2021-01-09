@@ -10,7 +10,6 @@ import {
 } from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
-import {addToRegion} from './region'
 import {forIn} from './collection'
 import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
@@ -51,6 +50,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
 
   const node = createNode({
     family: {type: DOMAIN},
+    regional: true,
   })
 
   const result: any = {
@@ -109,7 +109,6 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
         config,
       }),
     )
-  addToRegion(result)
   const parent = getParent(result)
   if (parent) {
     forIn(result.hooks, (from: NodeUnit, key) => {

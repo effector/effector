@@ -9,12 +9,7 @@ type RegionStack = {
   sidRoot?: string
 }
 
-export const addToRegion = (unit: any) => {
-  if (regionStack) own(getValue(regionStack), [unit])
-  return unit
-}
-
-let regionStack: RegionStack | null = null
+export let regionStack: RegionStack | null = null
 
 export const readTemplate = () => regionStack && regionStack.template
 export const readSidRoot = (sid?: string | null) => {

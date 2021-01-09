@@ -1,7 +1,9 @@
 import {Node, NodeUnit, Cmd, StateRef} from './index.h'
-import {getGraph, getOwners, getLinks} from './getter'
+import {getGraph, getOwners, getLinks, getValue} from './getter'
 import {nextNodeID} from './id'
 import {CROSSLINK, STORE} from './tag'
+import {regionStack} from './region'
+import {own} from './own'
 
 const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
@@ -42,6 +44,7 @@ export function createNode({
   scope = {},
   meta = {},
   family: familyRaw = {type: 'regular'},
+  regional,
 }: {
   node?: Array<Cmd | false | void | null>
   from?: NodeUnit | NodeUnit[]
@@ -57,6 +60,7 @@ export function createNode({
     links?: NodeUnit | NodeUnit[]
     owners?: NodeUnit | Array<NodeUnit | NodeUnit[]>
   }
+  regional?: boolean
 } = {}): Node {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
@@ -90,6 +94,9 @@ export function createNode({
   }
   for (let i = 0; i < sources.length; i++) {
     sources[i].next.push(result)
+  }
+  if (regional && regionStack) {
+    own(getValue(regionStack), [result])
   }
   return result
 }
