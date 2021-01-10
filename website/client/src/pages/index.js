@@ -9,7 +9,7 @@ import styles from './styles.module.css'
 
 import {Code} from '../components/Code'
 
-import SberLogo from './logo/sber.svg'
+import sberLogo from './logo/sber.png'
 import MtsLogo from './logo/mts.svg'
 import AutomationHeroLogo from './logo/automationhero.svg'
 import docsvisionLogo from './logo/docsvision.png'
@@ -98,7 +98,7 @@ const features = [
 
 const users = [
   {
-    view: SberLogo,
+    url: sberLogo,
     alt: 'Sber',
   },
   {
