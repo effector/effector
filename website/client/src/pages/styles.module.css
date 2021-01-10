@@ -60,7 +60,8 @@
   --logoCardGap: 2rem;
 }
 .usersSection > header {
-  margin-top: 2rem;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
 }
 .usersSection [data-users-header] {
   color: #1c1e21;
