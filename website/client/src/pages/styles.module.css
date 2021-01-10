@@ -19,13 +19,13 @@
 
 @media screen and (min-width: 966px) {
   .buttons a {
-    width: 33%
+    width: 33%;
   }
 }
 
 @media screen and (max-width: 966px) {
   .buttons a {
-    width: 50%
+    width: 50%;
   }
 }
 
@@ -48,4 +48,73 @@
 
 .rowRevers {
   flex-direction: row-reverse;
+}
+
+.usersSection {
+  display: grid;
+  justify-items: center;
+  padding-bottom: 2rem;
+  --maxWidth: 70vw;
+  --maxHeight: 60%;
+  --logoCardSize: 220px;
+  --logoCardGap: 2rem;
+}
+.usersSection > header {
+  margin-top: 2rem;
+}
+.usersSection [data-users-header] {
+  color: #1c1e21;
+}
+
+[data-theme='dark'] .usersSection {
+  background-color: #f5f6f7;
+}
+
+@media screen and (max-width: 966px) {
+  .usersSection {
+    --maxWidth: 90vw;
+    --logoCardSize: 150px;
+    --logoCardGap: 1rem;
+  }
+}
+
+.usersSection > [data-users-logos] {
+  display: grid;
+  max-width: var(--maxWidth);
+  grid-template-columns: repeat(auto-fill, minmax(var(--logoCardSize), 1fr));
+  grid-gap: var(--logoCardGap);
+}
+
+[data-users-logos] > [data-users-logo] {
+  padding: var(--logoCardGap);
+  position: relative;
+}
+
+[data-users-logo]::before {
+  content: '';
+  display: block;
+  padding-bottom: var(--maxHeight);
+}
+
+[data-users-logo] > img,
+[data-users-logo] > svg {
+  position: absolute;
+  max-width: 100%;
+  top: calc(var(--maxHeight) / 2);
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+[data-users-logo] > svg {
+  width: fit-content;
+}
+
+[data-users-logo][data-logo-offset] > img {
+  transform: translate(-50%, -60%);
+}
+
+[data-users-add-yours] {
+  justify-self: end;
+  padding-right: calc((100vw - var(--maxWidth)) / 2);
+  font-size: 12px;
 }

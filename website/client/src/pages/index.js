@@ -9,6 +9,16 @@ import styles from './styles.module.css'
 
 import {Code} from '../components/Code'
 
+import SberLogo from './logo/sber.svg'
+import MtsLogo from './logo/mts.svg'
+import AutomationHeroLogo from './logo/automationhero.svg'
+import docsvisionLogo from './logo/docsvision.png'
+import redmadrobotLogo from './logo/redmadrobot.png'
+import radityLogo from './logo/radity.png'
+import okooLogo from './logo/okoo.png'
+import globalCtoForumLogo from './logo/globalCtoForum.png'
+import stmLabsLogo from './logo/stmLabs.png'
+
 const codeExample = `import {createEvent, createStore, createEffect, sample} from 'effector'
 
 const nextPost = createEvent()
@@ -86,6 +96,47 @@ const features = [
   },
 ]
 
+const users = [
+  {
+    view: SberLogo,
+    alt: 'Sber',
+  },
+  {
+    view: MtsLogo,
+    alt: 'MTS',
+  },
+  {
+    url: redmadrobotLogo,
+    alt: 'REDMADROBOT',
+    yOffset: true,
+  },
+  {
+    view: AutomationHeroLogo,
+    alt: 'automation hero',
+  },
+  {
+    url: docsvisionLogo,
+    alt: 'Docsvision',
+  },
+  {
+    url: radityLogo,
+    alt: 'Radity',
+  },
+  {
+    url: okooLogo,
+    alt: 'Okoo',
+    yOffset: true,
+  },
+  {
+    url: globalCtoForumLogo,
+    alt: 'Global CTO Forum',
+  },
+  {
+    url: stmLabsLogo,
+    alt: 'STM Labs',
+  },
+]
+
 function Feature({imageUrl, title, description}) {
   const imgUrl = useBaseUrl(imageUrl)
   return (
@@ -149,7 +200,9 @@ function Home() {
                 </Link>
               </div>
             </div>
-            <div className="col col--6" style={{fontSize: 'calc(var(--ifm-code-font-size) * 0.9)'}}>
+            <div
+              className="col col--6"
+              style={{fontSize: 'calc(var(--ifm-code-font-size) * 0.9)'}}>
               <Code language="js">{codeExample}</Code>
             </div>
           </div>
@@ -168,6 +221,34 @@ function Home() {
           </section>
         )}
       </main>
+      <footer className={styles.usersSection}>
+        <header>
+          <h1 data-users-header>Companies using effector</h1>
+        </header>
+        <section data-users-logos>
+          {users.map(({url, alt, view: View, yOffset}, i) => {
+            if (!View)
+              return (
+                <div key={i} data-users-logo data-logo-offset={yOffset}>
+                  <img alt={alt} src={url} title={alt} />
+                </div>
+              )
+            return (
+              <div key={i} data-users-logo>
+                <View title={alt} />
+              </div>
+            )
+          })}
+        </section>
+        <div data-users-add-yours>
+          <i>
+            Want to appear on this page?{' '}
+            <a href="https://github.com/effector/effector/issues/278">
+              Tell us
+            </a>
+          </i>
+        </div>
+      </footer>
     </Layout>
   )
 }
