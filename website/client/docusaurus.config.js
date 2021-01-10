@@ -117,7 +117,7 @@ module.exports = {
         src: 'img/comet.png',
         href: 'https://github.com/effector/effector',
       },
-      copyright: `Copyright © ${new Date().getFullYear()} zerobias`,
+      copyright: `Copyright © 2018-${new Date().getFullYear()} zerobias`,
     },
   },
   scripts: [],
