@@ -6,3 +6,4 @@
 /docs/api/effector-vue /docs/api/effector-vue/effector-vue 301
 /docs/api/effector/createStoreObject /docs/api/effector/combine 301
 /docs/introduction/prior-art /docs/advanced-guide/prior-art 301
+/docs/recipes/usage-with-typescript /docs/typescript/typing-effector 301
