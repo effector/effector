@@ -236,7 +236,12 @@ function permute(items) {
   }
   return result
 }
-
+function matchSomeOfBoolFields(value, shape) {
+  for (const field in shape) {
+    if (value[field] === shape[field]) return true
+  }
+  return false
+}
 const generatedCases = generateCaseSet({
   groupBy: ['fn', 'combinable'],
   groupDescriptions: {
@@ -245,17 +250,28 @@ const generatedCases = generateCaseSet({
   },
   ignore: [
     item =>
+      !item.fn &&
+      matchSomeOfBoolFields(item, {
+        fnClockTypeAssertion: true,
+        secondArgument: true,
+        explicitArgumentTypes: true,
+        fnWithoutArgs: true,
+      }),
+    item =>
       item.fnClockTypeAssertion &&
-      (!item.fn || !item.secondArgument || !item.explicitArgumentTypes),
-    ({
-      fn,
-      fnClockTypeAssertion,
-      fnWithoutArgs,
-      secondArgument,
-      explicitArgumentTypes,
-    }) =>
-      fnWithoutArgs &&
-      (!fn || fnClockTypeAssertion || secondArgument || explicitArgumentTypes),
+      matchSomeOfBoolFields(item, {
+        fn: false,
+        secondArgument: false,
+        explicitArgumentTypes: false,
+      }),
+    item =>
+      item.fnWithoutArgs &&
+      matchSomeOfBoolFields(item, {
+        fn: false,
+        fnClockTypeAssertion: true,
+        secondArgument: true,
+        explicitArgumentTypes: true,
+      }),
   ],
   shape: {
     combinable: boolField(),
@@ -349,6 +365,175 @@ const stringt = createEvent<string>()
 const numt = createEvent<number>()
 const a = createStore('')
 const b = createStore(0)
+`,
+})
+function byFields({shape = {}, items = []}) {
+  function byField(field, def, items) {}
+}
+function computeField(values, {field, fn}) {
+  return values.map(val => ({...val, [field]: fn(val)}))
+}
+function permuteField(
+  values,
+  {field, items, amount: {min = 0, max = items.length - 1} = {}, ignore},
+) {
+  const combinations = selectFromNToM(items, min, max)
+  const results = []
+  for (const combination of selectFromNToM(items, min, max)) {
+    results.push(...values.map(val => ({...val, [field]: combination})))
+  }
+  if (ignore) return results.filter(ignore)
+  return results
+  function selectFromNToM(items, from, to) {
+    const result = []
+    for (let i = from; i < Math.min(to + 1, items.length); i++) {
+      result.push(...selectN(items, i))
+    }
+    return result
+  }
+  function selectN(items, n) {
+    if (n === 0) return [[]]
+    if (n === 1) return items.map(item => [item])
+    const result = []
+    for (let i = 0; i < items.length; i++) {
+      const subItems = [...items]
+      subItems.splice(i, 1)
+      result.push(
+        ...selectN(subItems, n - 1).map(nested => [items[i], ...nested]),
+      )
+    }
+    return result
+  }
+}
+const arrayTargetCaseSet = generateCaseSet({
+  groupBy: ['combinable'],
+  groupDescriptions: {
+    fn: val => (val ? 'fn' : 'no fn'),
+    combinable: val => (val ? 'combinable source' : 'plain source'),
+  },
+  ignore: [],
+  shape: {
+    combinable: boolField(),
+    source: 'number',
+    clock: 'any',
+    variables: {
+      number: 'numt',
+      void: 'voidt',
+      string: 'stringt',
+      any: 'anyt',
+    },
+  },
+  generateCases({source, clock, variables, combinable}) {
+    if (combinable) {
+      const targetCases = ['a_num', 'a_str', 'a_num_b_num', 'a_num_b_str']
+      const sourceCases = ['a', 'ab']
+      const failCases = {
+        a: ['a_str', 'a_num_b_num', 'a_num_b_str'],
+        ab: ['a_str', 'a_num_b_str'],
+      }
+      let casesDefs = permuteField([{clock: 'any'}], {
+        field: 'source',
+        items: ['a', 'ab'],
+        amount: {min: 1, max: 1},
+      })
+      casesDefs = permuteField(casesDefs, {
+        field: 'target',
+        items: ['a_num', 'a_str', 'a_num_b_num', 'a_num_b_str'],
+        amount: {min: 1, max: 2},
+      })
+      casesDefs = computeField(casesDefs, {
+        field: 'pass',
+        fn({source: [source], target}) {
+          return failCases[source].every(failCase => !target.includes(failCase))
+        },
+      })
+      return {
+        description: 'combinable',
+        cases: casesDefs.map(({source, clock, target, pass}) => {
+          const getText = item => variables[item] || item
+          const printTargets = target.join(',')
+          const sourceTargets = target.map(getText).join(', ')
+          const sourceText = source === 'a' ? '{a:num}' : '{a:num, b:num}'
+          const sourceCode = source === 'a' ? '{a: $num}' : '{a: $num, b: $num}'
+          const description = `sample({source:${sourceText},clock:${clock},target:[${printTargets}]}) (should ${
+            pass ? 'pass' : 'fail'
+          })`
+          const methodCall = `sample({source: ${sourceCode}, clock: ${getText(
+            clock,
+          )}, target: [${sourceTargets}]})`
+          return wrapText(
+            `test('${description}', () => {`,
+            [
+              pass
+                ? '//prettier-ignore'
+                : '/*@ts-expect-error*/ //prettier-ignore',
+              methodCall,
+              'expect(typecheck).toMatchInlineSnapshot()',
+            ].filter(Boolean),
+          )
+        }),
+      }
+    }
+    const pairs = [
+      ['number', 'numberString', true],
+      ['number', 'void', true],
+      ['string', 'number', false],
+      ['string', 'numberString', false],
+      ['number', 'stringBoolean', false],
+      ['string', 'void', false],
+      ['string', 'any', false],
+    ]
+      .map(([a, b, pass]) => [
+        {items: [a, b], pass},
+        {items: [b, a], pass},
+      ])
+      .flat()
+    const singleCases = [
+      {items: ['number'], pass: true},
+      {items: ['void'], pass: true},
+      {items: ['string'], pass: false},
+    ]
+    return {
+      description: 'basic cases',
+      cases: [...singleCases, ...pairs].map(({items, pass}) => {
+        const getText = item => variables[item] || item
+        const printTargets = items.join(',')
+        const sourceTargets = items.map(getText).join(', ')
+        const description = `sample({source:${source},clock:${clock},target:[${printTargets}]}) (should ${
+          pass ? 'pass' : 'fail'
+        })`
+        const methodCall = `sample({source: ${getText(
+          source,
+        )}, clock: ${getText(clock)}, target: [${sourceTargets}]})`
+        return wrapText(
+          `test('${description}', () => {`,
+          [
+            pass ? null : '//@ts-expect-error',
+            methodCall,
+            'expect(typecheck).toMatchInlineSnapshot()',
+          ].filter(Boolean),
+        )
+      }),
+    }
+  },
+})
+
+writeTestSuite({
+  file: 'arrayTargetGen',
+  suite: arrayTargetCaseSet,
+  usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
+  header: `
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const stringt = createEvent<string>()
+const numt = createEvent<number>()
+const numberString = createEvent<number | string>()
+const stringBoolean = createEvent<string | boolean>()
+const $num = createStore<number>(0)
+const a_num = createEvent<{a: number}>()
+const a_str = createEvent<{a: string}>()
+const a_num_b_num = createEvent<{a: number; b: number}>()
+const a_num_b_str = createEvent<{a: number; b: string}>()
 `,
 })
 
@@ -455,10 +640,21 @@ function generateCaseSet({
     for (const item of suite) {
       switch (item.type) {
         case 'item': {
-          const {description, cases} = generateCases(item.value)
-          results.push(
-            wrapText(`describe('${description}', () => {`, [...cases]),
-          )
+          const generated = generateCases(item.value)
+          if (Array.isArray(generated)) {
+            for (const {description, cases} of generated) {
+              if (cases.length > 0)
+                results.push(
+                  wrapText(`describe('${description}', () => {`, [...cases]),
+                )
+            }
+          } else if (generated) {
+            const {description, cases} = generated
+            if (cases.length > 0)
+              results.push(
+                wrapText(`describe('${description}', () => {`, [...cases]),
+              )
+          }
           break
         }
         case 'group': {
