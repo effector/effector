@@ -119,3 +119,7 @@
   padding-right: calc((100vw - var(--maxWidth)) / 2);
   font-size: 12px;
 }
+
+[data-users-add-yours-plain-text] {
+  color: #1c1e21;
+}

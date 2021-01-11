@@ -242,7 +242,9 @@ function Home() {
         </section>
         <div data-users-add-yours>
           <i>
-            Want to appear on this page?{' '}
+            <span data-users-add-yours-plain-text>
+              Want to appear on this page?
+            </span>{' '}
             <a href="https://github.com/effector/effector/issues/278">
               Tell us
             </a>
