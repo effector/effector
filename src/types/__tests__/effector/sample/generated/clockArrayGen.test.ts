@@ -324,36 +324,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Index signature is missing in type 'Store<string>'.
-                    Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                      Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                        Types of parameters 'a' and 'source' are incompatible.
-                          Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                            Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Index signature is missing in type 'Store<string>'.
-                    Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                      Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                        Types of parameters 'a' and 'source' are incompatible.
-                          Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                            Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Index signature is missing in type 'Store<string>'.
-                    Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                      Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                        Types of parameters 'a' and 'source' are incompatible.
-                          Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                            Type 'any[]' is not assignable to type 'string'.
+          no errors
           "
         `)
       })
@@ -367,33 +338,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
+          no errors
           "
         `)
       })
@@ -441,12 +386,14 @@ describe('fn', () => {
             The last overload gave the following error.
               Type 'Store<string>' is not assignable to type 'Combinable'.
                 Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+                  Index signature is missing in type 'Store<string>'.
+                    Type 'Event<string>' is not assignable to type 'Unit<void>'.
           No overload matches this call.
             The last overload gave the following error.
               Type 'Store<string>' is not assignable to type 'Combinable'.
                 Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+                  Index signature is missing in type 'Store<string>'.
+                    Type 'Event<string>' is not assignable to type 'Unit<void>'.
           Parameter 'a' implicitly has an 'any' type.
           Parameter 'clock' implicitly has an 'any' type.
           "
@@ -517,33 +464,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
+          no errors
           "
         `)
       })
@@ -557,33 +478,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-                    Type '(a: string) => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; }'.
-                      Types of parameters 'a' and 'source' are incompatible.
-                        Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'string'.
-                          Type 'any[]' is not assignable to type 'string'.
+          no errors
           "
         `)
       })
@@ -1589,16 +1484,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          no errors
           "
         `)
       })
@@ -1612,16 +1498,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Combinable'.
-                Type 'Store<string>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                  Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          no errors
           "
         `)
       })
@@ -1755,9 +1632,6 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
           Binding element 'a' implicitly has an 'any' type.
           Binding element 'b' implicitly has an 'any' type.
           "
@@ -1773,9 +1647,6 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
           Binding element 'a' implicitly has an 'any' type.
           Binding element 'b' implicitly has an 'any' type.
           "
@@ -1893,9 +1764,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          no errors
           "
         `)
       })
@@ -1909,9 +1778,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          no errors
           "
         `)
       })
@@ -2623,9 +2490,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          no errors
           "
         `)
       })
@@ -2639,9 +2504,7 @@ describe('fn', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          no errors
           "
         `)
       })

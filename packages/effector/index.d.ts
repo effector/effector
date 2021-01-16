@@ -580,6 +580,7 @@ export function sample<A, B, C>(config: {
 }): Unit<C>
 export function sample<A, B>(config: {
   source: Unit<A>
+  clock?: Clock<any>
   fn: (source: A) => NoInfer<B>
   target: Unit<B>
   greedy?: boolean
@@ -691,6 +692,13 @@ export function sample<A extends Combinable, B, C>(config: {
   name?: string
   greedy?: boolean
 }): Store<C>
+export function sample<A extends Combinable, C>(config: {
+  source: A
+  clock: Event<any> | Effect<any, any, any> | UnitList<any>
+  fn: (source: GetCombinedValue<A>) => C
+  name?: string
+  greedy?: boolean
+}): EventAsReturnType<C>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
   clock: Event<B> | Effect<B, any, any> | UnitList<B>
@@ -700,10 +708,17 @@ export function sample<A extends Combinable, B, C>(config: {
 }): EventAsReturnType<C>
 export function sample<A extends Combinable>(config: {
   source: A
-  clock: Clock<any>
+  clock?: Clock<any>
   target: Unit<GetCombinedValue<A>>
   greedy?: boolean
 }): Unit<GetCombinedValue<A>>
+export function sample<A extends Combinable, B>(config: {
+  source: A
+  clock?: Clock<any>
+  fn: (source: GetCombinedValue<A>) => NoInfer<B>
+  target: Unit<B>
+  greedy?: boolean
+}): Unit<B>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
   clock: Clock<B>
