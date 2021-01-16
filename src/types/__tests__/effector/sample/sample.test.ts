@@ -224,7 +224,7 @@ describe('sample + guard (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object is of type 'unknown'.
+      no errors
       "
     `)
   })

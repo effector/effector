@@ -611,7 +611,7 @@ export function sample<A, B, C>(config: {
   fn: (source: A, clock: B) => C
   name?: string
   greedy?: boolean
-}): Event<C>
+}): EventAsReturnType<C>
 export function sample<A>(config: {
   source: Store<A>
   clock?: Store<any>
@@ -623,23 +623,23 @@ export function sample<A>(config: {
   clock?: Event<any> | Effect<any, any, any> | UnitList<any>
   name?: string
   greedy?: boolean
-}): Event<A>
+}): EventAsReturnType<A>
 export function sample<A>(config: {
   source: Event<A> | Effect<A, any, any>
   clock?: Clock<any>
   name?: string
   greedy?: boolean
-}): Event<A>
+}): EventAsReturnType<A>
 /* basic overloads without config */
 export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 export function sample<A>(
   source: Store<A>,
   clock: Event<any> | Effect<any, any, any>,
-): Event<A>
+): EventAsReturnType<A>
 export function sample<A>(
   source: Event<A> | Effect<A, any, any>,
   clock: Unit<any>,
-): Event<A>
+): EventAsReturnType<A>
 export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
@@ -649,12 +649,12 @@ export function sample<A, B, C>(
   source: Unit<A>,
   clock: Unit<B>,
   fn: (source: A, clock: B) => C,
-): Event<C>
+): EventAsReturnType<C>
 /* overloads with implicit `combine` */
 export function sample<A extends Combinable>(
   source: A,
   clock: Event<any> | Effect<any, any, any>,
-): Event<GetCombinedValue<A>>
+): EventAsReturnType<GetCombinedValue<A>>
 export function sample<A extends Combinable, B, C>(
   source: A,
   clock: Store<B>,
@@ -664,12 +664,12 @@ export function sample<A extends Combinable, B, C>(
   source: A,
   clock: Store<B>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
-): Store<C>
+): EventAsReturnType<C>
 export function sample<A extends Combinable, B, C>(
   source: A,
   clock: Event<B> | Effect<B, any, any>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
-): Event<C>
+): EventAsReturnType<C>
 export function sample<A extends Combinable>(config: {
   source: A
   clock: Store<any>
@@ -681,7 +681,7 @@ export function sample<A extends Combinable>(config: {
   clock: Event<any> | Effect<any, any, any> | UnitList<any>
   name?: string
   greedy?: boolean
-}): Event<GetCombinedValue<A>>
+}): EventAsReturnType<GetCombinedValue<A>>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
   clock: Store<B>
@@ -695,7 +695,7 @@ export function sample<A extends Combinable, B, C>(config: {
   fn: (source: GetCombinedValue<A>, clock: B) => C
   name?: string
   greedy?: boolean
-}): Event<C>
+}): EventAsReturnType<C>
 export function sample<A extends Combinable>(config: {
   source: A
   clock: Clock<any>
