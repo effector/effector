@@ -209,6 +209,25 @@ describe('sample + guard (should pass)', () => {
       "
     `)
   })
+  test("directly assign `sample` invocation to `guard`'s `source` argument without losing inference in `guard`'s `filter` (should pass)", () => {
+    const source = createStore(0)
+    const clock = createEvent<number>()
+
+    guard({
+      source: sample({
+        source,
+        clock,
+        fn: (source, clock) => source + clock,
+      }),
+      filter: n => n > 0,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object is of type 'unknown'.
+      "
+    `)
+  })
 })
 describe('without clock', () => {
   test('with fn (should pass)', () => {
