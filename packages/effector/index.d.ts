@@ -562,10 +562,16 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 }
 
 export function createDomain(domainName?: string): Domain
+
+type UnitList<T> = ReadonlyArray<Unit<T>>
+type Clock<T> = Unit<T> | UnitList<T>
+
+//  Note: NoInfer in return of fn helps with detecting loose objects against target type
+
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Unit<B> | ReadonlyArray<Unit<B>>
+  clock: Clock<B>
   fn: (source: A, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
@@ -578,7 +584,7 @@ export function sample<A, B>(config: {
 }): Unit<B>
 export function sample<A>(config: {
   source: Unit<NoInfer<A>>
-  clock: Unit<any> | ReadonlyArray<Unit<any>>
+  clock: Clock<any>
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
@@ -595,14 +601,14 @@ export function sample(config: {
 export function sample<A, B, C>(config: {
   source: Store<A>
   clock: Store<B>
-  fn(source: A, clock: B): C
+  fn: (source: A, clock: B) => C
   name?: string
   greedy?: boolean
 }): Store<C>
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Unit<B> | ReadonlyArray<Unit<B>>
-  fn(source: A, clock: B): C
+  clock: Clock<B>
+  fn: (source: A, clock: B) => C
   name?: string
   greedy?: boolean
 }): Event<C>
@@ -614,13 +620,13 @@ export function sample<A>(config: {
 }): Store<A>
 export function sample<A>(config: {
   source: Store<A>
-  clock?: Event<any> | Effect<any, any, any> | ReadonlyArray<Unit<any>>
+  clock?: Event<any> | Effect<any, any, any> | UnitList<any>
   name?: string
   greedy?: boolean
 }): Event<A>
 export function sample<A>(config: {
   source: Event<A> | Effect<A, any, any>
-  clock?: Unit<any> | ReadonlyArray<Unit<any>>
+  clock?: Clock<any>
   name?: string
   greedy?: boolean
 }): Event<A>
@@ -672,33 +678,33 @@ export function sample<A extends Combinable>(config: {
 }): Store<GetCombinedValue<A>>
 export function sample<A extends Combinable>(config: {
   source: A
-  clock: Event<any> | Effect<any, any, any> | ReadonlyArray<Unit<any>>
+  clock: Event<any> | Effect<any, any, any> | UnitList<any>
   name?: string
   greedy?: boolean
 }): Event<GetCombinedValue<A>>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
   clock: Store<B>
-  fn(source: GetCombinedValue<A>, clock: B): C
+  fn: (source: GetCombinedValue<A>, clock: B) => C
   name?: string
   greedy?: boolean
 }): Store<C>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Event<B> | Effect<B, any, any> | ReadonlyArray<Unit<B>>
-  fn(source: GetCombinedValue<A>, clock: B): C
+  clock: Event<B> | Effect<B, any, any> | UnitList<B>
+  fn: (source: GetCombinedValue<A>, clock: B) => C
   name?: string
   greedy?: boolean
 }): Event<C>
 export function sample<A extends Combinable>(config: {
   source: A
-  clock: Unit<any> | ReadonlyArray<Unit<any>>
+  clock: Clock<any>
   target: Unit<GetCombinedValue<A>>
   greedy?: boolean
 }): Unit<GetCombinedValue<A>>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Unit<B> | ReadonlyArray<Unit<B>>
+  clock: Clock<B>
   fn: (source: GetCombinedValue<A>, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
