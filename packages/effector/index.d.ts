@@ -771,6 +771,34 @@ export function sample<
   target: Unit<Target>
 }): Unit<Target>
 
+
+
+// export function sample<
+//   Source extends (Combinable | Unit<any>),
+//   Target,
+//   Fn extends ((v: SourceValue<Source>) => Target),
+//   Tar extends (Unit<any> | ReadonlyArray<Unit<any>>)
+// >(config: {
+//   source: Source
+//   clock: Unit<any> | ReadonlyArray<Unit<any>>
+//   fn: Fn extends ((v: SourceValue<Source>) => infer Ret)
+//     ? Ret extends Target
+//       ? Fn
+//       : never
+//     : never
+//   target: Tar extends Unit<infer TargetType>
+//     ? Fn extends ((v: SourceValue<Source>) => infer Ret)
+//       ? FindStrictest<Ret, TargetType>
+//       : never
+//     : Tar extends ReadonlyArray<infer TargetUnit>
+//       ? TargetUnit extends Unit<infer TargetUnitType>
+//         ? Fn extends ((v: SourceValue<Source>) => infer Ret)
+//           ? FindStrictest<Ret, TargetUnitType>
+//           : never
+//         : never
+//       : never
+// }): Tar
+
 export function sample<Target, Fn extends (() => void)>(config: {
   source: Combinable | Unit<any>
   clock: Unit<any> | ReadonlyArray<Unit<any>>
@@ -840,6 +868,34 @@ export function sample<A extends Combinable, B, C>(config: {
 //       : never
 //     : Target
 // }): Target
+
+/* overloads with multitarget support */
+export function sample<A extends Combinable, B, C extends Tuple<Unit<any>>>(config: {
+  source: A
+  clock: Unit<B>
+  fn(source: GetCombinedValue<A>, clock: B): GetUnitValue<FindStrictestUnitInTuple<C>>
+  target: C
+  greedy?: boolean
+}): C
+export function sample<A, B, C extends Tuple<Unit<any>>>(config: {
+  source: Unit<A>
+  clock: Unit<B>
+  fn(source: A, clock: B): GetUnitValue<FindStrictestUnitInTuple<C>>
+  target: C
+  greedy?: boolean
+}): C
+export function sample<A extends Tuple<Unit<any>>>(config: {
+  source: FindStrictestUnitInTuple<A> 
+  clock: Unit<any>
+  target: A
+  greedy?: boolean
+}): A
+export function sample<A extends Tuple<Unit<any>>>(config: {
+  source: CombineSource<GetUnitValue<FindStrictestUnitInTuple<A>>>
+  clock: Unit<any>
+  target: A
+  greedy?: boolean
+}): A
 
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
