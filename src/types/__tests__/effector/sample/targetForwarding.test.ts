@@ -120,7 +120,11 @@ test('when a target receives a more loose value type from a source [without cloc
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Store<{ a: string; }>' is not assignable to type 'Combinable'.
+          Type 'Store<{ a: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+            Index signature is missing in type 'Store<{ a: string; }>'.
     "
   `)
 })
@@ -213,7 +217,11 @@ test('when nullable field passed to strict target [without clock] (should fail)'
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+            Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
     "
   `)
 })
@@ -244,7 +252,11 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{}>' is not assignable to type 'Combinable'.
+            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{}>'.
       "
     `)
   })

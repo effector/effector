@@ -566,7 +566,9 @@ export function createDomain(domainName?: string): Domain
 type UnitList<T> = ReadonlyArray<Unit<T>>
 type Clock<T> = Unit<T> | UnitList<T>
 
-//  Note: NoInfer in return of fn helps with detecting loose objects against target type
+//  Note: NoInfer in source and in return of fn helps with
+//        detecting loose objects against target type
+
 
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
@@ -589,7 +591,7 @@ export function sample<A>(config: {
   greedy?: boolean
 }): Unit<A>
 export function sample<A>(config: {
-  source: Unit<A>
+  source: Unit<NoInfer<A>>
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
