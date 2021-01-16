@@ -562,80 +562,6 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 }
 
 export function createDomain(domainName?: string): Domain
-
-type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
-type IsUnion<T, Yes, No> = [T] extends [UnionToIntersection<T>] ? No : Yes
-
-type GetUnitValue<T> = T extends Unit<infer Value> ? Value : never
-
-type CombineSource<T> = {
-  [K in keyof T]: Store<T[K]>
-}
- & { [key: string]: any } // allow excessive source object props
- & { [key: number]: any } // allow excessive source list items
-
-type HandleVoidAnyUnknownUnit<T, Fallback> = void extends T // Unit<void> extends Unit<void/any/unknown> ?
-    ? Fallback
-    : T
-
-type Clock<T> = Unit<T> | [Unit<T>] | Unit<T>[]
-
-type FindWeakest<L, R> =
-  [L] extends [R]
-    ? [R] extends [L]
-      ? L // L = R
-      : R // R > L
-    : [R] extends [L]
-      ? L // L > R
-      : never  // L != R
-
-type FindStrictest<L, R> =
-    [L] extends [R]
-        ? [R] extends [L]
-            ? L // L = R
-            : L // R > L
-        : [R] extends [L]
-            ? R // L > R
-            : never  // L != R
-
-type Tail<A extends Tuple> = 
-    ((...args: A) => any) extends ((h: any, ...t: infer T) => any) ? T : never
-
-type FindStrictestUnitInTuple<T extends Tuple<Unit<any>>, U extends Unit<any> = T[0]> = (
-    T['length'] extends 0
-      ? { _: U }
-      : {
-          _:
-            FindStrictestUnitInTuple<
-                Tail<T>,
-                Unit<FindStrictest<
-                    HandleVoidAnyUnknownUnit<GetUnitValue<U>, GetUnitValue<T[0]>>,
-                    HandleVoidAnyUnknownUnit<GetUnitValue<T[0]>, GetUnitValue<U>>
-                >>
-            >
-        }
-) extends { _: infer Result } ? Unit<HandleVoidAnyUnknownUnit<GetUnitValue<Result>, any>> : never
-
-type SourceValue<Source extends (Combinable | Unit<any>)> = Source extends Unit<infer T> ? T : GetCombinedValue<Source>
-
-type CombinableForType<T> = {
-  [K in keyof T]: Store<T[K]>
-} | Store<T>
-
-type GetValueOfUnitOrUnitList<A extends Clock<any>> = GetUnitValue<
-  A extends Tuple<Unit<any>>
-    ? FindStrictestUnitInTuple<A>
-    : A
->
-
-type IsNever<T, Yes, No> = [T] extends [never] ? Yes : No
-
-type IsEmptyObject<T, Yes, No> = T extends object
-  ? IsNever<keyof T, never, Yes>
-  : No
-
-
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
@@ -657,7 +583,7 @@ export function sample<A>(config: {
   greedy?: boolean
 }): Unit<A>
 export function sample<A>(config: {
-  source: Unit<NoInfer<A>>
+  source: Unit<A>
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
@@ -738,78 +664,6 @@ export function sample<A extends Combinable, B, C>(
   clock: Event<B> | Effect<B, any, any>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
 ): Event<C>
-
-export function sample<
-  Source extends (Combinable | Unit<any>),
-  Clock extends (Unit<any> | ReadonlyArray<Unit<any>>),
-  Target,
-  Fn extends ((v: SourceValue<Source>, clk: UnitValue<Clock extends Array<infer S> ? S : Clock>) => Target)
->(config: {
-  source: Source
-  clock: Clock
-  fn: Fn extends ((v: SourceValue<Source>, clk: infer Clk) => infer Ret)
-    ? Ret extends Target
-      ? Clk extends (UnitValue<Clock extends Array<infer S> ? UnionToIntersection<S> : Clock>)
-        ? Fn
-        : never
-      : never
-    : never
-  target: Unit<Target>
-}): Unit<Target>
-export function sample<
-  Source extends (Combinable | Unit<any>),
-  Target,
-  Fn extends ((v: SourceValue<Source>) => Target)
->(config: {
-  source: Source
-  clock: Unit<any> | ReadonlyArray<Unit<any>>
-  fn: Fn extends ((v: SourceValue<Source>) => infer Ret)
-    ? Ret extends Target
-      ? Fn
-      : never
-    : never
-  target: Unit<Target>
-}): Unit<Target>
-
-
-
-// export function sample<
-//   Source extends (Combinable | Unit<any>),
-//   Target,
-//   Fn extends ((v: SourceValue<Source>) => Target),
-//   Tar extends (Unit<any> | ReadonlyArray<Unit<any>>)
-// >(config: {
-//   source: Source
-//   clock: Unit<any> | ReadonlyArray<Unit<any>>
-//   fn: Fn extends ((v: SourceValue<Source>) => infer Ret)
-//     ? Ret extends Target
-//       ? Fn
-//       : never
-//     : never
-//   target: Tar extends Unit<infer TargetType>
-//     ? Fn extends ((v: SourceValue<Source>) => infer Ret)
-//       ? FindStrictest<Ret, TargetType>
-//       : never
-//     : Tar extends ReadonlyArray<infer TargetUnit>
-//       ? TargetUnit extends Unit<infer TargetUnitType>
-//         ? Fn extends ((v: SourceValue<Source>) => infer Ret)
-//           ? FindStrictest<Ret, TargetUnitType>
-//           : never
-//         : never
-//       : never
-// }): Tar
-
-export function sample<Target, Fn extends (() => void)>(config: {
-  source: Combinable | Unit<any>
-  clock: Unit<any> | ReadonlyArray<Unit<any>>
-  fn: Fn extends (() => infer Ret)
-    ? Ret extends Target
-      ? Fn
-      : never
-    : never
-  target: Unit<Target>
-}): Unit<Target>
-
 export function sample<A extends Combinable>(config: {
   source: A
   clock: Store<any>
@@ -850,52 +704,6 @@ export function sample<A extends Combinable, B, C>(config: {
   greedy?: boolean
 }): Unit<C>
 
-// export function sample<Source extends (Combinable | Unit<any>), Clock extends (Unit<any> | Array<Unit<any>>), Target extends Unit<any>>(config: {
-//   source: Source
-//   clock: Clock
-//   fn: (source: SourceValue<Source>, clock: UnitValue<Clock extends Array<infer S> ? S : Clock>) => UnitValue<Target>
-//   target: Target
-// }): Target
-// export function sample<Source extends (Combinable | Unit<any>), Target extends Unit<SourceValue<Source>>>(config: {
-//   source: Source
-//   clock: Unit<any> | Array<Unit<any>>
-//   target: SourceValue<Source> 
-//     ? SourceValue<Source> extends {}
-//       ?
-//         UnitValue<Target> extends SourceValue<Source>
-//           ? Target
-//           : never
-//       : never
-//     : Target
-// }): Target
-
-/* overloads with multitarget support */
-export function sample<A extends Combinable, B, C extends Tuple<Unit<any>>>(config: {
-  source: A
-  clock: Unit<B>
-  fn(source: GetCombinedValue<A>, clock: B): GetUnitValue<FindStrictestUnitInTuple<C>>
-  target: C
-  greedy?: boolean
-}): C
-export function sample<A, B, C extends Tuple<Unit<any>>>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  fn(source: A, clock: B): GetUnitValue<FindStrictestUnitInTuple<C>>
-  target: C
-  greedy?: boolean
-}): C
-export function sample<A extends Tuple<Unit<any>>>(config: {
-  source: FindStrictestUnitInTuple<A> 
-  clock: Unit<any>
-  target: A
-  greedy?: boolean
-}): A
-export function sample<A extends Tuple<Unit<any>>>(config: {
-  source: CombineSource<GetUnitValue<FindStrictestUnitInTuple<A>>>
-  clock: Unit<any>
-  target: A
-  greedy?: boolean
-}): A
 
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
