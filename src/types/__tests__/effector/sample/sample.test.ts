@@ -347,6 +347,26 @@ describe('without clock', () => {
       "
     `)
   })
+  test('with fn [combinable] (should pass)', () => {
+    const foo = createStore('ok')
+    const bar = createStore(0)
+    const target = createStore({foo: '...', bar: 1})
+
+    sample({
+      source: {foo, bar},
+      target,
+      fn: ({foo, bar}) => ({foo, bar}),
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ source: { foo: Store<string>; bar: Store<number>; }; target: Store<{ foo: string; bar: number; }>; fn: ({ foo, bar }: GetCombinedValue<{ foo: Store<string>; bar: Store<number>; }>) => { ...; }; }' is not assignable to parameter of type '{ source: { foo: Store<string>; bar: Store<number>; }; clock: Clock<unknown>; fn: (source: GetCombinedValue<{ foo: Store<string>; bar: Store<number>; }>, clock: unknown) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }'.
+            Property 'clock' is missing in type '{ source: { foo: Store<string>; bar: Store<number>; }; target: Store<{ foo: string; bar: number; }>; fn: ({ foo, bar }: GetCombinedValue<{ foo: Store<string>; bar: Store<number>; }>) => { ...; }; }' but required in type '{ source: { foo: Store<string>; bar: Store<number>; }; clock: Clock<unknown>; fn: (source: GetCombinedValue<{ foo: Store<string>; bar: Store<number>; }>, clock: unknown) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }'.
+      "
+    `)
+  })
 
   test('without fn (should pass)', () => {
     const source = createEvent()
@@ -359,6 +379,25 @@ describe('without clock', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
+      "
+    `)
+  })
+  test('without fn [combinable] (should pass)', () => {
+    const foo = createStore('ok')
+    const bar = createStore(0)
+    const target = createStore({foo: '...', bar: 1})
+
+    sample({
+      source: {foo, bar},
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ source: { foo: Store<string>; bar: Store<number>; }; target: Store<{ foo: string; bar: number; }>; }' is not assignable to parameter of type '{ source: { foo: Store<string>; bar: Store<number>; }; clock: Clock<unknown>; fn: (source: GetCombinedValue<{ foo: Store<string>; bar: Store<number>; }>, clock: unknown) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }'.
+            Type '{ source: { foo: Store<string>; bar: Store<number>; }; target: Store<{ foo: string; bar: number; }>; }' is missing the following properties from type '{ source: { foo: Store<string>; bar: Store<number>; }; clock: Clock<unknown>; fn: (source: GetCombinedValue<{ foo: Store<string>; bar: Store<number>; }>, clock: unknown) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }': clock, fn
       "
     `)
   })
