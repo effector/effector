@@ -11,6 +11,107 @@ import {
 
 const typecheck = '{global}'
 
+describe('explicit generics', () => {
+  test('sample<A, B, C>({source, clock, fn, target})', () => {
+    const source = createEvent<string>()
+    const clock = createEvent<number>()
+    const target = createEvent<number>()
+    sample<string, number, number>({
+      source,
+      clock,
+      fn: str => str.length,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('sample<A, B>({source, fn, target})', () => {
+    const source = createEvent<string>()
+    const target = createEvent<number>()
+    sample<string, number>({
+      source,
+      fn: str => str.length,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('sample<A>({source, clock, target})', () => {
+    const source = createEvent<string>()
+    const clock = createEvent<number>()
+    const target = createEvent<string>()
+    sample<string>({
+      source,
+      clock,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('sample<A>({source, target})', () => {
+    const source = createEvent<string>()
+    const target = createEvent<string>()
+    sample<string>({
+      source,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('sample<A, B, C>({source, clock, fn})', () => {
+    const source = createEvent<string>()
+    const clock = createEvent<number>()
+    sample<string, number, number>({
+      source,
+      clock,
+      fn: (str, num) => str.length + num,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('sample<A>({source: store, clock})', () => {
+    const source = createStore('')
+    const clock = createEvent<number>()
+    sample<string>({
+      source,
+      clock,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('sample<A>({source: event, clock})', () => {
+    const source = createEvent<string>()
+    const clock = createEvent<number>()
+    sample<string>({
+      source,
+      clock,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
+
 test('event by event', () => {
   const a = createEvent<number>()
   const b = createEvent<boolean>()
