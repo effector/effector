@@ -859,12 +859,29 @@ export function attach<
 >(config: {
   source: States
   effect: FX
-  mapParams: (params: Params, states: GetShapeValue<States>) => EffectParams<FX>
+  mapParams: (params: Params, states: GetShapeValue<States>) => NoInfer<EffectParams<FX>>
   name?: string
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
+export function attach<FN extends ((params: any) => any), FX extends Effect<any, any, any>>(config: {
+  effect: FX
+  mapParams: FN extends (...args: any[]) => NoInfer<EffectParams<FX>> 
+    ? FN
+    : never
+  name?: string
+}): FN extends (...args: infer Args) => NoInfer<EffectParams<FX>> 
+  ? Effect<
+    Args['length'] extends 0
+      ? void
+      : 0 | 1 extends Args['length']
+      ? Args[0] | void
+      : Args[0],
+    EffectResult<FX>,
+    EffectError<FX>
+  >
+  : never
 export function attach<Params, FX extends Effect<any, any, any>>(config: {
   effect: FX
-  mapParams: (params: Params) => EffectParams<FX>
+  mapParams: (params: Params) => NoInfer<EffectParams<FX>>
   name?: string
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
 export function attach<
@@ -880,6 +897,16 @@ export function attach<
 >(config: {
   effect: FX
 }): Effect<EffectParams<FX>, EffectResult<FX>, EffectError<FX>>
+export function attach<
+  States extends StoreShape,
+  FX extends Effect<any, any, any>,
+  FN extends ((params: any, source: GetShapeValue<States>) => NoInfer<EffectParams<FX>>)
+>(config: {
+  source: States
+  effect: FX
+  mapParams: FN
+  name?: string
+}): Effect<Parameters<FN>[0] , EffectResult<FX>, EffectError<FX>>
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 export function combine<T extends Store<any>>(

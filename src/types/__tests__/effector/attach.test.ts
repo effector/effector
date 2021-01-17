@@ -94,8 +94,10 @@ test('params type mismatch [with source] (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Argument of type '{ source: Store<number>; effect: Effect<{ foo: string; }, string, { message: string; }>; mapParams: (text: number, source: number) => { foo: number; }; }' is not assignable to parameter of type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
+        Type '(text: number, source: number) => { foo: number; }' is not assignable to type '(params: any, source: number) => { foo: string; }'.
+          Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
+            The types of 'foo' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -117,8 +119,10 @@ test('params type mismatch [without source] (should fail)', () => {
               Type '{ params: number; result: string; }' is not assignable to type '{ params: string; result: string; }'.
     No overload matches this call.
       The last overload gave the following error.
-        Argument of type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; mapParams: (text: number) => { foo: number; }; }' is not assignable to parameter of type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
-          Object literal may only specify known properties, and 'mapParams' does not exist in type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
+        Type '(text: number) => { foo: number; }' is not assignable to type '(params: any, source: any) => { foo: string; }'.
+          Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
+            The types of 'foo' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -133,13 +137,7 @@ test('mapParams without arguments (should pass)', () => {
   fx()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Effect<unknown, number, Error>' is not assignable to type 'Effect<void, number, Error>'.
-      The types of 'done.watch' are incompatible between these types.
-        Type '(watcher: (payload: { params: unknown; result: number; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: void; result: number; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ params: unknown; result: number; }' is not assignable to type '{ params: void; result: number; }'.
-    Expected 1 arguments, but got 0.
+    no errors
     "
   `)
 })
@@ -196,8 +194,8 @@ describe('difference in message quality between inferred types and explicit gene
       "
       No overload matches this call.
         The last overload gave the following error.
-          Argument of type '{ effect: Effect<string, void, Error>; source: Store<number>; mapParams: (params: unknown, data: number) => { wrapped: unknown; data: number; }; }' is not assignable to parameter of type '{ effect: Effect<string, void, Error>; }'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ effect: Effect<string, void, Error>; }'.
+          Type '(params: unknown, data: number) => { wrapped: unknown; data: number; }' is not assignable to type '(params: any, source: number) => string'.
+            Type '{ wrapped: unknown; data: number; }' is not assignable to type 'string'.
       "
     `)
   })
