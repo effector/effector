@@ -609,11 +609,24 @@ type Show<A extends any> =
         [K in keyof A]: A[K]
       } // & {}
 
+type NoNever<T> = any extends T ? T : any
+
+type TargetListType<T extends UnitList<any>> = T[number] extends Unit<infer S>
+  ? NoNever<Exclude<S, void>>
+  : never
+
 //  Note: NoInfer in source and in return of fn helps with
 //        detecting loose objects against target type
 
 
 /* basic overloads with config */
+export function sample<A, B, C extends UnitList<any>>(config: {
+  source: Unit<A>
+  clock: Clock<B>
+  fn: (source: A, clock: B) => TargetListType<C>
+  target: C
+  greedy?: boolean
+}): C
 export function sample<A, B, C>(config: {
   source: Unit<A>
   clock: Clock<B>
@@ -621,6 +634,13 @@ export function sample<A, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
+export function sample<A, B extends UnitList<any>>(config: {
+  source: Unit<A>
+  clock?: AnyClock
+  fn: (source: A) => TargetListType<B>
+  target: B
+  greedy?: boolean
+}): B
 export function sample<A, B>(config: {
   source: Unit<A>
   clock?: AnyClock
@@ -755,6 +775,13 @@ export function sample<A extends Combinable>(config: {
   target: Unit<GetCombinedValue<A>>
   greedy?: boolean
 }): Unit<GetCombinedValue<A>>
+export function sample<A extends Combinable, B extends UnitList<any>>(config: {
+  source: A
+  clock?: AnyClock
+  fn: (source: GetCombinedValue<A>) => TargetListType<B>
+  target: B
+  greedy?: boolean
+}): B
 export function sample<A extends Combinable, B>(config: {
   source: A
   clock?: AnyClock
@@ -762,6 +789,13 @@ export function sample<A extends Combinable, B>(config: {
   target: Unit<B>
   greedy?: boolean
 }): Unit<B>
+export function sample<A extends Combinable, B, C extends UnitList<any>>(config: {
+  source: A
+  clock: Clock<B>
+  fn: (source: GetCombinedValue<A>, clock: B) => TargetListType<C>
+  target: C
+  greedy?: boolean
+}): C
 export function sample<A extends Combinable, B, C>(config: {
   source: A
   clock: Clock<B>

@@ -391,7 +391,7 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Unit<{ a: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
+      Type 'readonly Unit<any>[]' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, filterMap, prepend, subscribe, and 7 more.
       No overload matches this call.
         The last overload gave the following error.
           Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: string; clock: any; }'.
@@ -416,7 +416,7 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Unit<{ a: string; b: string; clock: string; }>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': watch, map, filter, filterMap, and 7 more.
+      Type 'readonly Unit<any>[]' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': watch, filterMap, prepend, subscribe, and 7 more.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
