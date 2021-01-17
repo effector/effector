@@ -573,7 +573,7 @@ type Clock<T> = Unit<T> | UnitList<T>
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Clock<B>
+  clock: Unit<B> | UnitList<NoInfer<B>>
   fn: (source: A, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
@@ -610,7 +610,7 @@ export function sample<A, B, C>(config: {
 }): Store<C>
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Clock<B>
+  clock: Unit<B> | UnitList<NoInfer<B>>
   fn: (source: A, clock: B) => C
   name?: string
   greedy?: boolean
@@ -701,7 +701,7 @@ export function sample<A extends Combinable, C>(config: {
 }): EventAsReturnType<C>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Event<B> | Effect<B, any, any> | UnitList<B>
+  clock: Event<B> | Effect<B, any, any> | UnitList<NoInfer<B>>
   fn: (source: GetCombinedValue<A>, clock: B) => C
   name?: string
   greedy?: boolean
@@ -721,7 +721,7 @@ export function sample<A extends Combinable, B>(config: {
 }): Unit<B>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Clock<B>
+  clock: Unit<B> | UnitList<NoInfer<B>>
   fn: (source: GetCombinedValue<A>, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean

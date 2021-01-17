@@ -3652,162 +3652,162 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is missing the following properties from type 'readonly Unit<string>[]': concat, join, slice, indexOf, and 15 more.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is missing the following properties from type 'readonly Unit<string>[]': concat, join, slice, indexOf, and 15 more.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
@@ -3916,162 +3916,162 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
@@ -4180,162 +4180,162 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
@@ -4444,7 +4444,7 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4452,7 +4452,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4460,7 +4460,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4468,7 +4468,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4476,7 +4476,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4484,7 +4484,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4492,7 +4492,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4500,7 +4500,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4508,7 +4508,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4516,7 +4516,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4524,7 +4524,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4532,7 +4532,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4540,7 +4540,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4548,7 +4548,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4556,7 +4556,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4564,7 +4564,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4572,7 +4572,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4580,7 +4580,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4588,7 +4588,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4596,7 +4596,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4604,7 +4604,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4612,7 +4612,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4620,7 +4620,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4628,7 +4628,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4636,7 +4636,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4644,7 +4644,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4652,7 +4652,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4660,7 +4660,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4668,7 +4668,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4676,7 +4676,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4684,7 +4684,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4692,7 +4692,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4700,7 +4700,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4708,7 +4708,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4716,7 +4716,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4724,7 +4724,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4732,7 +4732,7 @@ describe('combinable', () => {
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4740,7 +4740,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4748,7 +4748,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4756,7 +4756,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4764,7 +4764,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4772,7 +4772,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4780,7 +4780,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4788,7 +4788,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4796,7 +4796,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4804,7 +4804,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4812,7 +4812,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
@@ -4820,7 +4820,7 @@ describe('combinable', () => {
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.

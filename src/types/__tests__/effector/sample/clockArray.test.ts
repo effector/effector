@@ -106,9 +106,7 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            No overload matches this call.
-              The last overload gave the following error.
-                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+            no errors
             "
           `)
         })
@@ -194,9 +192,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            No overload matches this call.
-              The last overload gave the following error.
-                Type 'Event<string>' is not assignable to type 'Unit<void>'.
             Binding element 'a' implicitly has an 'any' type.
             Binding element 'b' implicitly has an 'any' type.
             Parameter 'clock' implicitly has an 'any' type.
