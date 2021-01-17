@@ -3,6 +3,37 @@ import {createStore, createEffect, attach, Effect} from 'effector'
 
 const typecheck = '{global}'
 
+describe('explicit generics', () => {
+  test('attach<params, source, effect>', () => {
+    const source = createStore(0)
+    const effect = createEffect(({foo}: {foo: number}) => foo)
+    const fx = attach<number, typeof source, typeof effect>({
+      source,
+      effect,
+      mapParams: (params, source) => ({foo: params + source}),
+    })
+    const assert: Effect<number, number> = fx
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('attach<params, effect>', () => {
+    const effect = createEffect(({foo}: {foo: number}) => foo)
+    const fx = attach<number, typeof effect>({
+      effect,
+      mapParams: params => ({foo: params}),
+    })
+    const assert: Effect<number, number> = fx
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
+
 describe('with source', () => {
   test('with single store (should pass)', () => {
     const foo = createStore<string>('foo')
@@ -46,6 +77,48 @@ test('without source (should pass)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
+    "
+  `)
+})
+
+test('params type mismatch [with source] (should fail)', () => {
+  const source = createStore(8900)
+  //prettier-ignore
+  const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+  const fx: Effect<string, string, {message: string}> = attach({
+    source,
+    effect,
+    mapParams: (text: number, source) => ({foo: text}),
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    No overload matches this call.
+      The last overload gave the following error.
+        Argument of type '{ source: Store<number>; effect: Effect<{ foo: string; }, string, { message: string; }>; mapParams: (text: number, source: number) => { foo: number; }; }' is not assignable to parameter of type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
+    "
+  `)
+})
+
+test('params type mismatch [without source] (should fail)', () => {
+  //prettier-ignore
+  const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+  const fx: Effect<string, string, {message: string}> = attach({
+    effect,
+    mapParams: (text: number) => ({foo: text}),
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'Effect<number, string, { message: string; }>' is not assignable to type 'Effect<string, string, { message: string; }>'.
+      The types of 'done.watch' are incompatible between these types.
+        Type '(watcher: (payload: { params: number; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription'.
+          Types of parameters 'watcher' and 'watcher' are incompatible.
+            Types of parameters 'payload' and 'payload' are incompatible.
+              Type '{ params: number; result: string; }' is not assignable to type '{ params: string; result: string; }'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Argument of type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; mapParams: (text: number) => { foo: number; }; }' is not assignable to parameter of type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
+          Object literal may only specify known properties, and 'mapParams' does not exist in type '{ effect: Effect<{ foo: string; }, string, { message: string; }>; }'.
     "
   `)
 })
