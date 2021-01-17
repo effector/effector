@@ -16,9 +16,9 @@ type NoInfer<T> = [T][T extends any ? 0 : never]
 // Type for extention purpose. Represents combinable sample source.
 export type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
 // Helper type, which unwraps combinable sample source value.
-export type GetCombinedValue<T> = {
+export type GetCombinedValue<T> = Show<{
   [K in keyof T]: T[K] extends Store<infer U> ? U : never
-}
+}>
 
 export type StoreValue<T> = T extends Store<infer S> ? S : never
 export type EventPayload<T> = T extends Event<infer P> ? P : never
@@ -509,11 +509,11 @@ export function split<
 >(
   source: Unit<S>,
   match: Match,
-): {
+): Show<{
   [K in keyof Match]: Match[K] extends (p: any) => p is infer R
     ? Event<R>
     : Event<S>
-} & {__: Event<S>}
+} & {__: Event<S>}>
 export function split<S, Match extends ((p: S) => keyof any)>(config: {
   source: Unit<S>
   cases: ReturnType<Match> extends infer CaseSet
@@ -564,7 +564,50 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 export function createDomain(domainName?: string): Domain
 
 type UnitList<T> = ReadonlyArray<Unit<T>>
-type Clock<T> = Unit<T> | UnitList<T>
+type AnyClock = Unit<any> | UnitList<any>
+type Clock<T> = Unit<T> | UnitList<NoInfer<T>>
+
+
+
+type BuiltInObject =
+    | Error
+    | Date
+    | RegExp
+    | Int8Array
+    | Uint8Array
+    | Uint8ClampedArray
+    | Int16Array
+    | Uint16Array
+    | Int32Array
+    | Uint32Array
+    | Float32Array
+    | Float64Array
+    | ReadonlyMap<unknown, unknown>
+    | ReadonlySet<unknown>
+    | WeakMap<object, unknown>
+    | WeakSet<object>
+    | ArrayBuffer
+    | DataView
+    | Function
+    | Promise<unknown>
+    | Generator
+
+type UnitObject = Store<any> | Event<any> | Effect<any, any, any> | Unit<any>
+
+/**
+ * Force typescript to print real type instead of geneic types
+ * 
+ * It's better to see {a: string; b: number}
+ * instead of GetCombinedValue<{a: Store<string>; b: Store<number>}>
+ * */
+type Show<A extends any> =
+    A extends BuiltInObject
+    ? A
+    : A extends UnitObject
+    ? A
+    : {
+        [K in keyof A]: A[K]
+      } // & {}
 
 //  Note: NoInfer in source and in return of fn helps with
 //        detecting loose objects against target type
@@ -573,21 +616,21 @@ type Clock<T> = Unit<T> | UnitList<T>
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Unit<B> | UnitList<NoInfer<B>>
+  clock: Clock<B>
   fn: (source: A, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
 export function sample<A, B>(config: {
   source: Unit<A>
-  clock?: Clock<any>
+  clock?: AnyClock
   fn: (source: A) => NoInfer<B>
   target: Unit<B>
   greedy?: boolean
 }): Unit<B>
 export function sample<A>(config: {
   source: Unit<NoInfer<A>>
-  clock: Clock<any>
+  clock: AnyClock
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
@@ -610,7 +653,7 @@ export function sample<A, B, C>(config: {
 }): Store<C>
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Unit<B> | UnitList<NoInfer<B>>
+  clock: Clock<B>
   fn: (source: A, clock: B) => C
   name?: string
   greedy?: boolean
@@ -629,7 +672,7 @@ export function sample<A>(config: {
 }): EventAsReturnType<A>
 export function sample<A>(config: {
   source: Event<A> | Effect<A, any, any>
-  clock?: Clock<any>
+  clock?: AnyClock
   name?: string
   greedy?: boolean
 }): EventAsReturnType<A>
@@ -708,20 +751,20 @@ export function sample<A extends Combinable, B, C>(config: {
 }): EventAsReturnType<C>
 export function sample<A extends Combinable>(config: {
   source: A
-  clock?: Clock<any>
+  clock?: AnyClock
   target: Unit<GetCombinedValue<A>>
   greedy?: boolean
 }): Unit<GetCombinedValue<A>>
 export function sample<A extends Combinable, B>(config: {
   source: A
-  clock?: Clock<any>
+  clock?: AnyClock
   fn: (source: GetCombinedValue<A>) => NoInfer<B>
   target: Unit<B>
   greedy?: boolean
 }): Unit<B>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Unit<B> | UnitList<NoInfer<B>>
+  clock: Clock<B>
   fn: (source: GetCombinedValue<A>, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean

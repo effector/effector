@@ -263,9 +263,9 @@ describe('with target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<string>; }>, clock: any) => { a: string; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: string; clock: any; }'.
             Types of parameters '__0' and 'source' are incompatible.
-              Type 'GetCombinedValue<{ a: Store<string>; }>' is not assignable to type '{ a: number; }'.
+              Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
                   Type 'string' is not assignable to type 'number'.
       "
@@ -394,9 +394,9 @@ describe('without target', () => {
       Type 'Unit<{ a: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<string>; }>, clock: any) => { a: string; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: string; clock: any; }'.
             Types of parameters '__0' and 'source' are incompatible.
-              Type 'GetCombinedValue<{ a: Store<string>; }>' is not assignable to type '{ a: number; }'.
+              Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
                   Type 'string' is not assignable to type 'number'.
       "

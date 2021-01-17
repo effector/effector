@@ -426,27 +426,27 @@ describe('source & clock mapping (should pass)', () => {
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Combinable'.
             Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: number) => unknown'.
+              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: number) => unknown'.
                 Types of parameters 's' and 'source' are incompatible.
-                  Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'number'.
+                  Type 'any[] | [any] | { [x: string]: any; }' is not assignable to type 'number'.
                     Type 'any[]' is not assignable to type 'number'.
                       Type 'Event<number>[]' is not assignable to type 'Unit<unknown>'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Combinable'.
             Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: number) => unknown'.
+              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: number) => unknown'.
                 Types of parameters 's' and 'source' are incompatible.
-                  Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'number'.
+                  Type 'any[] | [any] | { [x: string]: any; }' is not assignable to type 'number'.
                     Type 'any[]' is not assignable to type 'number'.
                       Type 'Event<number>[]' is not assignable to type 'Unit<unknown>'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Combinable'.
             Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: number) => unknown'.
+              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: number) => unknown'.
                 Types of parameters 's' and 'source' are incompatible.
-                  Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'number'.
+                  Type 'any[] | [any] | { [x: string]: any; }' is not assignable to type 'number'.
                     Type 'any[]' is not assignable to type 'number'.
                       Type 'Event<number>[]' is not assignable to type 'Unit<unknown>'.
       "
@@ -469,27 +469,27 @@ describe('source & clock mapping (should pass)', () => {
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Combinable'.
             Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: number) => unknown'.
+              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: number) => unknown'.
                 Types of parameters 's' and 'source' are incompatible.
-                  Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'number'.
+                  Type 'any[] | [any] | { [x: string]: any; }' is not assignable to type 'number'.
                     Type 'any[]' is not assignable to type 'number'.
                       Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Combinable'.
             Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: number) => unknown'.
+              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: number) => unknown'.
                 Types of parameters 's' and 'source' are incompatible.
-                  Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'number'.
+                  Type 'any[] | [any] | { [x: string]: any; }' is not assignable to type 'number'.
                     Type 'any[]' is not assignable to type 'number'.
                       Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Combinable'.
             Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: number) => unknown'.
+              Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: number) => unknown'.
                 Types of parameters 's' and 'source' are incompatible.
-                  Type 'any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>' is not assignable to type 'number'.
+                  Type 'any[] | [any] | { [x: string]: any; }' is not assignable to type 'number'.
                     Type 'any[]' is not assignable to type 'number'.
                       Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
       "

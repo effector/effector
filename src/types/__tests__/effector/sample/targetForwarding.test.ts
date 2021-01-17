@@ -144,14 +144,14 @@ test('when a target receives a more loose value type from a mapping fn [with clo
         Type 'Store<null>' is not assignable to type 'Combinable'.
           Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
             Index signature is missing in type 'Store<null>'.
-              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
+              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
                 Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Store<null>' is not assignable to type 'Combinable'.
           Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
             Index signature is missing in type 'Store<null>'.
-              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
+              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
                 Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     "
   `)
@@ -170,13 +170,13 @@ test('when a target receives a more loose value type from a mapping fn [without 
       The last overload gave the following error.
         Type 'Store<null>' is not assignable to type 'Combinable'.
           Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: unknown) => { a: string; b: string; }'.
+            Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
               Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Store<null>' is not assignable to type 'Combinable'.
           Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: unknown) => { a: string; b: string; }'.
+            Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
               Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     "
   `)
@@ -275,13 +275,13 @@ describe('edge case for {} type', () => {
         The last overload gave the following error.
           Type 'Store<null>' is not assignable to type 'Combinable'.
             Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
+              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
                 Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       No overload matches this call.
         The last overload gave the following error.
           Type 'Store<null>' is not assignable to type 'Combinable'.
             Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
+              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
                 Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       "
     `)
@@ -300,13 +300,13 @@ describe('edge case for {} type', () => {
         The last overload gave the following error.
           Type 'Store<null>' is not assignable to type 'Combinable'.
             Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: unknown) => { a: string; b: string; }'.
+              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
                 Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       No overload matches this call.
         The last overload gave the following error.
           Type 'Store<null>' is not assignable to type 'Combinable'.
             Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: unknown) => { a: string; b: string; }'.
+              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
                 Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       "
     `)

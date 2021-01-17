@@ -1700,257 +1700,257 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
@@ -2108,195 +2108,195 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -2996,257 +2996,257 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; b: Store<string>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type 'GetCombinedValue<{ a: Store<number>; b: Store<string>; }>' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
@@ -3356,195 +3356,195 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: number; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -3652,162 +3652,162 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is missing the following properties from type 'readonly Unit<string>[]': concat, join, slice, indexOf, and 15 more.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is missing the following properties from type 'readonly Unit<string>[]': concat, join, slice, indexOf, and 15 more.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
@@ -3916,162 +3916,162 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
@@ -4180,162 +4180,162 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
                 Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
@@ -4444,387 +4444,387 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Unit<string> | UnitList<string>'.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: string) => unknown'.
+                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => unknown'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                       Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -5334,51 +5334,51 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -5460,147 +5460,147 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -6110,51 +6110,51 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -6236,147 +6236,147 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<number>; }>, clock: number) => unknown'.
+            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type 'GetCombinedValue<{ a: Store<number>; }>' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
                   Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
@@ -6884,19 +6884,19 @@ describe('combinable', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
@@ -6978,51 +6978,51 @@ describe('combinable', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
@@ -7532,19 +7532,19 @@ describe('combinable', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
@@ -7626,51 +7626,51 @@ describe('combinable', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; b: number; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: string; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        Property 'b' does not exist on type 'GetCombinedValue<{ a: Store<number>; }>'.
+        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>[]' is not assignable to type 'Unit<unknown>'.
