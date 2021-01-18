@@ -80,51 +80,55 @@ test('without source (should pass)', () => {
     "
   `)
 })
-
-test('params type mismatch [with source] (should fail)', () => {
-  const source = createStore(8900)
-  //prettier-ignore
-  const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
-  const fx: Effect<string, string, {message: string}> = attach({
-    source,
-    effect,
-    mapParams: (text: number, source) => ({foo: text}),
+describe('params type mismatch', () => {
+  test('params type mismatch [with source] (should fail)', () => {
+    const source = createStore(8900)
+    //prettier-ignore
+    const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+    const fx: Effect<string, string, {message: string}> = attach({
+      source,
+      effect,
+      //@ts-expect-error
+      mapParams: (text: number, source) => ({foo: text}),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(text: number, source: number) => { foo: number; }' is not assignable to type '(params: any, source: number) => { foo: string; }'.
+            Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
+              The types of 'foo' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+      "
+    `)
   })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type '(text: number, source: number) => { foo: number; }' is not assignable to type '(params: any, source: number) => { foo: string; }'.
-          Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
-            The types of 'foo' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
-    "
-  `)
-})
 
-test('params type mismatch [without source] (should fail)', () => {
-  //prettier-ignore
-  const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
-  const fx: Effect<string, string, {message: string}> = attach({
-    effect,
-    mapParams: (text: number) => ({foo: text}),
+  test('params type mismatch [without source] (should fail)', () => {
+    //prettier-ignore
+    const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+    //@ts-expect-error
+    const fx: Effect<string, string, {message: string}> = attach({
+      effect,
+      //@ts-expect-error
+      mapParams: (text: number) => ({foo: text}),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'Effect<number, string, { message: string; }>' is not assignable to type 'Effect<string, string, { message: string; }>'.
+        The types of 'done.watch' are incompatible between these types.
+          Type '(watcher: (payload: { params: number; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription'.
+            Types of parameters 'watcher' and 'watcher' are incompatible.
+              Types of parameters 'payload' and 'payload' are incompatible.
+                Type '{ params: number; result: string; }' is not assignable to type '{ params: string; result: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(text: number) => { foo: number; }' is not assignable to type '(params: any, source: any) => { foo: string; }'.
+            Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
+              The types of 'foo' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+      "
+    `)
   })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    Type 'Effect<number, string, { message: string; }>' is not assignable to type 'Effect<string, string, { message: string; }>'.
-      The types of 'done.watch' are incompatible between these types.
-        Type '(watcher: (payload: { params: number; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ params: number; result: string; }' is not assignable to type '{ params: string; result: string; }'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type '(text: number) => { foo: number; }' is not assignable to type '(params: any, source: any) => { foo: string; }'.
-          Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
-            The types of 'foo' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
-    "
-  `)
 })
 
 test('mapParams without arguments (should pass)', () => {
@@ -152,6 +156,59 @@ test('without source and mapParams (should pass)', () => {
   `)
 })
 
+describe('unknown params type', () => {
+  test('unknown params type [with source] (?)', () => {
+    const source = createStore(0)
+    //prettier-ignore
+    const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+    const fx = attach({
+      source,
+      effect,
+      //@ts-expect-error
+      mapParams: (text, source) => ({foo: text}),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'unknown' is not assignable to type 'string'.
+      "
+    `)
+  })
+  test('unknown params type [without source] (?)', () => {
+    //prettier-ignore
+    const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+    const fx = attach({
+      effect,
+      mapParams: text => ({foo: text}),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('unknown params type [with source shape] (?)', () => {
+    const a = createStore('')
+    const b = createStore(0)
+    //prettier-ignore
+    const effect: Effect<{foo: string}, string, {message: string}> = createEffect()
+    const fx = attach({
+      source: {a, b},
+      effect,
+      //@ts-expect-error
+      mapParams: (text, source) => ({foo: text}),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'unknown' is not assignable to type 'string'.
+      "
+    `)
+  })
+})
+
 describe('difference in message quality between inferred types and explicit generics', () => {
   test('type mismatch between original effect and mapParams [explicit] (should fail)', () => {
     const original = createEffect((params: string) => {
@@ -163,6 +220,7 @@ describe('difference in message quality between inferred types and explicit gene
     const created = attach<number, typeof data, typeof original>({
       effect: original,
       source: data,
+      //@ts-expect-error
       mapParams: (params, data) => {
         console.log('Created effect called with', params, 'and data', data)
         return {wrapped: params, data}
@@ -185,6 +243,7 @@ describe('difference in message quality between inferred types and explicit gene
     const created = attach({
       effect: original,
       source: data,
+      //@ts-expect-error
       mapParams: (params, data) => {
         console.log('Created effect called with', params, 'and data', data)
         return {wrapped: params, data}
