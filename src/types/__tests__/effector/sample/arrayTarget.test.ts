@@ -25,18 +25,7 @@ describe('basic cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Event<number>'.
-                Type 'Event<number>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Event<number>'.
-                Type 'Event<number>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -49,16 +38,7 @@ describe('basic cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -71,16 +51,7 @@ describe('basic cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type 'Event<void>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type 'Event<void>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -93,16 +64,7 @@ describe('basic cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -115,16 +77,7 @@ describe('basic cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+      no errors
       "
     `)
   })
@@ -138,16 +91,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type 'never[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type 'never[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -163,14 +107,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type 'Event<string>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type 'Event<string>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -181,19 +118,16 @@ describe('basic cases', () => {
     const anyt = createEvent<any>()
     //@ts-expect-error
     sample({source: num, clock: anyt, target: [num, str]})
-
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -209,14 +143,12 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -233,14 +165,12 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -257,14 +187,12 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<string> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -280,14 +208,12 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<number> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<number> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -303,14 +229,12 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<number> | Event<string | boolean>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<number> | Event<string | boolean>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -327,14 +251,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -351,14 +268,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<void> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -374,14 +284,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<any> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<any> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -397,14 +300,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<any> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Combinable'.
-            Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '(Event<any> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -454,9 +350,7 @@ describe('combinable source object (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -469,9 +363,7 @@ describe('combinable source object (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -488,9 +380,7 @@ describe('combinable source object (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<{ a: number; b: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -508,7 +398,7 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -525,7 +415,12 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '(Event<{ a: string; }> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -541,7 +436,7 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -552,9 +447,9 @@ describe('combinable source object (should fail)', () => {
     const a_num = createEvent<{a: number}>()
     const anyt = createEvent<any>()
     sample({
-      //@ts-expect-error
       source: {a: $num},
       clock: anyt,
+      //@ts-expect-error
       target: [a_num_b_num, a_num],
     })
 
@@ -562,7 +457,12 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '(Event<{ a: number; b: number; }> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -614,9 +514,7 @@ describe('combinable source list (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<[number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -633,9 +531,7 @@ describe('combinable source list (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
       "
     `)
   })
@@ -653,7 +549,7 @@ describe('combinable source list (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<[string]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })
@@ -670,7 +566,12 @@ describe('combinable source list (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '(Event<[number]> | Event<[string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+          Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target array\\"'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target array\\"'.
       "
     `)
   })

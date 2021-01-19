@@ -567,7 +567,10 @@ type UnitList<T> = ReadonlyArray<Unit<T>>
 type AnyClock = Unit<any> | UnitList<any>
 type Clock<T> = Unit<T> | UnitList<NoInfer<T>>
 
-
+type SourceValue<A extends Unit<unknown> | Combinable> =
+  A extends Unit<unknown>
+  ? UnitValue<A>
+  : GetCombinedValue<A>
 
 type BuiltInObject =
     | Error
@@ -609,24 +612,45 @@ type Show<A extends any> =
         [K in keyof A]: A[K]
       } // & {}
 
-type NoNever<T> = any extends T ? T : any
-
-type TargetListType<T extends UnitList<any>> = T[number] extends Unit<infer S>
-  ? NoNever<Exclude<S, void>>
+/** string error message is used when target value is assignable to source type
+  * because ValidTargetList works backward by checking
+  * whether target is assignable to source
+*/
+type ReplaceGeneric<U extends Unit<unknown>, Source, Target> =
+  Target extends Source
+  ? 'incompatible unit in target array'
+  : U extends Store<unknown>
+  ? Store<Source>
+  : U extends Effect<unknown, unknown, unknown>
+  ? Effect<Source, unknown, unknown>
+  : U extends Event<unknown>
+  ? Event<Source>
+  : U extends Unit<unknown>
+  ? Unit<Source>
   : never
 
-//  Note: NoInfer in source and in return of fn helps with
+/** validates target array per element
+  * and replaces incompatible types thereby showing
+  * precise type error message
+  * 
+  * unit kind is preserved to improve message quality,
+  * otherwise typescript will bloat errors with messages about fields
+  * which missing in Unit but exists in Event, Store or effect
+*/
+type ValidTargetList<Match, Target extends Tuple<unknown>> = {
+  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
+  ? Match extends Value
+  ? Target[Index]
+  : Value extends void
+  ? Target[Index]
+  : ReplaceGeneric<Target[Index], Match, Value>
+  : 'non-unit item in target array'
+}
+
+//  NoInfer in source and in return of fn helps with
 //        detecting loose objects against target type
 
-
 /* basic overloads with config */
-export function sample<A, B, C extends UnitList<any>>(config: {
-  source: Unit<A>
-  clock: Clock<B>
-  fn: (source: A, clock: B) => TargetListType<C>
-  target: C
-  greedy?: boolean
-}): C
 export function sample<A, B, C>(config: {
   source: Unit<A>
   clock: Clock<B>
@@ -634,13 +658,6 @@ export function sample<A, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
-export function sample<A, B extends UnitList<any>>(config: {
-  source: Unit<A>
-  clock?: AnyClock
-  fn: (source: A) => TargetListType<B>
-  target: B
-  greedy?: boolean
-}): B
 export function sample<A, B>(config: {
   source: Unit<A>
   clock?: AnyClock
@@ -775,13 +792,6 @@ export function sample<A extends Combinable>(config: {
   target: Unit<GetCombinedValue<A>>
   greedy?: boolean
 }): Unit<GetCombinedValue<A>>
-export function sample<A extends Combinable, B extends UnitList<any>>(config: {
-  source: A
-  clock?: AnyClock
-  fn: (source: GetCombinedValue<A>) => TargetListType<B>
-  target: B
-  greedy?: boolean
-}): B
 export function sample<A extends Combinable, B>(config: {
   source: A
   clock?: AnyClock
@@ -789,13 +799,7 @@ export function sample<A extends Combinable, B>(config: {
   target: Unit<B>
   greedy?: boolean
 }): Unit<B>
-export function sample<A extends Combinable, B, C extends UnitList<any>>(config: {
-  source: A
-  clock: Clock<B>
-  fn: (source: GetCombinedValue<A>, clock: B) => TargetListType<C>
-  target: C
-  greedy?: boolean
-}): C
+
 export function sample<A extends Combinable, B, C>(config: {
   source: A
   clock: Clock<B>
@@ -804,6 +808,35 @@ export function sample<A extends Combinable, B, C>(config: {
   greedy?: boolean
 }): Unit<C>
 
+export function sample<A extends (Unit<unknown> | Combinable), Tar extends Tuple<unknown>>(config: {
+  source: A
+  clock: AnyClock
+  fn?: never
+  target: ValidTargetList<SourceValue<A>, Tar>
+  greedy?: boolean
+}): Tar
+
+export function sample<A, Tar extends Tuple<unknown>>(config: {
+  source: Unit<unknown> | Combinable
+  clock?: AnyClock
+  fn: () => A
+  target: ValidTargetList<A, Tar>
+  greedy?: boolean
+}): Tar
+export function sample<A extends (Unit<unknown> | Combinable), B, Tar extends Tuple<unknown>>(config: {
+  source: A
+  clock?: AnyClock
+  fn: (source: SourceValue<A>) => B
+  target: ValidTargetList<B, Tar>
+  greedy?: boolean
+}): Tar
+export function sample<A extends (Unit<unknown> | Combinable), B, C, Tar extends Tuple<unknown>>(config: {
+  source: A
+  clock: Clock<B>
+  fn: (source: SourceValue<A>, clock: B) => C
+  target: ValidTargetList<C, Tar>
+  greedy?: boolean
+}): Tar
 
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>

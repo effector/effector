@@ -263,11 +263,22 @@ describe('with target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: string; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
             Types of parameters '__0' and 'source' are incompatible.
               Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
                   Type 'string' is not assignable to type 'number'.
+                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+                      Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
+            Types of parameters '__0' and 'source' are incompatible.
+              Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+                Types of property 'a' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+                      Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })
@@ -288,20 +299,18 @@ describe('with target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type 'Event<void>' is not assignable to type 'Unit<string>'.
-                  Types of property '__' are incompatible.
-                    Type 'void' is not assignable to type 'string'.
+          Type 'Event<void>' is not assignable to type 'Unit<string>'.
+            Types of property '__' are incompatible.
+              Type 'void' is not assignable to type 'string'.
+                Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type 'Event<void>' is not assignable to type 'Unit<string>'.
-                  Types of property '__' are incompatible.
-                    Type 'void' is not assignable to type 'string'.
+          Type 'Event<void>' is not assignable to type 'Unit<string>'.
+            Types of property '__' are incompatible.
+              Type 'void' is not assignable to type 'string'.
+                Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })
@@ -391,10 +400,10 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'readonly Unit<any>[]' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, filterMap, prepend, subscribe, and 7 more.
+      Type 'Unit<{ a: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: string; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
             Types of parameters '__0' and 'source' are incompatible.
               Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
@@ -416,19 +425,10 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'readonly Unit<any>[]' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': watch, filterMap, prepend, subscribe, and 7 more.
+      Type 'Unit<{ a: string; b: string; clock: string; }>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': watch, map, filter, filterMap, and 7 more.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type 'Event<void>' is not assignable to type 'Unit<string>'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type 'Event<void>' is not assignable to type 'Unit<string>'.
+          Type 'Event<void>' is not assignable to type 'Unit<string>'.
       "
     `)
   })

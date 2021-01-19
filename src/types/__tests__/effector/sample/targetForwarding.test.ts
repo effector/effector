@@ -105,9 +105,8 @@ test('when a target receives a more loose value type from a source [with clock] 
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<{ a: string; }>' is not assignable to type 'Combinable'.
-          Type 'Store<{ a: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Index signature is missing in type 'Store<{ a: string; }>'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     "
   `)
 })
@@ -122,9 +121,8 @@ test('when a target receives a more loose value type from a source [without cloc
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<{ a: string; }>' is not assignable to type 'Combinable'.
-          Type 'Store<{ a: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Index signature is missing in type 'Store<{ a: string; }>'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     "
   `)
 })
@@ -141,18 +139,8 @@ test('when a target receives a more loose value type from a mapping fn [with clo
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<null>' is not assignable to type 'Combinable'.
-          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Index signature is missing in type 'Store<null>'.
-              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Store<null>' is not assignable to type 'Combinable'.
-          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Index signature is missing in type 'Store<null>'.
-              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     "
   `)
 })
@@ -168,16 +156,8 @@ test('when a target receives a more loose value type from a mapping fn [without 
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<null>' is not assignable to type 'Combinable'.
-          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
-              Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Store<null>' is not assignable to type 'Combinable'.
-          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
-              Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     "
   `)
 })
@@ -198,9 +178,8 @@ test('when nullable field passed to strict target [with clock] (should fail)', (
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
-          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+        Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+          Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     "
   `)
 })
@@ -219,9 +198,8 @@ test('when nullable field passed to strict target [without clock] (should fail)'
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
-          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-            Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+        Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+          Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     "
   `)
 })
@@ -238,9 +216,8 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{}>' is not assignable to type 'Combinable'.
-            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{}>'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })
@@ -254,9 +231,8 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{}>' is not assignable to type 'Combinable'.
-            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{}>'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })
@@ -273,16 +249,8 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
-                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: void) => { a: string; b: string; }'.
-                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })
@@ -298,16 +266,8 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
-                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | { [x: string]: any; }, clock: unknown) => { a: string; b: string; }'.
-                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })
