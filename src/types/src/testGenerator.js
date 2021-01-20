@@ -2,14 +2,11 @@
 
 const {
   generateCaseSetFile,
-  matchSomeOfBoolFields,
   boolField,
-  dependent,
   printArray,
-  permute,
   createTest,
   byFields,
-  createDescribe,
+  createGroupedCases,
 } = require('./generateCaseSetFile')
 
 /**
@@ -51,70 +48,52 @@ const stringt = createEvent<string>()
 const numt = createEvent<number>()
 const a = createStore('')
 const b = createStore(0)
+const aTarget = createEvent<{a: string}>()
+const abTarget = createEvent<{a: string; b: number}>()
+const aclockTarget = createEvent<{a: string; clock: any}>()
+const abclockTarget = createEvent<{a: string; b: number; clock: any}>()
+const stringTarget = createEvent<string>()
 `,
-  groupBy: ['fn', 'combinable'],
-  groupDescriptions: {
-    fn: val => (val ? 'fn' : 'no fn'),
-    combinable: val => (val ? 'combinable source' : 'plain source'),
-  },
-  ignore: [
-    item =>
-      !item.fn &&
-      matchSomeOfBoolFields(item, {
-        fnClockTypeAssertion: true,
-        secondArgument: true,
-        explicitArgumentTypes: true,
-        fnWithoutArgs: true,
-      }),
-    item =>
-      item.fnClockTypeAssertion &&
-      matchSomeOfBoolFields(item, {
-        fn: false,
-        secondArgument: false,
-        explicitArgumentTypes: false,
-      }),
-    item =>
-      item.fnWithoutArgs &&
-      matchSomeOfBoolFields(item, {
-        fn: false,
-        fnClockTypeAssertion: true,
-        secondArgument: true,
-        explicitArgumentTypes: true,
-      }),
-  ],
+  groupBy: [],
+  groupDescriptions: {},
+  ignore: [],
   shape: {
     combinable: boolField(),
-    fn: boolField(),
-    secondArgument: boolField(),
-    explicitArgumentTypes: boolField(),
-    unificationToAny: boolField(),
-    fnClockTypeAssertion: boolField(),
-    fnWithoutArgs: boolField(),
-    description: dependent(shape => {
-      const res = []
-      shape.combinable ? res.push('combinable') : res.push('plain')
-      shape.fn && res.push('fn')
-      shape.secondArgument && res.push('fnClock')
-      shape.explicitArgumentTypes && res.push('typedFn')
-      shape.unificationToAny && res.push('unificationToAny')
-      shape.fnClockTypeAssertion && res.push('assertFnType')
-      shape.fnWithoutArgs && res.push('fnWithoutArgs')
-
-      return res.join(', ')
-    }),
   },
   generateCases(config) {
-    const {
-      combinable,
-      fn,
-      secondArgument,
-      explicitArgumentTypes,
-      unificationToAny,
-      fnClockTypeAssertion,
-      fnWithoutArgs,
-    } = config
     const casesDefs = byFields([config], {
       shape: {
+        fn: {
+          flag: {},
+        },
+        secondArgument: {
+          flag: {
+            needs: 'fn',
+          },
+        },
+        explicitArgumentTypes: {
+          flag: {
+            needs: 'fn',
+          },
+        },
+        unificationToAny: {
+          flag: {},
+        },
+        fnClockTypeAssertion: {
+          flag: {
+            needs: ['fn', 'secondArgument', 'explicitArgumentTypes'],
+          },
+        },
+        fnWithoutArgs: {
+          flag: {
+            needs: 'fn',
+            avoid: [
+              'fnClockTypeAssertion',
+              'secondArgument',
+              'explicitArgumentTypes',
+            ],
+          },
+        },
         clock: {
           split: {
             match: {
@@ -163,8 +142,26 @@ const b = createStore(0)
               fail: {fnClockTypeAssertion: true},
             },
             cases: {
-              pass: 'pass',
-              fail: 'fail',
+              pass: true,
+              fail: false,
+            },
+          },
+        },
+        target: {
+          compute: {
+            variant: {
+              abclock: {combinable: true, fn: true, secondArgument: true},
+              ab: {combinable: true},
+              aclock: {fn: true, secondArgument: true},
+              a: {fn: true, secondArgument: false},
+              string: {fn: false},
+            },
+            cases: {
+              abclock: 'abclockTarget',
+              ab: 'abTarget',
+              aclock: 'aclockTarget',
+              a: 'aTarget',
+              string: 'stringTarget',
             },
           },
         },
@@ -198,187 +195,111 @@ const b = createStore(0)
             },
           },
         },
+        sourceCode: {
+          compute: {
+            variant: {
+              plain: {combinable: false},
+              combinable: {combinable: true},
+            },
+            cases: {
+              plain: 'a',
+              combinable: '{a, b}',
+            },
+          },
+        },
+        clockCode: {
+          compute: {
+            fn: ({clock}) => printArray(clock),
+          },
+        },
+        //prettier-ignore
+        fnCode: {
+          compute: {
+            variants: {
+              shape: {
+                plain: {combinable: false, fn: true},
+                shape: {combinable: true, fn: true},
+              },
+              fn: {
+                noArgs: {fnWithoutArgs: true},
+                typedFnClock: {secondArgument: true, explicitArgumentTypes: true},
+                untypedFnClock: {secondArgument: true, explicitArgumentTypes: false},
+                typed: {explicitArgumentTypes: true},
+                untyped: {explicitArgumentTypes: false},
+              },
+              clock: {
+                assert: {fnClockTypeAssertion: true},
+                keep: {fnClockTypeAssertion: false},
+              }
+            },
+            cases: {
+              shape: {
+                noArgs: "() => ({a: '', b: 2})",
+                typedFnClock: {
+                  assert: '({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock})',
+                  keep: '({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock})'
+                },
+                untypedFnClock: '({a, b}, clock) => ({a, b, clock})',
+                typed: '({a, b}: {a: string; b: number}) => ({a, b})',
+                untyped: '({a, b}) => ({a, b})'
+              },
+              plain: {
+                noArgs: "() => ({a: ''})",
+                typedFnClock: {
+                  assert: '(a: string, clock: string) => ({a, clock})',
+                  keep: '(a: string, clock: any) => ({a, clock})'
+                },
+                untypedFnClock: '(a, clock) => ({a, clock})',
+                typed: '(a: string) => ({a})',
+                untyped: '(a) => ({a})',
+              }
+            },
+          },
+        },
+        methodCode: {
+          compute: {
+            variant: {
+              hasFn: {fn: true},
+              noFn: {fn: false},
+            },
+            cases: {
+              hasFn: ({sourceCode, clockCode, fnCode, target}) => `sample({
+  source: ${sourceCode},
+  clock: ${clockCode},
+  fn: ${fnCode},
+  target: ${target},
+})`,
+              noFn: ({sourceCode, clockCode, target}) =>
+                `sample({source: ${sourceCode}, clock: ${clockCode}, target: ${target}})`,
+            },
+          },
+        },
+        noGroup: {
+          compute: {
+            variant: {
+              yes: [{unificationToAny: true}, {fnClockTypeAssertion: true}],
+              no: {},
+            },
+            cases: {yes: true, no: false},
+          },
+        },
       },
     })
-    const resultCases = casesDefs.map(
-      ({
-        description,
-        pass,
-        clock: clockItems,
-        combinable,
-        fn,
-        secondArgument,
-        explicitArgumentTypes,
-        unificationToAny,
-        fnClockTypeAssertion,
-        fnWithoutArgs,
-      }) => {
-        description = `${description} (should ${pass})`
-        const clock = printArray(clockItems)
-        const headers = []
-        let body = []
-        const footer = ['expect(typecheck).toMatchInlineSnapshot()']
-        if (combinable) {
-          if (fn && secondArgument) {
-            headers.push(
-              'const target = createEvent<{a: string; b: number; clock: any}>()',
-            )
-          } else {
-            headers.push('const target = createEvent<{a: string; b: number}>()')
-          }
-          if (fn && secondArgument && explicitArgumentTypes) {
-            body = [
-              `sample({
-  source: {a, b},
-  clock: ${clock},`,
-              `  fn: ({a, b}: {a: string; b: number}, clock: ${
-                fnClockTypeAssertion ? 'string' : 'any'
-              }) => ({a, b, clock}),
-  target,
-})`,
-            ]
-          } else if (fn && secondArgument && !explicitArgumentTypes) {
-            body = [
-              `sample({
-  source: {a, b},
-  clock: ${clock},`,
-              `  fn: ({a, b}, clock) => ({a, b, clock}),
-  target,
-})`,
-            ]
-          } else if (fn && !secondArgument && explicitArgumentTypes) {
-            body = [
-              `sample({
-  source: {a, b},
-  clock: ${clock},`,
-              `  fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-  target,
-})`,
-            ]
-          } else if (
-            fn &&
-            !secondArgument &&
-            !explicitArgumentTypes &&
-            !fnWithoutArgs
-          ) {
-            body = [
-              `sample({
-  source: {a, b},
-  clock: ${clock},`,
-              `  fn: ({a, b}) => ({a, b}),
-  target,
-})`,
-            ]
-          } else if (
-            fn &&
-            !secondArgument &&
-            !explicitArgumentTypes &&
-            fnWithoutArgs
-          ) {
-            body = [
-              `sample({
-  source: {a, b},
-  clock: ${clock},`,
-              `  fn: () => ({a: '', b: 2}),
-  target,
-})`,
-            ]
-          } else if (!fn) {
-            body = [
-              `sample({
-  source: {a, b},
-  clock: ${clock},`,
-              `  target,
-})`,
-            ]
-          }
-        } else {
-          if (fn && secondArgument) {
-            headers.push(
-              'const target = createEvent<{a: string; clock: any}>()',
-            )
-          } else if (fn && !secondArgument) {
-            headers.push('const target = createEvent<{a: string}>()')
-          } else if (!fn) {
-            headers.push('const target = createEvent<string>()')
-          }
-          if (fn && secondArgument && explicitArgumentTypes) {
-            body = [
-              `sample({
-  source: a,
-  clock: ${clock},`,
-              `  fn: (a: string, clock: ${
-                fnClockTypeAssertion ? 'string' : 'any'
-              }) => ({a, clock}),
-  target,
-})`,
-            ]
-          } else if (fn && secondArgument && !explicitArgumentTypes) {
-            body = [
-              `sample({
-  source: a,
-  clock: ${clock},`,
-              `  fn: (a, clock) => ({a, clock}),
-  target,
-})`,
-            ]
-          } else if (fn && !secondArgument && explicitArgumentTypes) {
-            body = [
-              `sample({
-  source: a,
-  clock: ${clock},`,
-              `  fn: (a: string) => ({a}),
-  target,
-})`,
-            ]
-          } else if (
-            fn &&
-            !secondArgument &&
-            !explicitArgumentTypes &&
-            !fnWithoutArgs
-          ) {
-            body = [
-              `sample({
-  source: a,
-  clock: ${clock},`,
-              `  fn: (a) => ({a}),
-  target,
-})`,
-            ]
-          } else if (
-            fn &&
-            !secondArgument &&
-            !explicitArgumentTypes &&
-            fnWithoutArgs
-          ) {
-            body = [
-              `sample({
-  source: a,
-  clock: ${clock},`,
-              `  fn: () => ({a: ''}),
-  target,
-})`,
-            ]
-          } else if (!fn) {
-            body = [
-              `sample({
-  source: a,
-  clock: ${clock},`,
-              `  target,
-})`,
-            ]
-          }
-        }
-        return createTest(description, [...headers, ...body, ...footer])
-      },
-    )
+    const resultCases = createGroupedCases(casesDefs, {
+      getHash: ({descriptionTokens}) => descriptionTokens,
+      describeGroup: ({descriptionTokens, noGroup}) => ({
+        description: descriptionTokens,
+        noGroup,
+      }),
+      createTestLines: ({methodCode}) => [methodCode],
+    })
     return {
-      description: config.description,
+      description: config.combinable ? 'combinable' : 'plain',
+      noGroup: true,
       cases: resultCases,
     }
   },
 })
-
 generateCaseSetFile({
   groupBy: [],
   groupDescriptions: {
@@ -621,46 +542,15 @@ generateCaseSetFile({
           },
         },
       })
-      const casesDefsPending = [...casesDefs]
-      const defsGroups = new Map()
-      let cur
-      while ((cur = casesDefsPending.pop())) {
-        const hash = `${cur.sourceDescription} ${
-          cur.fn ? cur.fnDescription : ''
-        }`
-        let set = defsGroups.get(hash)
-        if (!set) {
-          set = {itemsPass: [], itemsFail: [], description: ''}
-          defsGroups.set(hash, set)
-        }
-        ;(cur.pass ? set.itemsPass : set.itemsFail).push(cur)
-        const description = `source:${cur.sourceDescription}${
-          cur.fn ? `, fn:${cur.fnDescription}` : ''
-        }`
-        set.description = description
-      }
-      const resultCases = []
-      for (const {description, itemsPass, itemsFail} of defsGroups.values()) {
-        if (itemsPass.length === 0 && itemsFail.length === 0) continue
-        const testSuiteItems = []
-        if (itemsPass.length > 0) {
-          testSuiteItems.push(
-            createTest(`${description} (should pass)`, [
-              ...itemsPass.map(createTestLines).flat(),
-              'expect(typecheck).toMatchInlineSnapshot()',
-            ]),
-          )
-        }
-        if (itemsFail.length > 0) {
-          testSuiteItems.push(
-            createTest(`${description} (should fail)`, [
-              ...itemsFail.map(createTestLines).flat(),
-              'expect(typecheck).toMatchInlineSnapshot()',
-            ]),
-          )
-        }
-        resultCases.push(createDescribe(description, testSuiteItems))
-      }
+      const resultCases = createGroupedCases(casesDefs, {
+        createTestLines,
+        getHash: cur =>
+          `${cur.sourceDescription} ${cur.fn ? cur.fnDescription : ''}`,
+        describeGroup: cur =>
+          `source:${cur.sourceDescription}${
+            cur.fn ? `, fn:${cur.fnDescription}` : ''
+          }`,
+      })
       function createTestLines({
         sourceCode,
         sourceDescription,

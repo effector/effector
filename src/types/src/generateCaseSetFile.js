@@ -12,6 +12,64 @@ module.exports = {
   createTest,
   createDescribe,
   byFields,
+  createGroupedCases,
+}
+
+function createGroupedCases(
+  casesDefs,
+  {createTestLines, getHash, describeGroup},
+) {
+  const casesDefsPending = [...casesDefs]
+  const defsGroups = new Map()
+  let cur
+  while ((cur = casesDefsPending.pop())) {
+    const hash = getHash(cur)
+    let set = defsGroups.get(hash)
+    if (!set) {
+      set = {itemsPass: [], itemsFail: [], description: '', noGroup: false}
+      defsGroups.set(hash, set)
+    }
+    ;(cur.pass ? set.itemsPass : set.itemsFail).push(cur)
+    const description = describeGroup(cur)
+    if (typeof description === 'string') {
+      set.description = description
+    } else {
+      set.noGroup = description.noGroup
+      set.description = description.description
+    }
+  }
+  const resultCases = []
+  for (const {
+    description,
+    itemsPass,
+    itemsFail,
+    noGroup,
+  } of defsGroups.values()) {
+    if (itemsPass.length === 0 && itemsFail.length === 0) continue
+    const testSuiteItems = []
+    if (itemsPass.length > 0) {
+      testSuiteItems.push(
+        createTest(`${description} (should pass)`, [
+          ...itemsPass.flatMap(createTestLines),
+          'expect(typecheck).toMatchInlineSnapshot()',
+        ]),
+      )
+    }
+    if (itemsFail.length > 0) {
+      testSuiteItems.push(
+        createTest(`${description} (should fail)`, [
+          ...itemsFail.flatMap(createTestLines),
+          'expect(typecheck).toMatchInlineSnapshot()',
+        ]),
+      )
+    }
+    if (noGroup) {
+      resultCases.push(...testSuiteItems)
+    } else {
+      resultCases.push(createDescribe(description, testSuiteItems))
+    }
+  }
+  return resultCases
 }
 function printArray(array) {
   return `[${array.join(', ')}]`
@@ -437,18 +495,30 @@ ${suite}`
           case 'item': {
             const generated = generateCases(item.value)
             if (Array.isArray(generated)) {
-              for (const {description, cases} of generated) {
-                if (cases.length > 0)
+              for (const {description, cases, noGroup} of generated) {
+                if (cases.length > 0) {
+                  if (noGroup) {
+                    results.push(cases.join(`\n`))
+                  } else {
+                    results.push(
+                      wrapText(`describe('${description}', () => {`, [
+                        ...cases,
+                      ]),
+                    )
+                  }
+                }
+              }
+            } else if (generated) {
+              const {description, cases, noGroup} = generated
+              if (cases.length > 0) {
+                if (noGroup) {
+                  results.push(cases.join(`\n`))
+                } else {
                   results.push(
                     wrapText(`describe('${description}', () => {`, [...cases]),
                   )
+                }
               }
-            } else if (generated) {
-              const {description, cases} = generated
-              if (cases.length > 0)
-                results.push(
-                  wrapText(`describe('${description}', () => {`, [...cases]),
-                )
             }
             break
           }
