@@ -385,7 +385,7 @@ function groupBy(field, descriptionFn) {
 
 async function generateCaseSetFile(config) {
   const suite = generateCaseSet(config)
-  const {file, usedMethods = [], header = ''} = config
+  const {file, dir, usedMethods = [], header = ''} = config
   const content = `/* eslint-disable no-unused-vars */
 import {${usedMethods.join(', ')}} from 'effector'
 const typecheck = '{global}'
@@ -399,8 +399,7 @@ ${suite}`
     '..',
     '__tests__',
     'effector',
-    'sample',
-    'generated',
+    ...dir.split('/'),
   )
   const fullFileName = resolve(srcRoot, `${file}.test.ts`)
   await promises.writeFile(fullFileName, content)

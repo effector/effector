@@ -40,6 +40,7 @@ const {
 
 generateCaseSetFile({
   file: 'clockArrayGen',
+  dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample'],
   header: `
 const voidt = createEvent()
@@ -621,6 +622,7 @@ generateCaseSetFile({
     }
   },
   file: 'arrayTargetGen',
+  dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
   header: `
 const voidt = createEvent()
