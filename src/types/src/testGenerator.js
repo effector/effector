@@ -2,204 +2,6 @@
 const {promises} = require('fs')
 const {resolve} = require('path')
 
-/**
-fn:
-- with fn with second argument
-- with fn without second argument
-- without fn
-
-source:
-- unit
-- combinable
-
-target:
-- without target
-- unit
-- array of units
-
-
-clock array kinds:
-  no unification to any:
-- [voidt, stringt]
-- [stringt, voidt]
-  unification to any:
-- [voidt, anyt, stringt]
-- [voidt, stringt, anyt]
-- [anyt, voidt, stringt]
-- [anyt, stringt, voidt]
-- [stringt, voidt, anyt]
-- [stringt, anyt, voidt]
-*/
-
-function generateCase({
-  description,
-  pass,
-  clock: clockItems,
-  combinable,
-  fn,
-  secondArgument,
-  explicitArgumentTypes,
-  unificationToAny,
-  fnClockTypeAssertion,
-  fnWithoutArgs,
-}) {
-  description = `${description} (should ${pass ? 'pass' : 'fail'})`
-  const clock = printArray(clockItems)
-  const headers = []
-  let body = []
-  const footer = ['expect(typecheck).toMatchInlineSnapshot()']
-  if (combinable) {
-    if (fn && secondArgument) {
-      headers.push(
-        'const target = createEvent<{a: string; b: number; clock: any}>()',
-      )
-    } else {
-      headers.push('const target = createEvent<{a: string; b: number}>()')
-    }
-    if (fn && secondArgument && explicitArgumentTypes) {
-      body = [
-        `sample({
-  source: {a, b},
-  clock: ${clock},`,
-        `  fn: ({a, b}: {a: string; b: number}, clock: ${
-          fnClockTypeAssertion ? 'string' : 'any'
-        }) => ({a, b, clock}),
-  target,
-})`,
-      ]
-    } else if (fn && secondArgument && !explicitArgumentTypes) {
-      body = [
-        `sample({
-  source: {a, b},
-  clock: ${clock},`,
-        `  fn: ({a, b}, clock) => ({a, b, clock}),
-  target,
-})`,
-      ]
-    } else if (fn && !secondArgument && explicitArgumentTypes) {
-      body = [
-        `sample({
-  source: {a, b},
-  clock: ${clock},`,
-        `  fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-  target,
-})`,
-      ]
-    } else if (
-      fn &&
-      !secondArgument &&
-      !explicitArgumentTypes &&
-      !fnWithoutArgs
-    ) {
-      body = [
-        `sample({
-  source: {a, b},
-  clock: ${clock},`,
-        `  fn: ({a, b}) => ({a, b}),
-  target,
-})`,
-      ]
-    } else if (
-      fn &&
-      !secondArgument &&
-      !explicitArgumentTypes &&
-      fnWithoutArgs
-    ) {
-      body = [
-        `sample({
-  source: {a, b},
-  clock: ${clock},`,
-        `  fn: () => ({a: '', b: 2}),
-  target,
-})`,
-      ]
-    } else if (!fn) {
-      body = [
-        `sample({
-  source: {a, b},
-  clock: ${clock},`,
-        `  target,
-})`,
-      ]
-    }
-  } else {
-    if (fn && secondArgument) {
-      headers.push('const target = createEvent<{a: string; clock: any}>()')
-    } else if (fn && !secondArgument) {
-      headers.push('const target = createEvent<{a: string}>()')
-    } else if (!fn) {
-      headers.push('const target = createEvent<string>()')
-    }
-    if (fn && secondArgument && explicitArgumentTypes) {
-      body = [
-        `sample({
-  source: a,
-  clock: ${clock},`,
-        `  fn: (a: string, clock: ${
-          fnClockTypeAssertion ? 'string' : 'any'
-        }) => ({a, clock}),
-  target,
-})`,
-      ]
-    } else if (fn && secondArgument && !explicitArgumentTypes) {
-      body = [
-        `sample({
-  source: a,
-  clock: ${clock},`,
-        `  fn: (a, clock) => ({a, clock}),
-  target,
-})`,
-      ]
-    } else if (fn && !secondArgument && explicitArgumentTypes) {
-      body = [
-        `sample({
-  source: a,
-  clock: ${clock},`,
-        `  fn: (a: string) => ({a}),
-  target,
-})`,
-      ]
-    } else if (
-      fn &&
-      !secondArgument &&
-      !explicitArgumentTypes &&
-      !fnWithoutArgs
-    ) {
-      body = [
-        `sample({
-  source: a,
-  clock: ${clock},`,
-        `  fn: (a) => ({a}),
-  target,
-})`,
-      ]
-    } else if (
-      fn &&
-      !secondArgument &&
-      !explicitArgumentTypes &&
-      fnWithoutArgs
-    ) {
-      body = [
-        `sample({
-  source: a,
-  clock: ${clock},`,
-        `  fn: () => ({a: ''}),
-  target,
-})`,
-      ]
-    } else if (!fn) {
-      body = [
-        `sample({
-  source: a,
-  clock: ${clock},`,
-        `  target,
-})`,
-      ]
-    }
-  }
-  return createTest(description, [...headers, ...body, ...footer])
-}
-
 function printArray(array) {
   return `[${array.join(', ')}]`
 }
@@ -238,7 +40,17 @@ function matchSomeOfBoolFields(value, shape) {
   }
   return false
 }
-const generatedCases = generateCaseSet({
+generateCaseSetFile({
+  file: 'clockArrayGen',
+  usedMethods: ['createStore', 'createEvent', 'sample'],
+  header: `
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const stringt = createEvent<string>()
+const numt = createEvent<number>()
+const a = createStore('')
+const b = createStore(0)
+`,
   groupBy: ['fn', 'combinable'],
   groupDescriptions: {
     fn: val => (val ? 'fn' : 'no fn'),
@@ -347,22 +159,207 @@ const generatedCases = generateCaseSet({
       description,
       cases,
     }
+
+    /**
+    fn:
+    - with fn with second argument
+    - with fn without second argument
+    - without fn
+
+    source:
+    - unit
+    - combinable
+
+    target:
+    - without target
+    - unit
+    - array of units
+
+
+    clock array kinds:
+      no unification to any:
+    - [voidt, stringt]
+    - [stringt, voidt]
+      unification to any:
+    - [voidt, anyt, stringt]
+    - [voidt, stringt, anyt]
+    - [anyt, voidt, stringt]
+    - [anyt, stringt, voidt]
+    - [stringt, voidt, anyt]
+    - [stringt, anyt, voidt]
+    */
+
+    function generateCase({
+      description,
+      pass,
+      clock: clockItems,
+      combinable,
+      fn,
+      secondArgument,
+      explicitArgumentTypes,
+      unificationToAny,
+      fnClockTypeAssertion,
+      fnWithoutArgs,
+    }) {
+      description = `${description} (should ${pass ? 'pass' : 'fail'})`
+      const clock = printArray(clockItems)
+      const headers = []
+      let body = []
+      const footer = ['expect(typecheck).toMatchInlineSnapshot()']
+      if (combinable) {
+        if (fn && secondArgument) {
+          headers.push(
+            'const target = createEvent<{a: string; b: number; clock: any}>()',
+          )
+        } else {
+          headers.push('const target = createEvent<{a: string; b: number}>()')
+        }
+        if (fn && secondArgument && explicitArgumentTypes) {
+          body = [
+            `sample({
+  source: {a, b},
+  clock: ${clock},`,
+            `  fn: ({a, b}: {a: string; b: number}, clock: ${
+              fnClockTypeAssertion ? 'string' : 'any'
+            }) => ({a, b, clock}),
+  target,
+})`,
+          ]
+        } else if (fn && secondArgument && !explicitArgumentTypes) {
+          body = [
+            `sample({
+  source: {a, b},
+  clock: ${clock},`,
+            `  fn: ({a, b}, clock) => ({a, b, clock}),
+  target,
+})`,
+          ]
+        } else if (fn && !secondArgument && explicitArgumentTypes) {
+          body = [
+            `sample({
+  source: {a, b},
+  clock: ${clock},`,
+            `  fn: ({a, b}: {a: string; b: number}) => ({a, b}),
+  target,
+})`,
+          ]
+        } else if (
+          fn &&
+          !secondArgument &&
+          !explicitArgumentTypes &&
+          !fnWithoutArgs
+        ) {
+          body = [
+            `sample({
+  source: {a, b},
+  clock: ${clock},`,
+            `  fn: ({a, b}) => ({a, b}),
+  target,
+})`,
+          ]
+        } else if (
+          fn &&
+          !secondArgument &&
+          !explicitArgumentTypes &&
+          fnWithoutArgs
+        ) {
+          body = [
+            `sample({
+  source: {a, b},
+  clock: ${clock},`,
+            `  fn: () => ({a: '', b: 2}),
+  target,
+})`,
+          ]
+        } else if (!fn) {
+          body = [
+            `sample({
+  source: {a, b},
+  clock: ${clock},`,
+            `  target,
+})`,
+          ]
+        }
+      } else {
+        if (fn && secondArgument) {
+          headers.push('const target = createEvent<{a: string; clock: any}>()')
+        } else if (fn && !secondArgument) {
+          headers.push('const target = createEvent<{a: string}>()')
+        } else if (!fn) {
+          headers.push('const target = createEvent<string>()')
+        }
+        if (fn && secondArgument && explicitArgumentTypes) {
+          body = [
+            `sample({
+  source: a,
+  clock: ${clock},`,
+            `  fn: (a: string, clock: ${
+              fnClockTypeAssertion ? 'string' : 'any'
+            }) => ({a, clock}),
+  target,
+})`,
+          ]
+        } else if (fn && secondArgument && !explicitArgumentTypes) {
+          body = [
+            `sample({
+  source: a,
+  clock: ${clock},`,
+            `  fn: (a, clock) => ({a, clock}),
+  target,
+})`,
+          ]
+        } else if (fn && !secondArgument && explicitArgumentTypes) {
+          body = [
+            `sample({
+  source: a,
+  clock: ${clock},`,
+            `  fn: (a: string) => ({a}),
+  target,
+})`,
+          ]
+        } else if (
+          fn &&
+          !secondArgument &&
+          !explicitArgumentTypes &&
+          !fnWithoutArgs
+        ) {
+          body = [
+            `sample({
+  source: a,
+  clock: ${clock},`,
+            `  fn: (a) => ({a}),
+  target,
+})`,
+          ]
+        } else if (
+          fn &&
+          !secondArgument &&
+          !explicitArgumentTypes &&
+          fnWithoutArgs
+        ) {
+          body = [
+            `sample({
+  source: a,
+  clock: ${clock},`,
+            `  fn: () => ({a: ''}),
+  target,
+})`,
+          ]
+        } else if (!fn) {
+          body = [
+            `sample({
+  source: a,
+  clock: ${clock},`,
+            `  target,
+})`,
+          ]
+        }
+      }
+      return createTest(description, [...headers, ...body, ...footer])
+    }
   },
 })
 
-writeTestSuite({
-  file: 'clockArrayGen',
-  suite: generatedCases,
-  usedMethods: ['createStore', 'createEvent', 'sample'],
-  header: `
-const voidt = createEvent()
-const anyt = createEvent<any>()
-const stringt = createEvent<string>()
-const numt = createEvent<number>()
-const a = createStore('')
-const b = createStore(0)
-`,
-})
 function selectUniqN(items, {n, optional = []}) {
   if (n === 0) return [[]]
   if (n === 1) return items.map(item => [item])
@@ -452,7 +449,19 @@ function byFields(values, {shape = {}}) {
 
 function splitField(values, {field, cases, match}) {
   const result = []
-  const matcher = typeof match === 'string' ? item => item[match] : match
+  let matcher
+  if (typeof match === 'object' && match !== null) {
+    const matchCases = {}
+    for (const key in match) matchCases[key] = key
+    matcher = matchDeep({
+      variants: {_: match},
+      cases: matchCases,
+    })
+  } else if (typeof match === 'string') {
+    matcher = item => item[match]
+  } else {
+    matcher = match
+  }
   for (const value of values) {
     const matchedCaseName = matcher(value)
     let currentCase = cases[matchedCaseName]
@@ -467,7 +476,12 @@ function splitField(values, {field, cases, match}) {
   }
   return result
 }
-function computeField(values, {field, fn}) {
+function computeField(values, {field, fn, cases, variants, variant}) {
+  if (cases) {
+    fn = variants
+      ? matchDeep({variants, cases})
+      : matchDeep({variants: {_: variant}, cases})
+  }
   return values.map(val => ({...val, [field]: fn(val)}))
 }
 function permuteField(
@@ -522,7 +536,70 @@ function selectN(items, n) {
   }
   return result
 }
-const arrayTargetCaseSet = generateCaseSet({
+
+function computeCaseIfMatch(value, matcher, fn) {
+  for (const field in matcher) {
+    const matcherValue = matcher[field]
+    const valueField = value[field]
+    if (matcherValue === false) {
+      if (valueField !== false && valueField !== undefined) return
+    }
+    if (matcherValue !== valueField) return
+  }
+  if (typeof fn === 'function') return fn(value)
+  return fn
+}
+
+function forIn(value, fn) {
+  for (const key in value) {
+    const fnResult = fn(value[key], key, value)
+    if (fnResult !== undefined) return fnResult
+  }
+}
+
+function matchDeep({variants: variantGroups, cases}) {
+  const matchCases = []
+  const variantGroupsNames = Object.keys(variantGroups)
+  if (variantGroupsNames.length === 0) return () => {}
+  function iterateVariantGroup(index, matcherParts, cases) {
+    const isLastVariant = index === variantGroupsNames.length - 1
+    forIn(variantGroups[variantGroupsNames[index]], (variant, variantName) => {
+      if (Array.isArray(variant)) {
+        for (const alt of variant) {
+          matchVariant(alt, variantName)
+        }
+      } else {
+        matchVariant(variant, variantName)
+      }
+      function matchVariant(variant, variantName) {
+        const childMatcherParts = [...matcherParts, variant]
+        const variantCase = cases[variantName]
+        if (variantCase === undefined) return
+        if (
+          isLastVariant ||
+          typeof variantCase !== 'object' ||
+          variantCase === null
+        ) {
+          matchCases.push({
+            matcher: Object.assign({}, ...[...childMatcherParts].reverse()),
+            variantCase,
+          })
+          return
+        }
+        iterateVariantGroup(index + 1, childMatcherParts, variantCase)
+      }
+    })
+  }
+  iterateVariantGroup(0, [], cases)
+  return value => {
+    for (const {matcher, variantCase} of matchCases) {
+      const computedResult = computeCaseIfMatch(value, matcher, variantCase)
+      if (computedResult !== undefined) return computedResult
+    }
+  }
+}
+
+generateCaseSetFile({
   groupBy: [],
   groupDescriptions: {
     fn: val => (val ? 'fn' : 'no fn'),
@@ -542,6 +619,37 @@ const arrayTargetCaseSet = generateCaseSet({
   },
   generateCases({source, clock, variables, combinable}) {
     if (combinable) {
+      const fnVariants = {
+        fnWithoutArgs: {fnWithoutArgs: true},
+        //typed
+        noFalsePositiveFnClock: {
+          typedFn: true,
+          fnClock: true,
+          noFalsePositiveFnClock: true,
+        },
+        noFalsePositiveFnSource_fnClock: {
+          typedFn: true,
+          fnClock: true,
+          noFalsePositiveFnSource: true,
+        },
+        typedFnClock: {typedFn: true, fnClock: true},
+        noFalsePositiveFnSource: {
+          typedFn: true,
+          fnClock: false,
+          noFalsePositiveFnSource: true,
+        },
+        typedNoFnClock: {typedFn: true, fnClock: false},
+        //non typed
+        fnClock: {typedFn: false, fnClock: true},
+        noFnClock: {typedFn: false, fnClock: false},
+      }
+      const sourceVariants = {
+        objectSolo: {sourceType: 'object', source: 'a'},
+        objectPair: {sourceType: 'object', source: 'ab'},
+        tupleSolo: {sourceType: 'tuple', source: 'tuple_a'},
+        tuplePair: {sourceType: 'tuple', source: 'tuple_aa'},
+      }
+
       const failCases = {
         a: ['a_num', 'a_num_b_num', 'a_num_b_str'],
         ab: ['a_str', 'a_num_b_num'],
@@ -555,16 +663,13 @@ const arrayTargetCaseSet = generateCaseSet({
           },
           sourceType: {
             compute: {
-              fn({source}) {
-                switch (source) {
-                  case 'tuple_a':
-                  case 'tuple_aa':
-                    return 'tuple'
-                  case 'a':
-                  case 'ab':
-                  default:
-                    return 'object'
-                }
+              variant: {
+                object: [{source: 'a'}, {source: 'ab'}],
+                tuple: [{source: 'tuple_a'}, {source: 'tuple_aa'}],
+              },
+              cases: {
+                object: 'object',
+                tuple: 'tuple',
               },
             },
           },
@@ -603,175 +708,100 @@ const arrayTargetCaseSet = generateCaseSet({
               ],
             },
           },
-          // clockFailedByAssert: {
-          //   flag: {
-          //     needs: ['fn', fnClock, 'typedFn', 'noFalsePositiveFnClock'],
-          //     avoid: ['fnWithoutArgs'],
-          //   },
-          // },
-          // clock: {
-          //   permute: {
-          //     // items:
-          //   },
-          // },
           fnText: {
+            //prettier-ignore
             compute: {
-              fn({
-                source,
-                sourceType,
-                typedFn,
-                fnClock,
-                noFalsePositiveFnClock,
-                noFalsePositiveFnSource,
-                fnWithoutArgs,
-              }) {
-                if (sourceType === 'object') {
-                  if (fnWithoutArgs) return "() => ({a: 2, b: ''})"
-                  if (typedFn) {
-                    if (fnClock) {
-                      if (noFalsePositiveFnClock)
-                        return '({a}: {a: number; b: string}, cl: string) => ({a, b: cl})'
-                      if (noFalsePositiveFnSource)
-                        return "({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''})"
-                      return '({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b})'
-                    } else {
-                      if (noFalsePositiveFnSource)
-                        return "({b}: {a: number; b: number}) => ({a: b, b: ''})"
-                      return '({a, b}: {a: number; b: string}) => ({a, b})'
-                    }
-                  } else {
-                    return fnClock
-                      ? '({a, b}, cl) => ({a: a + cl, b})'
-                      : '({a, b}) => ({a, b})'
-                  }
-                } else {
-                  if (fnWithoutArgs) return "() => ({a: 2, b: ''})"
-                  switch (source) {
-                    case 'tuple_a': {
-                      if (typedFn) {
-                        if (fnClock) {
-                          if (noFalsePositiveFnClock)
-                            return '([a]: [number], cl: string) => ({a, b: cl})'
-                          if (noFalsePositiveFnSource)
-                            return '([a]: [string], cl: number) => ({a: cl, b: a})'
-                          return "([a]: [number], cl: number) => ({a: a + cl, b: ''})"
-                        } else {
-                          if (noFalsePositiveFnSource)
-                            return '([a]: [string]) => ({a: 2, b: a})'
-                          return "([a]: [number]) => ({a, b: ''})"
-                        }
-                      } else {
-                        return fnClock
-                          ? "([a], cl) => ({a: a + cl, b: ''})"
-                          : "([a]) => ({a, b: ''})"
-                      }
-                    }
-                    case 'tuple_aa': {
-                      if (typedFn) {
-                        if (fnClock) {
-                          if (noFalsePositiveFnClock)
-                            return '([a]: [number, string], cl: string) => ({a, b: cl})'
-                          if (noFalsePositiveFnSource)
-                            return "([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''})"
-                          return '([a, b]: [number, string], cl: number) => ({a: a + cl, b})'
-                        } else {
-                          if (noFalsePositiveFnSource)
-                            return "([,b]: [number, number]) => ({a: b, b: ''})"
-                          return '([a, b]: [number, string]) => ({a, b})'
-                        }
-                      } else {
-                        return fnClock
-                          ? '([a, b], cl) => ({a: a + cl, b})'
-                          : '([a, b]) => ({a, b})'
-                      }
-                    }
-                  }
-                }
+              variants: {
+                fnVariants,
+                source: {
+                  objectVal: {sourceType: 'object'},
+                  tupleSolo: {sourceType: 'tuple', source: 'tuple_a'},
+                  tuplePair: {sourceType: 'tuple', source: 'tuple_aa'},
+                },
               },
-            },
+              cases: {
+                fnWithoutArgs: "() => ({a: 2, b: ''})",
+                noFalsePositiveFnClock: {
+                  objectVal: '({a}: {a: number; b: string}, cl: string) => ({a, b: cl})',
+                  tupleSolo: '([a]: [number], cl: string) => ({a, b: cl})',
+                  tuplePair: '([a]: [number, string], cl: string) => ({a, b: cl})',
+                },
+                noFalsePositiveFnSource_fnClock: {
+                  objectVal: "({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''})",
+                  tupleSolo: '([a]: [string], cl: number) => ({a: cl, b: a})',
+                  tuplePair: "([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''})",
+                },
+                typedFnClock: {
+                  objectVal: '({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b})',
+                  tupleSolo: "([a]: [number], cl: number) => ({a: a + cl, b: ''})",
+                  tuplePair: '([a, b]: [number, string], cl: number) => ({a: a + cl, b})',
+                },
+                noFalsePositiveFnSource: {
+                  objectVal: "({b}: {a: number; b: number}) => ({a: b, b: ''})",
+                  tupleSolo: '([a]: [string]) => ({a: 2, b: a})',
+                  tuplePair: "([,b]: [number, number]) => ({a: b, b: ''})",
+                },
+                typedNoFnClock: {
+                  objectVal: '({a, b}: {a: number; b: string}) => ({a, b})',
+                  tupleSolo: "([a]: [number]) => ({a, b: ''})",
+                  tuplePair: '([a, b]: [number, string]) => ({a, b})',
+                },
+                fnClock: {
+                  objectVal: '({a, b}, cl) => ({a: a + cl, b})',
+                  tupleSolo: "([a], cl) => ({a: a + cl, b: ''})",
+                  tuplePair: '([a, b], cl) => ({a: a + cl, b})',
+                },
+                noFnClock: {
+                  objectVal: '({a, b}) => ({a, b})',
+                  tupleSolo: "([a]) => ({a, b: ''})",
+                  tuplePair: '([a, b]) => ({a, b})',
+                },
+              },
+            }
           },
           fnDescription: {
             compute: {
-              fn({
-                sourceType,
-                typedFn,
-                fnClock,
-                noFalsePositiveFnClock,
-                noFalsePositiveFnSource,
-                fnWithoutArgs,
-              }) {
-                if (sourceType === 'object') {
-                  if (fnWithoutArgs) return '() => ...'
-                  if (typedFn) {
-                    if (fnClock) {
-                      if (noFalsePositiveFnClock)
-                        return '(src, clk: wrong) => ...'
-                      if (noFalsePositiveFnSource)
-                        return '(src: wrong, clk) => ...'
-                      return '(src: t, clk: t) => ...'
-                    } else {
-                      if (noFalsePositiveFnSource) return '(src: wrong) => ...'
-                      return '(src: t) => ...'
-                    }
-                  } else {
-                    return fnClock ? '(src, cl) => ...' : '(src) => ...'
-                  }
-                } else {
-                  if (fnWithoutArgs) return '() => ...'
-                  if (typedFn) {
-                    if (fnClock) {
-                      if (noFalsePositiveFnClock)
-                        return '(src, clk: wrong) => ...'
-                      if (noFalsePositiveFnSource)
-                        return '(src: wrong, clk) => ...'
-                      return '(src: t, clk: t) => ...'
-                    } else {
-                      if (noFalsePositiveFnSource) return '(src: wrong) => ...'
-                      return '(src: t) => ...'
-                    }
-                  } else {
-                    return fnClock ? '(src, cl) => ...' : '(src) => ...'
-                  }
-                }
+              variant: fnVariants,
+              cases: {
+                fnWithoutArgs: '() => ...',
+                noFalsePositiveFnClock: '(src, clk: wrong) => ...',
+                noFalsePositiveFnSource_fnClock: '(src: wrong, clk) => ...',
+                typedFnClock: '(src: t, clk: t) => ...',
+                noFalsePositiveFnSource: '(src: wrong) => ...',
+                typedNoFnClock: '(src: t) => ...',
+                fnClock: '(src, cl) => ...',
+                noFnClock: '(src) => ...',
               },
             },
           },
           sourceDescription: {
             compute: {
-              fn({source}) {
-                switch (source) {
-                  case 'tuple_a':
-                    return '[a]'
-                  case 'tuple_aa':
-                    return '[a,b]'
-                  case 'a':
-                    return '{a}'
-                  case 'ab':
-                    return '{a,b}'
-                }
+              variant: sourceVariants,
+              cases: {
+                objectSolo: '{a}',
+                objectPair: '{a,b}',
+                tupleSolo: '[a]',
+                tuplePair: '[a,b]',
               },
             },
           },
           sourceCode: {
             compute: {
-              fn({source}) {
-                switch (source) {
-                  case 'tuple_a':
-                    return '[$num]'
-                  case 'tuple_aa':
-                    return '[$num, $str]'
-                  case 'a':
-                    return '{a: $num}'
-                  case 'ab':
-                    return '{a: $num, b: $str}'
-                }
+              variant: sourceVariants,
+              cases: {
+                objectSolo: '{a: $num}',
+                objectPair: '{a: $num, b: $str}',
+                tupleSolo: '[$num]',
+                tuplePair: '[$num, $str]',
               },
             },
           },
           target: {
             split: {
-              match: ({sourceType, fn}) =>
-                fn || sourceType === 'object' ? 'object' : 'tuple',
+              match: {
+                object: [{fn: true}, {sourceType: 'object'}],
+                tuple: {sourceType: 'tuple'},
+              },
               cases: {
                 tuple: {
                   permute: {
@@ -790,23 +820,22 @@ const arrayTargetCaseSet = generateCaseSet({
           },
           pass: {
             compute: {
-              fn({
-                source,
-                target,
-                fn,
-                noFalsePositiveFnSource,
-                noFalsePositiveFnClock,
-              }) {
-                if (noFalsePositiveFnSource || noFalsePositiveFnClock)
-                  return false
-                if (fn) {
-                  return failCases.ab.every(
+              variant: {
+                noFalsePositive: [
+                  {noFalsePositiveFnSource: true},
+                  {noFalsePositiveFnClock: true},
+                ],
+                fn: {fn: true},
+                default: {},
+              },
+              cases: {
+                noFalsePositive: false,
+                fn: ({target}) =>
+                  failCases.ab.every(failCase => !target.includes(failCase)),
+                default: ({source, target}) =>
+                  failCases[source].every(
                     failCase => !target.includes(failCase),
-                  )
-                }
-                return failCases[source].every(
-                  failCase => !target.includes(failCase),
-                )
+                  ),
               },
             },
           },
@@ -955,11 +984,7 @@ const arrayTargetCaseSet = generateCaseSet({
       }),
     }
   },
-})
-
-writeTestSuite({
   file: 'arrayTargetGen',
-  suite: arrayTargetCaseSet,
   usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
   header: `
 const voidt = createEvent()
@@ -996,131 +1021,9 @@ function groupBy(field, descriptionFn) {
   return {type: 'groupBy', field, descriptionFn}
 }
 
-function generateCaseSet({
-  groupBy = [],
-  ignore = [],
-  groupDescriptions = {},
-  shape,
-  generateCases,
-}) {
-  groupBy = groupBy.map(val => (typeof val === 'string' ? {field: val} : val))
-  const groupByFields = groupBy.map(({field}) => field)
-  const valueSet = {}
-  const plainShape = {}
-  const generationSeq = []
-  for (const fieldName in shape) {
-    const field = shape[fieldName]
-    if (field && field.type) {
-      switch (field.type) {
-        case 'bool': {
-          valueSet[fieldName] = [false, true]
-          break
-        }
-        case 'dependent': {
-          generationSeq.push(shape => ({
-            ...shape,
-            [fieldName]: field.fn(shape),
-          }))
-          break
-        }
-      }
-    } else {
-      plainShape[fieldName] = shape[fieldName]
-    }
-  }
-  let results = [{...plainShape}]
-  for (const field in valueSet) {
-    const newResults = []
-    for (const value of valueSet[field]) {
-      newResults.push(...results.map(val => ({...val, [field]: value})))
-    }
-    results = newResults
-  }
-
-  const resultsFlat = results
-    .map(item => {
-      item = generationSeq.reduce((item, fn) => fn(item), item)
-      return item
-    })
-    .filter(item => {
-      if (ignore.length === 0) return true
-      return ignore.every(fn => !fn(item))
-    })
-  const testSuite = []
-  for (const resultItem of resultsFlat) {
-    const groupValues = groupBy.map(({field}) => ({
-      field,
-      value: resultItem[field],
-    }))
-    if (groupValues.length === 0) {
-      testSuite.push({type: 'item', value: resultItem})
-    } else {
-      let currentParent = testSuite
-      for (let i = 0; i < groupValues.length; i++) {
-        const {field, value} = groupValues[i]
-        let newParent = currentParent.find(
-          e => e.type === 'group' && e.name === field && e.value === value,
-        )
-        if (!newParent) {
-          newParent = {
-            type: 'group',
-            name: field,
-            value,
-            child: [],
-          }
-          currentParent.push(newParent)
-        }
-        currentParent = newParent.child
-        if (i === groupValues.length - 1) {
-          currentParent.push({type: 'item', value: resultItem})
-        }
-      }
-    }
-  }
-  const testSuiteText = iterateSuite(testSuite).join(`\n`)
-  return testSuiteText
-  function iterateSuite(suite) {
-    const results = []
-    for (const item of suite) {
-      switch (item.type) {
-        case 'item': {
-          const generated = generateCases(item.value)
-          if (Array.isArray(generated)) {
-            for (const {description, cases} of generated) {
-              if (cases.length > 0)
-                results.push(
-                  wrapText(`describe('${description}', () => {`, [...cases]),
-                )
-            }
-          } else if (generated) {
-            const {description, cases} = generated
-            if (cases.length > 0)
-              results.push(
-                wrapText(`describe('${description}', () => {`, [...cases]),
-              )
-          }
-          break
-        }
-        case 'group': {
-          const descriptionFn = groupDescriptions[item.name]
-          let description = `${item.name}: ${item.value}`
-          if (descriptionFn) description = descriptionFn(item.value)
-          if (item.child.length === 0) continue
-          results.push(
-            wrapText(
-              `describe('${description}', () => {`,
-              iterateSuite(item.child),
-            ),
-          )
-          break
-        }
-      }
-    }
-    return results
-  }
-}
-
-async function writeTestSuite({file, suite, usedMethods = [], header = ''}) {
+async function generateCaseSetFile(config) {
+  const suite = generateCaseSet(config)
+  const {file, usedMethods = [], header = ''} = config
   const content = `/* eslint-disable no-unused-vars */
 import {${usedMethods.join(', ')}} from 'effector'
 const typecheck = '{global}'
@@ -1139,4 +1042,128 @@ ${suite}`
   )
   const fullFileName = resolve(srcRoot, `${file}.test.ts`)
   await promises.writeFile(fullFileName, content)
+
+  function generateCaseSet({
+    groupBy = [],
+    ignore = [],
+    groupDescriptions = {},
+    shape,
+    generateCases,
+  }) {
+    groupBy = groupBy.map(val => (typeof val === 'string' ? {field: val} : val))
+    const groupByFields = groupBy.map(({field}) => field)
+    const valueSet = {}
+    const plainShape = {}
+    const generationSeq = []
+    for (const fieldName in shape) {
+      const field = shape[fieldName]
+      if (field && field.type) {
+        switch (field.type) {
+          case 'bool': {
+            valueSet[fieldName] = [false, true]
+            break
+          }
+          case 'dependent': {
+            generationSeq.push(shape => ({
+              ...shape,
+              [fieldName]: field.fn(shape),
+            }))
+            break
+          }
+        }
+      } else {
+        plainShape[fieldName] = shape[fieldName]
+      }
+    }
+    let results = [{...plainShape}]
+    for (const field in valueSet) {
+      const newResults = []
+      for (const value of valueSet[field]) {
+        newResults.push(...results.map(val => ({...val, [field]: value})))
+      }
+      results = newResults
+    }
+
+    const resultsFlat = results
+      .map(item => {
+        item = generationSeq.reduce((item, fn) => fn(item), item)
+        return item
+      })
+      .filter(item => {
+        if (ignore.length === 0) return true
+        return ignore.every(fn => !fn(item))
+      })
+    const testSuite = []
+    for (const resultItem of resultsFlat) {
+      const groupValues = groupBy.map(({field}) => ({
+        field,
+        value: resultItem[field],
+      }))
+      if (groupValues.length === 0) {
+        testSuite.push({type: 'item', value: resultItem})
+      } else {
+        let currentParent = testSuite
+        for (let i = 0; i < groupValues.length; i++) {
+          const {field, value} = groupValues[i]
+          let newParent = currentParent.find(
+            e => e.type === 'group' && e.name === field && e.value === value,
+          )
+          if (!newParent) {
+            newParent = {
+              type: 'group',
+              name: field,
+              value,
+              child: [],
+            }
+            currentParent.push(newParent)
+          }
+          currentParent = newParent.child
+          if (i === groupValues.length - 1) {
+            currentParent.push({type: 'item', value: resultItem})
+          }
+        }
+      }
+    }
+    const testSuiteText = iterateSuite(testSuite).join(`\n`)
+    return testSuiteText
+    function iterateSuite(suite) {
+      const results = []
+      for (const item of suite) {
+        switch (item.type) {
+          case 'item': {
+            const generated = generateCases(item.value)
+            if (Array.isArray(generated)) {
+              for (const {description, cases} of generated) {
+                if (cases.length > 0)
+                  results.push(
+                    wrapText(`describe('${description}', () => {`, [...cases]),
+                  )
+              }
+            } else if (generated) {
+              const {description, cases} = generated
+              if (cases.length > 0)
+                results.push(
+                  wrapText(`describe('${description}', () => {`, [...cases]),
+                )
+            }
+            break
+          }
+          case 'group': {
+            const descriptionFn = groupDescriptions[item.name]
+            let description = `${item.name}: ${item.value}`
+            if (descriptionFn) description = descriptionFn(item.value)
+            if (item.child.length === 0) continue
+            results.push(
+              wrapText(
+                `describe('${description}', () => {`,
+                iterateSuite(item.child),
+              ),
+            )
+            break
+          }
+        }
+      }
+      return results
+    }
+  }
 }
