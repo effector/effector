@@ -662,6 +662,7 @@ generateCaseSetFile({
       array: {targetType: 'array'},
     }
     function permuteTargets({
+      permute = false,
       correctObject,
       correctObjectWide,
       wrongObject,
@@ -671,31 +672,35 @@ generateCaseSetFile({
       wrongTuple,
       wrongTupleWide,
     }) {
+      const op = val => (permute ? {permute: val} : {compute: {fn: () => val}})
       return {
         nonTuple: {
           correct: {
-            same: {permute: correctObject},
-            wide: {permute: correctObjectWide},
+            same: op(correctObject),
+            wide: op(correctObjectWide),
           },
           wrong: {
-            same: {permute: wrongObject},
-            wide: {permute: wrongObjectWide},
+            same: op(wrongObject),
+            wide: op(wrongObjectWide),
           },
         },
         tuple: {
           correct: {
-            same: {permute: correctTuple},
-            wide: {permute: correctTupleWide},
+            same: op(correctTuple),
+            wide: op(correctTupleWide),
           },
           wrong: {
-            same: {permute: wrongTuple},
-            wide: {permute: wrongTupleWide},
+            same: op(wrongTuple),
+            wide: op(wrongTupleWide),
           },
         },
       }
     }
     const casesDefs = byFields([{}], {
       shape: {
+        clockType: {
+          union: ['no', 'unit', 'array'],
+        },
         filterType: {
           union: ['fn', 'store', 'bool'],
         },
@@ -887,6 +892,34 @@ generateCaseSetFile({
                 : targetValue,
           },
         },
+        clockCode: {
+          compute: {
+            variant: {
+              noClock: {clockType: 'no'},
+              clockSingle: {clockType: 'unit'},
+              clockArray: {clockType: 'array'},
+            },
+            cases: {
+              noClock: '',
+              clockSingle: 'clock: anyt, ',
+              clockArray: 'clock: [anyt], ',
+            },
+          },
+        },
+        clockDescription: {
+          compute: {
+            variant: {
+              noClock: {clockType: 'no'},
+              clockSingle: {clockType: 'unit'},
+              clockArray: {clockType: 'array'},
+            },
+            cases: {
+              noClock: '',
+              clockSingle: ' + clock',
+              clockArray: ' + [clock]',
+            },
+          },
+        },
         sourceCode: {
           split: {
             variants: {
@@ -949,8 +982,9 @@ generateCaseSetFile({
               filterType,
               sourceType,
               targetType,
+              clockType,
             }) =>
-              `${sourceType} ${filterType} ${targetType} ${
+              `${sourceType} ${filterType} ${targetType} ${clockType} ${
                 sourceIsWiderThatTarget ? 'wide' : 'same'
               }`,
           },
@@ -964,8 +998,9 @@ generateCaseSetFile({
               sourceType,
               targetType,
               targetVoid,
+              clockDescription,
             }) =>
-              `${sourceType} ${targetType} ${
+              `${sourceType}${clockDescription} -> ${targetType} ${
                 sourceIsWiderThatTarget ? 'wide' : 'same'
               }`,
           },
@@ -979,7 +1014,8 @@ generateCaseSetFile({
               sourceType,
               targetType,
               targetVoid,
-            }) => `${filterType} filter`,
+              clockType,
+            }) => `${filterType} filter, ${clockType} clock`,
           },
         },
         pass: {
@@ -996,8 +1032,8 @@ generateCaseSetFile({
         },
         methodCode: {
           compute: {
-            fn({filterType, sourceCode, filterCode, targetCode}) {
-              return `guard({source: ${sourceCode}, target: ${targetCode}, filter: ${filterCode}})`
+            fn({filterType, sourceCode, clockCode, filterCode, targetCode}) {
+              return `guard({source: ${sourceCode}, ${clockCode}target: ${targetCode}, filter: ${filterCode}})`
             },
           },
         },
