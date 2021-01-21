@@ -643,3 +643,408 @@ const l_num_str = createEvent<[number, string]>()
 const l_num_num = createEvent<[number, number]>()
 `,
 })
+
+generateCaseSetFile({
+  shape: {},
+  generateCases({}) {
+    const Source = {
+      unit: {sourceType: 'unit'},
+      object: {sourceType: 'object'},
+      tuple: {sourceType: 'tuple'},
+    }
+    const Filter = {
+      fn: {filterType: 'fn'},
+      store: {filterType: 'store'},
+      bool: {filterType: 'bool'},
+    }
+    const Target = {
+      unit: {targetType: 'unit'},
+      array: {targetType: 'array'},
+    }
+    function permuteTargets({
+      correctObject,
+      correctObjectWide,
+      wrongObject,
+      wrongObjectWide,
+      correctTuple,
+      correctTupleWide,
+      wrongTuple,
+      wrongTupleWide,
+    }) {
+      return {
+        nonTuple: {
+          correct: {
+            same: {permute: correctObject},
+            wide: {permute: correctObjectWide},
+          },
+          wrong: {
+            same: {permute: wrongObject},
+            wide: {permute: wrongObjectWide},
+          },
+        },
+        tuple: {
+          correct: {
+            same: {permute: correctTuple},
+            wide: {permute: correctTupleWide},
+          },
+          wrong: {
+            same: {permute: wrongTuple},
+            wide: {permute: wrongTupleWide},
+          },
+        },
+      }
+    }
+    const casesDefs = byFields([{}], {
+      shape: {
+        filterType: {
+          union: ['fn', 'store', 'bool'],
+        },
+        sourceType: {
+          union: ['unit', 'object', 'tuple'],
+        },
+        targetType: {
+          union: ['unit', 'array'],
+        },
+        targetVoid: {flag: {}},
+        targetAny: {
+          split: {
+            match: 'targetType',
+            cases: {
+              unit: {
+                flag: {avoid: 'targetVoid'},
+              },
+              array: {flag: {}},
+            },
+          },
+        },
+        targetIsTyped: {
+          compute: {
+            variants: {
+              Target,
+              targetType: {
+                nonAny: {targetAny: false, targetVoid: false},
+                any: [{targetAny: true}, {targetVoid: true}],
+              },
+            },
+            cases: {
+              array: true,
+              unit: {
+                nonAny: true,
+                any: false,
+              },
+            },
+          },
+        },
+        combinable: {
+          compute: {
+            variant: {
+              yes: [Source.object, Source.tuple],
+              no: Source.unit,
+            },
+            cases: {yes: true, no: false},
+          },
+        },
+        canInferByFilter: {
+          compute: {
+            variants: {
+              filter: {
+                store: {filterType: 'store'},
+                nonStore: [{filterType: 'fn'}, {filterType: 'bool'}],
+              },
+              source: {
+                plain: {combinable: false},
+                combinable: {combinable: true},
+              },
+            },
+            cases: {
+              store: false,
+              nonStore: {
+                plain: true,
+                combinable: false,
+              },
+            },
+          },
+        },
+        wrongTarget: {
+          flag: {
+            needs: ['targetIsTyped'],
+          },
+        },
+        sourceIsWiderThatTarget: {
+          flag: {
+            needs: ['targetIsTyped'],
+            // avoid: ['wrongTarget']
+          },
+        },
+        inferByFilter: {
+          flag: {
+            needs: ['canInferByFilter', 'targetIsTyped'],
+            avoid: [],
+          },
+        },
+        targetValue: {
+          split: {
+            variants: {
+              targetKind: {
+                singleVoid: {targetType: 'unit', targetVoid: true},
+                singleAny: {targetType: 'unit', targetAny: true},
+                single: {targetType: 'unit'},
+                manyAnyVoid: {
+                  targetType: 'array',
+                  targetVoid: true,
+                  targetAny: true,
+                },
+                manyVoid: {targetType: 'array', targetVoid: true},
+                manyAny: {targetType: 'array', targetAny: true},
+                many: {targetType: 'array'},
+              },
+              source: {
+                nonTuple: [Source.unit, Source.object],
+                tuple: {sourceType: 'tuple'},
+              },
+              target: {
+                correct: {wrongTarget: false},
+                wrong: {wrongTarget: true},
+              },
+              sourceWidth: {
+                wide: {sourceIsWiderThatTarget: true},
+                same: {sourceIsWiderThatTarget: false},
+              },
+            },
+            cases: {
+              singleVoid: 'voidt',
+              singleAny: 'anyt',
+              single: {
+                nonTuple: {
+                  correct: {
+                    wide: 'aNum',
+                    same: 'aNumBStr',
+                  },
+                  wrong: {
+                    wide: 'aStr',
+                    same: 'aNumBNum',
+                  },
+                },
+                tuple: {
+                  correct: {
+                    wide: 'lNum',
+                    same: 'lNumStr',
+                  },
+                  wrong: {
+                    wide: 'lStr',
+                    same: 'lNumNum',
+                  },
+                },
+              },
+              manyAnyVoid: permuteTargets({
+                correctObject: ['aNumBStr', 'anyt', 'voidt'],
+                correctObjectWide: ['aNum', 'anyt', 'voidt'],
+                wrongObject: ['aNumBNum', 'anyt', 'voidt'],
+                wrongObjectWide: ['aStr', 'anyt', 'voidt'],
+                correctTuple: ['lNumStr', 'anyt', 'voidt'],
+                correctTupleWide: ['lNum', 'anyt', 'voidt'],
+                wrongTuple: ['lNumNum', 'anyt', 'voidt'],
+                wrongTupleWide: ['lStr', 'anyt', 'voidt'],
+              }),
+              manyVoid: permuteTargets({
+                correctObject: ['aNumBStr', 'voidt'],
+                correctObjectWide: ['aNum', 'voidt'],
+                wrongObject: ['aNumBNum', 'voidt'],
+                wrongObjectWide: ['aStr', 'voidt'],
+                correctTuple: ['lNumStr', 'voidt'],
+                correctTupleWide: ['lNum', 'voidt'],
+                wrongTuple: ['lNumNum', 'voidt'],
+                wrongTupleWide: ['lStr', 'voidt'],
+              }),
+              manyAny: permuteTargets({
+                correctObject: ['aNumBStr', 'anyt'],
+                correctObjectWide: ['aNum', 'anyt'],
+                wrongObject: ['aNumBNum', 'anyt'],
+                wrongObjectWide: ['aStr', 'anyt'],
+                correctTuple: ['lNumStr', 'anyt'],
+                correctTupleWide: ['lNum', 'anyt'],
+                wrongTuple: ['lNumNum', 'anyt'],
+                wrongTupleWide: ['lStr', 'anyt'],
+              }),
+              many: permuteTargets({
+                correctObject: ['aNumBStr'],
+                correctObjectWide: ['aNum'],
+                wrongObject: ['aNumBNum'],
+                wrongObjectWide: ['aStr', 'aNumBStr'],
+                correctTuple: ['lNumStr'],
+                correctTupleWide: ['lNum', 'lNumStr'],
+                wrongTuple: ['lNumNum'],
+                wrongTupleWide: ['lStr', 'lNumStr'],
+              }),
+            },
+          },
+        },
+        targetCode: {
+          compute: {
+            fn: ({targetValue}) =>
+              Array.isArray(targetValue)
+                ? printArray(targetValue)
+                : targetValue,
+          },
+        },
+        sourceCode: {
+          split: {
+            variants: {
+              Source,
+              Filter,
+              infer: {
+                infer: {inferByFilter: true},
+                noInfer: {inferByFilter: false},
+              },
+            },
+            cases: {
+              unit: {
+                fn: {
+                  infer: 'abNull',
+                  noInfer: 'ab',
+                },
+                bool: {
+                  infer: 'nullableAB',
+                  noInfer: 'ab',
+                },
+                store: 'ab',
+              },
+              tuple: '[a, b]',
+              object: '{a, b}',
+            },
+          },
+        },
+        filterCode: {
+          compute: {
+            variants: {
+              Filter,
+              Source,
+              infer: {
+                infer: {inferByFilter: true},
+                noInfer: {inferByFilter: false},
+              },
+            },
+            cases: {
+              fn: {
+                unit: {
+                  infer: '(val): val is AB => val.a !== null',
+                  noInfer: '(val) => val.a > 0',
+                },
+                object: {
+                  infer: '(val): val is AB => val.a > 0',
+                  noInfer: '(val) => val.a > 0',
+                },
+                tuple: '(val) => val[0] > 0',
+              },
+              store: '$filter',
+              bool: 'Boolean',
+            },
+          },
+        },
+        descriptionTokens: {
+          compute: {
+            fn: ({
+              inferByFilter,
+              sourceIsWiderThatTarget,
+              filterType,
+              sourceType,
+              targetType,
+            }) =>
+              `${sourceType} ${filterType} ${targetType} ${
+                sourceIsWiderThatTarget ? 'wide' : 'same'
+              }`,
+          },
+        },
+        groupTokens: {
+          compute: {
+            fn: ({
+              inferByFilter,
+              sourceIsWiderThatTarget,
+              filterType,
+              sourceType,
+              targetType,
+              targetVoid,
+            }) =>
+              `${sourceType} ${targetType} ${
+                sourceIsWiderThatTarget ? 'wide' : 'same'
+              }`,
+          },
+        },
+        largeGroup: {
+          compute: {
+            fn: ({
+              inferByFilter,
+              sourceIsWiderThatTarget,
+              filterType,
+              sourceType,
+              targetType,
+              targetVoid,
+            }) => `${filterType} filter`,
+          },
+        },
+        pass: {
+          compute: {
+            variant: {
+              pass: {wrongTarget: false},
+              fail: {wrongTarget: true},
+            },
+            cases: {
+              pass: true,
+              fail: false,
+            },
+          },
+        },
+        methodCode: {
+          compute: {
+            fn({filterType, sourceCode, filterCode, targetCode}) {
+              return `guard({source: ${sourceCode}, target: ${targetCode}, filter: ${filterCode}})`
+            },
+          },
+        },
+      },
+    })
+    function printBools(shape) {
+      let result = ''
+      for (const key in shape) {
+        if (shape[key]) result += `, ${key}`
+      }
+      return result
+    }
+    const resultCases = createGroupedCases(casesDefs, {
+      getHash: ({descriptionTokens}) => descriptionTokens,
+      describeGroup: ({groupTokens, largeGroup}) => ({
+        largeGroup,
+        description: groupTokens,
+      }),
+      createTestLines: ({methodCode}) => [methodCode],
+    })
+    return {
+      description: '-',
+      noGroup: true,
+      cases: resultCases,
+    }
+  },
+  file: 'guardGen',
+  dir: 'generated',
+  usedMethods: ['createStore', 'createEvent', 'guard'],
+  header: `
+
+const $filter = createStore(true)
+const a = createStore(0)
+const b = createStore('')
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const ab = createEvent<{a: number; b: string}>()
+const nullableAB = createEvent<{a: number; b: string} | null>()
+type AB = {a: number; b: string}
+const abNull = createEvent<{a: number | null; b: string}>()
+const aNum = createEvent<{a: number}>()
+const aStr = createEvent<{a: string}>()
+const lNum = createEvent<[number]>()
+const lStr = createEvent<[string]>()
+const lNumStr = createEvent<[number, string]>()
+const lNumNum = createEvent<[number, number]>()
+const aNumBStr = createEvent<{a: number; b: string}>()
+const aNumBNum = createEvent<{a: number; b: number}>()
+`,
+})
