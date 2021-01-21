@@ -26,7 +26,13 @@ function createGroupedCases(
     const hash = getHash(cur)
     let set = defsGroups.get(hash)
     if (!set) {
-      set = {itemsPass: [], itemsFail: [], description: '', noGroup: false}
+      set = {
+        itemsPass: [],
+        itemsFail: [],
+        description: '',
+        largeGroup: null,
+        noGroup: false,
+      }
       defsGroups.set(hash, set)
     }
     ;(cur.pass ? set.itemsPass : set.itemsFail).push(cur)
@@ -36,14 +42,29 @@ function createGroupedCases(
     } else {
       set.noGroup = description.noGroup
       set.description = description.description
+      set.largeGroup = description.largeGroup || null
     }
   }
+  const descriptions = {}
+  for (const [hash, group] of [...defsGroups]) {
+    const text = `${group.largeGroup || ''} ${group.description}`
+    if (text in descriptions) {
+      defsGroups.delete(hash)
+      const {itemsPass, itemsFail} = descriptions[text]
+      itemsPass.splice(itemsPass.length, 0, ...group.itemsPass)
+      itemsFail.splice(itemsFail.length, 0, ...group.itemsFail)
+      continue
+    }
+    descriptions[text] = group
+  }
+  const largeGroups = {}
   const resultCases = []
   for (const {
     description,
     itemsPass,
     itemsFail,
     noGroup,
+    largeGroup,
   } of defsGroups.values()) {
     if (itemsPass.length === 0 && itemsFail.length === 0) continue
     const testSuiteItems = []
@@ -63,13 +84,27 @@ function createGroupedCases(
         ]),
       )
     }
+    const lines = []
     if (noGroup) {
-      resultCases.push(...testSuiteItems)
+      lines.push(...testSuiteItems)
     } else {
-      resultCases.push(createDescribe(description, testSuiteItems))
+      lines.push(createDescribe(description, testSuiteItems))
+    }
+    if (largeGroup !== null) {
+      if (!(largeGroup in largeGroups)) {
+        largeGroups[largeGroup] = []
+      }
+      largeGroups[largeGroup].push(...lines)
+    } else {
+      resultCases.push(...lines)
     }
   }
-  return resultCases
+  return [
+    ...Object.entries(largeGroups).map(([text, items]) =>
+      createDescribe(text, items),
+    ),
+    ...resultCases,
+  ]
 }
 function printArray(array) {
   return `[${array.join(', ')}]`
@@ -200,7 +235,104 @@ function byFields(values, {shape = {}}) {
   return values
 }
 
-function splitField(values, field, {cases, match}) {
+function splitField(
+  values,
+  field,
+  {cases, variant, match = variant, variants},
+) {
+  if (variants) {
+    const variantGroupNames = Object.keys(variants)
+    function buildFullCases(depth, currentCases) {
+      const isLastGroup = depth === variantGroupNames.length - 1
+      const casesFull = {}
+      const variantGroupName = variantGroupNames[depth]
+      const variantGroup = variants[variantGroupName]
+      function processCase(currentCase) {
+        // if current case is plain value then it assumed to be constant value
+        if (
+          typeof currentCase !== 'object' &&
+          typeof currentCase !== 'function'
+        ) {
+          return {
+            compute: {
+              fn: () => currentCase,
+            },
+          }
+        }
+        if (isLastGroup) {
+          return currentCase
+        }
+        const caseKeys = Object.keys(currentCase)
+        const nextGroupName = variantGroupNames[depth + 1]
+        const nextGroup = variants[nextGroupName]
+        // if next group is string selector or function
+        if (
+          Array.isArray(nextGroup) ||
+          typeof nextGroup !== 'object' ||
+          nextGroup === null
+        ) {
+          // if current case contains only operation names in keys
+          // then it is already an operation
+          if (
+            caseKeys.every(key => {
+              switch (key) {
+                case 'compute':
+                case 'split':
+                case 'union':
+                case 'flag':
+                case 'permute':
+                  return true
+                default:
+                  return false
+              }
+            })
+          ) {
+            return currentCase
+          }
+          // if not every case keys is valid operation name then it is
+          // a case record
+          return {
+            split: {
+              match: nextGroup,
+              cases: buildFullCases(depth + 1, currentCase),
+            },
+          }
+        }
+        const validBranchNames = [...Object.keys(nextGroup), '__']
+        // if current case contains invalid branch name then it is an operation
+        if (!caseKeys.every(key => validBranchNames.includes(key))) {
+          return currentCase
+        }
+        // create operation for next group in current case
+        return {
+          split: {
+            match: nextGroup,
+            cases: buildFullCases(depth + 1, currentCase),
+          },
+        }
+      }
+      function processCaseName(caseName) {
+        const currentCase = currentCases[caseName]
+        if (currentCase === undefined) return
+        if (Array.isArray(currentCase)) {
+          casesFull[caseName] = currentCase.map(childCase =>
+            processCase(childCase),
+          )
+        } else {
+          casesFull[caseName] = processCase(currentCase)
+        }
+      }
+      for (const caseName in variantGroup) {
+        processCaseName(caseName)
+      }
+      processCaseName('__')
+      return casesFull
+    }
+    return splitField(values, field, {
+      match: variants[variantGroupNames[0]],
+      cases: buildFullCases(0, cases),
+    })
+  }
   const result = []
   let matcher
   if (typeof match === 'object' && match !== null) {
@@ -257,13 +389,16 @@ function permuteField(values, field, config) {
     amount: {min = 0, max = items.length - 1} = {},
     ignore,
     unbox,
+    required = [],
   } = config
   const results = []
   if (typeof items === 'function') {
     for (const value of values) {
       const valueItems = items(value)
-      const combinations = selectFromNToM(valueItems, min, max)
       for (const combination of selectFromNToM(valueItems, min, max)) {
+        if (required.length > 0) {
+          if (!required.every(e => combination.includes(e))) continue
+        }
         results.push(
           ...values.map(val => ({
             ...val,
@@ -274,6 +409,9 @@ function permuteField(values, field, config) {
     }
   } else {
     for (const combination of selectFromNToM(items, min, max)) {
+      if (required.length > 0) {
+        if (!required.every(e => combination.includes(e))) continue
+      }
       results.push(
         ...values.map(val => ({
           ...val,
