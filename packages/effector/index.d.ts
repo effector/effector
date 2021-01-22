@@ -838,40 +838,67 @@ export function sample<A extends (Unit<unknown> | Combinable), B, C, Tar extends
   greedy?: boolean
 }): Tar
 
+type ValidTargetList2<Match, Target extends Tuple<unknown>> = {
+  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
+  ? Match extends Value
+  ? Target[Index]
+  : Value extends void
+  ? Target[Index]
+  : Unit<Match> // ReplaceGeneric<Target[Index], Match, Value>
+  : never
+}
+
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
+  clock?: AnyClock
   filter: (value: Source) => value is Result
+  target?: never
 }): EventAsReturnType<Result>
 export function guard<Source>(config: {
   source: Unit<Source>
+  clock?: AnyClock
   filter: typeof Boolean
+  target?: never
 }): EventAsReturnType<NonNullable<Source>>
 export function guard<A>(config: {
   source: Unit<A>
+  clock?: AnyClock
   filter: Store<boolean> | ((value: A) => boolean)
+  target?: never
 }): EventAsReturnType<A>
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
+  clock?: AnyClock
   filter: (value: Source) => value is Result
   target: Unit<Result>
 }): Unit<Result>
 export function guard<A>(config: {
   source: Unit<A>
+  clock?: AnyClock
   filter: (value: A) => boolean
   target: Unit<void>
 }): Unit<void>
 export function guard(config: {
   source: Unit<any>
+  clock?: AnyClock
   filter: Store<boolean>
   target: Unit<void>
 }): Unit<void>
 export function guard<Source>(config: {
   source: Unit<Source>
+  clock?: AnyClock
   filter: typeof Boolean
   target: Unit<NonNullable<Source>>
 }): Unit<NonNullable<Source>>
+export function guard<A extends (Unit<unknown> | Combinable), Tar extends Tuple<unknown>>(config: {
+  source: A
+  clock?: AnyClock
+  filter: Store<boolean> | ((value: SourceValue<A>) => boolean)
+  target: ValidTargetList2<SourceValue<A>, Tar>
+}): Tar
 export function guard<A>(config: {
   source: Unit<A>
+  clock?: AnyClock
   filter: Store<boolean> | ((value: A) => boolean)
   target: Unit<A>
 }): Unit<A>
@@ -879,24 +906,31 @@ export function guard<A>(config: {
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
   config: {
+    clock?: AnyClock
     filter: (value: Source) => value is Result
+    target?: never
   },
 ): EventAsReturnType<Result>
 export function guard<Source>(
   source: Unit<Source>,
   config: {
+    clock?: AnyClock
     filter: typeof Boolean
+    target?: never
   },
 ): EventAsReturnType<NonNullable<Source>>
 export function guard<A>(
   source: Unit<A>,
   config: {
+    clock?: AnyClock
     filter: Store<boolean> | ((value: A) => boolean)
+    target?: never
   },
 ): EventAsReturnType<A>
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
   config: {
+    clock?: AnyClock
     filter: (value: Source) => value is Result
     target: Unit<Result>
   },
@@ -904,6 +938,7 @@ export function guard<Source, Result extends Source>(
 export function guard<Source>(
   source: Unit<Source>,
   config: {
+    clock?: AnyClock
     filter: typeof Boolean
     target: Unit<NonNullable<Source>>
   },
@@ -911,6 +946,7 @@ export function guard<Source>(
 export function guard<A>(
   source: Unit<A>,
   config: {
+    clock?: AnyClock
     filter: Store<boolean> | ((value: A) => boolean)
     target: Unit<A>
   },

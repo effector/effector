@@ -58,30 +58,7 @@ describe('bool filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: [aNum], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
+        no errors
         "
       `)
     })
@@ -165,10 +142,6 @@ describe('bool filter, array clock', () => {
             Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
               Types of property '__' are incompatible.
                 Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<{ a: number; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
         "
       `)
     })
@@ -238,30 +211,7 @@ describe('bool filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: [aNumBStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<{ a: number; b: string; } | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<{ a: number; b: string; }>': kind, __
+        no errors
         "
       `)
     })
@@ -352,23 +302,7 @@ describe('bool filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: aNumBStr, filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; } | null>; clock: Event<any>[]; target: Event<{ a: number; b: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; } | null>; filter: Store<boolean> | ((value: { a: number; b: string; } | null) => boolean); target: Unit<{ a: number; b: string; } | null>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; } | null>; filter: Store<boolean> | ((value: { a: number; b: string; } | null) => boolean); target: Unit<{ a: number; b: string; } | null>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<void>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-              Types of property '__' are incompatible.
-                Type 'void' is not assignable to type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<any>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<{ a: number; b: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
+        no errors
         "
       `)
     })
@@ -545,46 +479,7 @@ describe('bool filter, array clock', () => {
       guard({source: {a, b}, clock: [anyt], target: [aNum], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
         "
       `)
     })
@@ -728,38 +623,7 @@ describe('bool filter, array clock', () => {
       guard({source: [a, b], clock: [anyt], target: [lNumStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
         "
       `)
     })
@@ -849,46 +713,7 @@ describe('bool filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
         "
       `)
     })
@@ -1061,30 +886,7 @@ describe('bool filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: [aNum], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -1166,10 +968,6 @@ describe('bool filter, unit clock', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<{ a: number; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
         "
       `)
     })
@@ -1235,30 +1033,7 @@ describe('bool filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: [aNumBStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -1349,21 +1124,7 @@ describe('bool filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: aNumBStr, filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; } | null>; clock: Event<any>; target: Event<{ a: number; b: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; } | null>; filter: Store<boolean> | ((value: { a: number; b: string; } | null) => boolean); target: Unit<{ a: number; b: string; } | null>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; } | null>; filter: Store<boolean> | ((value: { a: number; b: string; } | null) => boolean); target: Unit<{ a: number; b: string; } | null>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<void>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<any>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<{ a: number; b: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
+        no errors
         "
       `)
     })
@@ -1536,46 +1297,7 @@ describe('bool filter, unit clock', () => {
       guard({source: {a, b}, clock: anyt, target: [aNum], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -1719,38 +1441,7 @@ describe('bool filter, unit clock', () => {
       guard({source: [a, b], clock: anyt, target: [lNumStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -1835,46 +1526,7 @@ describe('bool filter, unit clock', () => {
       guard({source: {a, b}, clock: anyt, target: [aNumBStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -2022,30 +1674,7 @@ describe('bool filter, no clock', () => {
       guard({source: ab, target: [aNum], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -2131,30 +1760,7 @@ describe('bool filter, no clock', () => {
       guard({source: ab, target: [aNumBStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; } | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -2322,46 +1928,7 @@ describe('bool filter, no clock', () => {
       guard({source: {a, b}, target: [aNum], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -2470,38 +2037,7 @@ describe('bool filter, no clock', () => {
       guard({source: [a, b], target: [lNumStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -2556,46 +2092,7 @@ describe('bool filter, no clock', () => {
       guard({source: {a, b}, target: [aNumBStr], filter: Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -2780,18 +2277,6 @@ describe('fn filter, array clock', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         "
       `)
     })
@@ -2890,11 +2375,6 @@ describe('fn filter, array clock', () => {
             Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
               Types of property '__' are incompatible.
                 Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number | null; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -2972,30 +2452,7 @@ describe('fn filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -3101,21 +2558,7 @@ describe('fn filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<any>[]; target: Event<{ a: number; b: string; }>; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ source: Unit<{ a: number | null; b: string; }>; filter: Store<boolean> | ((value: { a: number | null; b: string; }) => boolean); target: Unit<{ a: number | null; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number | null; b: string; }>; filter: Store<boolean> | ((value: { a: number | null; b: string; }) => boolean); target: Unit<{ a: number | null; b: string; }>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<void>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<any>; filter: (val: { a: number; b: string; }) => boolean; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<{ a: number; b: string; }>; filter: (val: { a: number; b: string; }) => boolean; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
+        no errors
         "
       `)
     })
@@ -3308,50 +2751,7 @@ describe('fn filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -3526,42 +2926,7 @@ describe('fn filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -3660,50 +3025,7 @@ describe('fn filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -3950,18 +3272,6 @@ describe('fn filter, unit clock', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         "
       `)
     })
@@ -4058,9 +3368,6 @@ describe('fn filter, unit clock', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         "
       `)
     })
@@ -4136,30 +3443,7 @@ describe('fn filter, unit clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -4260,21 +3544,7 @@ describe('fn filter, unit clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<any>; target: Event<{ a: number; b: string; }>; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ source: Unit<{ a: number | null; b: string; }>; filter: Store<boolean> | ((value: { a: number | null; b: string; }) => boolean); target: Unit<{ a: number | null; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number | null; b: string; }>; filter: Store<boolean> | ((value: { a: number | null; b: string; }) => boolean); target: Unit<{ a: number | null; b: string; }>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<void>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<any>; filter: (val: { a: number; b: string; }) => boolean; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<{ a: number; b: string; }>; filter: (val: { a: number; b: string; }) => boolean; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
+        no errors
         "
       `)
     })
@@ -4465,50 +3735,7 @@ describe('fn filter, unit clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -4683,42 +3910,7 @@ describe('fn filter, unit clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -4817,50 +4009,7 @@ describe('fn filter, unit clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -5088,18 +4237,6 @@ describe('fn filter, no clock', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         "
       `)
     })
@@ -5171,9 +4308,6 @@ describe('fn filter, no clock', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         "
       `)
     })
@@ -5228,30 +4362,7 @@ describe('fn filter, no clock', () => {
       guard({source: ab, target: [aNumBStr], filter: val => val.a > 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -5471,50 +4582,7 @@ describe('fn filter, no clock', () => {
       guard({source: {a, b}, target: [aNum], filter: val => val.a > 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -5649,42 +4717,7 @@ describe('fn filter, no clock', () => {
       guard({source: [a, b], target: [lNumStr], filter: val => val[0] > 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -5767,50 +4800,7 @@ describe('fn filter, no clock', () => {
       guard({source: {a, b}, target: [aNumBStr], filter: val => val.a > 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
+        no errors
         "
       `)
     })
@@ -6099,46 +5089,7 @@ describe('store filter, array clock', () => {
       guard({source: {a, b}, clock: [anyt], target: [aNum], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -6226,18 +5177,7 @@ describe('store filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: [aNum], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -6325,10 +5265,7 @@ describe('store filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: aNum, filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<{ a: number; }>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
+        no errors
         "
       `)
     })
@@ -6366,38 +5303,7 @@ describe('store filter, array clock', () => {
       guard({source: [a, b], clock: [anyt], target: [lNumStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -6487,46 +5393,7 @@ describe('store filter, array clock', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -6624,18 +5491,7 @@ describe('store filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: [aNumBStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -6748,17 +5604,7 @@ describe('store filter, array clock', () => {
       guard({source: ab, clock: [anyt], target: aNumBStr, filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<void>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>[]; target: Event<{ a: number; b: string; }>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
+        no errors
         "
       `)
     })
@@ -6924,46 +5770,7 @@ describe('store filter, unit clock', () => {
       guard({source: {a, b}, clock: anyt, target: [aNum], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -7051,18 +5858,7 @@ describe('store filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: [aNum], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -7150,10 +5946,7 @@ describe('store filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: aNum, filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<{ a: number; }>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; }>; filter: Store<boolean> | ((value: { a: number; }) => boolean); target: Unit<{ a: number; }>; }'.
+        no errors
         "
       `)
     })
@@ -7191,38 +5984,7 @@ describe('store filter, unit clock', () => {
       guard({source: [a, b], clock: anyt, target: [lNumStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -7307,46 +6069,7 @@ describe('store filter, unit clock', () => {
       guard({source: {a, b}, clock: anyt, target: [aNumBStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -7439,18 +6162,7 @@ describe('store filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: [aNumBStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -7563,17 +6275,7 @@ describe('store filter, unit clock', () => {
       guard({source: ab, clock: anyt, target: aNumBStr, filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<void>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<any>; filter: Store<boolean> | ((value: any) => boolean); target: Unit<any>; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Argument of type '{ source: Event<{ a: number; b: string; }>; clock: Event<any>; target: Event<{ a: number; b: string; }>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
-              Object literal may only specify known properties, and 'clock' does not exist in type '{ source: Unit<{ a: number; b: string; }>; filter: Store<boolean> | ((value: { a: number; b: string; }) => boolean); target: Unit<{ a: number; b: string; }>; }'.
+        no errors
         "
       `)
     })
@@ -7684,46 +6386,7 @@ describe('store filter, no clock', () => {
       guard({source: {a, b}, target: [aNum], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -7786,18 +6449,7 @@ describe('store filter, no clock', () => {
       guard({source: ab, target: [aNum], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
@@ -7898,38 +6550,7 @@ describe('store filter, no clock', () => {
       guard({source: [a, b], target: [lNumStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, string]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, string]>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -7984,46 +6605,7 @@ describe('store filter, no clock', () => {
       guard({source: {a, b}, target: [aNumBStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
         "
       `)
     })
@@ -8086,18 +6668,7 @@ describe('store filter, no clock', () => {
       guard({source: ab, target: [aNumBStr], filter: $filter})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: number; b: string; }>)[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        no errors
         "
       `)
     })
