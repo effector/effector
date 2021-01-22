@@ -6885,13 +6885,11 @@ describe('combinable', () => {
     test('source:{a} (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: numt, target: [a_str]})
+        sample({source: {a: $num}, clock: numt, target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        no errors
         "
       `)
     })
@@ -6927,7 +6925,7 @@ describe('combinable', () => {
         /*@ts-expect-error*/
         sample({source: {a: $num}, clock: numt, target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, target: [a_num]})
+        sample({source: {a: $num}, clock: numt, target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7033,6 +7031,9 @@ describe('combinable', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         "
       `)
     })

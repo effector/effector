@@ -353,7 +353,13 @@ generateCaseSetFile({
       }
 
       const failCases = {
-        a: ['a_num', 'a_num_b_num', 'a_num_b_str'],
+        a: [
+          'a_str',
+          'a_num_b_num',
+          'a_num_b_str',
+          'a_str_b_num',
+          'a_str_b_str',
+        ],
         ab: ['a_str', 'a_num_b_num'],
         tuple_a: ['l_str'],
         tuple_aa: ['l_num', 'l_str', 'l_num_num'],
