@@ -686,24 +686,7 @@ test('combinable, fn, fnClock, unificationToAny (should pass)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
@@ -719,18 +702,7 @@ test('combinable, fn, unificationToAny (should pass)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
@@ -793,18 +765,7 @@ describe('combinable, fn, fnClock', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Parameter 'clock' implicitly has an 'any' type.
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Parameter 'clock' implicitly has an 'any' type.
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Parameter 'clock' implicitly has an 'any' type.
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Parameter 'clock' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -820,14 +781,7 @@ describe('combinable, fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
+      no errors
       "
     `)
   })

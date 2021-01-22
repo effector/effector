@@ -171,9 +171,7 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            Binding element 'a' implicitly has an 'any' type.
-            Binding element 'b' implicitly has an 'any' type.
-            Parameter 'clock' implicitly has an 'any' type.
+            no errors
             "
           `)
         })
@@ -192,9 +190,7 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            Binding element 'a' implicitly has an 'any' type.
-            Binding element 'b' implicitly has an 'any' type.
-            Parameter 'clock' implicitly has an 'any' type.
+            no errors
             "
           `)
         })
@@ -216,8 +212,7 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            Binding element 'a' implicitly has an 'any' type.
-            Binding element 'b' implicitly has an 'any' type.
+            no errors
             "
           `)
         })
@@ -236,8 +231,7 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            Binding element 'a' implicitly has an 'any' type.
-            Binding element 'b' implicitly has an 'any' type.
+            no errors
             "
           `)
         })
@@ -252,11 +246,11 @@ describe('with target', () => {
     const clockC = createEvent<string>()
 
     sample({
-      //@ts-expect-error
       source: {a},
       clock: [clockA, clockB, clockC],
       //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
+      //@ts-expect-error
       target,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -289,10 +283,11 @@ describe('with target', () => {
     const clockC = createEvent<string>()
 
     sample({
-      //@ts-expect-error
       source,
+      //@ts-expect-error
       clock: [clockA, clockC],
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
+      //@ts-expect-error
       target,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -400,7 +395,7 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Unit<{ a: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
+      Type 'Store<unknown>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': filter, filterMap, prepend, getType
       No overload matches this call.
         The last overload gave the following error.
           Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
@@ -418,14 +413,14 @@ describe('without target', () => {
 
     //@ts-expect-error
     const target: Event<{a: string; b: string; clock: string}> = sample({
-      //@ts-expect-error
       source,
+      //@ts-expect-error
       clock: [clockA, clockC],
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Unit<{ a: string; b: string; clock: string; }>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': watch, map, filter, filterMap, and 7 more.
+      Type 'Store<unknown>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': filter, filterMap, prepend, getType
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<void>' is not assignable to type 'Unit<string>'.

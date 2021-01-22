@@ -360,8 +360,7 @@ describe('without clock', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Binding element 'foo' implicitly has an 'any' type.
-      Binding element 'bar' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
