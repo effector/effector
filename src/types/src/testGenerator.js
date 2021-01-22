@@ -301,13 +301,8 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
     }
   },
 })
+
 generateCaseSetFile({
-  groupBy: [],
-  groupDescriptions: {
-    fn: val => (val ? 'fn' : 'no fn'),
-    combinable: val => (val ? 'combinable source' : 'plain source'),
-  },
-  ignore: [],
   shape: {
     combinable: boolField(),
     source: 'number',
@@ -861,6 +856,171 @@ const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()
 const l_num_str = createEvent<[number, string]>()
 const l_num_num = createEvent<[number, number]>()
+`,
+})
+generateCaseSetFile({
+  shape: {},
+  generateCases({}) {
+    const Source = {
+      event: {source: 'event'},
+      store: {source: 'store'},
+      combinable: {source: 'combinable'},
+    }
+    const Clock = {
+      none: {clock: 'none'},
+      event: {clock: 'event'},
+      store: {clock: 'store'},
+      tuple: {clock: 'tuple'},
+    }
+    const Target = {
+      none: {target: 'none'},
+      event: {target: 'event'},
+      store: {target: 'store'},
+      tuple: {target: 'tuple'},
+    }
+    const casesDefs = byFields([{}], {
+      shape: {
+        source: {
+          union: ['event', 'store', 'combinable'],
+        },
+        clock: {
+          union: ['none', 'event', 'store', 'tuple'],
+        },
+        target: {
+          union: ['none', 'event', 'store', 'tuple'],
+        },
+        fn: {
+          split: {
+            match: {
+              noClock: {clock: 'none'},
+            },
+            cases: {
+              noClock: {
+                union: ['none', 'noArgs', 'arg'],
+              },
+              __: {
+                union: ['none', 'noArgs', 'arg', 'argPair'],
+              },
+            },
+          },
+        },
+        fnCode: {
+          compute: {
+            variant: {
+              none: {fn: 'none'},
+              noArgs: {fn: 'noArgs'},
+              arg: {fn: 'arg'},
+              argPair: {fn: 'argPair'},
+            },
+            cases: {
+              none: '         ',
+              noArgs: ', fn: fn0',
+              arg: ', fn: fn1',
+              argPair: ', fn: fn2',
+            },
+          },
+        },
+        sourceCode: {
+          compute: {
+            variant: Source,
+            cases: {
+              event: 'aNum     ',
+              store: 'a        ',
+              combinable: '{a: $num}',
+            },
+          },
+        },
+        clockCode: {
+          compute: {
+            variant: Clock,
+            cases: {
+              none: '',
+              event: ', clock: num',
+              store: ', clock: $num',
+              tuple: ', clock: [num, $num]',
+            },
+          },
+        },
+        targetCode: {
+          compute: {
+            variant: Target,
+            cases: {
+              none: '',
+              event: ', target: aNumTarget',
+              store: ', target: aTarget',
+              tuple: ', target: [aNumTarget, aTarget]',
+            },
+          },
+        },
+        returnCode: {
+          compute: {
+            variants: {
+              Target,
+              sources: {
+                store: [
+                  {source: 'store', clock: 'store'},
+                  {source: 'combinable', clock: 'store'},
+                  {source: 'store', clock: 'none'},
+                  {source: 'combinable', clock: 'none'},
+                ],
+                event: {},
+              },
+            },
+            cases: {
+              none: {
+                store: 'Store<AN>',
+                event: 'Event<AN>',
+              },
+              event: 'Event<AN>',
+              store: 'Store<AN>',
+              tuple: '[Event<AN>, Store<AN>]',
+            },
+          },
+        },
+        pass: {
+          union: [true],
+        },
+        methodCode: {
+          compute: {
+            fn({sourceCode, clockCode, fnCode, targetCode, returnCode}) {
+              return `{const result: ${returnCode} = sample({source:${sourceCode}${clockCode}${fnCode}${targetCode}})}`
+            },
+          },
+        },
+      },
+    })
+    const resultCases = createGroupedCases(casesDefs, {
+      getHash: ({target, clock}) => `${target} ${clock}`,
+      describeGroup: ({target, clock}) => ({
+        // largeGroup,
+        noGroup: true,
+        description: `${target} target, ${clock} clock`,
+      }),
+      createTestLines: ({methodCode, pass}) => [
+        pass ? null : '//@ts-expect-error',
+        methodCode,
+      ],
+    })
+    return {
+      description: '-',
+      noGroup: true,
+      cases: resultCases,
+    }
+  },
+  file: 'sampleReturnGen',
+  dir: 'sample/generated',
+  usedMethods: ['createStore', 'createEvent', 'sample', 'Event', 'Store'],
+  header: `
+type AN = {a: number}
+const $num = createStore(0)
+const a = createStore({a: 0})
+const num = createEvent<number>()
+const aNum = createEvent<AN>()
+const aTarget = createStore({a: 0})
+const aNumTarget = createEvent<AN>()
+const fn0 = () => ({a: 0})
+const fn1 = ({a}: AN) => ({a})
+const fn2 = ({a}: AN, c: number) => ({a: a + c})
 `,
 })
 
