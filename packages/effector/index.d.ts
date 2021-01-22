@@ -872,16 +872,28 @@ export function guard<Source, Result extends Source>(config: {
   filter: (value: Source) => value is Result
   target: Unit<Result>
 }): Unit<Result>
-export function guard<A>(config: {
-  source: Unit<A>
+export function guard<A extends Combinable>(config: {
+  source: A
   clock?: AnyClock
-  filter: (value: A) => boolean
+  filter: (value: GetCombinedValue<A>) => boolean
+  target: Unit<void>
+}): Unit<void>
+export function guard(config: {
+  source: Combinable
+  clock?: AnyClock
+  filter: Store<boolean> | typeof Boolean
   target: Unit<void>
 }): Unit<void>
 export function guard(config: {
   source: Unit<any>
   clock?: AnyClock
-  filter: Store<boolean>
+  filter: typeof Boolean | Store<boolean>
+  target: Unit<void>
+}): Unit<void>
+export function guard<A>(config: {
+  source: Unit<A>
+  clock?: AnyClock
+  filter: (value: A) => boolean
   target: Unit<void>
 }): Unit<void>
 export function guard<Source>(config: {
@@ -896,6 +908,12 @@ export function guard<A extends (Unit<unknown> | Combinable), Tar extends Tuple<
   filter: Store<boolean> | ((value: SourceValue<A>) => boolean)
   target: ValidTargetList2<SourceValue<A>, Tar>
 }): Tar
+export function guard<A extends Combinable>(config: {
+  source: A
+  clock?: AnyClock
+  filter: Store<boolean> | ((value: GetCombinedValue<A>) => boolean)
+  target: Unit<GetCombinedValue<A>>
+}): Unit<GetCombinedValue<A>>
 export function guard<A>(config: {
   source: Unit<A>
   clock?: AnyClock

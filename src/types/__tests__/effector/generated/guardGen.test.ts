@@ -616,15 +616,7 @@ describe('bool filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is missing the following properties from type 'Unit<void>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is missing the following properties from type 'Unit<any>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is missing the following properties from type 'Unit<[number, string]>': kind, __
+        no errors
         "
       `)
     })
@@ -653,18 +645,7 @@ describe('bool filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -1271,15 +1252,7 @@ describe('bool filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -1308,18 +1281,7 @@ describe('bool filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -1926,15 +1888,7 @@ describe('bool filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -1963,18 +1917,7 @@ describe('bool filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -2620,17 +2563,7 @@ describe('fn filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'void'.
-          Property '0' does not exist on type 'void'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -2659,19 +2592,7 @@ describe('fn filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        Property 'a' does not exist on type 'void'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -3311,17 +3232,7 @@ describe('fn filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'void'.
-          Property '0' does not exist on type 'void'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -3350,19 +3261,7 @@ describe('fn filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        Property 'a' does not exist on type 'void'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -4002,17 +3901,7 @@ describe('fn filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'void'.
-          Property '0' does not exist on type 'void'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -4041,19 +3930,7 @@ describe('fn filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        Property 'a' does not exist on type 'void'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -4569,15 +4446,7 @@ describe('store filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -4606,18 +4475,7 @@ describe('store filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -5162,15 +5020,7 @@ describe('store filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -5199,18 +5049,7 @@ describe('store filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
@@ -5755,15 +5594,7 @@ describe('store filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<[number, string]>'.
+        no errors
         "
       `)
     })
@@ -5792,18 +5623,7 @@ describe('store filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<void>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<void>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<any>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<AB>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<AB>'.
+        no errors
         "
       `)
     })
