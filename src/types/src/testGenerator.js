@@ -424,7 +424,7 @@ generateCaseSetFile({
               cases: {
                 fnWithoutArgs: "() => ({a: 2, b: ''})",
                 noFalsePositiveFnClock: {
-                  objectVal: '({a}: {a: number; b: string}, cl: string) => ({a, b: cl})',
+                  objectVal: '({a}: AB, cl: string) => ({a, b: cl})',
                   tupleSolo: '([a]: [number], cl: string) => ({a, b: cl})',
                   tuplePair: '([a]: [number, string], cl: string) => ({a, b: cl})',
                 },
@@ -434,7 +434,7 @@ generateCaseSetFile({
                   tuplePair: "([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''})",
                 },
                 typedFnClock: {
-                  objectVal: '({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b})',
+                  objectVal: '({a, b}: AB, cl: number) => ({a: a + cl, b})',
                   tupleSolo: "([a]: [number], cl: number) => ({a: a + cl, b: ''})",
                   tuplePair: '([a, b]: [number, string], cl: number) => ({a: a + cl, b})',
                 },
@@ -444,7 +444,7 @@ generateCaseSetFile({
                   tuplePair: "([,b]: [number, number]) => ({a: b, b: ''})",
                 },
                 typedNoFnClock: {
-                  objectVal: '({a, b}: {a: number; b: string}) => ({a, b})',
+                  objectVal: '({a, b}: AB) => ({a, b})',
                   tupleSolo: "([a]: [number]) => ({a, b: ''})",
                   tuplePair: '([a, b]: [number, string]) => ({a, b})',
                 },
@@ -572,10 +572,9 @@ generateCaseSetFile({
         const methodCall = `sample({source: ${sourceCode}, clock: ${getText(
           clock,
         )}, ${fn ? `fn: ${fnText}, ` : ''}target: [${sourceTargets}]})`
-        return [
-          pass || methodCall.length > 76 ? null : '/*@ts-expect-error*/',
-          methodCall,
-        ]
+        return [pass ? null : '/*@ts-expect-error*/', methodCall].filter(
+          Boolean,
+        )
       }
       return {
         description: 'combinable',
@@ -625,6 +624,7 @@ generateCaseSetFile({
   dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
   header: `
+type AB = {a: number; b: string}
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const stringt = createEvent<string>()
@@ -636,7 +636,7 @@ const $str = createStore<string>('')
 const a_num = createEvent<{a: number}>()
 const a_str = createEvent<{a: string}>()
 const a_num_b_num = createEvent<{a: number; b: number}>()
-const a_num_b_str = createEvent<{a: number; b: string}>()
+const a_num_b_str = createEvent<AB>()
 const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()
 const l_num_str = createEvent<[number, string]>()

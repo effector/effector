@@ -71,7 +71,10 @@ function createGroupedCases(
     if (itemsPass.length > 0) {
       testSuiteItems.push(
         createTest(`${description} (should pass)`, [
-          ...itemsPass.flatMap(createTestLines),
+          '//prettier-ignore',
+          '{',
+          ...leftPad(itemsPass.flatMap(createTestLines)),
+          '}',
           'expect(typecheck).toMatchInlineSnapshot()',
         ]),
       )
@@ -79,7 +82,10 @@ function createGroupedCases(
     if (itemsFail.length > 0) {
       testSuiteItems.push(
         createTest(`${description} (should fail)`, [
-          ...itemsFail.flatMap(createTestLines),
+          '//prettier-ignore',
+          '{',
+          ...leftPad(itemsFail.flatMap(createTestLines)),
+          '}',
           'expect(typecheck).toMatchInlineSnapshot()',
         ]),
       )

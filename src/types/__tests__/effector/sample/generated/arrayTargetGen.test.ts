@@ -2,6 +2,7 @@
 import {createStore, createEvent, sample, combine} from 'effector'
 const typecheck = '{global}'
 
+type AB = {a: number; b: string}
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const stringt = createEvent<string>()
@@ -13,7 +14,7 @@ const $str = createStore<string>('')
 const a_num = createEvent<{a: number}>()
 const a_str = createEvent<{a: string}>()
 const a_num_b_num = createEvent<{a: number; b: number}>()
-const a_num_b_str = createEvent<{a: number; b: string}>()
+const a_num_b_str = createEvent<AB>()
 const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()
 const l_num_str = createEvent<[number, string]>()
@@ -223,30 +224,13 @@ describe('basic cases', () => {
 describe('combinable', () => {
   describe('source:[a,b], fn:() => ...', () => {
     test('source:[a,b], fn:() => ... (should pass)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -254,78 +238,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a,b], fn:() => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -416,30 +355,13 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:() => ...', () => {
     test('source:[a], fn:() => ... (should pass)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -447,78 +369,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a], fn:() => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -609,30 +486,13 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:() => ...', () => {
     test('source:{a,b}, fn:() => ... (should pass)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -640,78 +500,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a,b}, fn:() => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -802,30 +617,13 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:() => ...', () => {
     test('source:{a}, fn:() => ... (should pass)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -833,78 +631,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a}, fn:() => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: () => ({a: 2, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: () => ({a: 2, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -995,102 +748,41 @@ describe('combinable', () => {
   })
   describe('source:[a,b], fn:(src: wrong, clk) => ...', () => {
     test('source:[a,b], fn:(src: wrong, clk) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -1347,102 +1039,41 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src: wrong, clk) => ...', () => {
     test('source:[a], fn:(src: wrong, clk) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string], cl: number) => ({a: cl, b: a}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string], cl: number) => ({a: cl, b: a}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -1699,150 +1330,41 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src: wrong, clk) => ...', () => {
     test('source:{a,b}, fn:(src: wrong, clk) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -2157,150 +1679,41 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src: wrong, clk) => ...', () => {
     test('source:{a}, fn:(src: wrong, clk) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: number}, cl: number) => ({
-          a: b + cl,
-          b: '',
-        }),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -2555,102 +1968,41 @@ describe('combinable', () => {
   })
   describe('source:[a,b], fn:(src: wrong) => ...', () => {
     test('source:[a,b], fn:(src: wrong) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([, b]: [number, number]) => ({a: b, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([,b]: [number, number]) => ({a: b, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -2905,102 +2257,41 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src: wrong) => ...', () => {
     test('source:[a], fn:(src: wrong) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [string]) => ({a: 2, b: a}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [string]) => ({a: 2, b: a}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -3255,102 +2546,41 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src: wrong) => ...', () => {
     test('source:{a,b}, fn:(src: wrong) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -3665,102 +2895,41 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src: wrong) => ...', () => {
     test('source:{a}, fn:(src: wrong) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -4015,102 +3184,41 @@ describe('combinable', () => {
   })
   describe('source:[a,b], fn:(src, clk: wrong) => ...', () => {
     test('source:[a,b], fn:(src, clk: wrong) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a]: [number, string], cl: string) => ({a, b: cl}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a]: [number, string], cl: string) => ({a, b: cl}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -4335,102 +3443,41 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src, clk: wrong) => ...', () => {
     test('source:[a], fn:(src, clk: wrong) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: string) => ({a, b: cl}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: string) => ({a, b: cl}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -4655,102 +3702,41 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src, clk: wrong) => ...', () => {
     test('source:{a,b}, fn:(src, clk: wrong) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -4975,111 +3961,50 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src, clk: wrong) => ...', () => {
     test('source:{a}, fn:(src, clk: wrong) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a}: {a: number; b: string}, cl: string) => ({a, b: cl}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5087,9 +4012,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5097,9 +4022,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5107,9 +4032,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5117,9 +4042,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5127,9 +4052,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5137,23 +4062,23 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5161,9 +4086,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5171,9 +4096,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5181,22 +4106,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5207,9 +4119,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5220,9 +4132,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5233,9 +4145,22 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
+                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                  Types of parameters '__0' and 'source' are incompatible.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5243,9 +4168,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5253,9 +4178,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5263,9 +4188,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5273,9 +4198,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5283,9 +4208,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5293,9 +4218,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5306,9 +4231,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5319,9 +4244,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5332,9 +4257,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5345,9 +4270,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5355,9 +4280,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5365,9 +4290,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5375,23 +4300,23 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5399,9 +4324,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5409,9 +4334,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5419,9 +4344,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5429,9 +4354,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5439,9 +4364,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5449,23 +4374,23 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5473,9 +4398,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5483,9 +4408,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
@@ -5493,9 +4418,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5503,9 +4428,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5513,9 +4438,9 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                       Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
                           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -5523,46 +4448,29 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: { a: number; b: string; }, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
+                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
                   Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         "
       `)
     })
   })
   describe('source:[a,b], fn:(src: t, clk: t) => ...', () => {
     test('source:[a,b], fn:(src: t, clk: t) => ... (should pass)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -5570,78 +4478,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a,b], fn:(src: t, clk: t) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string], cl: number) => ({a: a + cl, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -5732,30 +4595,13 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src: t, clk: t) => ...', () => {
     test('source:[a], fn:(src: t, clk: t) => ... (should pass)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -5763,78 +4609,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a], fn:(src: t, clk: t) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number], cl: number) => ({a: a + cl, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -5925,30 +4726,13 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src: t, clk: t) => ...', () => {
     test('source:{a,b}, fn:(src: t, clk: t) => ... (should pass)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -5956,78 +4740,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a,b}, fn:(src: t, clk: t) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -6118,183 +4857,121 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src: t, clk: t) => ...', () => {
     test('source:{a}, fn:(src: t, clk: t) => ... (should pass)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         "
       `)
     })
     test('source:{a}, fn:(src: t, clk: t) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}, cl: number) => ({a: a + cl, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
@@ -6303,9 +4980,9 @@ describe('combinable', () => {
                             Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
@@ -6314,9 +4991,9 @@ describe('combinable', () => {
                             Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
@@ -6325,41 +5002,41 @@ describe('combinable', () => {
                             Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -6368,9 +5045,9 @@ describe('combinable', () => {
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -6379,9 +5056,9 @@ describe('combinable', () => {
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -6390,81 +5067,81 @@ describe('combinable', () => {
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -6474,30 +5151,13 @@ describe('combinable', () => {
   })
   describe('source:[a,b], fn:(src: t) => ...', () => {
     test('source:[a,b], fn:(src: t) => ... (should pass)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_str, a_num]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num, a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -6505,78 +5165,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a,b], fn:(src: t) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]: [number, string]) => ({a, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]: [number, string]) => ({a, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -6667,30 +5282,13 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src: t) => ...', () => {
     test('source:[a], fn:(src: t) => ... (should pass)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -6698,78 +5296,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a], fn:(src: t) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]: [number]) => ({a, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]: [number]) => ({a, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -6860,30 +5413,13 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src: t) => ...', () => {
     test('source:{a,b}, fn:(src: t) => ... (should pass)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -6891,78 +5427,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a,b}, fn:(src: t) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -7053,183 +5544,121 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src: t) => ...', () => {
     test('source:{a}, fn:(src: t) => ... (should pass)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         "
       `)
     })
     test('source:{a}, fn:(src: t) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}: {a: number; b: string}) => ({a, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
@@ -7238,9 +5667,9 @@ describe('combinable', () => {
                             Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
@@ -7249,9 +5678,9 @@ describe('combinable', () => {
                             Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
@@ -7260,41 +5689,41 @@ describe('combinable', () => {
                             Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -7303,9 +5732,9 @@ describe('combinable', () => {
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -7314,9 +5743,9 @@ describe('combinable', () => {
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -7325,81 +5754,81 @@ describe('combinable', () => {
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: string; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
                   Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
                       Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
@@ -7409,30 +5838,13 @@ describe('combinable', () => {
   })
   describe('source:[a,b], fn:(src, cl) => ...', () => {
     test('source:[a,b], fn:(src, cl) => ... (should pass)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -7440,78 +5852,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a,b], fn:(src, cl) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b], cl) => ({a: a + cl, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b], cl) => ({a: a + cl, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -7602,30 +5969,13 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src, cl) => ...', () => {
     test('source:[a], fn:(src, cl) => ... (should pass)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -7633,78 +5983,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a], fn:(src, cl) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a], cl) => ({a: a + cl, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a], cl) => ({a: a + cl, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -7795,30 +6100,13 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src, cl) => ...', () => {
     test('source:{a,b}, fn:(src, cl) => ... (should pass)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -7826,78 +6114,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a,b}, fn:(src, cl) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -7988,30 +6231,13 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src, cl) => ...', () => {
     test('source:{a}, fn:(src, cl) => ... (should pass)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' does not exist on type '{ a: number; }'.
@@ -8022,78 +6248,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a}, fn:(src, cl) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}, cl) => ({a: a + cl, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' does not exist on type '{ a: number; }'.
@@ -8149,30 +6330,13 @@ describe('combinable', () => {
   })
   describe('source:[a,b], fn:(src) => ...', () => {
     test('source:[a,b], fn:(src) => ... (should pass)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_str, a_num]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num, a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_str]})
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -8180,78 +6344,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a,b], fn:(src) => ... (should fail)', () => {
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        fn: ([a, b]) => ({a, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, fn: ([a, b]) => ({a, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -8342,30 +6461,13 @@ describe('combinable', () => {
   })
   describe('source:[a], fn:(src) => ...', () => {
     test('source:[a], fn:(src) => ... (should pass)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_str]})
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -8373,78 +6475,33 @@ describe('combinable', () => {
       `)
     })
     test('source:[a], fn:(src) => ... (should fail)', () => {
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: [$num],
-        clock: numt,
-        fn: ([a]) => ({a, b: ''}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, fn: ([a]) => ({a, b: ''}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -8535,30 +6592,13 @@ describe('combinable', () => {
   })
   describe('source:{a,b}, fn:(src) => ...', () => {
     test('source:{a,b}, fn:(src) => ... (should pass)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -8566,78 +6606,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a,b}, fn:(src) => ... (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -8728,30 +6723,13 @@ describe('combinable', () => {
   })
   describe('source:{a}, fn:(src) => ...', () => {
     test('source:{a}, fn:(src) => ... (should pass)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num],
-      })
+      //prettier-ignore
+      {
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' does not exist on type '{ a: number; }'.
@@ -8762,78 +6740,33 @@ describe('combinable', () => {
       `)
     })
     test('source:{a}, fn:(src) => ... (should fail)', () => {
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str, a_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num, a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num, a_str],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_num_b_num],
-      })
-      sample({
-        source: {a: $num},
-        clock: numt,
-        fn: ({a, b}) => ({a, b}),
-        target: [a_str],
-      })
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' does not exist on type '{ a: number; }'.
@@ -8889,7 +6822,10 @@ describe('combinable', () => {
   })
   describe('source:[a,b]', () => {
     test('source:[a,b] (should pass)', () => {
-      sample({source: [$num, $str], clock: numt, target: [l_num_str]})
+      //prettier-ignore
+      {
+        sample({source: [$num, $str], clock: numt, target: [l_num_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -8897,44 +6833,39 @@ describe('combinable', () => {
       `)
     })
     test('source:[a,b] (should fail)', () => {
-      /*@ts-expect-error*/
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        target: [l_num_num, l_num_str],
-      })
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num_num, l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num_num, l_num]})
-      /*@ts-expect-error*/
-      sample({
-        source: [$num, $str],
-        clock: numt,
-        target: [l_num_str, l_num_num],
-      })
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num_str, l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num_str, l_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_str, l_num_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_str, l_num_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_str, l_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num, l_num_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num, l_num_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num, l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num, $str], clock: numt, target: [l_num]})
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_num, l_num_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_num, l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_num, l_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_str, l_num_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_str, l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_str, l_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_str, l_num_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_str, l_num_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_str, l_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num, l_num_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num, l_num_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num, l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num, $str], clock: numt, target: [l_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -9048,15 +6979,18 @@ describe('combinable', () => {
   })
   describe('source:[a]', () => {
     test('source:[a] (should pass)', () => {
-      sample({source: [$num], clock: numt, target: [l_num_num, l_num_str]})
-      sample({source: [$num], clock: numt, target: [l_num_num, l_num]})
-      sample({source: [$num], clock: numt, target: [l_num_str, l_num_num]})
-      sample({source: [$num], clock: numt, target: [l_num_str, l_num]})
-      sample({source: [$num], clock: numt, target: [l_num, l_num_num]})
-      sample({source: [$num], clock: numt, target: [l_num, l_num_str]})
-      sample({source: [$num], clock: numt, target: [l_num_num]})
-      sample({source: [$num], clock: numt, target: [l_num_str]})
-      sample({source: [$num], clock: numt, target: [l_num]})
+      //prettier-ignore
+      {
+        sample({source: [$num], clock: numt, target: [l_num_num, l_num_str]})
+        sample({source: [$num], clock: numt, target: [l_num_num, l_num]})
+        sample({source: [$num], clock: numt, target: [l_num_str, l_num_num]})
+        sample({source: [$num], clock: numt, target: [l_num_str, l_num]})
+        sample({source: [$num], clock: numt, target: [l_num, l_num_num]})
+        sample({source: [$num], clock: numt, target: [l_num, l_num_str]})
+        sample({source: [$num], clock: numt, target: [l_num_num]})
+        sample({source: [$num], clock: numt, target: [l_num_str]})
+        sample({source: [$num], clock: numt, target: [l_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -9117,20 +7051,23 @@ describe('combinable', () => {
       `)
     })
     test('source:[a] (should fail)', () => {
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_num_num, l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_num_str, l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_str, l_num_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_str, l_num_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_str, l_num]})
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_num, l_str]})
-      /*@ts-expect-error*/
-      sample({source: [$num], clock: numt, target: [l_str]})
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_num_num, l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_num_str, l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_str, l_num_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_str, l_num_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_str, l_num]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_num, l_str]})
+        /*@ts-expect-error*/
+        sample({source: [$num], clock: numt, target: [l_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -9190,18 +7127,13 @@ describe('combinable', () => {
   })
   describe('source:{a,b}', () => {
     test('source:{a,b} (should pass)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num_b_str, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num, a_num_b_str],
-      })
-      sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_str]})
-      sample({source: {a: $num, b: $str}, clock: numt, target: [a_num]})
+      //prettier-ignore
+      {
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -9209,80 +7141,59 @@ describe('combinable', () => {
       `)
     })
     test('source:{a,b} (should fail)', () => {
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num_b_str, a_num_b_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num_b_str, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num_b_num, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num_b_num, a_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num_b_num, a_num],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_str, a_num_b_str],
-      })
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_str, a_num_b_num],
-      })
-      /*@ts-expect-error*/
-      sample({source: {a: $num, b: $str}, clock: numt, target: [a_str, a_num]})
-      sample({
-        source: {a: $num, b: $str},
-        clock: numt,
-        target: [a_num, a_num_b_num],
-      })
-      /*@ts-expect-error*/
-      sample({source: {a: $num, b: $str}, clock: numt, target: [a_num, a_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_num]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num, b: $str}, clock: numt, target: [a_str]})
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num, b: $str}, clock: numt, target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
@@ -9302,11 +7213,11 @@ describe('combinable', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
@@ -9351,7 +7262,10 @@ describe('combinable', () => {
   })
   describe('source:{a}', () => {
     test('source:{a} (should pass)', () => {
-      sample({source: {a: $num}, clock: numt, target: [a_str]})
+      //prettier-ignore
+      {
+        sample({source: {a: $num}, clock: numt, target: [a_str]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -9361,78 +7275,73 @@ describe('combinable', () => {
       `)
     })
     test('source:{a} (should fail)', () => {
-      /*@ts-expect-error*/
-      sample({
-        source: {a: $num},
-        clock: numt,
-        target: [a_num_b_str, a_num_b_num],
-      })
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num_b_str, a_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num_b_str, a_num]})
-      /*@ts-expect-error*/
-      sample({
-        source: {a: $num},
-        clock: numt,
-        target: [a_num_b_num, a_num_b_str],
-      })
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num_b_num, a_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num_b_num, a_num]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_str, a_num_b_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_str, a_num_b_num]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_str, a_num]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num, a_num_b_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num, a_num_b_num]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num, a_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num_b_str]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num_b_num]})
-      /*@ts-expect-error*/
-      sample({source: {a: $num}, clock: numt, target: [a_num]})
+      //prettier-ignore
+      {
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_str, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_num, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_str, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_str, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_str, a_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num, a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num, a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num, a_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_str]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num_b_num]})
+        /*@ts-expect-error*/
+        sample({source: {a: $num}, clock: numt, target: [a_num]})
+      }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
@@ -9452,11 +7361,11 @@ describe('combinable', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
@@ -9476,11 +7385,11 @@ describe('combinable', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
@@ -9499,7 +7408,7 @@ describe('combinable', () => {
               Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
