@@ -73,7 +73,9 @@ function createGroupedCases(
         createTest(`${description} (should pass)`, [
           '//prettier-ignore',
           '{',
-          ...leftPad(itemsPass.flatMap(createTestLines)),
+          ...leftPad(
+            itemsPass.flatMap(item => createTestLines(item).filter(Boolean)),
+          ),
           '}',
           'expect(typecheck).toMatchInlineSnapshot()',
         ]),
@@ -84,7 +86,9 @@ function createGroupedCases(
         createTest(`${description} (should fail)`, [
           '//prettier-ignore',
           '{',
-          ...leftPad(itemsFail.flatMap(createTestLines)),
+          ...leftPad(
+            itemsFail.flatMap(item => createTestLines(item).filter(Boolean)),
+          ),
           '}',
           'expect(typecheck).toMatchInlineSnapshot()',
         ]),
@@ -113,7 +117,7 @@ function createGroupedCases(
   ]
 }
 function printArray(array) {
-  return `[${array.join(', ')}]`
+  return `[${array.join(',')}]`
 }
 function wrapText(firstLine, lines) {
   return [firstLine, ...leftPad(lines), '})'].join(`\n`)

@@ -2,57 +2,27 @@
 import {createStore, createEvent, sample} from 'effector'
 const typecheck = '{global}'
 
+type AB = {a: string; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
-const stringt = createEvent<string>()
-const numt = createEvent<number>()
+const str = createEvent<string>()
+const num = createEvent<number>()
 const a = createStore('')
 const b = createStore(0)
 const aTarget = createEvent<{a: string}>()
-const abTarget = createEvent<{a: string; b: number}>()
-const aclockTarget = createEvent<{a: string; clock: any}>()
-const abclockTarget = createEvent<{a: string; b: number; clock: any}>()
-const stringTarget = createEvent<string>()
+const abTarget = createEvent<AB>()
+const aclock = createEvent<{a: string; clock: any}>()
+const abclock = createEvent<{a: string; b: number; clock: any}>()
 
 test('plain, fn, unificationToAny, fnWithoutArgs (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [stringt, voidt, anyt],
-      fn: () => ({a: ''}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [stringt, anyt, voidt],
-      fn: () => ({a: ''}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, stringt, anyt],
-      fn: () => ({a: ''}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, anyt, stringt],
-      fn: () => ({a: ''}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, stringt, voidt],
-      fn: () => ({a: ''}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, voidt, stringt],
-      fn: () => ({a: ''}),
-      target: aTarget,
-    })
+    sample({source: a, clock: [str,voidt,anyt], fn: ()=>({a:''}), target: aTarget})
+    sample({source: a, clock: [str,anyt,voidt], fn: ()=>({a:''}), target: aTarget})
+    sample({source: a, clock: [voidt,str,anyt], fn: ()=>({a:''}), target: aTarget})
+    sample({source: a, clock: [voidt,anyt,str], fn: ()=>({a:''}), target: aTarget})
+    sample({source: a, clock: [anyt,str,voidt], fn: ()=>({a:''}), target: aTarget})
+    sample({source: a, clock: [anyt,voidt,str], fn: ()=>({a:''}), target: aTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -64,30 +34,10 @@ describe('plain, fn, fnWithoutArgs', () => {
   test('plain, fn, fnWithoutArgs (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: a,
-        clock: [stringt, voidt],
-        fn: () => ({a: ''}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt, stringt],
-        fn: () => ({a: ''}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [stringt],
-        fn: () => ({a: ''}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt],
-        fn: () => ({a: ''}),
-        target: aTarget,
-      })
+      sample({source: a, clock: [str,voidt], fn: ()=>({a:''}), target: aTarget})
+      sample({source: a, clock: [voidt,str], fn: ()=>({a:''}), target: aTarget})
+      sample({source: a, clock: [str], fn: ()=>({a:''}), target: aTarget})
+      sample({source: a, clock: [voidt], fn: ()=>({a:''}), target: aTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -99,42 +49,18 @@ describe('plain, fn, fnWithoutArgs', () => {
 test('plain, fn, fnClock, typedFn, unificationToAny, assertFnType (should fail)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [numt, voidt, anyt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [numt, anyt, voidt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, numt, anyt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, anyt, numt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, numt, voidt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, voidt, numt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
+    //@ts-expect-error
+    sample({source: a, clock: [num,voidt,anyt], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [num,anyt,voidt], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [voidt,num,anyt], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [voidt,anyt,num], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [anyt,num,voidt], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [anyt,voidt,num], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -252,30 +178,14 @@ test('plain, fn, fnClock, typedFn, unificationToAny, assertFnType (should fail)'
 test('plain, fn, fnClock, typedFn, assertFnType (should fail)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [numt, voidt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, numt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [numt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt],
-      fn: (a: string, clock: string) => ({a, clock}),
-      target: aclockTarget,
-    })
+    //@ts-expect-error
+    sample({source: a, clock: [num,voidt], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [voidt,num], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [num], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
+    //@ts-expect-error
+    sample({source: a, clock: [voidt], fn: (a:string, clock:string) => ({a,clock}), target: aclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -341,42 +251,12 @@ test('plain, fn, fnClock, typedFn, assertFnType (should fail)', () => {
 test('plain, fn, fnClock, typedFn, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [stringt, voidt, anyt],
-      fn: (a: string, clock: any) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [stringt, anyt, voidt],
-      fn: (a: string, clock: any) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, stringt, anyt],
-      fn: (a: string, clock: any) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, anyt, stringt],
-      fn: (a: string, clock: any) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, stringt, voidt],
-      fn: (a: string, clock: any) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, voidt, stringt],
-      fn: (a: string, clock: any) => ({a, clock}),
-      target: aclockTarget,
-    })
+    sample({source: a, clock: [str,voidt,anyt], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [str,anyt,voidt], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [voidt,str,anyt], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [voidt,anyt,str], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [anyt,str,voidt], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [anyt,voidt,str], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -387,42 +267,12 @@ test('plain, fn, fnClock, typedFn, unificationToAny (should pass)', () => {
 test('plain, fn, typedFn, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [stringt, voidt, anyt],
-      fn: (a: string) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [stringt, anyt, voidt],
-      fn: (a: string) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, stringt, anyt],
-      fn: (a: string) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, anyt, stringt],
-      fn: (a: string) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, stringt, voidt],
-      fn: (a: string) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, voidt, stringt],
-      fn: (a: string) => ({a}),
-      target: aTarget,
-    })
+    sample({source: a, clock: [str,voidt,anyt], fn: (a:string) => ({a}), target: aTarget})
+    sample({source: a, clock: [str,anyt,voidt], fn: (a:string) => ({a}), target: aTarget})
+    sample({source: a, clock: [voidt,str,anyt], fn: (a:string) => ({a}), target: aTarget})
+    sample({source: a, clock: [voidt,anyt,str], fn: (a:string) => ({a}), target: aTarget})
+    sample({source: a, clock: [anyt,str,voidt], fn: (a:string) => ({a}), target: aTarget})
+    sample({source: a, clock: [anyt,voidt,str], fn: (a:string) => ({a}), target: aTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -433,42 +283,12 @@ test('plain, fn, typedFn, unificationToAny (should pass)', () => {
 test('plain, fn, fnClock, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [stringt, voidt, anyt],
-      fn: (a, clock) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [stringt, anyt, voidt],
-      fn: (a, clock) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, stringt, anyt],
-      fn: (a, clock) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, anyt, stringt],
-      fn: (a, clock) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, stringt, voidt],
-      fn: (a, clock) => ({a, clock}),
-      target: aclockTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, voidt, stringt],
-      fn: (a, clock) => ({a, clock}),
-      target: aclockTarget,
-    })
+    sample({source: a, clock: [str,voidt,anyt], fn: (a,clock) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [str,anyt,voidt], fn: (a,clock) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [voidt,str,anyt], fn: (a,clock) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [voidt,anyt,str], fn: (a,clock) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [anyt,str,voidt], fn: (a,clock) => ({a,clock}), target: aclock})
+    sample({source: a, clock: [anyt,voidt,str], fn: (a,clock) => ({a,clock}), target: aclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -479,42 +299,12 @@ test('plain, fn, fnClock, unificationToAny (should pass)', () => {
 test('plain, fn, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: a,
-      clock: [stringt, voidt, anyt],
-      fn: (a) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [stringt, anyt, voidt],
-      fn: (a) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, stringt, anyt],
-      fn: (a) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [voidt, anyt, stringt],
-      fn: (a) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, stringt, voidt],
-      fn: (a) => ({a}),
-      target: aTarget,
-    })
-    sample({
-      source: a,
-      clock: [anyt, voidt, stringt],
-      fn: (a) => ({a}),
-      target: aTarget,
-    })
+    sample({source: a, clock: [str,voidt,anyt], fn: (a) => ({a}), target: aTarget})
+    sample({source: a, clock: [str,anyt,voidt], fn: (a) => ({a}), target: aTarget})
+    sample({source: a, clock: [voidt,str,anyt], fn: (a) => ({a}), target: aTarget})
+    sample({source: a, clock: [voidt,anyt,str], fn: (a) => ({a}), target: aTarget})
+    sample({source: a, clock: [anyt,str,voidt], fn: (a) => ({a}), target: aTarget})
+    sample({source: a, clock: [anyt,voidt,str], fn: (a) => ({a}), target: aTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -525,12 +315,12 @@ test('plain, fn, unificationToAny (should pass)', () => {
 test('plain, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({source: a, clock: [stringt, voidt, anyt], target: stringTarget})
-    sample({source: a, clock: [stringt, anyt, voidt], target: stringTarget})
-    sample({source: a, clock: [voidt, stringt, anyt], target: stringTarget})
-    sample({source: a, clock: [voidt, anyt, stringt], target: stringTarget})
-    sample({source: a, clock: [anyt, stringt, voidt], target: stringTarget})
-    sample({source: a, clock: [anyt, voidt, stringt], target: stringTarget})
+    sample({source: a, clock: [str,voidt,anyt], target: str})
+    sample({source: a, clock: [str,anyt,voidt], target: str})
+    sample({source: a, clock: [voidt,str,anyt], target: str})
+    sample({source: a, clock: [voidt,anyt,str], target: str})
+    sample({source: a, clock: [anyt,str,voidt], target: str})
+    sample({source: a, clock: [anyt,voidt,str], target: str})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -542,30 +332,10 @@ describe('plain, fn, fnClock, typedFn', () => {
   test('plain, fn, fnClock, typedFn (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: a,
-        clock: [stringt, voidt],
-        fn: (a: string, clock: any) => ({a, clock}),
-        target: aclockTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt, stringt],
-        fn: (a: string, clock: any) => ({a, clock}),
-        target: aclockTarget,
-      })
-      sample({
-        source: a,
-        clock: [stringt],
-        fn: (a: string, clock: any) => ({a, clock}),
-        target: aclockTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt],
-        fn: (a: string, clock: any) => ({a, clock}),
-        target: aclockTarget,
-      })
+      sample({source: a, clock: [str,voidt], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+      sample({source: a, clock: [voidt,str], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+      sample({source: a, clock: [str], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
+      sample({source: a, clock: [voidt], fn: (a:string, clock:any) => ({a,clock}), target: aclock})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -578,30 +348,10 @@ describe('plain, fn, typedFn', () => {
   test('plain, fn, typedFn (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: a,
-        clock: [stringt, voidt],
-        fn: (a: string) => ({a}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt, stringt],
-        fn: (a: string) => ({a}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [stringt],
-        fn: (a: string) => ({a}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt],
-        fn: (a: string) => ({a}),
-        target: aTarget,
-      })
+      sample({source: a, clock: [str,voidt], fn: (a:string) => ({a}), target: aTarget})
+      sample({source: a, clock: [voidt,str], fn: (a:string) => ({a}), target: aTarget})
+      sample({source: a, clock: [str], fn: (a:string) => ({a}), target: aTarget})
+      sample({source: a, clock: [voidt], fn: (a:string) => ({a}), target: aTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -614,30 +364,10 @@ describe('plain, fn, fnClock', () => {
   test('plain, fn, fnClock (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: a,
-        clock: [stringt, voidt],
-        fn: (a, clock) => ({a, clock}),
-        target: aclockTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt, stringt],
-        fn: (a, clock) => ({a, clock}),
-        target: aclockTarget,
-      })
-      sample({
-        source: a,
-        clock: [stringt],
-        fn: (a, clock) => ({a, clock}),
-        target: aclockTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt],
-        fn: (a, clock) => ({a, clock}),
-        target: aclockTarget,
-      })
+      sample({source: a, clock: [str,voidt], fn: (a,clock) => ({a,clock}), target: aclock})
+      sample({source: a, clock: [voidt,str], fn: (a,clock) => ({a,clock}), target: aclock})
+      sample({source: a, clock: [str], fn: (a,clock) => ({a,clock}), target: aclock})
+      sample({source: a, clock: [voidt], fn: (a,clock) => ({a,clock}), target: aclock})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -650,30 +380,10 @@ describe('plain, fn', () => {
   test('plain, fn (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: a,
-        clock: [stringt, voidt],
-        fn: (a) => ({a}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt, stringt],
-        fn: (a) => ({a}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [stringt],
-        fn: (a) => ({a}),
-        target: aTarget,
-      })
-      sample({
-        source: a,
-        clock: [voidt],
-        fn: (a) => ({a}),
-        target: aTarget,
-      })
+      sample({source: a, clock: [str,voidt], fn: (a) => ({a}), target: aTarget})
+      sample({source: a, clock: [voidt,str], fn: (a) => ({a}), target: aTarget})
+      sample({source: a, clock: [str], fn: (a) => ({a}), target: aTarget})
+      sample({source: a, clock: [voidt], fn: (a) => ({a}), target: aTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -686,10 +396,10 @@ describe('plain', () => {
   test('plain (should pass)', () => {
     //prettier-ignore
     {
-      sample({source: a, clock: [stringt, voidt], target: stringTarget})
-      sample({source: a, clock: [voidt, stringt], target: stringTarget})
-      sample({source: a, clock: [stringt], target: stringTarget})
-      sample({source: a, clock: [voidt], target: stringTarget})
+      sample({source: a, clock: [str,voidt], target: str})
+      sample({source: a, clock: [voidt,str], target: str})
+      sample({source: a, clock: [str], target: str})
+      sample({source: a, clock: [voidt], target: str})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -701,42 +411,12 @@ describe('plain', () => {
 test('combinable, fn, unificationToAny, fnWithoutArgs (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [stringt, voidt, anyt],
-      fn: () => ({a: '', b: 2}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [stringt, anyt, voidt],
-      fn: () => ({a: '', b: 2}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, stringt, anyt],
-      fn: () => ({a: '', b: 2}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, anyt, stringt],
-      fn: () => ({a: '', b: 2}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, stringt, voidt],
-      fn: () => ({a: '', b: 2}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, voidt, stringt],
-      fn: () => ({a: '', b: 2}),
-      target: abTarget,
-    })
+    sample({source: {a, b}, clock: [str,voidt,anyt], fn: ()=>({a:'',b:2}), target: abTarget})
+    sample({source: {a, b}, clock: [str,anyt,voidt], fn: ()=>({a:'',b:2}), target: abTarget})
+    sample({source: {a, b}, clock: [voidt,str,anyt], fn: ()=>({a:'',b:2}), target: abTarget})
+    sample({source: {a, b}, clock: [voidt,anyt,str], fn: ()=>({a:'',b:2}), target: abTarget})
+    sample({source: {a, b}, clock: [anyt,str,voidt], fn: ()=>({a:'',b:2}), target: abTarget})
+    sample({source: {a, b}, clock: [anyt,voidt,str], fn: ()=>({a:'',b:2}), target: abTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -748,30 +428,10 @@ describe('combinable, fn, fnWithoutArgs', () => {
   test('combinable, fn, fnWithoutArgs (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: {a, b},
-        clock: [stringt, voidt],
-        fn: () => ({a: '', b: 2}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt, stringt],
-        fn: () => ({a: '', b: 2}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [stringt],
-        fn: () => ({a: '', b: 2}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt],
-        fn: () => ({a: '', b: 2}),
-        target: abTarget,
-      })
+      sample({source: {a, b}, clock: [str,voidt], fn: ()=>({a:'',b:2}), target: abTarget})
+      sample({source: {a, b}, clock: [voidt,str], fn: ()=>({a:'',b:2}), target: abTarget})
+      sample({source: {a, b}, clock: [str], fn: ()=>({a:'',b:2}), target: abTarget})
+      sample({source: {a, b}, clock: [voidt], fn: ()=>({a:'',b:2}), target: abTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -783,42 +443,18 @@ describe('combinable, fn, fnWithoutArgs', () => {
 test('combinable, fn, fnClock, typedFn, unificationToAny, assertFnType (should fail)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [numt, voidt, anyt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [numt, anyt, voidt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, numt, anyt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, anyt, numt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, numt, voidt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, voidt, numt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [num,voidt,anyt], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [num,anyt,voidt], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [voidt,num,anyt], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [voidt,anyt,num], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [anyt,num,voidt], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [anyt,voidt,num], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -936,30 +572,14 @@ test('combinable, fn, fnClock, typedFn, unificationToAny, assertFnType (should f
 test('combinable, fn, fnClock, typedFn, assertFnType (should fail)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [numt, voidt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, numt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [numt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt],
-      fn: ({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock}),
-      target: abclockTarget,
-    })
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [num,voidt], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [voidt,num], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [num], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
+    //@ts-expect-error
+    sample({source: {a, b}, clock: [voidt], fn: ({a,b}:AB, clock:string) => ({a,b,clock}), target: abclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -1025,42 +645,12 @@ test('combinable, fn, fnClock, typedFn, assertFnType (should fail)', () => {
 test('combinable, fn, fnClock, typedFn, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [stringt, voidt, anyt],
-      fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [stringt, anyt, voidt],
-      fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, stringt, anyt],
-      fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, anyt, stringt],
-      fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, stringt, voidt],
-      fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, voidt, stringt],
-      fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-      target: abclockTarget,
-    })
+    sample({source: {a, b}, clock: [str,voidt,anyt], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [str,anyt,voidt], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [voidt,str,anyt], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [voidt,anyt,str], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [anyt,str,voidt], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [anyt,voidt,str], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -1071,42 +661,12 @@ test('combinable, fn, fnClock, typedFn, unificationToAny (should pass)', () => {
 test('combinable, fn, typedFn, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [stringt, voidt, anyt],
-      fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [stringt, anyt, voidt],
-      fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, stringt, anyt],
-      fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, anyt, stringt],
-      fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, stringt, voidt],
-      fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, voidt, stringt],
-      fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-      target: abTarget,
-    })
+    sample({source: {a, b}, clock: [str,voidt,anyt], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [str,anyt,voidt], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [voidt,str,anyt], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [voidt,anyt,str], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [anyt,str,voidt], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [anyt,voidt,str], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -1117,42 +677,12 @@ test('combinable, fn, typedFn, unificationToAny (should pass)', () => {
 test('combinable, fn, fnClock, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [stringt, voidt, anyt],
-      fn: ({a, b}, clock) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [stringt, anyt, voidt],
-      fn: ({a, b}, clock) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, stringt, anyt],
-      fn: ({a, b}, clock) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, anyt, stringt],
-      fn: ({a, b}, clock) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, stringt, voidt],
-      fn: ({a, b}, clock) => ({a, b, clock}),
-      target: abclockTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, voidt, stringt],
-      fn: ({a, b}, clock) => ({a, b, clock}),
-      target: abclockTarget,
-    })
+    sample({source: {a, b}, clock: [str,voidt,anyt], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [str,anyt,voidt], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [voidt,str,anyt], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [voidt,anyt,str], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [anyt,str,voidt], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+    sample({source: {a, b}, clock: [anyt,voidt,str], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -1180,42 +710,12 @@ test('combinable, fn, fnClock, unificationToAny (should pass)', () => {
 test('combinable, fn, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({
-      source: {a, b},
-      clock: [stringt, voidt, anyt],
-      fn: ({a, b}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [stringt, anyt, voidt],
-      fn: ({a, b}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, stringt, anyt],
-      fn: ({a, b}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [voidt, anyt, stringt],
-      fn: ({a, b}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, stringt, voidt],
-      fn: ({a, b}) => ({a, b}),
-      target: abTarget,
-    })
-    sample({
-      source: {a, b},
-      clock: [anyt, voidt, stringt],
-      fn: ({a, b}) => ({a, b}),
-      target: abTarget,
-    })
+    sample({source: {a, b}, clock: [str,voidt,anyt], fn: ({a,b}) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [str,anyt,voidt], fn: ({a,b}) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [voidt,str,anyt], fn: ({a,b}) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [voidt,anyt,str], fn: ({a,b}) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [anyt,str,voidt], fn: ({a,b}) => ({a,b}), target: abTarget})
+    sample({source: {a, b}, clock: [anyt,voidt,str], fn: ({a,b}) => ({a,b}), target: abTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -1237,12 +737,12 @@ test('combinable, fn, unificationToAny (should pass)', () => {
 test('combinable, unificationToAny (should pass)', () => {
   //prettier-ignore
   {
-    sample({source: {a, b}, clock: [stringt, voidt, anyt], target: abTarget})
-    sample({source: {a, b}, clock: [stringt, anyt, voidt], target: abTarget})
-    sample({source: {a, b}, clock: [voidt, stringt, anyt], target: abTarget})
-    sample({source: {a, b}, clock: [voidt, anyt, stringt], target: abTarget})
-    sample({source: {a, b}, clock: [anyt, stringt, voidt], target: abTarget})
-    sample({source: {a, b}, clock: [anyt, voidt, stringt], target: abTarget})
+    sample({source: {a, b}, clock: [str,voidt,anyt], target: abTarget})
+    sample({source: {a, b}, clock: [str,anyt,voidt], target: abTarget})
+    sample({source: {a, b}, clock: [voidt,str,anyt], target: abTarget})
+    sample({source: {a, b}, clock: [voidt,anyt,str], target: abTarget})
+    sample({source: {a, b}, clock: [anyt,str,voidt], target: abTarget})
+    sample({source: {a, b}, clock: [anyt,voidt,str], target: abTarget})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -1254,30 +754,10 @@ describe('combinable, fn, fnClock, typedFn', () => {
   test('combinable, fn, fnClock, typedFn (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: {a, b},
-        clock: [stringt, voidt],
-        fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-        target: abclockTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt, stringt],
-        fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-        target: abclockTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [stringt],
-        fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-        target: abclockTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt],
-        fn: ({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock}),
-        target: abclockTarget,
-      })
+      sample({source: {a, b}, clock: [str,voidt], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+      sample({source: {a, b}, clock: [voidt,str], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+      sample({source: {a, b}, clock: [str], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
+      sample({source: {a, b}, clock: [voidt], fn: ({a,b}:AB, clock:any) => ({a,b,clock}), target: abclock})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -1290,30 +770,10 @@ describe('combinable, fn, typedFn', () => {
   test('combinable, fn, typedFn (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: {a, b},
-        clock: [stringt, voidt],
-        fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt, stringt],
-        fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [stringt],
-        fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt],
-        fn: ({a, b}: {a: string; b: number}) => ({a, b}),
-        target: abTarget,
-      })
+      sample({source: {a, b}, clock: [str,voidt], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+      sample({source: {a, b}, clock: [voidt,str], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+      sample({source: {a, b}, clock: [str], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
+      sample({source: {a, b}, clock: [voidt], fn: ({a,b}:AB) => ({a,b}), target: abTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -1326,30 +786,10 @@ describe('combinable, fn, fnClock', () => {
   test('combinable, fn, fnClock (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: {a, b},
-        clock: [stringt, voidt],
-        fn: ({a, b}, clock) => ({a, b, clock}),
-        target: abclockTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt, stringt],
-        fn: ({a, b}, clock) => ({a, b, clock}),
-        target: abclockTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [stringt],
-        fn: ({a, b}, clock) => ({a, b, clock}),
-        target: abclockTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt],
-        fn: ({a, b}, clock) => ({a, b, clock}),
-        target: abclockTarget,
-      })
+      sample({source: {a, b}, clock: [str,voidt], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+      sample({source: {a, b}, clock: [voidt,str], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+      sample({source: {a, b}, clock: [str], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
+      sample({source: {a, b}, clock: [voidt], fn: ({a,b}, clock) => ({a,b,clock}), target: abclock})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -1373,30 +813,10 @@ describe('combinable, fn', () => {
   test('combinable, fn (should pass)', () => {
     //prettier-ignore
     {
-      sample({
-        source: {a, b},
-        clock: [stringt, voidt],
-        fn: ({a, b}) => ({a, b}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt, stringt],
-        fn: ({a, b}) => ({a, b}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [stringt],
-        fn: ({a, b}) => ({a, b}),
-        target: abTarget,
-      })
-      sample({
-        source: {a, b},
-        clock: [voidt],
-        fn: ({a, b}) => ({a, b}),
-        target: abTarget,
-      })
+      sample({source: {a, b}, clock: [str,voidt], fn: ({a,b}) => ({a,b}), target: abTarget})
+      sample({source: {a, b}, clock: [voidt,str], fn: ({a,b}) => ({a,b}), target: abTarget})
+      sample({source: {a, b}, clock: [str], fn: ({a,b}) => ({a,b}), target: abTarget})
+      sample({source: {a, b}, clock: [voidt], fn: ({a,b}) => ({a,b}), target: abTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -1416,9 +836,9 @@ describe('combinable', () => {
   test('combinable (should pass)', () => {
     //prettier-ignore
     {
-      sample({source: {a, b}, clock: [stringt, voidt], target: abTarget})
-      sample({source: {a, b}, clock: [voidt, stringt], target: abTarget})
-      sample({source: {a, b}, clock: [stringt], target: abTarget})
+      sample({source: {a, b}, clock: [str,voidt], target: abTarget})
+      sample({source: {a, b}, clock: [voidt,str], target: abTarget})
+      sample({source: {a, b}, clock: [str], target: abTarget})
       sample({source: {a, b}, clock: [voidt], target: abTarget})
     }
     expect(typecheck).toMatchInlineSnapshot(`

@@ -27,15 +27,15 @@ const {
 
   clock array kinds:
     no unification to any:
-  - [voidt, stringt]
-  - [stringt, voidt]
+  - [voidt, str]
+  - [str, voidt]
     unification to any:
-  - [voidt, anyt, stringt]
-  - [voidt, stringt, anyt]
-  - [anyt, voidt, stringt]
-  - [anyt, stringt, voidt]
-  - [stringt, voidt, anyt]
-  - [stringt, anyt, voidt]
+  - [voidt, anyt, str]
+  - [voidt, str, anyt]
+  - [anyt, voidt, str]
+  - [anyt, str, voidt]
+  - [str, voidt, anyt]
+  - [str, anyt, voidt]
   */
 
 generateCaseSetFile({
@@ -43,17 +43,17 @@ generateCaseSetFile({
   dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample'],
   header: `
+type AB = {a: string; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
-const stringt = createEvent<string>()
-const numt = createEvent<number>()
+const str = createEvent<string>()
+const num = createEvent<number>()
 const a = createStore('')
 const b = createStore(0)
 const aTarget = createEvent<{a: string}>()
-const abTarget = createEvent<{a: string; b: number}>()
-const aclockTarget = createEvent<{a: string; clock: any}>()
-const abclockTarget = createEvent<{a: string; b: number; clock: any}>()
-const stringTarget = createEvent<string>()
+const abTarget = createEvent<AB>()
+const aclock = createEvent<{a: string; clock: any}>()
+const abclock = createEvent<{a: string; b: number; clock: any}>()
 `,
   groupBy: [],
   groupDescriptions: {},
@@ -112,21 +112,21 @@ const stringTarget = createEvent<string>()
             cases: {
               noAnyNoFalsePositiveFnClock: {
                 permute: {
-                  items: ['voidt', 'numt'],
+                  items: ['voidt', 'num'],
                   amount: {min: 1, max: 2},
                 },
               },
               noAny: {
                 permute: {
-                  items: ['voidt', 'stringt'],
+                  items: ['voidt', 'str'],
                   amount: {min: 1, max: 2},
                 },
               },
               withAnyNoFalsePositiveFnClock: {
-                permute: ['anyt', 'voidt', 'numt'],
+                permute: ['anyt', 'voidt', 'num'],
               },
               withAny: {
-                permute: ['anyt', 'voidt', 'stringt'],
+                permute: ['anyt', 'voidt', 'str'],
               },
             },
           },
@@ -158,11 +158,11 @@ const stringTarget = createEvent<string>()
               string: {fn: false},
             },
             cases: {
-              abclock: 'abclockTarget',
+              abclock: 'abclock',
               ab: 'abTarget',
-              aclock: 'aclockTarget',
+              aclock: 'aclock',
               a: 'aTarget',
-              string: 'stringTarget',
+              string: 'str',
             },
           },
         },
@@ -235,23 +235,23 @@ const stringTarget = createEvent<string>()
             },
             cases: {
               shape: {
-                noArgs: "() => ({a: '', b: 2})",
+                noArgs: "()=>({a:'',b:2})",
                 typedFnClock: {
-                  assert: '({a, b}: {a: string; b: number}, clock: string) => ({a, b, clock})',
-                  keep: '({a, b}: {a: string; b: number}, clock: any) => ({a, b, clock})'
+                  assert: '({a,b}:AB, clock:string) => ({a,b,clock})',
+                  keep: '({a,b}:AB, clock:any) => ({a,b,clock})'
                 },
-                untypedFnClock: '({a, b}, clock) => ({a, b, clock})',
-                typed: '({a, b}: {a: string; b: number}) => ({a, b})',
-                untyped: '({a, b}) => ({a, b})'
+                untypedFnClock: '({a,b}, clock) => ({a,b,clock})',
+                typed: '({a,b}:AB) => ({a,b})',
+                untyped: '({a,b}) => ({a,b})'
               },
               plain: {
-                noArgs: "() => ({a: ''})",
+                noArgs: "()=>({a:''})",
                 typedFnClock: {
-                  assert: '(a: string, clock: string) => ({a, clock})',
-                  keep: '(a: string, clock: any) => ({a, clock})'
+                  assert: '(a:string, clock:string) => ({a,clock})',
+                  keep: '(a:string, clock:any) => ({a,clock})'
                 },
-                untypedFnClock: '(a, clock) => ({a, clock})',
-                typed: '(a: string) => ({a})',
+                untypedFnClock: '(a,clock) => ({a,clock})',
+                typed: '(a:string) => ({a})',
                 untyped: '(a) => ({a})',
               }
             },
@@ -264,12 +264,8 @@ const stringTarget = createEvent<string>()
               noFn: {fn: false},
             },
             cases: {
-              hasFn: ({sourceCode, clockCode, fnCode, target}) => `sample({
-  source: ${sourceCode},
-  clock: ${clockCode},
-  fn: ${fnCode},
-  target: ${target},
-})`,
+              hasFn: ({sourceCode, clockCode, fnCode, target}) =>
+                `sample({source: ${sourceCode}, clock: ${clockCode}, fn: ${fnCode}, target: ${target}})`,
               noFn: ({sourceCode, clockCode, target}) =>
                 `sample({source: ${sourceCode}, clock: ${clockCode}, target: ${target}})`,
             },
@@ -292,7 +288,10 @@ const stringTarget = createEvent<string>()
         description: descriptionTokens,
         noGroup,
       }),
-      createTestLines: ({methodCode}) => [methodCode],
+      createTestLines: ({methodCode, pass}) => [
+        pass ? null : '//@ts-expect-error',
+        methodCode,
+      ],
     })
     return {
       description: config.combinable ? 'combinable' : 'plain',
@@ -313,9 +312,9 @@ generateCaseSetFile({
     source: 'number',
     clock: 'any',
     variables: {
-      number: 'numt',
+      number: 'num',
       void: 'voidt',
-      string: 'stringt',
+      string: 'str',
       any: 'anyt',
     },
   },
@@ -353,15 +352,9 @@ generateCaseSetFile({
       }
 
       const failCases = {
-        a: [
-          'a_str',
-          'a_num_b_num',
-          'a_num_b_str',
-          'a_str_b_num',
-          'a_str_b_str',
-        ],
-        ab: ['a_str', 'a_num_b_num'],
-        tuple_a: ['l_str'],
+        a: ['a_str', 'abn', 'ab', 'a_str_b_num', 'a_str_b_str'],
+        ab: ['a_str', 'abn'],
+        tuple_a: ['l_str', 'l_num_num', 'l_num_str'],
         tuple_aa: ['l_num', 'l_str', 'l_num_num'],
       }
       const casesDefs = byFields([{clock: 'number'}], {
@@ -568,7 +561,7 @@ generateCaseSetFile({
                 },
                 object: {
                   permute: {
-                    items: ['a_num', 'a_str', 'a_num_b_num', 'a_num_b_str'],
+                    items: ['a_num', 'a_str', 'abn', 'ab'],
                     amount: {min: 1, max: 2},
                   },
                 },
@@ -637,11 +630,11 @@ generateCaseSetFile({
       }
     }
     const pairs = [
-      ['number', 'numberString', true],
+      ['number', 'numStr', true],
       ['number', 'void', true],
       ['string', 'number', false],
-      ['string', 'numberString', false],
-      ['number', 'stringBoolean', false],
+      ['string', 'numStr', false],
+      ['number', 'strBool', false],
       ['string', 'void', false],
       ['string', 'any', false],
     ]
@@ -689,16 +682,16 @@ type AB = {a: number; b: string}
 type ABN = {a: number; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
-const stringt = createEvent<string>()
-const numt = createEvent<number>()
-const numberString = createEvent<number | string>()
-const stringBoolean = createEvent<string | boolean>()
+const str = createEvent<string>()
+const num = createEvent<number>()
+const numStr = createEvent<number | string>()
+const strBool = createEvent<string | boolean>()
 const $num = createStore<number>(0)
 const $str = createStore<string>('')
 const a_num = createEvent<AN>()
 const a_str = createEvent<AS>()
-const a_num_b_num = createEvent<ABN>()
-const a_num_b_str = createEvent<AB>()
+const ab = createEvent<AB>()
+const abn = createEvent<ABN>()
 const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()
 const l_num_str = createEvent<[number, string]>()
@@ -885,11 +878,11 @@ generateCaseSetFile({
                 nonTuple: {
                   correct: {
                     wide: 'aNum',
-                    same: 'aNumBStr',
+                    same: 'ab',
                   },
                   wrong: {
                     wide: 'aStr',
-                    same: 'aNumBNum',
+                    same: 'abn',
                   },
                 },
                 tuple: {
@@ -904,9 +897,9 @@ generateCaseSetFile({
                 },
               },
               manyAnyVoid: permuteTargets({
-                correctObject: ['aNumBStr', 'anyt', 'voidt'],
+                correctObject: ['ab', 'anyt', 'voidt'],
                 correctObjectWide: ['aNum', 'anyt', 'voidt'],
-                wrongObject: ['aNumBNum', 'anyt', 'voidt'],
+                wrongObject: ['abn', 'anyt', 'voidt'],
                 wrongObjectWide: ['aStr', 'anyt', 'voidt'],
                 correctTuple: ['lNumStr', 'anyt', 'voidt'],
                 correctTupleWide: ['lNum', 'anyt', 'voidt'],
@@ -914,9 +907,9 @@ generateCaseSetFile({
                 wrongTupleWide: ['lStr', 'anyt', 'voidt'],
               }),
               manyVoid: permuteTargets({
-                correctObject: ['aNumBStr', 'voidt'],
+                correctObject: ['ab', 'voidt'],
                 correctObjectWide: ['aNum', 'voidt'],
-                wrongObject: ['aNumBNum', 'voidt'],
+                wrongObject: ['abn', 'voidt'],
                 wrongObjectWide: ['aStr', 'voidt'],
                 correctTuple: ['lNumStr', 'voidt'],
                 correctTupleWide: ['lNum', 'voidt'],
@@ -924,9 +917,9 @@ generateCaseSetFile({
                 wrongTupleWide: ['lStr', 'voidt'],
               }),
               manyAny: permuteTargets({
-                correctObject: ['aNumBStr', 'anyt'],
+                correctObject: ['ab', 'anyt'],
                 correctObjectWide: ['aNum', 'anyt'],
-                wrongObject: ['aNumBNum', 'anyt'],
+                wrongObject: ['abn', 'anyt'],
                 wrongObjectWide: ['aStr', 'anyt'],
                 correctTuple: ['lNumStr', 'anyt'],
                 correctTupleWide: ['lNum', 'anyt'],
@@ -934,10 +927,10 @@ generateCaseSetFile({
                 wrongTupleWide: ['lStr', 'anyt'],
               }),
               many: permuteTargets({
-                correctObject: ['aNumBStr'],
+                correctObject: ['ab'],
                 correctObjectWide: ['aNum'],
-                wrongObject: ['aNumBNum'],
-                wrongObjectWide: ['aStr', 'aNumBStr'],
+                wrongObject: ['abn'],
+                wrongObjectWide: ['aStr', 'ab'],
                 correctTuple: ['lNumStr'],
                 correctTupleWide: ['lNum', 'lNumStr'],
                 wrongTuple: ['lNumNum'],
@@ -1114,7 +1107,10 @@ generateCaseSetFile({
         largeGroup,
         description: groupTokens,
       }),
-      createTestLines: ({methodCode}) => [methodCode],
+      createTestLines: ({methodCode, pass}) => [
+        pass ? null : '//@ts-expect-error',
+        methodCode,
+      ],
     })
     return {
       description: '-',
@@ -1127,14 +1123,15 @@ generateCaseSetFile({
   usedMethods: ['createStore', 'createEvent', 'guard'],
   header: `
 
+type AB = {a: number; b: string}
+type ABN = {a: number; b: number}
 const $filter = createStore(true)
 const a = createStore(0)
 const b = createStore('')
 const voidt = createEvent()
 const anyt = createEvent<any>()
-const ab = createEvent<{a: number; b: string}>()
-const nullableAB = createEvent<{a: number; b: string} | null>()
-type AB = {a: number; b: string}
+const ab = createEvent<AB>()
+const nullableAB = createEvent<AB | null>()
 const abNull = createEvent<{a: number | null; b: string}>()
 const aNum = createEvent<{a: number}>()
 const aStr = createEvent<{a: string}>()
@@ -1142,7 +1139,6 @@ const lNum = createEvent<[number]>()
 const lStr = createEvent<[string]>()
 const lNumStr = createEvent<[number, string]>()
 const lNumNum = createEvent<[number, number]>()
-const aNumBStr = createEvent<{a: number; b: string}>()
-const aNumBNum = createEvent<{a: number; b: number}>()
+const abn = createEvent<ABN>()
 `,
 })
