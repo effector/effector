@@ -98,7 +98,7 @@ test('when a target receives a more loose value type from a source [with clock] 
   const source = createStore({a: ''})
   const clock = createEvent()
   const target = createEvent<{a: string; b: string}>()
-
+  //@ts-expect-error
   sample({source, clock, target})
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -114,7 +114,7 @@ test('when a target receives a more loose value type from a source [with clock] 
 test('when a target receives a more loose value type from a source [without clock] (should fail)', () => {
   const source = createStore({a: ''})
   const target = createEvent<{a: string; b: string}>()
-
+  //@ts-expect-error
   sample({source, target})
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -132,7 +132,7 @@ test('when a target receives a more loose value type from a mapping fn [with clo
   const clock = createEvent()
   const fn = () => ({a: ''})
   const target = createEvent<{a: string; b: string}>()
-
+  //@ts-expect-error
   sample({source, clock, fn, target})
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -149,7 +149,7 @@ test('when a target receives a more loose value type from a mapping fn [without 
   const source = createStore(null)
   const fn = () => ({a: ''})
   const target = createEvent<{a: string; b: string}>()
-
+  //@ts-expect-error
   sample({source, fn, target})
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -172,6 +172,7 @@ test('when nullable field passed to strict target [with clock] (should fail)', (
   sample({
     source,
     clock,
+    //@ts-expect-error
     target,
   })
   expect(typecheck).toMatchInlineSnapshot(`
@@ -190,8 +191,10 @@ test('when nullable field passed to strict target [without clock] (should fail)'
     bar: null,
   })
   const target = createEffect<{foo: string; bar: string}, void, Error>()
+
   sample({
     source,
+    //@ts-expect-error
     target,
   })
   expect(typecheck).toMatchInlineSnapshot(`
@@ -209,7 +212,7 @@ describe('edge case for {} type', () => {
     const source = createStore({})
     const clock = createEvent()
     const target = createEvent<{a: string; b: string}>()
-
+    //@ts-expect-error
     sample({source, clock, target})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -224,7 +227,7 @@ describe('edge case for {} type', () => {
   test('when a target receives a more loose value type from a source [without clock] (should fail)', () => {
     const source = createStore({})
     const target = createEvent<{a: string; b: string}>()
-
+    //@ts-expect-error
     sample({source, target})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -242,7 +245,7 @@ describe('edge case for {} type', () => {
     const clock = createEvent()
     const fn = () => ({})
     const target = createEvent<{a: string; b: string}>()
-
+    //@ts-expect-error
     sample({source, clock, fn, target})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -259,7 +262,7 @@ describe('edge case for {} type', () => {
     const source = createStore(null)
     const fn = () => ({})
     const target = createEvent<{a: string; b: string}>()
-
+    //@ts-expect-error
     sample({source, fn, target})
 
     expect(typecheck).toMatchInlineSnapshot(`

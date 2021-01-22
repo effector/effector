@@ -16,7 +16,7 @@ describe('explicit generics', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const target = createEvent<number>()
-    sample<string, number, number>({
+    sample({
       source,
       clock,
       fn: str => str.length,
@@ -31,7 +31,7 @@ describe('explicit generics', () => {
   test('sample<A, B>({source, fn, target})', () => {
     const source = createEvent<string>()
     const target = createEvent<number>()
-    sample<string, number>({
+    sample({
       source,
       fn: str => str.length,
       target,
@@ -46,7 +46,7 @@ describe('explicit generics', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const target = createEvent<string>()
-    sample<string>({
+    sample({
       source,
       clock,
       target,
@@ -60,7 +60,7 @@ describe('explicit generics', () => {
   test('sample<A>({source, target})', () => {
     const source = createEvent<string>()
     const target = createEvent<string>()
-    sample<string>({
+    sample({
       source,
       target,
     })
@@ -73,7 +73,7 @@ describe('explicit generics', () => {
   test('sample<A, B, C>({source, clock, fn})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
-    sample<string, number, number>({
+    sample({
       source,
       clock,
       fn: (str, num) => str.length + num,
@@ -87,7 +87,7 @@ describe('explicit generics', () => {
   test('sample<A>({source: store, clock})', () => {
     const source = createStore('')
     const clock = createEvent<number>()
-    sample<string>({
+    sample({
       source,
       clock,
     })
@@ -100,7 +100,7 @@ describe('explicit generics', () => {
   test('sample<A>({source: event, clock})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
-    sample<string>({
+    sample({
       source,
       clock,
     })

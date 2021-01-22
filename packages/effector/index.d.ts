@@ -565,7 +565,7 @@ export function createDomain(domainName?: string): Domain
 
 type UnitList<T> = ReadonlyArray<Unit<T>>
 type AnyClock = Unit<any> | UnitList<any>
-type Clock<T> = Unit<T> | UnitList<NoInfer<T>>
+// type Clock<T> = Unit<T> | UnitList<NoInfer<T>>
 
 type SourceValue<A extends Unit<unknown> | Combinable> =
   A extends Unit<unknown>
@@ -650,207 +650,62 @@ type ValidTargetList<Match, Target extends Tuple<unknown>> = {
 //  NoInfer in source and in return of fn helps with
 //        detecting loose objects against target type
 
-/* basic overloads without config */
-export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
-export function sample<A>(
-  source: Store<A>,
-  clock: Event<any> | Effect<any, any, any>,
-): EventAsReturnType<A>
-export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Unit<any>,
-): EventAsReturnType<A>
-export function sample<A, B, C>(
-  source: Store<A>,
-  clock: Store<B>,
-  fn: (source: A, clock: B) => C,
-): Store<C>
-export function sample<A, B, C>(
-  source: Unit<A>,
-  clock: Unit<B>,
-  fn: (source: A, clock: B) => C,
-): EventAsReturnType<C>
-/* basic overloads with config */
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Clock<B>
-  fn: (source: A, clock: B) => NoInfer<C>
-  target: Unit<C>
-  greedy?: boolean
-}): Unit<C>
-export function sample<A, B>(config: {
-  source: Unit<A>
-  clock?: AnyClock
-  fn: (source: A) => NoInfer<B>
-  target: Unit<B>
-  greedy?: boolean
-}): Unit<B>
-export function sample<A>(config: {
-  source: Unit<NoInfer<A>>
-  clock: AnyClock
-  target: Unit<A>
-  greedy?: boolean
-  fn?: never
-}): Unit<A>
-export function sample<A>(config: {
-  source: Unit<NoInfer<A>>
-  target: Unit<A>
-  greedy?: boolean
-  fn?: never
-}): Unit<A>
-export function sample(config: {
-  source: Unit<any>
-  target: Unit<void>
-  greedy?: boolean
-  fn?: never
-}): Unit<void>
-export function sample<A, B, C>(config: {
-  source: Store<A>
-  clock: Store<B>
-  fn: (source: A, clock: B) => C
-  name?: string
-  greedy?: boolean
-  // target?: never
-}): Store<C>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Clock<B>
-  fn: (source: A, clock: B) => C
-  name?: string
-  greedy?: boolean
-  // target?: never
-}): EventAsReturnType<C>
-export function sample<A>(config: {
-  source: Store<A>
-  clock?: Store<any>
-  name?: string
-  greedy?: boolean
-  fn?: never
-  // target?: never
-}): Store<A>
-export function sample<A>(config: {
-  source: Store<A>
-  clock?: Event<any> | Effect<any, any, any> | UnitList<any>
-  name?: string
-  greedy?: boolean
-  fn?: never
-  // target?: never
-}): EventAsReturnType<A>
-export function sample<A>(config: {
-  source: Event<A> | Effect<A, any, any>
-  clock?: AnyClock
-  name?: string
-  greedy?: boolean
-  fn?: never
-  // target?: never
-}): EventAsReturnType<A>
+type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
+// export type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
+export type Source = Unit<any> | Combinable
+export type Clock = Unit<any> | Tuple<Unit<any>>
+export type Target = Unit<any> | Tuple<Unit<any>>
+export type GetCombined<T> = {
+  [K in keyof T]: T[K] extends Unit<infer U> ? U : never
+}
+export type GetMerged<T> = T extends ReadonlyArray<infer C>
+  ? C extends Unit<infer U>
+    ? IfAny<U, never, U>
+    : never
+  : never
+type GetSource<T> = T extends Unit<infer S> ? S : GetCombined<T>
+type GetClock<T> = T extends Unit<infer S> ? S : GetMerged<T>
+type GetInvalidTarget<T, D> = T extends ReadonlyArray<infer U>
+  ? U extends Unit<infer P>
+    ? D extends P ? never : P extends void ? never : P
+    : never
+  : T extends Unit<infer P>
+    ? D extends P ? never : P extends void ? never : P
+    : never
+type GetTarget<S, T> = GetInvalidTarget<T, S> extends never
+  ? S
+  : GetInvalidTarget<T, S>
+type AnyFn = (...args: any) => any
+type Fn<S, C, F extends AnyFn, T> = (source: GetSource<S>, clock: GetClock<C>) => GetTarget<ReturnType<F>, T>
+type Src<S, T> = Unit<GetTarget<GetSource<S>, T>>
+  // Error messages are not very useful
+  |
+  {
+    [key: string]: GetInvalidTarget<T, GetSource<S>> extends never
+      ? Store<any>
+      : GetInvalidTarget<T, GetSource<S>>
+  }
+  // Error messages are not very useful
+  |
+  Tuple<
+    GetInvalidTarget<T, GetSource<S>> extends never
+      ? Unit<any>
+      : GetInvalidTarget<T, GetSource<S>>
+    >
 
-/* overloads with implicit `combine` */
-export function sample<A extends Combinable>(
-  source: A,
-  clock: Event<any> | Effect<any, any, any>,
-): EventAsReturnType<GetCombinedValue<A>>
-export function sample<A extends Combinable, B, C>(
-  source: A,
-  clock: Store<B>,
-  fn: (source: GetCombinedValue<A>, clock: B) => C,
-): Store<C>
-export function sample<A extends Combinable, B, C>(
-  source: A,
-  clock: Store<B>,
-  fn: (source: GetCombinedValue<A>, clock: B) => C,
-): EventAsReturnType<C>
-export function sample<A extends Combinable, B, C>(
-  source: A,
-  clock: Event<B> | Effect<B, any, any>,
-  fn: (source: GetCombinedValue<A>, clock: B) => C,
-): EventAsReturnType<C>
-export function sample<A extends Combinable>(config: {
-  source: A
-  clock: Store<any>
-  name?: string
-  greedy?: boolean
-}): Store<GetCombinedValue<A>>
-export function sample<A extends Combinable>(config: {
-  source: A
-  clock: Event<any> | Effect<any, any, any> | UnitList<any>
-  name?: string
-  greedy?: boolean
+export function sample<S extends Source, C extends Clock, T extends Target, F extends Fn<S, C, F, T>>(config: {
+  source: S,
+  clock?: C,
+  fn: F,
+  target: T
+}): T
+
+export function sample<C extends Clock, T extends Target, S extends Src<S, T>>(config: {
+  source: S,
+  clock?: C,
   fn?: never
-}): EventAsReturnType<GetCombinedValue<A>>
-export function sample<A extends Combinable, B, C>(config: {
-  source: A
-  clock: Store<B>
-  fn: (source: GetCombinedValue<A>, clock: B) => C
-  name?: string
-  greedy?: boolean
-}): Store<C>
-export function sample<A extends Combinable, C>(config: {
-  source: A
-  clock: Event<any> | Effect<any, any, any> | UnitList<any>
-  fn: (source: GetCombinedValue<A>) => C
-  name?: string
-  greedy?: boolean
-  target?: never
-}): EventAsReturnType<C>
-export function sample<A extends Combinable, B, C>(config: {
-  source: A
-  clock: Event<B> | Effect<B, any, any> | UnitList<NoInfer<B>>
-  fn: (source: GetCombinedValue<A>, clock: B) => C
-  name?: string
-  greedy?: boolean
-}): EventAsReturnType<C>
-export function sample<A extends Combinable>(config: {
-  source: A
-  clock?: AnyClock
-  target: Unit<GetCombinedValue<A>>
-  greedy?: boolean
-  fn?: never
-}): Unit<GetCombinedValue<A>>
-export function sample<A extends Combinable, B>(config: {
-  source: A
-  clock?: AnyClock
-  fn: (source: GetCombinedValue<A>) => NoInfer<B>
-  target: Unit<B>
-  greedy?: boolean
-}): Unit<B>
-
-export function sample<A extends Combinable, B, C>(config: {
-  source: A
-  clock: Clock<B>
-  fn: (source: GetCombinedValue<A>, clock: B) => NoInfer<C>
-  target: Unit<C>
-  greedy?: boolean
-}): Unit<C>
-
-export function sample<A extends (Unit<unknown> | Combinable), Tar extends Tuple<unknown>>(config: {
-  source: A
-  clock: AnyClock
-  target: ValidTargetList<SourceValue<A>, Tar>
-  greedy?: boolean
-}): Tar
-
-export function sample<A, Tar extends Tuple<unknown>>(config: {
-  source: Unit<unknown> | Combinable
-  clock?: AnyClock
-  fn: () => A
-  target: ValidTargetList<A, Tar>
-  greedy?: boolean
-}): Tar
-export function sample<A extends (Unit<unknown> | Combinable), B, Tar extends Tuple<unknown>>(config: {
-  source: A
-  clock?: AnyClock
-  fn: (source: SourceValue<A>) => B
-  target: ValidTargetList<B, Tar>
-  greedy?: boolean
-}): Tar
-export function sample<A extends (Unit<unknown> | Combinable), B, C, Tar extends Tuple<unknown>>(config: {
-  source: A
-  clock: Clock<B>
-  fn: (source: SourceValue<A>, clock: B) => C
-  target: ValidTargetList<C, Tar>
-  greedy?: boolean
-}): Tar
+  target: T
+}): T
 
 type ValidTargetList2<Match, Target extends Tuple<unknown>> = {
   [Index in keyof Target]: Target[Index] extends Unit<infer Value>
