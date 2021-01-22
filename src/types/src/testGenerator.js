@@ -410,53 +410,102 @@ generateCaseSetFile({
               ],
             },
           },
+          isPairOfSourceFields: {
+            compute: {
+              variant: sourceVariants,
+              cases: {
+                objectSolo: false,
+                objectPair: true,
+                tupleSolo: false,
+                tuplePair: true,
+              },
+            },
+          },
           fnText: {
             //prettier-ignore
             compute: {
               variants: {
                 fnVariants,
                 source: {
-                  objectVal: {sourceType: 'object'},
-                  tupleSolo: {sourceType: 'tuple', source: 'tuple_a'},
-                  tuplePair: {sourceType: 'tuple', source: 'tuple_aa'},
+                  object: {sourceType: 'object'},
+                  tuple: {sourceType: 'tuple'},
                 },
+                sourceObject: {
+                  solo: {isPairOfSourceFields: false},
+                  pair: {isPairOfSourceFields: true},
+                }
               },
               cases: {
                 fnWithoutArgs: "() => ({a: 2, b: ''})",
                 noFalsePositiveFnClock: {
-                  objectVal: '({a}: AB, cl: string) => ({a, b: cl})',
-                  tupleSolo: '([a]: [number], cl: string) => ({a, b: cl})',
-                  tuplePair: '([a]: [number, string], cl: string) => ({a, b: cl})',
+                  object: {
+                    solo: '({a}: AN, cl: string) => ({a, b: cl})',
+                    pair: '({a}: AB, cl: string) => ({a, b: cl})'
+                  },
+                  tuple: {
+                    solo: '([a]: [number], cl: string) => ({a, b: cl})',
+                    pair: '([a]: [number, string], cl: string) => ({a, b: cl})',
+                  }
                 },
                 noFalsePositiveFnSource_fnClock: {
-                  objectVal: "({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''})",
-                  tupleSolo: '([a]: [string], cl: number) => ({a: cl, b: a})',
-                  tuplePair: "([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''})",
+                  object: {
+                    solo: "({a}: AS, cl: number) => ({a: cl, b: a})",
+                    pair: "({a, b}: ABN, cl: number) => ({a: b + cl, b: ''})"
+                  },
+                  tuple: {
+                    solo: '([a]: [string], cl: number) => ({a: cl, b: a})',
+                    pair: "([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''})",
+                  }
                 },
                 typedFnClock: {
-                  objectVal: '({a, b}: AB, cl: number) => ({a: a + cl, b})',
-                  tupleSolo: "([a]: [number], cl: number) => ({a: a + cl, b: ''})",
-                  tuplePair: '([a, b]: [number, string], cl: number) => ({a: a + cl, b})',
+                  object: {
+                    solo: "({a}: AN, cl: number) => ({a: a + cl, b: ''})",
+                    pair: '({a, b}: AB, cl: number) => ({a: a + cl, b})'
+                  },
+                  tuple: {
+                    solo: "([a]: [number], cl: number) => ({a: a + cl, b: ''})",
+                    pair: '([a, b]: [number, string], cl: number) => ({a: a + cl, b})',
+                  }
                 },
                 noFalsePositiveFnSource: {
-                  objectVal: "({b}: {a: number; b: number}) => ({a: b, b: ''})",
-                  tupleSolo: '([a]: [string]) => ({a: 2, b: a})',
-                  tuplePair: "([,b]: [number, number]) => ({a: b, b: ''})",
+                  object: {
+                    solo: "({a}: AS) => ({a: 0, b: a})",
+                    pair: "({b}: ABN) => ({a: b, b: ''})"
+                  },
+                  tuple: {
+                    solo: '([a]: [string]) => ({a: 2, b: a})',
+                    pair: "([,b]: [number, number]) => ({a: b, b: ''})",
+                  }
                 },
                 typedNoFnClock: {
-                  objectVal: '({a, b}: AB) => ({a, b})',
-                  tupleSolo: "([a]: [number]) => ({a, b: ''})",
-                  tuplePair: '([a, b]: [number, string]) => ({a, b})',
+                  object: {
+                    solo: "({a}: AN) => ({a, b: ''})",
+                    pair: '({a, b}: AB) => ({a, b})'
+                  },
+                  tuple: {
+                    solo: "([a]: [number]) => ({a, b: ''})",
+                    pair: '([a, b]: [number, string]) => ({a, b})',
+                  }
                 },
                 fnClock: {
-                  objectVal: '({a, b}, cl) => ({a: a + cl, b})',
-                  tupleSolo: "([a], cl) => ({a: a + cl, b: ''})",
-                  tuplePair: '([a, b], cl) => ({a: a + cl, b})',
+                  object: {
+                    solo: "({a}, cl) => ({a: a + cl, b: ''})",
+                    pair: '({a, b}, cl) => ({a: a + cl, b})'
+                  },
+                  tuple: {
+                    solo: "([a], cl) => ({a: a + cl, b: ''})",
+                    pair: '([a, b], cl) => ({a: a + cl, b})',
+                  }
                 },
                 noFnClock: {
-                  objectVal: '({a, b}) => ({a, b})',
-                  tupleSolo: "([a]) => ({a, b: ''})",
-                  tuplePair: '([a, b]) => ({a, b})',
+                  object: {
+                    solo: "({a}) => ({a, b: ''})",
+                    pair: '({a, b}) => ({a, b})'
+                  },
+                  tuple: {
+                    solo: "([a]) => ({a, b: ''})",
+                    pair: '([a, b]) => ({a, b})',
+                  }
                 },
               },
             }
@@ -624,7 +673,14 @@ generateCaseSetFile({
   dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
   header: `
+/** used as valid source type */
+type AN = {a: number}
+/** used as invalid source type */
+type AS = {a: string}
+/** used as valid source type */
 type AB = {a: number; b: string}
+/** used as invalid source type */
+type ABN = {a: number; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const stringt = createEvent<string>()
@@ -633,9 +689,9 @@ const numberString = createEvent<number | string>()
 const stringBoolean = createEvent<string | boolean>()
 const $num = createStore<number>(0)
 const $str = createStore<string>('')
-const a_num = createEvent<{a: number}>()
-const a_str = createEvent<{a: string}>()
-const a_num_b_num = createEvent<{a: number; b: number}>()
+const a_num = createEvent<AN>()
+const a_str = createEvent<AS>()
+const a_num_b_num = createEvent<ABN>()
 const a_num_b_str = createEvent<AB>()
 const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()

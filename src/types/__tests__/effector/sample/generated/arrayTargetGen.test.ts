@@ -2,7 +2,14 @@
 import {createStore, createEvent, sample, combine} from 'effector'
 const typecheck = '{global}'
 
+/** used as valid source type */
+type AN = {a: number}
+/** used as invalid source type */
+type AS = {a: string}
+/** used as valid source type */
 type AB = {a: number; b: string}
+/** used as invalid source type */
+type ABN = {a: number; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const stringt = createEvent<string>()
@@ -11,9 +18,9 @@ const numberString = createEvent<number | string>()
 const stringBoolean = createEvent<string | boolean>()
 const $num = createStore<number>(0)
 const $str = createStore<string>('')
-const a_num = createEvent<{a: number}>()
-const a_str = createEvent<{a: string}>()
-const a_num_b_num = createEvent<{a: number; b: number}>()
+const a_num = createEvent<AN>()
+const a_str = createEvent<AS>()
+const a_num_b_num = createEvent<ABN>()
 const a_num_b_str = createEvent<AB>()
 const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()
@@ -269,86 +276,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -400,86 +407,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -531,86 +538,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -662,86 +669,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -791,7 +798,7 @@ describe('combinable', () => {
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
                   Type 'string' is not assignable to type 'number'.
-                    Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                       The types of '__.b' are incompatible between these types.
                         Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -800,7 +807,7 @@ describe('combinable', () => {
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
                   Type 'string' is not assignable to type 'number'.
-                    Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                       The types of '__.b' are incompatible between these types.
                         Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -808,17 +815,17 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -829,7 +836,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -837,7 +844,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -845,40 +852,40 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -886,7 +893,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -894,26 +901,26 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -921,10 +928,10 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -932,10 +939,10 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -943,17 +950,17 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -964,7 +971,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -972,7 +979,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -980,17 +987,17 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -1001,7 +1008,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1009,7 +1016,7 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1017,17 +1024,17 @@ describe('combinable', () => {
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a, b]: [number, number], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -1082,7 +1089,7 @@ describe('combinable', () => {
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
                   Type 'number' is not assignable to type 'string'.
-                    Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                       The types of '__.b' are incompatible between these types.
                         Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1091,7 +1098,7 @@ describe('combinable', () => {
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
                   Type 'number' is not assignable to type 'string'.
-                    Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                       The types of '__.b' are incompatible between these types.
                         Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1099,17 +1106,17 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -1120,7 +1127,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1128,7 +1135,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1136,40 +1143,40 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1177,7 +1184,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1185,26 +1192,26 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1212,10 +1219,10 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1223,10 +1230,10 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1234,17 +1241,17 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -1255,7 +1262,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1263,7 +1270,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1271,17 +1278,17 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -1292,7 +1299,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1300,7 +1307,7 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -1308,17 +1315,17 @@ describe('combinable', () => {
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string], cl: number) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -1333,344 +1340,344 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({a, b}: ABN, cl: number) => ({a: b + cl, b: ''}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               The types of '__.b' are incompatible between these types.
                                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               The types of '__.b' are incompatible between these types.
                                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               The types of '__.b' are incompatible between these types.
                                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a, b }: ABN, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         "
@@ -1682,286 +1689,346 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: {a: number; b: number}, cl: number) => ({a: b + cl, b: ''}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS, cl: number) => ({a: cl, b: a}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              The types of '__.b' are incompatible between these types.
+                                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              The types of '__.b' are incompatible between these types.
+                                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              The types of '__.b' are incompatible between these types.
+                                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: { a: number; b: number; }, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -2010,7 +2077,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2018,7 +2085,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2026,17 +2093,17 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -2047,7 +2114,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2055,7 +2122,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2063,40 +2130,40 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2104,7 +2171,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2112,26 +2179,26 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2139,10 +2206,10 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2150,10 +2217,10 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2161,17 +2228,17 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -2182,7 +2249,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2190,7 +2257,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2198,17 +2265,17 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -2219,7 +2286,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2227,7 +2294,7 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2235,17 +2302,17 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string], clock: number) => { a: number; b: string; }'.
@@ -2299,7 +2366,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2307,7 +2374,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2315,17 +2382,17 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -2336,7 +2403,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2344,7 +2411,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2352,40 +2419,40 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2393,7 +2460,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2401,26 +2468,26 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2428,10 +2495,10 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2439,10 +2506,10 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                        Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                           The types of '__.b' are incompatible between these types.
                             Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2450,17 +2517,17 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -2471,7 +2538,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2479,7 +2546,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2487,17 +2554,17 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -2508,7 +2575,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2516,7 +2583,7 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
@@ -2524,17 +2591,17 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number], clock: number) => { a: number; b: string; }'.
@@ -2549,344 +2616,344 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num]})
+        sample({source: {a: $num, b: $str}, clock: numt, fn: ({b}: ABN) => ({a: b, b: ''}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               The types of '__.b' are incompatible between these types.
                                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               The types of '__.b' are incompatible between these types.
                                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                               The types of '__.b' are incompatible between these types.
                                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
+            Type '({ b }: ABN) => { a: number; b: string; }' is not assignable to type '(source: { a: number; b: string; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Type '{ a: number; b: string; }' is not assignable to type '{ a: number; b: number; }'.
+                Type '{ a: number; b: string; }' is not assignable to type 'ABN'.
                   Types of property 'b' are incompatible.
                     Type 'string' is not assignable to type 'number'.
         "
@@ -2898,286 +2965,346 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({b}: {a: number; b: number}) => ({a: b, b: ''}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AS) => ({a: 0, b: a}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
+                            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              Types of property '__' are incompatible.
+                                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              The types of '__.b' are incompatible between these types.
+                                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              The types of '__.b' are incompatible between these types.
+                                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                              The types of '__.b' are incompatible between these types.
+                                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        The types of '__.b' are incompatible between these types.
+                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ b }: { a: number; b: number; }) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
+            Type '({ a }: AS) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
               Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+                Type '{ a: number; }' is not assignable to type 'AS'.
+                  Types of property 'a' are incompatible.
+                    Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -3225,30 +3352,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is missing the following properties from type 'readonly Unit<string>[]': concat, join, slice, indexOf, and 15 more.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is missing the following properties from type 'readonly Unit<string>[]': concat, join, slice, indexOf, and 15 more.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3257,118 +3384,118 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3377,30 +3504,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3409,30 +3536,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3484,30 +3611,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3516,118 +3643,118 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3636,30 +3763,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3668,30 +3795,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3743,30 +3870,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3775,118 +3902,118 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3895,30 +4022,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3927,30 +4054,30 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   The types of '__.b' are incompatible between these types.
                     Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                   Types of property '__' are incompatible.
-                    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
@@ -3964,37 +4091,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a}: AB, cl: string) => ({a, b: cl}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: string) => ({a, b: cl}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -4002,462 +4129,218 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+                      Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                        Types of property '__' are incompatible.
+                          Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Clock<string>'.
+              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                      Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                         The types of '__.b' are incompatible between these types.
                           Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  The types of '__.b' are incompatible between these types.
+                    Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-                            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              Types of property '__' are incompatible.
-                                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Types of property '__' are incompatible.
+                    Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Clock<string>'.
               Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              The types of '__.b' are incompatible between these types.
-                                Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              The types of '__.b' are incompatible between these types.
-                                Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              The types of '__.b' are incompatible between these types.
-                                Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                              The types of '__.b' are incompatible between these types.
-                                Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        The types of '__.b' are incompatible between these types.
-                          Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                      Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                        Types of property '__' are incompatible.
-                          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Clock<string>'.
-              Type 'Event<number>' is not assignable to type 'UnitList<string>'.
-                Type '({ a }: AB, cl: string) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: string) => { a: number; b: string; }'.
-                  Types of parameters '__0' and 'source' are incompatible.
-                    Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
         "
       `)
     })
@@ -4509,86 +4392,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -4640,86 +4523,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -4771,86 +4654,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -4859,33 +4742,14 @@ describe('combinable', () => {
     test('source:{a}, fn:(src: t, clk: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
+        no errors
         "
       `)
     })
@@ -4893,258 +4757,114 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB, cl: number) => ({a: a + cl, b}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN, cl: number) => ({a: a + cl, b: ''}), target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB, cl: number) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -5196,86 +4916,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -5327,86 +5047,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -5458,86 +5178,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -5546,33 +5266,14 @@ describe('combinable', () => {
     test('source:{a}, fn:(src: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_num]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
+        no errors
         "
       `)
     })
@@ -5580,258 +5281,114 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}: AB) => ({a, b}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}: AN) => ({a, b: ''}), target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-                        Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          Types of property '__' are incompatible.
-                            Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                        Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                          The types of '__.b' are incompatible between these types.
-                            Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    The types of '__.b' are incompatible between these types.
-                      Type 'number' is not assignable to type 'string'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '({ a, b }: AB) => { a: number; b: string; }' is not assignable to type '(source: { a: number; }, clock: number) => { a: number; b: string; }'.
-              Types of parameters '__0' and 'source' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-                    Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -5883,86 +5440,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6014,86 +5571,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6145,86 +5702,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6233,17 +5790,14 @@ describe('combinable', () => {
     test('source:{a}, fn:(src, cl) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+        no errors
         "
       `)
     })
@@ -6251,79 +5805,114 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}, cl) => ({a: a + cl, b}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}, cl) => ({a: a + cl, b: ''}), target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    The types of '__.b' are incompatible between these types.
+                      Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    The types of '__.b' are incompatible between these types.
+                      Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6375,86 +5964,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6506,86 +6095,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6637,86 +6226,86 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     Types of property '__' are incompatible.
-                      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
-                  Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
                     The types of '__.b' are incompatible between these types.
                       Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               The types of '__.b' are incompatible between these types.
                 Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: string; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -6725,17 +6314,14 @@ describe('combinable', () => {
     test('source:{a}, fn:(src) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_num]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str]})
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+        no errors
         "
       `)
     })
@@ -6743,79 +6329,114 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_str, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_str, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_num, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_num, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num_b_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_str, a_num_b_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_str, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num, a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_num_b_num]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_num_b_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: numt, fn: ({a, b}) => ({a, b}), target: [a_str]})
+        sample({source: {a: $num}, clock: numt, fn: ({a}) => ({a, b: ''}), target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+                  Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    Types of property '__' are incompatible.
+                      Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
-        Property 'b' does not exist on type '{ a: number; }'.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type 'Unit<{ a: number; b: any; }>'.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
               Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: number; b: any; }'.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    The types of '__.b' are incompatible between these types.
+                      Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+                  Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+                    The types of '__.b' are incompatible between these types.
+                      Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              The types of '__.b' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+              Types of property '__' are incompatible.
+                Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         "
       `)
     })
@@ -7173,89 +6794,89 @@ describe('combinable', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         "
       `)
     })
@@ -7270,7 +6891,7 @@ describe('combinable', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         "
       `)
     })
@@ -7313,105 +6934,105 @@ describe('combinable', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
               Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-              Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<AN>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target array\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target array\\"'.
         "
       `)
     })
