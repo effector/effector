@@ -7,6 +7,7 @@ const {
   createTest,
   byFields,
   createGroupedCases,
+  printBools,
 } = require('./generateCaseSetFile')
 
 /**
@@ -648,24 +649,188 @@ generateCaseSetFile({
       {items: ['void'], pass: true},
       {items: ['string'], pass: false},
     ]
+    const casesDefs = byFields([{clock: 'anyt'}], {
+      shape: {
+        source: {
+          union: ['num', 'str'],
+        },
+        clock: {
+          union: ['num', 'str'],
+        },
+        fn: {
+          flag: {},
+        },
+        fnTypecheck: {
+          compute: {
+            variant: {
+              yes: [
+                {fn: true, source: 'num', clock: 'num'},
+                {fn: true, source: 'str', clock: 'num'},
+                {fn: true, source: 'num', clock: 'str'},
+              ],
+              no: {},
+            },
+            cases: {yes: true, no: false},
+          },
+        },
+        typedFn: {
+          flag: {
+            needs: ['fn', 'fnTypecheck'],
+          },
+        },
+
+        targets: {
+          permute: {
+            items: ['num', 'voidt', 'str', 'anyt', 'strBool', 'numStr'],
+            amount: {min: 1, max: 2},
+          },
+        },
+        validSource: {
+          compute: {
+            variant: {
+              yes: {source: 'num'},
+              no: {source: 'str'},
+            },
+            cases: {yes: true, no: false},
+          },
+        },
+        validClock: {
+          compute: {
+            variant: {
+              noFn: {fn: false},
+              yes: {clock: 'num'},
+              no: {clock: 'str'},
+            },
+            cases: {noFn: true, yes: true, no: false},
+          },
+        },
+        validTarget: {
+          compute: {
+            fn: ({targets}) =>
+              targets.every(target => !['strBool', 'str'].includes(target)),
+          },
+        },
+        targetAcceptString: {
+          compute: {
+            fn: ({targets}) =>
+              targets.every(target =>
+                ['str', 'numStr', 'strBool', 'anyt', 'voidt'].includes(target),
+              ),
+          },
+        },
+        targetAcceptNumber: {
+          compute: {
+            fn: ({targets}) =>
+              targets.every(target =>
+                ['num', 'numStr', 'anyt', 'voidt'].includes(target),
+              ),
+          },
+        },
+        validSources: {
+          compute: {
+            variant: {
+              validWithFn: [
+                {
+                  fn: true,
+                  source: 'num',
+                  clock: 'num',
+                  targetAcceptNumber: true,
+                },
+                {
+                  fn: true,
+                  typedFn: false,
+                  source: 'str',
+                  targetAcceptString: true,
+                },
+                {
+                  fn: true,
+                  typedFn: false,
+                  clock: 'str',
+                  targetAcceptString: true,
+                },
+                // {fn: true, typedFn: false, targetAcceptNumber: true},
+              ],
+              errorWithFn: {fn: true},
+              validWithoutFn: [
+                {fn: false, source: 'num', targetAcceptNumber: true},
+                {fn: false, source: 'str', targetAcceptString: true},
+              ],
+              errorWithoutFn: {},
+            },
+            cases: {
+              validWithFn: true,
+              errorWithFn: false,
+              validWithoutFn: true,
+              errorWithoutFn: false,
+            },
+          },
+        },
+        pass: {
+          compute: {
+            variant: {
+              yes: [
+                {fn: true, validSources: true},
+                {fn: false, validSources: true},
+                // {fn: true, validSources: true, validTarget: true},
+              ],
+              no: {},
+            },
+            cases: {yes: true, no: false},
+          },
+        },
+        fnCode: {
+          compute: {
+            variant: {
+              noFn: {fn: false},
+              typed: {typedFn: true},
+              untyped: {typedFn: false},
+            },
+            cases: {
+              noFn: '',
+              typed: ', fn: (src:number,clk:number) => src+clk',
+              untyped: ', fn: (src,clk) => src + clk',
+            },
+          },
+        },
+        targetCode: {
+          compute: {fn: ({targets}) => printArray(targets)},
+        },
+        methodCode: {
+          compute: {
+            fn({source, clock, fnCode, targetCode}) {
+              return `sample({source: ${source}, clock: ${clock}, target: ${targetCode}${fnCode}})`
+            },
+          },
+        },
+        groupTokens: {
+          compute: {
+            fn: ({fn, typedFn, validSources}) =>
+              fn ? (typedFn ? 'typed fn' : 'untyped fn') : 'no fn',
+          },
+        },
+        descriptionTokens: {
+          compute: {
+            fn({fn, typedFn, validSources}) {
+              return `${fn} ${fn && typedFn} ${validSources}`
+            },
+          },
+        },
+      },
+    })
+    const resultCases = createGroupedCases(casesDefs, {
+      getHash: ({descriptionTokens}) => descriptionTokens,
+      describeGroup: ({groupTokens}) => ({
+        // largeGroup,
+        description: groupTokens,
+      }),
+      createTestLines: ({methodCode, pass}) => [
+        pass ? null : '//@ts-expect-error',
+        methodCode,
+      ],
+    })
     return {
       description: 'basic cases',
-      cases: [...singleCases, ...pairs].map(({items, pass}) => {
-        const getText = item => variables[item] || item
-        const printTargets = items.join(',')
-        const sourceTargets = items.map(getText).join(', ')
-        const description = `sample({source:${source},clock:${clock},target:[${printTargets}]}) (should ${
-          pass ? 'pass' : 'fail'
-        })`
-        const methodCall = `sample({source: ${getText(
-          source,
-        )}, clock: ${getText(clock)}, target: [${sourceTargets}]})`
-        return createTest(description, [
-          pass ? null : '//@ts-expect-error',
-          methodCall,
-          'expect(typecheck).toMatchInlineSnapshot()',
-        ])
-      }),
+      cases: resultCases,
     }
   },
   file: 'arrayTargetGen',
@@ -1094,13 +1259,7 @@ generateCaseSetFile({
         },
       },
     })
-    function printBools(shape) {
-      let result = ''
-      for (const key in shape) {
-        if (shape[key]) result += `, ${key}`
-      }
-      return result
-    }
+
     const resultCases = createGroupedCases(casesDefs, {
       getHash: ({descriptionTokens}) => descriptionTokens,
       describeGroup: ({groupTokens, largeGroup}) => ({

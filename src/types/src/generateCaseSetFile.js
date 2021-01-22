@@ -13,8 +13,15 @@ module.exports = {
   createDescribe,
   byFields,
   createGroupedCases,
+  printBools,
 }
-
+function printBools(shape) {
+  let result = ''
+  for (const key in shape) {
+    if (shape[key]) result += `, ${key}`
+  }
+  return result
+}
 function createGroupedCases(
   casesDefs,
   {createTestLines, getHash, describeGroup},

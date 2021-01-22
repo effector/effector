@@ -28,204 +28,1880 @@ const l_num_str = createEvent<[number, string]>()
 const l_num_num = createEvent<[number, number]>()
 
 describe('basic cases', () => {
-  test('sample({source:number,clock:any,target:[number]}) (should pass)', () => {
-    sample({source: num, clock: anyt, target: [num]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+  describe('typed fn', () => {
+    test('typed fn (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({source: num, clock: num, target: [numStr,anyt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [numStr,voidt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [numStr,num], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [anyt,numStr], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [anyt,voidt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [anyt,num], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [voidt,numStr], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [voidt,anyt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [voidt,num], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [num,numStr], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [num,anyt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [num,voidt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [numStr], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [anyt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [voidt], fn: (src:number,clk:number) => src+clk})
+        sample({source: num, clock: num, target: [num], fn: (src:number,clk:number) => src+clk})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('typed fn (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [numStr,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [numStr,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [anyt,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [anyt,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [voidt,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [voidt,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [num,strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [num,str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num], fn: (src:number,clk:number) => src+clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num], fn: (src:number,clk:number) => src+clk})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is missing the following properties from type 'readonly Unit<number>[]': concat, join, slice, indexOf, and 15 more.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                  Types of property '__' are incompatible.
+                    Type 'string | boolean' is not assignable to type 'number'.
+                      Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is missing the following properties from type 'readonly Unit<number>[]': concat, join, slice, indexOf, and 15 more.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                  Types of property '__' are incompatible.
+                    Type 'string | boolean' is not assignable to type 'number'.
+                      Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                  Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                  Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                  Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                  Types of parameters 'src' and 'source' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                  Types of parameters 'src' and 'source' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                  Types of parameters 'src' and 'source' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                  Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                  Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                  Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                  Types of parameters 'src' and 'source' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                  Types of parameters 'src' and 'source' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+                Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                  Types of parameters 'src' and 'source' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+                Types of parameters 'src' and 'source' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Clock<number>'.
+              Type 'Event<string>' is not assignable to type 'UnitList<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => number'.
+              Types of parameters 'src' and 'source' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        "
+      `)
+    })
   })
-  test('sample({source:number,clock:any,target:[void]}) (should pass)', () => {
-    sample({source: num, clock: anyt, target: [voidt]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+  describe('untyped fn', () => {
+    test('untyped fn (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({source: str, clock: str, target: [numStr,strBool], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [numStr,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [numStr,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [numStr,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [numStr,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [numStr,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [numStr,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [numStr,str], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [numStr,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [numStr,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [numStr,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [numStr,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [numStr,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [numStr,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [numStr,num], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [strBool,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [strBool,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [strBool,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [strBool,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [strBool,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [strBool,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [strBool,str], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [strBool,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [strBool,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [strBool,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [strBool,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [strBool,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [anyt,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [anyt,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [anyt,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [anyt,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [anyt,strBool], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [anyt,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [anyt,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [anyt,str], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [anyt,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [anyt,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [anyt,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [anyt,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [anyt,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [anyt,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [anyt,num], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [str,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [str,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [str,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [str,strBool], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [str,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [str,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [str,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [str,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [str,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [str,voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [str,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [str,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [voidt,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [voidt,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [voidt,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [voidt,numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [voidt,strBool], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [voidt,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [voidt,strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [voidt,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [voidt,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [voidt,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [voidt,anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [voidt,str], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [voidt,str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [voidt,str], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [voidt,num], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [num,numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [num,anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [num,voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [numStr], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [numStr], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [strBool], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [strBool], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [anyt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [anyt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [str], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [str], fn: (src,clk) => src + clk})
+        sample({source: str, clock: str, target: [voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: str, target: [voidt], fn: (src,clk) => src + clk})
+        sample({source: str, clock: num, target: [voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [voidt], fn: (src,clk) => src + clk})
+        sample({source: num, clock: num, target: [num], fn: (src,clk) => src + clk})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('untyped fn (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [numStr,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [numStr,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [numStr,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,numStr], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,anyt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,voidt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [strBool,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [anyt,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [anyt,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [anyt,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,numStr], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,anyt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,voidt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [str,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [voidt,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [voidt,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [voidt,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,numStr], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,numStr], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,numStr], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [num,strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,anyt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,anyt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,anyt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [num,str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,voidt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,voidt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,voidt], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num], fn: (src,clk) => src + clk})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num], fn: (src,clk) => src + clk})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type 'Unit<number>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Unit<string>'.
+        "
+      `)
+    })
   })
-  test('sample({source:number,clock:any,target:[string]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [str]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[number,numStr]}) (should pass)', () => {
-    sample({source: num, clock: anyt, target: [num, numStr]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[numStr,number]}) (should pass)', () => {
-    sample({source: num, clock: anyt, target: [numStr, num]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[number,void]}) (should pass)', () => {
-    sample({source: num, clock: anyt, target: [num, voidt]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[void,number]}) (should pass)', () => {
-    sample({source: num, clock: anyt, target: [voidt, num]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[string,number]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [str, num]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[number,string]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [num, str]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[string,numStr]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [str, numStr]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+  describe('no fn', () => {
+    test('no fn (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({source: str, clock: str, target: [numStr,strBool]})
+        sample({source: str, clock: num, target: [numStr,strBool]})
+        sample({source: str, clock: str, target: [numStr,anyt]})
+        sample({source: num, clock: str, target: [numStr,anyt]})
+        sample({source: str, clock: num, target: [numStr,anyt]})
+        sample({source: num, clock: num, target: [numStr,anyt]})
+        sample({source: str, clock: str, target: [numStr,str]})
+        sample({source: str, clock: num, target: [numStr,str]})
+        sample({source: str, clock: str, target: [numStr,voidt]})
+        sample({source: num, clock: str, target: [numStr,voidt]})
+        sample({source: str, clock: num, target: [numStr,voidt]})
+        sample({source: num, clock: num, target: [numStr,voidt]})
+        sample({source: num, clock: str, target: [numStr,num]})
+        sample({source: num, clock: num, target: [numStr,num]})
+        sample({source: str, clock: str, target: [strBool,numStr]})
+        sample({source: str, clock: num, target: [strBool,numStr]})
+        sample({source: str, clock: str, target: [strBool,anyt]})
+        sample({source: str, clock: num, target: [strBool,anyt]})
+        sample({source: str, clock: str, target: [strBool,str]})
+        sample({source: str, clock: num, target: [strBool,str]})
+        sample({source: str, clock: str, target: [strBool,voidt]})
+        sample({source: str, clock: num, target: [strBool,voidt]})
+        sample({source: str, clock: str, target: [anyt,numStr]})
+        sample({source: num, clock: str, target: [anyt,numStr]})
+        sample({source: str, clock: num, target: [anyt,numStr]})
+        sample({source: num, clock: num, target: [anyt,numStr]})
+        sample({source: str, clock: str, target: [anyt,strBool]})
+        sample({source: str, clock: num, target: [anyt,strBool]})
+        sample({source: str, clock: str, target: [anyt,str]})
+        sample({source: str, clock: num, target: [anyt,str]})
+        sample({source: str, clock: str, target: [anyt,voidt]})
+        sample({source: num, clock: str, target: [anyt,voidt]})
+        sample({source: str, clock: num, target: [anyt,voidt]})
+        sample({source: num, clock: num, target: [anyt,voidt]})
+        sample({source: num, clock: str, target: [anyt,num]})
+        sample({source: num, clock: num, target: [anyt,num]})
+        sample({source: str, clock: str, target: [str,numStr]})
+        sample({source: str, clock: num, target: [str,numStr]})
+        sample({source: str, clock: str, target: [str,strBool]})
+        sample({source: str, clock: num, target: [str,strBool]})
+        sample({source: str, clock: str, target: [str,anyt]})
+        sample({source: str, clock: num, target: [str,anyt]})
+        sample({source: str, clock: str, target: [str,voidt]})
+        sample({source: str, clock: num, target: [str,voidt]})
+        sample({source: str, clock: str, target: [voidt,numStr]})
+        sample({source: num, clock: str, target: [voidt,numStr]})
+        sample({source: str, clock: num, target: [voidt,numStr]})
+        sample({source: num, clock: num, target: [voidt,numStr]})
+        sample({source: str, clock: str, target: [voidt,strBool]})
+        sample({source: str, clock: num, target: [voidt,strBool]})
+        sample({source: str, clock: str, target: [voidt,anyt]})
+        sample({source: num, clock: str, target: [voidt,anyt]})
+        sample({source: str, clock: num, target: [voidt,anyt]})
+        sample({source: num, clock: num, target: [voidt,anyt]})
+        sample({source: str, clock: str, target: [voidt,str]})
+        sample({source: str, clock: num, target: [voidt,str]})
+        sample({source: num, clock: str, target: [voidt,num]})
+        sample({source: num, clock: num, target: [voidt,num]})
+        sample({source: num, clock: str, target: [num,numStr]})
+        sample({source: num, clock: num, target: [num,numStr]})
+        sample({source: num, clock: str, target: [num,anyt]})
+        sample({source: num, clock: num, target: [num,anyt]})
+        sample({source: num, clock: str, target: [num,voidt]})
+        sample({source: num, clock: num, target: [num,voidt]})
+        sample({source: str, clock: str, target: [numStr]})
+        sample({source: num, clock: str, target: [numStr]})
+        sample({source: str, clock: num, target: [numStr]})
+        sample({source: num, clock: num, target: [numStr]})
+        sample({source: str, clock: str, target: [strBool]})
+        sample({source: str, clock: num, target: [strBool]})
+        sample({source: str, clock: str, target: [anyt]})
+        sample({source: num, clock: str, target: [anyt]})
+        sample({source: str, clock: num, target: [anyt]})
+        sample({source: num, clock: num, target: [anyt]})
+        sample({source: str, clock: str, target: [str]})
+        sample({source: str, clock: num, target: [str]})
+        sample({source: str, clock: str, target: [voidt]})
+        sample({source: num, clock: str, target: [voidt]})
+        sample({source: str, clock: num, target: [voidt]})
+        sample({source: num, clock: num, target: [voidt]})
+        sample({source: num, clock: str, target: [num]})
+        sample({source: num, clock: num, target: [num]})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('no fn (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [numStr,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [numStr,str]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [numStr,str]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [numStr,num]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [numStr,num]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,numStr]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,numStr]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,anyt]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,anyt]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,str]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,str]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,voidt]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,voidt]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [strBool,num]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool,num]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [strBool,num]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool,num]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [anyt,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [anyt,str]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [anyt,str]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [anyt,num]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [anyt,num]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,numStr]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,numStr]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,anyt]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,anyt]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,voidt]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,voidt]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [str,num]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str,num]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [str,num]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str,num]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [voidt,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [voidt,str]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [voidt,str]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [voidt,num]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [voidt,num]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,numStr]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,numStr]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,strBool]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [num,strBool]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,anyt]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,anyt]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,str]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [num,str]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,str]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [num,str]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num,voidt]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num,voidt]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [strBool]})
+        //@ts-expect-error
+        sample({source: num, clock: str, target: [str]})
+        //@ts-expect-error
+        sample({source: num, clock: num, target: [str]})
+        //@ts-expect-error
+        sample({source: str, clock: str, target: [num]})
+        //@ts-expect-error
+        sample({source: str, clock: num, target: [num]})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[numStr,string]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [numStr, str]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[number,strBool]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [num, strBool]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[strBool,number]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [strBool, num]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[string,void]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [str, voidt]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[void,string]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [voidt, str]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[string,any]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [str, anyt]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
-  })
-  test('sample({source:number,clock:any,target:[any,string]}) (should fail)', () => {
-    //@ts-expect-error
-    sample({source: num, clock: anyt, target: [anyt, str]})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      "
-    `)
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+        "
+      `)
+    })
   })
 })
 describe('combinable', () => {
