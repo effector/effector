@@ -4,7 +4,18 @@
  *
  * @see https://github.com/krzkaczor/ts-essentials/blob/a4c2485bc3f37843267820ec552aa662251767bc/lib/types.ts#L169
  */
-type Tuple<T = unknown> = [T] | T[]
+type Tuple<T = unknown> = [T]
+  | [T, T]
+  | [T, T, T]
+  | [T, T, T, T]
+  | [T, T, T, T, T]
+  | [T, T, T, T, T, T]
+  | [T, T, T, T, T, T, T]
+  | [T, T, T, T, T, T, T, T]
+  | [T, T, T, T, T, T, T, T, T]
+  | [T, T, T, T, T, T, T, T, T, T]
+  | [T, T, T, T, T, T, T, T, T, T, T]
+  | [T, T, T, T, T, T, T, T, T, T, T, T]
 
 /**
  * Non inferential type parameter usage.
@@ -692,7 +703,32 @@ type Src<S, T> = Unit<GetTarget<GetSource<S>, T>>
       ? Unit<any>
       : GetInvalidTarget<T, GetSource<S>>
     >
+type GetResultSouce<S> = S extends Store<any>
+  ? Store<GetSource<S>>
+  : Event<GetSource<S>>
 
+type GetResult<S, C> = S extends Store<any>
+  ? C extends Store<any>
+    ? Store<GetSource<S>>
+    : Event<GetSource<S>>
+  : Event<GetSource<S>>
+
+type GetResultFn<S, C, F extends AnyFn> = S extends Store<any>
+  ? C extends Store<any>
+    ? Store<ReturnType<F>>
+    : Event<ReturnType<F>>
+  : Event<ReturnType<F>>
+
+/* overloads without config */
+export function sample<S extends Source, C extends Clock, T extends Target, F extends Fn<S, C, F, T>>(
+  source: S,
+  clock: C,
+  fn: F
+): GetResultFn<S, C, F>
+export function sample<S extends Source, C extends Clock>(source: S): GetResultSouce<S>
+export function sample<S extends Source, C extends Clock>(source: S, clock?: C): GetResult<S, C>
+
+/* overloads with config */
 export function sample<S extends Source, C extends Clock, T extends Target, F extends Fn<S, C, F, T>>(config: {
   source: S,
   clock?: C,
@@ -700,12 +736,26 @@ export function sample<S extends Source, C extends Clock, T extends Target, F ex
   target: T
 }): T
 
-export function sample<C extends Clock, T extends Target, S extends Src<S, T>>(config: {
+export function sample<T extends Target, C extends Clock, S extends Src<S, T>>(config: {
   source: S,
   clock?: C,
   fn?: never
   target: T
 }): T
+
+export function sample<S extends Source, C extends Clock, T extends Target, F extends Fn<S, C, F, T>>(config: {
+  source: S,
+  clock?: C,
+  fn: F,
+  target?: never
+}): GetResultFn<S, C, F>
+
+export function sample<T extends Target, C extends Clock, S extends Src<S, T>>(config: {
+  source: S,
+  clock?: C,
+  fn?: never
+  target?: never
+}): GetResult<S, C>
 
 type ValidTargetList2<Match, Target extends Tuple<unknown>> = {
   [Index in keyof Target]: Target[Index] extends Unit<infer Value>
