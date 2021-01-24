@@ -658,7 +658,7 @@ generateCaseSetFile({
         const sourceTargets = target.map(getText).join(', ')
         const methodCall = `sample({source: ${sourceCode}, clock: ${getText(
           clock,
-        )},target: [${sourceTargets}]${fn ? `, fn: ${fnText}` : ''}})`
+        )}, target: [${sourceTargets}]${fn ? `, fn: ${fnText}` : ''}})`
         return [pass ? null : '/*@ts-expect-error*/', methodCall].filter(
           Boolean,
         )
@@ -909,6 +909,7 @@ const l_num_str = createEvent<[number, string]>()
 const l_num_num = createEvent<[number, number]>()
 `,
 })
+
 generateCaseSetFile({
   shape: {},
   generateCases({}) {
