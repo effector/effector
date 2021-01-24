@@ -21,6 +21,7 @@ describe('basic cases (should pass)', () => {
   test('{ source: number, clock: any, target: [number] } (should pass)', () => {
     const num = createEvent<number>()
     const anyt = createEvent<any>()
+
     sample({source: num, clock: anyt, target: [num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -34,6 +35,7 @@ describe('basic cases (should pass)', () => {
     const numberString = createEvent<number | string>()
     const num = createEvent<number>()
     const anyt = createEvent<any>()
+
     sample({source: num, clock: anyt, target: [numberString, num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -47,6 +49,7 @@ describe('basic cases (should pass)', () => {
     const num = createEvent<number>()
     const anyt = createEvent<any>()
     const voidt = createEvent<void>()
+
     sample({source: num, clock: anyt, target: [voidt]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -60,6 +63,7 @@ describe('basic cases (should pass)', () => {
     const num = createEvent<number>()
     const anyt = createEvent<any>()
     const voidt = createEvent<void>()
+
     sample({source: num, clock: anyt, target: [num, voidt]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -73,6 +77,7 @@ describe('basic cases (should pass)', () => {
     const num = createEvent<number>()
     const anyt = createEvent<any>()
     const voidt = createEvent<void>()
+
     sample({source: num, clock: anyt, target: [voidt, num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -87,6 +92,7 @@ describe('basic cases', () => {
   test('{ source: number, clock: any, target: [] } (?)', () => {
     const num = createEvent<number>()
     const anyt = createEvent<any>()
+    //@ts-expect-error
     sample({source: num, clock: anyt, target: []})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -309,6 +315,7 @@ describe('basic cases', () => {
 describe('source & clock mapping (should pass)', () => {
   test('{ source: number, clock: number, fn: (s, c) => s + c, target: [number] } (should pass)', () => {
     const num = createEvent<number>()
+
     sample({
       source: num,
       clock: num,
@@ -326,6 +333,7 @@ describe('source & clock mapping (should pass)', () => {
   test('{ source: number, clock: number, fn: (s, c) => s + c, target: [numberString, number] } (should pass)', () => {
     const numberString = createEvent<number | string>()
     const num = createEvent<number>()
+
     sample({
       source: num,
       clock: num,
@@ -346,6 +354,7 @@ describe('combinable source object (should pass)', () => {
     const $num = createStore<number>(0)
     const a_num = createEvent<{a: number}>()
     const anyt = createEvent<any>()
+
     sample({source: {a: $num}, clock: anyt, target: [a_num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -359,6 +368,7 @@ describe('combinable source object (should pass)', () => {
     const $num = createStore<number>(0)
     const a_num = createEvent<{a: number}>()
     const anyt = createEvent<any>()
+
     sample({source: {a: $num, b: $num}, clock: anyt, target: [a_num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -372,6 +382,7 @@ describe('combinable source object (should pass)', () => {
     const $num = createStore<number>(0)
     const a_num_b_num = createEvent<{a: number; b: number}>()
     const anyt = createEvent<any>()
+
     sample({
       source: {a: $num, b: $num},
       clock: anyt,
@@ -446,12 +457,9 @@ describe('combinable source object (should fail)', () => {
     const a_num_b_num = createEvent<{a: number; b: number}>()
     const a_num = createEvent<{a: number}>()
     const anyt = createEvent<any>()
-    sample({
-      source: {a: $num},
-      clock: anyt,
-      //@ts-expect-error
-      target: [a_num_b_num, a_num],
-    })
+
+    //@ts-expect-error
+    sample({source: {a: $num}, clock: anyt, target: [a_num_b_num, a_num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -472,6 +480,7 @@ describe('combinable source object & clock mapping (should pass)', () => {
   test('{ source: { a: $num, b: $num }, clock: number, fn: (s, c) => s.a + s.b + c, target: [number] } (should pass)', () => {
     const $num = createStore<number>(0)
     const num = createEvent<number>()
+
     sample({
       source: {a: $num, b: $num},
       clock: num,
@@ -490,6 +499,7 @@ describe('combinable source object & clock mapping (should pass)', () => {
     const $num = createStore<number>(0)
     const numberString = createEvent<number | string>()
     const num = createEvent<number>()
+
     sample({
       source: {a: $num, b: $num},
       clock: num,
@@ -510,6 +520,7 @@ describe('combinable source list (should pass)', () => {
     const $num = createStore<number>(0)
     const l_num = createEvent<[number]>()
     const anyt = createEvent<any>()
+
     sample({source: [$num], clock: anyt, target: [l_num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -523,6 +534,7 @@ describe('combinable source list (should pass)', () => {
     const $num = createStore<number>(0)
     const l_num_num = createEvent<[number, number]>()
     const anyt = createEvent<any>()
+
     sample({
       source: [$num, $num],
       clock: anyt,
@@ -581,6 +593,7 @@ describe('combinable source list & clock mapping (should pass)', () => {
   test('{ source: [$num, $num], clock: number, fn: ([a, b], c) => a + b + c, target: [number] } (should pass)', () => {
     const $num = createStore<number>(0)
     const num = createEvent<number>()
+
     sample({
       source: [$num, $num],
       clock: num,
@@ -599,6 +612,7 @@ describe('combinable source list & clock mapping (should pass)', () => {
     const $num = createStore<number>(0)
     const numberString = createEvent<number | string>()
     const num = createEvent<number>()
+
     sample({
       source: [$num, $num],
       clock: num,

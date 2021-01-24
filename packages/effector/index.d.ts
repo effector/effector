@@ -678,13 +678,13 @@ export function sample<A, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
-export function sample<A, B>(config: {
+export function sample<A, C>(config: {
   source: Unit<A>
   clock?: AnyClock
-  fn: (source: A) => NoInfer<B>
-  target: Unit<B>
+  fn: (source: A) => NoInfer<C>
+  target: Unit<C>
   greedy?: boolean
-}): Unit<B>
+}): Unit<C>
 export function sample<A>(config: {
   source: Unit<NoInfer<A>>
   clock: AnyClock
@@ -807,13 +807,13 @@ export function sample<A extends Combinable>(config: {
   greedy?: boolean
   fn?: never
 }): Unit<GetCombinedValue<A>>
-export function sample<A extends Combinable, B>(config: {
+export function sample<A extends Combinable, C>(config: {
   source: A
   clock?: AnyClock
-  fn: (source: GetCombinedValue<A>) => NoInfer<B>
-  target: Unit<B>
+  fn: (source: GetCombinedValue<A>) => NoInfer<C>
+  target: Unit<C>
   greedy?: boolean
-}): Unit<B>
+}): Unit<C>
 
 export function sample<A extends Combinable, B, C>(config: {
   source: A

@@ -1906,10 +1906,10 @@ describe('combinable', () => {
     test('source:{a,b} (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num]})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab]})
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab]})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1921,29 +1921,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str]})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2041,10 +2041,10 @@ describe('combinable', () => {
     test('source:{a,b}, fn:() => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: () => ({a:2,b:''})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: () => ({a:2,b:''})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: () => ({a:2,b:''})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2056,29 +2056,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2173,37 +2173,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2522,37 +2522,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({b}:ABN) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({b}:ABN) => ({a:b,b:''})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({b}:ABN) => ({a:b,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2871,37 +2871,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({a}:AB, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({a}:AB, cl:string) => ({a,b:cl})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3129,10 +3129,10 @@ describe('combinable', () => {
     test('source:{a,b}, fn:(src: t, clk: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3144,29 +3144,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({a,b}:AB, cl:number) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3260,10 +3260,10 @@ describe('combinable', () => {
     test('source:{a,b}, fn:(src: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({a,b}:AB) => ({a,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({a,b}:AB) => ({a,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({a,b}:AB) => ({a,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({a,b}:AB) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3275,29 +3275,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({a,b}:AB) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({a,b}:AB) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({a,b}:AB) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3391,10 +3391,10 @@ describe('combinable', () => {
     test('source:{a,b}, fn:(src, cl) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3406,29 +3406,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({a,b}, cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({a,b}, cl) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3522,10 +3522,10 @@ describe('combinable', () => {
     test('source:{a,b}, fn:(src) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_num], fn: ({a,b}) => ({a,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, ab], fn: ({a,b}) => ({a,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab], fn: ({a,b}) => ({a,b})})
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_num], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, ab], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num], fn: ({a,b}) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3537,29 +3537,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, abn], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, abn], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [ab, a_str], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [ab, a_str], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, ab], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, ab], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_str], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_str], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn, a_num], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn, a_num], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, ab], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, ab], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, abn], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, abn], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str, a_num], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str, a_num], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, abn], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, abn], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_num, a_str], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_num, a_str], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [abn], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [abn], fn: ({a,b}) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: {a: $num, b: $str}, clock: num,target: [a_str], fn: ({a,b}) => ({a,b})})
+        sample({source: {a: $num, b: $str}, clock: num, target: [a_str], fn: ({a,b}) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3652,7 +3652,7 @@ describe('combinable', () => {
   describe('source:{a}', () => {
     test('source:{a} (should pass)', () => {
       //prettier-ignore
-      sample({source: {a: $num}, clock: num,target: [a_num]})
+      sample({source: {a: $num}, clock: num, target: [a_num]})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -3663,35 +3663,35 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn]})
+        sample({source: {a: $num}, clock: num, target: [ab, abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str]})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_num]})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab]})
+        sample({source: {a: $num}, clock: num, target: [abn, ab]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str]})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num]})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab]})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn]})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num]})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, ab]})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn]})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str]})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab]})
+        sample({source: {a: $num}, clock: num, target: [ab]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn]})
+        sample({source: {a: $num}, clock: num, target: [abn]})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str]})
+        sample({source: {a: $num}, clock: num, target: [a_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3808,10 +3808,10 @@ describe('combinable', () => {
     test('source:{a}, fn:() => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: () => ({a:2,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: () => ({a:2,b:''})})
-        sample({source: {a: $num}, clock: num,target: [ab], fn: () => ({a:2,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3823,29 +3823,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: () => ({a:2,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3940,37 +3940,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}:AS, cl:number) => ({a: cl, b: a})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -4289,37 +4289,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}:AS) => ({a:0,b:a})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}:AS) => ({a:0,b:a})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}:AS) => ({a:0,b:a})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -4638,37 +4638,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}:AN, cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}:AN, cl:string) => ({a,b:cl})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -4896,10 +4896,10 @@ describe('combinable', () => {
     test('source:{a}, fn:(src: t, clk: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -4911,29 +4911,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}:AN, cl:number) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5027,10 +5027,10 @@ describe('combinable', () => {
     test('source:{a}, fn:(src: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}:AN) => ({a,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}:AN) => ({a,b:''})})
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}:AN) => ({a,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}:AN) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5042,29 +5042,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}:AN) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}:AN) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}:AN) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5158,10 +5158,10 @@ describe('combinable', () => {
     test('source:{a}, fn:(src, cl) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5173,29 +5173,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}, cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}, cl) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5289,10 +5289,10 @@ describe('combinable', () => {
     test('source:{a}, fn:(src) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: {a: $num}, clock: num,target: [ab, a_num], fn: ({a}) => ({a,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num, ab], fn: ({a}) => ({a,b:''})})
-        sample({source: {a: $num}, clock: num,target: [ab], fn: ({a}) => ({a,b:''})})
-        sample({source: {a: $num}, clock: num,target: [a_num], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_num], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, ab], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num], fn: ({a}) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5304,29 +5304,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, abn], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, abn], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [ab, a_str], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [ab, a_str], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, ab], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, ab], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_str], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_str], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn, a_num], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn, a_num], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, ab], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, ab], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, abn], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, abn], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str, a_num], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str, a_num], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, abn], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, abn], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_num, a_str], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_num, a_str], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [abn], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [abn], fn: ({a}) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: {a: $num}, clock: num,target: [a_str], fn: ({a}) => ({a,b:''})})
+        sample({source: {a: $num}, clock: num, target: [a_str], fn: ({a}) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5419,7 +5419,7 @@ describe('combinable', () => {
   describe('source:[a,b]', () => {
     test('source:[a,b] (should pass)', () => {
       //prettier-ignore
-      sample({source: [$num, $str], clock: num,target: [l_num_str]})
+      sample({source: [$num, $str], clock: num, target: [l_num_str]})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -5430,35 +5430,35 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_num, l_num_str]})
+        sample({source: [$num, $str], clock: num, target: [l_num_num, l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_num, l_str]})
+        sample({source: [$num, $str], clock: num, target: [l_num_num, l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_num, l_num]})
+        sample({source: [$num, $str], clock: num, target: [l_num_num, l_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_str, l_num_num]})
+        sample({source: [$num, $str], clock: num, target: [l_num_str, l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_str, l_str]})
+        sample({source: [$num, $str], clock: num, target: [l_num_str, l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_str, l_num]})
+        sample({source: [$num, $str], clock: num, target: [l_num_str, l_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_str, l_num_num]})
+        sample({source: [$num, $str], clock: num, target: [l_str, l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_str, l_num_str]})
+        sample({source: [$num, $str], clock: num, target: [l_str, l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_str, l_num]})
+        sample({source: [$num, $str], clock: num, target: [l_str, l_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num, l_num_num]})
+        sample({source: [$num, $str], clock: num, target: [l_num, l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num, l_num_str]})
+        sample({source: [$num, $str], clock: num, target: [l_num, l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num, l_str]})
+        sample({source: [$num, $str], clock: num, target: [l_num, l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num_num]})
+        sample({source: [$num, $str], clock: num, target: [l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_str]})
+        sample({source: [$num, $str], clock: num, target: [l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [l_num]})
+        sample({source: [$num, $str], clock: num, target: [l_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5575,10 +5575,10 @@ describe('combinable', () => {
     test('source:[a,b], fn:() => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: () => ({a:2,b:''})})
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: () => ({a:2,b:''})})
-        sample({source: [$num, $str], clock: num,target: [ab], fn: () => ({a:2,b:''})})
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5590,29 +5590,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5707,37 +5707,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5998,37 +5998,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([,b]:[number,number]) => ({a:b,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([,b]:[number,number]) => ({a:b,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6287,37 +6287,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([a]:[number,string], cl:string) => ({a,b:cl})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6545,10 +6545,10 @@ describe('combinable', () => {
     test('source:[a,b], fn:(src: t, clk: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6560,29 +6560,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([a,b]:[number,string], cl:number) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6676,10 +6676,10 @@ describe('combinable', () => {
     test('source:[a,b], fn:(src: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([a,b]:[number,string]) => ({a,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([a,b]:[number,string]) => ({a,b})})
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([a,b]:[number,string]) => ({a,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([a,b]:[number,string]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6691,29 +6691,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([a,b]:[number,string]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([a,b]:[number,string]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([a,b]:[number,string]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6807,10 +6807,10 @@ describe('combinable', () => {
     test('source:[a,b], fn:(src, cl) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([a,b], cl) => ({a:a+cl,b})})
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([a,b], cl) => ({a:a+cl,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6822,29 +6822,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([a,b], cl) => ({a:a+cl,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([a,b], cl) => ({a:a+cl,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6938,10 +6938,10 @@ describe('combinable', () => {
     test('source:[a,b], fn:(src) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num, $str], clock: num,target: [ab, a_num], fn: ([a,b]) => ({a,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num, ab], fn: ([a,b]) => ({a,b})})
-        sample({source: [$num, $str], clock: num,target: [ab], fn: ([a,b]) => ({a,b})})
-        sample({source: [$num, $str], clock: num,target: [a_num], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_num], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, ab], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num], fn: ([a,b]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -6953,29 +6953,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, abn], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, abn], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [ab, a_str], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [ab, a_str], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, ab], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, ab], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_str], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_str], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn, a_num], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn, a_num], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, ab], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, ab], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, abn], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, abn], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str, a_num], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str, a_num], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, abn], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, abn], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_num, a_str], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_num, a_str], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [abn], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [abn], fn: ([a,b]) => ({a,b})})
         /*@ts-expect-error*/
-        sample({source: [$num, $str], clock: num,target: [a_str], fn: ([a,b]) => ({a,b})})
+        sample({source: [$num, $str], clock: num, target: [a_str], fn: ([a,b]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7068,7 +7068,7 @@ describe('combinable', () => {
   describe('source:[a]', () => {
     test('source:[a] (should pass)', () => {
       //prettier-ignore
-      sample({source: [$num], clock: num,target: [l_num]})
+      sample({source: [$num], clock: num, target: [l_num]})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -7079,35 +7079,35 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_num, l_num_str]})
+        sample({source: [$num], clock: num, target: [l_num_num, l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_num, l_str]})
+        sample({source: [$num], clock: num, target: [l_num_num, l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_num, l_num]})
+        sample({source: [$num], clock: num, target: [l_num_num, l_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_str, l_num_num]})
+        sample({source: [$num], clock: num, target: [l_num_str, l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_str, l_str]})
+        sample({source: [$num], clock: num, target: [l_num_str, l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_str, l_num]})
+        sample({source: [$num], clock: num, target: [l_num_str, l_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_str, l_num_num]})
+        sample({source: [$num], clock: num, target: [l_str, l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_str, l_num_str]})
+        sample({source: [$num], clock: num, target: [l_str, l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_str, l_num]})
+        sample({source: [$num], clock: num, target: [l_str, l_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num, l_num_num]})
+        sample({source: [$num], clock: num, target: [l_num, l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num, l_num_str]})
+        sample({source: [$num], clock: num, target: [l_num, l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num, l_str]})
+        sample({source: [$num], clock: num, target: [l_num, l_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_num]})
+        sample({source: [$num], clock: num, target: [l_num_num]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_num_str]})
+        sample({source: [$num], clock: num, target: [l_num_str]})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [l_str]})
+        sample({source: [$num], clock: num, target: [l_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7224,10 +7224,10 @@ describe('combinable', () => {
     test('source:[a], fn:() => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: () => ({a:2,b:''})})
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: () => ({a:2,b:''})})
-        sample({source: [$num], clock: num,target: [ab], fn: () => ({a:2,b:''})})
-        sample({source: [$num], clock: num,target: [a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_num], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7239,29 +7239,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [abn], fn: () => ({a:2,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: () => ({a:2,b:''})})
+        sample({source: [$num], clock: num, target: [a_str], fn: () => ({a:2,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7356,37 +7356,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a]:[string], cl:number) => ({a:cl,b:a})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7647,37 +7647,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a]:[string]) => ({a:2,b:a})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a]:[string]) => ({a:2,b:a})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a]:[string]) => ({a:2,b:a})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -7936,37 +7936,37 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a]:[number], cl:string) => ({a,b:cl})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a]:[number], cl:string) => ({a,b:cl})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8194,10 +8194,10 @@ describe('combinable', () => {
     test('source:[a], fn:(src: t, clk: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
-        sample({source: [$num], clock: num,target: [ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8209,29 +8209,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a]:[number], cl:number) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8325,10 +8325,10 @@ describe('combinable', () => {
     test('source:[a], fn:(src: t) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a]:[number]) => ({a,b:''})})
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a]:[number]) => ({a,b:''})})
-        sample({source: [$num], clock: num,target: [ab], fn: ([a]:[number]) => ({a,b:''})})
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a]:[number]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8340,29 +8340,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a]:[number]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a]:[number]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a]:[number]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8456,10 +8456,10 @@ describe('combinable', () => {
     test('source:[a], fn:(src, cl) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a], cl) => ({a:a+cl,b:''})})
-        sample({source: [$num], clock: num,target: [ab], fn: ([a], cl) => ({a:a+cl,b:''})})
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8471,29 +8471,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a], cl) => ({a:a+cl,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a], cl) => ({a:a+cl,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8587,10 +8587,10 @@ describe('combinable', () => {
     test('source:[a], fn:(src) => ... (should pass)', () => {
       //prettier-ignore
       {
-        sample({source: [$num], clock: num,target: [ab, a_num], fn: ([a]) => ({a,b:''})})
-        sample({source: [$num], clock: num,target: [a_num, ab], fn: ([a]) => ({a,b:''})})
-        sample({source: [$num], clock: num,target: [ab], fn: ([a]) => ({a,b:''})})
-        sample({source: [$num], clock: num,target: [a_num], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_num], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, ab], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num], fn: ([a]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -8602,29 +8602,29 @@ describe('combinable', () => {
       //prettier-ignore
       {
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, abn], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab, abn], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [ab, a_str], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [ab, a_str], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, ab], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn, ab], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_str], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_str], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn, a_num], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn, a_num], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, ab], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, ab], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, abn], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, abn], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str, a_num], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str, a_num], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, abn], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, abn], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_num, a_str], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_num, a_str], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [abn], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [abn], fn: ([a]) => ({a,b:''})})
         /*@ts-expect-error*/
-        sample({source: [$num], clock: num,target: [a_str], fn: ([a]) => ({a,b:''})})
+        sample({source: [$num], clock: num, target: [a_str], fn: ([a]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
