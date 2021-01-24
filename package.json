@@ -4,6 +4,7 @@
   "description": "The state manager",
   "private": true,
   "scripts": {
+    "test:generate": "node src/types/src/testGenerator.js && yarn test -u",
     "browserstack": "COMPAT=true npx jest --config=jest.config.js --runInBand",
     "test": "npx jest --config=jest.config.js",
     "coverage": "COVERAGE=yes jest --config=jest.config.js",
