@@ -807,13 +807,13 @@ export function sample<A extends Combinable>(config: {
   greedy?: boolean
   fn?: never
 }): Unit<GetCombinedValue<A>>
-export function sample<A extends Combinable, B>(config: {
+export function sample<A extends Combinable, C>(config: {
   source: A
   clock?: AnyClock
-  fn: (source: GetCombinedValue<A>) => NoInfer<B>
-  target: Unit<B>
+  fn: (source: GetCombinedValue<A>) => NoInfer<C>
+  target: Unit<C>
   greedy?: boolean
-}): Unit<B>
+}): Unit<C>
 
 export function sample<A extends Combinable, B, C>(config: {
   source: A
