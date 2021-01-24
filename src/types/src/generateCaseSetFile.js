@@ -115,28 +115,36 @@ function createGroupedCases(
     const testSuiteItems = []
     if (itemsPass.length > 0) {
       sortList(itemsPass, sortByFields)
+      const blockOpen = itemsPass.length === 1 ? null : '{'
+      const blockClose = itemsPass.length === 1 ? null : '}'
+      const itemsFlat = itemsPass.flatMap(item =>
+        createTestLines(item).filter(Boolean),
+      )
+      const items = itemsPass.length === 1 ? itemsFlat : leftPad(itemsFlat)
       testSuiteItems.push(
         createTest(`${description} (should pass)`, [
           '//prettier-ignore',
-          '{',
-          ...leftPad(
-            itemsPass.flatMap(item => createTestLines(item).filter(Boolean)),
-          ),
-          '}',
+          blockOpen,
+          ...items,
+          blockClose,
           'expect(typecheck).toMatchInlineSnapshot()',
         ]),
       )
     }
     if (itemsFail.length > 0) {
       sortList(itemsFail, sortByFields)
+      const blockOpen = itemsFail.length === 1 ? null : '{'
+      const blockClose = itemsFail.length === 1 ? null : '}'
+      const itemsFlat = itemsFail.flatMap(item =>
+        createTestLines(item).filter(Boolean),
+      )
+      const items = itemsFail.length === 1 ? itemsFlat : leftPad(itemsFlat)
       testSuiteItems.push(
         createTest(`${description} (should fail)`, [
           '//prettier-ignore',
-          '{',
-          ...leftPad(
-            itemsFail.flatMap(item => createTestLines(item).filter(Boolean)),
-          ),
-          '}',
+          blockOpen,
+          ...items,
+          blockClose,
           'expect(typecheck).toMatchInlineSnapshot()',
         ]),
       )
