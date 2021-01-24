@@ -266,7 +266,7 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
             },
             cases: {
               hasFn: ({sourceCode, clockCode, fnCode, target}) =>
-                `sample({source: ${sourceCode}, clock: ${clockCode}, fn: ${fnCode}, target: ${target}})`,
+                `sample({source: ${sourceCode}, clock: ${clockCode}, target: ${target}, fn: ${fnCode}})`,
               noFn: ({sourceCode, clockCode, target}) =>
                 `sample({source: ${sourceCode}, clock: ${clockCode}, target: ${target}})`,
             },
@@ -293,6 +293,12 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
         pass ? null : '//@ts-expect-error',
         methodCode,
       ],
+      sortByFields: {
+        combinable: [false, true],
+        fn: [false, true],
+        unificationToAny: [false, true],
+        fnClockTypeAssertion: [false, true],
+      },
     })
     return {
       description: config.combinable ? 'combinable' : 'plain',
@@ -431,75 +437,75 @@ generateCaseSetFile({
                 }
               },
               cases: {
-                fnWithoutArgs: "() => ({a: 2, b: ''})",
+                fnWithoutArgs: "() => ({a:2,b:''})",
                 noFalsePositiveFnClock: {
                   object: {
-                    solo: '({a}: AN, cl: string) => ({a, b: cl})',
-                    pair: '({a}: AB, cl: string) => ({a, b: cl})'
+                    solo: '({a}:AN, cl:string) => ({a,b:cl})',
+                    pair: '({a}:AB, cl:string) => ({a,b:cl})'
                   },
                   tuple: {
-                    solo: '([a]: [number], cl: string) => ({a, b: cl})',
-                    pair: '([a]: [number, string], cl: string) => ({a, b: cl})',
+                    solo: '([a]:[number], cl:string) => ({a,b:cl})',
+                    pair: '([a]:[number,string], cl:string) => ({a,b:cl})',
                   }
                 },
                 noFalsePositiveFnSource_fnClock: {
                   object: {
-                    solo: "({a}: AS, cl: number) => ({a: cl, b: a})",
-                    pair: "({a, b}: ABN, cl: number) => ({a: b + cl, b: ''})"
+                    solo: "({a}:AS, cl:number) => ({a: cl, b: a})",
+                    pair: "({a,b}:ABN, cl:number) => ({a:b+cl,b:''})"
                   },
                   tuple: {
-                    solo: '([a]: [string], cl: number) => ({a: cl, b: a})',
-                    pair: "([a, b]: [number, number], cl: number) => ({a: b + cl, b: ''})",
+                    solo: '([a]:[string], cl:number) => ({a:cl,b:a})',
+                    pair: "([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})",
                   }
                 },
                 typedFnClock: {
                   object: {
-                    solo: "({a}: AN, cl: number) => ({a: a + cl, b: ''})",
-                    pair: '({a, b}: AB, cl: number) => ({a: a + cl, b})'
+                    solo: "({a}:AN, cl:number) => ({a:a+cl,b:''})",
+                    pair: '({a,b}:AB, cl:number) => ({a:a+cl,b})'
                   },
                   tuple: {
-                    solo: "([a]: [number], cl: number) => ({a: a + cl, b: ''})",
-                    pair: '([a, b]: [number, string], cl: number) => ({a: a + cl, b})',
+                    solo: "([a]:[number], cl:number) => ({a:a+cl,b:''})",
+                    pair: '([a,b]:[number,string], cl:number) => ({a:a+cl,b})',
                   }
                 },
                 noFalsePositiveFnSource: {
                   object: {
-                    solo: "({a}: AS) => ({a: 0, b: a})",
-                    pair: "({b}: ABN) => ({a: b, b: ''})"
+                    solo: "({a}:AS) => ({a:0,b:a})",
+                    pair: "({b}:ABN) => ({a:b,b:''})"
                   },
                   tuple: {
-                    solo: '([a]: [string]) => ({a: 2, b: a})',
-                    pair: "([,b]: [number, number]) => ({a: b, b: ''})",
+                    solo: '([a]:[string]) => ({a:2,b:a})',
+                    pair: "([,b]:[number,number]) => ({a:b,b:''})",
                   }
                 },
                 typedNoFnClock: {
                   object: {
-                    solo: "({a}: AN) => ({a, b: ''})",
-                    pair: '({a, b}: AB) => ({a, b})'
+                    solo: "({a}:AN) => ({a,b:''})",
+                    pair: '({a,b}:AB) => ({a,b})'
                   },
                   tuple: {
-                    solo: "([a]: [number]) => ({a, b: ''})",
-                    pair: '([a, b]: [number, string]) => ({a, b})',
+                    solo: "([a]:[number]) => ({a,b:''})",
+                    pair: '([a,b]:[number,string]) => ({a,b})',
                   }
                 },
                 fnClock: {
                   object: {
-                    solo: "({a}, cl) => ({a: a + cl, b: ''})",
-                    pair: '({a, b}, cl) => ({a: a + cl, b})'
+                    solo: "({a}, cl) => ({a:a+cl,b:''})",
+                    pair: '({a,b}, cl) => ({a:a+cl,b})'
                   },
                   tuple: {
-                    solo: "([a], cl) => ({a: a + cl, b: ''})",
-                    pair: '([a, b], cl) => ({a: a + cl, b})',
+                    solo: "([a], cl) => ({a:a+cl,b:''})",
+                    pair: '([a,b], cl) => ({a:a+cl,b})',
                   }
                 },
                 noFnClock: {
                   object: {
-                    solo: "({a}) => ({a, b: ''})",
-                    pair: '({a, b}) => ({a, b})'
+                    solo: "({a}) => ({a,b:''})",
+                    pair: '({a,b}) => ({a,b})'
                   },
                   tuple: {
-                    solo: "([a]) => ({a, b: ''})",
-                    pair: '([a, b]) => ({a, b})',
+                    solo: "([a]) => ({a,b:''})",
+                    pair: '([a,b]) => ({a,b})',
                   }
                 },
               },
@@ -595,6 +601,10 @@ generateCaseSetFile({
           `source:${cur.sourceDescription}${
             cur.fn ? `, fn:${cur.fnDescription}` : ''
           }`,
+        sortByFields: {
+          source: ['ab', 'a', 'tuple_aa', 'tuple_a'],
+          fn: [false, true],
+        },
       })
       function createTestLines({
         sourceCode,
@@ -615,7 +625,7 @@ generateCaseSetFile({
         const sourceTargets = target.map(getText).join(', ')
         const methodCall = `sample({source: ${sourceCode}, clock: ${getText(
           clock,
-        )}, ${fn ? `fn: ${fnText}, ` : ''}target: [${sourceTargets}]})`
+        )},target: [${sourceTargets}]${fn ? `, fn: ${fnText}` : ''}})`
         return [pass ? null : '/*@ts-expect-error*/', methodCall].filter(
           Boolean,
         )
@@ -797,10 +807,15 @@ generateCaseSetFile({
             },
           },
         },
-        groupTokens: {
+        fnToken: {
           compute: {
             fn: ({fn, typedFn, validSources}) =>
               fn ? (typedFn ? 'typed fn' : 'untyped fn') : 'no fn',
+          },
+        },
+        groupTokens: {
+          compute: {
+            fn: ({fnToken}) => fnToken,
           },
         },
         descriptionTokens: {
@@ -822,6 +837,9 @@ generateCaseSetFile({
         pass ? null : '//@ts-expect-error',
         methodCode,
       ],
+      sortByFields: {
+        fnToken: ['no fn', 'untyped fn', 'typed fn'],
+      },
     })
     return {
       description: 'basic cases',
@@ -1364,14 +1382,14 @@ generateCaseSetFile({
               targetType,
               clockType,
             }) =>
-              `${sourceType} ${filterType} ${targetType} ${clockType} ${
+              `${inferByFilter} ${sourceType} ${filterType} ${targetType} ${clockType} ${
                 sourceIsWiderThatTarget ? 'wide' : 'same'
               }`,
           },
         },
         groupTokens: {
           compute: {
-            fn: ({
+            fn({
               inferByFilter,
               sourceIsWiderThatTarget,
               filterType,
@@ -1379,10 +1397,12 @@ generateCaseSetFile({
               targetType,
               targetVoid,
               clockDescription,
-            }) =>
-              `${sourceType}${clockDescription} -> ${targetType} ${
+            }) {
+              const nullable = inferByFilter ? 'nullable ' : ''
+              return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
                 sourceIsWiderThatTarget ? 'wide' : 'same'
-              }`,
+              }`
+            },
           },
         },
         largeGroup: {
@@ -1395,7 +1415,7 @@ generateCaseSetFile({
               targetType,
               targetVoid,
               clockType,
-            }) => `${filterType} filter, ${clockType} clock`,
+            }) => `${sourceType} source`,
           },
         },
         pass: {
@@ -1430,6 +1450,14 @@ generateCaseSetFile({
         pass ? null : '//@ts-expect-error',
         methodCode,
       ],
+      sortByFields: {
+        inferByFilter: [false, true],
+        targetType: ['unit', 'array'],
+        filterType: ['fn', 'store', 'bool'],
+        clockType: ['no', 'unit', 'array'],
+        sourceType: ['unit', 'object', 'tuple'],
+        sourceIsWiderThatTarget: [false, true],
+      },
     })
     return {
       description: '-',

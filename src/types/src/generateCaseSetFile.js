@@ -24,9 +24,47 @@ function printBools(shape) {
 }
 function createGroupedCases(
   casesDefs,
-  {createTestLines, getHash, describeGroup},
+  {createTestLines, getHash, describeGroup, sortByFields},
 ) {
+  if (sortByFields) {
+    forIn(sortByFields, prioritySet => {
+      prioritySet.reverse()
+    })
+  }
+  function sortList(list, sortByFields) {
+    if (!sortByFields) return
+    list.sort((a, b) => {
+      for (const field in sortByFields) {
+        const prioritySet = sortByFields[field]
+        const comparsion = sortObjectsByFieldPrioritySet(
+          a,
+          b,
+          field,
+          prioritySet,
+        )
+        if (comparsion !== 0) return comparsion
+      }
+      return 0
+    })
+  }
+  function sortObjectsByFieldPrioritySet(a, b, field, prioritySet) {
+    let aVal = a[field]
+    let bVal = b[field]
+    if (prioritySet.includes(false) && !prioritySet.includes(undefined)) {
+      if (aVal === undefined) aVal = false
+      if (bVal === undefined) bVal = false
+    }
+    if (aVal === bVal) return 0
+    if (prioritySet.includes(aVal) && !prioritySet.includes(bVal)) return -1
+    if (!prioritySet.includes(aVal) && prioritySet.includes(bVal)) return 1
+    if (!prioritySet.includes(aVal) && !prioritySet.includes(bVal)) return 0
+    const ai = prioritySet.indexOf(aVal)
+    const bi = prioritySet.indexOf(bVal)
+    if (ai < bi) return -1
+    return 1
+  }
   const casesDefsPending = [...casesDefs]
+  sortList(casesDefsPending, sortByFields)
   const defsGroups = new Map()
   let cur
   while ((cur = casesDefsPending.pop())) {
@@ -76,6 +114,7 @@ function createGroupedCases(
     if (itemsPass.length === 0 && itemsFail.length === 0) continue
     const testSuiteItems = []
     if (itemsPass.length > 0) {
+      sortList(itemsPass, sortByFields)
       testSuiteItems.push(
         createTest(`${description} (should pass)`, [
           '//prettier-ignore',
@@ -89,6 +128,7 @@ function createGroupedCases(
       )
     }
     if (itemsFail.length > 0) {
+      sortList(itemsFail, sortByFields)
       testSuiteItems.push(
         createTest(`${description} (should fail)`, [
           '//prettier-ignore',
