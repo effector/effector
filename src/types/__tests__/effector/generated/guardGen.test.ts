@@ -441,10 +441,7 @@ describe('bool filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -1075,10 +1072,7 @@ describe('bool filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -1709,10 +1703,7 @@ describe('bool filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -2375,10 +2366,7 @@ describe('fn filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -3044,10 +3032,7 @@ describe('fn filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -3713,10 +3698,7 @@ describe('fn filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -4195,10 +4177,7 @@ describe('store filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -4769,10 +4748,7 @@ describe('store filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })
@@ -5343,10 +5319,7 @@ describe('store filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<{ a: number; }>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<{ a: number; }>'.
+        no errors
         "
       `)
     })

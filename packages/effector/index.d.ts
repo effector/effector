@@ -852,15 +852,25 @@ export function sample<A extends (Unit<unknown> | Combinable), B, C, Tar extends
   greedy?: boolean
 }): Tar
 
-type ValidTargetList2<Match, Target extends Tuple<unknown>> = {
-  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
-  ? Match extends Value
-  ? Target[Index]
-  : Value extends void
-  ? Target[Index]
-  : Unit<Match> // ReplaceGeneric<Target[Index], Match, Value>
+type ValidTargetUnitGuard<Source, Target extends unknown> =
+  Target extends Unit<infer TargetValue>
+  ? Source extends TargetValue
+  ? Target
+  : TargetValue extends void
+  ? Target
+  : Unit<Source> // ReplaceGeneric<Target, Source, TargetValue>
   : never
+
+type ValidTargetList2<Source, Target extends Tuple<unknown>> = {
+  [Index in keyof Target]: ValidTargetUnitGuard<Source, Target[Index]>
 }
+
+type ValidTargetGuard<Source, Target extends unknown> =
+  Target extends Unit<unknown>
+  ? ValidTargetUnitGuard<Source, Target>
+  : Target extends Tuple<unknown>
+  ? ValidTargetList2<Source, Target>
+  : never
 
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
@@ -916,11 +926,11 @@ export function guard<Source>(config: {
   filter: typeof Boolean
   target: Unit<NonNullable<Source>>
 }): Unit<NonNullable<Source>>
-export function guard<A extends (Unit<unknown> | Combinable), Tar extends Tuple<unknown>>(config: {
-  source: A
+export function guard<Src extends (Unit<unknown> | Combinable), Tar extends (Tuple<unknown> | Unit<unknown>)>(config: {
+  source: Src
   clock?: AnyClock
-  filter: Store<boolean> | ((value: SourceValue<A>) => boolean)
-  target: ValidTargetList2<SourceValue<A>, Tar>
+  filter: Store<boolean> | ((value: SourceValue<Src>) => boolean)
+  target: ValidTargetGuard<SourceValue<Src>, Tar>
 }): Tar
 export function guard<A extends Combinable>(config: {
   source: A
