@@ -136,12 +136,14 @@ const fnAb = ({a,b}:AB) => ({a,b})
                 permute: {
                   items: ['voidt', 'num'],
                   amount: {min: 1, max: 2},
+                  noReorder: true,
                 },
               },
               noAny: {
                 permute: {
                   items: ['voidt', 'str'],
                   amount: {min: 1, max: 2},
+                  noReorder: true,
                 },
               },
               withAnyNoFalsePositiveFnClock: {
@@ -392,10 +394,13 @@ generateCaseSetFile({
         tuple_a: ['l_str', 'l_num_num', 'l_num_str'],
         tuple_aa: ['l_num', 'l_str', 'l_num_num'],
       }
-      const casesDefs = byFields([{clock: 'number'}], {
+      const casesDefs = byFields([{}], {
         shape: {
           source: {
             union: ['a', 'ab', 'tuple_a', 'tuple_aa'],
+          },
+          hasClock: {
+            flag: {},
           },
           sourceType: {
             compute: {
@@ -414,7 +419,7 @@ generateCaseSetFile({
           },
           fnClock: {
             flag: {
-              needs: 'fn',
+              needs: ['fn', 'hasClock'],
             },
           },
           typedFn: {
@@ -424,7 +429,7 @@ generateCaseSetFile({
           },
           noFalsePositiveFnClock: {
             flag: {
-              needs: ['fn', 'typedFn', 'fnClock'],
+              needs: ['fn', 'typedFn', 'fnClock', 'hasClock'],
             },
           },
           noFalsePositiveFnSource: {
@@ -592,14 +597,28 @@ generateCaseSetFile({
                   permute: {
                     items: ['l_num', 'l_str', 'l_num_str', 'l_num_num'],
                     amount: {min: 1, max: 2},
+                    noReorder: true,
                   },
                 },
                 object: {
                   permute: {
                     items: ['a_num', 'a_str', 'abn', 'ab'],
                     amount: {min: 1, max: 2},
+                    noReorder: true,
                   },
                 },
+              },
+            },
+          },
+          clockText: {
+            compute: {
+              variant: {
+                hasClock: {hasClock: true},
+                noClock: {},
+              },
+              cases: {
+                hasClock: ', clock: num',
+                noClock: '',
               },
             },
           },
@@ -637,12 +656,13 @@ generateCaseSetFile({
         sortByFields: {
           source: ['ab', 'a', 'tuple_aa', 'tuple_a'],
           fn: [false, true],
+          hasClock: [false, true],
         },
       })
       function createTestLines({
         sourceCode,
         sourceDescription,
-        clock,
+        clockText,
         target,
         pass,
         fn,
@@ -656,9 +676,9 @@ generateCaseSetFile({
         const getText = item => variables[item] || item
         const printTargets = target.join(',')
         const sourceTargets = target.map(getText).join(', ')
-        const methodCall = `sample({source: ${sourceCode}, clock: ${getText(
-          clock,
-        )}, target: [${sourceTargets}]${fn ? `, fn: ${fnText}` : ''}})`
+        const methodCall = `sample({source: ${sourceCode}${clockText}, target: [${sourceTargets}]${
+          fn ? `, fn: ${fnText}` : ''
+        }})`
         return [pass ? null : '/*@ts-expect-error*/', methodCall].filter(
           Boolean,
         )
@@ -668,26 +688,7 @@ generateCaseSetFile({
         cases: resultCases,
       }
     }
-    const pairs = [
-      ['number', 'numStr', true],
-      ['number', 'void', true],
-      ['string', 'number', false],
-      ['string', 'numStr', false],
-      ['number', 'strBool', false],
-      ['string', 'void', false],
-      ['string', 'any', false],
-    ]
-      .map(([a, b, pass]) => [
-        {items: [a, b], pass},
-        {items: [b, a], pass},
-      ])
-      .flat()
-    const singleCases = [
-      {items: ['number'], pass: true},
-      {items: ['void'], pass: true},
-      {items: ['string'], pass: false},
-    ]
-    const casesDefs = byFields([{clock: 'anyt'}], {
+    const casesDefs = byFields([{}], {
       shape: {
         source: {
           union: ['num', 'str'],
@@ -721,6 +722,7 @@ generateCaseSetFile({
           permute: {
             items: ['num', 'voidt', 'str', 'anyt', 'strBool', 'numStr'],
             amount: {min: 1, max: 2},
+            noReorder: true,
           },
         },
         validSource: {
@@ -956,19 +958,46 @@ generateCaseSetFile({
             },
           },
         },
-        fnCode: {
-          compute: {
-            variant: {
-              none: {fn: 'none'},
-              noArgs: {fn: 'noArgs'},
-              arg: {fn: 'arg'},
-              argPair: {fn: 'argPair'},
+        typedFn: {
+          split: {
+            match: {
+              hasFnArgs: [{fn: 'arg'}, {fn: 'argPair'}],
             },
             cases: {
-              none: '         ',
+              hasFnArgs: {
+                flag: {},
+              },
+              __: {
+                union: [false],
+              },
+            },
+          },
+        },
+        fnCode: {
+          compute: {
+            variants: {
+              fn: {
+                none: {fn: 'none'},
+                noArgs: {fn: 'noArgs'},
+                arg: {fn: 'arg'},
+                argPair: {fn: 'argPair'},
+              },
+              types: {
+                typed: {typedFn: true},
+                untyped: {typedFn: false},
+              },
+            },
+            cases: {
+              none: '',
               noArgs: ', fn: fn0',
-              arg: ', fn: fn1',
-              argPair: ', fn: fn2',
+              arg: {
+                typed: ', fn: fn1',
+                untyped: ', fn: ({a}) => ({a})',
+              },
+              argPair: {
+                typed: ', fn: fn2',
+                untyped: ', fn: ({a},c) => ({a:a+c})',
+              },
             },
           },
         },
@@ -976,9 +1005,9 @@ generateCaseSetFile({
           compute: {
             variant: Source,
             cases: {
-              event: 'aNum     ',
-              store: 'a        ',
-              combinable: '{a: $num}',
+              event: 'aNum    ',
+              store: 'a       ',
+              combinable: '{a:$num}',
             },
           },
         },
@@ -989,7 +1018,7 @@ generateCaseSetFile({
               none: '',
               event: ', clock: num',
               store: ', clock: $num',
-              tuple: ', clock: [num, $num]',
+              tuple: ', clock: [num,$num]',
             },
           },
         },
@@ -998,9 +1027,9 @@ generateCaseSetFile({
             variant: Target,
             cases: {
               none: '',
-              event: ', target: aNumTarget',
-              store: ', target: aTarget',
-              tuple: ', target: [aNumTarget, aTarget]',
+              event: ', target: aNumT',
+              store: ', target: aT',
+              tuple: ', target: [aNumT,aT]',
             },
           },
         },
@@ -1035,23 +1064,61 @@ generateCaseSetFile({
         methodCode: {
           compute: {
             fn({sourceCode, clockCode, fnCode, targetCode, returnCode}) {
-              return `{const result: ${returnCode} = sample({source:${sourceCode}${clockCode}${fnCode}${targetCode}})}`
+              return `{const result: ${returnCode} = sample({source:${sourceCode}${clockCode}${targetCode}${fnCode}})}`
             },
+          },
+        },
+        typedFnToken: {
+          compute: {
+            variant: {
+              typed: {typedFn: true},
+              untyped: {},
+            },
+            cases: {
+              typed: ', typed fn',
+              untyped: '',
+            },
+          },
+        },
+        targetToken: {
+          compute: {
+            variant: {
+              unit: [{target: 'event'}, {target: 'store'}],
+              none: {target: 'none'},
+              tuple: {target: 'tuple'},
+            },
+            cases: {
+              unit: 'unit target',
+              none: 'no target',
+              tuple: 'tuple target',
+            },
+          },
+        },
+        largeGroup: {
+          compute: {
+            fn: ({typedFnToken, targetToken}) =>
+              `${targetToken}${typedFnToken}`,
           },
         },
       },
     })
     const resultCases = createGroupedCases(casesDefs, {
-      getHash: ({target, clock}) => `${target} ${clock}`,
-      describeGroup: ({target, clock}) => ({
-        // largeGroup,
+      getHash: ({targetToken, clock, typedFn}) =>
+        `${targetToken} ${clock} ${typedFn}`,
+      describeGroup: ({targetToken, typedFnToken, clock, largeGroup}) => ({
+        largeGroup,
         noGroup: true,
-        description: `${target} target, ${clock} clock`,
+        description: `${targetToken}${typedFnToken}, ${clock} clock`,
       }),
       createTestLines: ({methodCode, pass}) => [
         pass ? null : '//@ts-expect-error',
         methodCode,
       ],
+      sortByFields: {
+        targetToken: ['no target', 'unit target', 'tuple target'],
+        typedFn: [false, true],
+        clock: ['none', 'event', 'store', 'tuple'],
+      },
     })
     return {
       description: '-',
@@ -1068,8 +1135,8 @@ const $num = createStore(0)
 const a = createStore({a: 0})
 const num = createEvent<number>()
 const aNum = createEvent<AN>()
-const aTarget = createStore({a: 0})
-const aNumTarget = createEvent<AN>()
+const aT = createStore({a: 0})
+const aNumT = createEvent<AN>()
 const fn0 = () => ({a: 0})
 const fn1 = ({a}: AN) => ({a})
 const fn2 = ({a}: AN, c: number) => ({a: a + c})

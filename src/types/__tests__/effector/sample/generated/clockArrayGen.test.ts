@@ -174,7 +174,6 @@ test('noTarget, plain (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str]})
     sample({source: a, clock: [anyt,str,voidt]})
     sample({source: a, clock: [anyt,voidt,str]})
-    sample({source: a, clock: [str,voidt]})
     sample({source: a, clock: [voidt,str]})
     sample({source: a, clock: [str]})
     sample({source: a, clock: [voidt]})
@@ -194,7 +193,6 @@ test('plain (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], target: str})
     sample({source: a, clock: [anyt,str,voidt], target: str})
     sample({source: a, clock: [anyt,voidt,str], target: str})
-    sample({source: a, clock: [str,voidt], target: str})
     sample({source: a, clock: [voidt,str], target: str})
     sample({source: a, clock: [str], target: str})
     sample({source: a, clock: [voidt], target: str})
@@ -214,7 +212,6 @@ test('noTarget, plain, fn, fnClock, typedFn (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], fn: fnAStringClockAny})
     sample({source: a, clock: [anyt,str,voidt], fn: fnAStringClockAny})
     sample({source: a, clock: [anyt,voidt,str], fn: fnAStringClockAny})
-    sample({source: a, clock: [str,voidt], fn: fnAStringClockAny})
     sample({source: a, clock: [voidt,str], fn: fnAStringClockAny})
     sample({source: a, clock: [str], fn: fnAStringClockAny})
     sample({source: a, clock: [voidt], fn: fnAStringClockAny})
@@ -234,7 +231,6 @@ test('noTarget, plain, fn, typedFn (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], fn: fnAString})
     sample({source: a, clock: [anyt,str,voidt], fn: fnAString})
     sample({source: a, clock: [anyt,voidt,str], fn: fnAString})
-    sample({source: a, clock: [str,voidt], fn: fnAString})
     sample({source: a, clock: [voidt,str], fn: fnAString})
     sample({source: a, clock: [str], fn: fnAString})
     sample({source: a, clock: [voidt], fn: fnAString})
@@ -254,7 +250,6 @@ test('noTarget, plain, fn, fnClock (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [anyt,str,voidt], fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [anyt,voidt,str], fn: (a,clock) => ({a,clock})})
-    sample({source: a, clock: [str,voidt], fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [voidt,str], fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [str], fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [voidt], fn: (a,clock) => ({a,clock})})
@@ -280,11 +275,9 @@ test('noTarget, plain, fn (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], fn: (a) => ({a})})
     sample({source: a, clock: [anyt,str,voidt], fn: (a) => ({a})})
     sample({source: a, clock: [anyt,voidt,str], fn: (a) => ({a})})
-    sample({source: a, clock: [str,voidt], fn: ()=>({a:''})})
     sample({source: a, clock: [voidt,str], fn: ()=>({a:''})})
     sample({source: a, clock: [str], fn: ()=>({a:''})})
     sample({source: a, clock: [voidt], fn: ()=>({a:''})})
-    sample({source: a, clock: [str,voidt], fn: (a) => ({a})})
     sample({source: a, clock: [voidt,str], fn: (a) => ({a})})
     sample({source: a, clock: [str], fn: (a) => ({a})})
     sample({source: a, clock: [voidt], fn: (a) => ({a})})
@@ -304,7 +297,6 @@ test('plain, fn, fnClock, typedFn (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], target: aclock, fn: fnAStringClockAny})
     sample({source: a, clock: [anyt,str,voidt], target: aclock, fn: fnAStringClockAny})
     sample({source: a, clock: [anyt,voidt,str], target: aclock, fn: fnAStringClockAny})
-    sample({source: a, clock: [str,voidt], target: aclock, fn: fnAStringClockAny})
     sample({source: a, clock: [voidt,str], target: aclock, fn: fnAStringClockAny})
     sample({source: a, clock: [str], target: aclock, fn: fnAStringClockAny})
     sample({source: a, clock: [voidt], target: aclock, fn: fnAStringClockAny})
@@ -324,7 +316,6 @@ test('plain, fn, typedFn (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], target: aTarget, fn: fnAString})
     sample({source: a, clock: [anyt,str,voidt], target: aTarget, fn: fnAString})
     sample({source: a, clock: [anyt,voidt,str], target: aTarget, fn: fnAString})
-    sample({source: a, clock: [str,voidt], target: aTarget, fn: fnAString})
     sample({source: a, clock: [voidt,str], target: aTarget, fn: fnAString})
     sample({source: a, clock: [str], target: aTarget, fn: fnAString})
     sample({source: a, clock: [voidt], target: aTarget, fn: fnAString})
@@ -344,7 +335,6 @@ test('plain, fn, fnClock (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], target: aclock, fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [anyt,str,voidt], target: aclock, fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [anyt,voidt,str], target: aclock, fn: (a,clock) => ({a,clock})})
-    sample({source: a, clock: [str,voidt], target: aclock, fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [voidt,str], target: aclock, fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [str], target: aclock, fn: (a,clock) => ({a,clock})})
     sample({source: a, clock: [voidt], target: aclock, fn: (a,clock) => ({a,clock})})
@@ -370,11 +360,9 @@ test('plain, fn (should pass)', () => {
     sample({source: a, clock: [voidt,anyt,str], target: aTarget, fn: (a) => ({a})})
     sample({source: a, clock: [anyt,str,voidt], target: aTarget, fn: (a) => ({a})})
     sample({source: a, clock: [anyt,voidt,str], target: aTarget, fn: (a) => ({a})})
-    sample({source: a, clock: [str,voidt], target: aTarget, fn: ()=>({a:''})})
     sample({source: a, clock: [voidt,str], target: aTarget, fn: ()=>({a:''})})
     sample({source: a, clock: [str], target: aTarget, fn: ()=>({a:''})})
     sample({source: a, clock: [voidt], target: aTarget, fn: ()=>({a:''})})
-    sample({source: a, clock: [str,voidt], target: aTarget, fn: (a) => ({a})})
     sample({source: a, clock: [voidt,str], target: aTarget, fn: (a) => ({a})})
     sample({source: a, clock: [str], target: aTarget, fn: (a) => ({a})})
     sample({source: a, clock: [voidt], target: aTarget, fn: (a) => ({a})})
@@ -400,8 +388,6 @@ test('noTarget, plain, fn, fnClock, typedFn, assertFnType (should fail)', () => 
     sample({source: a, clock: [anyt,num,voidt], fn: fnAStringClockString})
     //@ts-expect-error
     sample({source: a, clock: [anyt,voidt,num], fn: fnAStringClockString})
-    //@ts-expect-error
-    sample({source: a, clock: [num,voidt], fn: fnAStringClockString})
     //@ts-expect-error
     sample({source: a, clock: [voidt,num], fn: fnAStringClockString})
     //@ts-expect-error
@@ -461,14 +447,6 @@ test('noTarget, plain, fn, fnClock, typedFn, assertFnType (should fail)', () => 
           Type 'Event<number>' is not assignable to type 'Unit<string>'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-    No overload matches this call.
-      The last overload gave the following error.
         Type 'Event<void>' is not assignable to type 'Unit<string>'.
           Type 'Event<number>' is not assignable to type 'Unit<string>'.
     No overload matches this call.
@@ -499,8 +477,6 @@ test('plain, fn, fnClock, typedFn, assertFnType (should fail)', () => {
     sample({source: a, clock: [anyt,num,voidt], target: aclock, fn: fnAStringClockString})
     //@ts-expect-error
     sample({source: a, clock: [anyt,voidt,num], target: aclock, fn: fnAStringClockString})
-    //@ts-expect-error
-    sample({source: a, clock: [num,voidt], target: aclock, fn: fnAStringClockString})
     //@ts-expect-error
     sample({source: a, clock: [voidt,num], target: aclock, fn: fnAStringClockString})
     //@ts-expect-error
@@ -620,24 +596,6 @@ test('plain, fn, fnClock, typedFn, assertFnType (should fail)', () => {
               Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-              Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-              Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-              Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
-    No overload matches this call.
-      The last overload gave the following error.
         Type 'Event<void>' is not assignable to type 'Unit<string>'.
           Type 'Event<number>' is not assignable to type 'Unit<string>'.
             Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
@@ -686,7 +644,6 @@ test('noTarget, combinable (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str]})
     sample({source: {a,b}, clock: [anyt,str,voidt]})
     sample({source: {a,b}, clock: [anyt,voidt,str]})
-    sample({source: {a,b}, clock: [str,voidt]})
     sample({source: {a,b}, clock: [voidt,str]})
     sample({source: {a,b}, clock: [str]})
     sample({source: {a,b}, clock: [voidt]})
@@ -706,7 +663,6 @@ test('combinable (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], target: abTarget})
     sample({source: {a,b}, clock: [anyt,str,voidt], target: abTarget})
     sample({source: {a,b}, clock: [anyt,voidt,str], target: abTarget})
-    sample({source: {a,b}, clock: [str,voidt], target: abTarget})
     sample({source: {a,b}, clock: [voidt,str], target: abTarget})
     sample({source: {a,b}, clock: [str], target: abTarget})
     sample({source: {a,b}, clock: [voidt], target: abTarget})
@@ -726,7 +682,6 @@ test('noTarget, combinable, fn, fnClock, typedFn (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], fn: fnAbClockAny})
     sample({source: {a,b}, clock: [anyt,str,voidt], fn: fnAbClockAny})
     sample({source: {a,b}, clock: [anyt,voidt,str], fn: fnAbClockAny})
-    sample({source: {a,b}, clock: [str,voidt], fn: fnAbClockAny})
     sample({source: {a,b}, clock: [voidt,str], fn: fnAbClockAny})
     sample({source: {a,b}, clock: [str], fn: fnAbClockAny})
     sample({source: {a,b}, clock: [voidt], fn: fnAbClockAny})
@@ -746,7 +701,6 @@ test('noTarget, combinable, fn, typedFn (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], fn: fnAb})
     sample({source: {a,b}, clock: [anyt,str,voidt], fn: fnAb})
     sample({source: {a,b}, clock: [anyt,voidt,str], fn: fnAb})
-    sample({source: {a,b}, clock: [str,voidt], fn: fnAb})
     sample({source: {a,b}, clock: [voidt,str], fn: fnAb})
     sample({source: {a,b}, clock: [str], fn: fnAb})
     sample({source: {a,b}, clock: [voidt], fn: fnAb})
@@ -766,16 +720,12 @@ test('noTarget, combinable, fn, fnClock (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [anyt,str,voidt], fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [anyt,voidt,str], fn: ({a,b}, clock) => ({a,b,clock})})
-    sample({source: {a,b}, clock: [str,voidt], fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [voidt,str], fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [str], fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [voidt], fn: ({a,b}, clock) => ({a,b,clock})})
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
     Binding element 'a' implicitly has an 'any' type.
     Binding element 'b' implicitly has an 'any' type.
     Parameter 'clock' implicitly has an 'any' type.
@@ -821,11 +771,9 @@ test('noTarget, combinable, fn (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [anyt,str,voidt], fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [anyt,voidt,str], fn: ({a,b}) => ({a,b})})
-    sample({source: {a,b}, clock: [str,voidt], fn: ()=>({a:'',b:2})})
     sample({source: {a,b}, clock: [voidt,str], fn: ()=>({a:'',b:2})})
     sample({source: {a,b}, clock: [str], fn: ()=>({a:'',b:2})})
     sample({source: {a,b}, clock: [voidt], fn: ()=>({a:'',b:2})})
-    sample({source: {a,b}, clock: [str,voidt], fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [voidt,str], fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [str], fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [voidt], fn: ({a,b}) => ({a,b})})
@@ -845,7 +793,6 @@ test('combinable, fn, fnClock, typedFn (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], target: abclock, fn: fnAbClockAny})
     sample({source: {a,b}, clock: [anyt,str,voidt], target: abclock, fn: fnAbClockAny})
     sample({source: {a,b}, clock: [anyt,voidt,str], target: abclock, fn: fnAbClockAny})
-    sample({source: {a,b}, clock: [str,voidt], target: abclock, fn: fnAbClockAny})
     sample({source: {a,b}, clock: [voidt,str], target: abclock, fn: fnAbClockAny})
     sample({source: {a,b}, clock: [str], target: abclock, fn: fnAbClockAny})
     sample({source: {a,b}, clock: [voidt], target: abclock, fn: fnAbClockAny})
@@ -865,7 +812,6 @@ test('combinable, fn, typedFn (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], target: abTarget, fn: fnAb})
     sample({source: {a,b}, clock: [anyt,str,voidt], target: abTarget, fn: fnAb})
     sample({source: {a,b}, clock: [anyt,voidt,str], target: abTarget, fn: fnAb})
-    sample({source: {a,b}, clock: [str,voidt], target: abTarget, fn: fnAb})
     sample({source: {a,b}, clock: [voidt,str], target: abTarget, fn: fnAb})
     sample({source: {a,b}, clock: [str], target: abTarget, fn: fnAb})
     sample({source: {a,b}, clock: [voidt], target: abTarget, fn: fnAb})
@@ -885,7 +831,6 @@ test('combinable, fn, fnClock (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [anyt,str,voidt], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [anyt,voidt,str], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
-    sample({source: {a,b}, clock: [str,voidt], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [voidt,str], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [str], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
     sample({source: {a,b}, clock: [voidt], target: abclock, fn: ({a,b}, clock) => ({a,b,clock})})
@@ -911,11 +856,9 @@ test('combinable, fn (should pass)', () => {
     sample({source: {a,b}, clock: [voidt,anyt,str], target: abTarget, fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [anyt,str,voidt], target: abTarget, fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [anyt,voidt,str], target: abTarget, fn: ({a,b}) => ({a,b})})
-    sample({source: {a,b}, clock: [str,voidt], target: abTarget, fn: ()=>({a:'',b:2})})
     sample({source: {a,b}, clock: [voidt,str], target: abTarget, fn: ()=>({a:'',b:2})})
     sample({source: {a,b}, clock: [str], target: abTarget, fn: ()=>({a:'',b:2})})
     sample({source: {a,b}, clock: [voidt], target: abTarget, fn: ()=>({a:'',b:2})})
-    sample({source: {a,b}, clock: [str,voidt], target: abTarget, fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [voidt,str], target: abTarget, fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [str], target: abTarget, fn: ({a,b}) => ({a,b})})
     sample({source: {a,b}, clock: [voidt], target: abTarget, fn: ({a,b}) => ({a,b})})
@@ -941,8 +884,6 @@ test('noTarget, combinable, fn, fnClock, typedFn, assertFnType (should fail)', (
     sample({source: {a,b}, clock: [anyt,num,voidt], fn: fnAbClockString})
     //@ts-expect-error
     sample({source: {a,b}, clock: [anyt,voidt,num], fn: fnAbClockString})
-    //@ts-expect-error
-    sample({source: {a,b}, clock: [num,voidt], fn: fnAbClockString})
     //@ts-expect-error
     sample({source: {a,b}, clock: [voidt,num], fn: fnAbClockString})
     //@ts-expect-error
@@ -1002,14 +943,6 @@ test('noTarget, combinable, fn, fnClock, typedFn, assertFnType (should fail)', (
           Type 'Event<number>' is not assignable to type 'Unit<string>'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-    No overload matches this call.
-      The last overload gave the following error.
         Type 'Event<void>' is not assignable to type 'Unit<string>'.
           Type 'Event<number>' is not assignable to type 'Unit<string>'.
     No overload matches this call.
@@ -1040,8 +973,6 @@ test('combinable, fn, fnClock, typedFn, assertFnType (should fail)', () => {
     sample({source: {a,b}, clock: [anyt,num,voidt], target: abclock, fn: fnAbClockString})
     //@ts-expect-error
     sample({source: {a,b}, clock: [anyt,voidt,num], target: abclock, fn: fnAbClockString})
-    //@ts-expect-error
-    sample({source: {a,b}, clock: [num,voidt], target: abclock, fn: fnAbClockString})
     //@ts-expect-error
     sample({source: {a,b}, clock: [voidt,num], target: abclock, fn: fnAbClockString})
     //@ts-expect-error
@@ -1157,24 +1088,6 @@ test('combinable, fn, fnClock, typedFn, assertFnType (should fail)', () => {
       The last overload gave the following error.
         Type 'Event<void>' is not assignable to type 'Unit<string>'.
           Type 'Event<number>' is not assignable to type 'Unit<string>'.
-            Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-              Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-              Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-              Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
             Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
               Type 'Event<{ a: string; b: number; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
     No overload matches this call.
