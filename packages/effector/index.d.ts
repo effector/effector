@@ -678,13 +678,13 @@ export function sample<A, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
-export function sample<A, B>(config: {
+export function sample<A, C>(config: {
   source: Unit<A>
   clock?: AnyClock
-  fn: (source: A) => NoInfer<B>
-  target: Unit<B>
+  fn: (source: A) => NoInfer<C>
+  target: Unit<C>
   greedy?: boolean
-}): Unit<B>
+}): Unit<C>
 export function sample<A>(config: {
   source: Unit<NoInfer<A>>
   clock: AnyClock
