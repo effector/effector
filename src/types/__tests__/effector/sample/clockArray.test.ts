@@ -271,7 +271,6 @@ describe('with target', () => {
       clock: [clockA, clockB, clockC],
       //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
-      //@ts-expect-error
       target,
     })
 
@@ -307,10 +306,9 @@ describe('with target', () => {
 
     sample({
       source,
-      //@ts-expect-error
       clock: [clockA, clockC],
-      fn: ({a, b}: any, clock: string) => ({a, b, clock}),
       //@ts-expect-error
+      fn: ({a, b}: any, clock: string) => ({a, b, clock}),
       target,
     })
 
@@ -320,7 +318,7 @@ describe('with target', () => {
         The last overload gave the following error.
           Type 'Event<void>' is not assignable to type 'Unit<string>'.
             Types of property '__' are incompatible.
-                Type 'void' is not assignable to type 'string'.
+              Type 'void' is not assignable to type 'string'.
                 Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
                   Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       No overload matches this call.
@@ -447,8 +445,8 @@ describe('without target', () => {
     //@ts-expect-error
     const target: Event<{a: string; b: string; clock: string}> = sample({
       source,
-      //@ts-expect-error
       clock: [clockA, clockC],
+      //@ts-expect-error
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
     })
 

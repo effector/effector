@@ -458,12 +458,8 @@ describe('combinable source object (should fail)', () => {
     const a_num = createEvent<{a: number}>()
     const anyt = createEvent<any>()
 
-    sample({
-      source: {a: $num},
-      clock: anyt,
-      //@ts-expect-error
-      target: [a_num_b_num, a_num],
-    })
+    //@ts-expect-error
+    sample({source: {a: $num}, clock: anyt, target: [a_num_b_num, a_num]})
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
