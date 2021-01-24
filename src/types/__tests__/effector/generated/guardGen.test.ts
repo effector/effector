@@ -99,11 +99,7 @@ describe('bool filter, array clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type 'Unit<AB | null>'.
-              Types of property '__' are incompatible.
-                Property 'b' is missing in type '{ a: number; }' but required in type 'AB'.
+        no errors
         "
       `)
     })
@@ -745,9 +741,7 @@ describe('bool filter, unit clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type 'Unit<AB | null>'.
+        no errors
         "
       `)
     })
@@ -1381,9 +1375,7 @@ describe('bool filter, no clock', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type 'Unit<AB | null>'.
+        no errors
         "
       `)
     })

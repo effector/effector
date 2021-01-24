@@ -928,6 +928,12 @@ export function guard<A extends Combinable>(config: {
   filter: Store<boolean> | ((value: GetCombinedValue<A>) => boolean)
   target: Unit<GetCombinedValue<A>>
 }): Unit<GetCombinedValue<A>>
+export function guard<A, Src extends (A | null | void)>(config: {
+  source: Unit<Src>
+  clock?: AnyClock
+  filter: typeof Boolean
+  target: Unit<A>
+}): Unit<A>
 export function guard<A>(config: {
   source: Unit<A>
   clock?: AnyClock
