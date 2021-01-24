@@ -455,12 +455,18 @@ function permuteField(values, field, config) {
     ignore,
     unbox,
     required = [],
+    noReorder = false,
   } = config
   const results = []
   if (typeof items === 'function') {
     for (const value of values) {
       const valueItems = items(value)
-      for (const combination of selectFromNToM(valueItems, min, max)) {
+      for (const combination of selectFromNToM(
+        valueItems,
+        min,
+        max,
+        noReorder,
+      )) {
         if (required.length > 0) {
           if (!required.every(e => combination.includes(e))) continue
         }
@@ -473,7 +479,7 @@ function permuteField(values, field, config) {
       }
     }
   } else {
-    for (const combination of selectFromNToM(items, min, max)) {
+    for (const combination of selectFromNToM(items, min, max, noReorder)) {
       if (required.length > 0) {
         if (!required.every(e => combination.includes(e))) continue
       }
@@ -488,10 +494,29 @@ function permuteField(values, field, config) {
   if (ignore) return results.filter(ignore)
   return results
 }
-function selectFromNToM(items, from, to) {
+function selectFromNToM(items, from, to, noReorder) {
   const result = []
+  const fn = noReorder ? selectNNoReorder : selectN
   for (let i = from; i < Math.min(to + 1, items.length + 1); i++) {
-    result.push(...selectN(items, i))
+    result.push(...fn(items, i))
+  }
+  return result
+}
+function selectNNoReorder(items, n) {
+  if (n > items.length) return [[]]
+  if (n === 0) return [[]]
+  if (n === 1) return items.map(item => [item])
+  const result = []
+  const subItems = [...items]
+  for (let i = 0; i < items.length; i++) {
+    subItems.splice(i, 1)
+    result.push(
+      ...selectNNoReorder(subItems, n - 1)
+        .map(nested => [items[i], ...nested])
+        .filter(
+          selection => [...new Set(selection)].length === selection.length,
+        ),
+    )
   }
   return result
 }
