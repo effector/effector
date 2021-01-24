@@ -92,7 +92,7 @@ describe('basic cases', () => {
   test('{ source: number, clock: any, target: [] } (?)', () => {
     const num = createEvent<number>()
     const anyt = createEvent<any>()
-
+    //@ts-expect-error
     sample({source: num, clock: anyt, target: []})
 
     expect(typecheck).toMatchInlineSnapshot(`
