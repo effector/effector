@@ -15,6 +15,7 @@ it('supports store objects as a source (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample({
     source: {a, b},
     clock,
@@ -26,10 +27,12 @@ it('supports store objects as a source (should pass)', () => {
     "
   `)
 })
+
 it('supports a list of stores as a source (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample({
     source: [a, b],
     clock,
@@ -41,10 +44,12 @@ it('supports a list of stores as a source (should pass)', () => {
     "
   `)
 })
+
 it('supports store objects as a source + mapping (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample({
     source: {a, b},
     clock,
@@ -57,10 +62,12 @@ it('supports store objects as a source + mapping (should pass)', () => {
     "
   `)
 })
+
 it('supports a list of stores as a source + mapping (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample({
     source: [a, b],
     clock,
@@ -73,11 +80,13 @@ it('supports a list of stores as a source + mapping (should pass)', () => {
     "
   `)
 })
+
 it('supports store objects as a source + target forwarding (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
   const target = createEvent<{a: number; b: string}>()
+
   const result = sample({
     source: {a, b},
     clock,
@@ -90,11 +99,13 @@ it('supports store objects as a source + target forwarding (should pass)', () =>
     "
   `)
 })
+
 it('supports a list of stores as a source + target forwarding (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
   const target = createEvent<[number, string]>()
+
   const result = sample({
     source: [a, b],
     clock,
@@ -107,11 +118,13 @@ it('supports a list of stores as a source + target forwarding (should pass)', ()
     "
   `)
 })
+
 it('supports store objects as a source + mapping + target forwarding (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
   const target = createEvent<string>()
+
   const result = sample({
     source: {a, b},
     clock,
@@ -125,11 +138,13 @@ it('supports store objects as a source + mapping + target forwarding (should pas
     "
   `)
 })
+
 it('supports a list of stores as a source + mapping + target forwarding (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
   const target = createEvent<string>()
+
   const result = sample({
     source: [a, b],
     clock,
@@ -143,10 +158,12 @@ it('supports a list of stores as a source + mapping + target forwarding (should 
     "
   `)
 })
+
 it('supports store objects as a source (should pass) [non-config sample overload]', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample({a, b}, clock)
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -155,10 +172,12 @@ it('supports store objects as a source (should pass) [non-config sample overload
     "
   `)
 })
+
 it('supports a list of stores as a source (should pass) [non-config sample overload]', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample([a, b], clock)
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -167,10 +186,12 @@ it('supports a list of stores as a source (should pass) [non-config sample overl
     "
   `)
 })
+
 it('supports store objects as a source + mapping (should pass) [non-config sample overload]', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample(
     {a, b},
     clock,
@@ -183,10 +204,12 @@ it('supports store objects as a source + mapping (should pass) [non-config sampl
     "
   `)
 })
+
 it('supports a list of stores as a source + mapping (should pass) [non-config sample overload]', () => {
   const a = createStore(1)
   const b = createStore('b')
   const clock = createEvent<number>()
+
   const result = sample(
     [a, b],
     clock,

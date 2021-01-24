@@ -24,12 +24,14 @@ describe('with target', () => {
       clock: [clockA, clockB, clockC],
       target,
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
     `)
   })
+
   it('without fn with combinable source (should pass)', () => {
     const target = createEvent<{a: string; b: string}>()
     const a = createStore('')
@@ -43,12 +45,14 @@ describe('with target', () => {
       clock: [clockA, clockB, clockC],
       target,
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
     `)
   })
+
   it('with fn (should pass)', () => {
     const target = createEvent<{a: string; b: string; clock: any}>()
     const source = createStore({a: '', b: ''})
@@ -62,12 +66,14 @@ describe('with target', () => {
       fn: ({a, b}, clock) => ({a, b, clock}),
       target,
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
     `)
   })
+
   describe('with fn and combinable source (should pass)', () => {
     describe('with explicitly typed arguments', () => {
       describe('with second argument in fn', () => {
@@ -85,12 +91,14 @@ describe('with target', () => {
             fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
             "
           `)
         })
+
         test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string; clock: any}>()
           const a = createStore('')
@@ -104,6 +112,7 @@ describe('with target', () => {
             fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
@@ -111,6 +120,7 @@ describe('with target', () => {
           `)
         })
       })
+
       describe('without second argument in fn', () => {
         test('with unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
@@ -126,12 +136,14 @@ describe('with target', () => {
             fn: ({a, b}: {a: string; b: string}) => ({a, b}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
             "
           `)
         })
+
         test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
           const a = createStore('')
@@ -145,6 +157,7 @@ describe('with target', () => {
             fn: ({a, b}: {a: string; b: string}) => ({a, b}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
@@ -153,6 +166,7 @@ describe('with target', () => {
         })
       })
     })
+
     describe('with implicitly typed arguments', () => {
       describe('with second argument in fn', () => {
         test('with unification to any (should pass)', () => {
@@ -175,6 +189,7 @@ describe('with target', () => {
             "
           `)
         })
+
         test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string; clock: any}>()
           const a = createStore('')
@@ -188,6 +203,7 @@ describe('with target', () => {
             fn: ({a, b}, clock) => ({a, b, clock}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
@@ -195,6 +211,7 @@ describe('with target', () => {
           `)
         })
       })
+
       describe('without second argument in fn', () => {
         test('with unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
@@ -210,12 +227,14 @@ describe('with target', () => {
             fn: ({a, b}) => ({a, b}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
             "
           `)
         })
+
         test('without unification to any (should pass)', () => {
           const target = createEvent<{a: string; b: string}>()
           const a = createStore('')
@@ -229,6 +248,7 @@ describe('with target', () => {
             fn: ({a, b}) => ({a, b}),
             target,
           })
+
           expect(typecheck).toMatchInlineSnapshot(`
             "
             no errors
@@ -238,6 +258,7 @@ describe('with target', () => {
       })
     })
   })
+
   test('detect incorrect arguments in fn with combinable source (should fail)', () => {
     const target = createEvent<{a: string; clock: any}>()
     const a = createStore('')
@@ -253,6 +274,7 @@ describe('with target', () => {
       //@ts-expect-error
       target,
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
@@ -276,6 +298,7 @@ describe('with target', () => {
       "
     `)
   })
+
   test('detect too wide type of clocks (should fail)', () => {
     const target = createEvent<{a: string; b: string; clock: string}>()
     const source = createStore({a: '', b: ''})
@@ -290,13 +313,14 @@ describe('with target', () => {
       //@ts-expect-error
       target,
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<void>' is not assignable to type 'Unit<string>'.
             Types of property '__' are incompatible.
-              Type 'void' is not assignable to type 'string'.
+                Type 'void' is not assignable to type 'string'.
                 Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
                   Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       No overload matches this call.
@@ -322,12 +346,14 @@ describe('without target', () => {
       source,
       clock: [clockA, clockB, clockC],
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
     `)
   })
+
   it('without fn with combinable source (should pass)', () => {
     const a = createStore('')
     const b = createStore('')
@@ -339,12 +365,14 @@ describe('without target', () => {
       source: {a, b},
       clock: [clockA, clockB, clockC],
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
     `)
   })
+
   it('with fn (should pass)', () => {
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
@@ -362,6 +390,7 @@ describe('without target', () => {
       "
     `)
   })
+
   it('with fn and combinable source (should pass)', () => {
     const a = createStore('')
     const b = createStore('')
@@ -374,12 +403,14 @@ describe('without target', () => {
       clock: [clockA, clockB, clockC],
       fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
     `)
   })
+
   it('should detect incorrect arguments in fn with combinable source (should fail)', () => {
     const a = createStore('')
     const clockA = createEvent()
@@ -393,6 +424,7 @@ describe('without target', () => {
       //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<unknown>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': filter, filterMap, prepend, getType
@@ -406,6 +438,7 @@ describe('without target', () => {
       "
     `)
   })
+
   it('should detect too wide type of clocks (should fail)', () => {
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
@@ -418,6 +451,7 @@ describe('without target', () => {
       clock: [clockA, clockC],
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
     })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<unknown>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': filter, filterMap, prepend, getType
