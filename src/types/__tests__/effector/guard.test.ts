@@ -1,6 +1,81 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, guard, Store, Event} from 'effector'
+import {createStore, createEvent, guard, Store, Event, Unit} from 'effector'
 const typecheck = '{global}'
+
+describe('explicit generics', () => {
+  test('guard<A>({source, filter})', () => {
+    const source = createEvent<string | null>()
+    const filter = createStore(true)
+    const withFilterStore: Event<string | null> = guard<string | null>({
+      source,
+      filter,
+    })
+    const withFilterFn: Event<string | null> = guard<string | null>({
+      source,
+      filter: e => e !== null,
+    })
+    const withFilterBoolean: Event<string> = guard<string | null>({
+      source,
+      filter: Boolean,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('guard<A>({source, filter, target})', () => {
+    const source = createEvent<string | null>()
+    const filter = createStore(true)
+    const target = createEvent<string>()
+    const withFilterStore: Unit<string | null> = guard<string | null>({
+      source,
+      filter,
+      target,
+    })
+    const withFilterFn: Unit<string | null> = guard<string | null>({
+      source,
+      filter: e => e !== null,
+      target,
+    })
+    const withFilterBoolean: Unit<string> = guard<string | null>({
+      source,
+      filter: Boolean,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('guard<Source, Result>({source, filter})', () => {
+    const source = createEvent<string | null>()
+    const result: Event<string> = guard<string | null, string>({
+      source,
+      filter: (e): e is string => e !== null,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('guard<Source, Result>({source, filter, target})', () => {
+    const source = createEvent<string | null>()
+    const target = createEvent<string>()
+    const result: Unit<string> = guard<string | null, string>({
+      source,
+      filter: (e): e is string => e !== null,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
 
 describe('guard(source, config)', () => {
   describe('guard(source, {filter: store})', () => {
