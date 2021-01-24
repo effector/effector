@@ -55,22 +55,36 @@ const aTarget = createEvent<{a: string}>()
 const abTarget = createEvent<AB>()
 const aclock = createEvent<{a: string; clock: any}>()
 const abclock = createEvent<{a: string; b: number; clock: any}>()
+const fnAbClockString = ({a,b}:AB, clock:string) => ({a,b,clock})
+const fnAbClockAny = ({a,b}:AB, clock:any) => ({a,b,clock})
+const fnAString = (a:string) => ({a})
+const fnAStringClockString = (a:string, clock:string) => ({a,clock})
+const fnAStringClockAny = (a:string, clock:any) => ({a,clock})
+const fnAb = ({a,b}:AB) => ({a,b})
 `,
   groupBy: [],
   groupDescriptions: {},
   ignore: [],
-  shape: {
-    combinable: boolField(),
-  },
-  generateCases(config) {
-    const casesDefs = byFields([config], {
+  shape: {},
+  generateCases({}) {
+    const casesDefs = byFields([{}], {
       shape: {
+        combinable: {
+          flag: {},
+        },
         fn: {
+          flag: {},
+        },
+        noTarget: {
+          flag: {},
+        },
+        noClock: {
           flag: {},
         },
         secondArgument: {
           flag: {
             needs: 'fn',
+            avoid: ['noClock'],
           },
         },
         explicitArgumentTypes: {
@@ -79,11 +93,14 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
           },
         },
         unificationToAny: {
-          flag: {},
+          flag: {
+            avoid: ['noClock'],
+          },
         },
         fnClockTypeAssertion: {
           flag: {
             needs: ['fn', 'secondArgument', 'explicitArgumentTypes'],
+            avoid: ['noClock'],
           },
         },
         fnWithoutArgs: {
@@ -99,6 +116,7 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
         clock: {
           split: {
             match: {
+              none: {noClock: true},
               noAnyNoFalsePositiveFnClock: {
                 unificationToAny: false,
                 fnClockTypeAssertion: true,
@@ -111,6 +129,9 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
               withAny: {unificationToAny: true},
             },
             cases: {
+              none: {
+                compute: {fn: () => ''},
+              },
               noAnyNoFalsePositiveFnClock: {
                 permute: {
                   items: ['voidt', 'num'],
@@ -134,13 +155,13 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
         },
         isSingle: {
           compute: {
-            fn: ({clock}) => clock.length === 1,
+            fn: ({clock}) => clock !== '' && clock.length === 1,
           },
         },
         pass: {
           compute: {
             variant: {
-              pass: {fnClockTypeAssertion: false},
+              pass: [{noClock: true}, {fnClockTypeAssertion: false}],
               fail: {fnClockTypeAssertion: true},
             },
             cases: {
@@ -152,6 +173,7 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
         target: {
           compute: {
             variant: {
+              none: {noTarget: true},
               abclock: {combinable: true, fn: true, secondArgument: true},
               ab: {combinable: true},
               aclock: {fn: true, secondArgument: true},
@@ -159,11 +181,12 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
               string: {fn: false},
             },
             cases: {
-              abclock: 'abclock',
-              ab: 'abTarget',
-              aclock: 'aclock',
-              a: 'aTarget',
-              string: 'str',
+              none: '',
+              abclock: ', target: abclock',
+              ab: ', target: abTarget',
+              aclock: ', target: aclock',
+              a: ', target: aTarget',
+              string: ', target: str',
             },
           },
         },
@@ -171,29 +194,17 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
           compute: {
             fn(shape) {
               const res = []
+              shape.noClock && res.push('noClock')
+              shape.noTarget && res.push('noTarget')
               shape.combinable ? res.push('combinable') : res.push('plain')
               shape.fn && res.push('fn')
               shape.secondArgument && res.push('fnClock')
               shape.explicitArgumentTypes && res.push('typedFn')
-              shape.unificationToAny && res.push('unificationToAny')
+              // shape.unificationToAny && res.push('unificationToAny')
               shape.fnClockTypeAssertion && res.push('assertFnType')
-              shape.fnWithoutArgs && res.push('fnWithoutArgs')
+              // shape.fnWithoutArgs && res.push('fnWithoutArgs')
 
               return res.join(', ')
-            },
-          },
-        },
-        description: {
-          compute: {
-            variant: {
-              single: {isSingle: true},
-              many: {isSingle: false},
-            },
-            cases: {
-              single: ({descriptionTokens, clock}) =>
-                `${descriptionTokens}, single ${printArray(clock)}`,
-              many: ({descriptionTokens, clock}) =>
-                `${descriptionTokens} ${printArray(clock)}`,
             },
           },
         },
@@ -205,13 +216,14 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
             },
             cases: {
               plain: 'a',
-              combinable: '{a, b}',
+              combinable: '{a,b}',
             },
           },
         },
         clockCode: {
           compute: {
-            fn: ({clock}) => printArray(clock),
+            fn: ({clock}) =>
+              clock === '' ? '' : `, clock: ${printArray(clock)}`,
           },
         },
         //prettier-ignore
@@ -238,21 +250,21 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
               shape: {
                 noArgs: "()=>({a:'',b:2})",
                 typedFnClock: {
-                  assert: '({a,b}:AB, clock:string) => ({a,b,clock})',
-                  keep: '({a,b}:AB, clock:any) => ({a,b,clock})'
+                  assert: 'fnAbClockString',
+                  keep: 'fnAbClockAny'
                 },
                 untypedFnClock: '({a,b}, clock) => ({a,b,clock})',
-                typed: '({a,b}:AB) => ({a,b})',
+                typed: 'fnAb',
                 untyped: '({a,b}) => ({a,b})'
               },
               plain: {
                 noArgs: "()=>({a:''})",
                 typedFnClock: {
-                  assert: '(a:string, clock:string) => ({a,clock})',
-                  keep: '(a:string, clock:any) => ({a,clock})'
+                  assert: 'fnAStringClockString',
+                  keep: 'fnAStringClockAny'
                 },
                 untypedFnClock: '(a,clock) => ({a,clock})',
-                typed: '(a:string) => ({a})',
+                typed: 'fnAString',
                 untyped: '(a) => ({a})',
               }
             },
@@ -266,28 +278,46 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
             },
             cases: {
               hasFn: ({sourceCode, clockCode, fnCode, target}) =>
-                `sample({source: ${sourceCode}, clock: ${clockCode}, target: ${target}, fn: ${fnCode}})`,
+                `sample({source: ${sourceCode}${clockCode}${target}, fn: ${fnCode}})`,
               noFn: ({sourceCode, clockCode, target}) =>
-                `sample({source: ${sourceCode}, clock: ${clockCode}, target: ${target}})`,
+                `sample({source: ${sourceCode}${clockCode}${target}})`,
             },
           },
         },
         noGroup: {
           compute: {
             variant: {
-              yes: [{unificationToAny: true}, {fnClockTypeAssertion: true}],
+              yes: [
+                {noClock: true},
+                {unificationToAny: true},
+                {fnClockTypeAssertion: true},
+              ],
               no: {},
             },
             cases: {yes: true, no: false},
           },
         },
+        largeGroup: {
+          compute: {
+            variant: {
+              noClock: {noClock: true},
+              hasClock: {},
+            },
+            cases: {
+              noClock: 'no clock',
+              hasClock: null,
+            },
+          },
+        },
       },
     })
     const resultCases = createGroupedCases(casesDefs, {
-      getHash: ({descriptionTokens}) => descriptionTokens,
-      describeGroup: ({descriptionTokens, noGroup}) => ({
+      getHash: ({descriptionTokens, noTarget, noClock}) =>
+        `${descriptionTokens}${noTarget}${noClock}`,
+      describeGroup: ({descriptionTokens, noGroup, largeGroup}) => ({
         description: descriptionTokens,
         noGroup,
+        largeGroup,
       }),
       createTestLines: ({methodCode, pass}) => [
         pass ? null : '//@ts-expect-error',
@@ -298,10 +328,13 @@ const abclock = createEvent<{a: string; b: number; clock: any}>()
         fn: [false, true],
         unificationToAny: [false, true],
         fnClockTypeAssertion: [false, true],
+        noTarget: [true, false],
+        noClock: [true, false],
+        fnWithoutArgs: [false, true],
       },
     })
     return {
-      description: config.combinable ? 'combinable' : 'plain',
+      description: '',
       noGroup: true,
       cases: resultCases,
     }

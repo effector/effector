@@ -3652,9 +3652,7 @@ describe('combinable', () => {
   describe('source:{a}', () => {
     test('source:{a} (should pass)', () => {
       //prettier-ignore
-      {
-        sample({source: {a: $num}, clock: num,target: [a_num]})
-      }
+      sample({source: {a: $num}, clock: num,target: [a_num]})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -5421,9 +5419,7 @@ describe('combinable', () => {
   describe('source:[a,b]', () => {
     test('source:[a,b] (should pass)', () => {
       //prettier-ignore
-      {
-        sample({source: [$num, $str], clock: num,target: [l_num_str]})
-      }
+      sample({source: [$num, $str], clock: num,target: [l_num_str]})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -7072,9 +7068,7 @@ describe('combinable', () => {
   describe('source:[a]', () => {
     test('source:[a] (should pass)', () => {
       //prettier-ignore
-      {
-        sample({source: [$num], clock: num,target: [l_num]})
-      }
+      sample({source: [$num], clock: num,target: [l_num]})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
