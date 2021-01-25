@@ -1274,16 +1274,46 @@ generateCaseSetFile({
             needs: ['targetIsTyped'],
           },
         },
+        sourceIsTuple: {
+          compute: {
+            variant: {
+              yes: {sourceType: 'tuple'},
+              no: {},
+            },
+            cases: {
+              yes: true,
+              no: false,
+            },
+          },
+        },
         sourceIsWiderThatTarget: {
           flag: {
             needs: ['targetIsTyped'],
-            // avoid: ['wrongTarget']
+            avoid: ['sourceIsTuple'],
+          },
+        },
+        noWideSourceSupport: {
+          compute: {
+            variant: {
+              yes: [
+                {
+                  sourceType: 'unit',
+                  filterType: 'fn',
+                  sourceIsWiderThatTarget: true,
+                },
+              ],
+              no: {},
+            },
+            cases: {
+              yes: true,
+              no: false,
+            },
           },
         },
         inferByFilter: {
           flag: {
             needs: ['canInferByFilter', 'targetIsTyped'],
-            avoid: [],
+            avoid: ['noWideSourceSupport'],
           },
         },
         targetValue: {
