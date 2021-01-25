@@ -1295,13 +1295,11 @@ generateCaseSetFile({
         noWideSourceSupport: {
           compute: {
             variant: {
-              yes: [
-                {
-                  sourceType: 'unit',
-                  filterType: 'fn',
-                  sourceIsWiderThatTarget: true,
-                },
-              ],
+              yes: {
+                sourceType: 'unit',
+                filterType: 'fn',
+                sourceIsWiderThatTarget: true,
+              },
               no: {},
             },
             cases: {
@@ -1314,6 +1312,33 @@ generateCaseSetFile({
           flag: {
             needs: ['canInferByFilter', 'targetIsTyped'],
             avoid: ['noWideSourceSupport'],
+          },
+        },
+        fnCanHaveSecondArg: {
+          compute: {
+            variant: {
+              yes: [
+                {
+                  filterType: 'fn',
+                  clockType: 'unit',
+                },
+                {
+                  filterType: 'fn',
+                  clockType: 'array',
+                },
+              ],
+              no: {},
+            },
+            cases: {
+              yes: true,
+              no: false,
+            },
+          },
+        },
+        fnSecondArg: {
+          flag: {
+            needs: 'fnCanHaveSecondArg',
+            avoid: 'wrongTarget',
           },
         },
         targetValue: {
@@ -1423,15 +1448,27 @@ generateCaseSetFile({
         },
         clockCode: {
           compute: {
-            variant: {
-              noClock: {clockType: 'no'},
-              clockSingle: {clockType: 'unit'},
-              clockArray: {clockType: 'array'},
+            variants: {
+              clock: {
+                noClock: {clockType: 'no'},
+                clockSingle: {clockType: 'unit'},
+                clockArray: {clockType: 'array'},
+              },
+              fnArg: {
+                hasFnSecondArg: {fnSecondArg: true},
+                noFnSecondArg: {},
+              },
             },
             cases: {
               noClock: '',
-              clockSingle: 'clock: anyt, ',
-              clockArray: 'clock: [anyt], ',
+              clockSingle: {
+                hasFnSecondArg: 'clock: numt, ',
+                noFnSecondArg: 'clock: anyt, ',
+              },
+              clockArray: {
+                hasFnSecondArg: 'clock: [numt, $num], ',
+                noFnSecondArg: 'clock: [anyt], ',
+              },
             },
           },
         },
@@ -1480,6 +1517,10 @@ generateCaseSetFile({
           compute: {
             variants: {
               Filter,
+              fnArg: {
+                hasFnSecondArg: {fnSecondArg: true},
+                noFnSecondArg: {},
+              },
               Source,
               infer: {
                 infer: {inferByFilter: true},
@@ -1488,15 +1529,28 @@ generateCaseSetFile({
             },
             cases: {
               fn: {
-                unit: {
-                  infer: '(val): val is AB => val.a !== null',
-                  noInfer: '(val) => val.a > 0',
+                hasFnSecondArg: {
+                  unit: {
+                    infer: '(val, n): val is AB => n > 0 && val.a !== null',
+                    noInfer: '(val, n) => val.a > n',
+                  },
+                  object: {
+                    infer: '(val, n): val is AB => val.a > n',
+                    noInfer: '(val, n) => val.a > n',
+                  },
+                  tuple: '(val, n) => val[0] > n',
                 },
-                object: {
-                  infer: '(val): val is AB => val.a > 0',
-                  noInfer: '(val) => val.a > 0',
+                noFnSecondArg: {
+                  unit: {
+                    infer: '(val): val is AB => val.a !== null',
+                    noInfer: '(val) => val.a > 0',
+                  },
+                  object: {
+                    infer: '(val): val is AB => val.a > 0',
+                    noInfer: '(val) => val.a > 0',
+                  },
+                  tuple: '(val) => val[0] > 0',
                 },
-                tuple: '(val) => val[0] > 0',
               },
               store: '$filter',
               bool: 'Boolean',
@@ -1588,6 +1642,7 @@ generateCaseSetFile({
         clockType: ['no', 'unit', 'array'],
         sourceType: ['unit', 'object', 'tuple'],
         sourceIsWiderThatTarget: [false, true],
+        fnSecondArg: [false, true],
       },
     })
     return {
@@ -1608,6 +1663,8 @@ const a = createStore(0)
 const b = createStore('')
 const voidt = createEvent()
 const anyt = createEvent<any>()
+const numt = createEvent<number>()
+const $num = createStore(0)
 const ab = createEvent<AB>()
 const nullableAB = createEvent<AB | null>()
 const abNull = createEvent<{a: number | null; b: string}>()

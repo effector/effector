@@ -567,6 +567,16 @@ type UnitList<T> = ReadonlyArray<Unit<T>>
 type AnyClock = Unit<any> | UnitList<any>
 type Clock<T> = Unit<T> | UnitList<NoInfer<T>>
 
+type ClockBound = Unit<unknown> | Tuple<unknown>
+type ClockValue<Clk extends ClockBound> =
+  Clk extends Unit<infer Value>
+  ? Value
+  : Clk extends Tuple<infer U>
+  ? U extends Unit<infer V>
+  ? V
+  : never
+  : never
+
 type SourceValue<A extends Unit<unknown> | Combinable> =
   A extends Unit<unknown>
   ? UnitValue<A>
@@ -872,6 +882,12 @@ type ValidTargetGuard<Source, Target extends unknown> =
   ? ValidTargetList2<Source, Target>
   : never
 
+export function guard<Source, Result extends Source, Clk extends ClockBound>(config: {
+  source: Unit<Source>
+  clock: Clk
+  filter: (value: Source, clock: ClockValue<Clk>) => value is Result
+  target?: never
+}): EventAsReturnType<Result>
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   clock?: AnyClock
@@ -884,18 +900,36 @@ export function guard<Source>(config: {
   filter: typeof Boolean
   target?: never
 }): EventAsReturnType<NonNullable<Source>>
+export function guard<A, Clk extends ClockBound>(config: {
+  source: Unit<A>
+  clock: Clk
+  filter: (value: A, clock: ClockValue<Clk>) => boolean
+  target?: never
+}): EventAsReturnType<A>
 export function guard<A>(config: {
   source: Unit<A>
   clock?: AnyClock
   filter: Store<boolean> | ((value: A) => boolean)
   target?: never
 }): EventAsReturnType<A>
+export function guard<Source, Result extends Source, Clk extends ClockBound>(config: {
+  source: Unit<Source>
+  clock: Clk
+  filter: (value: Source, clock: ClockValue<Clk>) => value is Result
+  target: Unit<Result>
+}): Unit<Result>
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   clock?: AnyClock
   filter: (value: Source) => value is Result
   target: Unit<Result>
 }): Unit<Result>
+export function guard<A extends Combinable, Clk extends ClockBound>(config: {
+  source: A
+  clock: Clk
+  filter: (value: GetCombinedValue<A>, clock: ClockValue<Clk>) => boolean
+  target: Unit<void>
+}): Unit<void>
 export function guard<A extends Combinable>(config: {
   source: A
   clock?: AnyClock
@@ -914,6 +948,12 @@ export function guard(config: {
   filter: typeof Boolean | Store<boolean>
   target: Unit<void>
 }): Unit<void>
+export function guard<A, Clk extends ClockBound>(config: {
+  source: Unit<A>
+  clock: Clk
+  filter: (value: A, clock: ClockValue<Clk>) => boolean
+  target: Unit<void>
+}): Unit<void>
 export function guard<A>(config: {
   source: Unit<A>
   clock?: AnyClock
@@ -926,12 +966,28 @@ export function guard<Source>(config: {
   filter: typeof Boolean
   target: Unit<NonNullable<Source>>
 }): Unit<NonNullable<Source>>
+export function guard<
+  Src extends (Unit<unknown> | Combinable),
+  Clk extends ClockBound,
+  Tar extends (Tuple<unknown> | Unit<unknown>)
+>(config: {
+  source: Src
+  clock: Clk
+  filter: (value: SourceValue<Src>, clock: ClockValue<Clk>) => boolean
+  target: ValidTargetGuard<SourceValue<Src>, Tar>
+}): Tar
 export function guard<Src extends (Unit<unknown> | Combinable), Tar extends (Tuple<unknown> | Unit<unknown>)>(config: {
   source: Src
   clock?: AnyClock
   filter: Store<boolean> | ((value: SourceValue<Src>) => boolean)
   target: ValidTargetGuard<SourceValue<Src>, Tar>
 }): Tar
+export function guard<A extends Combinable, Clk extends ClockBound>(config: {
+  source: A
+  clock: Clk
+  filter: (value: GetCombinedValue<A>, clock: ClockValue<Clk>) => boolean
+  target: Unit<GetCombinedValue<A>>
+}): Unit<GetCombinedValue<A>>
 export function guard<A extends Combinable>(config: {
   source: A
   clock?: AnyClock
@@ -942,6 +998,12 @@ export function guard<A, Src extends (A | null | void)>(config: {
   source: Unit<Src>
   clock?: AnyClock
   filter: typeof Boolean
+  target: Unit<A>
+}): Unit<A>
+export function guard<A, Clk extends ClockBound>(config: {
+  source: Unit<A>
+  clock: Clk
+  filter: (value: A, clock: ClockValue<Clk>) => boolean
   target: Unit<A>
 }): Unit<A>
 export function guard<A>(config: {
