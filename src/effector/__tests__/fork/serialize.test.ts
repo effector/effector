@@ -80,9 +80,6 @@ describe('onlyChanges', () => {
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
         "-i1guvk": 1,
-        "-umj39i": Object {
-          "messages": 1,
-        },
       }
     `)
   })
@@ -97,7 +94,7 @@ describe('onlyChanges', () => {
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "aua36b": 1,
+        "-isuad": 1,
       }
     `)
   })
@@ -115,7 +112,7 @@ describe('onlyChanges', () => {
     await allSettled(resetMessages, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "bfnfri": 0,
+        "a0ikkx": 0,
       }
     `)
   })
@@ -132,13 +129,13 @@ describe('onlyChanges', () => {
     })
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-vnswy5": 1,
+        "-x2xs4q": 1,
       }
     `)
     await allSettled(resetMessages, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-vnswy5": 0,
+        "-x2xs4q": 0,
       }
     `)
   })
@@ -156,13 +153,53 @@ describe('onlyChanges', () => {
     })
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-vvhbi": 0,
+        "-2b0ci3": 0,
       }
     `)
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-vvhbi": 1,
+        "-2b0ci3": 1,
+      }
+    `)
+  })
+})
+
+describe('serializing combine', () => {
+  it('should not serialize combine in default case', async () => {
+    const app = createDomain()
+    const trigger = app.createEvent()
+    const foo = app.createStore(0).on(trigger, x => x + 1)
+    const bar = app.createStore(0).on(trigger, x => x + 1)
+    const combined = combine({foo, bar})
+    const scope = fork(app)
+    await allSettled(trigger, {scope})
+    expect(serialize(scope)).toMatchInlineSnapshot(`
+      Object {
+        "19cuby": 1,
+        "q3ihek": 1,
+      }
+    `)
+  })
+  it('should serialize combine when it updated by on', async () => {
+    const app = createDomain()
+    const trigger = app.createEvent()
+    const foo = app.createStore(0)
+    const bar = app.createStore(0)
+    const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
+      foo: foo + 1,
+      bar: bar + 1,
+    }))
+    const scope = fork(app)
+    await allSettled(trigger, {scope})
+    expect(serialize(scope)).toMatchInlineSnapshot(`
+      Object {
+        "-7gr20z": Object {
+          "bar": 1,
+          "foo": 1,
+        },
+        "-rvz6dk": 0,
+        "iaz8iy": 0,
       }
     `)
   })

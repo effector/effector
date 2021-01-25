@@ -3,7 +3,7 @@ import {createStore} from './createUnit'
 import {createStateRef} from './stateRef'
 import {step} from './typedef'
 import {onConfigNesting} from './config'
-import {getStoreState} from './getter'
+import {getGraph, getStoreState} from './getter'
 import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -96,6 +96,7 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
   })
+  getGraph(store).meta.isCombine = true
   const node = [
     step.check.defined(),
     step.mov({

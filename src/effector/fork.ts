@@ -1,4 +1,4 @@
-import {getForkPage, getGraph, getLinks, getOwners} from './getter'
+import {getForkPage, getGraph, getLinks, getOwners, getParent} from './getter'
 import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
@@ -184,7 +184,7 @@ export function serialize(
     if (meta.unit !== STORE) return
     const {sid} = meta
     if (!sid) return
-    if (onlyChanges) {
+    if (onlyChanges || meta.isCombine) {
       if (!changedStores.has(meta.forkOf.id)) return
     }
     result[sid] = reg[scope.state.id].current
@@ -448,7 +448,11 @@ function cloneGraph(unit: any) {
   const changedStores = new Set<string>()
   const putStoreToChanged = step.compute({
     fn(upd, _, stack) {
-      changedStores.add(stack.node.meta.forkOf.id)
+      if (
+        !stack.node.meta.isCombine ||
+        (getParent(stack) && getParent(stack).node.meta.op !== 'combine')
+      )
+        changedStores.add(stack.node.meta.forkOf.id)
       return upd
     },
   })

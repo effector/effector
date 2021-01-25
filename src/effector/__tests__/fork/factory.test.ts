@@ -27,10 +27,6 @@ test('nested factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-g0d896ɔ-99fk0y": Object {
-        "age": 21,
-        "username": "alice",
-      },
       "-g0d896ɔ10gcehɔ-77rc2s": "alice",
       "-g0d896ɔ1104zuɔ-77rc2s": 21,
     }
