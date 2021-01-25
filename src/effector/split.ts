@@ -20,10 +20,11 @@ const launchCase = (
   data: any,
   stack: any,
 ) => {
-  if (scopeTargets[field]) {
+  const target = scopeTargets[field]
+  if (target) {
     launch({
-      target: scopeTargets[field],
-      params: data,
+      target,
+      params: Array.isArray(target) ? target.map(() => data) : data,
       defer: true,
       stack,
     })

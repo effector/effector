@@ -530,7 +530,10 @@ function cloneGraph(unit: any) {
     })
     if (onCopy) {
       forEach(onCopy, (copyField: string) => {
-        scope[copyField] = findClone(scope[copyField])
+        const origValue = scope[copyField]
+        scope[copyField] = Array.isArray(origValue)
+          ? origValue.map(findClone)
+          : findClone(origValue)
       })
     }
     forEachRelatedNode(node, (node, i, siblings) => {

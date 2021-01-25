@@ -54,6 +54,91 @@ describe('split(source, match)', () => {
 })
 
 describe('split(config)', () => {
+  test('array targets', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+
+    const anyCase = createEvent<Message>()
+
+    const messageReceived = createEvent<Message>()
+    const showTextPopup = createEvent<Text>()
+    const playAudio = createEvent<Audio>()
+    const reportUnknownMessageType = createEffect<Message, void>()
+
+    const textIsSelected = createStore(false).on(
+      messageReceived,
+      (_, msg) => msg.type === 'text',
+    )
+    const audioIsSelected = createStore(false).on(
+      messageReceived,
+      (_, msg) => msg.type === 'audio',
+    )
+
+    //@ts-ignore
+    split({
+      source: messageReceived,
+      match: {
+        text: textIsSelected,
+        audio: audioIsSelected,
+      },
+      cases: {
+        text: [showTextPopup, anyCase],
+        audio: [playAudio, anyCase],
+        __: [reportUnknownMessageType, anyCase],
+      },
+    })
+
+    showTextPopup.watch(fn1)
+    playAudio.watch(fn1)
+    reportUnknownMessageType.use(fn1)
+    anyCase.watch(fn2)
+
+    messageReceived({
+      type: 'text',
+      value: 'Hello',
+    })
+    messageReceived({
+      type: 'image',
+      imageUrl: '...',
+    })
+    messageReceived({
+      type: 'audio',
+      duration: 500,
+    })
+
+    expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+        Object {
+          "imageUrl": "...",
+          "type": "image",
+        },
+        Object {
+          "duration": 500,
+          "type": "audio",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+        Object {
+          "imageUrl": "...",
+          "type": "image",
+        },
+        Object {
+          "duration": 500,
+          "type": "audio",
+        },
+      ]
+    `)
+  })
   test('match by condition functions', () => {
     const fn1 = jest.fn()
     const fn2 = jest.fn()
