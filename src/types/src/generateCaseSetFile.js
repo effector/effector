@@ -238,6 +238,36 @@ function byFields(values, {shape = {}}) {
         unbox: true,
       })
     }
+    if ('value' in def) {
+      values = computeField(values, {
+        field: key,
+        fn: () => def.value,
+      })
+    }
+    if (def.true) {
+      values = computeField(values, {
+        field: key,
+        variant: {
+          true: def.true,
+          false: {},
+        },
+        cases: {true: true, false: false},
+      })
+    }
+    if (def.bool) {
+      const variantDef = {}
+      forIn(def.bool, (val, field) => {
+        if (field !== 'true' && field !== 'false') return
+        variantDef[field] = val
+      })
+      if (!variantDef.true) variantDef.true = {}
+      if (!variantDef.false) variantDef.false = {}
+      values = computeField(values, {
+        field: key,
+        variant: variantDef,
+        cases: {true: true, false: false},
+      })
+    }
     if (def.compute) {
       if (Array.isArray(def.compute)) {
         for (const subCase of def.compute) {
@@ -256,32 +286,39 @@ function byFields(values, {shape = {}}) {
     if (def.flag) {
       const {flag} = def
       const ignoreChecks = []
+      const computedFields = {}
+      let computedCount = 0
+      if (flag.need) flag.needs = flag.need
       if (flag.needs) {
         const needs = Array.isArray(flag.needs) ? flag.needs : [flag.needs]
+        for (let i = 0; i < needs.length; i++) {
+          const value = needs[i]
+          if (typeof value === 'string') continue
+          const computedField = `${key}__${computedCount++}`
+          computedFields[computedField] = value
+          needs[i] = computedField
+        }
         ignoreChecks.push(item => {
           if (!item[key]) return true
           return needs.every(field => !!item[field])
         })
       }
       if (flag.avoid) {
-        const avoid = (Array.isArray(flag.avoid)
-          ? flag.avoid
-          : [flag.avoid]
-        ).map(e => {
-          if (typeof e === 'string') return item => !!item[e]
-          if (typeof e === 'function') return e
-          const keys = Object.keys(e)
-          return item => {
-            for (const key of keys) {
-              if (item[key] !== e[key]) return false
-            }
-            return true
-          }
-        })
+        const avoid = Array.isArray(flag.avoid) ? flag.avoid : [flag.avoid]
+        for (let i = 0; i < avoid.length; i++) {
+          const value = avoid[i]
+          if (typeof value === 'string') continue
+          const computedField = `${key}__${computedCount++}`
+          computedFields[computedField] = value
+          avoid[i] = computedField
+        }
         ignoreChecks.push(item => {
           if (!item[key]) return true
-          return !avoid.some(fn => !!fn(item))
+          return !avoid.some(field => !!item[field])
         })
+      }
+      if (computedCount > 0) {
+        values = byFields(values, {shape: computedFields})
       }
       values = permuteField(values, key, {
         items: [false, true],
