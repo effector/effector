@@ -14,6 +14,7 @@ import {readTemplate} from './region'
 import {throwError} from './throw'
 import {includes} from './collection'
 import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
+import {merge} from './merge'
 
 export function sample(...args: any): any {
   let target
@@ -33,6 +34,13 @@ export function sample(...args: any): any {
     name = source.name
     sid = source.sid
     source = source.source
+  }
+  if (!source) {
+    assertNodeSet(clock, 'sample', 'clock')
+    if (Array.isArray(clock)) {
+      clock = merge(clock)
+    }
+    source = clock
   }
   if (!is.unit(source)) {
     source = combine(source)
