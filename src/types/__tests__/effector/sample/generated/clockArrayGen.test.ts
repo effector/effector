@@ -6,6 +6,7 @@ type AB = {a: string; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const str = createEvent<string>()
+const strClk = createEvent<string>()
 const num = createEvent<number>()
 const a = createStore('')
 const b = createStore(0)
@@ -161,6 +162,393 @@ describe('no clock', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
+      "
+    `)
+  })
+})
+describe('no source', () => {
+  test('noSource, noTarget, plain (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock: [strClk,anyt]})
+      sample({clock: [anyt]})
+      sample({clock: [strClk]})
+      sample({clock: anyt})
+      sample({clock: strClk})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<any> | Event<string>)[]; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, fn, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>[]; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<any>[]; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, fn, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<string>[]; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<string>[]; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, fn, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: AnyClock; fn: (source: unknown, clock: any) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<any>; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: AnyClock; fn: (source: unknown, clock: any) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, fn, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<string>; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<string>; fn: (source: unknown, clock: string) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<string>; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<string>; fn: (source: unknown, clock: string) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, fn, target
+      "
+    `)
+  })
+  test('noSource, plain (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock: [strClk,anyt], target: str})
+      sample({clock: [anyt], target: str})
+      sample({clock: [strClk], target: str})
+      sample({clock: anyt, target: str})
+      sample({clock: strClk, target: str})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<string>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<string>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<string>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<string>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<string>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<string>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<string>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<string>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<string>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<string>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      "
+    `)
+  })
+  test('noSource, noTarget, plain, fn, typedFn (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock: [aclock,anyt], fn: fnAString})
+      sample({clock: [anyt], fn: fnAString})
+      sample({clock: [aclock], fn: fnAString})
+      sample({clock: anyt, fn: fnAString})
+      sample({clock: aclock, fn: fnAString})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+            Types of parameters 'a' and 'source' are incompatible.
+              Type 'unknown' is not assignable to type 'string'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: any) => { a: string; }'.
+            Types of parameters 'a' and 'source' are incompatible.
+              Type 'unknown' is not assignable to type 'string'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: { a: string; clock: any; }) => { a: string; }'.
+            Types of parameters 'a' and 'source' are incompatible.
+              Type 'unknown' is not assignable to type 'string'.
+      "
+    `)
+  })
+  test('noSource, noTarget, plain, fn (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock: [anyt,num], fn: ()=>({a:'',b:2})})
+      sample({clock: [strClk,anyt], fn: ()=>({a:'',b:2})})
+      sample({clock: [strClk,num], fn: ()=>({a:'',b:2})})
+      sample({clock: [num,anyt], fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt,anyt], fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt,strClk], fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt,num], fn: ()=>({a:'',b:2})})
+      sample({clock: [anyt], fn: ()=>({a:'',b:2})})
+      sample({clock: [strClk], fn: ()=>({a:'',b:2})})
+      sample({clock: [num], fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt], fn: ()=>({a:'',b:2})})
+      sample({clock: anyt, fn: ()=>({a:'',b:2})})
+      sample({clock: strClk, fn: ()=>({a:'',b:2})})
+      sample({clock: num, fn: ()=>({a:'',b:2})})
+      sample({clock: voidt, fn: ()=>({a:'',b:2})})
+      sample({clock: [aclock,anyt], fn: (a) => ({a})})
+      sample({clock: [anyt], fn: (a) => ({a})})
+      sample({clock: [aclock], fn: (a) => ({a})})
+      sample({clock: anyt, fn: (a) => ({a})})
+      sample({clock: aclock, fn: (a) => ({a})})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<any> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<any> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<any> | Event<string>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<any> | Event<string>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<string> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<string> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<any> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<any> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<any> | Event<void>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<any> | Event<void>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<void> | Event<string>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<void> | Event<string>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<void> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<void> | Event<number>)[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<any>[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<string>[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<string>[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<number>[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<number>[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<void>[]; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<void>[]; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: AnyClock; fn: (source: unknown, clock: any) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<any>; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: AnyClock; fn: (source: unknown, clock: any) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<string>; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<string>; fn: (source: unknown, clock: string) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<string>; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<string>; fn: (source: unknown, clock: string) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<number>; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<number>; fn: (source: unknown, clock: number) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<number>; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<number>; fn: (source: unknown, clock: number) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<void>; fn: () => { a: string; b: number; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<void>; fn: (source: unknown, clock: void) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<void>; fn: () => { a: string; b: number; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<void>; fn: (source: unknown, clock: void) => { a: string; b: number; }; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: (Event<any> | Event<{ a: string; clock: any; }>)[]; fn: (a: unknown) => { a: unknown; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: (Event<any> | Event<{ a: string; clock: any; }>)[]; fn: (a: unknown) => { a: unknown; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>[]; fn: (a: unknown) => { a: unknown; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<any>[]; fn: (a: unknown) => { a: unknown; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<{ a: string; clock: any; }>[]; fn: (a: unknown) => { a: unknown; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<{ a: string; clock: any; }>[]; fn: (a: unknown) => { a: unknown; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<unknown>; fn: (source: unknown, clock: unknown) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; fn: (a: unknown) => { a: unknown; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: AnyClock; fn: (source: unknown, clock: any) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<any>; fn: (a: unknown) => { a: unknown; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: AnyClock; fn: (source: unknown, clock: any) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<{ a: string; clock: any; }>; fn: (a: unknown) => { a: unknown; }; }' is not assignable to parameter of type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<{ a: string; clock: any; }>; fn: (source: unknown, clock: { a: string; clock: any; }) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }'.
+            Type '{ clock: Event<{ a: string; clock: any; }>; fn: (a: unknown) => { a: unknown; }; }' is missing the following properties from type '{ source: { [key: string]: Store<any>; } | [Store<any>] | Store<any>[] | Unit<unknown>; clock: Clock<{ a: string; clock: any; }>; fn: (source: unknown, clock: { a: string; clock: any; }) => unknown; target: \\"non-unit item in target array\\"[] | [...]; greedy?: boolean | undefined; }': source, target
+      "
+    `)
+  })
+  test('noSource, plain, fn, typedFn (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock: [aclock,anyt], target: aTarget, fn: fnAString})
+      sample({clock: [anyt], target: aTarget, fn: fnAString})
+      sample({clock: [aclock], target: aTarget, fn: fnAString})
+      sample({clock: anyt, target: aTarget, fn: fnAString})
+      sample({clock: aclock, target: aTarget, fn: fnAString})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: unknown) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: any) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: any) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: { a: string; clock: any; }) => { a: string; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+              Type '(a: string) => { a: string; }' is not assignable to type '(source: unknown, clock: { a: string; clock: any; }) => { a: string; }'.
+      "
+    `)
+  })
+  test('noSource, plain, fn (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock: [anyt,num], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [strClk,anyt], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [strClk,num], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [num,anyt], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt,anyt], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt,strClk], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt,num], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [anyt], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [strClk], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [num], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [voidt], target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: anyt, target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: strClk, target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: num, target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: voidt, target: aTarget, fn: ()=>({a:'',b:2})})
+      sample({clock: [aclock,anyt], target: aTarget, fn: (a) => ({a})})
+      sample({clock: [anyt], target: aTarget, fn: (a) => ({a})})
+      sample({clock: [aclock], target: aTarget, fn: (a) => ({a})})
+      sample({clock: anyt, target: aTarget, fn: (a) => ({a})})
+      sample({clock: aclock, target: aTarget, fn: (a) => ({a})})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
+            Type 'Event<{ a: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
       "
     `)
   })

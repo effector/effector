@@ -8,8 +8,8 @@ const {
 } = require('../generateCaseSetFile')
 
 const grouping = {
-  getHash: ({descriptionTokens, noTarget, noClock}) =>
-    `${descriptionTokens}${noTarget}${noClock}`,
+  getHash: ({descriptionTokens, noTarget, noClock, noSource}) =>
+    `${descriptionTokens}${noTarget}${noClock}${noSource}`,
   describeGroup: ({descriptionTokens, noGroup, largeGroup}) => ({
     description: descriptionTokens,
     noGroup,
@@ -20,6 +20,7 @@ const grouping = {
     methodCode,
   ],
   sortByFields: {
+    noSource: [false, true],
     combinable: [false, true],
     fn: [false, true],
     unificationToAny: [false, true],
@@ -31,8 +32,12 @@ const grouping = {
 }
 
 const shape = {
+  noSource: {flag: {}},
+  clockArray: {
+    flag: {needs: 'noSource'},
+  },
   combinable: {
-    flag: {},
+    flag: {avoid: 'noSource'},
   },
   fn: {
     flag: {},
@@ -41,12 +46,12 @@ const shape = {
     flag: {},
   },
   noClock: {
-    flag: {},
+    flag: {avoid: 'noSource'},
   },
   secondArgument: {
     flag: {
       needs: 'fn',
-      avoid: ['noClock'],
+      avoid: ['noClock', 'noSource'],
     },
   },
   explicitArgumentTypes: {
@@ -56,7 +61,7 @@ const shape = {
   },
   unificationToAny: {
     flag: {
-      avoid: ['noClock'],
+      avoid: ['noClock', 'noSource'],
     },
   },
   fnClockTypeAssertion: {
@@ -79,6 +84,7 @@ const shape = {
     split: {
       match: {
         none: {noClock: true},
+        only: {noSource: true},
         noAnyNoFalsePositiveFnClock: {
           unificationToAny: false,
           fnClockTypeAssertion: true,
@@ -93,6 +99,59 @@ const shape = {
       cases: {
         none: {
           value: '',
+        },
+        only: {
+          split: {
+            variants: {
+              fn: {
+                noArgs: {fnWithoutArgs: true},
+                noFn: {fn: false},
+                fn: {},
+              },
+              amount: {
+                singleClock: {clockArray: false},
+                manyClocks: {clockArray: true},
+              },
+            },
+            cases: {
+              noArgs: {
+                singleClock: {
+                  union: ['voidt', 'num', 'strClk', 'anyt'],
+                },
+                manyClocks: {
+                  permute: {
+                    items: ['voidt', 'num', 'strClk', 'anyt'],
+                    amount: {min: 1, max: 2},
+                    noReorder: true,
+                  },
+                },
+              },
+              noFn: {
+                singleClock: {
+                  union: ['strClk', 'anyt'],
+                },
+                manyClocks: {
+                  permute: {
+                    items: ['strClk', 'anyt'],
+                    amount: {min: 1, max: 2},
+                    noReorder: true,
+                  },
+                },
+              },
+              fn: {
+                singleClock: {
+                  union: ['aclock', 'anyt'],
+                },
+                manyClocks: {
+                  permute: {
+                    items: ['aclock', 'anyt'],
+                    amount: {min: 1, max: 2},
+                    noReorder: true,
+                  },
+                },
+              },
+            },
+          },
         },
         noAnyNoFalsePositiveFnClock: {
           permute: {
@@ -117,14 +176,9 @@ const shape = {
       },
     },
   },
-  isSingle: {
-    compute: {
-      fn: ({clock}) => clock !== '' && clock.length === 1,
-    },
-  },
   pass: {
     bool: {
-      true: [{noClock: true}, {fnClockTypeAssertion: false}],
+      true: [{noClock: true}, {noSource: true}, {fnClockTypeAssertion: false}],
       false: {fnClockTypeAssertion: true},
     },
   },
@@ -152,6 +206,7 @@ const shape = {
     compute: {
       fn(shape) {
         const res = []
+        shape.noSource && res.push('noSource')
         shape.noClock && res.push('noClock')
         shape.noTarget && res.push('noTarget')
         shape.combinable ? res.push('combinable') : res.push('plain')
@@ -169,18 +224,25 @@ const shape = {
   sourceCode: {
     compute: {
       variant: {
+        none: {noSource: true},
         plain: {combinable: false},
         combinable: {combinable: true},
       },
       cases: {
-        plain: 'a',
-        combinable: '{a,b}',
+        none: '',
+        plain: 'source: a',
+        combinable: 'source: {a,b}',
       },
     },
   },
   clockCode: {
     compute: {
-      fn: ({clock}) => (clock === '' ? '' : `, clock: ${printArray(clock)}`),
+      fn({clock, noSource}) {
+        if (clock === '') return ''
+        const clockText = Array.isArray(clock) ? printArray(clock) : clock
+        const comma = noSource ? '' : ', '
+        return `${comma}clock: ${clockText}`
+      },
     },
   },
   //prettier-ignore
@@ -188,6 +250,7 @@ const shape = {
     compute: {
       variants: {
         shape: {
+          none: {noSource: true, fn: true},
           plain: {combinable: false, fn: true},
           shape: {combinable: true, fn: true},
         },
@@ -204,6 +267,11 @@ const shape = {
         }
       },
       cases: {
+        none: {
+          noArgs: "()=>({a:'',b:2})",
+          typed: 'fnAString',
+          untyped: '(a) => ({a})'
+        },
         shape: {
           noArgs: "()=>({a:'',b:2})",
           typedFnClock: {
@@ -235,15 +303,16 @@ const shape = {
       },
       cases: {
         hasFn: ({sourceCode, clockCode, fnCode, target}) =>
-          `sample({source: ${sourceCode}${clockCode}${target}, fn: ${fnCode}})`,
+          `sample({${sourceCode}${clockCode}${target}, fn: ${fnCode}})`,
         noFn: ({sourceCode, clockCode, target}) =>
-          `sample({source: ${sourceCode}${clockCode}${target}})`,
+          `sample({${sourceCode}${clockCode}${target}})`,
       },
     },
   },
   noGroup: {
     true: [
       {noClock: true},
+      {noSource: true},
       {unificationToAny: true},
       {fnClockTypeAssertion: true},
     ],
@@ -252,10 +321,12 @@ const shape = {
     compute: {
       variant: {
         noClock: {noClock: true},
+        noSource: {noSource: true},
         hasClock: {},
       },
       cases: {
         noClock: 'no clock',
+        noSource: 'no source',
         hasClock: null,
       },
     },
@@ -267,6 +338,7 @@ type AB = {a: string; b: number}
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const str = createEvent<string>()
+const strClk = createEvent<string>()
 const num = createEvent<number>()
 const a = createStore('')
 const b = createStore(0)
