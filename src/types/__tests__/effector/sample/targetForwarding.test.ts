@@ -189,7 +189,7 @@ test('when nullable field passed to strict target [without clock] (should fail)'
   })
   const target = createEffect<{foo: string; bar: string}, void, Error>()
   //@ts-expect-error
-  sample({source,target})
+  sample({source, target})
 
   expect(typecheck).toMatchInlineSnapshot(`
     "

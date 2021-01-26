@@ -140,11 +140,11 @@ const shape = {
               },
               fn: {
                 singleClock: {
-                  union: ['aclock', 'anyt'],
+                  union: ['strClk', 'anyt'],
                 },
                 manyClocks: {
                   permute: {
-                    items: ['aclock', 'anyt'],
+                    items: ['strClk', 'anyt'],
                     amount: {min: 1, max: 2},
                     noReorder: true,
                   },
