@@ -8,6 +8,7 @@ import {callStack} from './caller'
 import {assertNodeSet, is, isFunction} from './is'
 import {createNode} from './createNode'
 import {throwError} from './throw'
+import {merge} from './merge'
 
 export function guard(...args: any[]) {
   const meta: Record<string, any> = {op: 'guard'}
@@ -21,9 +22,16 @@ export function guard(...args: any[]) {
     config = source
     source = config.source
   }
-  const {filter, greedy, clock, name = rawName} = config
+  let {filter, greedy, clock, name = rawName} = config
   const target = config.target || createEvent(name, meta.config)
   const filterIsUnit = is.unit(filter)
+  if (!source) {
+    assertNodeSet(clock, 'guard', 'clock')
+    if (Array.isArray(clock)) {
+      clock = merge(clock)
+    }
+    source = clock
+  }
   if (!is.unit(source)) source = combine(source)
   if (clock) {
     assertNodeSet(clock, 'guard', 'clock')
