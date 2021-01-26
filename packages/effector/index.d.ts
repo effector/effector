@@ -676,24 +676,36 @@ export type Target = Unit<any> | Tuple<any>
 export type GetCombined<T> = Show<{
   [K in keyof T]: T[K] extends Unit<infer U> ? U : never
 }>
-export type GetMerged<T> = T extends Tuple<infer C>
+
+export type ExcludeAny<T> = T extends Tuple<infer C>
   ? C extends Unit<infer U>
     ? IfAny<U, never, U>
     : never
   : never
+
+export type GetMerged<T> = ExcludeAny<T> extends never ? any : ExcludeAny<T>
 
 type GetSource<T> = T extends Unit<infer S> ? S : GetCombined<T>
 type GetClock<T> = T extends Unit<infer S> ? S : GetMerged<T>
 
 type AnyFn = (...args: any) => any
 type FnSF<S, F extends AnyFn> = (source: GetSource<S>) => ReturnType<F>
+type FnCF<C, F extends AnyFn> = (clock: GetClock<C>) => ReturnType<F>
 type FnSCF<S, C, F extends AnyFn> = (source: GetSource<S>, clock: GetClock<C>) => ReturnType<F>
 
 type GetResultS<S> = S extends Store<any> | Combinable
   ? Store<GetSource<S>>
   : Event<GetSource<S>>
 
+type GetResultC<C> = C extends Store<any>
+  ? Store<GetClock<C>>
+  : Event<GetClock<C>>
+
 type GetResultSF<S, F extends AnyFn> = S extends Store<any> | Combinable
+  ? Store<ReturnType<F>>
+  : Event<ReturnType<F>>
+
+type GetResultCF<C, F extends AnyFn> = C extends Store<any>
   ? Store<ReturnType<F>>
   : Event<ReturnType<F>>
 
@@ -749,6 +761,14 @@ export function sample<S extends Source>(config: {
   target?: never
 }): GetResultS<S>
 
+// C
+export function sample<C extends Clock>(config: {
+  source?: never,
+  clock: C,
+  fn?: never,
+  target?: never
+}): GetResultC<C>
+
 // SC
 export function sample<S extends Source, C extends Clock>(config: {
   source: S,
@@ -765,6 +785,14 @@ export function sample<S extends Source, F extends FnSF<S, F>>(config: {
   target?: never
 }): GetResultSF<S, F>
 
+// SF
+export function sample<C extends Clock, F extends FnCF<C, F>>(config: {
+  source?: never,
+  clock: C,
+  fn: F,
+  target?: never
+}): GetResultCF<C, F>
+
 // SCF
 export function sample<S extends Source, C extends Clock, F extends FnSCF<S, C, F>>(config: {
   source: S,
@@ -779,6 +807,22 @@ export function sample<S extends Source, C extends Clock, F extends FnSCF<S, C, 
   clock: C,
   fn: F,
   target: MultiTarget<ReturnType<F>, T>
+}): T
+
+// СFT
+export function sample<C extends Clock, F extends FnCF<C, F>, T extends Target>(config: {
+  source?: never,
+  clock: C,
+  fn: F,
+  target: MultiTarget<ReturnType<F>, T>
+}): T
+
+// СFT
+export function sample<C extends Clock, T extends Target>(config: {
+  source?: never,
+  clock: C,
+  fn?: never,
+  target: MultiTarget<GetClock<C>, T>
 }): T
 
 // SFT

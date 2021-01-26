@@ -39,7 +39,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Source'.
+      Type 'string' does not satisfy the constraint 'Clock'.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -55,7 +55,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Source'.
+      Type 'string' does not satisfy the constraint 'Clock'.
       "
     `)
   })
@@ -68,7 +68,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Source'.
+      Type 'string' does not satisfy the constraint 'Clock'.
       "
     `)
   })
@@ -98,7 +98,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Source'.
+      Type 'string' does not satisfy the constraint 'Clock'.
       "
     `)
   })
@@ -111,7 +111,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Source'.
+      Type 'string' does not satisfy the constraint 'Clock'.
       "
     `)
   })
