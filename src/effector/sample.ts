@@ -35,7 +35,7 @@ export function sample(...args: any): any {
     sid = source.sid
     source = source.source
   }
-  if (!source) {
+  if (source === undefined) {
     assertNodeSet(clock, 'sample', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)
