@@ -25,7 +25,7 @@ export function guard(...args: any[]) {
   let {filter, greedy, clock, name = rawName} = config
   const target = config.target || createEvent(name, meta.config)
   const filterIsUnit = is.unit(filter)
-  if (!source) {
+  if (source === undefined) {
     assertNodeSet(clock, 'guard', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)
