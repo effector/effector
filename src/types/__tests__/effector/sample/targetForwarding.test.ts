@@ -105,8 +105,7 @@ test('when a target receives a more loose value type from a source [with clock] 
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -121,8 +120,7 @@ test('when a target receives a more loose value type from a source [without cloc
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -139,8 +137,7 @@ test('when a target receives a more loose value type from a mapping fn [with clo
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -156,8 +153,7 @@ test('when a target receives a more loose value type from a mapping fn [without 
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+        Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -176,8 +172,7 @@ test('when nullable field passed to strict target [with clock] (should fail)', (
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-          Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+        Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -195,8 +190,7 @@ test('when nullable field passed to strict target [without clock] (should fail)'
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-          Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+        Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -214,8 +208,7 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -229,8 +222,7 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -247,8 +239,7 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -264,8 +255,7 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-            Type 'Event<{ a: string; b: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+          Type 'Event<{ a: string; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })

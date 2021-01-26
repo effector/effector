@@ -24,7 +24,8 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' does not satisfy the constraint 'Source'.
+      Parameter 'str' implicitly has an 'any' type.
       "
     `)
   })
@@ -38,7 +39,8 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' does not satisfy the constraint 'Source'.
+      Parameter 'str' implicitly has an 'any' type.
       "
     `)
   })
@@ -53,7 +55,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' does not satisfy the constraint 'Source'.
       "
     `)
   })
@@ -66,7 +68,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' does not satisfy the constraint 'Source'.
       "
     `)
   })
@@ -80,7 +82,10 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'Event<string>' is not assignable to type 'Event<number>'.
+      Type 'string' does not satisfy the constraint 'Source'.
+      Parameter 'str' implicitly has an 'any' type.
+      Parameter 'num' implicitly has an 'any' type.
       "
     `)
   })
@@ -93,7 +98,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' does not satisfy the constraint 'Source'.
       "
     `)
   })
@@ -106,7 +111,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' does not satisfy the constraint 'Source'.
       "
     `)
   })
