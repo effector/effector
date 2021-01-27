@@ -789,6 +789,8 @@ export function sample<
   clock?: never,
   fn?: never,
   target?: never
+  name?: string
+  greedy?: boolean
 }): GetResultS<S>
 
 // C
@@ -800,6 +802,8 @@ export function sample<
   clock: C,
   fn?: never,
   target?: never
+  name?: string
+  greedy?: boolean
 }): GetResultC<C>
 
 // SC
@@ -813,6 +817,8 @@ export function sample<
   clock: C,
   fn?: never,
   target?: never
+  name?: string
+  greedy?: boolean
 }): GetResultSC<S, C>
 
 // SF
@@ -826,6 +832,8 @@ export function sample<
   clock?: never,
   fn: F,
   target?: never
+  name?: string
+  greedy?: boolean
 }): GetResultSF<S, F>
 
 // CF
@@ -839,6 +847,8 @@ export function sample<
   clock: C,
   fn: F,
   target?: never
+  name?: string
+  greedy?: boolean
 }): GetResultCF<C, F>
 
 // SCF
@@ -854,6 +864,8 @@ export function sample<
   clock: C,
   fn: F,
   target?: never
+  name?: string
+  greedy?: boolean
 }): GetResultSCF<S, C, F>
 
 // SCFT
@@ -870,6 +882,8 @@ export function sample<
   clock: C,
   fn: F,
   target: MultiTarget<ReturnType<F>, T, X>
+  name?: string
+  greedy?: boolean
 }): T
 
 // СFT
@@ -884,6 +898,8 @@ export function sample<
   clock: C,
   fn: F,
   target: MultiTarget<ReturnType<F>, T>
+  name?: string
+  greedy?: boolean
 }): T
 
 // СT
@@ -897,6 +913,8 @@ export function sample<
   clock: C,
   fn?: never,
   target: MultiTarget<GetClock<C>, T>
+  name?: string
+  greedy?: boolean
 }): T
 
 // SFT
@@ -911,6 +929,8 @@ export function sample<
   clock?: never,
   fn: F,
   target: MultiTarget<ReturnType<F>, T, X>
+  name?: string
+  greedy?: boolean
 }): T
 
 // Last overload
@@ -927,6 +947,8 @@ export function sample<
   clock?: C,
   fn?: F,
   target: MultiTarget<IfUnknown<ReturnType<F>, GetSource<S>, ReturnType<F>>, T, X>
+  name?: string
+  greedy?: boolean
 }): T
 
 type ValidTargetUnitGuard<Source, Target extends unknown> =
