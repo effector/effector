@@ -24,8 +24,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Source'.
-      Parameter 'str' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -39,8 +38,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Clock'.
-      Parameter 'str' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -55,7 +53,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Clock'.
+      no errors
       "
     `)
   })
@@ -68,7 +66,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Clock'.
+      no errors
       "
     `)
   })
@@ -82,36 +80,33 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<string>' is not assignable to type 'Event<number>'.
-      Type 'string' does not satisfy the constraint 'Source'.
-      Parameter 'str' implicitly has an 'any' type.
-      Parameter 'num' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
   test('sample<A>({source: store, clock})', () => {
     const source = createStore('')
     const clock = createEvent<number>()
-    const result: Event<string> = sample<string>({
+    sample<string>({
       source,
       clock,
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Clock'.
+      no errors
       "
     `)
   })
   test('sample<A>({source: event, clock})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
-    const result: Event<string> = sample<string>({
+    sample<string>({
       source,
       clock,
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' does not satisfy the constraint 'Clock'.
+      no errors
       "
     `)
   })
