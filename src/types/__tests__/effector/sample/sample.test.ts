@@ -112,6 +112,29 @@ describe('explicit generics', () => {
   })
 })
 
+test('generic edge cases', () => {
+  function generic1<T, S>(target: Store<S>, clock: Event<T>) {
+    sample({
+      source: target,
+      clock,
+      target
+    })
+  }
+  function generic2<T, S>(target: Store<S>, clock: Event<T>) {
+    sample({
+      source: target,
+      clock,
+      fn: (source, clock) => source,
+      target
+    })
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
 test('event by event', () => {
   const a = createEvent<number>()
   const b = createEvent<boolean>()
