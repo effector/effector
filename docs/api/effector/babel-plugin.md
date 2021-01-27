@@ -146,6 +146,16 @@ const foo = createInputField('-', {
 
 Specify import to process by plugin. By default has value `["effector", "effector/compat"]`
 
+### addNames
+
+> `addNames: boolean`
+
+:::note since
+effector 21.8.0
+:::
+
+Add names to units factories calls. By default has value `true`. Useful for minification and obfuscation of production builds.
+
 ### addLoc
 
 > `addLoc: boolean`

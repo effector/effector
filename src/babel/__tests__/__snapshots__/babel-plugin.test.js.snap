@@ -1357,6 +1357,42 @@ const g1_val = withFactory({
 const g2_val = g2(0);"
 `;
 
+exports[`babel-plugin should factories without name with options 1`] = `
+"import { withFactory } from \\"effector\\";
+import { itIsALongName, Randomizing } from 'c/d';
+import Defaulting, { AnotherImport } from '@/f';
+import { splitMap } from 'patronum/split-map';
+const longer = withFactory({
+  sid: \\"mn9l4u\\",
+  fn: () => itIsALongName(0)
+});
+const arcade = withFactory({
+  sid: \\"xpbz5w\\",
+  fn: () => Defaulting({
+    source: longer,
+    condition: withFactory({
+      sid: \\"lijhe7\\",
+      fn: () => AnotherImport({
+        test: true
+      })
+    })
+  })
+});
+withFactory({
+  sid: \\"-yfq3bv\\",
+  fn: () => Randomizing({
+    arcade
+  })
+});
+const result = withFactory({
+  sid: \\"lwwnia\\",
+  fn: () => splitMap({
+    longer,
+    source: arcade
+  })
+});"
+`;
+
 exports[`babel-plugin should forward 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/forward.js\\";
 //@flow
@@ -2055,4 +2091,282 @@ const f = () => split({
     sid: \\"pldjp\\"
   }
 });"
+`;
+
+exports[`babel-plugin should units without name with options 1`] = `
+"import { createDomain, createEffect, createEvent, createStore, restore } from 'effector';
+{
+  const domain = createDomain({
+    sid: \\"-nzaa7a\\"
+  });
+  const a = domain.store('bar', {
+    sid: \\"-r4da5h\\"
+  });
+  const b = domain.store('h', {
+    ɔ: {
+      option: 'test',
+      ['na' + 'me']: 'LOL'
+    },
+    sid: \\"ehfy55\\"
+  });
+  const c = domain.store('h', {
+    ɔ: {
+      name: 'test'
+    },
+    sid: \\"-exuvjd\\"
+  }); //$off
+
+  const d = domain.store('h', {
+    ɔ: null,
+    sid: \\"r4zz5g\\"
+  }); //$off
+
+  const e = domain.store('h', {
+    ɔ: 4234,
+    sid: \\"-1t984v\\"
+  });
+  const f = domain.store('h', {
+    ɔ: {},
+    sid: \\"-v8k1td\\"
+  });
+  const aAlias = domain.createStore('bar', {
+    sid: \\"rsi1ca\\"
+  });
+  const bAlias = domain.createStore('h', {
+    ɔ: {
+      option: 'test',
+      ['na' + 'me']: 'LOL'
+    },
+    sid: \\"i7igmi\\"
+  });
+  const cAlias = domain.createStore('h', {
+    ɔ: {
+      name: 'testAlias'
+    },
+    sid: \\"8mivwq\\"
+  }); //$off
+
+  const dAlias = domain.createStore('h', {
+    ɔ: null,
+    sid: \\"-hf2ev\\"
+  }); //$off
+
+  const eAlias = domain.createStore('h', {
+    ɔ: 4234,
+    sid: \\"-9ld0qg\\"
+  });
+  const fAlias = domain.createStore('h', {
+    ɔ: {},
+    sid: \\"-j6clg8\\"
+  });
+  const {
+    sid
+  } = domain.createStore(null, {
+    sid: \\"-ls4ila\\"
+  });
+  const {
+    shortName
+  } = domain.createStore(null, {
+    ɔ: {
+      name: 'foo'
+    },
+    sid: \\"-lb2vju\\"
+  });
+  domain.createStore(null, {
+    sid: \\"tgv4rt\\"
+  });
+  domain.createStore(null, {
+    sid: \\"thypyj\\"
+  });
+}
+{
+  const foo = createEffect({
+    sid: \\"9vguxc\\"
+  });
+  const bar = createEffect('hello', {
+    sid: \\"-t87e9q\\"
+  });
+  const baz = createEffect({
+    handler() {
+      return 0;
+    }
+
+  }, {
+    sid: \\"g6ivfd\\"
+  });
+  const quux = createEffect('nice', {
+    ɔ: {
+      handler() {
+        return 0;
+      }
+
+    },
+    sid: \\"-26njv2\\"
+  });
+
+  const fa = () => createEffect({
+    sid: \\"nsvob9\\"
+  });
+
+  const {
+    sid
+  } = createEffect({
+    sid: \\"ixqzbg\\"
+  });
+  const {
+    name
+  } = createEffect('foo', {
+    sid: \\"jeslqi\\"
+  });
+  const {
+    shortName
+  } = createEffect({
+    name: 'foo'
+  }, {
+    sid: \\"jvu8r3\\"
+  });
+  createEffect({
+    sid: \\"uh5jxn\\"
+  });
+  createEffect({
+    sid: \\"ui954d\\"
+  });
+}
+{
+  const foo = createStore('foo', {
+    sid: \\"-jyq2qv\\"
+  });
+  const a = createStore('h', {
+    sid: \\"-oagam9\\"
+  });
+  const b = createStore('h', {
+    ɔ: {},
+    sid: \\"hbcxod\\"
+  }); //$off
+
+  const c = createStore('h', {
+    ɔ: 23020,
+    sid: \\"-bmw9ly\\"
+  });
+  const config = {
+    option: 0
+  };
+  const dod = createStore(null, {
+    ɔ: config,
+    sid: \\"sja6dc\\"
+  });
+
+  const f = a => createStore(a, {
+    sid: \\"-sen25u\\"
+  });
+
+  const {
+    sid
+  } = createStore(null, {
+    sid: \\"-mqki7m\\"
+  });
+  const {
+    shortName
+  } = createStore(null, {
+    ɔ: {
+      name: 'foo'
+    },
+    sid: \\"-m9iv66\\"
+  });
+  createStore(null, {
+    sid: \\"vep04o\\"
+  });
+  createStore(null, {
+    sid: \\"vfslbe\\"
+  });
+}
+{
+  const foo = createEvent({
+    sid: \\"8x0vb0\\"
+  });
+  const bar = createEvent('hello', {
+    sid: \\"-u6ndw2\\"
+  });
+  const baz = createEvent({
+    name: 'nice'
+  }, {
+    sid: \\"f82vt1\\"
+  });
+
+  const f = () => createEvent({
+    sid: \\"-1w4823\\"
+  });
+
+  const {
+    sid
+  } = createEvent({
+    sid: \\"-65zqet\\"
+  });
+  const {
+    name
+  } = createEvent('foo', {
+    sid: \\"-5oy3zr\\"
+  });
+  const {
+    shortName
+  } = createEvent({
+    name: 'foo'
+  }, {
+    sid: \\"-57wgz6\\"
+  });
+  createEvent({
+    sid: \\"vyhlho\\"
+  });
+  createEvent({
+    sid: \\"wb4v4z\\"
+  });
+}
+{
+  const foo = createEvent({
+    sid: \\"pyn9i0\\"
+  });
+  const a = restore(foo, null, {
+    sid: \\"lmx1mm\\"
+  });
+  const b = restore(foo, null, {
+    ɔ: {},
+    sid: \\"-7sds1w\\"
+  }); //$off
+
+  const c = restore(foo, null, {
+    ɔ: 23020,
+    sid: \\"yah2mx\\"
+  });
+  const config = {
+    option: 0
+  };
+  const dod = restore(foo, null, {
+    ɔ: config,
+    sid: \\"10dc0p\\"
+  });
+
+  const f = a => restore(foo, null, {
+    sid: \\"-gu50wv\\"
+  });
+
+  const {
+    sid
+  } = restore(foo, null, {
+    sid: \\"zcd1uy\\"
+  });
+  const {
+    shortName
+  } = restore(foo, null, {
+    ɔ: {
+      name: 'bar'
+    },
+    sid: \\"-z7pd2q\\"
+  });
+  restore(foo, null, {
+    sid: \\"vif224\\"
+  });
+  restore(foo, null, {
+    sid: \\"vv2bpf\\"
+  });
+}"
 `;

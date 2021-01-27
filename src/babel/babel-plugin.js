@@ -1,6 +1,7 @@
 module.exports = function(babel, options = {}) {
   const {
     compressor,
+    addNames,
     addLoc,
     filename: enableFileName,
     stores,
@@ -39,7 +40,7 @@ module.exports = function(babel, options = {}) {
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
   )
-  const smallConfig = {compressor, addLoc}
+  const smallConfig = {compressor, addLoc, addNames}
   const {types: t, template} = babel
   let factoryTemplate
   const isPropertyNameInRange = (range, path) =>
@@ -569,6 +570,10 @@ const normalizeOptions = options => {
       ),
       factories: (options.factories || defaults.factories).map(stripExtension),
       addLoc: Boolean(options.addLoc),
+      addNames:
+        typeof options.addNames !== 'undefined'
+          ? Boolean(options.addNames)
+          : true,
       compressor: options.compressSid === false ? str => str : hashCode,
     },
   })
@@ -653,7 +658,13 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
-function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
+function setRestoreNameAfter(
+  path,
+  state,
+  nameNodeId,
+  t,
+  {addLoc, compressor, addNames},
+) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
@@ -695,7 +706,7 @@ function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
       )
       configExpr.properties.push(locProp)
     }
-    if (displayName) {
+    if (displayName && addNames) {
       configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
@@ -706,7 +717,7 @@ function setStoreNameAfter(
   state,
   nameNodeId,
   t,
-  {addLoc, compressor},
+  {addLoc, compressor, addNames},
   fillFirstArg,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
@@ -752,7 +763,7 @@ function setStoreNameAfter(
       )
       configExpr.properties.push(locProp)
     }
-    if (displayName) {
+    if (displayName && addNames) {
       configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
@@ -763,7 +774,7 @@ function setConfigForConfigurableMethod(
   state,
   nameNodeId,
   t,
-  {addLoc, compressor},
+  {addLoc, compressor, addNames},
   singleArgument,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
@@ -806,7 +817,7 @@ function setConfigForConfigurableMethod(
       )
       configExpr.properties.push(locProp)
     }
-    if (displayName) {
+    if (displayName && addNames) {
       configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
@@ -817,7 +828,13 @@ function setConfigForConfigurableMethod(
   }
 }
 
-function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
+function setEventNameAfter(
+  path,
+  state,
+  nameNodeId,
+  t,
+  {addLoc, compressor, addNames},
+) {
   const displayName = nameNodeId ? nameNodeId.name : ''
 
   let args
@@ -864,7 +881,7 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
       )
       configExpr.properties.push(locProp)
     }
-    if (displayName) {
+    if (displayName && addNames) {
       configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
