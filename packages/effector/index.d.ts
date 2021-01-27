@@ -663,6 +663,9 @@ type ValidTargetList<Match, Target extends Tuple<unknown>> = {
 
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type IfUnknown<T, Y, N> = 0 extends (1 & T) ? N : unknown extends T ? Y : N;
+type IfEqual<T, U, Y = unknown, N = never> =
+  (<G>() => G extends T ? 1 : 2) extends
+    (<G>() => G extends U ? 1 : 2) ? Y : N;
 
 // export type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
 export type Source<X> = Unit<X> | Combinable
@@ -725,21 +728,24 @@ type GetResultSCF<S, C, F extends AnyFn> = S extends Store<any> | Combinable
     : Event<ReturnType<F>>
   : Event<ReturnType<F>>
 
+type ReplaceUnit<Source, Value, Target> = IfEqual<
+  Source,
+  Value,
+  Target,
+  Source extends Value
+  ? Target
+  : Value extends void
+    ? Target
+    : 'incompatible unit in target'
+>
+
 type TargetUnit<Source, T extends Unit<unknown>> = T extends Unit<infer Value>
-  ? Source extends Value
-    ? T
-    : Value extends void
-      ? T
-      : 'incompatible unit in target'
+  ? ReplaceUnit<Source, Value, T>
   : 'non-unit item in target'
 
 type TargetArray<Source, T extends Tuple<unknown>> = {
   [Index in keyof T]: T[Index] extends Unit<infer Value>
-    ? Source extends Value
-      ? T[Index]
-      : Value extends void
-        ? T[Index]
-        : 'incompatible unit in target'
+    ? ReplaceUnit<Source, Value, T[Index]>
     : 'non-unit item in target'
 }
 
