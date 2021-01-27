@@ -289,6 +289,7 @@ export class Domain implements Unit<any> {
     config?: {name?: string; sid?: string},
   ): Store<State>
   sid: string | null
+  compositeName: CompositeName
   shortName: string
   getType(): string
   history: {
