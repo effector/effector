@@ -87,7 +87,7 @@ describe('explicit generics', () => {
   test('sample<A>({source: store, clock})', () => {
     const source = createStore('')
     const clock = createEvent<number>()
-    const result: Event<string> = sample<string>({
+    sample<string>({
       source,
       clock,
     })
@@ -100,7 +100,7 @@ describe('explicit generics', () => {
   test('sample<A>({source: event, clock})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
-    const result: Event<string> = sample<string>({
+    sample<string>({
       source,
       clock,
     })

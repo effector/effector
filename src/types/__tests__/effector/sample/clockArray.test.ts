@@ -271,6 +271,7 @@ describe('with target', () => {
       clock: [clockA, clockB, clockC],
       //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
+      //@ts-expect-error
       target,
     })
 
@@ -278,22 +279,20 @@ describe('with target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: string | void) => unknown'.
             Types of parameters '__0' and 'source' are incompatible.
               Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
                   Type 'string' is not assignable to type 'number'.
-                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-                      Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: string | void) => unknown'.
             Types of parameters '__0' and 'source' are incompatible.
               Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
                   Type 'string' is not assignable to type 'number'.
-                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-                      Type 'Event<{ a: string; clock: any; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -309,6 +308,7 @@ describe('with target', () => {
       clock: [clockA, clockC],
       //@ts-expect-error
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
+      //@ts-expect-error
       target,
     })
 
@@ -316,18 +316,18 @@ describe('with target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Types of property '__' are incompatible.
-              Type 'void' is not assignable to type 'string'.
-                Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+          Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(source: { a: string; b: string; }, clock: string | void) => unknown'.
+            Types of parameters 'clock' and 'clock' are incompatible.
+              Type 'string | void' is not assignable to type 'string'.
+                Type 'void' is not assignable to type 'string'.
+                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
-            Types of property '__' are incompatible.
-              Type 'void' is not assignable to type 'string'.
-                Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"non-unit item in target array\\"[] | [\\"non-unit item in target array\\"]'.
-                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '[\\"non-unit item in target array\\"]'.
+          Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(source: { a: string; b: string; }, clock: string | void) => unknown'.
+            Types of parameters 'clock' and 'clock' are incompatible.
+              Type 'string | void' is not assignable to type 'string'.
+                Type 'void' is not assignable to type 'string'.
+                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -425,10 +425,11 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<unknown>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': filter, filterMap, prepend, getType
+      Type 'Store<[any]> | Store<[any, ...any[]]> | Event<any> | Store<{ [x: string]: any; source: unknown; }>' is not assignable to type 'Event<{ a: string; clock: any; }>'.
+        Type 'Store<[any]>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': filter, filterMap, prepend, getType
       No overload matches this call.
         The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: any) => { a: number; clock: any; }'.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: string | void) => unknown'.
             Types of parameters '__0' and 'source' are incompatible.
               Type '{ a: string; }' is not assignable to type '{ a: number; }'.
                 Types of property 'a' are incompatible.
@@ -452,10 +453,14 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<unknown>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': filter, filterMap, prepend, getType
+      Type 'Store<[any]> | Store<[any, ...any[]]> | Event<any> | Store<{ [x: string]: any; source: unknown; }>' is not assignable to type 'Event<{ a: string; b: string; clock: string; }>'.
+        Type 'Store<[any]>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': filter, filterMap, prepend, getType
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<void>' is not assignable to type 'Unit<string>'.
+          Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(source: { a: string; b: string; }, clock: string | void) => unknown'.
+            Types of parameters 'clock' and 'clock' are incompatible.
+              Type 'string | void' is not assignable to type 'string'.
+                Type 'void' is not assignable to type 'string'.
       "
     `)
   })

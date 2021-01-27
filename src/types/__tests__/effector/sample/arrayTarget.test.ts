@@ -97,7 +97,11 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '[]' is not assignable to type 'Target<any>'.
+            Type '[]' is not assignable to type '[any, ...any[]]'.
+              Source has 0 element(s) but target requires 1.
       "
     `)
   })
@@ -113,7 +117,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -128,12 +132,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -149,12 +148,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -171,12 +165,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -193,12 +182,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string | number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -214,12 +198,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -235,12 +214,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -257,7 +231,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -274,7 +248,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -290,7 +264,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -306,7 +280,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -409,7 +383,7 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -426,12 +400,7 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -447,7 +416,7 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<{ a: number; b: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -465,12 +434,7 @@ describe('combinable source object (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<{ a: number; b: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -561,7 +525,7 @@ describe('combinable source list (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
@@ -578,12 +542,7 @@ describe('combinable source list (should fail)', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target array\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target array\\"'.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target array\\"'.
+          Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
       "
     `)
   })
