@@ -99,7 +99,7 @@ describe('basic cases', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type '[]' is not assignable to type 'Target<any>'.
+          Type '[]' is not assignable to type 'Target<unknown>'.
             Type '[]' is not assignable to type '[any, ...any[]]'.
               Source has 0 element(s) but target requires 1.
       "
