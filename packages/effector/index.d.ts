@@ -7,7 +7,8 @@
 type Tuple<T = unknown> = [T] | [T, ...T[]]
 
 /**
- * Non inferential type parameter usage.
+ * Non inferential type parameter usage. NoInfer in source and in return of fn helps with
+ detecting loose objects against target type.
  *
  * @see https://github.com/microsoft/TypeScript/issues/14829#issuecomment-504042546
  */
@@ -564,9 +565,7 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-type UnitList<T> = ReadonlyArray<Unit<T>>
-type AnyClock = Unit<any> | UnitList<any>
-// type Clock<T> = Unit<T> | UnitList<NoInfer<T>>
+type AnyClock = Unit<any> | Tuple<Unit<any>>
 
 type ClockBound = Unit<unknown> | Tuple<unknown>
 type ClockValue<Clk extends ClockBound> =
@@ -661,44 +660,44 @@ type ValidTargetList<Match, Target extends Tuple<unknown>> = {
 //  NoInfer in source and in return of fn helps with
 //        detecting loose objects against target type
 
-type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
-type IfUnknown<T, Y, N> = 0 extends (1 & T) ? N : unknown extends T ? Y : N;
-type IfEqual<T, U, Y = unknown, N = never> =
-  (<G>() => G extends T ? 1 : 2) extends
-    (<G>() => G extends U ? 1 : 2) ? Y : N;
+/* Sample types */
 
-// export type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
-export type Source<X> = Unit<X> | Combinable
+type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
+type IfUnknown<T, Y, N> = IfAny<T, N, unknown extends T ? Y : N>;
+type IfEqual<T, U, Y = unknown, N = never> =
+  (<G>() => G extends T ? 1 : 0) extends
+    (<G>() => G extends U ? 1 : 0) ? Y : N;
+
+// TODO: support `sample(combinable)` [?]
 export type SourceNotConfig<T> = Unit<T> | {
   source: never,
+  clock: never,
   [key: string]: Store<any>
 } | Tuple<Store<any>>
 
-export type Clock<X> = Unit<X> | Tuple<Unit<any>>
-export type Target<X> = Unit<X> | Tuple<any>
-export type GetCombined<T> = Show<{
-  [K in keyof T]: T[K] extends Unit<infer U> ? U : never
-}>
+type Source<X> = Unit<X> | Combinable
+type Clock<X> = Unit<X> | Tuple<Unit<any>>
+type Target<X> = Unit<X> | Tuple<any>
 
-export type ExcludeAny<T> = T extends Tuple<infer C>
-  ? C extends Unit<infer U>
-    ? IfAny<U, never, U>
+type GetTupleWithoutAny<T> = T extends Array<infer U>
+  ? U extends Unit<infer Value>
+    ? IfAny<Value, never, Value>
     : never
   : never
 
-export type GetMerged<T> = ExcludeAny<T> extends never ? any : ExcludeAny<T>
+type GetMergedValue<T> = GetTupleWithoutAny<T> extends never ? any : GetTupleWithoutAny<T>
 
-type GetSource<T> = T extends Unit<infer S> ? S : GetCombined<T>
-type GetClock<T> = T extends Unit<infer S> ? S : GetMerged<T>
+type GetSource<T> = T extends Unit<infer S> ? S : GetCombinedValue<T>
+type GetClock<T> = T extends Unit<infer S> ? S : GetMergedValue<T>
 
 type AnyFn = (...args: any) => any
-type FnSF<S, F extends AnyFn, X> = (source: GetSource<S>) => IfUnknown<X, ReturnType<F>,X>
-type FnCF<C, F extends AnyFn, X> = (clock: GetClock<C>) => IfUnknown<X, ReturnType<F>,X>
-type FnSCF<S, C, F extends AnyFn, X> = (source: GetSource<S>, clock: GetClock<C>) => IfUnknown<X, ReturnType<F>,X>
 
-type Fn1<S> = (source: GetSource<S>) => unknown
-type Fn2<S, C> = (source: GetSource<S>, clock: GetClock<C>) => unknown
+type FnS<S> = (source: GetSource<S>) => unknown
+type FnSC<S, C> = (source: GetSource<S>, clock: GetClock<C>) => unknown
 type FnC<C> = (clock: GetClock<C>) => unknown
+type FnSF<S, F extends AnyFn, X> = (source: GetSource<S>) => IfUnknown<X, ReturnType<F>, X>
+type FnCF<C, F extends AnyFn, X> = (clock: GetClock<C>) => IfUnknown<X, ReturnType<F>, X>
+type FnSCF<S, C, F extends AnyFn, X> = (source: GetSource<S>, clock: GetClock<C>) => IfUnknown<X, ReturnType<F>, X>
 
 type GetResultS<S> = S extends Store<any> | Combinable
   ? Store<GetSource<S>>
@@ -728,44 +727,59 @@ type GetResultSCF<S, C, F extends AnyFn> = S extends Store<any> | Combinable
     : Event<ReturnType<F>>
   : Event<ReturnType<F>>
 
-type ReplaceUnit<Source, Value, Target> = IfEqual<
-  Source,
+/** Replaces incompatible unit type with string error message.
+ *  There is no error message if target type is void.
+ */
+type ReplaceUnit<Result, Value, Target> = IfEqual<
+  Result,
   Value,
   Target,
-  Source extends Value
+  Result extends Value
   ? Target
   : Value extends void
     ? Target
     : 'incompatible unit in target'
 >
 
-type TargetUnit<Source, T extends Unit<unknown>> = T extends Unit<infer Value>
-  ? ReplaceUnit<Source, Value, T>
+type TargetUnit<Result, T extends Unit<unknown>> = T extends Unit<infer Value>
+  ? ReplaceUnit<Result, Value, T>
   : 'non-unit item in target'
 
-type TargetArray<Source, T extends Tuple<unknown>> = {
+type TargetTuple<Result, T extends Tuple<unknown>> = {
   [Index in keyof T]: T[Index] extends Unit<infer Value>
-    ? ReplaceUnit<Source, Value, T[Index]>
+    ? ReplaceUnit<Result, Value, T[Index]>
     : 'non-unit item in target'
 }
 
-type MultiTarget<Source, T extends Target<X>, X = any> = T extends Unit<any>
-  ? TargetUnit<Source, T>
+type MultiTarget<Result, T extends Target<X>, X = any> = T extends Unit<any>
+  ? TargetUnit<Result, T>
   : T extends Tuple<unknown>
-    ? TargetArray<Source, T>
+    ? TargetTuple<Result, T>
     : never
+
+/*
+* Sample generics:
+* A - source value
+* B - clock value
+* X - target value
+*/
 
 export function sample<
   A = any,
   S extends SourceNotConfig<A> = SourceNotConfig<A>
->(source: S): GetResultS<S>
+>(
+  source: S
+): GetResultS<S>
 
 export function sample<
   A = any,
   B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>
->(source: S, clock: C): GetResultSC<S, C>
+>(
+  source: S,
+  clock: C
+): GetResultSC<S, C>
 
 export function sample<
   A = any,
@@ -773,7 +787,7 @@ export function sample<
   X = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCF<S, C, F, X> = FnSCF<S, C, Fn2<S, C>, X>
+  F extends FnSCF<S, C, F, X> = FnSCF<S, C, FnSC<S, C>, X>
 >(
   source: S,
   clock: C,
@@ -826,7 +840,7 @@ export function sample<
   A = any,
   X = any,
   S extends Source<A> = Source<A>,
-  F extends FnSF<S, F, X> = FnSF<S, Fn1<S>, X>
+  F extends FnSF<S, F, X> = FnSF<S, FnS<S>, X>
 >(config: {
   source: S,
   clock?: never,
@@ -858,7 +872,7 @@ export function sample<
   X = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCF<S, C, F, X> = FnSCF<S, C, Fn2<S, C>, X>
+  F extends FnSCF<S, C, F, X> = FnSCF<S, C, FnSC<S, C>, X>
 >(config: {
   source: S,
   clock: C,
@@ -868,36 +882,19 @@ export function sample<
   greedy?: boolean
 }): GetResultSCF<S, C, F>
 
-// SCFT
+// With target
+
+// ST
 export function sample<
   A = any,
-  B = any,
   X = any,
   S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
-  F extends FnSCF<S, C, F, X> = FnSCF<S, C, Fn2<S, C>, X>,
   T extends Target<X> = Target<X>
 >(config: {
   source: S,
-  clock: C,
-  fn: F,
-  target: MultiTarget<ReturnType<F>, T, X>
-  name?: string
-  greedy?: boolean
-}): T
-
-// СFT
-export function sample<
-  B = any,
-  X = any,
-  C extends Clock<B> = Clock<B>,
-  F extends FnCF<C, F, X> = FnCF<C, FnC<C>, X>,
-  T extends Target<X> = Target<X>
->(config: {
-  source?: never,
-  clock: C,
-  fn: F,
-  target: MultiTarget<ReturnType<F>, T>
+  clock?: never,
+  fn?: never,
+  target: MultiTarget<GetSource<S>, T>
   name?: string
   greedy?: boolean
 }): T
@@ -917,12 +914,29 @@ export function sample<
   greedy?: boolean
 }): T
 
+// SСT
+export function sample<
+  A = any,
+  B = any,
+  X = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  T extends Target<X> = Target<X>
+>(config: {
+  source: S,
+  clock: C,
+  fn?: never,
+  target: MultiTarget<GetSource<S>, T>
+  name?: string
+  greedy?: boolean
+}): T
+
 // SFT
 export function sample<
   A = any,
   X = any,
   S extends Source<A> = Source<A>,
-  F extends FnSF<S, F, X> = FnSF<S, Fn1<S>, X>,
+  F extends FnSF<S, F, X> = FnSF<S, FnS<S>, X>,
   T extends Target<X> = Target<X>
 >(config: {
   source: S,
@@ -933,14 +947,48 @@ export function sample<
   greedy?: boolean
 }): T
 
-// Last overload
+// СFT
+export function sample<
+  B = any,
+  X = any,
+  C extends Clock<B> = Clock<B>,
+  F extends FnCF<C, F, X> = FnCF<C, FnC<C>, X>,
+  T extends Target<X> = Target<X>
+>(config: {
+  source?: never,
+  clock: C,
+  fn: F,
+  target: MultiTarget<ReturnType<F>, T, X>
+  name?: string
+  greedy?: boolean
+}): T
+
+// SCFT
 export function sample<
   A = any,
   B = any,
   X = any,
-  S extends Source<any> = Source<A>,
-  C extends Clock<any> = Clock<B>,
-  F extends (source: GetSource<S>, clock: GetClock<C>) => unknown = Fn2<S, C>,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends FnSCF<S, C, F, X> = FnSCF<S, C, FnSC<S, C>, X>,
+  T extends Target<X> = Target<X>
+>(config: {
+  source: S,
+  clock: C,
+  fn: F,
+  target: MultiTarget<ReturnType<F>, T, X>
+  name?: string
+  greedy?: boolean
+}): T
+
+// Last overload
+export function sample<
+  A = unknown,
+  B = unknown,
+  X = unknown,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends (source: IfUnknown<GetSource<S>, GetClock<C>, GetSource<S>>, clock: GetClock<C>) => unknown = (source: unknown, clock: unknown) => unknown,
   T extends Target<X> = Target<X>
 >(config: {
   source: S,

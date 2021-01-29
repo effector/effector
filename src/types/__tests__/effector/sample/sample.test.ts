@@ -12,7 +12,7 @@ import {
 const typecheck = '{global}'
 
 describe('explicit generics', () => {
-  test('sample<A, B, C>({source, clock, fn, target})', () => {
+  test('sample<A, B, X>({source, clock, fn, target})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const target = createEvent<number>()
@@ -70,7 +70,7 @@ describe('explicit generics', () => {
       "
     `)
   })
-  test('sample<A, B, C>({source, clock, fn})', () => {
+  test('sample<A, B, X>({source, clock, fn})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const result: Event<number> = sample<string, number, number>({
@@ -110,22 +110,50 @@ describe('explicit generics', () => {
       "
     `)
   })
+  test('sample<A, B, X>({source: shape, clock: list, target: list})', () => {
+    const num = createEvent<number>()
+    const str = createEvent<string>()
+    const anyt = createEvent<any>()
+    const $num = createStore<number>(0)
+    const $str = createStore('')
+    const a_num = createEvent<{a: number}>()
+    const ab_num_str = createEvent<{a: number; b: string}>()
+    const result1 = sample<
+      {a: number; b: string},
+      [number, string, any],
+      [{a: number}, {a: number; b: string}, {a: number}]
+    >({
+      source: {a: $num, b: $str},
+      clock: [num, anyt, str],
+      target: [a_num, ab_num_str, a_num],
+    })
+    const result2 = sample({
+      source: {a: $num, b: $str},
+      clock: [str, anyt, num],
+      target: [a_num, ab_num_str, a_num],
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
 })
 
 test('generic edge cases', () => {
   function generic1<T, S>(target: Store<S>, clock: Event<T>) {
-    sample({
+    const result: Store<S> = sample({
       source: target,
       clock,
-      target
+      target,
     })
   }
   function generic2<T, S>(target: Store<S>, clock: Event<T>) {
-    sample({
+    const result: Store<S> = sample({
       source: target,
       clock,
       fn: (source, clock) => source,
-      target
+      target,
     })
   }
   expect(typecheck).toMatchInlineSnapshot(`
