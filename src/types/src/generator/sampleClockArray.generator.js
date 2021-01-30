@@ -20,14 +20,15 @@ const grouping = {
     methodCode,
   ],
   sortByFields: {
-    noSource: [false, true],
+    clockArray: [false, true],
     combinable: [false, true],
+    noSource: [false, true],
     fn: [false, true],
     unificationToAny: [false, true],
     fnClockTypeAssertion: [false, true],
     noTarget: [true, false],
     noClock: [true, false],
-    fnWithoutArgs: [false, true],
+    fnWithoutArgs: [true, false],
   },
 }
 
@@ -206,15 +207,19 @@ const shape = {
     compute: {
       fn(shape) {
         const res = []
+        if (shape.fnClockTypeAssertion) {
+          shape.combinable ? res.push('combinable') : res.push('plain')
+          shape.noTarget && res.push('noTarget')
+        }
         shape.noSource && res.push('noSource')
         shape.noClock && res.push('noClock')
-        shape.noTarget && res.push('noTarget')
-        shape.combinable ? res.push('combinable') : res.push('plain')
-        shape.fn && res.push('fn')
-        shape.secondArgument && res.push('fnClock')
-        shape.explicitArgumentTypes && res.push('typedFn')
+        if (!shape.fnClockTypeAssertion) {
+          shape.fn && res.push('fn')
+          shape.secondArgument && res.push('fnClock')
+          // shape.explicitArgumentTypes && res.push('typedFn')
+        }
         // shape.unificationToAny && res.push('unificationToAny')
-        shape.fnClockTypeAssertion && res.push('assertFnType')
+        // shape.fnClockTypeAssertion && res.push('assertFnType')
         // shape.fnWithoutArgs && res.push('fnWithoutArgs')
 
         return res.join(', ')
@@ -314,20 +319,30 @@ const shape = {
       {noClock: true},
       {noSource: true},
       {unificationToAny: true},
-      {fnClockTypeAssertion: true},
+      // {fnClockTypeAssertion: true},
     ],
   },
   largeGroup: {
     compute: {
+      // variant: {
+      //   noClock: {noClock: true},
+      //   noSource: {noSource: true},
+      //   hasClock: {},
+      // },
+      // cases: {
+      //   noClock: 'no clock',
+      //   noSource: 'no source',
+      //   hasClock: null,
+      // },
       variant: {
-        noClock: {noClock: true},
+        fnAssertion: {fnClockTypeAssertion: true},
         noSource: {noSource: true},
-        hasClock: {},
+        __: {},
       },
       cases: {
-        noClock: 'no clock',
-        noSource: 'no source',
-        hasClock: null,
+        fnAssertion: 'fn clock assertion',
+        noSource: 'clock only',
+        __: null,
       },
     },
   },

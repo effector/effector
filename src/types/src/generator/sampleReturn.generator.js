@@ -40,7 +40,9 @@ const grouping = {
   sortByFields: {
     targetToken: ['no target', 'unit target', 'tuple target'],
     typedFn: [false, true],
+    source: ['event', 'store', 'combinable'],
     clock: ['none', 'event', 'store', 'tuple'],
+    fn: ['none', 'noArgs', 'arg', 'argPair'],
   },
 }
 
@@ -139,7 +141,7 @@ const shape = {
       cases: {
         none: '',
         event: ', target: aNumT',
-        store: ', target: aT',
+        store: ', target: aT   ',
         tuple: ', target: [aNumT,aT]',
       },
     },

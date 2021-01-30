@@ -34,10 +34,10 @@ const grouping = {
   ],
   sortByFields: {
     inferByFilter: [false, true],
+    sourceType: ['unit', 'object', 'tuple'],
     targetType: ['unit', 'array'],
     filterType: ['fn', 'store', 'bool'],
     clockType: ['no', 'unit', 'array'],
-    sourceType: ['unit', 'object', 'tuple'],
     sourceIsWiderThatTarget: [false, true],
     fnSecondArg: [false, true],
   },

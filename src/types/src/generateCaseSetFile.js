@@ -26,45 +26,20 @@ function createGroupedCases(
   casesDefs,
   {createTestLines, getHash, describeGroup, sortByFields},
 ) {
+  const isAafterB = sortByFields && skewHeapSortFieldsComparator(sortByFields)
+  function sortList(list) {
+    if (!sortByFields) return [...list]
+    return sortListBySkewHeap(list, isAafterB)
+  }
+  const casesDefsPending = sortList([...casesDefs])
   if (sortByFields) {
-    forIn(sortByFields, prioritySet => {
-      prioritySet.reverse()
+    // forIn(sortByFields, prioritySet => {
+    //   prioritySet.reverse()
+    // })
+    casesDefsPending.forEach((e, id) => {
+      e.__casesDefsID = id
     })
   }
-  function sortList(list, sortByFields) {
-    if (!sortByFields) return
-    list.sort((a, b) => {
-      for (const field in sortByFields) {
-        const prioritySet = sortByFields[field]
-        const comparsion = sortObjectsByFieldPrioritySet(
-          a,
-          b,
-          field,
-          prioritySet,
-        )
-        if (comparsion !== 0) return comparsion
-      }
-      return 0
-    })
-  }
-  function sortObjectsByFieldPrioritySet(a, b, field, prioritySet) {
-    let aVal = a[field]
-    let bVal = b[field]
-    if (prioritySet.includes(false) && !prioritySet.includes(undefined)) {
-      if (aVal === undefined) aVal = false
-      if (bVal === undefined) bVal = false
-    }
-    if (aVal === bVal) return 0
-    if (prioritySet.includes(aVal) && !prioritySet.includes(bVal)) return -1
-    if (!prioritySet.includes(aVal) && prioritySet.includes(bVal)) return 1
-    if (!prioritySet.includes(aVal) && !prioritySet.includes(bVal)) return 0
-    const ai = prioritySet.indexOf(aVal)
-    const bi = prioritySet.indexOf(bVal)
-    if (ai < bi) return -1
-    return 1
-  }
-  const casesDefsPending = [...casesDefs]
-  sortList(casesDefsPending, sortByFields)
   const defsGroups = new Map()
   let cur
   while ((cur = casesDefsPending.pop())) {
@@ -104,7 +79,7 @@ function createGroupedCases(
   }
   const largeGroups = {}
   const resultCases = []
-  for (const {
+  for (let {
     description,
     itemsPass,
     itemsFail,
@@ -114,7 +89,7 @@ function createGroupedCases(
     if (itemsPass.length === 0 && itemsFail.length === 0) continue
     const testSuiteItems = []
     if (itemsPass.length > 0) {
-      sortList(itemsPass, sortByFields)
+      //itemsPass = sortList(itemsPass)
       const blockOpen = itemsPass.length === 1 ? null : '{'
       const blockClose = itemsPass.length === 1 ? null : '}'
       const itemsFlat = itemsPass.flatMap(item =>
@@ -132,7 +107,7 @@ function createGroupedCases(
       )
     }
     if (itemsFail.length > 0) {
-      sortList(itemsFail, sortByFields)
+      //itemsFail = sortList(itemsFail)
       const blockOpen = itemsFail.length === 1 ? null : '{'
       const blockClose = itemsFail.length === 1 ? null : '}'
       const itemsFlat = itemsFail.flatMap(item =>
@@ -150,7 +125,7 @@ function createGroupedCases(
       )
     }
     const lines = []
-    if (noGroup) {
+    if (noGroup || testSuiteItems.length === 1) {
       lines.push(...testSuiteItems)
     } else {
       lines.push(createDescribe(description, testSuiteItems))
@@ -803,5 +778,91 @@ ${suite}`
       }
       return results
     }
+  }
+}
+const Heap = {
+  merge(a, b, isAafterB) {
+    if (!a) return b
+    if (!b) return a
+
+    let ret
+    if (!isAafterB(a.value, b.value)) {
+      ret = a
+      a = b
+      b = ret
+    }
+    ret = Heap.merge(a.right, b, isAafterB)
+    a.right = a.left
+    a.left = ret
+    return a
+  },
+  push(value, queue) {
+    queue.top = Heap.merge(
+      queue.top,
+      {value, left: null, right: null},
+      queue.isAafterB,
+    )
+    queue.size += 1
+  },
+  pop(queue) {
+    if (queue.size === 0) return
+    queue.size -= 1
+    const value = queue.top.value
+    queue.top = Heap.merge(queue.top.left, queue.top.right, queue.isAafterB)
+    return value
+  },
+  create(isAafterB) {
+    return {top: null, size: 0, isAafterB}
+  },
+}
+
+function sortListBySkewHeap(list, isAafterB) {
+  const heap = Heap.create(isAafterB)
+  list.forEach(e => {
+    Heap.push(e, heap)
+  })
+  const result = []
+  let value
+  while ((value = Heap.pop(heap))) {
+    result.push(value)
+  }
+  return result
+}
+
+function skewHeapSortFieldsComparator(sortByFields) {
+  const fields = []
+  forIn(sortByFields, (prioritySet, field) => {
+    const isVoidFalse =
+      prioritySet.includes(false) && !prioritySet.includes(undefined)
+    fields.push({
+      field,
+      isVoidFalse,
+      prioritySet: [...prioritySet], //.reverse(),
+    })
+  })
+  return function isAafterB(a, b) {
+    for (let i = 0; i < fields.length; i++) {
+      const {field, isVoidFalse, prioritySet} = fields[i]
+      let aVal = a[field]
+      let bVal = b[field]
+      if (isVoidFalse) {
+        if (aVal === undefined) aVal = false
+        if (bVal === undefined) bVal = false
+      }
+      if (aVal === bVal) continue
+      const ai = prioritySet.indexOf(aVal)
+      const bi = prioritySet.indexOf(bVal)
+      const hasA = ai !== -1
+      const hasB = bi !== -1
+      if (hasA && !hasB) return false
+      if (!hasA && hasB) return true
+      if (!hasA && !hasB) continue
+      return ai > bi
+    }
+    const idDiff = a.__casesDefsID - b.__casesDefsID
+    if (idDiff !== 0) return idDiff > 0
+    console.count('indifferentiated elements')
+    console.log(a, b)
+    return false
   }
 }

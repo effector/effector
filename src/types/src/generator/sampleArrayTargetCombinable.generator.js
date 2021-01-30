@@ -170,56 +170,56 @@ const shape = {
         }
       },
       cases: {
-        fnWithoutArgs: "() => ({a:2,b:''})",
+        fnWithoutArgs: 'fn.noArgs',
         noFalsePositiveFnClock: {
           object: {
-            solo: '({a}:AN, cl:string) => ({a,b:cl})',
-            pair: '({a}:AB, cl:string) => ({a,b:cl})'
+            solo: 'fn.assertSecond.object.solo',
+            pair: 'fn.assertSecond.object.pair'
           },
           tuple: {
-            solo: '([a]:[number], cl:string) => ({a,b:cl})',
-            pair: '([a]:[number,string], cl:string) => ({a,b:cl})',
-          }
+            solo: 'fn.assertSecond.tuple.solo',
+            pair: 'fn.assertSecond.tuple.pair'
+          },
         },
         noFalsePositiveFnSource_fnClock: {
           object: {
-            solo: "({a}:AS, cl:number) => ({a: cl, b: a})",
-            pair: "({a,b}:ABN, cl:number) => ({a:b+cl,b:''})"
+            solo: 'fn.assertFirst.object.solo',
+            pair: 'fn.assertFirst.object.pair'
           },
           tuple: {
-            solo: '([a]:[string], cl:number) => ({a:cl,b:a})',
-            pair: "([a,b]:[number,number], cl:number) => ({a:b+cl,b:''})",
-          }
+            solo: 'fn.assertFirst.tuple.solo',
+            pair: 'fn.assertFirst.tuple.pair'
+          },
         },
         typedFnClock: {
           object: {
-            solo: "({a}:AN, cl:number) => ({a:a+cl,b:''})",
-            pair: '({a,b}:AB, cl:number) => ({a:a+cl,b})'
+            solo: 'fn.typedSrcClock.object.solo',
+            pair: 'fn.typedSrcClock.object.pair'
           },
           tuple: {
-            solo: "([a]:[number], cl:number) => ({a:a+cl,b:''})",
-            pair: '([a,b]:[number,string], cl:number) => ({a:a+cl,b})',
-          }
+            solo: 'fn.typedSrcClock.tuple.solo',
+            pair: 'fn.typedSrcClock.tuple.pair'
+          },
         },
         noFalsePositiveFnSource: {
           object: {
-            solo: "({a}:AS) => ({a:0,b:a})",
-            pair: "({b}:ABN) => ({a:b,b:''})"
+            solo: 'fn.assertFirstOnly.object.solo',
+            pair: 'fn.assertFirstOnly.object.pair'
           },
           tuple: {
-            solo: '([a]:[string]) => ({a:2,b:a})',
-            pair: "([,b]:[number,number]) => ({a:b,b:''})",
-          }
+            solo: 'fn.assertFirstOnly.tuple.solo',
+            pair: 'fn.assertFirstOnly.tuple.pair'
+          },
         },
         typedNoFnClock: {
           object: {
-            solo: "({a}:AN) => ({a,b:''})",
-            pair: '({a,b}:AB) => ({a,b})'
+            solo: 'fn.typedSrc.object.solo',
+            pair: 'fn.typedSrc.object.pair'
           },
           tuple: {
-            solo: "([a]:[number]) => ({a,b:''})",
-            pair: '([a,b]:[number,string]) => ({a,b})',
-          }
+            solo: 'fn.typedSrc.tuple.solo',
+            pair: 'fn.typedSrc.tuple.pair'
+          },
         },
         fnClock: {
           object: {
@@ -248,14 +248,14 @@ const shape = {
     compute: {
       variant: fnVariants,
       cases: {
-        fnWithoutArgs: '() => ...',
-        noFalsePositiveFnClock: '(src, clk: wrong) => ...',
-        noFalsePositiveFnSource_fnClock: '(src: wrong, clk) => ...',
-        typedFnClock: '(src: t, clk: t) => ...',
-        noFalsePositiveFnSource: '(src: wrong) => ...',
-        typedNoFnClock: '(src: t) => ...',
-        fnClock: '(src, cl) => ...',
-        noFnClock: '(src) => ...',
+        fnWithoutArgs: 'untyped',
+        noFalsePositiveFnClock: 'assert',
+        noFalsePositiveFnSource_fnClock: 'assert',
+        typedFnClock: 'typed',
+        noFalsePositiveFnSource: 'assert',
+        typedNoFnClock: 'typed',
+        fnClock: 'untyped',
+        noFnClock: 'untyped',
       },
     },
   },
@@ -263,10 +263,10 @@ const shape = {
     compute: {
       variant: sourceVariants,
       cases: {
-        objectSolo: '{a}',
-        objectPair: '{a,b}',
-        tupleSolo: '[a]',
-        tuplePair: '[a,b]',
+        objectSolo: 'same',
+        objectPair: 'wide',
+        tupleSolo: 'same',
+        tuplePair: 'wide',
       },
     },
   },

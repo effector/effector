@@ -121,6 +121,61 @@ const l_num = createEvent<[number]>()
 const l_str = createEvent<[string]>()
 const l_num_str = createEvent<[number, string]>()
 const l_num_num = createEvent<[number, number]>()
+
+const fn = {
+  noArgs: () => ({a:2,b:''}),
+  assertFirst: {
+    object: {
+      solo: ({a}:AS, cl:number) => ({a: cl, b: a}),
+      pair: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})
+    },
+    tuple: {
+      solo: ([a]:[string], cl:number) => ({a:cl,b:a}),
+      pair: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''}),
+    }
+  },
+  assertFirstOnly: {
+    object: {
+      solo: ({a}:AS) => ({a:0,b:a}),
+      pair: ({b}:ABN) => ({a:b,b:''}),
+    },
+    tuple: {
+      solo: ([a]:[string]) => ({a:2,b:a}),
+      pair: ([,b]:[number,number]) => ({a:b,b:''}),
+    }
+  },
+  assertSecond: {
+    object: {
+      solo: ({a}:AN, cl:string) => ({a,b:cl}),
+      pair: ({a}:AB, cl:string) => ({a,b:cl}),
+    },
+    tuple: {
+      solo: ([a]:[number], cl:string) => ({a,b:cl}),
+      pair: ([a]:[number,string], cl:string) => ({a,b:cl}),
+    }
+  },
+  typedSrc: {
+    object: {
+      solo: ({a}:AN) => ({a,b:''}),
+      pair: ({a,b}:AB) => ({a,b})
+    },
+    tuple: {
+      solo: ([a]:[number]) => ({a,b:''}),
+      pair: ([a,b]:[number,string]) => ({a,b}),
+    }
+  },
+  typedSrcClock: {
+    object: {
+      solo: ({a}:AN, cl:number) => ({a:a+cl,b:''}),
+      pair: ({a,b}:AB, cl:number) => ({a:a+cl,b})
+    },
+    tuple: {
+      solo: ([a]:[number], cl:number) => ({a:a+cl,b:''}),
+      pair: ([a,b]:[number,string], cl:number) => ({a:a+cl,b}),
+    }
+  },
+}
+
 `,
 })
 

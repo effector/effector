@@ -98,13 +98,6 @@ const shape = {
             source: 'str',
             targetAcceptString: true,
           },
-          {
-            fn: true,
-            typedFn: false,
-            clock: 'str',
-            targetAcceptString: true,
-          },
-          // {fn: true, typedFn: false, targetAcceptNumber: true},
         ],
         errorWithFn: {fn: true},
         validWithoutFn: [
@@ -154,7 +147,7 @@ const shape = {
   },
   fnToken: {
     compute: {
-      fn: ({fn, typedFn, validSources}) =>
+      fn: ({fn, typedFn}) =>
         fn ? (typedFn ? 'typed fn' : 'untyped fn') : 'no fn',
     },
   },
