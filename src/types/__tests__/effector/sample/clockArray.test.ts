@@ -425,7 +425,7 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<[any]> | Store<[any, ...any[]]> | Event<any> | Store<{ [x: string]: any; source: unknown; clock: unknown; }>' is not assignable to type 'Event<{ a: string; clock: any; }>'.
+      Type 'Store<[any]> | Store<[any, ...any[]]> | Event<any>' is not assignable to type 'Event<{ a: string; clock: any; }>'.
         Type 'Store<[any]>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': filter, filterMap, prepend, getType
       No overload matches this call.
         The last overload gave the following error.
@@ -453,7 +453,7 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<[any]> | Store<[any, ...any[]]> | Event<any> | Store<{ [x: string]: any; source: unknown; clock: unknown; }>' is not assignable to type 'Event<{ a: string; b: string; clock: string; }>'.
+      Type 'Store<[any]> | Store<[any, ...any[]]> | Event<any>' is not assignable to type 'Event<{ a: string; b: string; clock: string; }>'.
         Type 'Store<[any]>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': filter, filterMap, prepend, getType
       No overload matches this call.
         The last overload gave the following error.

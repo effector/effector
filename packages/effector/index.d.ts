@@ -109,25 +109,6 @@ export type CompositeName = {
   path: Array<string>
 }
 
-export interface Event<Payload> extends Unit<Payload> {
-  (payload: Payload): Payload
-  (this: Payload extends void ? void : `Error: Expected 1 argument, but got 0`, payload?: Payload): void
-  watch(watcher: (payload: Payload) => any): Subscription
-  map<T>(fn: (payload: Payload) => T): Event<T>
-  filter<T extends Payload>(config: {
-    fn(payload: Payload): payload is T
-  }): Event<T>
-  filter(config: {fn(payload: Payload): boolean}): Event<Payload>
-  filterMap<T>(fn: (payload: Payload) => T | undefined): Event<T>
-  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
-  subscribe(observer: Observer<Payload>): Subscription
-  thru<U>(fn: (event: Event<Payload>) => U): U
-  getType(): string
-  compositeName: CompositeName
-  sid: string | null
-  shortName: string
-}
-
 /**
  * This is a workaround for https://github.com/microsoft/TypeScript/issues/35162
  *
@@ -137,6 +118,25 @@ export interface Event<Payload> extends Unit<Payload> {
  * as the return type we won't see any problems.
  */
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
+
+export interface Event<Payload> extends Unit<Payload> {
+  (payload: Payload): Payload
+  (this: Payload extends void ? void : `Error: Expected 1 argument, but got 0`, payload?: Payload): void
+  watch(watcher: (payload: Payload) => any): Subscription
+  map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
+  filter<T extends Payload>(config: {
+    fn(payload: Payload): payload is T
+  }): EventAsReturnType<T>
+  filter(config: {fn(payload: Payload): boolean}): EventAsReturnType<Payload>
+  filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
+  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
+  subscribe(observer: Observer<Payload>): Subscription
+  thru<U>(fn: (event: Event<Payload>) => U): U
+  getType(): string
+  compositeName: CompositeName
+  sid: string | null
+  shortName: string
+}
 
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (params: Params): Promise<Done>
@@ -169,10 +169,10 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   watch(watcher: (payload: Params) => any): Subscription
   filter<T extends Params>(config: {
     fn(payload: Params): payload is T
-  }): Event<T>
-  filter(config: {fn(payload: Params): boolean}): Event<Params>
-  filterMap<T>(fn: (payload: Params) => T | undefined): Event<T>
-  map<T>(fn: (params: Params) => T): Event<T>
+  }): EventAsReturnType<T>
+  filter(config: {fn(payload: Params): boolean}): EventAsReturnType<Params>
+  filterMap<T>(fn: (payload: Params) => T | undefined): EventAsReturnType<T>
+  map<T>(fn: (params: Params) => T): EventAsReturnType<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
@@ -418,7 +418,7 @@ export function forward<To, From extends To>(opts: {
   to: Unit<To> | ReadonlyArray<Unit<To>>
 }): Subscription
 
-export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
+export function merge<T>(events: ReadonlyArray<Unit<T>>): EventAsReturnType<T>
 export function merge<T extends ReadonlyArray<Unit<any>>>(
   events: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
@@ -657,27 +657,20 @@ type ValidTargetList<Match, Target extends Tuple<unknown>> = {
   : 'non-unit item in target array'
 }
 
-//  NoInfer in source and in return of fn helps with
-//        detecting loose objects against target type
-
-/* Sample types */
+/* sample types */
 
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
-type IfUnknown<T, Y, N> = IfAny<T, N, unknown extends T ? Y : N>;
-type IfEqual<T, U, Y = unknown, N = never> =
-  (<G>() => G extends T ? 1 : 0) extends
-    (<G>() => G extends U ? 1 : 0) ? Y : N;
+type IfUnknown<T, Y, N> = 0 extends (1 & T) ? N : unknown extends T ? Y : N;
+type IfAssignable<T, U, Y, N> =
+  (<G>() => IfAny<T & U, 0, G extends T ? 1 : 2>) extends
+    (<G>() => IfAny<T & U, 0, G extends U ? 1 : 2>)
+    ? Y
+    : (T extends U ? never : 1) extends never ? Y : N
 
-// TODO: support `sample(combinable)` [?]
-export type SourceNotConfig<T> = Unit<T> | {
-  source: never,
-  clock: never,
-  [key: string]: Store<any>
-} | Tuple<Store<any>>
-
-type Source<X> = Unit<X> | Combinable
-type Clock<X> = Unit<X> | Tuple<Unit<any>>
-type Target<X> = Unit<X> | Tuple<any>
+type SourceNotConfig<A> = Unit<A> | Tuple<Store<any>>
+type Source<A> = Unit<A> | Combinable
+type Clock<B> = Unit<B> | Tuple<Unit<any>>
+type Target = Unit<any> | Tuple<any>
 
 type GetTupleWithoutAny<T> = T extends Array<infer U>
   ? U extends Unit<infer Value>
@@ -687,17 +680,14 @@ type GetTupleWithoutAny<T> = T extends Array<infer U>
 
 type GetMergedValue<T> = GetTupleWithoutAny<T> extends never ? any : GetTupleWithoutAny<T>
 
-type GetSource<T> = T extends Unit<infer S> ? S : GetCombinedValue<T>
-type GetClock<T> = T extends Unit<infer S> ? S : GetMergedValue<T>
+type GetSource<S> = S extends Unit<infer Value> ? Value : GetCombinedValue<S>
+type GetClock<C> = C extends Unit<infer Value> ? Value : GetMergedValue<C>
 
 type AnyFn = (...args: any) => any
 
-type FnS<S> = (source: GetSource<S>) => unknown
-type FnSC<S, C> = (source: GetSource<S>, clock: GetClock<C>) => unknown
-type FnC<C> = (clock: GetClock<C>) => unknown
-type FnSF<S, F extends AnyFn, X> = (source: GetSource<S>) => IfUnknown<X, ReturnType<F>, X>
-type FnCF<C, F extends AnyFn, X> = (clock: GetClock<C>) => IfUnknown<X, ReturnType<F>, X>
-type FnSCF<S, C, F extends AnyFn, X> = (source: GetSource<S>, clock: GetClock<C>) => IfUnknown<X, ReturnType<F>, X>
+type FnSR<S, R> = (source: GetSource<S>) => R
+type FnCR<C, R> = (clock: GetClock<C>) => R
+type FnSCR<S, C, R> = (source: GetSource<S>, clock: GetClock<C>) => R
 
 type GetResultS<S> = S extends Store<any> | Combinable
   ? Store<GetSource<S>>
@@ -730,38 +720,31 @@ type GetResultSCF<S, C, F extends AnyFn> = S extends Store<any> | Combinable
 /** Replaces incompatible unit type with string error message.
  *  There is no error message if target type is void.
  */
-type ReplaceUnit<Result, Value, Target> = IfEqual<
-  Result,
-  Value,
+type ReplaceUnit<Target, Result, Value> = IfAssignable<Result, Value,
   Target,
-  Result extends Value
-  ? Target
-  : Value extends void
+  Value extends void
     ? Target
     : 'incompatible unit in target'
 >
 
-type TargetUnit<Result, T extends Unit<unknown>> = T extends Unit<infer Value>
-  ? ReplaceUnit<Result, Value, T>
-  : 'non-unit item in target'
-
-type TargetTuple<Result, T extends Tuple<unknown>> = {
-  [Index in keyof T]: T[Index] extends Unit<infer Value>
-    ? ReplaceUnit<Result, Value, T[Index]>
+// [...T] is used to show sample result as a tuple (not array)
+type TargetTuple<Target extends Array<unknown>, Result> = [...{
+  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
+    ? ReplaceUnit<Target[Index], Result, Value>
     : 'non-unit item in target'
-}
+}]
 
-type MultiTarget<Result, T extends Target<X>, X = any> = T extends Unit<any>
-  ? TargetUnit<Result, T>
-  : T extends Tuple<unknown>
-    ? TargetTuple<Result, T>
-    : never
+type MultiTarget<Target, Result> = Target extends Unit<infer Value>
+  ? ReplaceUnit<Target, Result, Value>
+  : Target extends Tuple<unknown>
+    ? TargetTuple<Target, Result>
+    : 'non-unit item in target'
 
 /*
 * Sample generics:
 * A - source value
 * B - clock value
-* X - target value
+* R - fn result
 */
 
 export function sample<
@@ -784,10 +767,10 @@ export function sample<
 export function sample<
   A = any,
   B = any,
-  X = any,
+  R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCF<S, C, F, X> = FnSCF<S, C, FnSC<S, C>, X>
+  F extends FnSCR<S, C, R> = FnSCR<S, C, R>
 >(
   source: S,
   clock: C,
@@ -802,8 +785,8 @@ export function sample<
   source: S,
   clock?: never,
   fn?: never,
-  target?: never
-  name?: string
+  target?: never,
+  name?: string,
   greedy?: boolean
 }): GetResultS<S>
 
@@ -815,8 +798,8 @@ export function sample<
   source?: never,
   clock: C,
   fn?: never,
-  target?: never
-  name?: string
+  target?: never,
+  name?: string,
   greedy?: boolean
 }): GetResultC<C>
 
@@ -830,38 +813,38 @@ export function sample<
   source: S,
   clock: C,
   fn?: never,
-  target?: never
-  name?: string
+  target?: never,
+  name?: string,
   greedy?: boolean
 }): GetResultSC<S, C>
 
 // SF
 export function sample<
   A = any,
-  X = any,
+  R = any,
   S extends Source<A> = Source<A>,
-  F extends FnSF<S, F, X> = FnSF<S, FnS<S>, X>
+  F extends FnSR<S, R> = FnSR<S, R>
 >(config: {
   source: S,
   clock?: never,
   fn: F,
-  target?: never
-  name?: string
+  target?: never,
+  name?: string,
   greedy?: boolean
 }): GetResultSF<S, F>
 
 // CF
 export function sample<
   B = any,
-  X = any,
+  R = any,
   C extends Clock<B> = Clock<B>,
-  F extends FnCF<C, F, X> = FnCF<C, FnC<C>, X>
+  F extends FnCR<C, R> = FnCR<C, R>
 >(config: {
   source?: never,
   clock: C,
   fn: F,
-  target?: never
-  name?: string
+  target?: never,
+  name?: string,
   greedy?: boolean
 }): GetResultCF<C, F>
 
@@ -869,48 +852,46 @@ export function sample<
 export function sample<
   A = any,
   B = any,
-  X = any,
+  R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCF<S, C, F, X> = FnSCF<S, C, FnSC<S, C>, X>
+  F extends FnSCR<S, C, R> = FnSCR<S, C, R>
 >(config: {
   source: S,
   clock: C,
   fn: F,
-  target?: never
-  name?: string
+  target?: never,
+  name?: string,
   greedy?: boolean
 }): GetResultSCF<S, C, F>
 
-// With target
+//  with target
 
 // ST
 export function sample<
   A = any,
-  X = any,
   S extends Source<A> = Source<A>,
-  T extends Target<X> = Target<X>
+  T extends Target = Target
 >(config: {
   source: S,
   clock?: never,
   fn?: never,
-  target: MultiTarget<GetSource<S>, T>
-  name?: string
+  target: MultiTarget<T, GetSource<S>>,
+  name?: string,
   greedy?: boolean
 }): T
 
 // СT
 export function sample<
   B = any,
-  X = any,
   C extends Clock<B> = Clock<B>,
-  T extends Target<X> = Target<X>
+  T extends Target = Target
 >(config: {
   source?: never,
   clock: C,
   fn?: never,
-  target: MultiTarget<GetClock<C>, T>
-  name?: string
+  target: MultiTarget<T, GetClock<C>>,
+  name?: string,
   greedy?: boolean
 }): T
 
@@ -918,48 +899,47 @@ export function sample<
 export function sample<
   A = any,
   B = any,
-  X = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  T extends Target<X> = Target<X>
+  T extends Target = Target
 >(config: {
   source: S,
   clock: C,
   fn?: never,
-  target: MultiTarget<GetSource<S>, T>
-  name?: string
+  target: MultiTarget<T, GetSource<S>>,
+  name?: string,
   greedy?: boolean
 }): T
 
 // SFT
 export function sample<
   A = any,
-  X = any,
+  R = any,
   S extends Source<A> = Source<A>,
-  F extends FnSF<S, F, X> = FnSF<S, FnS<S>, X>,
-  T extends Target<X> = Target<X>
+  F extends FnSR<S, R> = FnSR<S, R>,
+  T extends Target = Target
 >(config: {
   source: S,
   clock?: never,
   fn: F,
-  target: MultiTarget<ReturnType<F>, T, X>
-  name?: string
+  target: MultiTarget<T, ReturnType<F>>,
+  name?: string,
   greedy?: boolean
 }): T
 
 // СFT
 export function sample<
   B = any,
-  X = any,
+  R = any,
   C extends Clock<B> = Clock<B>,
-  F extends FnCF<C, F, X> = FnCF<C, FnC<C>, X>,
-  T extends Target<X> = Target<X>
+  F extends FnCR<C, R> = FnCR<C, R>,
+  T extends Target = Target
 >(config: {
   source?: never,
   clock: C,
   fn: F,
-  target: MultiTarget<ReturnType<F>, T, X>
-  name?: string
+  target: MultiTarget<T, ReturnType<F>>,
+  name?: string,
   greedy?: boolean
 }): T
 
@@ -967,37 +947,47 @@ export function sample<
 export function sample<
   A = any,
   B = any,
-  X = any,
+  R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCF<S, C, F, X> = FnSCF<S, C, FnSC<S, C>, X>,
-  T extends Target<X> = Target<X>
+  F extends FnSCR<S, C, R> = FnSCR<S, C, R>,
+  T extends Target = Target
 >(config: {
   source: S,
   clock: C,
   fn: F,
-  target: MultiTarget<ReturnType<F>, T, X>
-  name?: string
+  target: MultiTarget<T, ReturnType<F>>,
+  name?: string,
   greedy?: boolean
 }): T
 
-// Last overload
+// last overload (for readable error messages)
 export function sample<
-  A = unknown,
-  B = unknown,
-  X = unknown,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
-  F extends (source: IfUnknown<GetSource<S>, GetClock<C>, GetSource<S>>, clock: GetClock<C>) => unknown = (source: unknown, clock: unknown) => unknown,
-  T extends Target<X> = Target<X>
+  S extends Source<unknown>,
+  C extends Clock<unknown>,
+  F extends IfUnknown<GetSource<S>,
+    (clock: GetClock<C>) => unknown,
+    IfUnknown<GetSource<C>,
+      (source: GetSource<S>) => unknown,
+      (source: GetSource<S>, clock: GetClock<C>) => unknown
+    >
+  >,
+  T extends Target
 >(config: {
-  source: S,
+  source?: S,
   clock?: C,
   fn?: F,
-  target: MultiTarget<IfUnknown<ReturnType<F>, GetSource<S>, ReturnType<F>>, T, X>
-  name?: string
+  target: MultiTarget<T,
+    IfUnknown<ReturnType<F>,
+      IfUnknown<GetSource<S>, GetClock<C>, GetSource<S>>,
+      ReturnType<F>
+    >
+  >,
+  name?: string,
   greedy?: boolean
 }): T
+
+/* guard types */
 
 type ValidTargetUnitGuard<Source, Target extends unknown> =
   Target extends Unit<infer TargetValue>
