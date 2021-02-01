@@ -3,24 +3,24 @@ id: dynamic-form-schema
 title: Dynamic form schema
 ---
 
-[Try it](https://share.effector.dev/1oOz6104)
+[Try it](https://share.effector.dev/kOWvKMLn)
 
 ```js
 const submitForm = createEvent()
+const addMessage = createEvent()
+const $message = restore(addMessage, 'done')
+const showTooltipFx = createEffect(
+  () => new Promise(rs => setTimeout(rs, 1500))
+)
 
-const saveFormFx = createEffect({
-  handler(data) {
-    localStorage.setItem('form_state/2', JSON.stringify(data, null, 2))
-  },
+const saveFormFx = createEffect(data => {
+  localStorage.setItem('form_state/2', JSON.stringify(data, null, 2))
+})
+const loadFormFx = createEffect(() => {
+  return JSON.parse(localStorage.getItem('form_state/2'))
 })
 
-const loadFormFx = createEffect({
-  handler() {
-    return JSON.parse(localStorage.getItem('form_state/2'))
-  },
-})
-
-const mainForm = createStore({}).on(loadFormFx.doneData, (state, result) => {
+const $mainForm = createStore({}).on(loadFormFx.doneData, (state, result) => {
   let changed = false
   state = {...state}
   for (const key in result) {
@@ -34,7 +34,7 @@ const mainForm = createStore({}).on(loadFormFx.doneData, (state, result) => {
   return state
 })
 
-const mainFormApi = createApi(mainForm, {
+const mainFormApi = createApi($mainForm, {
   upsertField(state, name) {
     if (name in state) return
     return {...state, [name]: ''}
@@ -54,8 +54,7 @@ const mainFormApi = createApi(mainForm, {
     return state
   },
 })
-
-const types = createStore({
+const $types = createStore({
   username: 'text',
   email: 'text',
   password: 'text',
@@ -84,7 +83,7 @@ const types = createStore({
     return state
   })
 
-const fields = types.map(state => Object.keys(state))
+const $fields = $types.map(state => Object.keys(state))
 
 const changeFieldInput = mainFormApi.changeField.prepend(e => [
   e.currentTarget.name,
@@ -100,8 +99,14 @@ const submitField = mainFormApi.addField.prepend(e => [
   e.currentTarget.fieldtype.value,
 ])
 const submitRemoveField = mainFormApi.deleteField.prepend(
-  e => e.currentTarget.field.value,
+  e => e.currentTarget.field.value
 )
+
+const changeFieldType = createEvent()
+const $fieldType = createStore('text')
+  .on(changeFieldType, (_, e) => e.currentTarget.value)
+  .reset(submitField)
+
 submitForm.watch(e => {
   e.preventDefault()
 })
@@ -114,11 +119,8 @@ submitRemoveField.watch(e => {
 })
 
 sample({
-  source: {
-    values: mainForm,
-    types,
-  },
-  clock: merge([submitForm, submitField, submitRemoveField]),
+  clock: [submitForm, submitField, submitRemoveField],
+  source: {values: $mainForm, types: $types},
   target: saveFormFx,
   fn({values, types}) {
     const result = {}
@@ -130,12 +132,6 @@ sample({
     }
     return result
   },
-})
-
-const addMessage = createEvent()
-const message = restore(addMessage, 'done')
-const showTooltipFx = createEffect({
-  handler: () => new Promise(rs => setTimeout(rs, 1500)),
 })
 
 forward({
@@ -161,7 +157,7 @@ loadFormFx.finally.watch(() => {
 
 function useFormField(name) {
   const type = useStoreMap({
-    store: types,
+    store: $types,
     keys: [name],
     fn(state, [field]) {
       if (field in state) return state[field]
@@ -169,7 +165,7 @@ function useFormField(name) {
     },
   })
   const value = useStoreMap({
-    store: mainForm,
+    store: $mainForm,
     keys: [name],
     fn(state, [field]) {
       if (field in state) return state[field]
@@ -187,7 +183,7 @@ function Form() {
       <header>
         <h4>Form</h4>
       </header>
-      {useList(fields, name => (
+      {useList($fields, name => (
         <InputField name={name} />
       ))}
 
@@ -234,12 +230,8 @@ function InputField({name}) {
   )
 }
 
-const changeFieldType = createEvent()
-const fieldType = createStore('text')
-  .on(changeFieldType, (_, e) => e.currentTarget.value)
-  .reset(submitField)
 function FieldForm() {
-  const currentFieldType = useStore(fieldType)
+  const currentFieldType = useStore($fieldType)
   const fieldValue =
     currentFieldType === 'checkbox' ? (
       <input id="fieldvalue" name="fieldvalue" type="checkbox" />
@@ -287,7 +279,7 @@ function RemoveFieldForm() {
         <strong>name</strong>
       </label>
       <select id="field" name="field" required>
-        {useList(fields, name => (
+        {useList($fields, name => (
           <option value={name}>{name}</option>
         ))}
       </select>
@@ -298,7 +290,7 @@ function RemoveFieldForm() {
 
 const Tooltip = () => {
   const visible = useStore(showTooltipFx.pending)
-  const text = useStore(message)
+  const text = useStore($message)
   return <span data-tooltip={text} data-visible={visible} />
 }
 const App = () => (

@@ -3,51 +3,46 @@ id: todo-with-validation
 title: TODO list with input validation
 ---
 
+[Try it](https://share.effector.dev/4la2a6lj)
+
 ```js
 import {createEvent, createStore, createEffect, restore, combine, sample} from 'effector'
 import {useStore, useList} from 'effector-react'
 
-const validate = createEffect()
 const submit = createEvent()
 const submitted = createEvent()
 const completed = createEvent()
 const changed = createEvent()
 const removed = createEvent()
-const $todos = createStore([])
-const $todo = restore(changed, '').reset(submitted)
-const $error = restore(validate.failData, '').reset(changed)
-
-submit.watch(e => e.preventDefault())
-
-$todos.on(submitted, (prev, next) =>
-  prev.concat({text: next, completed: false})
-)
-$todos.on(completed, (state, index) =>
-  state.map((item, i) => ({
-    ...item,
-    completed: index === i ? !item.completed : item.completed,
-  }))
-)
-$todos.on(removed, (state, index) => state.filter((_, i) => i !== index))
-
-validate.use(([todo, todos]) => {
+const validate = createEffect(([todo, todos]) => {
   if (todos.some(item => item.text === todo))
     throw 'This todo is already on the list'
   if (!todo.trim().length) throw 'Required field'
   return null
 })
+const $todo = restore(changed, '').reset(submitted)
+const $error = restore(validate.failData, '').reset(changed)
+const $todos = createStore([])
+  .on(submitted, (prev, next) => [...prev, {text: next, completed: false}])
+  .on(completed, (state, index) => state.map((item, i) => ({
+    ...item,
+    completed: index === i ? !item.completed : item.completed,
+  })))
+  .on(removed, (state, index) => state.filter((_, i) => i !== index))
 
 sample({
-  source: combine($todo, $todos),
   clock: submit,
+  source: [$todo, $todos],
   target: validate,
 })
 
 sample({
-  source: $todo,
   clock: validate.done,
+  source: $todo,
   target: submitted,
 })
+
+submit.watch(e => e.preventDefault())
 
 const App = () => {
   const tasks = useStore($todos)
@@ -90,5 +85,3 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-
-[Try it](https://share.effector.dev/HuK3aUI8)

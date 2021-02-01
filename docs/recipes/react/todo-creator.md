@@ -3,7 +3,9 @@ id: todo-creator
 title: TODO creator
 ---
 
-```js
+[Try it](https://share.effector.dev/CKvKkf6j)
+
+```ts
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent, sample} from 'effector'
@@ -26,8 +28,8 @@ function createTodoListApi(initial: string[] = []) {
   submit.watch(e => e.preventDefault())
 
   sample({
-    source: input,
     clock: submit,
+    source: input,
     target: insert,
   })
 
@@ -83,5 +85,3 @@ function App() {
 
 ReactDOM.render(<App/>, document.getElementById('root'))
 ```
-
-[Try it](https://share.effector.dev/kctWL5O5)

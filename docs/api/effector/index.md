@@ -24,7 +24,7 @@ title: API Reference
 - [createApi(store, api)](./createApi.md)
 - [forward({from, to})](./forward.md)
 - [merge([eventA, eventB])](./merge.md)
-- [sample({source, clock, fn, target})](./sample.md)
+- [sample({clock, source, fn, target})](./sample.md)
 - [guard({source, filter, target})](./guard.md)
 - [split(event, cases)](./split.md)
 - [is](./is.md)

@@ -42,14 +42,14 @@ How to read it:
 For example:
 
 ```ts
-const $store = sample({source: $store, clock: $store})
+const $store = sample({clock: $store, source: $store})
 // Result will be store, because source and clock are stores.
 
-const event = sample({source: $store, clock: event})
+const event = sample({clock: event, source: $store})
 // Because not all arguments are stores.
 ```
 
-## `sample({source, clock?, fn?, target?, greedy?})`
+## `sample({clock?, source, fn?, target?, greedy?})`
 
 **Arguments**
 
@@ -82,8 +82,8 @@ const signIn = createEffect(params => {
 const submitForm = createEvent()
 
 sample({
-  source: $userName /* 2 */,
   clock: submitForm /* 1 */,
+  source: $userName /* 2 */,
   fn: (name, password) => ({name, password}) /* 3 */,
   target: signIn /* 4 */,
 })
@@ -95,7 +95,7 @@ submitForm(12345678)
 // 4. triger effect signIn with params received at the step (3)
 ```
 
-[Try it](https://share.effector.dev/jRBTnrsv)
+[Try it](https://share.effector.dev/PAjWhOJc)
 
 ## `sample(sourceUnit, clockUnit, fn?)`
 
@@ -188,17 +188,19 @@ const b = createStore(1)
 
 // Target has type `Event<{ a: string, b: number }>`
 const target = sample({
-  source: {a, b},
   clock: trigger,
+  source: {a, b},
 })
 
 target.watch(obj => {
   console.log('sampled object', obj)
-  // => {a: 'A', b: 1}
 })
+
+trigger()
+// => sampled object {a: 'A', b: 1}
 ```
 
-[Try it](https://share.effector.dev/hiGwHrX4)
+[Try it](https://share.effector.dev/Wp9nq14k)
 
 ### Array of stores
 
@@ -216,23 +218,25 @@ const b = createStore(1)
 
 // Target has type `Event<[string, number]>`
 const target = sample({
-  source: [a, b],
   clock: trigger,
+  source: [a, b],
 })
 
 target.watch(obj => {
   console.log('sampled array', obj)
-  // => ["A", 1]
 })
 
 // You can easily destructure arguments to set explicit names
 target.watch(([a, b]) => {
-  console.log('Explicit names', a, b)
-  // => "A" 1
+  console.log('explicit names', a, b)
 })
+
+trigger()
+// => sampled array ["A", 1]
+// => explicit names "A" 1
 ```
 
-[Try it](https://share.effector.dev/aQPLBJ2j)
+[Try it](https://share.effector.dev/duqTwRgT)
 
 ### Support array in clock
 
@@ -252,18 +256,20 @@ const store = createStore('')
 
 // array of units in clock
 sample({
-  source: store,
   clock: [trigger, fx.doneData],
+  source: store,
   target: showNotification,
 })
 
 // merged unit in clock
 sample({
-  source: store,
   clock: merge([trigger, fx.doneData]),
+  source: store,
   target: showNotification,
 })
 ```
+
+[Try it](https://share.effector.dev/1YEHUFs7)
 
 <!-- ## Other examples
 
@@ -292,14 +298,14 @@ lastEvent.updates.watch(data => {
 const analyticReportsEnabled = createStore(false)
 
 const commonSampling = sample({
-  source: analyticReportsEnabled,
   clock: merge([clickButton, closeModal]),
+  source: analyticReportsEnabled,
   fn: (isEnabled, data) => ({isEnabled, data}),
 })
 
 const greedySampling = sample({
-  source: analyticReportsEnabled,
   clock: merge([clickButton, closeModal]),
+  source: analyticReportsEnabled,
   fn: (isEnabled, data) => ({isEnabled, data}),
   greedy: true,
 })
@@ -311,7 +317,7 @@ clickButton('click A')
 clickButton('click B')
 ```
 
-[Try it](https://share.effector.dev/yI70z0nd)
+[Try it](https://share.effector.dev/RCo60EEK)
 
 ### Example `sample(sourceEvent, clockEvent, fn?)`
 

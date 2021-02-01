@@ -22,8 +22,8 @@ const $form = createStore({}).on(setField, (s, {key, value}) => ({
 }))
 
 sample({
-  source: $form,
   clock: submitted,
+  source: $form,
   target: sendFormFx,
 })
 
@@ -61,7 +61,7 @@ submitted.watch(e => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/nfObKoO1)
+[Try it](https://share.effector.dev/G2WBDwZP)
 
 Let's break down the code above.
 
@@ -83,8 +83,8 @@ Next piece of code shows how we can obtain a state in effector in a right way. T
 
 ```js
 sample({
-  source: $form, // Take LATEST state from $form, and
   clock: submitted, // when `submitted` is triggered
+  source: $form, // Take LATEST state from $form, and
   target: sendFormFx, // pass it to `sendFormFx`, in other words -> sendFormFx(state)
   //fn: (sourceState, clockParams) => transformedData // we could additionally transform data here, but if we need just pass source's value, we may omit this property
 })
