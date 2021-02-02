@@ -43,9 +43,24 @@ const failCases = {
 }
 
 const grouping = {
-  createTestLines,
-  getHash: cur => `${cur.sourceDescription} ${cur.fn ? cur.fnDescription : ''}`,
-  describeGroup: cur =>
+  createTestLines: {
+    method: 'sample',
+    shape: {
+      source: 'sourceCode',
+      clock: {
+        field: 'clockText',
+        when: 'hasClock',
+      },
+      target: 'targetText',
+      fn: {
+        field: 'fnText',
+        when: 'fn',
+      },
+    },
+  },
+  getHash: (cur: any) =>
+    `${cur.sourceDescription} ${cur.fn ? cur.fnDescription : ''}`,
+  describeGroup: (cur: any) =>
     `source:${cur.sourceDescription}${
       cur.fn ? `, fn:${cur.fnDescription}` : ''
     }`,
@@ -54,29 +69,6 @@ const grouping = {
     fn: [false, true],
     hasClock: [false, true],
   },
-}
-
-function createTestLines({
-  sourceCode,
-  sourceDescription,
-  clockText,
-  target,
-  pass,
-  fn,
-  fnText,
-  fnDescription,
-  fnClock,
-  typedFn,
-  noFalsePositiveFnClock,
-  fnWithoutArgs,
-}) {
-  const getText = item => variables[item] || item
-  const printTargets = target.join(',')
-  const sourceTargets = target.map(getText).join(', ')
-  const methodCall = `sample({source: ${sourceCode}${clockText}, target: [${sourceTargets}]${
-    fn ? `, fn: ${fnText}` : ''
-  }})`
-  return [pass ? null : '/*@ts-expect-error*/', methodCall].filter(Boolean)
 }
 
 const shape = {
@@ -295,15 +287,12 @@ const shape = {
     },
   },
   clockText: {
+    value: 'num',
+  },
+  targetText: {
     compute: {
-      variant: {
-        hasClock: {hasClock: true},
-        noClock: {},
-      },
-      cases: {
-        hasClock: ', clock: num',
-        noClock: '',
-      },
+      fn: ({target}: any) =>
+        target.map((item: keyof typeof variables) => variables[item] || item),
     },
   },
   pass: {
@@ -318,10 +307,12 @@ const shape = {
       },
       cases: {
         noFalsePositive: false,
-        fn: ({target}) =>
+        fn: ({target}: any) =>
           failCases.ab.every(failCase => !target.includes(failCase)),
-        default: ({source, target}) =>
-          failCases[source].every(failCase => !target.includes(failCase)),
+        default: ({source, target}: any) =>
+          failCases[source as keyof typeof failCases].every(
+            failCase => !target.includes(failCase),
+          ),
       },
     },
   },

@@ -1,15 +1,18 @@
-import {printArray} from '../runner/text'
-
 const grouping = {
   getHash: ({descriptionTokens}) => descriptionTokens,
   describeGroup: ({groupTokens}) => ({
     // largeGroup,
     description: groupTokens,
   }),
-  createTestLines: ({methodCode, pass}) => [
-    pass ? null : '//@ts-expect-error',
-    methodCode,
-  ],
+  createTestLines: {
+    method: 'sample',
+    shape: {
+      source: 'source',
+      clock: 'clock',
+      target: 'targets',
+      fn: 'fnCode',
+    },
+  },
   sortByFields: {
     fnToken: ['no fn', 'untyped fn', 'typed fn'],
   },
@@ -28,7 +31,6 @@ const shape = {
   typedFn: {
     flag: {
       needs: [
-        'fn',
         {
           true: [
             {fn: true, source: 'num', clock: 'num'},
@@ -47,18 +49,6 @@ const shape = {
       noReorder: true,
     },
   },
-  validSource: {
-    bool: {
-      true: {source: 'num'},
-      false: {source: 'str'},
-    },
-  },
-  validTarget: {
-    compute: {
-      fn: ({targets}) =>
-        targets.every(target => !['strBool', 'str'].includes(target)),
-    },
-  },
   targetAcceptString: {
     compute: {
       fn: ({targets}) =>
@@ -75,7 +65,7 @@ const shape = {
         ),
     },
   },
-  validSources: {
+  pass: {
     compute: {
       variant: {
         validWithFn: [
@@ -90,6 +80,20 @@ const shape = {
             typedFn: false,
             source: 'str',
             targetAcceptString: true,
+          },
+          {
+            fn: true,
+            typedFn: false,
+            source: 'num',
+            clock: 'str',
+            targetAcceptString: true,
+          },
+          {
+            fn: true,
+            typedFn: false,
+            source: 'num',
+            clock: 'num',
+            targetAcceptNumber: true,
           },
         ],
         errorWithFn: {fn: true},
@@ -107,13 +111,6 @@ const shape = {
       },
     },
   },
-  pass: {
-    true: [
-      {fn: true, validSources: true},
-      {fn: false, validSources: true},
-      // {fn: true, validSources: true, validTarget: true},
-    ],
-  },
   fnCode: {
     compute: {
       variant: {
@@ -122,19 +119,9 @@ const shape = {
         untyped: {typedFn: false},
       },
       cases: {
-        noFn: '',
-        typed: ', fn: (src:number,clk:number) => src+clk',
-        untyped: ', fn: (src,clk) => src + clk',
-      },
-    },
-  },
-  targetCode: {
-    compute: {fn: ({targets}) => printArray(targets)},
-  },
-  methodCode: {
-    compute: {
-      fn({source, clock, fnCode, targetCode}) {
-        return `sample({source: ${source}, clock: ${clock}, target: ${targetCode}${fnCode}})`
+        noFn: null,
+        typed: '(src:number,clk:number) => src+clk',
+        untyped: '(src,clk) => src + clk',
       },
     },
   },
@@ -151,8 +138,8 @@ const shape = {
   },
   descriptionTokens: {
     compute: {
-      fn({fn, typedFn, validSources}) {
-        return `${fn} ${fn && typedFn} ${validSources}`
+      fn({fn, typedFn, pass}) {
+        return `${fn} ${fn && typedFn} ${pass}`
       },
     },
   },

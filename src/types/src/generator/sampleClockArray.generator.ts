@@ -1,17 +1,20 @@
-import {printArray} from '../runner/text'
-
 const grouping = {
-  getHash: ({descriptionTokens, noTarget, noClock, noSource}) =>
+  getHash: ({descriptionTokens, noTarget, noClock, noSource}: any) =>
     `${descriptionTokens}${noTarget}${noClock}${noSource}`,
-  describeGroup: ({descriptionTokens, noGroup, largeGroup}) => ({
+  describeGroup: ({descriptionTokens, noGroup, largeGroup}: any) => ({
     description: descriptionTokens,
     noGroup,
     largeGroup,
   }),
-  createTestLines: ({methodCode, pass}) => [
-    pass ? null : '//@ts-expect-error',
-    methodCode,
-  ],
+  createTestLines: {
+    method: 'sample',
+    shape: {
+      source: 'sourceCode',
+      clock: 'clock',
+      target: 'target',
+      fn: 'fnCode',
+    },
+  },
   sortByFields: {
     clockArray: [false, true],
     combinable: [false, true],
@@ -92,7 +95,7 @@ const shape = {
       },
       cases: {
         none: {
-          value: '',
+          value: null,
         },
         only: {
           split: {
@@ -187,18 +190,18 @@ const shape = {
         string: {fn: false},
       },
       cases: {
-        none: '',
-        abclock: ', target: abclock',
-        ab: ', target: abTarget',
-        aclock: ', target: aclock',
-        a: ', target: aTarget',
-        string: ', target: str',
+        none: null,
+        abclock: 'abclock',
+        ab: 'abTarget',
+        aclock: 'aclock',
+        a: 'aTarget',
+        string: 'str',
       },
     },
   },
   descriptionTokens: {
     compute: {
-      fn(shape) {
+      fn(shape: any) {
         const res = []
         if (shape.fnClockTypeAssertion) {
           shape.combinable ? res.push('combinable') : res.push('plain')
@@ -209,12 +212,7 @@ const shape = {
         if (!shape.fnClockTypeAssertion) {
           shape.fn && res.push('fn')
           shape.secondArgument && res.push('fnClock')
-          // shape.explicitArgumentTypes && res.push('typedFn')
         }
-        // shape.unificationToAny && res.push('unificationToAny')
-        // shape.fnClockTypeAssertion && res.push('assertFnType')
-        // shape.fnWithoutArgs && res.push('fnWithoutArgs')
-
         return res.join(', ')
       },
     },
@@ -227,19 +225,9 @@ const shape = {
         combinable: {combinable: true},
       },
       cases: {
-        none: '',
-        plain: 'source: a',
-        combinable: 'source: {a,b}',
-      },
-    },
-  },
-  clockCode: {
-    compute: {
-      fn({clock, noSource}) {
-        if (clock === '') return ''
-        const clockText = Array.isArray(clock) ? printArray(clock) : clock
-        const comma = noSource ? '' : ', '
-        return `${comma}clock: ${clockText}`
+        none: null,
+        plain: 'a',
+        combinable: '{a,b}',
       },
     },
   },
@@ -293,40 +281,11 @@ const shape = {
       },
     },
   },
-  methodCode: {
-    compute: {
-      variant: {
-        hasFn: {fn: true},
-        noFn: {fn: false},
-      },
-      cases: {
-        hasFn: ({sourceCode, clockCode, fnCode, target}) =>
-          `sample({${sourceCode}${clockCode}${target}, fn: ${fnCode}})`,
-        noFn: ({sourceCode, clockCode, target}) =>
-          `sample({${sourceCode}${clockCode}${target}})`,
-      },
-    },
-  },
   noGroup: {
-    true: [
-      {noClock: true},
-      {noSource: true},
-      {unificationToAny: true},
-      // {fnClockTypeAssertion: true},
-    ],
+    true: [{noClock: true}, {noSource: true}, {unificationToAny: true}],
   },
   largeGroup: {
     compute: {
-      // variant: {
-      //   noClock: {noClock: true},
-      //   noSource: {noSource: true},
-      //   hasClock: {},
-      // },
-      // cases: {
-      //   noClock: 'no clock',
-      //   noSource: 'no source',
-      //   hasClock: null,
-      // },
       variant: {
         fnAssertion: {fnClockTypeAssertion: true},
         noSource: {noSource: true},

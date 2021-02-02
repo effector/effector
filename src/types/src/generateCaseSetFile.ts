@@ -1,7 +1,13 @@
 import {promises} from 'fs'
 import {resolve} from 'path'
 import {sortListBySkewHeap} from './runner/heap'
-import {leftPad, wrapText, createDescribe, createTest} from './runner/text'
+import {
+  leftPad,
+  wrapText,
+  createDescribe,
+  createTest,
+  printMethod,
+} from './runner/text'
 import {forIn} from './runner/forIn'
 
 export {generateCaseSetFile, byFields, createGroupedCases}
@@ -9,6 +15,17 @@ function createGroupedCases(
   casesDefs,
   {createTestLines, getHash, describeGroup, sortByFields},
 ) {
+  if (typeof createTestLines === 'object' && createTestLines !== null) {
+    const {method, shape, addExpectError = true} = createTestLines
+    createTestLines = (value: any) => [
+      printMethod({
+        method,
+        shape,
+        addExpectError,
+        value,
+      }),
+    ]
+  }
   const isAafterB = sortByFields && skewHeapSortFieldsComparator(sortByFields)
   function sortList<T>(list: T[]) {
     if (!sortByFields) return [...list]

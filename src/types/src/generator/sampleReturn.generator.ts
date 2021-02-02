@@ -1,3 +1,5 @@
+import {printMethod} from '../runner/text'
+
 const Source = {
   event: {source: 'event'},
   store: {source: 'store'},
@@ -17,17 +19,30 @@ const Target = {
 }
 
 const grouping = {
-  getHash: ({targetToken, clock, typedFn}) =>
+  getHash: ({targetToken, clock, typedFn}: any) =>
     `${targetToken} ${clock} ${typedFn}`,
-  describeGroup: ({targetToken, typedFnToken, clock, largeGroup}) => ({
+  describeGroup: ({targetToken, typedFnToken, clock, largeGroup}: any) => ({
     largeGroup,
     noGroup: true,
     description: `${targetToken}${typedFnToken}, ${clock} clock`,
   }),
-  createTestLines: ({methodCode, pass}) => [
-    pass ? null : '//@ts-expect-error',
-    methodCode,
-  ],
+  createTestLines(value: any) {
+    const method = printMethod({
+      method: 'sample',
+      shape: {
+        source: 'sourceCode',
+        clock: 'clockCode',
+        target: 'targetCode',
+        fn: 'fnCode',
+      },
+      value,
+      addExpectError: false,
+    })
+    return [
+      !value.pass && '//@ts-expect-error',
+      `{const result: ${value.returnCode} = ${method}}`,
+    ]
+  },
   sortByFields: {
     targetToken: ['no target', 'unit target', 'tuple target'],
     typedFn: [false, true],
@@ -92,15 +107,15 @@ const shape = {
         },
       },
       cases: {
-        none: '',
-        noArgs: ', fn: fn0',
+        none: null,
+        noArgs: 'fn0',
         arg: {
-          typed: ', fn: fn1',
-          untyped: ', fn: ({a}) => ({a})',
+          typed: 'fn1',
+          untyped: '({a}) => ({a})',
         },
         argPair: {
-          typed: ', fn: fn2',
-          untyped: ', fn: ({a},c) => ({a:a+c})',
+          typed: 'fn2',
+          untyped: '({a},c) => ({a:a+c})',
         },
       },
     },
@@ -119,10 +134,10 @@ const shape = {
     compute: {
       variant: Clock,
       cases: {
-        none: '',
-        event: ', clock: num',
-        store: ', clock: $num',
-        tuple: ', clock: [num,$num]',
+        none: null,
+        event: 'num',
+        store: '$num',
+        tuple: '[num,$num]',
       },
     },
   },
@@ -130,10 +145,10 @@ const shape = {
     compute: {
       variant: Target,
       cases: {
-        none: '',
-        event: ', target: aNumT',
-        store: ', target: aT   ',
-        tuple: ', target: [aNumT,aT]',
+        none: null,
+        event: 'aNumT',
+        store: 'aT   ',
+        tuple: '[aNumT,aT]',
       },
     },
   },
@@ -165,13 +180,6 @@ const shape = {
   pass: {
     value: true,
   },
-  methodCode: {
-    compute: {
-      fn({sourceCode, clockCode, fnCode, targetCode, returnCode}) {
-        return `{const result: ${returnCode} = sample({source:${sourceCode}${clockCode}${targetCode}${fnCode}})}`
-      },
-    },
-  },
   typedFnToken: {
     compute: {
       variant: {
@@ -200,7 +208,7 @@ const shape = {
   },
   largeGroup: {
     compute: {
-      fn: ({typedFnToken, targetToken}) => `${targetToken}${typedFnToken}`,
+      fn: ({typedFnToken, targetToken}: any) => `${targetToken}${typedFnToken}`,
     },
   },
 }
