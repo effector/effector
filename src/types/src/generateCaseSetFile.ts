@@ -7,6 +7,7 @@ import {
   createDescribe,
   createTest,
   printMethod,
+  printMethodValues,
 } from './runner/text'
 import {forIn} from './runner/forIn'
 
@@ -15,8 +16,10 @@ function createGroupedCases(
   casesDefs,
   {createTestLines, getHash, describeGroup, sortByFields},
 ) {
+  let align = false
   if (typeof createTestLines === 'object' && createTestLines !== null) {
     const {method, shape, addExpectError = true} = createTestLines
+    align = createTestLines.align || align
     createTestLines = (value: any) => [
       printMethod({
         method,
@@ -25,6 +28,16 @@ function createGroupedCases(
         value,
       }),
     ]
+    if (align) {
+      createTestLines = (values: any[]) =>
+        printMethodValues({
+          method,
+          values,
+          shape,
+          addExpectError,
+          align,
+        })
+    }
   }
   const isAafterB = sortByFields && skewHeapSortFieldsComparator(sortByFields)
   function sortList<T>(list: T[]) {
@@ -92,9 +105,9 @@ function createGroupedCases(
       //itemsPass = sortList(itemsPass)
       const blockOpen = itemsPass.length === 1 ? null : '{'
       const blockClose = itemsPass.length === 1 ? null : '}'
-      const itemsFlat = itemsPass.flatMap(item =>
-        createTestLines(item).filter(Boolean),
-      )
+      const itemsFlat = align
+        ? createTestLines(itemsPass)
+        : itemsPass.flatMap(item => createTestLines(item).filter(Boolean))
       const items = itemsPass.length === 1 ? itemsFlat : leftPad(itemsFlat)
       testSuiteItems.push(
         createTest(`${description} (should pass)`, [
@@ -110,9 +123,9 @@ function createGroupedCases(
       //itemsFail = sortList(itemsFail)
       const blockOpen = itemsFail.length === 1 ? null : '{'
       const blockClose = itemsFail.length === 1 ? null : '}'
-      const itemsFlat = itemsFail.flatMap(item =>
-        createTestLines(item).filter(Boolean),
-      )
+      const itemsFlat = align
+        ? createTestLines(itemsFail)
+        : itemsFail.flatMap(item => createTestLines(item).filter(Boolean))
       const items = itemsFail.length === 1 ? itemsFlat : leftPad(itemsFlat)
       testSuiteItems.push(
         createTest(`${description} (should fail)`, [

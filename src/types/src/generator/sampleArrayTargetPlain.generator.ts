@@ -6,6 +6,7 @@ const grouping = {
   }),
   createTestLines: {
     method: 'sample',
+    align: true,
     shape: {
       source: 'source',
       clock: 'clock',

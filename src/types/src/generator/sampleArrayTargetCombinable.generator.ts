@@ -45,6 +45,7 @@ const failCases = {
 const grouping = {
   createTestLines: {
     method: 'sample',
+    align: true,
     shape: {
       source: 'sourceCode',
       clock: {
@@ -204,12 +205,12 @@ const shape = {
         },
         fnClock: {
           object: {
-            solo: "({a}, cl) => ({a:a+cl,b:''})",
-            pair: '({a,b}, cl) => ({a:a+cl,b})'
+            solo: "({a},cl) => ({a:a+cl,b:''})",
+            pair: '({a,b},cl) => ({a:a+cl,b})'
           },
           tuple: {
-            solo: "([a], cl) => ({a:a+cl,b:''})",
-            pair: '([a,b], cl) => ({a:a+cl,b})',
+            solo: "([a],cl) => ({a:a+cl,b:''})",
+            pair: '([a,b],cl) => ({a:a+cl,b})',
           }
         },
         noFnClock: {
@@ -255,10 +256,10 @@ const shape = {
     compute: {
       variant: sourceVariants,
       cases: {
-        objectSolo: '{a: $num}',
-        objectPair: '{a: $num, b: $str}',
+        objectSolo: '{a:$num}',
+        objectPair: '{a:$num,b:$str}',
         tupleSolo: '[$num]',
-        tuplePair: '[$num, $str]',
+        tuplePair: '[$num,$str]',
       },
     },
   },
