@@ -10,6 +10,7 @@ const b = createStore('')
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const numt = createEvent<number>()
+const strt = createEvent<number>()
 const $num = createStore(0)
 const ab = createEvent<AB>()
 const nullableAB = createEvent<AB | null>()
@@ -27,15 +28,15 @@ describe('unit source', () => {
     test('unit -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, target: voidt, filter: (val) => val.a > 0})
-        guard({source: ab, target: ab, filter: (val) => val.a > 0})
-        guard({source: ab, target: anyt, filter: (val) => val.a > 0})
-        guard({source: ab, target: ab, filter: $filter})
-        guard({source: ab, target: anyt, filter: $filter})
-        guard({source: ab, target: voidt, filter: $filter})
-        guard({source: ab, target: ab, filter: Boolean})
-        guard({source: ab, target: voidt, filter: Boolean})
-        guard({source: ab, target: anyt, filter: Boolean})
+        guard({source:ab, target:voidt, filter:(val) => val.a > 0})
+        guard({source:ab, target:ab   , filter:(val) => val.a > 0})
+        guard({source:ab, target:anyt , filter:(val) => val.a > 0})
+        guard({source:ab, target:voidt, filter:$filter           })
+        guard({source:ab, target:anyt , filter:$filter           })
+        guard({source:ab, target:ab   , filter:$filter           })
+        guard({source:ab, target:anyt , filter:Boolean           })
+        guard({source:ab, target:ab   , filter:Boolean           })
+        guard({source:ab, target:voidt, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -47,11 +48,11 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, target: abn, filter: (val) => val.a > 0})
+        guard({source:ab, target:abn, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: abn, filter: $filter})
+        guard({source:ab, target:abn, filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: abn, filter: Boolean})
+        guard({source:ab, target:abn, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -74,9 +75,9 @@ describe('unit source', () => {
     test('unit -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, target: aNum, filter: (val) => val.a > 0})
-        guard({source: ab, target: aNum, filter: $filter})
-        guard({source: ab, target: aNum, filter: Boolean})
+        guard({source:ab, target:aNum, filter:(val) => val.a > 0})
+        guard({source:ab, target:aNum, filter:$filter           })
+        guard({source:ab, target:aNum, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -88,11 +89,11 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, target: aStr, filter: (val) => val.a > 0})
+        guard({source:ab, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: aStr, filter: $filter})
+        guard({source:ab, target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: aStr, filter: Boolean})
+        guard({source:ab, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -115,18 +116,18 @@ describe('unit source', () => {
     test('unit + clock -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: anyt, target: ab, filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: voidt, filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: anyt, filter: (val) => val.a > 0})
-        guard({source: ab, clock: numt, target: anyt, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: voidt, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: ab, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: anyt, target: ab, filter: $filter})
-        guard({source: ab, clock: anyt, target: voidt, filter: $filter})
-        guard({source: ab, clock: anyt, target: anyt, filter: $filter})
-        guard({source: ab, clock: anyt, target: voidt, filter: Boolean})
-        guard({source: ab, clock: anyt, target: ab, filter: Boolean})
-        guard({source: ab, clock: anyt, target: anyt, filter: Boolean})
+        guard({source:ab, clock:anyt, target:ab   , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:voidt, filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:anyt , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:numt, target:voidt, filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:anyt , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:ab   , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:anyt, target:anyt , filter:$filter             })
+        guard({source:ab, clock:anyt, target:voidt, filter:$filter             })
+        guard({source:ab, clock:anyt, target:ab   , filter:$filter             })
+        guard({source:ab, clock:anyt, target:anyt , filter:Boolean             })
+        guard({source:ab, clock:anyt, target:voidt, filter:Boolean             })
+        guard({source:ab, clock:anyt, target:ab   , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -138,11 +139,11 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: abn, filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:abn, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: abn, filter: $filter})
+        guard({source:ab, clock:anyt, target:abn, filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: abn, filter: Boolean})
+        guard({source:ab, clock:anyt, target:abn, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -163,10 +164,10 @@ describe('unit source', () => {
     test('unit + clock -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: anyt, target: aNum, filter: (val) => val.a > 0})
-        guard({source: ab, clock: numt, target: aNum, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: anyt, target: aNum, filter: $filter})
-        guard({source: ab, clock: anyt, target: aNum, filter: Boolean})
+        guard({source:ab, clock:anyt, target:aNum, filter:(val) => val.a > 0  })
+        guard({source:ab, clock:numt, target:aNum, filter:(val,n) => val.a > n})
+        guard({source:ab, clock:anyt, target:aNum, filter:$filter             })
+        guard({source:ab, clock:anyt, target:aNum, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -178,11 +179,11 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: aStr, filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: aStr, filter: $filter})
+        guard({source:ab, clock:anyt, target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: aStr, filter: Boolean})
+        guard({source:ab, clock:anyt, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -203,18 +204,18 @@ describe('unit source', () => {
     test('unit + [clock] -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: [anyt], target: voidt, filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: ab, filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: anyt, filter: (val) => val.a > 0})
-        guard({source: ab, clock: [numt, $num], target: voidt, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: anyt, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: ab, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [anyt], target: ab, filter: $filter})
-        guard({source: ab, clock: [anyt], target: voidt, filter: $filter})
-        guard({source: ab, clock: [anyt], target: anyt, filter: $filter})
-        guard({source: ab, clock: [anyt], target: ab, filter: Boolean})
-        guard({source: ab, clock: [anyt], target: anyt, filter: Boolean})
-        guard({source: ab, clock: [anyt], target: voidt, filter: Boolean})
+        guard({source:ab, clock:[anyt]     , target:anyt , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:voidt, filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:ab   , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[numt,$num], target:anyt , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:ab   , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:voidt, filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[anyt]     , target:voidt, filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:ab   , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:anyt , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:anyt , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:ab   , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:voidt, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -226,11 +227,11 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: abn, filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:abn, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: abn, filter: $filter})
+        guard({source:ab, clock:[anyt], target:abn, filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: abn, filter: Boolean})
+        guard({source:ab, clock:[anyt], target:abn, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -251,10 +252,10 @@ describe('unit source', () => {
     test('unit + [clock] -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: [anyt], target: aNum, filter: (val) => val.a > 0})
-        guard({source: ab, clock: [numt, $num], target: aNum, filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [anyt], target: aNum, filter: $filter})
-        guard({source: ab, clock: [anyt], target: aNum, filter: Boolean})
+        guard({source:ab, clock:[anyt]     , target:aNum, filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[numt,$num], target:aNum, filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[anyt]     , target:aNum, filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:aNum, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -266,11 +267,11 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: aStr, filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: aStr, filter: $filter})
+        guard({source:ab, clock:[anyt], target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: aStr, filter: Boolean})
+        guard({source:ab, clock:[anyt], target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -291,18 +292,18 @@ describe('unit source', () => {
     test('unit -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, target: [ab,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, target: [ab,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, target: [ab], filter: (val) => val.a > 0})
-        guard({source: ab, target: [ab,anyt], filter: (val) => val.a > 0})
-        guard({source: ab, target: [ab,anyt,voidt], filter: $filter})
-        guard({source: ab, target: [ab], filter: $filter})
-        guard({source: ab, target: [ab,anyt], filter: $filter})
-        guard({source: ab, target: [ab,voidt], filter: $filter})
-        guard({source: ab, target: [ab], filter: Boolean})
-        guard({source: ab, target: [ab,voidt], filter: Boolean})
-        guard({source: ab, target: [ab,anyt], filter: Boolean})
-        guard({source: ab, target: [ab,anyt,voidt], filter: Boolean})
+        guard({source:ab, target:[ab,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab, target:[ab,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab, target:[ab,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab, target:[ab]           , filter:(val) => val.a > 0})
+        guard({source:ab, target:[ab,anyt]      , filter:$filter           })
+        guard({source:ab, target:[ab,voidt]     , filter:$filter           })
+        guard({source:ab, target:[ab]           , filter:$filter           })
+        guard({source:ab, target:[ab,anyt,voidt], filter:$filter           })
+        guard({source:ab, target:[ab,anyt]      , filter:Boolean           })
+        guard({source:ab, target:[ab,voidt]     , filter:Boolean           })
+        guard({source:ab, target:[ab]           , filter:Boolean           })
+        guard({source:ab, target:[ab,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -314,50 +315,50 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, target: [abn,anyt], filter: (val) => val.a > 0})
+        guard({source:ab, target:[abn]           , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [abn,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, target:[abn,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [abn], filter: (val) => val.a > 0})
+        guard({source:ab, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [abn,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, target:[abn,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [abn,voidt], filter: $filter})
+        guard({source:ab, target:[abn,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [abn,anyt,voidt], filter: $filter})
+        guard({source:ab, target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [abn], filter: $filter})
+        guard({source:ab, target:[abn]           , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [abn,anyt], filter: $filter})
+        guard({source:ab, target:[abn,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:ab, target:[abn,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, target: [abn], filter: Boolean})
+        guard({source:ab, target:[abn]           , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, target: [abn,anyt], filter: Boolean})
+        guard({source:ab, target:[abn,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, target: [abn,voidt], filter: Boolean})
+        guard({source:ab, target:[abn,anyt]      , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
             Type 'Event<ABN>[]' is missing the following properties from type 'Unit<AB>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB>': kind, __
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+            Type '(Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
@@ -372,10 +373,10 @@ describe('unit source', () => {
             Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         "
       `)
     })
@@ -384,18 +385,18 @@ describe('unit source', () => {
     test('unit -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, target: [aNum,anyt], filter: (val) => val.a > 0})
-        guard({source: ab, target: [aNum,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, target: [aNum], filter: (val) => val.a > 0})
-        guard({source: ab, target: [aNum,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, target: [aNum,anyt], filter: $filter})
-        guard({source: ab, target: [aNum], filter: $filter})
-        guard({source: ab, target: [aNum,voidt], filter: $filter})
-        guard({source: ab, target: [aNum,anyt,voidt], filter: $filter})
-        guard({source: ab, target: [aNum,anyt], filter: Boolean})
-        guard({source: ab, target: [aNum,voidt], filter: Boolean})
-        guard({source: ab, target: [aNum], filter: Boolean})
-        guard({source: ab, target: [aNum,anyt,voidt], filter: Boolean})
+        guard({source:ab, target:[aNum,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab, target:[aNum,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab, target:[aNum,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab, target:[aNum]           , filter:(val) => val.a > 0})
+        guard({source:ab, target:[aNum,anyt,voidt], filter:$filter           })
+        guard({source:ab, target:[aNum]           , filter:$filter           })
+        guard({source:ab, target:[aNum,anyt]      , filter:$filter           })
+        guard({source:ab, target:[aNum,voidt]     , filter:$filter           })
+        guard({source:ab, target:[aNum]           , filter:Boolean           })
+        guard({source:ab, target:[aNum,voidt]     , filter:Boolean           })
+        guard({source:ab, target:[aNum,anyt,voidt], filter:Boolean           })
+        guard({source:ab, target:[aNum,anyt]      , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -407,29 +408,29 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, target: [aStr,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [aStr,anyt], filter: (val) => val.a > 0})
+        guard({source:ab, target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [aStr,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [aStr,ab], filter: (val) => val.a > 0})
+        guard({source:ab, target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, target: [aStr,anyt], filter: $filter})
+        guard({source:ab, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,voidt], filter: $filter})
+        guard({source:ab, target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,ab], filter: $filter})
+        guard({source:ab, target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,anyt,voidt], filter: $filter})
+        guard({source:ab, target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:ab, target:[aStr,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,ab], filter: Boolean})
+        guard({source:ab, target:[aStr,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,voidt], filter: Boolean})
+        guard({source:ab, target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, target: [aStr,anyt], filter: Boolean})
+        guard({source:ab, target:[aStr,voidt]     , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -438,25 +439,28 @@ describe('unit source', () => {
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB>': kind, __
         No overload matches this call.
           The last overload gave the following error.
+            Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB>': kind, __
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
+            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
@@ -466,9 +470,6 @@ describe('unit source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         "
       `)
     })
@@ -477,22 +478,22 @@ describe('unit source', () => {
     test('unit + clock -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: anyt, target: [ab,anyt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: [ab], filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: [ab,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: [ab,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: numt, target: [ab,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: [ab,anyt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: [ab], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: [ab,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: anyt, target: [ab], filter: $filter})
-        guard({source: ab, clock: anyt, target: [ab,anyt,voidt], filter: $filter})
-        guard({source: ab, clock: anyt, target: [ab,anyt], filter: $filter})
-        guard({source: ab, clock: anyt, target: [ab,voidt], filter: $filter})
-        guard({source: ab, clock: anyt, target: [ab,anyt,voidt], filter: Boolean})
-        guard({source: ab, clock: anyt, target: [ab,anyt], filter: Boolean})
-        guard({source: ab, clock: anyt, target: [ab], filter: Boolean})
-        guard({source: ab, clock: anyt, target: [ab,voidt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[ab,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:[ab,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:[ab,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:[ab]           , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:numt, target:[ab,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:[ab,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:[ab,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:[ab]           , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:anyt, target:[ab,voidt]     , filter:$filter             })
+        guard({source:ab, clock:anyt, target:[ab,anyt]      , filter:$filter             })
+        guard({source:ab, clock:anyt, target:[ab]           , filter:$filter             })
+        guard({source:ab, clock:anyt, target:[ab,anyt,voidt], filter:$filter             })
+        guard({source:ab, clock:anyt, target:[ab,anyt,voidt], filter:Boolean             })
+        guard({source:ab, clock:anyt, target:[ab,voidt]     , filter:Boolean             })
+        guard({source:ab, clock:anyt, target:[ab]           , filter:Boolean             })
+        guard({source:ab, clock:anyt, target:[ab,anyt]      , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -504,35 +505,44 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,anyt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[abn]           , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[abn,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn], filter: $filter})
+        guard({source:ab, clock:anyt, target:[abn]           , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,anyt,voidt], filter: $filter})
+        guard({source:ab, clock:anyt, target:[abn,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,anyt], filter: $filter})
+        guard({source:ab, clock:anyt, target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,voidt], filter: $filter})
+        guard({source:ab, clock:anyt, target:[abn,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[abn,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,anyt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[abn,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[abn]           , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [abn,voidt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[abn,voidt]     , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
+            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
@@ -544,22 +554,13 @@ describe('unit source', () => {
             Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
@@ -574,22 +575,22 @@ describe('unit source', () => {
     test('unit + clock -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: anyt, target: [aNum,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: [aNum,anyt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: [aNum], filter: (val) => val.a > 0})
-        guard({source: ab, clock: anyt, target: [aNum,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: numt, target: [aNum,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: [aNum,anyt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: [aNum,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: numt, target: [aNum], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: anyt, target: [aNum,voidt], filter: $filter})
-        guard({source: ab, clock: anyt, target: [aNum,anyt], filter: $filter})
-        guard({source: ab, clock: anyt, target: [aNum], filter: $filter})
-        guard({source: ab, clock: anyt, target: [aNum,anyt,voidt], filter: $filter})
-        guard({source: ab, clock: anyt, target: [aNum,anyt], filter: Boolean})
-        guard({source: ab, clock: anyt, target: [aNum], filter: Boolean})
-        guard({source: ab, clock: anyt, target: [aNum,voidt], filter: Boolean})
-        guard({source: ab, clock: anyt, target: [aNum,anyt,voidt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[aNum,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:[aNum,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:anyt, target:[aNum]           , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:numt, target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:[aNum,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:[aNum,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:numt, target:[aNum]           , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:anyt, target:[aNum]           , filter:$filter             })
+        guard({source:ab, clock:anyt, target:[aNum,anyt,voidt], filter:$filter             })
+        guard({source:ab, clock:anyt, target:[aNum,voidt]     , filter:$filter             })
+        guard({source:ab, clock:anyt, target:[aNum,anyt]      , filter:$filter             })
+        guard({source:ab, clock:anyt, target:[aNum]           , filter:Boolean             })
+        guard({source:ab, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:ab, clock:anyt, target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:ab, clock:anyt, target:[aNum,voidt]     , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -601,34 +602,49 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,ab], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,anyt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,ab], filter: $filter})
+        guard({source:ab, clock:anyt, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,voidt], filter: $filter})
+        guard({source:ab, clock:anyt, target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,anyt], filter: $filter})
+        guard({source:ab, clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,anyt,voidt], filter: $filter})
+        guard({source:ab, clock:anyt, target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,anyt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,voidt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,ab], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: anyt, target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:ab, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
+            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -644,25 +660,10 @@ describe('unit source', () => {
             Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         "
       `)
     })
@@ -671,22 +672,22 @@ describe('unit source', () => {
     test('unit + [clock] -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: [anyt], target: [ab,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: [ab,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: [ab], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: [ab,anyt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [numt, $num], target: [ab,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: [ab,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: [ab], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: [ab,anyt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [anyt], target: [ab,voidt], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [ab,anyt,voidt], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [ab,anyt], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [ab], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [ab], filter: Boolean})
-        guard({source: ab, clock: [anyt], target: [ab,anyt], filter: Boolean})
-        guard({source: ab, clock: [anyt], target: [ab,voidt], filter: Boolean})
-        guard({source: ab, clock: [anyt], target: [ab,anyt,voidt], filter: Boolean})
+        guard({source:ab, clock:[anyt]     , target:[ab,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:[ab,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:[ab]           , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:[ab,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[numt,$num], target:[ab,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:[ab,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:[ab]           , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[anyt]     , target:[ab,voidt]     , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[ab,anyt]      , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[ab]           , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[ab,anyt,voidt], filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[ab]           , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -698,38 +699,50 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[abn,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,anyt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[abn]           , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,anyt,voidt], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[abn]           , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,anyt], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[abn,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,voidt], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[abn,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[abn,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,anyt], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[abn,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [abn,voidt], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[abn]           , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
+            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
@@ -748,18 +761,6 @@ describe('unit source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB>'.
         "
       `)
     })
@@ -768,22 +769,22 @@ describe('unit source', () => {
     test('unit + [clock] -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: ab, clock: [anyt], target: [aNum,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: [aNum,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: [aNum,anyt], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [anyt], target: [aNum], filter: (val) => val.a > 0})
-        guard({source: ab, clock: [numt, $num], target: [aNum,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: [aNum,anyt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: [aNum,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [numt, $num], target: [aNum], filter: (val, n) => val.a > n})
-        guard({source: ab, clock: [anyt], target: [aNum,anyt,voidt], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [aNum,voidt], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [aNum,anyt], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [aNum], filter: $filter})
-        guard({source: ab, clock: [anyt], target: [aNum,anyt], filter: Boolean})
-        guard({source: ab, clock: [anyt], target: [aNum,anyt,voidt], filter: Boolean})
-        guard({source: ab, clock: [anyt], target: [aNum,voidt], filter: Boolean})
-        guard({source: ab, clock: [anyt], target: [aNum], filter: Boolean})
+        guard({source:ab, clock:[anyt]     , target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:[aNum]           , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:[aNum,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[anyt]     , target:[aNum,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:ab, clock:[numt,$num], target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:[aNum]           , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:[aNum,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[numt,$num], target:[aNum,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:ab, clock:[anyt]     , target:[aNum,voidt]     , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[aNum]           , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[aNum,anyt,voidt], filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[aNum,anyt]      , filter:$filter             })
+        guard({source:ab, clock:[anyt]     , target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:[aNum,voidt]     , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:[aNum]           , filter:Boolean             })
+        guard({source:ab, clock:[anyt]     , target:[aNum,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -795,35 +796,53 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,anyt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,ab], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,voidt], filter: (val) => val.a > 0})
+        guard({source:ab, clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,ab], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,anyt,voidt], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,voidt], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,anyt], filter: $filter})
+        guard({source:ab, clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,ab], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,anyt], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: ab, clock: [anyt], target: [aStr,voidt], filter: Boolean})
+        guard({source:ab, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
+            Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
@@ -835,28 +854,10 @@ describe('unit source', () => {
             Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB>'.
         "
       `)
     })
@@ -865,8 +866,8 @@ describe('unit source', () => {
     test('nullable unit -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: abNull, target: ab, filter: (val): val is AB => val.a !== null})
-        guard({source: nullableAB, target: ab, filter: Boolean})
+        guard({source:abNull    , target:ab, filter:(val): val is AB => val.a !== null})
+        guard({source:nullableAB, target:ab, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -878,9 +879,9 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: abNull, target: abn, filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , target:abn, filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: nullableAB, target: abn, filter: Boolean})
+        guard({source:nullableAB, target:abn, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -902,9 +903,9 @@ describe('unit source', () => {
     test('nullable unit + clock -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: abNull, clock: anyt, target: ab, filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: numt, target: ab, filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: nullableAB, clock: anyt, target: ab, filter: Boolean})
+        guard({source:abNull    , clock:anyt, target:ab, filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:numt, target:ab, filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:anyt, target:ab, filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -916,9 +917,9 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: abNull, clock: anyt, target: abn, filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:anyt, target:abn, filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: abn, filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:abn, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -936,9 +937,9 @@ describe('unit source', () => {
     test('nullable unit + [clock] -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: abNull, clock: [anyt], target: ab, filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: [numt, $num], target: ab, filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: nullableAB, clock: [anyt], target: ab, filter: Boolean})
+        guard({source:abNull    , clock:[anyt]     , target:ab, filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[numt,$num], target:ab, filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:[anyt]     , target:ab, filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -950,9 +951,9 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: abNull, clock: [anyt], target: abn, filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:[anyt], target:abn, filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: abn, filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:abn, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -969,7 +970,7 @@ describe('unit source', () => {
   describe('nullable unit -> unit wide', () => {
     test('nullable unit -> unit wide (should pass)', () => {
       //prettier-ignore
-      guard({source: nullableAB, target: aNum, filter: Boolean})
+      guard({source:nullableAB, target:aNum, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -979,7 +980,7 @@ describe('unit source', () => {
     test('nullable unit -> unit wide (should fail)', () => {
       //prettier-ignore
       //@ts-expect-error
-      guard({source: nullableAB, target: aStr, filter: Boolean})
+      guard({source:nullableAB, target:aStr, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -994,7 +995,7 @@ describe('unit source', () => {
   describe('nullable unit + clock -> unit wide', () => {
     test('nullable unit + clock -> unit wide (should pass)', () => {
       //prettier-ignore
-      guard({source: nullableAB, clock: anyt, target: aNum, filter: Boolean})
+      guard({source:nullableAB, clock:anyt, target:aNum, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -1004,7 +1005,7 @@ describe('unit source', () => {
     test('nullable unit + clock -> unit wide (should fail)', () => {
       //prettier-ignore
       //@ts-expect-error
-      guard({source: nullableAB, clock: anyt, target: aStr, filter: Boolean})
+      guard({source:nullableAB, clock:anyt, target:aStr, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -1017,7 +1018,7 @@ describe('unit source', () => {
   describe('nullable unit + [clock] -> unit wide', () => {
     test('nullable unit + [clock] -> unit wide (should pass)', () => {
       //prettier-ignore
-      guard({source: nullableAB, clock: [anyt], target: aNum, filter: Boolean})
+      guard({source:nullableAB, clock:[anyt], target:aNum, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
@@ -1027,7 +1028,7 @@ describe('unit source', () => {
     test('nullable unit + [clock] -> unit wide (should fail)', () => {
       //prettier-ignore
       //@ts-expect-error
-      guard({source: nullableAB, clock: [anyt], target: aStr, filter: Boolean})
+      guard({source:nullableAB, clock:[anyt], target:aStr, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
@@ -1041,14 +1042,14 @@ describe('unit source', () => {
     test('nullable unit -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: abNull, target: [ab], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, target: [ab,anyt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, target: [ab,anyt,voidt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, target: [ab,voidt], filter: (val): val is AB => val.a !== null})
-        guard({source: nullableAB, target: [ab], filter: Boolean})
-        guard({source: nullableAB, target: [ab,anyt], filter: Boolean})
-        guard({source: nullableAB, target: [ab,voidt], filter: Boolean})
-        guard({source: nullableAB, target: [ab,anyt,voidt], filter: Boolean})
+        guard({source:abNull    , target:[ab,anyt]      , filter:(val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[ab]           , filter:(val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[ab,voidt]     , filter:(val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null})
+        guard({source:nullableAB, target:[ab]           , filter:Boolean                           })
+        guard({source:nullableAB, target:[ab,anyt,voidt], filter:Boolean                           })
+        guard({source:nullableAB, target:[ab,voidt]     , filter:Boolean                           })
+        guard({source:nullableAB, target:[ab,anyt]      , filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1060,30 +1061,30 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: abNull, target: [abn,voidt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[abn]           , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, target: [abn], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, target: [abn,anyt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, target: [abn,anyt,voidt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: nullableAB, target: [abn], filter: Boolean})
+        guard({source:nullableAB, target:[abn,anyt,voidt], filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, target: [abn,anyt], filter: Boolean})
+        guard({source:nullableAB, target:[abn,voidt]     , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, target: [abn,voidt], filter: Boolean})
+        guard({source:nullableAB, target:[abn]           , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, target:[abn,anyt]      , filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
+            Type 'Event<ABN>[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
+            Type '(Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
@@ -1092,16 +1093,16 @@ describe('unit source', () => {
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<{ a: number | null; b: string; }>': kind, __
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>[]' is missing the following properties from type 'Unit<AB | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
+            Type '(Event<any> | Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
+            Type 'Event<ABN>[]' is missing the following properties from type 'Unit<AB | null>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
         "
       `)
     })
@@ -1110,18 +1111,18 @@ describe('unit source', () => {
     test('nullable unit + clock -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: abNull, clock: anyt, target: [ab], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: anyt, target: [ab,anyt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: anyt, target: [ab,voidt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: anyt, target: [ab,anyt,voidt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: numt, target: [ab,anyt], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: abNull, clock: numt, target: [ab,anyt,voidt], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: abNull, clock: numt, target: [ab], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: abNull, clock: numt, target: [ab,voidt], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: nullableAB, clock: anyt, target: [ab], filter: Boolean})
-        guard({source: nullableAB, clock: anyt, target: [ab,anyt,voidt], filter: Boolean})
-        guard({source: nullableAB, clock: anyt, target: [ab,anyt], filter: Boolean})
-        guard({source: nullableAB, clock: anyt, target: [ab,voidt], filter: Boolean})
+        guard({source:abNull    , clock:anyt, target:[ab,voidt]     , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:anyt, target:[ab]           , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:anyt, target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:anyt, target:[ab,anyt]      , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:numt, target:[ab]           , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:numt, target:[ab,anyt,voidt], filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:numt, target:[ab,anyt]      , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:numt, target:[ab,voidt]     , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:anyt, target:[ab,anyt]      , filter:Boolean                                      })
+        guard({source:nullableAB, clock:anyt, target:[ab]           , filter:Boolean                                      })
+        guard({source:nullableAB, clock:anyt, target:[ab,voidt]     , filter:Boolean                                      })
+        guard({source:nullableAB, clock:anyt, target:[ab,anyt,voidt], filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1133,48 +1134,48 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: abNull, clock: anyt, target: [abn,anyt,voidt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:anyt, target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, clock: anyt, target: [abn,voidt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:anyt, target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, clock: anyt, target: [abn], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:anyt, target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, clock: anyt, target: [abn,anyt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:anyt, target:[abn]           , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [abn], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[abn,voidt]     , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [abn,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[abn,anyt]      , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[abn]           , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [abn,anyt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
+            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB | null>'.
+            Type 'Event<ABN>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
+            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
+            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB | null>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
         "
       `)
     })
@@ -1183,18 +1184,18 @@ describe('unit source', () => {
     test('nullable unit + [clock] -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: abNull, clock: [anyt], target: [ab,voidt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: [anyt], target: [ab], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: [anyt], target: [ab,anyt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: [anyt], target: [ab,anyt,voidt], filter: (val): val is AB => val.a !== null})
-        guard({source: abNull, clock: [numt, $num], target: [ab], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: abNull, clock: [numt, $num], target: [ab,anyt], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: abNull, clock: [numt, $num], target: [ab,voidt], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: abNull, clock: [numt, $num], target: [ab,anyt,voidt], filter: (val, n): val is AB => n > 0 && val.a !== null})
-        guard({source: nullableAB, clock: [anyt], target: [ab], filter: Boolean})
-        guard({source: nullableAB, clock: [anyt], target: [ab,anyt], filter: Boolean})
-        guard({source: nullableAB, clock: [anyt], target: [ab,voidt], filter: Boolean})
-        guard({source: nullableAB, clock: [anyt], target: [ab,anyt,voidt], filter: Boolean})
+        guard({source:abNull    , clock:[anyt]     , target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[anyt]     , target:[ab]           , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[anyt]     , target:[ab,voidt]     , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[anyt]     , target:[ab,anyt]      , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[numt,$num], target:[ab,voidt]     , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:[numt,$num], target:[ab]           , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:[numt,$num], target:[ab,anyt]      , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:[anyt]     , target:[ab]           , filter:Boolean                                      })
+        guard({source:nullableAB, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean                                      })
+        guard({source:nullableAB, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean                                      })
+        guard({source:nullableAB, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1206,21 +1207,21 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: abNull, clock: [anyt], target: [abn], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:[anyt], target:[abn]           , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, clock: [anyt], target: [abn,anyt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:[anyt], target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, clock: [anyt], target: [abn,voidt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:[anyt], target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: abNull, clock: [anyt], target: [abn,anyt,voidt], filter: (val): val is AB => val.a !== null})
+        guard({source:abNull    , clock:[anyt], target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [abn], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [abn,anyt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[abn]           , filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [abn,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[abn,voidt]     , filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1229,25 +1230,25 @@ describe('unit source', () => {
             Type 'Event<ABN>[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
+            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
+            Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<{ a: number | null; b: string; }>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
+            Type 'Event<ABN>[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<AB | null>'.
         "
       `)
     })
@@ -1256,10 +1257,10 @@ describe('unit source', () => {
     test('nullable unit -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: nullableAB, target: [aNum,voidt], filter: Boolean})
-        guard({source: nullableAB, target: [aNum,anyt], filter: Boolean})
-        guard({source: nullableAB, target: [aNum,anyt,voidt], filter: Boolean})
-        guard({source: nullableAB, target: [aNum], filter: Boolean})
+        guard({source:nullableAB, target:[aNum,anyt,voidt], filter:Boolean})
+        guard({source:nullableAB, target:[aNum,anyt]      , filter:Boolean})
+        guard({source:nullableAB, target:[aNum,voidt]     , filter:Boolean})
+        guard({source:nullableAB, target:[aNum]           , filter:Boolean})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1271,28 +1272,28 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: nullableAB, target: [aStr,anyt], filter: Boolean})
+        guard({source:nullableAB, target:[aStr,ab]        , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, target: [aStr,voidt], filter: Boolean})
+        guard({source:nullableAB, target:[aStr,anyt,voidt], filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, target:[aStr,voidt]     , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, target: [aStr,ab], filter: Boolean})
+        guard({source:nullableAB, target:[aStr,anyt]      , filter:Boolean})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
+            Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
+            Type '(Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<AB | null>': kind, __
         "
       `)
     })
@@ -1301,10 +1302,10 @@ describe('unit source', () => {
     test('nullable unit + clock -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: nullableAB, clock: anyt, target: [aNum,anyt], filter: Boolean})
-        guard({source: nullableAB, clock: anyt, target: [aNum,voidt], filter: Boolean})
-        guard({source: nullableAB, clock: anyt, target: [aNum], filter: Boolean})
-        guard({source: nullableAB, clock: anyt, target: [aNum,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aNum]           , filter:Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aNum,anyt]      , filter:Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aNum,voidt]     , filter:Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1316,19 +1317,16 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aStr,anyt]      , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [aStr,anyt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aStr,voidt]     , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [aStr,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aStr,ab]        , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, clock: anyt, target: [aStr,ab], filter: Boolean})
+        guard({source:nullableAB, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
@@ -1338,6 +1336,9 @@ describe('unit source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
         "
       `)
     })
@@ -1346,10 +1347,10 @@ describe('unit source', () => {
     test('nullable unit + [clock] -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: nullableAB, clock: [anyt], target: [aNum], filter: Boolean})
-        guard({source: nullableAB, clock: [anyt], target: [aNum,anyt], filter: Boolean})
-        guard({source: nullableAB, clock: [anyt], target: [aNum,voidt], filter: Boolean})
-        guard({source: nullableAB, clock: [anyt], target: [aNum,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aNum,anyt]      , filter:Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aNum,voidt]     , filter:Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aNum,anyt,voidt], filter:Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aNum]           , filter:Boolean})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1361,13 +1362,13 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [aStr,ab], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aStr,ab]        , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [aStr,anyt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [aStr,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aStr,anyt]      , filter:Boolean})
         //@ts-expect-error
-        guard({source: nullableAB, clock: [anyt], target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:nullableAB, clock:[anyt], target:[aStr,voidt]     , filter:Boolean})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1376,13 +1377,13 @@ describe('unit source', () => {
             Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
+            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<AB | null>'.
         "
       `)
     })
@@ -1393,15 +1394,15 @@ describe('object source', () => {
     test('object -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, target: voidt, filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: ab, filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: anyt, filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: ab, filter: $filter})
-        guard({source: {a, b}, target: anyt, filter: $filter})
-        guard({source: {a, b}, target: voidt, filter: $filter})
-        guard({source: {a, b}, target: ab, filter: Boolean})
-        guard({source: {a, b}, target: voidt, filter: Boolean})
-        guard({source: {a, b}, target: anyt, filter: Boolean})
+        guard({source:{a,b}, target:ab   , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:voidt, filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:anyt , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:anyt , filter:$filter           })
+        guard({source:{a,b}, target:voidt, filter:$filter           })
+        guard({source:{a,b}, target:ab   , filter:$filter           })
+        guard({source:{a,b}, target:ab   , filter:Boolean           })
+        guard({source:{a,b}, target:voidt, filter:Boolean           })
+        guard({source:{a,b}, target:anyt , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1413,11 +1414,11 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, target: abn, filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:abn, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: abn, filter: $filter})
+        guard({source:{a,b}, target:abn, filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: abn, filter: Boolean})
+        guard({source:{a,b}, target:abn, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1441,9 +1442,9 @@ describe('object source', () => {
     test('object -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, target: aNum, filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: aNum, filter: $filter})
-        guard({source: {a, b}, target: aNum, filter: Boolean})
+        guard({source:{a,b}, target:aNum, filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:aNum, filter:$filter           })
+        guard({source:{a,b}, target:aNum, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1455,11 +1456,11 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, target: aStr, filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: aStr, filter: $filter})
+        guard({source:{a,b}, target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: aStr, filter: Boolean})
+        guard({source:{a,b}, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1484,18 +1485,18 @@ describe('object source', () => {
     test('object + clock -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: anyt, target: voidt, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: ab, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: anyt, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: numt, target: anyt, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: ab, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: voidt, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: anyt, target: voidt, filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: ab, filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: anyt, filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: ab, filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: voidt, filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: anyt, filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:ab   , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:voidt, filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:anyt , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:numt, target:anyt , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:voidt, filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:ab   , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:anyt, target:anyt , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:voidt, filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:ab   , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:anyt , filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:voidt, filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:ab   , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1507,11 +1508,11 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: abn, filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:abn, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: abn, filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:abn, filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: abn, filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:abn, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1535,10 +1536,10 @@ describe('object source', () => {
     test('object + clock -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: anyt, target: aNum, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: numt, target: aNum, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: anyt, target: aNum, filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: aNum, filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:aNum, filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:numt, target:aNum, filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:anyt, target:aNum, filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:aNum, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1550,11 +1551,11 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: aStr, filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: aStr, filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: aStr, filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1579,18 +1580,18 @@ describe('object source', () => {
     test('object + [clock] -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: [anyt], target: voidt, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: ab, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: anyt, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [numt, $num], target: anyt, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: ab, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: voidt, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [anyt], target: voidt, filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: ab, filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: anyt, filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: ab, filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: voidt, filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: anyt, filter: Boolean})
+        guard({source:{a,b}, clock:[anyt]     , target:voidt, filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:anyt , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:ab   , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[numt,$num], target:voidt, filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:anyt , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:ab   , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[anyt]     , target:anyt , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:voidt, filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:ab   , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:ab   , filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:voidt, filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:anyt , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1602,11 +1603,11 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: abn, filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:abn, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: abn, filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:abn, filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: abn, filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:abn, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1630,10 +1631,10 @@ describe('object source', () => {
     test('object + [clock] -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: [anyt], target: aNum, filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [numt, $num], target: aNum, filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [anyt], target: aNum, filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: aNum, filter: Boolean})
+        guard({source:{a,b}, clock:[anyt]     , target:aNum, filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[numt,$num], target:aNum, filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[anyt]     , target:aNum, filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:aNum, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1645,11 +1646,11 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: aStr, filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: aStr, filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: aStr, filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1674,18 +1675,18 @@ describe('object source', () => {
     test('object -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, target: [ab,anyt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [ab,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [ab], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [ab,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [ab,voidt], filter: $filter})
-        guard({source: {a, b}, target: [ab,anyt,voidt], filter: $filter})
-        guard({source: {a, b}, target: [ab], filter: $filter})
-        guard({source: {a, b}, target: [ab,anyt], filter: $filter})
-        guard({source: {a, b}, target: [ab,anyt,voidt], filter: Boolean})
-        guard({source: {a, b}, target: [ab,anyt], filter: Boolean})
-        guard({source: {a, b}, target: [ab,voidt], filter: Boolean})
-        guard({source: {a, b}, target: [ab], filter: Boolean})
+        guard({source:{a,b}, target:[ab,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[ab]           , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[ab,anyt]      , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[ab,voidt]     , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[ab]           , filter:$filter           })
+        guard({source:{a,b}, target:[ab,anyt,voidt], filter:$filter           })
+        guard({source:{a,b}, target:[ab,anyt]      , filter:$filter           })
+        guard({source:{a,b}, target:[ab,voidt]     , filter:$filter           })
+        guard({source:{a,b}, target:[ab,anyt]      , filter:Boolean           })
+        guard({source:{a,b}, target:[ab,voidt]     , filter:Boolean           })
+        guard({source:{a,b}, target:[ab,anyt,voidt], filter:Boolean           })
+        guard({source:{a,b}, target:[ab]           , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1697,29 +1698,29 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[abn,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[abn,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,anyt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[abn]           , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,anyt], filter: $filter})
+        guard({source:{a,b}, target:[abn]           , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn], filter: $filter})
+        guard({source:{a,b}, target:[abn,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,voidt], filter: $filter})
+        guard({source:{a,b}, target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,anyt,voidt], filter: $filter})
+        guard({source:{a,b}, target:[abn,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn], filter: Boolean})
+        guard({source:{a,b}, target:[abn,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,voidt], filter: Boolean})
+        guard({source:{a,b}, target:[abn,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,anyt], filter: Boolean})
+        guard({source:{a,b}, target:[abn]           , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, target:[abn,voidt]     , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1727,6 +1728,17 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<ABN>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
         No overload matches this call.
           The last overload gave the following error.
@@ -1749,17 +1761,6 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type 'Event<ABN>[]' is missing the following properties from type 'Unit<unknown>': kind, __
         No overload matches this call.
           The last overload gave the following error.
@@ -1771,32 +1772,12 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -1807,16 +1788,6 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -1841,12 +1812,42 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -1855,18 +1856,18 @@ describe('object source', () => {
     test('object -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, target: [aNum,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [aNum], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [aNum,anyt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [aNum,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, target: [aNum,anyt], filter: $filter})
-        guard({source: {a, b}, target: [aNum,voidt], filter: $filter})
-        guard({source: {a, b}, target: [aNum], filter: $filter})
-        guard({source: {a, b}, target: [aNum,anyt,voidt], filter: $filter})
-        guard({source: {a, b}, target: [aNum,anyt], filter: Boolean})
-        guard({source: {a, b}, target: [aNum], filter: Boolean})
-        guard({source: {a, b}, target: [aNum,anyt,voidt], filter: Boolean})
-        guard({source: {a, b}, target: [aNum,voidt], filter: Boolean})
+        guard({source:{a,b}, target:[aNum,anyt]      , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[aNum,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[aNum,voidt]     , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[aNum]           , filter:(val) => val.a > 0})
+        guard({source:{a,b}, target:[aNum]           , filter:$filter           })
+        guard({source:{a,b}, target:[aNum,anyt,voidt], filter:$filter           })
+        guard({source:{a,b}, target:[aNum,voidt]     , filter:$filter           })
+        guard({source:{a,b}, target:[aNum,anyt]      , filter:$filter           })
+        guard({source:{a,b}, target:[aNum,anyt]      , filter:Boolean           })
+        guard({source:{a,b}, target:[aNum,anyt,voidt], filter:Boolean           })
+        guard({source:{a,b}, target:[aNum,voidt]     , filter:Boolean           })
+        guard({source:{a,b}, target:[aNum]           , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1878,29 +1879,29 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,anyt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,ab], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,anyt,voidt], filter: $filter})
+        guard({source:{a,b}, target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,ab], filter: $filter})
+        guard({source:{a,b}, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,anyt], filter: $filter})
+        guard({source:{a,b}, target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,voidt], filter: $filter})
+        guard({source:{a,b}, target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,ab], filter: Boolean})
+        guard({source:{a,b}, target:[aStr,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,voidt], filter: Boolean})
+        guard({source:{a,b}, target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, target: [aStr,anyt], filter: Boolean})
+        guard({source:{a,b}, target:[aStr,anyt]      , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1908,34 +1909,23 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -1952,12 +1942,13 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -1968,16 +1959,6 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -1992,12 +1973,22 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2008,6 +1999,16 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2036,22 +2037,22 @@ describe('object source', () => {
     test('object + clock -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: anyt, target: [ab,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: [ab,anyt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: [ab,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: [ab], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: numt, target: [ab,anyt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: [ab], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: [ab,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: [ab,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: anyt, target: [ab,anyt], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [ab,anyt,voidt], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [ab], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [ab,voidt], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [ab,anyt,voidt], filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: [ab,anyt], filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: [ab], filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: [ab,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[ab,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:[ab,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:[ab]           , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:[ab,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:numt, target:[ab,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:[ab]           , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:[ab,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:[ab,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:anyt, target:[ab,voidt]     , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[ab,anyt]      , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[ab]           , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[ab,anyt,voidt], filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[ab,anyt,voidt], filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:[ab,anyt]      , filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:[ab]           , filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:[ab,voidt]     , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2063,29 +2064,29 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[abn]           , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,anyt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,anyt], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,voidt], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,anyt,voidt], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[abn]           , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[abn]           , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [abn,anyt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2104,28 +2105,6 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2137,22 +2116,13 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2163,6 +2133,27 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2187,12 +2178,12 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2213,6 +2204,16 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -2221,22 +2222,22 @@ describe('object source', () => {
     test('object + clock -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: anyt, target: [aNum], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: [aNum,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: [aNum,anyt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: anyt, target: [aNum,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: numt, target: [aNum], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: [aNum,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: [aNum,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: numt, target: [aNum,anyt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: anyt, target: [aNum], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [aNum,voidt], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [aNum,anyt,voidt], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [aNum,anyt], filter: $filter})
-        guard({source: {a, b}, clock: anyt, target: [aNum], filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: [aNum,anyt,voidt], filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: [aNum,voidt], filter: Boolean})
-        guard({source: {a, b}, clock: anyt, target: [aNum,anyt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[aNum,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:[aNum,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:anyt, target:[aNum]           , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:numt, target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:[aNum]           , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:[aNum,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:numt, target:[aNum,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:anyt, target:[aNum]           , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[aNum,voidt]     , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[aNum,anyt]      , filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[aNum,anyt,voidt], filter:$filter             })
+        guard({source:{a,b}, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:[aNum]           , filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:{a,b}, clock:anyt, target:[aNum,voidt]     , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2248,29 +2249,29 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,ab], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,anyt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,ab], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,voidt], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,anyt], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,anyt,voidt], filter: $filter})
+        guard({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,ab], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: anyt, target: [aStr,anyt], filter: Boolean})
+        guard({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2278,12 +2279,12 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2295,17 +2296,6 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2328,16 +2318,7 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2352,12 +2333,12 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2378,6 +2359,16 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2398,6 +2389,16 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -2406,22 +2407,22 @@ describe('object source', () => {
     test('object + [clock] -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: [anyt], target: [ab], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: [ab,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: [ab,anyt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: [ab,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [numt, $num], target: [ab,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: [ab,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: [ab], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: [ab,anyt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [anyt], target: [ab,voidt], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [ab,anyt,voidt], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [ab,anyt], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [ab], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [ab], filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: [ab,anyt], filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: [ab,anyt,voidt], filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: [ab,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab]           , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:[ab,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:[ab]           , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:[ab,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt,voidt], filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab]           , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt]      , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,voidt]     , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab]           , filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2433,29 +2434,29 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,anyt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[abn]           , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,anyt,voidt], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[abn]           , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,anyt], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,voidt], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,anyt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[abn]           , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [abn,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2463,28 +2464,6 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2496,6 +2475,28 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2507,6 +2508,16 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2523,6 +2534,16 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2557,32 +2578,12 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type 'Event<ABN>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<ABN>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -2591,22 +2592,22 @@ describe('object source', () => {
     test('object + [clock] -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: {a, b}, clock: [anyt], target: [aNum], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,anyt,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,anyt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,voidt], filter: (val) => val.a > 0})
-        guard({source: {a, b}, clock: [numt, $num], target: [aNum,anyt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: [aNum,anyt,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: [aNum], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [numt, $num], target: [aNum,voidt], filter: (val, n) => val.a > n})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,voidt], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,anyt,voidt], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [aNum], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,anyt], filter: $filter})
-        guard({source: {a, b}, clock: [anyt], target: [aNum], filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,voidt], filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,anyt], filter: Boolean})
-        guard({source: {a, b}, clock: [anyt], target: [aNum,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum]           , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:{a,b}, clock:[numt,$num], target:[aNum,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:[aNum]           , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[numt,$num], target:[aNum,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt,voidt], filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt]      , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum]           , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,voidt]     , filter:$filter             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum]           , filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,voidt]     , filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt]      , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2618,29 +2619,29 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,anyt,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,voidt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,anyt], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,ab], filter: (val) => val.a > 0})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,anyt,voidt], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,voidt], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,anyt], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,ab], filter: $filter})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,ab], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,anyt,voidt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source: {a, b}, clock: [anyt], target: [aStr,anyt], filter: Boolean})
+        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2648,34 +2649,23 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2692,12 +2682,13 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+                Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2708,6 +2699,36 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
+                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
@@ -2732,16 +2753,6 @@ describe('object source', () => {
           The last overload gave the following error.
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<AB> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -2758,16 +2769,6 @@ describe('object source', () => {
             Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
               Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
                 Type '(Event<any> | Event<void> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Unit<unknown>'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<unknown>'.
-                Type '(Event<any> | Event<{ a: string; }>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -2778,15 +2779,15 @@ describe('tuple source', () => {
     test('tuple -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: [a, b], target: voidt, filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: lNumStr, filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: anyt, filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: lNumStr, filter: $filter})
-        guard({source: [a, b], target: voidt, filter: $filter})
-        guard({source: [a, b], target: anyt, filter: $filter})
-        guard({source: [a, b], target: voidt, filter: Boolean})
-        guard({source: [a, b], target: lNumStr, filter: Boolean})
-        guard({source: [a, b], target: anyt, filter: Boolean})
+        guard({source:[a,b], target:lNumStr, filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:voidt  , filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:anyt   , filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:voidt  , filter:$filter            })
+        guard({source:[a,b], target:lNumStr, filter:$filter            })
+        guard({source:[a,b], target:anyt   , filter:$filter            })
+        guard({source:[a,b], target:voidt  , filter:Boolean            })
+        guard({source:[a,b], target:lNumStr, filter:Boolean            })
+        guard({source:[a,b], target:anyt   , filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2798,11 +2799,11 @@ describe('tuple source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: [a, b], target: lNumNum, filter: (val) => val[0] > 0})
+        guard({source:[a,b], target:lNumNum, filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], target: lNumNum, filter: $filter})
+        guard({source:[a,b], target:lNumNum, filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], target: lNumNum, filter: Boolean})
+        guard({source:[a,b], target:lNumNum, filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2823,18 +2824,18 @@ describe('tuple source', () => {
     test('tuple + clock -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: [a, b], clock: anyt, target: lNumStr, filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: anyt, target: anyt, filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: anyt, target: voidt, filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: numt, target: anyt, filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: numt, target: voidt, filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: numt, target: lNumStr, filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: anyt, target: lNumStr, filter: $filter})
-        guard({source: [a, b], clock: anyt, target: voidt, filter: $filter})
-        guard({source: [a, b], clock: anyt, target: anyt, filter: $filter})
-        guard({source: [a, b], clock: anyt, target: lNumStr, filter: Boolean})
-        guard({source: [a, b], clock: anyt, target: anyt, filter: Boolean})
-        guard({source: [a, b], clock: anyt, target: voidt, filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:lNumStr, filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:anyt, target:voidt  , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:anyt, target:anyt   , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:numt, target:anyt   , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:numt, target:lNumStr, filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:numt, target:voidt  , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:anyt, target:lNumStr, filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:anyt   , filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:voidt  , filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:voidt  , filter:Boolean               })
+        guard({source:[a,b], clock:anyt, target:anyt   , filter:Boolean               })
+        guard({source:[a,b], clock:anyt, target:lNumStr, filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2846,11 +2847,11 @@ describe('tuple source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: lNumNum, filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:anyt, target:lNumNum, filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: lNumNum, filter: $filter})
+        guard({source:[a,b], clock:anyt, target:lNumNum, filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: lNumNum, filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:lNumNum, filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2871,18 +2872,18 @@ describe('tuple source', () => {
     test('tuple + [clock] -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: [a, b], clock: [anyt], target: lNumStr, filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [anyt], target: voidt, filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [anyt], target: anyt, filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [numt, $num], target: voidt, filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [numt, $num], target: anyt, filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [numt, $num], target: lNumStr, filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [anyt], target: lNumStr, filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: voidt, filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: anyt, filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: voidt, filter: Boolean})
-        guard({source: [a, b], clock: [anyt], target: lNumStr, filter: Boolean})
-        guard({source: [a, b], clock: [anyt], target: anyt, filter: Boolean})
+        guard({source:[a,b], clock:[anyt]     , target:anyt   , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[anyt]     , target:lNumStr, filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[anyt]     , target:voidt  , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[numt,$num], target:lNumStr, filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[numt,$num], target:voidt  , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[numt,$num], target:anyt   , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[anyt]     , target:lNumStr, filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:voidt  , filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:anyt   , filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:voidt  , filter:Boolean               })
+        guard({source:[a,b], clock:[anyt]     , target:anyt   , filter:Boolean               })
+        guard({source:[a,b], clock:[anyt]     , target:lNumStr, filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2894,11 +2895,11 @@ describe('tuple source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: lNumNum, filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:[anyt], target:lNumNum, filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: lNumNum, filter: $filter})
+        guard({source:[a,b], clock:[anyt], target:lNumNum, filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: lNumNum, filter: Boolean})
+        guard({source:[a,b], clock:[anyt], target:lNumNum, filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2919,18 +2920,18 @@ describe('tuple source', () => {
     test('tuple -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: [a, b], target: [lNumStr,anyt,voidt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: [lNumStr,voidt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: [lNumStr], filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: [lNumStr,anyt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], target: [lNumStr,voidt], filter: $filter})
-        guard({source: [a, b], target: [lNumStr,anyt,voidt], filter: $filter})
-        guard({source: [a, b], target: [lNumStr], filter: $filter})
-        guard({source: [a, b], target: [lNumStr,anyt], filter: $filter})
-        guard({source: [a, b], target: [lNumStr,voidt], filter: Boolean})
-        guard({source: [a, b], target: [lNumStr], filter: Boolean})
-        guard({source: [a, b], target: [lNumStr,anyt], filter: Boolean})
-        guard({source: [a, b], target: [lNumStr,anyt,voidt], filter: Boolean})
+        guard({source:[a,b], target:[lNumStr]           , filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumStr,voidt]     , filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumStr,anyt,voidt], filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumStr,anyt]      , filter:(val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumStr]           , filter:$filter            })
+        guard({source:[a,b], target:[lNumStr,anyt]      , filter:$filter            })
+        guard({source:[a,b], target:[lNumStr,voidt]     , filter:$filter            })
+        guard({source:[a,b], target:[lNumStr,anyt,voidt], filter:$filter            })
+        guard({source:[a,b], target:[lNumStr,anyt]      , filter:Boolean            })
+        guard({source:[a,b], target:[lNumStr]           , filter:Boolean            })
+        guard({source:[a,b], target:[lNumStr,anyt,voidt], filter:Boolean            })
+        guard({source:[a,b], target:[lNumStr,voidt]     , filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2942,68 +2943,116 @@ describe('tuple source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum], filter: (val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumNum,anyt]      , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,anyt,voidt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumNum,anyt,voidt], filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,anyt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumNum,voidt]     , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,voidt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], target:[lNumNum]           , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,anyt], filter: $filter})
+        guard({source:[a,b], target:[lNumNum]           , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum], filter: $filter})
+        guard({source:[a,b], target:[lNumNum,voidt]     , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,anyt,voidt], filter: $filter})
+        guard({source:[a,b], target:[lNumNum,anyt,voidt], filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,voidt], filter: $filter})
+        guard({source:[a,b], target:[lNumNum,anyt]      , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum], filter: Boolean})
+        guard({source:[a,b], target:[lNumNum,voidt]     , filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,anyt], filter: Boolean})
+        guard({source:[a,b], target:[lNumNum,anyt,voidt], filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,anyt,voidt], filter: Boolean})
+        guard({source:[a,b], target:[lNumNum,anyt]      , filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], target: [lNumNum,voidt], filter: Boolean})
+        guard({source:[a,b], target:[lNumNum]           , filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-              Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+              Type '(Event<any> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+              Type '(Event<any> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        Object is of type 'unknown'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        Object is of type 'unknown'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        Object is of type 'unknown'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
@@ -3020,54 +3069,6 @@ describe('tuple source', () => {
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -3076,22 +3077,22 @@ describe('tuple source', () => {
     test('tuple + clock -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: [a, b], clock: anyt, target: [lNumStr], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,anyt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,anyt,voidt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,voidt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: numt, target: [lNumStr], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: numt, target: [lNumStr,anyt,voidt], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: numt, target: [lNumStr,voidt], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: numt, target: [lNumStr,anyt], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: anyt, target: [lNumStr], filter: $filter})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,anyt,voidt], filter: $filter})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,voidt], filter: $filter})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,anyt], filter: $filter})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,anyt,voidt], filter: Boolean})
-        guard({source: [a, b], clock: anyt, target: [lNumStr], filter: Boolean})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,anyt], filter: Boolean})
-        guard({source: [a, b], clock: anyt, target: [lNumStr,voidt], filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt]      , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:anyt, target:[lNumStr]           , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt,voidt], filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,voidt]     , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:numt, target:[lNumStr,anyt,voidt], filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:numt, target:[lNumStr]           , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:numt, target:[lNumStr,anyt]      , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:numt, target:[lNumStr,voidt]     , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:anyt, target:[lNumStr]           , filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt,voidt], filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt]      , filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,voidt]     , filter:$filter               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt]      , filter:Boolean               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,voidt]     , filter:Boolean               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt,voidt], filter:Boolean               })
+        guard({source:[a,b], clock:anyt, target:[lNumStr]           , filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3103,40 +3104,40 @@ describe('tuple source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,anyt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,anyt,voidt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,voidt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:anyt, target:[lNumNum]           , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,anyt], filter: $filter})
+        guard({source:[a,b], clock:anyt, target:[lNumNum]           , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum], filter: $filter})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,voidt], filter: $filter})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,anyt,voidt], filter: $filter})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum], filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,voidt], filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:[lNumNum]           , filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,anyt,voidt], filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], clock: anyt, target: [lNumNum,anyt], filter: Boolean})
+        guard({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -3146,15 +3147,6 @@ describe('tuple source', () => {
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -3168,11 +3160,12 @@ describe('tuple source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
@@ -3192,27 +3185,11 @@ describe('tuple source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
@@ -3229,6 +3206,30 @@ describe('tuple source', () => {
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
@@ -3237,22 +3238,22 @@ describe('tuple source', () => {
     test('tuple + [clock] -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source: [a, b], clock: [anyt], target: [lNumStr], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,anyt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,anyt,voidt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,voidt], filter: (val) => val[0] > 0})
-        guard({source: [a, b], clock: [numt, $num], target: [lNumStr], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [numt, $num], target: [lNumStr,voidt], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [numt, $num], target: [lNumStr,anyt], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [numt, $num], target: [lNumStr,anyt,voidt], filter: (val, n) => val[0] > n})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,anyt,voidt], filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr], filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,anyt], filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,voidt], filter: $filter})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr], filter: Boolean})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,anyt], filter: Boolean})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,voidt], filter: Boolean})
-        guard({source: [a, b], clock: [anyt], target: [lNumStr,anyt,voidt], filter: Boolean})
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr]           , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,voidt]     , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt]      , filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt,voidt], filter:(val) => val[0] > 0   })
+        guard({source:[a,b], clock:[numt,$num], target:[lNumStr,anyt,voidt], filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[numt,$num], target:[lNumStr]           , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[numt,$num], target:[lNumStr,anyt]      , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[numt,$num], target:[lNumStr,voidt]     , filter:(val, n) => val[0] > n})
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr]           , filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt]      , filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,voidt]     , filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt,voidt], filter:$filter               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt]      , filter:Boolean               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,voidt]     , filter:Boolean               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr]           , filter:Boolean               })
+        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt,voidt], filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3264,40 +3265,58 @@ describe('tuple source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,voidt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum]           , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,anyt,voidt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,anyt], filter: (val) => val[0] > 0})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:(val) => val[0] > 0})
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,voidt], filter: $filter})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,anyt,voidt], filter: $filter})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum], filter: $filter})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum]           , filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,anyt], filter: $filter})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:$filter            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum], filter: Boolean})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,anyt], filter: Boolean})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,voidt], filter: Boolean})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum]           , filter:Boolean            })
         //@ts-expect-error
-        guard({source: [a, b], clock: [anyt], target: [lNumNum,anyt,voidt], filter: Boolean})
+        guard({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+        Object is of type 'unknown'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         Object is of type 'unknown'.
         No overload matches this call.
           The last overload gave the following error.
@@ -3311,45 +3330,11 @@ describe('tuple source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        Object is of type 'unknown'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
@@ -3369,6 +3354,14 @@ describe('tuple source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<any> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
@@ -3377,21 +3370,257 @@ describe('tuple source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
-              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         No overload matches this call.
           The last overload gave the following error.
             Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
               Type '(Event<any> | Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type 'Event<[number, number]>[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Store<number> | Store<string>)[]' is not assignable to type 'Unit<unknown>'.
+              Type '(Event<void> | Event<[number, number]>)[]' is not assignable to type 'Unit<unknown>'.
         "
       `)
     })
+  })
+})
+describe('no source', () => {
+  test('no + clock -> unit same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:anyt, target:numt, filter:(n) => n > 0})
+      guard({clock:anyt, target:numt, filter:$filter     })
+      guard({clock:anyt, target:numt, filter:Boolean     })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; target: Event<number>; filter: (n: number) => boolean; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: Event<any>; target: Event<number>; filter: (n: number) => boolean; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; target: Event<number>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: Event<any>; target: Event<number>; filter: Store<boolean>; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; target: Event<number>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: Event<any>; target: Event<number>; filter: BooleanConstructor; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      "
+    `)
+  })
+  test('no + [clock] -> unit same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:[anyt], target:numt, filter:(n) => n > 0})
+      guard({clock:[anyt], target:numt, filter:$filter     })
+      guard({clock:[anyt], target:numt, filter:Boolean     })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; target: Event<number>; filter: (n: number) => boolean; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: [Event<any>]; target: Event<number>; filter: (n: number) => boolean; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; target: Event<number>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: [Event<any>]; target: Event<number>; filter: Store<boolean>; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; target: Event<number>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: [Event<any>]; target: Event<number>; filter: BooleanConstructor; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      "
+    `)
+  })
+  test('no + clock -> array same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:anyt, filter:(n) => n > 0})
+      guard({clock:anyt, filter:(n) => n > 0})
+      guard({clock:anyt, filter:$filter     })
+      guard({clock:anyt, filter:$filter     })
+      guard({clock:anyt, filter:Boolean     })
+      guard({clock:anyt, filter:Boolean     })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: (n: unknown) => boolean; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: (n: unknown) => boolean; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      Object is of type 'unknown'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: (n: unknown) => boolean; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: (n: unknown) => boolean; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      Object is of type 'unknown'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: Store<boolean>; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: Store<boolean>; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      "
+    `)
+  })
+  test('no + [clock] -> array same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:[anyt], filter:(n) => n > 0})
+      guard({clock:[anyt], filter:(n) => n > 0})
+      guard({clock:[anyt], filter:$filter     })
+      guard({clock:[anyt], filter:$filter     })
+      guard({clock:[anyt], filter:Boolean     })
+      guard({clock:[anyt], filter:Boolean     })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: (n: unknown) => boolean; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: (n: unknown) => boolean; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      Object is of type 'unknown'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: (n: unknown) => boolean; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: (n: unknown) => boolean; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      Object is of type 'unknown'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: Store<boolean>; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: Store<boolean>; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: Store<boolean>; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      "
+    `)
+  })
+  test('nullable no + clock -> unit same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:anyt, target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
+      guard({clock:anyt, target:numt, filter:Boolean                                           })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; target: Event<number>; filter: (n: number) => n is number; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: Event<any>; target: Event<number>; filter: (n: number) => n is number; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; target: Event<number>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: Event<any>; target: Event<number>; filter: BooleanConstructor; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      "
+    `)
+  })
+  test('nullable no + [clock] -> unit same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:[anyt], target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
+      guard({clock:[anyt], target:numt, filter:Boolean                                           })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; target: Event<number>; filter: (n: number) => n is number; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: [Event<any>]; target: Event<number>; filter: (n: number) => n is number; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; target: Event<number>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+            Property 'source' is missing in type '{ clock: [Event<any>]; target: Event<number>; filter: BooleanConstructor; }' but required in type '{ source: Unit<number>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: number) => boolean); target: Unit<...>; }'.
+      "
+    `)
+  })
+  test('nullable no + clock -> array same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:anyt, filter:(n): n is number => typeof n === 'number' && n > 0})
+      guard({clock:anyt, filter:(n): n is number => typeof n === 'number' && n > 0})
+      guard({clock:anyt, filter:Boolean                                           })
+      guard({clock:anyt, filter:Boolean                                           })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: (n: unknown) => n is number; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: (n: unknown) => n is number; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: (n: unknown) => n is number; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: (n: unknown) => n is number; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: Event<any>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: Event<any>; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      "
+    `)
+  })
+  test('nullable no + [clock] -> array same (should pass)', () => {
+    //prettier-ignore
+    {
+      guard({clock:[anyt], filter:(n): n is number => typeof n === 'number' && n > 0})
+      guard({clock:[anyt], filter:(n): n is number => typeof n === 'number' && n > 0})
+      guard({clock:[anyt], filter:Boolean                                           })
+      guard({clock:[anyt], filter:Boolean                                           })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: (n: unknown) => n is number; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: (n: unknown) => n is number; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: (n: unknown) => n is number; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: (n: unknown) => n is number; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }'.
+            Type '{ clock: [Event<any>]; filter: BooleanConstructor; }' is missing the following properties from type '{ source: Unit<unknown>; clock?: Unit<any> | [Unit<any>] | [Unit<any>, ...Unit<any>[]] | undefined; filter: Store<boolean> | ((value: unknown) => boolean); target: Unit<...>; }': source, target
+      "
+    `)
   })
 })

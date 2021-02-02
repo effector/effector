@@ -1,6 +1,7 @@
 import {printArray} from '../runner/text'
 
 const Source = {
+  none: {sourceType: 'no'},
   unit: {sourceType: 'unit'},
   object: {sourceType: 'object'},
   tuple: {sourceType: 'tuple'},
@@ -16,18 +17,24 @@ const Target = {
 }
 
 const grouping = {
-  getHash: ({descriptionTokens}) => descriptionTokens,
-  describeGroup: ({groupTokens, largeGroup}) => ({
+  getHash: ({descriptionTokens}: any) => descriptionTokens,
+  describeGroup: ({groupTokens, largeGroup}: any) => ({
     largeGroup,
     description: groupTokens,
   }),
-  createTestLines: ({methodCode, pass}) => [
-    pass ? null : '//@ts-expect-error',
-    methodCode,
-  ],
+  createTestLines: {
+    method: 'guard',
+    align: true,
+    shape: {
+      source: 'sourceCode',
+      clock: 'clockCode',
+      target: 'targetCode',
+      filter: 'filterCode',
+    },
+  },
   sortByFields: {
     inferByFilter: [false, true],
-    sourceType: ['unit', 'object', 'tuple'],
+    sourceType: ['unit', 'object', 'tuple', 'no'],
     targetType: ['unit', 'array'],
     filterType: ['fn', 'store', 'bool'],
     clockType: ['no', 'unit', 'array'],
@@ -46,8 +53,8 @@ function permuteTargets({
   correctTupleWide,
   wrongTuple,
   wrongTupleWide,
-}) {
-  const op = value => (permute ? {permute: value} : {value})
+}: any) {
+  const op = (value: any) => (permute ? {permute: value} : {value})
   return {
     nonTuple: {
       correct: {
@@ -80,18 +87,33 @@ const shape = {
     union: ['fn', 'store', 'bool'],
   },
   sourceType: {
-    union: ['unit', 'object', 'tuple'],
+    split: {
+      variant: {
+        noClock: {clockType: 'no'},
+      },
+      cases: {
+        noClock: {
+          union: ['unit', 'object', 'tuple'],
+        },
+        __: {
+          union: ['no', 'unit', 'object', 'tuple'],
+        },
+      },
+    },
   },
   targetType: {
     union: ['unit', 'array'],
   },
-  targetVoid: {flag: {}},
+  noSource: {
+    true: Source.none,
+  },
+  targetVoid: {flag: {avoid: 'noSource'}},
   targetAny: {
     split: {
       match: 'targetType',
       cases: {
         unit: {
-          flag: {avoid: 'targetVoid'},
+          flag: {avoid: ['targetVoid', 'noSource']},
         },
         array: {flag: {}},
       },
@@ -118,20 +140,24 @@ const shape = {
   combinable: {
     bool: {
       true: [Source.object, Source.tuple],
-      false: Source.unit,
+      false: [Source.none, Source.unit],
     },
   },
   wrongTarget: {
     flag: {
       needs: ['targetIsTyped'],
+      avoid: 'noSource',
     },
   },
   sourceIsWiderThatTarget: {
     flag: {
       needs: ['targetIsTyped'],
-      avoid: {
-        true: {sourceType: 'tuple'},
-      },
+      avoid: [
+        'noSource',
+        {
+          true: [Source.tuple, Source.none],
+        },
+      ],
     },
   },
   inferByFilter: {
@@ -183,7 +209,7 @@ const shape = {
           },
         ],
       },
-      avoid: 'wrongTarget',
+      avoid: ['wrongTarget', {true: Source.none}],
     },
   },
   targetValue: {
@@ -203,8 +229,9 @@ const shape = {
           many: {targetType: 'array'},
         },
         source: {
+          none: Source.none,
           nonTuple: [Source.unit, Source.object],
-          tuple: {sourceType: 'tuple'},
+          tuple: Source.tuple,
         },
         target: {
           correct: {wrongTarget: false},
@@ -219,6 +246,10 @@ const shape = {
         singleVoid: 'voidt',
         singleAny: 'anyt',
         single: {
+          none: {
+            correct: 'numt',
+            wrong: 'strt',
+          },
           nonTuple: {
             correct: {
               wide: 'aNum',
@@ -285,7 +316,7 @@ const shape = {
   },
   targetCode: {
     compute: {
-      fn: ({targetValue}) =>
+      fn: ({targetValue}: any) =>
         Array.isArray(targetValue) ? printArray(targetValue) : targetValue,
     },
   },
@@ -303,14 +334,14 @@ const shape = {
         },
       },
       cases: {
-        noClock: '',
+        noClock: null,
         clockSingle: {
-          hasFnSecondArg: 'clock: numt, ',
-          noFnSecondArg: 'clock: anyt, ',
+          hasFnSecondArg: 'numt',
+          noFnSecondArg: 'anyt',
         },
         clockArray: {
-          hasFnSecondArg: 'clock: [numt, $num], ',
-          noFnSecondArg: 'clock: [anyt], ',
+          hasFnSecondArg: '[numt,$num]',
+          noFnSecondArg: '[anyt]',
         },
       },
     },
@@ -340,6 +371,7 @@ const shape = {
         },
       },
       cases: {
+        none: null,
         unit: {
           fn: {
             infer: 'abNull',
@@ -351,8 +383,8 @@ const shape = {
           },
           store: 'ab',
         },
-        tuple: '[a, b]',
-        object: '{a, b}',
+        tuple: '[a,b]',
+        object: '{a,b}',
       },
     },
   },
@@ -374,16 +406,20 @@ const shape = {
         fn: {
           hasFnSecondArg: {
             unit: {
-              infer: '(val, n): val is AB => n > 0 && val.a !== null',
-              noInfer: '(val, n) => val.a > n',
+              infer: '(val,n): val is AB => n > 0 && val.a !== null',
+              noInfer: '(val,n) => val.a > n',
             },
             object: {
-              infer: '(val, n): val is AB => val.a > n',
-              noInfer: '(val, n) => val.a > n',
+              infer: '(val,n): val is AB => val.a > n',
+              noInfer: '(val,n) => val.a > n',
             },
             tuple: '(val, n) => val[0] > n',
           },
           noFnSecondArg: {
+            none: {
+              infer: "(n): n is number => typeof n === 'number' && n > 0",
+              noInfer: '(n) => n > 0',
+            },
             unit: {
               infer: '(val): val is AB => val.a !== null',
               noInfer: '(val) => val.a > 0',
@@ -409,7 +445,7 @@ const shape = {
         sourceType,
         targetType,
         clockType,
-      }) =>
+      }: any) =>
         `${inferByFilter} ${sourceType} ${filterType} ${targetType} ${clockType} ${
           sourceIsWiderThatTarget ? 'wide' : 'same'
         }`,
@@ -420,12 +456,10 @@ const shape = {
       fn({
         inferByFilter,
         sourceIsWiderThatTarget,
-        filterType,
         sourceType,
         targetType,
-        targetVoid,
         clockDescription,
-      }) {
+      }: any) {
         const nullable = inferByFilter ? 'nullable ' : ''
         return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
           sourceIsWiderThatTarget ? 'wide' : 'same'
@@ -435,28 +469,13 @@ const shape = {
   },
   largeGroup: {
     compute: {
-      fn: ({
-        inferByFilter,
-        sourceIsWiderThatTarget,
-        filterType,
-        sourceType,
-        targetType,
-        targetVoid,
-        clockType,
-      }) => `${sourceType} source`,
+      fn: ({sourceType}: any) => `${sourceType} source`,
     },
   },
   pass: {
     bool: {
       true: {wrongTarget: false},
       false: {wrongTarget: true},
-    },
-  },
-  methodCode: {
-    compute: {
-      fn({filterType, sourceCode, clockCode, filterCode, targetCode}) {
-        return `guard({source: ${sourceCode}, ${clockCode}target: ${targetCode}, filter: ${filterCode}})`
-      },
     },
   },
 }
@@ -470,6 +489,7 @@ const b = createStore('')
 const voidt = createEvent()
 const anyt = createEvent<any>()
 const numt = createEvent<number>()
+const strt = createEvent<number>()
 const $num = createStore(0)
 const ab = createEvent<AB>()
 const nullableAB = createEvent<AB | null>()
