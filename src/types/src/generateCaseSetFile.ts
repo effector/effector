@@ -8,6 +8,7 @@ import {
   createTest,
   printMethod,
   printMethodValues,
+  printArray,
 } from './runner/text'
 import {forIn} from './runner/forIn'
 
@@ -160,9 +161,41 @@ function createGroupedCases(
   ]
 }
 
+const valid = {
+  def: [
+    'union',
+    'value',
+    'true',
+    'bool',
+    'compute',
+    'permute',
+    'flag',
+    'split',
+  ],
+  split: ['cases', 'variant', 'match', 'variants'],
+  flag: ['needs', 'need', 'avoid'],
+  permute: [
+    'field',
+    'items',
+    'amount',
+    'ignore',
+    'unbox',
+    'required',
+    'noReorder',
+  ],
+  compute: ['field', 'fn', 'cases', 'variants', 'variant'],
+}
+function validateConfig(config: any, validFields: string[]) {
+  if (typeof config !== 'object' || config === null || Array.isArray(config))
+    throw Error(`config should be object`)
+  const keys = Object.keys(config).filter(key => !validFields.includes(key))
+  if (keys.length > 0) throw Error(`incorrect fields ${printArray(keys)})`)
+}
+
 function byFields(values, {shape = {}}) {
   for (const key in shape) {
     const def = shape[key]
+    validateConfig(def, valid.def)
     if (def.union) {
       values = permuteField(values, key, {
         items: def.union,
@@ -216,6 +249,7 @@ function byFields(values, {shape = {}}) {
     }
 
     if (def.flag) {
+      validateConfig(def.flag, valid.flag)
       const {flag} = def
       const ignoreChecks = []
       const computedFields = {}
@@ -269,11 +303,9 @@ function byFields(values, {shape = {}}) {
   return values
 }
 
-function splitField(
-  values,
-  field,
-  {cases, variant, match = variant, variants},
-) {
+function splitField(values, field, config) {
+  validateConfig(config, valid.split)
+  const {cases, variant, match = variant, variants} = config
   if (variants) {
     const variantGroupNames = Object.keys(variants)
     function buildFullCases(depth, currentCases) {
@@ -284,7 +316,7 @@ function splitField(
       function processCase(currentCase) {
         // if current case is plain value then it assumed to be constant value
         if (
-          typeof currentCase !== 'object' &&
+          (typeof currentCase !== 'object' || currentCase === null) &&
           typeof currentCase !== 'function'
         ) {
           return {
@@ -403,7 +435,9 @@ function splitField(
   }
   return result
 }
-function computeField(values, {field, fn, cases, variants, variant}) {
+function computeField(values, config) {
+  validateConfig(config, valid.compute)
+  let {field, fn, cases, variants, variant} = config
   if (cases) {
     fn = variants
       ? matchDeep({variants, cases})
@@ -418,6 +452,7 @@ function permuteField(values, field, config) {
       amount: {min: config.length, max: config.length},
     })
   }
+  validateConfig(config, valid.permute)
   const {
     items,
     amount: {min = 0, max = items.length - 1} = {},
@@ -531,6 +566,8 @@ function matchDeep({variants: variantGroups, cases}) {
         matchVariant(variant, variantName)
       }
       function matchVariant(variant, variantName) {
+        if (variant === undefined)
+          throw Error(`case ${variantName} exists but nod defined`)
         const childMatcherParts = [...matcherParts, variant]
         const variantCase = cases[variantName]
         if (variantCase === undefined) return
