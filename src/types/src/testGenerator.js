@@ -4,10 +4,8 @@ const {
   generateCaseSetFile,
   boolField,
   printArray,
-  createTest,
   byFields,
   createGroupedCases,
-  printBools,
 } = require('./generateCaseSetFile')
 
 const sampleClockArray = require('./generator/sampleClockArray.generator')

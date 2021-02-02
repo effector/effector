@@ -4,23 +4,10 @@ const {promises} = require('fs')
 const {resolve} = require('path')
 module.exports = {
   generateCaseSetFile,
-  matchSomeOfBoolFields,
   boolField,
-  dependent,
   printArray,
-  permute,
-  createTest,
-  createDescribe,
   byFields,
   createGroupedCases,
-  printBools,
-}
-function printBools(shape) {
-  let result = ''
-  for (const key in shape) {
-    if (shape[key]) result += `, ${key}`
-  }
-  return result
 }
 function createGroupedCases(
   casesDefs,
@@ -177,12 +164,6 @@ function permute(items) {
     }
   }
   return result
-}
-function matchSomeOfBoolFields(value, shape) {
-  for (const field in shape) {
-    if (value[field] === shape[field]) return true
-  }
-  return false
 }
 
 function selectUniqN(items, {n, optional = []}) {
@@ -611,14 +592,6 @@ function matchDeep({variants: variantGroups, cases}) {
 function boolField() {
   return {type: 'bool'}
 }
-function dependent(config) {
-  if (typeof config === 'function') config = {fn: config, resultType: 'plain'}
-  return {
-    type: 'dependent',
-    fn: config.fn,
-    resultType: config.resultType || 'plain',
-  }
-}
 function groupBy(field, descriptionFn) {
   return {type: 'groupBy', field, descriptionFn}
 }
@@ -662,13 +635,6 @@ ${suite}`
         switch (field.type) {
           case 'bool': {
             valueSet[fieldName] = [false, true]
-            break
-          }
-          case 'dependent': {
-            generationSeq.push(shape => ({
-              ...shape,
-              [fieldName]: field.fn(shape),
-            }))
             break
           }
         }
