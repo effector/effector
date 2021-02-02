@@ -1,19 +1,16 @@
 import {promises} from 'fs'
 import {resolve} from 'path'
+import {sortListBySkewHeap} from './runner/heap'
+import {leftPad, wrapText, createDescribe, createTest} from './runner/text'
+import {forIn} from './runner/forIn'
 
-export {
-  generateCaseSetFile,
-  boolField,
-  printArray,
-  byFields,
-  createGroupedCases,
-}
+export {generateCaseSetFile, byFields, createGroupedCases}
 function createGroupedCases(
   casesDefs,
   {createTestLines, getHash, describeGroup, sortByFields},
 ) {
   const isAafterB = sortByFields && skewHeapSortFieldsComparator(sortByFields)
-  function sortList(list) {
+  function sortList<T>(list: T[]) {
     if (!sortByFields) return [...list]
     return sortListBySkewHeap(list, isAafterB)
   }
@@ -51,7 +48,7 @@ function createGroupedCases(
       set.largeGroup = description.largeGroup || null
     }
   }
-  const descriptions = {}
+  const descriptions = {} as Record<string, any>
   for (const [hash, group] of [...defsGroups]) {
     const text = `${group.largeGroup || ''} ${group.description}`
     if (text in descriptions) {
@@ -63,8 +60,8 @@ function createGroupedCases(
     }
     descriptions[text] = group
   }
-  const largeGroups = {}
-  const resultCases = []
+  const largeGroups = {} as Record<string, string[]>
+  const resultCases = [] as string[]
   for (let {
     description,
     itemsPass,
@@ -132,57 +129,7 @@ function createGroupedCases(
     ...resultCases,
   ]
 }
-function printArray(array) {
-  return `[${array.join(',')}]`
-}
-function wrapText(firstLine, lines) {
-  return [firstLine, ...leftPad(lines), '})'].join(`\n`)
-}
-function leftPad(lines) {
-  return lines
-    .join(`\n`)
-    .split(`\n`)
-    .map(line => `  ${line}`)
-}
-function permute(items) {
-  if (items.length === 0) return [[]]
-  if (items.length === 1) return [[items[0]]]
-  if (items.length === 2)
-    return [
-      [items[0], items[1]],
-      [items[1], items[0]],
-    ]
-  const result = []
-  for (let i = 0; i < items.length; i++) {
-    const head = items[i]
-    const tail = [...items]
-    tail.splice(i, 1)
-    const subresults = permute(tail)
-    for (const subresult of subresults) {
-      result.push([head, ...subresult])
-    }
-  }
-  return result
-}
 
-function selectUniqN(items, {n, optional = []}) {
-  if (n === 0) return [[]]
-  if (n === 1) return items.map(item => [item])
-  // if (n > items.length)
-  function selectUniqNFlat(items, {n}) {}
-}
-function createDescribe(description, lines) {
-  return wrapText(
-    `describe('${description.replace(/\'/gi, '"')}', () => {`,
-    lines.filter(Boolean),
-  )
-}
-function createTest(description, lines) {
-  return wrapText(
-    `test('${description.replace(/\'/gi, '"')}', () => {`,
-    lines.filter(Boolean),
-  )
-}
 function byFields(values, {shape = {}}) {
   for (const key in shape) {
     const def = shape[key]
@@ -539,13 +486,6 @@ function computeCaseIfMatch(value, matcher, fn) {
   return fn
 }
 
-function forIn(value, fn) {
-  for (const key in value) {
-    const fnResult = fn(value[key], key, value)
-    if (fnResult !== undefined) return fnResult
-  }
-}
-
 function matchDeep({variants: variantGroups, cases}) {
   const matchCases = []
   const variantGroupsNames = Object.keys(variantGroups)
@@ -588,16 +528,56 @@ function matchDeep({variants: variantGroups, cases}) {
   }
 }
 
-function boolField() {
-  return {type: 'bool'}
-}
-function groupBy(field, descriptionFn) {
-  return {type: 'groupBy', field, descriptionFn}
-}
+async function generateCaseSetFile(config: {
+  file: string
+  dir: string
+  usedMethods: string[]
+  header: string
+  shape?: Record<string, any>[]
+  generateCases(
+    shape: Record<string, any>,
+  ): {description: string; noGroup?: boolean; cases: string[]}
+}) {
+  const {
+    file,
+    dir,
+    usedMethods = [],
+    header = '',
+    shape = [{}],
+    generateCases,
+  } = config
 
-async function generateCaseSetFile(config) {
-  const suite = generateCaseSet(config)
-  const {file, dir, usedMethods = [], header = ''} = config
+  const suite = shape
+    .flatMap(value => {
+      const results = []
+      const generated = generateCases(value)
+      if (Array.isArray(generated)) {
+        for (const {description, cases, noGroup} of generated) {
+          if (cases.length > 0) {
+            if (noGroup) {
+              results.push(cases.join(`\n`))
+            } else {
+              results.push(
+                wrapText(`describe('${description}', () => {`, [...cases]),
+              )
+            }
+          }
+        }
+      } else if (generated) {
+        const {description, cases, noGroup} = generated
+        if (cases.length > 0) {
+          if (noGroup) {
+            results.push(cases.join(`\n`))
+          } else {
+            results.push(
+              wrapText(`describe('${description}', () => {`, [...cases]),
+            )
+          }
+        }
+      }
+      return results
+    })
+    .join(`\n`)
   const content = `/* eslint-disable no-unused-vars */
 import {${usedMethods.join(', ')}} from 'effector'
 const typecheck = '{global}'
@@ -615,187 +595,16 @@ ${suite}`
   )
   const fullFileName = resolve(srcRoot, `${file}.test.ts`)
   await promises.writeFile(fullFileName, content)
-
-  function generateCaseSet({
-    groupBy = [],
-    ignore = [],
-    groupDescriptions = {},
-    shape,
-    generateCases,
-  }) {
-    groupBy = groupBy.map(val => (typeof val === 'string' ? {field: val} : val))
-    const groupByFields = groupBy.map(({field}) => field)
-    const valueSet = {}
-    const plainShape = {}
-    const generationSeq = []
-    for (const fieldName in shape) {
-      const field = shape[fieldName]
-      if (field && field.type) {
-        switch (field.type) {
-          case 'bool': {
-            valueSet[fieldName] = [false, true]
-            break
-          }
-        }
-      } else {
-        plainShape[fieldName] = shape[fieldName]
-      }
-    }
-    let results = [{...plainShape}]
-    for (const field in valueSet) {
-      const newResults = []
-      for (const value of valueSet[field]) {
-        newResults.push(...results.map(val => ({...val, [field]: value})))
-      }
-      results = newResults
-    }
-
-    const resultsFlat = results
-      .map(item => {
-        item = generationSeq.reduce((item, fn) => fn(item), item)
-        return item
-      })
-      .filter(item => {
-        if (ignore.length === 0) return true
-        return ignore.every(fn => !fn(item))
-      })
-    const testSuite = []
-    for (const resultItem of resultsFlat) {
-      const groupValues = groupBy.map(({field}) => ({
-        field,
-        value: resultItem[field],
-      }))
-      if (groupValues.length === 0) {
-        testSuite.push({type: 'item', value: resultItem})
-      } else {
-        let currentParent = testSuite
-        for (let i = 0; i < groupValues.length; i++) {
-          const {field, value} = groupValues[i]
-          let newParent = currentParent.find(
-            e => e.type === 'group' && e.name === field && e.value === value,
-          )
-          if (!newParent) {
-            newParent = {
-              type: 'group',
-              name: field,
-              value,
-              child: [],
-            }
-            currentParent.push(newParent)
-          }
-          currentParent = newParent.child
-          if (i === groupValues.length - 1) {
-            currentParent.push({type: 'item', value: resultItem})
-          }
-        }
-      }
-    }
-    const testSuiteText = iterateSuite(testSuite).join(`\n`)
-    return testSuiteText
-    function iterateSuite(suite) {
-      const results = []
-      for (const item of suite) {
-        switch (item.type) {
-          case 'item': {
-            const generated = generateCases(item.value)
-            if (Array.isArray(generated)) {
-              for (const {description, cases, noGroup} of generated) {
-                if (cases.length > 0) {
-                  if (noGroup) {
-                    results.push(cases.join(`\n`))
-                  } else {
-                    results.push(
-                      wrapText(`describe('${description}', () => {`, [
-                        ...cases,
-                      ]),
-                    )
-                  }
-                }
-              }
-            } else if (generated) {
-              const {description, cases, noGroup} = generated
-              if (cases.length > 0) {
-                if (noGroup) {
-                  results.push(cases.join(`\n`))
-                } else {
-                  results.push(
-                    wrapText(`describe('${description}', () => {`, [...cases]),
-                  )
-                }
-              }
-            }
-            break
-          }
-          case 'group': {
-            const descriptionFn = groupDescriptions[item.name]
-            let description = `${item.name}: ${item.value}`
-            if (descriptionFn) description = descriptionFn(item.value)
-            if (item.child.length === 0) continue
-            results.push(
-              wrapText(
-                `describe('${description}', () => {`,
-                iterateSuite(item.child),
-              ),
-            )
-            break
-          }
-        }
-      }
-      return results
-    }
-  }
-}
-const Heap = {
-  merge(a, b, isAafterB) {
-    if (!a) return b
-    if (!b) return a
-
-    let ret
-    if (!isAafterB(a.value, b.value)) {
-      ret = a
-      a = b
-      b = ret
-    }
-    ret = Heap.merge(a.right, b, isAafterB)
-    a.right = a.left
-    a.left = ret
-    return a
-  },
-  push(value, queue) {
-    queue.top = Heap.merge(
-      queue.top,
-      {value, left: null, right: null},
-      queue.isAafterB,
-    )
-    queue.size += 1
-  },
-  pop(queue) {
-    if (queue.size === 0) return
-    queue.size -= 1
-    const value = queue.top.value
-    queue.top = Heap.merge(queue.top.left, queue.top.right, queue.isAafterB)
-    return value
-  },
-  create(isAafterB) {
-    return {top: null, size: 0, isAafterB}
-  },
 }
 
-function sortListBySkewHeap(list, isAafterB) {
-  const heap = Heap.create(isAafterB)
-  list.forEach(e => {
-    Heap.push(e, heap)
-  })
-  const result = []
-  let value
-  while ((value = Heap.pop(heap))) {
-    result.push(value)
-  }
-  return result
-}
-
-function skewHeapSortFieldsComparator(sortByFields) {
-  const fields = []
+function skewHeapSortFieldsComparator<
+  Obj extends Record<string, ReadonlyArray<any>>
+>(sortByFields: Obj) {
+  const fields = [] as Array<{
+    field: keyof Obj
+    isVoidFalse: boolean
+    prioritySet: ReadonlyArray<any>
+  }>
   forIn(sortByFields, (prioritySet, field) => {
     const isVoidFalse =
       prioritySet.includes(false) && !prioritySet.includes(undefined)
@@ -805,7 +614,7 @@ function skewHeapSortFieldsComparator(sortByFields) {
       prioritySet: [...prioritySet], //.reverse(),
     })
   })
-  return function isAafterB(a, b) {
+  return function isAafterB(a: any, b: any) {
     for (let i = 0; i < fields.length; i++) {
       const {field, isVoidFalse, prioritySet} = fields[i]
       let aVal = a[field]

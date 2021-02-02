@@ -1,7 +1,5 @@
 import {
   generateCaseSetFile,
-  boolField,
-  printArray,
   byFields,
   createGroupedCases,
 } from './generateCaseSetFile'
@@ -45,8 +43,7 @@ generateCaseSetFile({
   dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample'],
   header: sampleClockArray.header,
-  shape: {},
-  generateCases({}) {
+  generateCases() {
     const casesDefs = byFields([{}], {
       shape: sampleClockArray.shape,
     })
@@ -60,9 +57,7 @@ generateCaseSetFile({
 })
 
 generateCaseSetFile({
-  shape: {
-    combinable: boolField(),
-  },
+  shape: [{combinable: false}, {combinable: true}],
   generateCases({combinable}: any) {
     if (combinable) {
       const casesDefs = byFields([{}], {
@@ -176,8 +171,7 @@ const fn = {
 })
 
 generateCaseSetFile({
-  shape: {},
-  generateCases({}) {
+  generateCases() {
     const casesDefs = byFields([{}], {
       shape: sampleReturn.shape,
     })
@@ -195,8 +189,7 @@ generateCaseSetFile({
 })
 
 generateCaseSetFile({
-  shape: {},
-  generateCases({}) {
+  generateCases() {
     const casesDefs = byFields([{}], {
       shape: guardGenerator.shape,
     })

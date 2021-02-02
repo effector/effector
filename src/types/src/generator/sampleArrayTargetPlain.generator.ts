@@ -1,4 +1,4 @@
-import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
+import {printArray} from '../runner/text'
 
 const grouping = {
   getHash: ({descriptionTokens}) => descriptionTokens,

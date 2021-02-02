@@ -1,5 +1,3 @@
-import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
-
 const variables = {
   number: 'num',
   void: 'voidt',
