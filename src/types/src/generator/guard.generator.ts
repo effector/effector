@@ -1,4 +1,4 @@
-const {generateCaseSetFile, printArray} = require('../generateCaseSetFile')
+import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
 
 const Source = {
   unit: {sourceType: 'unit'},
@@ -483,4 +483,4 @@ const lNumNum = createEvent<[number, number]>()
 const abn = createEvent<ABN>()
 `
 
-module.exports = {shape, grouping, header}
+export default {shape, grouping, header}

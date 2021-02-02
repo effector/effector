@@ -1,6 +1,4 @@
-//@ts-check
-
-const {generateCaseSetFile, printArray} = require('../generateCaseSetFile')
+import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
 
 const variables = {
   number: 'num',
@@ -331,4 +329,4 @@ const shape = {
   },
 }
 
-module.exports = {shape, grouping}
+export default {shape, grouping}

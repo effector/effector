@@ -1,4 +1,4 @@
-const {generateCaseSetFile, printArray} = require('../generateCaseSetFile')
+import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
 
 const Source = {
   event: {source: 'event'},
@@ -220,4 +220,4 @@ const fn1 = ({a}: AN) => ({a})
 const fn2 = ({a}: AN, c: number) => ({a: a + c})
 `
 
-module.exports = {shape, grouping, header}
+export default {shape, grouping, header}

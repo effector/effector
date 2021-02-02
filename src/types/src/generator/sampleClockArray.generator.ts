@@ -1,4 +1,4 @@
-const {generateCaseSetFile, printArray} = require('../generateCaseSetFile')
+import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
 
 const grouping = {
   getHash: ({descriptionTokens, noTarget, noClock, noSource}) =>
@@ -362,4 +362,4 @@ const fnAStringClockAny = (a:string, clock:any) => ({a,clock})
 const fnAb = ({a,b}:AB) => ({a,b})
 `
 
-module.exports = {grouping, shape, header}
+export default {grouping, shape, header}

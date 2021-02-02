@@ -1,4 +1,4 @@
-const {generateCaseSetFile, printArray} = require('../generateCaseSetFile')
+import {generateCaseSetFile, printArray} from '../generateCaseSetFile'
 
 const grouping = {
   getHash: ({descriptionTokens}) => descriptionTokens,
@@ -158,4 +158,4 @@ const shape = {
   },
 }
 
-module.exports = {shape, grouping}
+export default {shape, grouping}

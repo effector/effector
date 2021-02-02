@@ -4,13 +4,14 @@
   "description": "The state manager",
   "private": true,
   "scripts": {
-    "test:generate": "node src/types/src/testGenerator.js && yarn test -u",
     "browserstack": "COMPAT=true npx jest --config=jest.config.js --runInBand",
     "test": "npx jest --config=jest.config.js",
     "coverage": "COVERAGE=yes jest --config=jest.config.js",
     "build": "node tools/build",
     "test:watch": "npx jest --config=jest.config.js --watch",
-    "doc:update-readme": "npx doctoc README.md"
+    "doc:update-readme": "npx doctoc README.md",
+    "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
+    "test:generate": "yarn test:regen && yarn test -u"
   },
   "author": "Zero Bias",
   "license": "MIT",
@@ -94,6 +95,7 @@
     "serve": "^11.3.0",
     "sharp": "^0.26.2",
     "terser": "^5.3.8",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.2",
     "viz.js": "^2.1.2",
     "vue": "^2.6.12",

@@ -1,18 +1,16 @@
-//@ts-check
-
-const {
+import {
   generateCaseSetFile,
   boolField,
   printArray,
   byFields,
   createGroupedCases,
-} = require('./generateCaseSetFile')
+} from './generateCaseSetFile'
 
-const sampleClockArray = require('./generator/sampleClockArray.generator')
-const sampleArrayTargetCombinable = require('./generator/sampleArrayTargetCombinable.generator')
-const sampleArrayTargetPlain = require('./generator/sampleArrayTargetPlain.generator')
-const sampleReturn = require('./generator/sampleReturn.generator')
-const guardGenerator = require('./generator/guard.generator')
+import sampleClockArray from './generator/sampleClockArray.generator'
+import sampleArrayTargetCombinable from './generator/sampleArrayTargetCombinable.generator'
+import sampleArrayTargetPlain from './generator/sampleArrayTargetPlain.generator'
+import sampleReturn from './generator/sampleReturn.generator'
+import guardGenerator from './generator/guard.generator'
 /**
   fn:
   - with fn with second argument
@@ -65,7 +63,7 @@ generateCaseSetFile({
   shape: {
     combinable: boolField(),
   },
-  generateCases({combinable}) {
+  generateCases({combinable}: any) {
     if (combinable) {
       const casesDefs = byFields([{}], {
         shape: sampleArrayTargetCombinable.shape,

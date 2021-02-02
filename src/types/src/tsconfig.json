@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "module": "CommonJS",
+    "target": "esnext",
+    "jsx": "react",
+    "allowJs": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "lib": ["esnext"],
+    "baseUrl": "."
+  },
+  "exclude": [
+  ]
+}

@@ -1,8 +1,7 @@
-//@ts-check
+import {promises} from 'fs'
+import {resolve} from 'path'
 
-const {promises} = require('fs')
-const {resolve} = require('path')
-module.exports = {
+export {
   generateCaseSetFile,
   boolField,
   printArray,
