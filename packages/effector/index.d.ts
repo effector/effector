@@ -622,41 +622,6 @@ type Show<A extends any> =
         [K in keyof A]: A[K]
       } // & {}
 
-/** string error message is used when target value is assignable to source type
-  * because ValidTargetList works backward by checking
-  * whether target is assignable to source
-*/
-type ReplaceGeneric<U extends Unit<unknown>, Source, Target> =
-  Target extends Source
-  ? 'incompatible unit in target array'
-  : U extends Store<unknown>
-  ? Store<Source>
-  : U extends Effect<unknown, unknown, unknown>
-  ? Effect<Source, unknown, unknown>
-  : U extends Event<unknown>
-  ? Event<Source>
-  : U extends Unit<unknown>
-  ? Unit<Source>
-  : never
-
-/** validates target array per element
-  * and replaces incompatible types thereby showing
-  * precise type error message
-  * 
-  * unit kind is preserved to improve message quality,
-  * otherwise typescript will bloat errors with messages about fields
-  * which missing in Unit but exists in Event, Store or effect
-*/
-type ValidTargetList<Match, Target extends Tuple<unknown>> = {
-  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
-  ? Match extends Value
-  ? Target[Index]
-  : Value extends void
-  ? Target[Index]
-  : ReplaceGeneric<Target[Index], Match, Value>
-  : 'non-unit item in target array'
-}
-
 /* sample types */
 
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
@@ -945,7 +910,7 @@ type ValidTargetUnitGuard<Source, Target extends unknown> =
   ? Target
   : TargetValue extends void
   ? Target
-  : Unit<Source> // ReplaceGeneric<Target, Source, TargetValue>
+  : Unit<Source>
   : never
 
 type ValidTargetList2<Source, Target extends Tuple<unknown>> = {
