@@ -25,14 +25,16 @@ export function guard(...args: any[]) {
   let {filter, greedy, clock, name = rawName} = config
   const target = config.target || createEvent(name, meta.config)
   const filterIsUnit = is.unit(filter)
+  let needToCombine = true
   if (source === undefined) {
     assertNodeSet(clock, 'guard', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)
     }
     source = clock
+    needToCombine = false
   }
-  if (!is.unit(source)) source = combine(source)
+  if (needToCombine && !is.unit(source)) source = combine(source)
   if (clock) {
     assertNodeSet(clock, 'guard', 'clock')
     source = sample({

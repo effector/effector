@@ -262,3 +262,49 @@ describe('clock support', () => {
     `)
   })
 })
+
+describe('support clock without source', () => {
+  test('it works with clock unit', () => {
+    const fn = jest.fn()
+    const clockA = createEvent<number>()
+    const target = createEvent<number>()
+    target.watch(fn)
+    const result = guard({
+      clock: clockA,
+      filter: n => n % 2 !== 0,
+      target,
+    })
+    clockA(1)
+    clockA(2)
+    clockA(3)
+    expect(result === target).toBe(true)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        3,
+      ]
+    `)
+  })
+  test('it works with clock array', () => {
+    const fn = jest.fn()
+    const clockA = createEvent<number>()
+    const clockB = createEvent<number>()
+    const target = createEvent<number>()
+    target.watch(fn)
+    const result = guard({
+      clock: [clockA, clockB],
+      filter: n => n % 2 !== 0,
+      target,
+    })
+    clockA(1)
+    clockB(4)
+    clockB(5)
+    expect(result === target).toBe(true)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        5,
+      ]
+    `)
+  })
+})
