@@ -81,7 +81,7 @@ const $playerPosition = createStore({x: 0, y: 0}, {
 ```js
 sample({
   clock: [fx1.doneData, fx2.doneData],
-  fn: effectResult => ({url: '/stats', data: effectResult})
+  fn: data => ({url: '/stats', data})
   target: fetchFx,
 })
 ```
@@ -90,8 +90,8 @@ sample({
 
 ```js
 guard({
-  source: $formFields,
   clock: validateForm,
+  source: $formFields,
   filter: formFields => validator(formFields),
   target: submitFormFx,
 })
