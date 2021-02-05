@@ -4,6 +4,16 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 21.8.0
 
+- Add type support for arrays in `sample` `target` ([PR #284](https://github.com/effector/effector/pull/284), [#445](https://github.com/effector/effector/pull/445))
+
+```js
+sample({
+  clock: clickValidate,
+  source: $formFields,
+  target: [validateForm, sendStatsFx],
+})
+```
+
 - Add support for matcher functions, matcher stores and case stores to `split`. Matcher functions and stores will choose target case by its name, case stores are boolean stores which indicate whether to choose given case
 
 ```typescript
@@ -58,11 +68,34 @@ split({
 
 ```
 
-- Add support for `sample` with `clock` without `source` to use in cases when `clock` is array of units and no `source` stores is needed
-
-- Add support for `clock` to `guard` to improve developer expirience in cases when update trigger (`clock` field) and data source are different things
-
 - Add `updateFilter` config field to `createStore` to skip arbitrary store updates ([discussion #428](https://github.com/effector/effector/discussions/428))
+
+```js
+const $playerPosition = createStore({x: 0, y: 0}, {
+  updateFilter: (update, current) => update.x !== current.x
+})
+```
+
+- Add support for `sample` with `clock` without `source`. For example, it useful in cases when `clock` is array of units and no `source` stores is needed
+
+```js
+sample({
+  clock: [fx1.doneData, fx2.doneData],
+  fn: effectResult => ({url: '/stats', data: effectResult})
+  target: fetchFx,
+})
+```
+
+- Add support for `clock` to `guard` to improve developer expirience in cases when update trigger (`clock` field) and data source (`source` field) are different things
+
+```js
+guard({
+  source: $formFields,
+  clock: validateForm,
+  filter: formFields => validator(formFields),
+  target: submitFormFx,
+})
+```
 
 - Add `addNames` field to babel plugin ([PR #450](https://github.com/effector/effector/pull/450))
 
@@ -76,7 +109,7 @@ split({
 
 - Improve typechecking for `attach` ([issue #439](https://github.com/effector/effector/issues/439))
 
-- Fix type issues in `sample` and `guard` typings
+- Fix various type issues in `sample` and `guard` typings
 
 
 ## effector-react 21.2.0
