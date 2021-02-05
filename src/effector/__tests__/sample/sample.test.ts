@@ -119,7 +119,7 @@ it('should not accept undefined clocks', () => {
       source: createStore(null),
       clock: undefined,
     })
-  }).toThrowErrorMatchingInlineSnapshot(`"config.clock should be defined"`)
+  }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
 })
 
 describe('sample type', () => {
@@ -588,4 +588,44 @@ test('source shape support', () => {
     clock: createEvent(),
   })
   expect(is.event(sampled)).toBe(true)
+})
+
+describe('it works without source', () => {
+  test('it works with clock unit', () => {
+    const fn = jest.fn()
+    const clockA = createEvent<number>()
+    const target = createEvent<number>()
+    target.watch(fn)
+    const result = sample({
+      clock: clockA,
+      target,
+    })
+    clockA(1)
+    expect(result === target).toBe(true)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+      ]
+    `)
+  })
+  test('it works with clock array', () => {
+    const fn = jest.fn()
+    const clockA = createEvent<number>()
+    const clockB = createEvent<number>()
+    const target = createEvent<number>()
+    target.watch(fn)
+    const result = sample({
+      clock: [clockA, clockB],
+      target,
+    })
+    clockA(1)
+    clockB(4)
+    expect(result === target).toBe(true)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        4,
+      ]
+    `)
+  })
 })

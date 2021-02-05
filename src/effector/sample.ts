@@ -5,16 +5,31 @@ import {callStackAReg, callARegStack} from './caller'
 import {processArgsToConfig} from './config'
 import {getStoreState, getGraph} from './getter'
 import {own} from './own'
-import {assertNodeSet, is} from './is'
+import {assertNodeSet, is, isObject} from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {readTemplate} from './region'
 import {throwError} from './throw'
-import {includes} from './collection'
+import {includes, forEach} from './collection'
 import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
 import {merge} from './merge'
+
+const sampleConfigFields = ['source', 'clock', 'target']
+
+function validateSampleConfig(config: any) {
+  let atLeastOneFieldExists = false
+  forEach(sampleConfigFields, field => {
+    if (field in config) {
+      if (config[field] == null) {
+        throwError(`sample: ${field} should be defined`)
+      }
+      atLeastOneFieldExists = true
+    }
+  })
+  return atLeastOneFieldExists
+}
 
 export function sample(...args: any): any {
   let target
@@ -23,9 +38,7 @@ export function sample(...args: any): any {
   let sid
   let greedy
   //config case
-  if (clock === undefined && 'source' in source) {
-    if ('clock' in source && source.clock == null)
-      throwError('config.clock should be defined')
+  if (clock === undefined && isObject(source) && validateSampleConfig(source)) {
     clock = source.clock
     fn = source.fn
     greedy = source.greedy
@@ -35,14 +48,16 @@ export function sample(...args: any): any {
     sid = source.sid
     source = source.source
   }
+  let needToCombine = true
   if (source === undefined) {
     assertNodeSet(clock, 'sample', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)
     }
     source = clock
+    needToCombine = false
   }
-  if (!is.unit(source)) {
+  if (needToCombine && !is.unit(source)) {
     source = combine(source)
   }
   if (clock === undefined) {
