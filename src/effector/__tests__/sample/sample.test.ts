@@ -11,6 +11,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 test('sid support', () => {
   const source = createStore(null)
+  //@ts-ignore
   const sampled = sample({source, sid: 'foo'})
 
   expect(sampled.sid).toBe('foo')
@@ -19,7 +20,7 @@ test('sid support', () => {
 describe('temporal consistency', () => {
   test('in combination with guard, pass immediately', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
@@ -34,7 +35,7 @@ describe('temporal consistency', () => {
   })
   test('in combination with guard, pass on second call', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
@@ -50,7 +51,7 @@ describe('temporal consistency', () => {
   })
   test('in combination with .filter, pass immediately', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
@@ -65,7 +66,7 @@ describe('temporal consistency', () => {
   })
   test('in combination with .filter, pass on second call', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
@@ -81,7 +82,7 @@ describe('temporal consistency', () => {
   })
   test('source & clock is a same event', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
@@ -95,7 +96,7 @@ describe('temporal consistency', () => {
   })
   test('clock triggers earlier than source during same pure phase', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<number>()
     const source = trigger.map(x => x)
     const target = createEvent()
     sample({
@@ -215,7 +216,7 @@ describe('sample', () => {
     it('works with sibling events', () => {
       const fn1 = jest.fn()
       const fn2 = jest.fn()
-      const A = createEvent()
+      const A = createEvent<number>()
       const B = A.map(b => ({b}))
       const C = A.filterMap(x => {
         if (x > 5) return `${x} > 5`
@@ -241,7 +242,7 @@ describe('sample', () => {
     })
     test('event', () => {
       const fn = jest.fn()
-      const data = createEvent()
+      const data = createEvent<any>()
       const stop = createEvent()
 
       const lastData = sample(data, stop)
@@ -260,7 +261,7 @@ describe('sample', () => {
     })
     test('no updates until first source update', () => {
       const fn = jest.fn()
-      const data = createEvent()
+      const data = createEvent<any>()
       const stop = createEvent()
 
       const lastData = sample(data, stop)
@@ -281,8 +282,8 @@ describe('sample', () => {
         'even when clock is store',
       () => {
         const fn = jest.fn()
-        const data = createEvent()
-        const add = createEvent()
+        const data = createEvent<any>()
+        const add = createEvent<number>()
         const stop = createStore(0).on(add, (x, n) => x + n)
 
         const lastData = sample(data, stop)
@@ -305,8 +306,8 @@ describe('sample', () => {
     )
     test('handler works', () => {
       const fn = jest.fn()
-      const release = createEvent()
-      const emit = createEvent()
+      const release = createEvent<number>()
+      const emit = createEvent<number>()
       const received = sample(emit, release, (last, payload) => [last, payload])
       received.watch(value => fn(value))
       release(0)
@@ -322,7 +323,7 @@ describe('sample', () => {
     })
     test('store as clock', () => {
       const fn = jest.fn()
-      const source = createEvent()
+      const source = createEvent<string>()
       const clock = createStore(0)
       const result = sample(source, clock)
       result.watch(value => fn(value))
@@ -338,7 +339,7 @@ describe('sample', () => {
     test('store as clock with handler', () => {
       const fn = jest.fn()
       const handler = jest.fn(x => x)
-      const source = createEvent()
+      const source = createEvent<string>()
       const clock = createStore(0)
       const result = sample(source, clock, (source, clock) =>
         handler({
@@ -367,7 +368,7 @@ describe('sample', () => {
     test('effect', () => {
       const fn = jest.fn()
       const data = createEffect({
-        handler() {
+        handler(_: any) {
           return 'resolved'
         },
       })
@@ -391,7 +392,7 @@ describe('sample', () => {
       const fn1 = jest.fn()
       const fn2 = jest.fn()
       const hello = createEffect({
-        handler() {
+        handler(_: any) {
           return Promise.resolve(200)
         },
       })
@@ -495,7 +496,7 @@ describe('sample', () => {
     test('store source with event as target plain', () => {
       const foo = createStore([1, 2, 3])
       const bar = createStore([4, 5, 6])
-      const stop = createEvent()
+      const stop = createEvent<string[]>()
 
       const baz = sample(bar, stop)
 
@@ -508,7 +509,7 @@ describe('sample', () => {
   })
   test('store with handler', () => {
     const fn = jest.fn()
-    const stop = createEvent()
+    const stop = createEvent<string>()
 
     const s1 = createStore(0)
     //@ts-ignore
