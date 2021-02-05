@@ -12,7 +12,7 @@ import {
 const typecheck = '{global}'
 
 describe('explicit generics', () => {
-  test('sample<A, B, X>({source, clock, fn, target})', () => {
+  test('sample<A, B, R>({source, clock, fn, target})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const target = createEvent<number>()
@@ -70,7 +70,7 @@ describe('explicit generics', () => {
       "
     `)
   })
-  test('sample<A, B, X>({source, clock, fn})', () => {
+  test('sample<A, B, R>({source, clock, fn})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const result: Event<number> = sample<string, number, number>({
@@ -110,50 +110,30 @@ describe('explicit generics', () => {
       "
     `)
   })
-  test('sample<A, B, X>({source: shape, clock: list, target: list})', () => {
-    const num = createEvent<number>()
-    const str = createEvent<string>()
-    const anyt = createEvent<any>()
-    const $num = createStore<number>(0)
-    const $str = createStore('')
-    const a_num = createEvent<{a: number}>()
-    const ab_num_str = createEvent<{a: number; b: string}>()
-    const result1 = sample<
-      {a: number; b: string},
-      [number, string, any],
-      [{a: number}, {a: number; b: string}, {a: number}]
-    >({
-      source: {a: $num, b: $str},
-      clock: [num, anyt, str],
-      target: [a_num, ab_num_str, a_num],
-    })
-    const result2 = sample({
-      source: {a: $num, b: $str},
-      clock: [str, anyt, num],
-      target: [a_num, ab_num_str, a_num],
-    })
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
 })
 
 test('generic edge cases', () => {
-  function generic1<T, S>(target: Store<S>, clock: Event<T>) {
-    const result: Store<S> = sample({
+  function generic1<A, B>(target: Store<A>, clock: Event<B>) {
+    const result = sample({
       source: target,
       clock,
       target,
     })
   }
-  function generic2<T, S>(target: Store<S>, clock: Event<T>) {
-    const result: Store<S> = sample({
+  function generic2<A, B>(target: Store<A>, clock: Event<B>) {
+    const result: Store<A> = sample({
       source: target,
       clock,
       fn: (source, clock) => source,
       target,
+    })
+  }
+  function generic3<A, B>(target: Store<A>, clock: Event<B>) {
+    const result: Event<B> = sample({
+      source: target,
+      clock,
+      fn: (source, clock) => clock,
+      target: clock,
     })
   }
   expect(typecheck).toMatchInlineSnapshot(`
@@ -341,7 +321,6 @@ describe('sample(Store<T>):Store<T>', () => {
     })
   })
 })
-
 describe('sample + guard (should pass)', () => {
   test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn` (should pass)", () => {
     const source = createStore(0)
@@ -453,6 +432,202 @@ describe('without clock', () => {
       source,
       target,
     })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
+describe('clock without source', () => {
+  test('with fn (should pass)', () => {
+    const clock = createStore([{foo: 'ok', bar: 0}])
+    const target = createStore({foo: '...', bar: 1})
+    sample({
+      clock,
+      target,
+      fn: ([obj]) => obj,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('with fn [clock array] (should pass)', () => {
+    const clock = createStore({foo: 'ok', bar: 0})
+    const target = createStore({foo: '...', bar: 1})
+    sample({
+      clock: [clock],
+      target,
+      fn: foo => foo,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('without fn (should pass)', () => {
+    const clock = createEvent<number>()
+    const fx = createEffect<number, void, any>()
+    sample({
+      clock,
+      target: fx,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('without fn [void] (should pass)', () => {
+    const clock = createEvent()
+    const fx = createEffect<void, void, any>()
+    sample({
+      clock,
+      target: fx,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('without fn [clock array] (should pass)', () => {
+    const foo = createStore('ok')
+    const bar = createStore(0)
+    const target = createEvent<string | number>()
+    sample({
+      clock: [foo, bar],
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('without fn, any to void (should pass)', () => {
+    const clock = createEvent<string>()
+    const target = createEvent<void>()
+    sample({
+      clock,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('with fn (should fail)', () => {
+    const foo = createStore('ok')
+    const target = createStore(1)
+    sample({
+      clock: foo,
+      fn: foo => foo,
+      //@ts-expect-error
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      "
+    `)
+  })
+  test('with fn [clock array] (should fail)', () => {
+    const foo = createStore(0)
+    const bar = createStore(1)
+    const target = createStore(2)
+
+    sample({
+      clock: [foo, bar],
+      fn: foo => true,
+      //@ts-expect-error
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      "
+    `)
+  })
+  test('without fn (should fail)', () => {
+    const foo = createStore('ok')
+    const target = createStore(1)
+
+    sample({
+      clock: foo,
+      //@ts-expect-error
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      "
+    `)
+  })
+
+  test('without fn [clock array] (should fail)', () => {
+    const foo = createStore('ok')
+    const bar = createStore(0)
+    const baz = createStore(true)
+    const target = createStore(1)
+
+    sample({
+      clock: [foo, bar, baz],
+      //@ts-expect-error
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      "
+    `)
+  })
+})
+describe('sample + .map', () => {
+  test('directly assign `.map` result to `source` (should pass)', () => {
+    const event: Event<[{foo: string}]> = createEvent()
+    const target = createStore('yes')
+
+    sample({
+      source: event.map(([obj]) => obj.foo),
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('directly assign `.map` result to `source` without losing inference in `fn` (should pass)', () => {
+    const event: Event<[{foo: 'payload'}]> = createEvent()
+    const a = createStore(0)
+    const b = createEvent<number | string>()
+
+    sample({
+      source: event.map(([obj]) => obj.foo),
+      fn: payload =>
+        // cast never if payload is any
+        (payload as 0 extends 1 & typeof payload ? never : typeof payload)
+          .length,
+      target: [a, b],
+    })
+
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
