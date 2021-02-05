@@ -422,7 +422,7 @@ export function merge<T>(events: ReadonlyArray<Unit<T>>): EventAsReturnType<T>
 export function merge<T extends ReadonlyArray<Unit<any>>>(
   events: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
-export function clearNode(unit: Unit<any> | Node, opts?: {deep?: boolean}): void
+export function clearNode(unit: Unit<any> | Node | Scope, opts?: {deep?: boolean}): void
 export function createNode(opts?: {
   node?: Array<Cmd>
   parent?: Array<Unit<any> | Node>
@@ -1320,11 +1320,11 @@ export function combine<T extends Tuple<Store<any>>>(
   ...stores: T
 ): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
 
-export interface Fork {
+export interface Scope {
   getState<T>(store: Store<T>): T
 }
 
-export {Fork as Scope}
+export {Scope as Fork}
 
 export type ValueMap = Map<Store<any>, any> | {[sid: string]: any}
 
@@ -1337,13 +1337,13 @@ hydrate(root, {
 })
 
 */
-export function hydrate(domainOrScope: Domain | Fork, config: {values: ValueMap}): void
+export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
 
 /**
 serialize state on server
 */
 export function serialize(
-  scope: Fork,
+  scope: Scope,
   options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
 ): {[sid: string]: any}
 
@@ -1356,22 +1356,22 @@ export function fork(
     values?: ValueMap
     handlers?: Map<Effect<any, any, any>, Function> | {[sid: string]: Function}
   },
-): Fork
+): Scope
 
 /** run effect or event in scope and wait for all triggered effects */
 export function allSettled<FX extends Effect<any, any, any>>(
   unit: FX,
-  config: {scope: Fork; params: EffectParams<FX>},
+  config: {scope: Scope; params: EffectParams<FX>},
 ): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
 export function allSettled<FX extends Effect<void, any, any>>(
   unit: FX,
-  config: {scope: Fork},
+  config: {scope: Scope},
 ): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
 export function allSettled<T>(
   unit: Unit<T>,
-  config: {scope: Fork; params: T},
+  config: {scope: Scope; params: T},
 ): Promise<void>
 export function allSettled(
   unit: Unit<void>,
-  config: {scope: Fork},
+  config: {scope: Scope},
 ): Promise<void>
