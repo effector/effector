@@ -747,39 +747,21 @@ type MultiTarget<Target, Result> = Target extends Unit<infer Value>
 * R - fn result
 */
 
-export function sample<
-  A = any,
+export function sample<A = any,
   S extends SourceNotConfig<A> = SourceNotConfig<A>
->(
-  source: S
-): GetResultS<S>
-
-export function sample<
-  A = any,
-  B = any,
+>(source: S): GetResultS<S>
+export function sample<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>
->(
-  source: S,
-  clock: C
-): GetResultSC<S, C>
-
-export function sample<
-  A = any,
-  B = any,
-  R = any,
+>(source: S, clock: C): GetResultSC<S, C>
+export function sample<A = any, B = any, R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
   F extends FnSCR<S, C, R> = FnSCR<S, C, R>
->(
-  source: S,
-  clock: C,
-  fn: F
-): GetResultSCF<S, C, F>
+>(source: S, clock: C, fn: F): GetResultSCF<S, C, F>
 
 // S
-export function sample<
-  A = any,
+export function sample<A = any,
   S extends Source<A> = Source<A>
 >(config: {
   source: S,
@@ -789,10 +771,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): GetResultS<S>
-
 // C
-export function sample<
-  B = any,
+export function sample<B = any,
   C extends Clock<B> = Clock<B>
 >(config: {
   source?: never,
@@ -802,11 +782,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): GetResultC<C>
-
 // SC
-export function sample<
-  A = any,
-  B = any,
+export function sample<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>
 >(config: {
@@ -817,11 +794,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): GetResultSC<S, C>
-
 // SF
-export function sample<
-  A = any,
-  R = any,
+export function sample<A = any, R = any,
   S extends Source<A> = Source<A>,
   F extends FnSR<S, R> = FnSR<S, R>
 >(config: {
@@ -832,11 +806,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): GetResultSF<S, F>
-
 // CF
-export function sample<
-  B = any,
-  R = any,
+export function sample<B = any, R = any,
   C extends Clock<B> = Clock<B>,
   F extends FnCR<C, R> = FnCR<C, R>
 >(config: {
@@ -847,12 +818,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): GetResultCF<C, F>
-
 // SCF
-export function sample<
-  A = any,
-  B = any,
-  R = any,
+export function sample<A = any, B = any, R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
   F extends FnSCR<S, C, R> = FnSCR<S, C, R>
@@ -865,11 +832,9 @@ export function sample<
   greedy?: boolean
 }): GetResultSCF<S, C, F>
 
-//  with target
-
+// sample with target
 // ST
-export function sample<
-  A = any,
+export function sample<A = any,
   S extends Source<A> = Source<A>,
   T extends Target = Target
 >(config: {
@@ -880,10 +845,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): T
-
 // СT
-export function sample<
-  B = any,
+export function sample<B = any,
   C extends Clock<B> = Clock<B>,
   T extends Target = Target
 >(config: {
@@ -894,11 +857,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): T
-
 // SСT
-export function sample<
-  A = any,
-  B = any,
+export function sample<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
   T extends Target = Target
@@ -910,11 +870,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): T
-
 // SFT
-export function sample<
-  A = any,
-  R = any,
+export function sample<A = any, R = any,
   S extends Source<A> = Source<A>,
   F extends FnSR<S, R> = FnSR<S, R>,
   T extends Target = Target
@@ -926,11 +883,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): T
-
 // СFT
-export function sample<
-  B = any,
-  R = any,
+export function sample<B = any, R = any,
   C extends Clock<B> = Clock<B>,
   F extends FnCR<C, R> = FnCR<C, R>,
   T extends Target = Target
@@ -942,12 +896,8 @@ export function sample<
   name?: string,
   greedy?: boolean
 }): T
-
 // SCFT
-export function sample<
-  A = any,
-  B = any,
-  R = any,
+export function sample<A = any, B = any, R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
   F extends FnSCR<S, C, R> = FnSCR<S, C, R>,
@@ -961,7 +911,7 @@ export function sample<
   greedy?: boolean
 }): T
 
-// last overload (for readable error messages)
+// sample's last overload (for readable error messages)
 export function sample<
   S extends Source<unknown>,
   C extends Clock<unknown>,
