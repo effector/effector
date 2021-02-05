@@ -379,9 +379,7 @@ describe('sample + guard (should pass)', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Binding element 'isAble' implicitly has an 'any' type.
-      Binding element 'field' implicitly has an 'any' type.
-      Parameter 'data' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
