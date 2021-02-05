@@ -57,7 +57,7 @@ test('clearNode(incorrect)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type 'null' is not assignable to parameter of type 'Unit<any> | Node'.
+    Argument of type 'null' is not assignable to parameter of type 'Unit<any> | Node | Scope'.
     "
   `)
 })
