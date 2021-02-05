@@ -2,6 +2,83 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.8.0
+
+- Add support for matcher functions, matcher stores and case stores to `split`. Matcher functions and stores will choose target case by its name, case stores are boolean stores which indicate whether to choose given case
+
+```typescript
+
+const source = createEvent()
+const even = createEvent()
+const odd = createStore(0)
+
+split({
+  source,
+  // matcher function
+  match(n) {
+    if (n % 2 === 0) return 'even'
+    return 'odd'
+  },
+  cases: {
+    even,
+    odd,
+  }
+})
+
+const $currentPage = createStore('dashboard')
+
+split({
+  source,
+  // matcher store
+  match: $currentPage,
+  cases: {
+    dashboard: even,
+    __: odd,
+  }
+})
+
+const tryUpdatePage = createEvent()
+const updatePageFx = createEffect()
+
+
+
+const $hasWriteAccess = createStore(false)
+
+
+split({
+  source: tryUpdatePage,
+  match: {
+    // case store
+    admin: $hasWriteAccess
+  },
+  cases: {
+    admin: updatePageFx,
+  }
+})
+
+```
+
+- Add support for `sample` with `clock` without `source` to use in cases when `clock` is array of units and no `source` stores is needed
+
+- Add support for `clock` to `guard` to improve developer expirience in cases when update trigger (`clock` field) and data source are different things
+
+- Add `updateFilter` config field to `createStore` to skip arbitrary store updates ([discussion #428](https://github.com/effector/effector/discussions/428))
+
+- Add `addNames` field to babel plugin ([PR #450](https://github.com/effector/effector/pull/450))
+
+- Add type support for `Scope` to `clearNode` ([issue #441](https://github.com/effector/effector/issues/441))
+
+- Add `compositeName` to `Domain` typings, making it consistent with other units
+
+- Add `EventPayload` and `UnitValue` type helpers ([PR #434](https://github.com/effector/effector/pull/434))
+
+- Improve various edge cases with fork api and serialization
+
+- Improve typechecking for `attach` ([issue #439](https://github.com/effector/effector/issues/439))
+
+- Fix type issues in `sample` and `guard` typings
+
+
 ## effector-react 21.2.0
 
 - Add `createGate` implementation to `effector-react/ssr`
