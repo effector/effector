@@ -359,6 +359,32 @@ describe('sample + guard (should pass)', () => {
       "
     `)
   })
+  test('edge case (should pass)', () => {
+    function debounce<T>(event: Event<T>): Event<T> {
+      return event
+    }
+    const $store = createStore(0)
+    const $flag = createStore(false)
+    const trigger = createEvent<number>()
+    const target = createEffect<{field: number; data: number}, void>()
+
+    guard({
+      source: sample({
+        clock: debounce(trigger),
+        source: [$flag, $store],
+        fn: ([isAble, field], data) => (isAble ? {field, data} : null),
+      }),
+      filter: (e): e is {field: number; data: number} => !!e,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Binding element 'isAble' implicitly has an 'any' type.
+      Binding element 'field' implicitly has an 'any' type.
+      Parameter 'data' implicitly has an 'any' type.
+      "
+    `)
+  })
 })
 describe('without clock', () => {
   test('with fn (should pass)', () => {
