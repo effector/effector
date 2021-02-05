@@ -11,6 +11,8 @@ import {Code} from '../components/Code'
 
 import sberLogo from './logo/sber.png'
 import MtsLogo from './logo/mts.svg'
+import Raiffeisen from './logo/raiffeisen.svg'
+import Avito from './logo/avito.svg'
 import AutomationHeroLogo from './logo/automationhero.svg'
 import docsvisionLogo from './logo/docsvision.png'
 import redmadrobotLogo from './logo/redmadrobot.png'
@@ -104,6 +106,14 @@ const users = [
   {
     view: MtsLogo,
     alt: 'MTS',
+  },
+  {
+    view: Raiffeisen,
+    alt: 'Raiffeisen Bank Russia',
+  },
+  {
+    view: Avito,
+    alt: 'Avito',
   },
   {
     url: redmadrobotLogo,
