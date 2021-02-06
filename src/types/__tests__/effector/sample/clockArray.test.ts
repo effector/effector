@@ -415,7 +415,6 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
-    //@ts-expect-error
     const target: Event<{a: string; clock: any}> = sample({
       source: {a},
       clock: [clockA, clockB, clockC],
@@ -441,7 +440,6 @@ describe('without target', () => {
     const clockA = createEvent()
     const clockC = createEvent<string>()
 
-    //@ts-expect-error
     const target: Event<{a: string; b: string; clock: string}> = sample({
       source,
       clock: [clockA, clockC],

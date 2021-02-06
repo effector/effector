@@ -712,19 +712,6 @@ type MultiTarget<Target, Result> = Target extends Unit<infer Value>
 * R - fn result
 */
 
-export function sample<A = any, B = any, R = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
-  F extends FnSCR<S, C, R> = FnSCR<S, C, R>
->(source: S, clock: C, fn: F): GetResultSCF<S, C, F>
-export function sample<A = any, B = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>
->(source: S, clock: C): GetResultSC<S, C>
-export function sample<A = any,
-  S extends SourceNotConfig<A> = SourceNotConfig<A>
->(source: S): GetResultS<S>
-
 // sample with target
 // SCFT
 export function sample<A = any, B = any, R = any,
@@ -876,6 +863,20 @@ export function sample<B = any,
   name?: string,
   greedy?: boolean
 }): GetResultC<C>
+
+// sample without config
+export function sample<A = any, B = any, R = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends FnSCR<S, C, R> = FnSCR<S, C, R>
+>(source: S, clock: C, fn: F): GetResultSCF<S, C, F>
+export function sample<A = any, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>
+>(source: S, clock: C): GetResultSC<S, C>
+export function sample<A = any,
+  S extends SourceNotConfig<A> = SourceNotConfig<A>
+>(source: S): GetResultS<S>
 
 // sample's last overload (for readable error messages)
 export function sample<
