@@ -650,10 +650,6 @@ type GetClock<C> = C extends Unit<infer Value> ? Value : GetMergedValue<C>
 
 type AnyFn = (...args: any) => any
 
-type FnSR<S, R> = (source: GetSource<S>) => R
-type FnCR<C, R> = (clock: GetClock<C>) => R
-type FnSCR<S, C, R> = (source: GetSource<S>, clock: GetClock<C>) => R
-
 type GetResultS<S> = S extends Store<any> | Combinable
   ? Store<GetSource<S>>
   : Event<GetSource<S>>
@@ -662,13 +658,13 @@ type GetResultC<C> = C extends Store<any>
   ? Store<GetClock<C>>
   : Event<GetClock<C>>
 
-type GetResultSF<S, F extends AnyFn> = S extends Store<any> | Combinable
-  ? Store<ReturnType<F>>
-  : Event<ReturnType<F>>
+type GetResultSR<S, R> = S extends Store<any> | Combinable
+  ? Store<R>
+  : Event<R>
 
-type GetResultCF<C, F extends AnyFn> = C extends Store<any>
-  ? Store<ReturnType<F>>
-  : Event<ReturnType<F>>
+type GetResultCR<C, R> = C extends Store<any>
+  ? Store<R>
+  : Event<R>
 
 type GetResultSC<S, C> = S extends Store<any> | Combinable
   ? C extends Store<any>
@@ -676,11 +672,11 @@ type GetResultSC<S, C> = S extends Store<any> | Combinable
     : Event<GetSource<S>>
   : Event<GetSource<S>>
 
-type GetResultSCF<S, C, F extends AnyFn> = S extends Store<any> | Combinable
+type GetResultSCR<S, C, R> = S extends Store<any> | Combinable
   ? C extends Store<any>
-    ? Store<ReturnType<F>>
-    : Event<ReturnType<F>>
-  : Event<ReturnType<F>>
+    ? Store<R>
+    : Event<R>
+  : Event<R>
 
 /** Replaces incompatible unit type with string error message.
  *  There is no error message if target type is void.
@@ -717,39 +713,34 @@ type MultiTarget<Target, Result> = Target extends Unit<infer Value>
 export function sample<A = any, B = any, R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCR<S, C, R> = FnSCR<S, C, R>,
   T extends Target = Target
 >(config: {
   source: S,
   clock: C,
-  fn: F,
-  target: MultiTarget<T, ReturnType<F>>,
+  fn: (source: GetSource<S>, clock: GetClock<C>) => R,
+  target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
 }): T
 // SFT
 export function sample<A = any, R = any,
   S extends Source<A> = Source<A>,
-  F extends FnSR<S, R> = FnSR<S, R>,
   T extends Target = Target
 >(config: {
   source: S,
-  clock?: never,
-  fn: F,
-  target: MultiTarget<T, ReturnType<F>>,
+  fn: (source: GetSource<S>) => R,
+  target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
 }): T
 // СFT
 export function sample<B = any, R = any,
   C extends Clock<B> = Clock<B>,
-  F extends FnCR<C, R> = FnCR<C, R>,
   T extends Target = Target
 >(config: {
-  source?: never,
   clock: C,
-  fn: F,
-  target: MultiTarget<T, ReturnType<F>>,
+  fn: (clock: GetClock<C>) => R,
+  target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
 }): T
@@ -761,7 +752,6 @@ export function sample<A = any, B = any,
 >(config: {
   source: S,
   clock: C,
-  fn?: never,
   target: MultiTarget<T, GetSource<S>>,
   name?: string,
   greedy?: boolean
@@ -772,8 +762,6 @@ export function sample<A = any,
   T extends Target = Target
 >(config: {
   source: S,
-  clock?: never,
-  fn?: never,
   target: MultiTarget<T, GetSource<S>>,
   name?: string,
   greedy?: boolean
@@ -783,9 +771,7 @@ export function sample<B = any,
   C extends Clock<B> = Clock<B>,
   T extends Target = Target
 >(config: {
-  source?: never,
   clock: C,
-  fn?: never,
   target: MultiTarget<T, GetClock<C>>,
   name?: string,
   greedy?: boolean
@@ -796,39 +782,31 @@ export function sample<B = any,
 export function sample<A = any, B = any, R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCR<S, C, R> = FnSCR<S, C, R>
 >(config: {
   source: S,
   clock: C,
-  fn: F,
-  target?: never,
+  fn: (source: GetSource<S>, clock: GetClock<C>) => R,
   name?: string,
   greedy?: boolean
-}): GetResultSCF<S, C, F>
+}): GetResultSCR<S, C, R>
 // SF
 export function sample<A = any, R = any,
   S extends Source<A> = Source<A>,
-  F extends FnSR<S, R> = FnSR<S, R>
 >(config: {
   source: S,
-  clock?: never,
-  fn: F,
-  target?: never,
+  fn: (source: GetSource<S>) => R,
   name?: string,
   greedy?: boolean
-}): GetResultSF<S, F>
+}): GetResultSR<S, R>
 // CF
 export function sample<B = any, R = any,
   C extends Clock<B> = Clock<B>,
-  F extends FnCR<C, R> = FnCR<C, R>
 >(config: {
-  source?: never,
   clock: C,
-  fn: F,
-  target?: never,
+  fn: (clock: GetClock<C>) => R,
   name?: string,
   greedy?: boolean
-}): GetResultCF<C, F>
+}): GetResultCR<C, R>
 // SC
 export function sample<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -836,8 +814,6 @@ export function sample<A = any, B = any,
 >(config: {
   source: S,
   clock: C,
-  fn?: never,
-  target?: never,
   name?: string,
   greedy?: boolean
 }): GetResultSC<S, C>
@@ -846,9 +822,6 @@ export function sample<A = any,
   S extends Source<A> = Source<A>
 >(config: {
   source: S,
-  clock?: never,
-  fn?: never,
-  target?: never,
   name?: string,
   greedy?: boolean
 }): GetResultS<S>
@@ -856,10 +829,7 @@ export function sample<A = any,
 export function sample<B = any,
   C extends Clock<B> = Clock<B>
 >(config: {
-  source?: never,
   clock: C,
-  fn?: never,
-  target?: never,
   name?: string,
   greedy?: boolean
 }): GetResultC<C>
@@ -868,8 +838,8 @@ export function sample<B = any,
 export function sample<A = any, B = any, R = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
-  F extends FnSCR<S, C, R> = FnSCR<S, C, R>
->(source: S, clock: C, fn: F): GetResultSCF<S, C, F>
+>(source: S, clock: C, fn: (source: GetSource<S>, clock: GetClock<C>) => R)
+  : GetResultSCR<S, C, R>
 export function sample<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>
