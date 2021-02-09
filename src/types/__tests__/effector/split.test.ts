@@ -145,3 +145,24 @@ test('matcher function case mismatch (should fail)', () => {
     "
   `)
 })
+
+test('event with unknown payload in target (should pass)', () => {
+  const source = createEvent<string>();
+  const target = createEvent<unknown>();
+
+  split({
+    source,
+    match: {
+      test: value => value === 'ok'
+    },
+    cases: {
+      test: target
+    }
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
