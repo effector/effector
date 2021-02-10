@@ -28,7 +28,6 @@ describe('explicit generics', () => {
                 Type 'string | [any] | [any, ...any[]] | { [x: string]: any; } | null' is not assignable to type 'string | null'.
                   Type '[any]' is not assignable to type 'string'.
       Type 'Event<string | [any] | [any, ...any[]] | { [x: string]: any; } | null>' is not assignable to type 'Event<string | null>'.
-      Parameter 'e' implicitly has an 'any' type.
       Type 'Event<string | [any] | [any, ...any[]] | { [x: string]: any; } | null>' is not assignable to type 'Event<string>'.
         Types of property 'watch' are incompatible.
           Type '(watcher: (payload: string | [any] | [any, ...any[]] | { [x: string]: any; } | null) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
@@ -64,7 +63,6 @@ describe('explicit generics', () => {
         Type '[any]' is not assignable to type 'Unit<string | null>'.
       Type 'Target' is not assignable to type 'Unit<string | null>'.
         Type '[any]' is not assignable to type 'Unit<string | null>'.
-      Parameter 'e' implicitly has an 'any' type.
       Type 'Target' is not assignable to type 'Unit<string>'.
         Type '[any]' is not assignable to type 'Unit<string>'.
       "
@@ -136,7 +134,7 @@ describe('guard(source, config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'GuardFilterS<Event<number>>'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
                 The types returned by 'getState()' are incompatible between these types.
                   Type 'string' is not assignable to type 'boolean'.
@@ -154,7 +152,7 @@ describe('guard(source, config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'GuardFilterS<Event<number>>'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
@@ -189,8 +187,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Argument of type '{ filter: Store<boolean>; target: Store<string>; }' is not assignable to parameter of type '{ filter: Store<boolean>; name?: string | undefined; greedy?: boolean | undefined; }'.
-                Object literal may only specify known properties, and 'target' does not exist in type '{ filter: Store<boolean>; name?: string | undefined; greedy?: boolean | undefined; }'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -253,8 +250,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Argument of type '{ filter: (x: number) => boolean; target: Store<string>; }' is not assignable to parameter of type '{ filter: (x: number) => boolean; name?: string | undefined; greedy?: boolean | undefined; }'.
-                Object literal may only specify known properties, and 'target' does not exist in type '{ filter: (x: number) => boolean; name?: string | undefined; greedy?: boolean | undefined; }'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -320,8 +316,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Argument of type '{ filter: BooleanConstructor; target: Store<string>; }' is not assignable to parameter of type '{ filter: BooleanConstructor; name?: string | undefined; greedy?: boolean | undefined; }'.
-                Object literal may only specify known properties, and 'target' does not exist in type '{ filter: BooleanConstructor; name?: string | undefined; greedy?: boolean | undefined; }'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -375,7 +370,7 @@ describe('guard(config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'GuardFilterS<Event<number>>'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
@@ -385,17 +380,17 @@ describe('guard(config)', () => {
       const allow: Store<string> = createStore('no')
 
       //@ts-expect-error
-      const result = guard({
+      const result: Event<string> = guard({
         source: trigger,
         //@ts-expect-error
         filter: allow,
       })
-      result
+
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'GuardFilterS<Event<number>>'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)

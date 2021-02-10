@@ -852,9 +852,9 @@ export function sample<A = any,
 export function sample<
   S extends Source<unknown>,
   C extends Clock<unknown>,
-  F extends IfUnknown<GetSource<S>,
+  F extends IfUnknown<UnitValue<S>,
     (clock: GetClock<C>) => unknown,
-    IfUnknown<GetSource<C>,
+    IfUnknown<UnitValue<C>,
       (source: GetSource<S>) => unknown,
       (source: GetSource<S>, clock: GetClock<C>) => unknown
     >
@@ -866,7 +866,7 @@ export function sample<
   fn?: F,
   target: MultiTarget<T,
     IfUnknown<ReturnType<F>,
-      IfUnknown<GetSource<S>, GetClock<C>, GetSource<S>>,
+      IfUnknown<UnitValue<S>, GetClock<C>, GetSource<S>>,
       ReturnType<F>
     >
   >,
@@ -878,21 +878,28 @@ export function sample<
 
 type NonFalsy<T> = T extends null | undefined | false | 0 | 0n | "" ? never : T;
 
-type ReplaceUnitGuard<Target, Result, Value> = IfAssignable<Result, Value,
+type ReplaceUnitGuard<Target, Result, Value> = IfUnknown<Value,
   Target,
-  Value extends void
-    ? Target
-    : Unit<Result>
+  IfAny<Value,
+    Target,
+    Value extends void
+      ? Target
+      : Unit<Result extends Value ? unknown : never>
+    >
   >
 
 type TargetTupleGuard<Target extends Array<unknown>, Result> = [...{
   [Index in keyof Target]: Target[Index] extends Unit<infer Value>
-    ? ReplaceUnitGuard<Target[Index], Result, Value>
+    ? ReplaceUnitGuard<Target[Index], Result, Value> extends Unit<infer T>
+      ? IfAssignable<T, never, 'incompatible unit in target', Target[Index]>
+      : never
     : 'non-unit item in target'
 }]
 
 type MultiTargetGuard<Target, Result> = Target extends Unit<infer Value>
-  ? ReplaceUnitGuard<Target, Result, Value>
+  ? ReplaceUnitGuard<Target, Result, Value> extends Unit<infer T>
+    ? IfAssignable<T, never, 'incompatible unit in target', Target>
+    : never
   : Target extends Tuple<unknown>
     ? TargetTupleGuard<Target, Result>
     : 'non-unit item in target'
@@ -900,22 +907,19 @@ type MultiTargetGuard<Target, Result> = Target extends Unit<infer Value>
 type GuardFilterSC<S, C> =
   | ((source: GetSource<S>, clock: GetClock<C>) => boolean)
   | Store<boolean>
-  | typeof Boolean
-
 type GuardFilterS<S> =
   | ((source: GetSource<S>) => boolean)
   | Store<boolean>
-  | typeof Boolean
-
 type GuardFilterC<C> =
   | ((clock: GetClock<C>) => boolean)
   | Store<boolean>
-  | typeof Boolean
 
-type GuardGetS<S, Filter> = Filter extends typeof Boolean
+type GuardResult<Value> = EventAsReturnType<Exclude<Value, {[key: string]: Store<any>} | Tuple<Unit<any>>>>
+
+type GetSourceGuard<S, Filter> = Filter extends BooleanConstructor
   ? NonFalsy<GetSource<S>>
   : GetSource<S>
-type GuardGetC<C, Filter> = Filter extends typeof Boolean
+type GetClockGuard<C, Filter> = Filter extends BooleanConstructor
   ? NonFalsy<GetClock<C>>
   : GetClock<C>
 
@@ -968,7 +972,7 @@ export function guard<A, X extends GetSource<S>, B = any,
   filter: (source: GetSource<S>, clock: GetClock<C>) => source is X,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<X>
+}): GuardResult<X>
 // S
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -977,7 +981,7 @@ export function guard<A, X extends GetSource<S>,
   filter: (source: GetSource<S>) => source is X,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<X>
+}): GuardResult<X>
 // C
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>
@@ -986,7 +990,7 @@ export function guard<B, X extends GetClock<C>,
   filter: (clock: GetClock<C>) => clock is X,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<X>
+}): GuardResult<X>
 
 // ---------------------------------------
 // guard with target - boolean fn or store
@@ -1000,7 +1004,7 @@ export function guard<A = any, B = any, R = any,
   source: S,
   clock: C,
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>, clock: GetClock<C>) => R,
+  fn: (source: GetSourceGuard<S, Filter>, clock: GetClock<C>) => R,
   target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
@@ -1013,7 +1017,7 @@ export function guard<A = any, R = any,
 >(config: {
   source: S,
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>) => R,
+  fn: (source: GetSourceGuard<S, Filter>) => R,
   target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
@@ -1026,7 +1030,7 @@ export function guard<B = any, R = any,
 >(config: {
   clock: C,
   filter: Filter,
-  fn: (clock: GuardGetC<C, Filter>) => R,
+  fn: (clock: GetClockGuard<C, Filter>) => R,
   target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
@@ -1041,7 +1045,7 @@ export function guard<A = any, B = any,
   source: S,
   clock: C,
   filter: Filter,
-  target: MultiTarget<T, GuardGetS<S, Filter>>,
+  target: MultiTarget<T, GetSourceGuard<S, Filter>>,
   name?: string,
   greedy?: boolean
 }): T
@@ -1053,7 +1057,7 @@ export function guard<A = any,
 >(config: {
   source: S,
   filter: Filter,
-  target: MultiTarget<T, GuardGetS<S, Filter>>,
+  target: MultiTarget<T, GetSourceGuard<S, Filter>>,
   name?: string,
   greedy?: boolean
 }): T
@@ -1065,7 +1069,7 @@ export function guard<B = any,
 >(config: {
   clock: C,
   filter: Filter,
-  target: MultiTarget<T, GuardGetC<C, Filter>>,
+  target: MultiTarget<T, GetClockGuard<C, Filter>>,
   name?: string,
   greedy?: boolean
 }): T
@@ -1080,10 +1084,10 @@ export function guard<A = any, B = any, R = any,
   source: S,
   clock: C,
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>, clock: GetClock<C>) => R,
+  fn: (source: GetSourceGuard<S, Filter>, clock: GetClock<C>) => R,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<R>
+}): GuardResult<R>
 // SF
 export function guard<A = any, R = any,
   S extends Source<A> = Source<A>,
@@ -1091,10 +1095,10 @@ export function guard<A = any, R = any,
 >(config: {
   source: S,
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>) => R,
+  fn: (source: GetSourceGuard<S, Filter>) => R,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<R>
+}): GuardResult<R>
 // CF
 export function guard<B = any, R = any,
   C extends Clock<B> = Clock<B>,
@@ -1102,10 +1106,10 @@ export function guard<B = any, R = any,
 >(config: {
   clock: C,
   filter: Filter,
-  fn: (clock: GuardGetC<C, Filter>) => R,
+  fn: (clock: GetClockGuard<C, Filter>) => R,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<R>
+}): GuardResult<R>
 // SC
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -1117,7 +1121,7 @@ export function guard<A = any, B = any,
   filter: Filter,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<GuardGetS<S, Filter>>
+}): GuardResult<GetSourceGuard<S, Filter>>
 // S
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -1127,7 +1131,7 @@ export function guard<A = any,
   filter: Filter,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<GuardGetS<S, Filter>>
+}): GuardResult<GetSourceGuard<S, Filter>>
 // C
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -1137,7 +1141,7 @@ export function guard<B = any,
   filter: Filter,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<GuardGetC<C, Filter>>
+}): GuardResult<GetClockGuard<C, Filter>>
 
 // ====================================
 // guard with source param
@@ -1178,7 +1182,7 @@ export function guard<A, X extends GetSource<S>, B = any,
   filter: (source: GetSource<S>, clock: GetClock<C>) => source is X,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<X>
+}): GuardResult<X>
 // S
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -1186,7 +1190,7 @@ export function guard<A, X extends GetSource<S>,
   filter: (source: GetSource<S>) => source is X,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<X>
+}): GuardResult<X>
 
 // ---------------------------------------
 // guard with target - boolean fn or store
@@ -1199,7 +1203,7 @@ export function guard<A = any, B = any, R = any,
 >(source: S, config: {
   clock: C,
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>, clock: GetClock<C>) => R,
+  fn: (source: GetSourceGuard<S, Filter>, clock: GetClock<C>) => R,
   target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
@@ -1211,7 +1215,7 @@ export function guard<A = any, R = any,
   T extends Target = Target
 >(source: S, config: {
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>,) => R,
+  fn: (source: GetSourceGuard<S, Filter>,) => R,
   target: MultiTarget<T, R>,
   name?: string,
   greedy?: boolean
@@ -1225,7 +1229,7 @@ export function guard<A = any, B = any,
 >(source: S, config: {
   clock: C,
   filter: Filter,
-  target: MultiTarget<T, GuardGetS<S, Filter>>,
+  target: MultiTarget<T, GetSourceGuard<S, Filter>>,
   name?: string,
   greedy?: boolean
 }): T
@@ -1236,7 +1240,7 @@ export function guard<A = any,
   T extends Target = Target
 >(source: S, config: {
   filter: Filter,
-  target: MultiTarget<T, GuardGetS<S, Filter>>,
+  target: MultiTarget<T, GetSourceGuard<S, Filter>>,
   name?: string,
   greedy?: boolean
 }): T
@@ -1250,20 +1254,20 @@ export function guard<A = any, B = any, R = any,
 >(source: S, config: {
   clock: C,
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>, clock: GetClock<C>) => R,
+  fn: (source: GetSourceGuard<S, Filter>, clock: GetClock<C>) => R,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<R>
+}): GuardResult<R>
 // SF
 export function guard<A = any, R = any,
   S extends Source<A> = Source<A>,
   Filter extends GuardFilterS<S> = GuardFilterS<S>,
 >(source: S, config: {
   filter: Filter,
-  fn: (source: GuardGetS<S, Filter>) => R,
+  fn: (source: GetSourceGuard<S, Filter>) => R,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<R>
+}): GuardResult<R>
 // SC
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -1274,7 +1278,7 @@ export function guard<A = any, B = any,
   filter: Filter,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<GuardGetS<S, Filter>>
+}): GuardResult<GetSourceGuard<S, Filter>>
 // S
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -1283,24 +1287,51 @@ export function guard<A = any,
   filter: Filter,
   name?: string,
   greedy?: boolean
-}): EventAsReturnType<GuardGetS<S, Filter>>
+}): GuardResult<GetSourceGuard<S, Filter>>
 
-// guard's last overload
+// guard's last overload: guard(source, config)
 export function guard<
   S extends Source<unknown>,
   C extends Clock<unknown>,
-  Filter extends IfUnknown<GetSource<S>,
-    GuardFilterC<C>,
-    IfUnknown<GetSource<C>,
-      GuardFilterS<S>,
-      GuardFilterSC<S, C>
+  Filter extends IfUnknown<UnitValue<S>,
+    Store<boolean> | ((clock: GetClock<C>) => boolean),
+    IfUnknown<UnitValue<C>,
+      Store<boolean> | ((source: GetSource<S>) => boolean),
+      Store<boolean> | ((source: GetSource<S>, clock: GetClock<C>) => boolean)
       >
     >,
-  F extends IfUnknown<GetSource<S>,
-    (clock: GuardGetC<C, Filter>) => unknown,
-    IfUnknown<GetSource<C>,
-      (source: GuardGetS<S, Filter>) => unknown,
-      (source: GuardGetS<S, Filter>, clock: GetClock<C>) => unknown
+  F extends IfUnknown<UnitValue<C>,
+    (source: GetSourceGuard<S, Filter>) => unknown,
+    (source: GetSourceGuard<S, Filter>, clock: GetClock<C>) => unknown
+    >,
+  T extends Target
+>(source: S, config: {
+  clock?: C,
+  filter: Filter,
+  fn?: F,
+  target: Filter extends (value: any, ...args: any) => value is infer X
+    ? MultiTargetGuard<T, X>
+    : MultiTarget<T, IfUnknown<ReturnType<F>, GetSourceGuard<S, Filter>, ReturnType<F>>>,
+  name?: string,
+  greedy?: boolean
+}): T
+
+// guard's last overload: guard(config)
+export function guard<
+  S extends Source<unknown>,
+  C extends Clock<unknown>,
+  Filter extends IfUnknown<UnitValue<S>,
+    Store<boolean> | ((clock: GetClock<C>) => boolean),
+    IfUnknown<UnitValue<C>,
+      Store<boolean> | ((source: GetSource<S>) => boolean),
+      Store<boolean> | ((source: GetSource<S>, clock: GetClock<C>) => boolean)
+      >
+    >,
+  F extends IfUnknown<UnitValue<S>,
+    (clock: GetClockGuard<C, Filter>) => unknown,
+    IfUnknown<UnitValue<C>,
+      (source: GetSourceGuard<S, Filter>) => unknown,
+      (source: GetSourceGuard<S, Filter>, clock: GetClock<C>) => unknown
       >
     >,
   T extends Target
@@ -1309,15 +1340,17 @@ export function guard<
   clock?: C,
   filter: Filter,
   fn?: F,
-  target: MultiTarget<T,
-    IfUnknown<ReturnType<F>,
-      IfUnknown<GetSource<S>, GuardGetC<C, Filter>, GuardGetS<S, Filter>>,
-      ReturnType<F>
-      >
-    >,
+  target: Filter extends (value: any, ...args: any) => value is infer X
+    ? MultiTargetGuard<T, X>
+    : MultiTarget<T,
+        IfUnknown<ReturnType<F>,
+          IfUnknown<UnitValue<S>, GetClockGuard<C, Filter>, GetSourceGuard<S, Filter>>,
+          ReturnType<F>
+        >
+      >,
   name?: string,
   greedy?: boolean
-}): T extends Array<any> ? T : Event<IfUnknown<GetSource<S>, GuardGetC<C, Filter>, GuardGetS<S, Filter>>>
+}): T
 
 /* attach types */
 
