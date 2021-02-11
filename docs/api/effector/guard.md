@@ -16,14 +16,19 @@ It provides a way to control one dataflow with the help of another: when the con
 ## Formulae
 
 ```ts
-guard({ source, filter, target? }): target
+guard({ clock?, source, filter, target? }): target
 ```
 
-When `source` is triggered, check `filter` for thruthy and call `target` with data from `source` if `true`.
+When `clock` is triggered, check `filter` for thruthy and call `target` with data from `source` if `true`.
 
+- If the `clock` is not passed, guard will be trigged on every `source` update
 - If `target` is not passed, create [_Event_](Event.md) with type of `source` and return it from `guard()`
 - If `filter` is [_Store_](Store.md), check it value for `thruthy`
 - If `filter` is `Function`, call it with data from `source` and check result for `thruthy`
+
+:::note since
+`clock` in guard is available since `effector 21.8.0`
+:::
 
 ## `guard({source, filter, target?})`
 
