@@ -34,8 +34,6 @@ Imagine we have another responsibility scope with bigger `index.js`, so we had t
 
 ```
 .
-├── components/
-│   └── App/
 ├── models/
 │   ├── users/
 │   │   ├── index.js
@@ -45,7 +43,8 @@ Imagine we have another responsibility scope with bigger `index.js`, so we had t
 │   │   ├── state.js
 │   │   └── init.js
 │   └── init.js
-└── index.js
+├── App.jsx
+└── index.jsx
 ```
 
 Root `init.js` imports **all** init files from models.
@@ -57,12 +56,12 @@ import 'auth/init'
 
 It should be imported in your app root.
 
-```js title="index.js"
+```js title="index.jsx"
 import React from 'react'
 import ReactDOM from 'react-dom'
 
 //root component
-import {App} from './components/App'
+import {App} from './App'
 
 import './models/init'
 
