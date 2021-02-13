@@ -410,7 +410,7 @@ const result = $store.thru(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): Function that receives `Store` and returns some value
+1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure**](../../glossary.md#purity)
 
 **Returns**
 
