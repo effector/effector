@@ -64,8 +64,10 @@ export function attach(config: any) {
   }
   if (source) {
     let state
-    if (is.store(source)) state = source
-    else {
+    if (is.store(source)) {
+      state = source
+      own(source, [attached])
+    } else {
       state = combine(source)
       own(attached, [state])
     }
@@ -86,6 +88,7 @@ export function attach(config: any) {
   } else {
     runnerSteps = [step.run({fn: runnerFn})]
   }
+  own(effect, [attached])
   runner.scope.effect = effect
   runner.meta.onCopy.push(EFFECT)
   runner.seq.splice(0, 1, ...runnerSteps)
