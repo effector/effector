@@ -7,6 +7,7 @@ import {
   allSettled,
   launch,
   createEffect,
+  createStore,
 } from 'effector'
 
 describe('imperative call support', () => {
@@ -729,4 +730,20 @@ describe('unit name in not found error', () => {
       scope.find(fx.pending)
     }).toThrowErrorMatchingInlineSnapshot(`"pending not found in forked scope"`)
   })
+})
+
+test('fork should pass through attach', () => {
+  const app = createDomain()
+  const source = app.createEvent()
+
+  const timer = createStore(0)
+  const fx = attach({
+    source: timer,
+    mapParams: (param, timeout) => [param, timeout],
+    effect: createEffect(() => 0),
+  })
+  forward({from: source, to: fx})
+  expect(() => {
+    fork(app)
+  }).not.toThrow()
 })
