@@ -147,22 +147,26 @@ test('matcher function case mismatch (should fail)', () => {
 })
 
 test('event with unknown payload in target (should pass)', () => {
-  const source = createEvent<string>();
-  const target = createEvent<unknown>();
+  const source = createEvent<string>()
+  const target = createEvent<unknown>()
 
   split({
     source,
     match: {
-      test: value => value === 'ok'
+      test: value => value === 'ok',
     },
     cases: {
-      test: target
-    }
+      test: target,
+    },
   })
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      Overload 1 of 4, '(config: { source: Unit<string>; match: { [name: string]: Store<boolean> | ((payload: string) => boolean); }; cases: Partial<{ [x: string]: Unit<string>; } & { __: Unit<string>; }>; }): void', gave the following error.
+        Type 'Event<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
     "
   `)
 })
