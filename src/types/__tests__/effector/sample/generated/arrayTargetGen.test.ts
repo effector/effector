@@ -2966,12 +2966,14 @@ describe('combinable', () => {
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string]) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
+                  Type 'string' is not assignable to type 'number'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
             Type '([, b]: [number, number]) => { a: number; b: string; }' is not assignable to type '(source: [number, string]) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number, string]' is not assignable to type '[number, number]'.
+                  Type 'string' is not assignable to type 'number'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -5624,12 +5626,14 @@ describe('combinable', () => {
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number]) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
+                  Type 'number' is not assignable to type 'string'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
             Type '([a]: [string]) => { a: number; b: string; }' is not assignable to type '(source: [number]) => unknown'.
               Types of parameters '__0' and 'source' are incompatible.
                 Type '[number]' is not assignable to type '[string]'.
+                  Type 'number' is not assignable to type 'string'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
