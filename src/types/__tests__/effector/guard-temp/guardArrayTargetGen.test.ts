@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, guard, combine} from 'effector'
+import {createStore, createEvent, guard} from 'effector'
 const typecheck = '{global}'
 
 /** used as valid source type */

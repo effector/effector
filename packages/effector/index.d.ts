@@ -886,20 +886,18 @@ type ReplaceUnitGuard<Target, Result, Value> = IfUnknown<Value,
       ? Target
       : Unit<Result extends Value ? unknown : never>
     >
-  >
+  > extends Unit<infer T>
+    ? IfAssignable<T, never, 'incompatible unit in target', Target>
+    : never
 
 type TargetTupleGuard<Target extends Array<unknown>, Result> = [...{
   [Index in keyof Target]: Target[Index] extends Unit<infer Value>
-    ? ReplaceUnitGuard<Target[Index], Result, Value> extends Unit<infer T>
-      ? IfAssignable<T, never, 'incompatible unit in target', Target[Index]>
-      : never
+    ? ReplaceUnitGuard<Target[Index], Result, Value>
     : 'non-unit item in target'
 }]
 
 type MultiTargetGuard<Target, Result> = Target extends Unit<infer Value>
-  ? ReplaceUnitGuard<Target, Result, Value> extends Unit<infer T>
-    ? IfAssignable<T, never, 'incompatible unit in target', Target>
-    : never
+  ? ReplaceUnitGuard<Target, Result, Value>
   : Target extends Tuple<unknown>
     ? TargetTupleGuard<Target, Result>
     : 'non-unit item in target'
@@ -914,7 +912,7 @@ type GuardFilterC<C> =
   | ((clock: GetClock<C>) => boolean)
   | Store<boolean>
 
-type GuardResult<Value> = EventAsReturnType<Exclude<Value, {[key: string]: Store<any>} | Tuple<Unit<any>>>>
+type GuardResult<Value> = EventAsReturnType<Value>
 
 type GetSourceGuard<S, Filter> = Filter extends BooleanConstructor
   ? NonFalsy<GetSource<S>>

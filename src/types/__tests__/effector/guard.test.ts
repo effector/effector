@@ -379,8 +379,7 @@ describe('guard(config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
-      //@ts-expect-error
-      const result: Event<string> = guard({
+      guard({
         source: trigger,
         //@ts-expect-error
         filter: allow,
@@ -494,26 +493,6 @@ describe('guard(config)', () => {
           No overload matches this call.
             The last overload gave the following error.
               Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-          "
-        `)
-      })
-      test('nullable type support (should pass)', () => {
-        const event = createEvent()
-        const source = createStore<string | null>('test').on(event, () => null)
-        const filter = createStore(true)
-
-        const target = createEvent<string>()
-
-        guard({
-          source,
-          filter,
-          target,
-        })
-        expect(typecheck).toMatchInlineSnapshot(`
-          "
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
