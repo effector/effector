@@ -6,18 +6,18 @@ test('clock param name in the function', () => {
   const trigger: Event<number> = createEvent()
   const allow: Store<string> = createStore('no')
 
-  const result1: Event<string> = guard({
+  const result1 = guard({
     source: trigger,
     //@ts-expect-error
     filter: allow,
   })
-  const result2: Event<string> = guard({
+  const result2 = guard({
     source: trigger,
     clock: trigger,
     //@ts-expect-error
     filter: allow,
   })
-  const result3: Event<string> = guard({
+  const result3 = guard({
     clock: trigger,
     //@ts-expect-error
     filter: allow,

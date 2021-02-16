@@ -349,6 +349,10 @@ describe('combinable', () => {
         guard({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[ab]       })
         guard({filter: () => true, source:[$num,$str]    , target:[l_num_str]})
         guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num_str]})
+        guard({filter: () => true, source:[$num,$str]    , target:[l_num]               })
+        guard({filter: () => true, source:[$num,$str]    , target:[l_num,l_num_str]     })
+        guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num]    })
+        guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num,l_num_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -392,11 +396,7 @@ describe('combinable', () => {
         //@ts-expect-error
         guard({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_num,a_str]        })
         //@ts-expect-error
-        guard({filter: () => true, source:[$num,$str]    , target:[l_num]              })
-        //@ts-expect-error
         guard({filter: () => true, source:[$num,$str]    , target:[l_str]              })
-        //@ts-expect-error
-        guard({filter: () => true, source:[$num,$str]    , target:[l_num,l_num_str]    })
         //@ts-expect-error
         guard({filter: () => true, source:[$num,$str]    , target:[l_num,l_str]        })
         //@ts-expect-error
@@ -412,13 +412,9 @@ describe('combinable', () => {
         //@ts-expect-error
         guard({filter: () => true, source:[$num,$str]    , target:[l_str,l_num_num]    })
         //@ts-expect-error
-        guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num]              })
-        //@ts-expect-error
         guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_str]              })
         //@ts-expect-error
         guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num,l_str]        })
-        //@ts-expect-error
-        guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num,l_num_str]    })
         //@ts-expect-error
         guard({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num,l_num_num]    })
         //@ts-expect-error
@@ -494,32 +490,16 @@ describe('combinable', () => {
             Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -544,29 +524,13 @@ describe('combinable', () => {
               Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.

@@ -623,6 +623,9 @@ type Show<A extends any> =
       } // & {}
 
 /* sample types */
+type TupleObject<T extends Array<any>> = {
+  [I in Exclude<keyof T, keyof any[]>]: T[I]
+}
 
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type IfUnknown<T, Y, N> = 0 extends (1 & T) ? N : unknown extends T ? Y : N;
@@ -630,7 +633,17 @@ type IfAssignable<T, U, Y, N> =
   (<G>() => IfAny<T & U, 0, G extends T ? 1 : 2>) extends
     (<G>() => IfAny<T & U, 0, G extends U ? 1 : 2>)
     ? Y
-    : (T extends U ? never : 1) extends never ? Y : N
+    : (T extends U ? never : 1) extends never
+      ? Y
+      : T extends Array<any>
+        ? number extends T['length']
+          ? N
+          : U extends Array<any>
+            ? number extends U['length']
+              ? N
+              : TupleObject<T> extends TupleObject<U> ? Y : N
+            : N
+        : N
 
 type SourceNotConfig<A> = Unit<A> | Tuple<Store<any>>
 type Source<A> = Unit<A> | Combinable

@@ -1133,18 +1133,7 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        no errors
         "
       `)
     })
@@ -1281,23 +1270,13 @@ describe('combinable', () => {
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1325,20 +1304,10 @@ describe('combinable', () => {
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
