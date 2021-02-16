@@ -3,6 +3,31 @@ import {createStore, createEvent, guard, Store, Event, Unit} from 'effector'
 const typecheck = '{global}'
 
 describe('explicit generics', () => {
+  test('guard<A>({source, clock, filter})', () => {
+    const source = createEvent<string | null>()
+    const clock = createEvent<number>()
+    const filter = createStore(true)
+    const withFilterStore: Event<string | null> = guard<string | null>({
+      source,
+      clock,
+      filter,
+    })
+    const withFilterFn: Event<string | null> = guard<string | null>({
+      source,
+      clock,
+      filter: e => e !== null,
+    })
+    const withFilterBoolean: Event<string> = guard<string | null>({
+      source,
+      clock,
+      filter: Boolean,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
   test('guard<A>({source, filter})', () => {
     const source = createEvent<string | null>()
     const filter = createStore(true)
@@ -20,21 +45,28 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<string | [any] | [any, ...any[]] | { [x: string]: any; } | null>' is not assignable to type 'Event<string | null>'.
-        Types of property 'watch' are incompatible.
-          Type '(watcher: (payload: string | [any] | [any, ...any[]] | { [x: string]: any; } | null) => any) => Subscription' is not assignable to type '(watcher: (payload: string | null) => any) => Subscription'.
-            Types of parameters 'watcher' and 'watcher' are incompatible.
-              Types of parameters 'payload' and 'payload' are incompatible.
-                Type 'string | [any] | [any, ...any[]] | { [x: string]: any; } | null' is not assignable to type 'string | null'.
-                  Type '[any]' is not assignable to type 'string'.
-      Type 'Event<string | [any] | [any, ...any[]] | { [x: string]: any; } | null>' is not assignable to type 'Event<string | null>'.
-      Type 'Event<string | [any] | [any, ...any[]] | { [x: string]: any; } | null>' is not assignable to type 'Event<string>'.
-        Types of property 'watch' are incompatible.
-          Type '(watcher: (payload: string | [any] | [any, ...any[]] | { [x: string]: any; } | null) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-            Types of parameters 'watcher' and 'watcher' are incompatible.
-              Types of parameters 'payload' and 'payload' are incompatible.
-                Type 'string | [any] | [any, ...any[]] | { [x: string]: any; } | null' is not assignable to type 'string'.
-                  Type 'null' is not assignable to type 'string'.
+      no errors
+      "
+    `)
+  })
+  test('guard<A>({clock, filter})', () => {
+    const clock = createEvent<string | null>()
+    const filter = createStore(true)
+    const withFilterStore: Event<string | null> = guard<string | null>({
+      clock,
+      filter,
+    })
+    const withFilterFn: Event<string | null> = guard<string | null>({
+      clock,
+      filter: e => e !== null,
+    })
+    const withFilterBoolean: Event<string> = guard<string | null>({
+      clock,
+      filter: Boolean,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
       "
     `)
   })
@@ -70,8 +102,18 @@ describe('explicit generics', () => {
   })
   test('guard<Source, Result>({source, filter})', () => {
     const source = createEvent<string | null>()
-    const result: Event<string> = guard<string | null, string>({
+    const clock = createEvent<string | null>()
+    const result1: Event<string> = guard<string | null, string>({
       source,
+      clock,
+      filter: (e): e is string => e !== null,
+    })
+    const result2: Event<string> = guard<string | null, string>({
+      source,
+      filter: (e): e is string => e !== null,
+    })
+    const result3: Event<string> = guard<string | null, string>({
+      clock,
       filter: (e): e is string => e !== null,
     })
     expect(typecheck).toMatchInlineSnapshot(`

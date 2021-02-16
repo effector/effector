@@ -1032,6 +1032,22 @@ export function guard<B = any,
 }): T
 
 // guard without target - boolean fn or store
+// SC (Units - BooleanConstructor)
+export function guard<A = any, B = any>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// SC (Units - filter function or store)
+export function guard<A = any, B = any>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  filter: ((source: A, clock: B) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
 // SC
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -1044,6 +1060,20 @@ export function guard<A = any, B = any,
   name?: string,
   greedy?: boolean
 }): GuardResult<GetSourceGuard<S, Filter>>
+// S (Unit - BooleanConstructor)
+export function guard<A = any>(config: {
+  source: Unit<A>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// S (Unit - filter function or store)
+export function guard<A = any>(config: {
+  source: Unit<A>,
+  filter: ((source: A) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
 // S
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -1054,6 +1084,20 @@ export function guard<A = any,
   name?: string,
   greedy?: boolean
 }): GuardResult<GetSourceGuard<S, Filter>>
+// C (Unit - BooleanConstructor)
+export function guard<B = any>(config: {
+  clock: Unit<B>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<B>>
+// C (Unit - filter function or store)
+export function guard<B = any>(config: {
+  clock: Unit<B>,
+  filter: ((clock: B) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<B>
 // C
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -1142,6 +1186,20 @@ export function guard<A = any,
 }): T
 
 // guard without target - boolean fn or store
+// SC (Units - BooleanConstructor)
+export function guard<A = any, B = any>(source: Unit<A>, config: {
+  clock: Unit<B>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// SC (Units - filter function or store)
+export function guard<A = any, B = any>(source: Unit<A>, config: {
+  clock: Unit<B>,
+  filter: ((source: A, clock: B) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
 // SC
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -1153,6 +1211,18 @@ export function guard<A = any, B = any,
   name?: string,
   greedy?: boolean
 }): GuardResult<GetSourceGuard<S, Filter>>
+// S (Unit - BooleanConstructor)
+export function guard<A = any>(source: Unit<A>, config: {
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// S (Unit - filter function or store)
+export function guard<A = any>(source: Unit<A>, config: {
+  filter: ((source: A) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
 // S
 export function guard<A = any,
   S extends Source<A> = Source<A>,
