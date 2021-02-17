@@ -15,8 +15,11 @@ import {forIn} from './runner/forIn'
 export {generateCaseSetFile, byFields, createGroupedCases}
 function createGroupedCases(
   casesDefs,
-  {createTestLines, getHash, describeGroup, sortByFields},
+  {createTestLines, getHash, describeGroup, sortByFields, filter},
 ) {
+  if (filter) {
+    casesDefs = casesDefs.filter(filter)
+  }
   let align = false
   if (typeof createTestLines === 'object' && createTestLines !== null) {
     const {method, shape, addExpectError = true} = createTestLines
@@ -54,6 +57,8 @@ function createGroupedCases(
       e.__casesDefsID = id
     })
   }
+  // console.log(...casesDefs)
+  // console.log(...casesDefsPending)
   const defsGroups = new Map()
   let cur
   while ((cur = casesDefsPending.pop())) {

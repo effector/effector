@@ -35,11 +35,34 @@ const grouping = {
   sortByFields: {
     inferByFilter: [false, true],
     sourceType: ['unit', 'object', 'tuple', 'no'],
+    sourceSubtype: [
+      'fullObject',
+      'nullableField',
+      'smallObject',
+      'fullTuple',
+      'smallTuple',
+    ],
     targetType: ['unit', 'array'],
+    targetSubtype: [
+      'smallObject',
+      'tooWideObject',
+      'nonNullFieldSmall',
+      'wrongFieldSmall',
+      'smallTuple',
+    ],
     filterType: ['fn', 'store', 'bool'],
     clockType: ['no', 'unit', 'array'],
     sourceIsWiderThatTarget: [false, true],
     fnSecondArg: [false, true],
+  },
+  filter(val: any) {
+    if (val.sourceSubtype === 'nullableField') {
+      if (val.filterType !== 'fn') return false
+      if (val.wrongTarget) return false
+      if (!val.inferByFilter) return false
+      // if (!val.inferByFilter && !val.targetVoid && !val.targetAny) return false
+    }
+    return true
   },
 }
 
@@ -104,16 +127,64 @@ const shape = {
   targetType: {
     union: ['unit', 'array'],
   },
+  sourceSubtype: {
+    split: {
+      variants: {
+        source: {
+          object: Source.object,
+          tuple: Source.tuple,
+        },
+        target: {
+          targetUnit: Target.unit,
+          // targetArray: Target.array,
+        },
+      },
+      cases: {
+        object: {
+          targetUnit: {
+            union: ['fullObject', 'nullableField', 'smallObject'],
+          },
+        },
+        tuple: {
+          targetUnit: {
+            union: ['fullTuple', 'smallTuple'],
+          },
+        },
+      },
+    },
+  },
   noSource: {
     true: Source.none,
   },
-  targetVoid: {flag: {avoid: 'noSource'}},
+  targetVoid: {
+    flag: {
+      avoid: [
+        'noSource',
+        {
+          true: [
+            {sourceSubtype: 'smallTuple'},
+            {sourceSubtype: 'nullableField'},
+            {sourceSubtype: 'smallObject'},
+          ],
+        },
+      ],
+    },
+  },
+  noTargetAny: {
+    true: [
+      {sourceSubtype: 'smallTuple'},
+      {sourceSubtype: 'nullableField'},
+      {sourceSubtype: 'smallObject'},
+    ],
+  },
   targetAny: {
     split: {
       match: 'targetType',
       cases: {
         unit: {
-          flag: {avoid: ['targetVoid', 'noSource']},
+          flag: {
+            avoid: ['targetVoid', 'noSource', 'noTargetAny'],
+          },
         },
         array: {flag: {}},
       },
@@ -149,15 +220,68 @@ const shape = {
       avoid: 'noSource',
     },
   },
-  sourceIsWiderThatTarget: {
-    flag: {
-      needs: ['targetIsTyped'],
-      avoid: [
-        'noSource',
-        {
-          true: [Source.tuple, Source.none],
+  targetSubtype: {
+    split: {
+      variants: {
+        src: {
+          smallObject: {sourceSubtype: 'smallObject'},
+          nullableField: {sourceSubtype: 'nullableField'},
+          smallTuple: {sourceSubtype: 'smallTuple'},
         },
-      ],
+        isCorrect: {
+          correct: {wrongTarget: false},
+          wrong: {wrongTarget: true},
+        },
+      },
+      cases: {
+        smallObject: {
+          correct: {
+            value: 'smallObject',
+          },
+          wrong: {
+            union: ['tooWideObject', 'wrongFieldSmall'],
+          },
+        },
+        nullableField: {
+          correct: {
+            value: 'smallObject',
+          },
+          wrong: {
+            value: 'nonNullFieldSmall',
+          },
+        },
+        smallTuple: {
+          correct: {
+            value: 'smallTuple',
+          },
+        },
+      },
+    },
+  },
+  sourceIsWiderThatTargetCond: {
+    true: [
+      Source.tuple,
+      Source.none,
+      {sourceSubtype: 'smallObject'},
+      {sourceSubtype: 'smallTuple'},
+      {sourceSubtype: 'nullableField'},
+      {targetSubtype: 'smallTuple'},
+    ],
+  },
+  sourceIsWiderThatTarget: {
+    split: {
+      variant: {
+        nullableField: {sourceSubtype: 'nullableField'},
+      },
+      cases: {
+        nullableField: {value: true},
+        __: {
+          flag: {
+            needs: ['targetIsTyped'],
+            avoid: ['noSource', 'sourceIsWiderThatTargetCond'],
+          },
+        },
+      },
     },
   },
   inferByFilter: {
@@ -171,6 +295,7 @@ const shape = {
                 nonStore: [{filterType: 'fn'}, {filterType: 'bool'}],
               },
               source: {
+                nullableField: {sourceSubtype: 'nullableField'},
                 plain: {combinable: false},
                 combinable: {combinable: true},
               },
@@ -178,6 +303,7 @@ const shape = {
             cases: {
               store: false,
               nonStore: {
+                nullableField: true,
                 plain: true,
                 combinable: false,
               },
@@ -216,6 +342,11 @@ const shape = {
     split: {
       variants: {
         targetKind: {
+          smallObject: {targetSubtype: 'smallObject'},
+          smallTuple: {targetSubtype: 'smallTuple'},
+          tooWideObject: {targetSubtype: 'tooWideObject'},
+          nonNullFieldSmall: {targetSubtype: 'nonNullFieldSmall'},
+          wrongFieldSmall: {targetSubtype: 'wrongFieldSmall'},
           singleVoid: {targetType: 'unit', targetVoid: true},
           singleAny: {targetType: 'unit', targetAny: true},
           single: {targetType: 'unit'},
@@ -243,6 +374,11 @@ const shape = {
         },
       },
       cases: {
+        smallObject: 'aNum',
+        smallTuple: 'lNum',
+        tooWideObject: 'ab',
+        nonNullFieldSmall: 'aNum',
+        wrongFieldSmall: 'aStr',
         singleVoid: 'voidt',
         singleAny: 'anyt',
         single: {
@@ -363,6 +499,13 @@ const shape = {
   sourceCode: {
     split: {
       variants: {
+        sourceSubtype: {
+          fullObject: {sourceSubtype: 'fullObject'},
+          nullableField: {sourceSubtype: 'nullableField'},
+          smallObject: {sourceSubtype: 'smallObject'},
+          fullTuple: {sourceSubtype: 'fullTuple'},
+          smallTuple: {sourceSubtype: 'smallTuple'},
+        },
         Source,
         Filter,
         infer: {
@@ -371,20 +514,27 @@ const shape = {
         },
       },
       cases: {
-        none: null,
-        unit: {
-          fn: {
-            infer: 'abNull',
-            noInfer: 'ab',
+        fullObject: '{a,b}',
+        nullableField: '{a:aOpt,b}',
+        smallObject: '{a}',
+        fullTuple: '[a,b]',
+        smallTuple: '[a]',
+        __: {
+          none: null,
+          unit: {
+            fn: {
+              infer: 'abNull',
+              noInfer: 'ab',
+            },
+            bool: {
+              infer: 'nullableAB',
+              noInfer: 'ab',
+            },
+            store: 'ab',
           },
-          bool: {
-            infer: 'nullableAB',
-            noInfer: 'ab',
-          },
-          store: 'ab',
+          object: '{a,b}',
+          tuple: '[a,b]',
         },
-        tuple: '[a,b]',
-        object: '{a,b}',
       },
     },
   },
@@ -396,7 +546,17 @@ const shape = {
           hasFnSecondArg: {fnSecondArg: true},
           noFnSecondArg: {},
         },
-        Source,
+        source: {
+          none: Source.none,
+          fullObject: {sourceSubtype: 'fullObject'},
+          nullableField: {sourceSubtype: 'nullableField'},
+          smallObject: {sourceSubtype: 'smallObject'},
+          fullTuple: {sourceSubtype: 'fullTuple'},
+          smallTuple: {sourceSubtype: 'smallTuple'},
+          unit: Source.unit,
+          object: Source.object,
+          tuple: Source.tuple,
+        },
         infer: {
           infer: {inferByFilter: true},
           noInfer: {inferByFilter: false},
@@ -409,11 +569,26 @@ const shape = {
               infer: '(val,n): val is AB => n > 0 && val.a !== null',
               noInfer: '(val,n) => val.a > n',
             },
+            fullObject: {
+              infer: '(val,n): val is AB => val.a > n',
+              noInfer: '(val,n) => val.a > n',
+            },
             object: {
               infer: '(val,n): val is AB => val.a > n',
               noInfer: '(val,n) => val.a > n',
             },
+            nullableField: {
+              infer:
+                "(val,n): val is AB => typeof val.a === 'number' && val.a > n",
+              noInfer: "(val,n) => typeof val.a === 'number' && val.a > n",
+            },
+            smallObject: {
+              infer: '(val,n): val is Astr => val.a > n',
+              noInfer: '(val,n) => val.a > n',
+            },
+            fullTuple: '(val, n) => val[0] > n',
             tuple: '(val, n) => val[0] > n',
+            smallTuple: '(val, n) => val[0] > n',
           },
           noFnSecondArg: {
             none: {
@@ -424,11 +599,26 @@ const shape = {
               infer: '(val): val is AB => val.a !== null',
               noInfer: '(val) => val.a > 0',
             },
+            fullObject: {
+              infer: '(val): val is AB => val.a > 0',
+              noInfer: '(val) => val.a > 0',
+            },
             object: {
               infer: '(val): val is AB => val.a > 0',
               noInfer: '(val) => val.a > 0',
             },
+            nullableField: {
+              infer:
+                "(val): val is AB => typeof val.a === 'number' && val.a > 0",
+              noInfer: "(val) => typeof val.a === 'number' && val.a > 0",
+            },
+            smallObject: {
+              infer: '(val): val is Astr => val.a > 0',
+              noInfer: '(val) => val.a > 0',
+            },
+            fullTuple: '(val) => val[0] > 0',
             tuple: '(val) => val[0] > 0',
+            smallTuple: '(val) => val[0] > 0',
           },
         },
         store: '$filter',
@@ -481,10 +671,13 @@ const shape = {
 }
 
 const header = `
+type Astr = {a: string}
 type AB = {a: number; b: string}
+type AoptB = {a: number | null; b: string}
 type ABN = {a: number; b: number}
 const $filter = createStore(true)
 const a = createStore(0)
+const aOpt = createStore<number | null>(0)
 const b = createStore('')
 const voidt = createEvent()
 const anyt = createEvent<any>()
