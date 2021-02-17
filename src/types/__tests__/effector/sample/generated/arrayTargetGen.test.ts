@@ -1118,18 +1118,33 @@ describe('combinable', () => {
     test('source:wide (should pass)', () => {
       //prettier-ignore
       {
-        sample({source:{a:$num,b:$str}, target:[a_num]    })
-        sample({source:{a:$num,b:$str}, target:[a_num,ab] })
-        sample({source:{a:$num,b:$str}, target:[ab]       })
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num]    })
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,ab] })
-        sample({source:{a:$num,b:$str}, clock:num, target:[ab]       })
-        sample({source:[$num,$str]    , target:[l_num_str]})
-        sample({source:[$num,$str]    , clock:num, target:[l_num_str]})
+        sample({source:{a:$num,b:$str}, target:[a_num]          })
+        sample({source:{a:$num,b:$str}, target:[a_num,ab]       })
+        sample({source:{a:$num,b:$str}, target:[ab]             })
+        sample({source:{a:$num,b:$str}, clock:num, target:[a_num]          })
+        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,ab]       })
+        sample({source:{a:$num,b:$str}, clock:num, target:[ab]             })
+        sample({source:[$num,$str]    , target:[l_num]          })
+        sample({source:[$num,$str]    , target:[l_num_str]      })
+        sample({source:[$num,$str]    , target:[l_num,l_num_str]})
+        sample({source:[$num,$str]    , clock:num, target:[l_num]          })
+        sample({source:[$num,$str]    , clock:num, target:[l_num_str]      })
+        sample({source:[$num,$str]    , clock:num, target:[l_num,l_num_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1169,11 +1184,7 @@ describe('combinable', () => {
         //@ts-expect-error
         sample({source:{a:$num,b:$str}, clock:num, target:[a_num,a_str]        })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num]              })
-        //@ts-expect-error
         sample({source:[$num,$str]    , target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num,l_num_str]    })
         //@ts-expect-error
         sample({source:[$num,$str]    , target:[l_num,l_str]        })
         //@ts-expect-error
@@ -1189,13 +1200,9 @@ describe('combinable', () => {
         //@ts-expect-error
         sample({source:[$num,$str]    , target:[l_str,l_num_num]    })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num]              })
-        //@ts-expect-error
         sample({source:[$num,$str]    , clock:num, target:[l_str]              })
         //@ts-expect-error
         sample({source:[$num,$str]    , clock:num, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num,l_num_str]    })
         //@ts-expect-error
         sample({source:[$num,$str]    , clock:num, target:[l_num,l_num_num]    })
         //@ts-expect-error
@@ -1271,13 +1278,7 @@ describe('combinable', () => {
             Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1321,9 +1322,6 @@ describe('combinable', () => {
               Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
             Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
@@ -1333,9 +1331,6 @@ describe('combinable', () => {
           The last overload gave the following error.
             Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
               Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number]>' is not assignable to type '\\"incompatible unit in target\\"'.

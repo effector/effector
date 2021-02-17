@@ -39,7 +39,7 @@ const failCases = {
   a: ['a_str', 'abn', 'ab', 'a_str_b_num', 'a_str_b_str'],
   ab: ['a_str', 'abn'],
   tuple_a: ['l_str', 'l_num_num', 'l_num_str'],
-  tuple_aa: ['l_num', 'l_str', 'l_num_num'],
+  tuple_aa: ['l_str', 'l_num_num'],
 }
 
 const grouping = {
