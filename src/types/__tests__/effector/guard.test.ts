@@ -3,6 +3,31 @@ import {createStore, createEvent, guard, Store, Event, Unit} from 'effector'
 const typecheck = '{global}'
 
 describe('explicit generics', () => {
+  test('guard<A>({source, clock, filter})', () => {
+    const source = createEvent<string | null>()
+    const clock = createEvent<number>()
+    const filter = createStore(true)
+    const withFilterStore: Event<string | null> = guard<string | null>({
+      source,
+      clock,
+      filter,
+    })
+    const withFilterFn: Event<string | null> = guard<string | null>({
+      source,
+      clock,
+      filter: e => e !== null,
+    })
+    const withFilterBoolean: Event<string> = guard<string | null>({
+      source,
+      clock,
+      filter: Boolean,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
   test('guard<A>({source, filter})', () => {
     const source = createEvent<string | null>()
     const filter = createStore(true)
@@ -16,6 +41,27 @@ describe('explicit generics', () => {
     })
     const withFilterBoolean: Event<string> = guard<string | null>({
       source,
+      filter: Boolean,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('guard<A>({clock, filter})', () => {
+    const clock = createEvent<string | null>()
+    const filter = createStore(true)
+    const withFilterStore: Event<string | null> = guard<string | null>({
+      clock,
+      filter,
+    })
+    const withFilterFn: Event<string | null> = guard<string | null>({
+      clock,
+      filter: e => e !== null,
+    })
+    const withFilterBoolean: Event<string> = guard<string | null>({
+      clock,
       filter: Boolean,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -45,14 +91,29 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'Target' is not assignable to type 'Unit<string | null>'.
+        Type '[any]' is not assignable to type 'Unit<string | null>'.
+      Type 'Target' is not assignable to type 'Unit<string | null>'.
+        Type '[any]' is not assignable to type 'Unit<string | null>'.
+      Type 'Target' is not assignable to type 'Unit<string>'.
+        Type '[any]' is not assignable to type 'Unit<string>'.
       "
     `)
   })
   test('guard<Source, Result>({source, filter})', () => {
     const source = createEvent<string | null>()
-    const result: Event<string> = guard<string | null, string>({
+    const clock = createEvent<string | null>()
+    const result1: Event<string> = guard<string | null, string>({
       source,
+      clock,
+      filter: (e): e is string => e !== null,
+    })
+    const result2: Event<string> = guard<string | null, string>({
+      source,
+      filter: (e): e is string => e !== null,
+    })
+    const result3: Event<string> = guard<string | null, string>({
+      clock,
       filter: (e): e is string => e !== null,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -71,7 +132,8 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'Target' is not assignable to type 'Unit<string>'.
+        Type '[any]' is not assignable to type 'Unit<string>'.
       "
     `)
   })
@@ -114,7 +176,7 @@ describe('guard(source, config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
                 The types returned by 'getState()' are incompatible between these types.
                   Type 'string' is not assignable to type 'boolean'.
@@ -130,15 +192,9 @@ describe('guard(source, config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
@@ -173,9 +229,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
-                Types of property '__' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -202,6 +256,11 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Types of property 'watch' are incompatible.
+            Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -233,7 +292,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -299,9 +358,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<User | null>'.
-                Types of property '__' are incompatible.
-                  Type 'string' is not assignable to type 'User | null'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -355,7 +412,7 @@ describe('guard(config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
@@ -364,8 +421,7 @@ describe('guard(config)', () => {
       const trigger: Event<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
-      //@ts-expect-error
-      const result: Event<string> = guard({
+      guard({
         source: trigger,
         //@ts-expect-error
         filter: allow,
@@ -373,10 +429,9 @@ describe('guard(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
@@ -413,7 +468,7 @@ describe('guard(config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -479,25 +534,7 @@ describe('guard(config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
-          "
-        `)
-      })
-      test('nullable type support (should pass)', () => {
-        const event = createEvent()
-        const source = createStore<string | null>('test').on(event, () => null)
-        const filter = createStore(true)
-
-        const target = createEvent<string>()
-
-        guard({
-          source,
-          filter,
-          target,
-        })
-        expect(typecheck).toMatchInlineSnapshot(`
-          "
-          no errors
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -604,9 +641,7 @@ describe('guard(config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<User>'.
-                Types of property '__' are incompatible.
-                  Type 'string' is not assignable to type 'User'.
+              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
