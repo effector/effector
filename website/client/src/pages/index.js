@@ -20,6 +20,8 @@ import radityLogo from './logo/radity.png'
 import okooLogo from './logo/okoo.png'
 import globalCtoForumLogo from './logo/globalCtoForum.png'
 import stmLabsLogo from './logo/stmLabs.png'
+import juntoLogo from './logo/junto.png'
+import StellarXLogo from './logo/stellarX.svg'
 
 const codeExample = `import {createEvent, createStore, createEffect, sample} from 'effector'
 
@@ -140,6 +142,14 @@ const users = [
   {
     url: globalCtoForumLogo,
     alt: 'Global CTO Forum',
+  },
+  {
+    url: juntoLogo,
+    alt: 'Junto',
+  },
+  {
+    view: StellarXLogo,
+    alt: 'StellarX',
   },
   {
     url: stmLabsLogo,
