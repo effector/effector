@@ -205,7 +205,7 @@ test('narrow object (should fail)', () => {
     //@ts-expect-error
     target: [target],
   })
-  
+
   expect(typecheck).toMatchInlineSnapshot(`
     "
     No overload matches this call.
@@ -398,18 +398,9 @@ test('wide union (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; } | { a: 2; } | { a: 3; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; } | { a: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-                Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-                  Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[Event<{ a: 1; } | { a: 2; }>]'.
     "
   `)
 })
@@ -456,16 +447,9 @@ test('unknown type in source (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<unknown>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: unknown) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'unknown' is not assignable to type 'string'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<unknown>' is not assignable to type '[Event<string>]'.
     "
   `)
 })
@@ -512,16 +496,9 @@ test('optional props (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b?: 2 | undefined; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[Event<{ a: 1; b: 2; }>]'.
     "
   `)
 })
@@ -570,16 +547,9 @@ test('narrow object (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; c: 3; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b: 2; }' is not assignable to type '{ a: 1; b: 2; c: 3; }'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[Event<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
 })
