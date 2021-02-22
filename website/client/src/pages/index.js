@@ -158,7 +158,7 @@ const users = [
 function CompaniesUsingEffector() {
   return (
     <footer className={styles.usersSection}>
-      <header>
+      <header data-section-header>
         <h1 data-users-header>Companies using effector</h1>
       </header>
       <section data-users-logos>
@@ -190,17 +190,16 @@ function CompaniesUsingEffector() {
 
 function FeatureGrid() {
   return (
-    <main>
-      <section className={styles.features}>
-        <div className="container">
-          <div className="row">
-            {features.map((props, idx) => (
-              <Feature key={idx} {...props} />
-            ))}
-          </div>
-        </div>
-      </section>
-    </main>
+    <section className={styles.features}>
+      <header data-section-header>
+        <h1>Features</h1>
+      </header>
+      <div className="row" data-features-grid>
+        {features.map((props, idx) => (
+          <Feature key={idx} {...props} />
+        ))}
+      </div>
+    </section>
   )
 }
 

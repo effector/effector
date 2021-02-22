@@ -5,6 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+header[data-section-header] {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
 /**
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
@@ -46,10 +51,20 @@
 }
 
 .features {
-  display: flex;
+  display: grid;
   align-items: center;
-  padding: 2rem 0;
+  justify-items: center;
+  padding: 0 0 2rem 0;
   width: 100%;
+  background-color: unset;
+}
+
+.features > [data-section-header] {
+  grid-row: 1;
+}
+
+.features > [data-features-grid] {
+  grid-row: 2;
 }
 
 .features [data-feature-image] {
@@ -67,10 +82,7 @@
   --logoCardSize: 220px;
   --logoCardGap: 2rem;
 }
-.usersSection > header {
-  margin-top: 4rem;
-  margin-bottom: 2rem;
-}
+
 .usersSection [data-users-header] {
   color: #1c1e21;
 }
