@@ -6,6 +6,8 @@ import {
   restore,
   combine,
   sample,
+  split,
+  guard,
 } from 'effector'
 
 // let addGlobals: Function
@@ -82,4 +84,24 @@ test('effect support', async () => {
       "2",
     ]
   `)
+})
+
+test('split support', async () => {
+  const updates = await execFunc(async () => {
+    try {
+      const intervalStore = createStore(Date.now())
+      const filter = createStore(true)
+      const enumType = 3
+      const typeStore = createStore<any>(enumType)
+      const source = guard({source: intervalStore, filter})
+      const caseA = createEvent<any>()
+      const caseB = createEvent<any>()
+      split({source, match: typeStore, cases: {[enumType]: caseA, __: caseB}})
+    } catch (err) {
+      return String(err.message)
+    }
+    return 'ok'
+  })
+
+  expect(updates).toBe('ok')
 })
