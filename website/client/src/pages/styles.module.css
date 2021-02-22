@@ -10,23 +10,39 @@
  * and scoped locally.
  */
 
-.buttons {
-  display: flex;
+.heroBanner {
+  box-sizing: border-box;
+}
+.heroBanner [data-hero-explainer='first-row'] {
+  margin-top: 30px;
+}
+.heroBanner [data-hero-explainer='second-row'] {
+  margin-top: 10px;
+}
+.heroBanner [data-hero-code] {
+  font-size: calc(var(--ifm-code-font-size) * 0.9);
+}
+
+.heroBanner [data-hero-row] {
+  flex-direction: row-reverse;
+}
+
+.heroBanner [data-hero-controls] {
+  display: grid;
+  grid-gap: 8px;
   text-align: center;
   align-self: center;
   justify-content: center;
 }
 
-@media screen and (min-width: 966px) {
-  .buttons a {
-    width: 33%;
-  }
+.heroBanner [data-hero-controls] a {
+  grid-row: 1;
 }
 
-@media screen and (max-width: 966px) {
-  .buttons a {
-    width: 50%;
-  }
+.heroBanner [data-hero-content] {
+  text-align: center;
+  align-self: center;
+  justify-content: center;
 }
 
 .features {
@@ -36,18 +52,10 @@
   width: 100%;
 }
 
-.featureImage {
+.features [data-feature-image] {
   height: 100px;
   width: 100px;
   filter: hue-rotate(-50deg) brightness(1.7);
-}
-
-.getStarted {
-  margin-right: 8px;
-}
-
-.rowRevers {
-  flex-direction: row-reverse;
 }
 
 .usersSection {
