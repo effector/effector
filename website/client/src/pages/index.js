@@ -7,20 +7,6 @@ import styles from './styles.module.css'
 
 import {Code} from '../components/Code'
 
-import sberLogo from './logo/sber.png'
-import MtsLogo from './logo/mts.svg'
-import Raiffeisen from './logo/raiffeisen.svg'
-import Avito from './logo/avito.svg'
-import AutomationHeroLogo from './logo/automationhero.svg'
-import docsvisionLogo from './logo/docsvision.png'
-import redmadrobotLogo from './logo/redmadrobot.png'
-import radityLogo from './logo/radity.png'
-import okooLogo from './logo/okoo.png'
-import globalCtoForumLogo from './logo/globalCtoForum.png'
-import stmLabsLogo from './logo/stmLabs.png'
-import juntoLogo from './logo/junto.png'
-import StellarXLogo from './logo/stellarX.svg'
-
 const codeExample = `import {createEvent, createStore, createEffect, sample} from 'effector'
 
 const nextPost = createEvent()
@@ -100,57 +86,57 @@ const features = [
 
 const users = [
   {
-    url: sberLogo,
+    url: 'sber.png',
     alt: 'Sber',
   },
   {
-    view: MtsLogo,
+    url: 'mts.svg',
     alt: 'MTS',
   },
   {
-    view: Raiffeisen,
+    url: 'raiffeisen.svg',
     alt: 'Raiffeisen Bank Russia',
   },
   {
-    view: Avito,
+    url: 'avito.svg',
     alt: 'Avito',
   },
   {
-    url: redmadrobotLogo,
+    url: 'redmadrobot.png',
     alt: 'REDMADROBOT',
     yOffset: true,
   },
   {
-    view: AutomationHeroLogo,
+    url: 'automationhero.svg',
     alt: 'automation hero',
   },
   {
-    url: docsvisionLogo,
+    url: 'docsvision.png',
     alt: 'Docsvision',
   },
   {
-    url: radityLogo,
+    url: 'radity.png',
     alt: 'Radity',
   },
   {
-    url: okooLogo,
+    url: 'okoo.png',
     alt: 'Okoo',
     yOffset: true,
   },
   {
-    url: globalCtoForumLogo,
+    url: 'globalCtoForum.png',
     alt: 'Global CTO Forum',
   },
   {
-    url: juntoLogo,
+    url: 'junto.png',
     alt: 'Junto',
   },
   {
-    view: StellarXLogo,
+    url: 'stellarX.svg',
     alt: 'StellarX',
   },
   {
-    url: stmLabsLogo,
+    url: 'stmLabs.png',
     alt: 'STM Labs',
   },
 ]
@@ -162,16 +148,10 @@ function CompaniesUsingEffector() {
         <h1 data-users-header>Companies using effector</h1>
       </header>
       <section data-users-logos>
-        {users.map(({url, alt, view: View, yOffset}, i) => {
-          if (!View)
-            return (
-              <div key={i} data-users-logo data-logo-offset={yOffset}>
-                <img alt={alt} src={url} title={alt} />
-              </div>
-            )
+        {users.map(({url, alt, yOffset}, i) => {
           return (
-            <div key={i} data-users-logo>
-              <View title={alt} />
+            <div key={i} data-users-logo data-logo-offset={yOffset}>
+              <img alt={alt} src={useBaseUrl(`img/logo/${url}`)} title={alt} />
             </div>
           )
         })}
