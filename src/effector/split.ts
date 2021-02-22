@@ -163,7 +163,7 @@ export function split(...args: any[]): any {
     node: splitterSeq!,
     family: {
       type: 'crosslink',
-      owners: [...owners],
+      owners: Array.from(owners),
     },
     regional: true,
   })
