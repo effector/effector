@@ -493,16 +493,17 @@ export function createStoreObject<State>(
 
 export function split<
   S,
-  Match extends {[name: string]: ((payload: S) => boolean) | Store<boolean>}
+  Match extends {[name: string]: ((payload: S) => boolean) | Store<boolean>},
+  T extends Target = Target
 >(config: {
   source: Unit<S>
   match: Match
   cases: Partial<
     {
       [K in keyof Match]: Match[K] extends (p: any) => p is infer R
-        ? Unit<R>
-        : Unit<S>
-    } & {__: Unit<S>}
+      ? MultiTarget<T, R>
+      : MultiTarget<T, S>
+    } & {__: MultiTarget<T, S>}
   >
 }): void
 export function split<
@@ -516,19 +517,23 @@ export function split<
     ? Event<R>
     : Event<S>
 } & {__: Event<S>}>
-export function split<S, Match extends ((p: S) => keyof any)>(config: {
+export function split<
+  S,
+  K extends keyof any,
+  T extends Target = Target
+>(config: {
   source: Unit<S>
-  cases: ReturnType<Match> extends infer CaseSet
-    ? Partial<Record<(CaseSet extends string ? CaseSet : never) | '__', Unit<S>>>
-    : never
-  match: Match
+  match: (p: S) => K
+  cases: Partial<{[X in K]: MultiTarget<T, S>} & {__: MultiTarget<T, S>}>
 }): void
-export function split<S, Match extends Unit<keyof any>>(config: {
+export function split<
+  S,
+  K extends keyof any,
+  T extends Target = Target
+>(config: {
   source: Unit<S>
-  cases: Match extends Unit<infer CaseSet>
-    ? Partial<Record<(CaseSet extends string ? CaseSet : never) | '__', Unit<S>>>
-    : never
-  match: Match
+  match: Unit<K>
+  cases: Partial<{[X in K]: MultiTarget<T, S>} & {__: MultiTarget<T, S>}>
 }): void
 
 export function createApi<

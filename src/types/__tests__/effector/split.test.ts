@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, createStore, Event, split} from 'effector'
+import {createEvent, createStore, Event, guard, split} from 'effector'
 
 const typecheck = '{global}'
 
@@ -82,15 +82,15 @@ test('matcher store case mismatch (should fail)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     No overload matches this call.
-      Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Unit<number>; } & { __: Unit<number>; }>; }): void', gave the following error.
+      Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
         Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
           Index signature is missing in type 'Store<\\"a\\" | \\"c\\">'.
-      Overload 2 of 4, '(config: { source: Unit<number>; cases: Partial<Record<string, Unit<number>>>; match: (p: number) => string | number | symbol; }): void', gave the following error.
-        Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '(p: number) => string | number | symbol'.
-          Type 'Store<\\"a\\" | \\"c\\">' provides no match for the signature '(p: number): string | number | symbol'.
-      Overload 3 of 4, '(config: { source: Unit<number>; cases: Partial<Record<\\"a\\" | \\"__\\" | \\"c\\", Unit<number>>>; match: Store<\\"a\\" | \\"c\\">; }): void', gave the following error.
-        Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<Record<\\"a\\" | \\"__\\" | \\"c\\", Unit<number>>>'.
-          Object literal may only specify known properties, and 'b' does not exist in type 'Partial<Record<\\"a\\" | \\"__\\" | \\"c\\", Unit<number>>>'.
+      Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: Event<number>; b: Event<number>; __: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
+        Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
+          Type 'Store<\\"a\\" | \\"c\\">' provides no match for the signature '(p: number): \\"a\\" | \\"b\\" | \\"__\\"'.
+      Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"c\\">; cases: Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
+        Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
+          Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
     "
   `)
 })
@@ -134,14 +134,14 @@ test('matcher function case mismatch (should fail)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     No overload matches this call.
-      Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Unit<number>; } & { __: Unit<number>; }>; }): void', gave the following error.
+      Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
         Type '(x: number) => \\"a\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
           Index signature is missing in type '(x: number) => \\"a\\" | \\"c\\"'.
-      Overload 2 of 4, '(config: { source: Unit<number>; cases: Partial<Record<\\"a\\" | \\"__\\" | \\"c\\", Unit<number>>>; match: (x: number) => \\"a\\" | \\"c\\"; }): void', gave the following error.
-        Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<Record<\\"a\\" | \\"__\\" | \\"c\\", Unit<number>>>'.
-          Object literal may only specify known properties, and 'b' does not exist in type 'Partial<Record<\\"a\\" | \\"__\\" | \\"c\\", Unit<number>>>'.
-      Overload 3 of 4, '(config: { source: Unit<number>; cases: Partial<Record<string, Unit<number>>>; match: Unit<string | number | symbol>; }): void', gave the following error.
-        Type '(x: number) => \\"a\\" | \\"c\\"' is missing the following properties from type 'Unit<string | number | symbol>': kind, __
+      Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"c\\"; cases: Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
+        Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
+          Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
+      Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\" | \\"__\\">; cases: Partial<{ a: Event<number>; b: Event<number>; __: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
+        Type '(x: number) => \\"a\\" | \\"c\\"' is missing the following properties from type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">': kind, __
     "
   `)
 })
@@ -162,11 +162,25 @@ test('event with unknown payload in target (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      Overload 1 of 4, '(config: { source: Unit<string>; match: { [name: string]: Store<boolean> | ((payload: string) => boolean); }; cases: Partial<{ [x: string]: Unit<string>; } & { __: Unit<string>; }>; }): void', gave the following error.
-        Type 'Event<unknown>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'string'.
+    no errors
+    "
+  `)
+})
+
+test('edge case with target (should pass)', () => {
+  const intervalStore = createStore(Date.now())
+  const filter = createStore(true)
+  const enumType = 3
+  const typeStore = createStore(enumType)
+  const source = guard({source: intervalStore, filter})
+  const caseA = createEvent()
+  const caseB = createEvent()
+
+  split({source, match: typeStore, cases: {[enumType]: caseA, __: caseB}})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
     "
   `)
 })
