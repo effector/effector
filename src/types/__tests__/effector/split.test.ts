@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, createStore, Event, split} from 'effector'
+import {createEvent, createStore, Event, guard, split} from 'effector'
 
 const typecheck = '{global}'
 
@@ -167,6 +167,26 @@ test('event with unknown payload in target (should pass)', () => {
         Type 'Event<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+    "
+  `)
+})
+
+test('edge case with target (should pass)', () => {
+  const intervalStore = createStore(Date.now())
+  const filter = createStore(true)
+  const enumType = 3
+  const typeStore = createStore(enumType)
+  const source = guard({source: intervalStore, filter})
+  const caseA = createEvent()
+  const caseB = createEvent()
+
+  split({source, match: typeStore, cases: {[enumType]: caseA, __: caseB}})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    No overload matches this call.
+      Overload 3 of 4, '(config: { source: Unit<number>; cases: Partial<Record<\\"__\\", Unit<number>>>; match: Store<number>; }): void', gave the following error.
+        Type 'Event<void>' is not assignable to type 'Unit<number>'.
     "
   `)
 })
