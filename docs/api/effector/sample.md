@@ -10,7 +10,7 @@ Quite a common case, when you need to handle some event with some store's state.
 ## Formulae
 
 ```ts
-sample({ source, clock?, fn?, target?}): target
+sample({ source?, clock?, fn?, target?}): target
 ```
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
@@ -55,17 +55,27 @@ const event = sample({clock: event, source: $store})
 
 `params` (_Object_): Configuration object
 
-- `source`: Source [unit](../../glossary.md#common-unit)
-  - If event. Take last event invocation argument value. Event must be invoked at least once.
-  - If effect. Take last effect invocation argument value. Effect must be invoked at least once.
-  - If store. Take current store`s state.
-- `clock?`: Clock [unit](../../glossary.md#common-unit). **If not passed, source is used as clock**
-  - If event. Triger sampled unit, upon event is called.
-  - If effect. Triger sampled unit, upon effect is called.
-  - If store. Triger sampled unit, upon store is updated.
-- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
-- `target?`: Target [unit](../../glossary.md#common-unit), which accepts payload returned by `fn`. In case if target is not passed, it's created "under the hood" and being returned as result of the `sample()` call.
-- `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
+- `clock?`: [Unit](../../glossary.md#common-unit) or array of units
+  - If event or effect: triger `target` upon event or effect is called
+  - If store: triger `target` upon store is updated
+  - If array of units: trigger `target` upon any given unit is called or updated. Shorthand for inline [merge](./merge.md) call
+  - If not passed: `source` is used as `clock`
+- `source?`: [Unit](../../glossary.md#common-unit) or object/array with stores
+  - If event or effect: take last invocation argument value. That event or effect must be invoked at least once
+  - If store: take current state of given store
+  - If array or object with stores: take values from given stores combined to object or array. Shorthand for inline [combine](./combine.md) call
+  - If not passed: `clock` is used as `source`
+- `target?`: [Unit](../../glossary.md#common-unit) or array of units
+  - If event or effect: call given event or effect upon `clock` is triggered
+  - If store: update given store upon `clock` is triggered
+  - If array of units: trigger every given unit upon `clock` is triggered
+  - If not passed: new unit will be created under the hood and will be returned as result of the `sample()` call. Type of created target is described [in table beyond](./sample.md#type-of-the-created-target)
+- `fn?` (_(sourceData, clockData) => result_): Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](../../glossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
+- `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
+
+:::note
+Array of units in target are supported since effector 21.8.0
+:::
 
 **Returns**
 
@@ -104,13 +114,11 @@ It is just another form of the `sample` invocation, with the same sense.
 **Arguments**
 
 - `sourceUnit`: Source [unit](../../glossary.md#common-unit)
-  - If event. Take last event invocation argument value. Event must be invoked at least once.
-  - If effect. Take last effect invocation argument value. Effect must be invoked at least once.
-  - If store. Take current store`s state.
+  - If event or effect. Take last invocation argument value. That event or effect must be invoked at least once
+  - If store. Take current store`s state
 - `clockUnit`: Clock [unit](../../glossary.md#common-unit). If not passed, `source` is used as clock
-  - If event. Triger sampled unit, upon event is called.
-  - If effect. Triger sampled unit, upon effect is called.
-  - If store. Triger sampled unit, upon store is updated.
+  - If event or effect. Triger sampled unit, upon event or effect is called
+  - If store. Triger sampled unit, upon store is updated
 - `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 **Returns**
