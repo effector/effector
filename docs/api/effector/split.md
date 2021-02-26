@@ -3,7 +3,104 @@ id: split
 title: split
 ---
 
-Choose one of cases by matching functions. It "splits" source unit into several events, which fires when payload matches their matching function. Works like pattern matching for payload values
+Choose one of cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions. Works like pattern matching for payload values and external stores
+
+## Concepts
+
+### Case mode
+
+Mode in which target case is selected by name of it's field. Case could be selected from data in `source` by [case function](./split.md#case-function) or from external [case store](./split.md#case-store) which keept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+
+**See also**:
+* [case store](./split.md#case-store)
+* [case function](./split.md#case-function)
+
+### Matching mode
+
+Mode in which each case sequentially matched by stores and functions in fields of `match` object.
+If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+
+**See also**:
+* [matching store](./split.md#matching-store)
+* [matching function](./split.md#matching-function)
+
+### Case store
+
+Store with string which will be used to choose case by it's name. Placed directly in `match` field
+
+```ts
+split({
+  source: Unit<T>
+  // case store
+  match: Store<'first' | 'second'>,
+  cases: {
+    first: Unit<T>,
+    second: Unit<T>,
+    __?: Unit<T>
+  }
+})
+```
+
+### Case function
+
+String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](../../glossary.md#purity)
+
+```ts
+split({
+  source: Unit<T>
+  // case function
+  match: (value: T) => 'first' | 'second',
+  cases: {
+    first: Unit<T>,
+    second: Unit<T>,
+    __?: Unit<T>
+  }
+})
+```
+
+### Matcher store
+
+Boolean store which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher functions](./split.md#matcher-function)
+
+```ts
+split({
+  source: Unit<T>
+  match: {
+    // matcher store
+    first: Store<boolean>,
+    second: Store<boolean>
+  },
+  cases: {
+    first: Unit<T>,
+    second: Unit<T>,
+    __?: Unit<T>
+  }
+})
+```
+
+### Matcher function
+
+Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](./split.md#matcher-store), [should be **pure**](../../glossary.md#purity)
+
+```ts
+split({
+  source: Unit<T>
+  match: {
+    // matcher function
+    first: (value: T) => boolean,
+    second: (value: T) => boolean
+  },
+  cases: {
+    first: Unit<T>,
+    second: Unit<T>,
+    __?: Unit<T>
+  }
+})
+```
+
+:::note
+Case store, case funtion and matcher store are supported since effector 21.8.0
+:::
 
 ## split with cases
 
@@ -11,11 +108,48 @@ Choose one of cases by matching functions. It "splits" source unit into several 
 split({source, match, cases})
 ```
 
+```ts
+split({
+  source: Unit<T>
+  // case function
+  match: (data: T) => 'a' | 'b',
+  cases: {
+    a: Unit<T>,
+    b: Unit<T>,
+    __?: Unit<T>
+  }
+})
+split({
+  source: Unit<T>
+  // case store
+  match: Store<'a' | 'b'>,
+  cases: {
+    a: Unit<T>,
+    b: Unit<T>,
+    __?: Unit<T>
+  }
+})
+split({
+  source: Unit<T>
+  match: {
+    // matcher function
+    a: (data: T) => boolean,
+    // matcher store
+    b: Store<boolean>
+  },
+  cases: {
+    a: Unit<T>,
+    b: Unit<T>,
+    __?: Unit<T>
+  }
+})
+```
+
 **Arguments**
 
 - `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
-- `match`: Object with the functions-matches to which the data sent to the source will be sequentially matched. If one of the functions returns true, then the data will be sent to the corresponding `cases[fieldName]` (if there is one), if none of the functions returns true, then the data will be sent to `cases.__` (if there is one)
-- `cases`: Object with [units](../../glossary.md#common-unit) to which data will be passed from `source` if the corresponding matching function returns true
+- `match`: Single [store with string](./split.md#case-store), single [function which returns string](./split.md#case-function) or object with [boolean stores](./split.md#matching-store) and [functions which returns boolean](./split.md#matching-function)
+- `cases`: Object with [units](../../glossary.md#common-unit) to which data will be passed from `source` after case selection
 
 **Returns**
 

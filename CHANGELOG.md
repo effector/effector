@@ -14,7 +14,7 @@ sample({
 })
 ```
 
-- Add support for matcher functions, matcher stores and case stores to `split`. Matcher functions and stores will choose target case by its name, case stores are boolean stores which indicate whether to choose given case
+- Add support for case functions, case stores and matcher stores to `split`. Case functions and stores will choose target case by its name, matcher stores are boolean stores which indicate whether to choose given case
 
 ```typescript
 
@@ -24,7 +24,7 @@ const odd = createStore(0)
 
 split({
   source,
-  // matcher function
+  // case function
   match(n) {
     if (n % 2 === 0) return 'even'
     return 'odd'
@@ -39,7 +39,7 @@ const $currentPage = createStore('dashboard')
 
 split({
   source,
-  // matcher store
+  // case store
   match: $currentPage,
   cases: {
     dashboard: even,
@@ -58,7 +58,7 @@ const $hasWriteAccess = createStore(false)
 split({
   source: tryUpdatePage,
   match: {
-    // case store
+    // matcher store
     admin: $hasWriteAccess
   },
   cases: {
