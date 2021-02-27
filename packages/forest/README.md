@@ -175,7 +175,7 @@ h('a', {
 > - **prevent**: call [`preventDefault()`](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault) on trigger
 > - **stop**: call [`stopPropagation()`](https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation) on trigger
 
-- **fn**: add childrens to given element by nesting api methods calls
+- **fn**: add children to given element by nesting api methods calls
 
 ### spec
 
@@ -220,7 +220,7 @@ function list<T>(config: {
 
 **Config fields**:
 
-- **source**: store with array of items
+- **source**: store with an array of items
 - **key**: field name which value will be used as key for given item
 - **fn**: function which will be used as a template for every list item. Receive item value and item key as stores and `fields` as array of stores if provided. All fields are strongly typed and inferred from config definition
 - **fields**: array of item field names which will be passed to `fn` as array of separate stores. Useful to avoid `store.map` and [`remap`](#remap) calls
@@ -239,7 +239,7 @@ function variant<T>(config: {
 
 ### route
 
-Generailzed route is a combination of state and visibility status. `fn` content will be mounted until `visible` called with `source` value will return `true`. In case of store in `visible` field, content will be mounted while that store contain `true`. [variant](#variant) is shorthand for creating several routes at once
+Generalized route is a combination of state and visibility status. `fn` content will be mounted until `visible` called with `source` value will return `true`. In case of store in `visible` field, content will be mounted while that store contain `true`. [variant](#variant) is shorthand for creating several routes at once
 
 ```typescript
 function route<T>(config: {
@@ -277,7 +277,7 @@ function rec<T>(config: {store: Store<T>}): (config: {store: Store<T>}) => void
 
 ### block
 
-Allow to define and validate template outside from [using](#using) calls.
+Allow defining and validate template outside from [using](#using) calls.
 
 ```typescript
 function block(config: {fn: () => void}): () => void
@@ -285,7 +285,7 @@ function block(config: {fn: () => void}): () => void
 
 ### renderStatic
 
-Method from `forest/server` to render given application to string. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope), in which case `fn` childs must be wrapped in [block](#block) to ensure that all units are created before [fork](https://effector.dev/docs/api/effector/fork) call
+Method from `forest/server` to render given application to string. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope), in which case `fn` children must be wrapped in [block](#block) to ensure that all units are created before [fork](https://effector.dev/docs/api/effector/fork) call
 
 ```typescript
 function renderStatic(fn: () => void): Promise<string>
@@ -295,7 +295,7 @@ function renderStatic(config: {scope?: Scope; fn: () => void}): Promise<string>
 
 ### remap
 
-Helper for retrieving value fields from single store. Shorthand for several `store.map(val => val[fieldName])` calls. Infer types when used with either single key or whith `as const`: `const [id, name] = remap(user, ['id', 'name'] as const)`
+Helper for retrieving value fields from single store. Shorthand for several `store.map(val => val[fieldName])` calls. Infer types when used with either single key or with `as const`: `const [id, name] = remap(user, ['id', 'name'] as const)`
 
 ```typescript
 function remap<T>(store: Store<T>, keys: string[]): Store<any>[]
@@ -305,7 +305,7 @@ function remap<T>(store: Store<T>, key: string): Store<any>
 
 ### val
 
-Helper for joininig [properties](#property) to single string with template literals. If only [plain values](#plainproperty) are passed, the method returns `string`
+Helper for joining [properties](#property) to single string with template literals. If only [plain values](#plainproperty) are passed, the method returns `string`
 
 ```typescript
 function val(words: TemplateStringsArray, ...values: Property[]): Store<string>
