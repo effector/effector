@@ -58,9 +58,17 @@ const effectorMixin: ComponentOptions<Vue> = {
       }
 
       const store = combine(state)
-      const reactive = Vue.observable({ state: store.defaultState })
+      for(const key in store.defaultState) {
+        // @ts-ignore
+        Vue.util.defineReactive(this, key, store.defaultState[key])
+      }
 
-      store.watch(value => reactive.state = value)
+      store.watch(value => {
+        for (const key in value) {
+          // @ts-ignore
+          this[key] = value[key]
+        }
+      })
 
       for (const key in state) {
         const updated = createEvent();
@@ -68,7 +76,8 @@ const effectorMixin: ComponentOptions<Vue> = {
 
         // @ts-ignore
         this.$options.computed[key] = {
-          get: () => reactive.state[key],
+          // @ts-ignore
+          get: () => this[key],
           set: updated
         };
       }

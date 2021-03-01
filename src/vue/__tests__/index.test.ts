@@ -266,3 +266,116 @@ test('non v-model usage support', async () => {
   expect($store.getState()).toBe('some-value')
   expect(input.value).toBe('some-value')
 })
+
+test('change value in array from UI via v-model', async () => {
+
+  const handleChange = createEvent<number>()
+
+  const $users = createStore<{name: string; selected: boolean}[]>([
+    {name: 'Alan', selected: false},
+    {name: 'Criss', selected: false},
+    {name: 'John', selected: false},
+  ])
+
+  $users.on(handleChange, (state, payload) => {
+    const idx = state.findIndex((_, i) => i === payload);
+    const s = [...state];
+
+    s[idx].selected = !s[idx].selected;
+    return s;
+  })
+
+  const component = Vue.extend({
+    template: `
+      <div>
+        <label
+          v-for="(user, key) in $users"
+          :key="key"
+        >
+        <input
+          type="checkbox"
+          :value="user"
+          @change="handleChange(key)"
+          data-test="checkbox"
+        >
+          {{user.name}}
+        </label>
+      </div>
+    `,
+
+    effector: {
+      $users
+    },
+
+    methods: {
+      handleChange
+    }
+  })
+
+  const wrapper = mount(component, {
+    localVue
+  })
+  const checkbox = wrapper.find('[data-test="checkbox"]')
+  console.log(checkbox);
+  await checkbox.setChecked()
+
+  expect($users.getState()[0].selected).toBeTruthy()
+})
+
+test('change value in array from event via v-model', async () => {
+
+  const handleChange = createEvent<number>()
+
+  const $users = createStore<{name: string; selected: boolean}[]>([
+    {name: 'Alan', selected: false},
+    {name: 'Criss', selected: false},
+    {name: 'John', selected: false},
+  ])
+
+  $users.on(handleChange, (state, payload) => {
+    const idx = state.findIndex((_, i) => i === payload);
+    const s = [...state];
+
+    s[idx].selected = !s[idx].selected;
+    return s;
+  })
+
+  const component = Vue.extend({
+    template: `
+      <div>
+        <label
+          v-for="(user, key) in $users"
+          :key="key"
+        >
+        <input
+          type="checkbox"
+          :value="user"
+          @change="handleChange(key)"
+          data-test="checkbox"
+        >
+          {{user.name}}
+        </label>
+
+        <button @click="handleChange(0)" data-test="btn">
+          Change
+        </button>
+      </div>
+    `,
+
+    effector: {
+      $users
+    },
+
+    methods: {
+      handleChange
+    }
+  })
+
+  const wrapper = mount(component, {
+    localVue
+  })
+  const btn = wrapper.find('[data-test="btn"]')
+  await btn.trigger('click');
+
+  expect($users.getState()[0].selected).toBeTruthy()
+})
