@@ -1,14 +1,12 @@
 ---
 id: guard
 title: guard
-hide_title: true
+description: Method for conditional event routing.
 ---
 
-:::note since
-effector 20.4.0
+:::note
+since effector 20.4.0
 :::
-
-# guard
 
 Method for conditional event routing.
 It provides a way to control one dataflow with the help of another: when the condition and the data are in different places, we can use guard with stores as filters to trigger events when condition state is true, thereby modulate signals without mixing them.
