@@ -1,6 +1,7 @@
 ---
 id: attach
 title: attach
+description: Wrapper for effect, which allows to map effect arguments and use data from stores.
 ---
 
 :::note since
