@@ -56,8 +56,8 @@ const event = sample({clock: event, source: $store})
 `params` (_Object_): Configuration object
 
 - `clock?`: [Unit](../../glossary.md#common-unit) or array of units
-  - If event or effect: triger `target` upon event or effect is called
-  - If store: triger `target` upon store is updated
+  - If event or effect: trigger `target` upon event or effect is called
+  - If store: trigger `target` upon store is updated
   - If array of units: trigger `target` upon any given unit is called or updated. Shorthand for inline [merge](./merge.md) call
   - If not passed: `source` is used as `clock`
 - `source?`: [Unit](../../glossary.md#common-unit) or object/array with stores
@@ -102,7 +102,7 @@ submitForm(12345678)
 // 1. when submitForm is called with params (12345678)
 // 2. take $userName store`s state ('john')
 // 3. transform payload from event (1) and current store`s state (2)
-// 4. triger effect signIn with params received at the step (3)
+// 4. trigger effect signIn with params received at the step (3)
 ```
 
 [Try it](https://share.effector.dev/PAjWhOJc)
@@ -117,8 +117,8 @@ It is just another form of the `sample` invocation, with the same sense.
   - If event or effect. Take last invocation argument value. That event or effect must be invoked at least once
   - If store. Take current store`s state
 - `clockUnit`: Clock [unit](../../glossary.md#common-unit). If not passed, `source` is used as clock
-  - If event or effect. Triger sampled unit, upon event or effect is called
-  - If store. Triger sampled unit, upon store is updated
+  - If event or effect. Trigger sampled unit, upon event or effect is called
+  - If store. Trigger sampled unit, upon store is updated
 - `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 **Returns**
@@ -150,7 +150,7 @@ submitForm(12345678)
 // 1. when submitForm is called with params (12345678)
 // 2. take $userName store`s state ('john')
 // 3. transform payload from event (1) and current store`s state (2)
-// 4. when sampleUnit (event in this case) is trigered,
+// 4. when sampleUnit (event in this case) is triggered,
 //    send it payload to effect signIn with params received at the step (3)
 ```
 
