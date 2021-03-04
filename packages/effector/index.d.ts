@@ -287,7 +287,11 @@ export class Domain implements Unit<any> {
   ): Store<State>
   createStore<State>(
     defaultState: State,
-    config?: {name?: string; sid?: string},
+    config?: {
+      name?: string 
+      sid?: string
+      updateFilter?: (update: State, current: State) => boolean
+    },
   ): Store<State>
   sid: string | null
   compositeName: CompositeName
