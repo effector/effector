@@ -160,7 +160,7 @@ type Domain = {
 ## Unit
 
 Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
-Three are four units types: [store], [event], [effect] and [domain]
+There are four units types: [store], [event], [effect] and [domain]
 
 ## Common unit
 
