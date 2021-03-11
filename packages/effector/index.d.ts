@@ -1341,6 +1341,17 @@ export function attach<
   name?: string
 }): Effect<Parameters<FN>[0] , EffectResult<FX>, EffectError<FX>>
 
+type UnionToStoresUnion<T> = (T extends any
+  ? () => T
+  : never) extends infer U
+  ? U extends () => infer S
+    ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
+    : never
+  : never
+type CombineState<State> = {
+  [K in keyof State]: State[K] | Store<State[K]> | UnionToStoresUnion<State[K]>
+}
+
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 export function combine<T extends Store<any>>(
   store: T,
@@ -1349,7 +1360,7 @@ export function combine<State extends Tuple>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<State>(
-  shape: State,
+  shape: CombineState<State>,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 export function combine<State extends Tuple, R>(
