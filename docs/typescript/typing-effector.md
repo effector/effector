@@ -8,7 +8,7 @@ Best practices for writing well-typed code
 
 ## createEvent
 
-By default, this methos returns `Event<void>`.
+By default, this method returns `Event<void>`.
 
 ```typescript
 const event = createEvent()
