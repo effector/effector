@@ -1341,9 +1341,9 @@ export function attach<
   name?: string
 }): Effect<Parameters<FN>[0] , EffectResult<FX>, EffectError<FX>>
 
-type UnionToStoresUnion<T> = (T extends any
-  ? () => T
-  : never) extends infer U
+type UnionToStoresUnion<T> = (T extends never
+  ? never
+  : () => T) extends infer U
   ? U extends () => infer S
     ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
     : never
