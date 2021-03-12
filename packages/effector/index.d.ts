@@ -1349,7 +1349,10 @@ type UnionToStoresUnion<T> = (T extends never
     : never
   : never
 type CombineState<State> = {
-  [K in keyof State]: State[K] | Store<State[K]> | UnionToStoresUnion<State[K]>
+  [K in keyof State]:
+  | State[K]
+  | Store<Exclude<State[K], undefined>>
+  | UnionToStoresUnion<Exclude<State[K], undefined>>
 }
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
