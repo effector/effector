@@ -6,7 +6,7 @@ import {throwError} from './throw'
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
   const currentStore = React.useRef(store)
-  const setState = React.useReducer((_, action) => action, store.getState())[1];
+  const setState = React.useReducer((_, action) => action, store.getState())[1]
   useIsomorphicLayoutEffect(() => {
     if (currentStore.current === store) {
       setState(store.getState())
@@ -17,15 +17,28 @@ export function useStore<State>(store: Store<State>): State {
   return store.getState()
 }
 
-export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>({
-  store,
-  keys,
-  fn,
-}: {
-  store: Store<State>
-  keys: Keys
-  fn(state: State, keys: Keys): Result
-}): Result {
+export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
+  configOrStore:
+    | {
+        store: Store<State>
+        keys: Keys
+        fn(state: State, keys: Keys): Result
+      }
+    | Store<State>,
+  separateFn?: (state: State, keys: Keys) => Result,
+): Result {
+  let fn: (state: State, keys: Keys) => Result
+  let store: Store<State>
+  let keys: Keys
+  if (separateFn) {
+    fn = separateFn
+    store = configOrStore as Store<State>
+    keys = ([] as unknown) as Keys
+  } else {
+    fn = (configOrStore as any).fn
+    store = (configOrStore as any).store
+    keys = (configOrStore as any).keys
+  }
   if (!is.store(store)) throwError('useStoreMap expects a store')
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
   if (typeof fn !== 'function') throwError('useStoreMap expects a function')

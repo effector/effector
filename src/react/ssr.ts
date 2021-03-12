@@ -107,11 +107,13 @@ export function useList(store: any, opts: any) {
   return commonUseList(useScopeStore(store), opts)
 }
 /** useStoreMap wrapper for scopes */
-export function useStoreMap({store, keys, fn}: any) {
+export function useStoreMap(configOrStore: any, separateFn: any) {
+  if (separateFn)
+    return commonUseStoreMap(useScopeStore(configOrStore), separateFn)
   return commonUseStoreMap({
-    store: useScopeStore(store),
-    keys,
-    fn,
+    store: useScopeStore(separateFn.store),
+    keys: separateFn.keys,
+    fn: separateFn.fn,
   })
 }
 
