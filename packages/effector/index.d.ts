@@ -1344,15 +1344,17 @@ export function attach<
 type UnionToStoresUnion<T> = (T extends never
   ? never
   : () => T) extends infer U
-  ? U extends () => infer S
-    ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
+    ? U extends () => infer S
+      ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
+      : never
     : never
-  : never
 type CombineState<State> = {
   [K in keyof State]:
-  | State[K]
-  | Store<Exclude<State[K], undefined>>
-  | UnionToStoresUnion<Exclude<State[K], undefined>>
+    | State[K]
+    | (undefined extends State[K]
+      ? Store<Exclude<State[K], undefined>>
+      : Store<State[K]>)
+    | UnionToStoresUnion<Exclude<State[K], undefined>>
 }
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
