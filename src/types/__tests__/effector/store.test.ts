@@ -114,9 +114,7 @@ test('createApi unknown/void support', () => {
   const implicitVoid: Event<void> = baz
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<void>' is not assignable to type 'Event<unknown>'.
-      Types of parameters 'payload' and 'payload' are incompatible.
-        Type 'unknown' is not assignable to type 'void'.
+    no errors
     "
   `)
 })

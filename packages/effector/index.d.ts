@@ -547,7 +547,7 @@ export function createApi<
   store: Store<S>,
   api: Api,
 ): {
-  [K in keyof Api]: Api[K] extends (store: S, e: void) => S
+  [K in keyof Api]: ((store: S, e: void) => S) extends Api[K]
     ? Event<void>
     : Api[K] extends (store: S, e: infer E) => S
     ? Event<E extends void ? Exclude<E, undefined> | void : E>
