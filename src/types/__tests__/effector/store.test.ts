@@ -85,7 +85,7 @@ describe('createApi', () => {
     `)
   })
 })
-test('createApi voids', () => {
+test('createApi void calls', () => {
   const store = createStore(0)
   const api = createApi(store, {
     increment: count => count + 1,
@@ -102,13 +102,16 @@ test('createApi voids', () => {
     "
   `)
 })
-test('createApi unknown support', () => {
+test('createApi unknown/void support', () => {
   const store = createStore(0)
-  const {foo, bar} = createApi(store, {
-    foo: (_, __: number) => 0,
+  const {foo, bar, baz} = createApi(store, {
+    foo: (_, __: void) => 0,
     bar: (_, __: unknown) => 0,
+    baz: (_, __) => 0,
   })
   const unknownEvent: Event<unknown> = bar
+  const explicitVoid: Event<void> = foo
+  const implicitVoid: Event<void> = baz
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<void>' is not assignable to type 'Event<unknown>'.
