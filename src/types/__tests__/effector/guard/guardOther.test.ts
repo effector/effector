@@ -58,7 +58,7 @@ test('custom typeguards: target array support (1)', () => {
   const trigger = createEvent<{a: number}>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
-  const targetB= createEvent<{field: number | string; data: string}>()
+  const targetB = createEvent<{field: number | string; data: string}>()
   const targetC = createEvent<{field: unknown; data: number}>()
   const targetD = createEvent<{field: number; data: number}>()
   const targetE = createEvent<{field: any}>()
@@ -164,6 +164,25 @@ test('custom typeguards: target array support (2)', () => {
         Type 'Event<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
           Type 'Event<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
             Type 'Event<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    "
+  `)
+})
+
+test('generic support', () => {
+  const source = createEvent<null | number>()
+  const target = createEvent<number>()
+
+  function filter<T>(value: T): value is NonNullable<T> {
+    return value != null
+  }
+
+  guard({source, filter, target})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
