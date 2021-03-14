@@ -1341,15 +1341,20 @@ export function attach<
   name?: string
 }): Effect<Parameters<FN>[0] , EffectResult<FX>, EffectError<FX>>
 
-type UnionToStoresUnion<T> = (T extends any
-  ? () => T
-  : never) extends infer U
-  ? U extends () => infer S
-    ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
+type UnionToStoresUnion<T> = (T extends never
+  ? never
+  : () => T) extends infer U
+    ? U extends () => infer S
+      ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
+      : never
     : never
-  : never
 type CombineState<State> = {
-  [K in keyof State]: State[K] | Store<State[K]> | UnionToStoresUnion<State[K]>
+  [K in keyof State]:
+    | State[K]
+    | (undefined extends State[K]
+      ? Store<Exclude<State[K], undefined>>
+      : Store<State[K]>)
+    | UnionToStoresUnion<Exclude<State[K], undefined>>
 }
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
