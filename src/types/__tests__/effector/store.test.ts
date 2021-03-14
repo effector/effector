@@ -102,6 +102,21 @@ test('createApi voids', () => {
     "
   `)
 })
+test('createApi unknown support', () => {
+  const store = createStore(0)
+  const {foo, bar} = createApi(store, {
+    foo: (_, __: number) => 0,
+    bar: (_, __: unknown) => 0,
+  })
+  const unknownEvent: Event<unknown> = bar
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'Event<void>' is not assignable to type 'Event<unknown>'.
+      Types of parameters 'payload' and 'payload' are incompatible.
+        Type 'unknown' is not assignable to type 'void'.
+    "
+  `)
+})
 test('combine', () => {
   const ev = createEvent()
   const a = createStore('')
