@@ -259,3 +259,34 @@ describe('difference in message quality between inferred types and explicit gene
     `)
   })
 })
+
+test('string subtyping', () => {
+  const effectFx = createEffect(
+    (payload: {string: 'one' | 'two' | 'three'}) => 'response',
+  )
+
+  function run() {
+    effectFx({string: 'one'})
+  }
+
+  const attachedFx1 = attach({
+    effect: effectFx,
+    mapParams: () => ({
+      string: 'one',
+    }),
+  })
+  const attachedFx2 = attach({
+    effect: effectFx,
+    mapParams: () => ({
+      string: 'one' as const,
+    }),
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
+    "
+  `)
+})
