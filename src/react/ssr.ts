@@ -114,6 +114,7 @@ export function useStoreMap(configOrStore: any, separateFn: any) {
     store: useScopeStore(separateFn.store),
     keys: separateFn.keys,
     fn: separateFn.fn,
+    updateFilter: separateFn.updateFilter,
   })
 }
 

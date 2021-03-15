@@ -474,4 +474,41 @@ describe('useStoreMap', () => {
       </div>
     `)
   })
+  test('updateFilter support', async () => {
+    const update = createEvent<number>()
+    const store = createStore(0).on(update, (_, x) => x)
+
+    const View = () => {
+      const x = useStoreMap({
+        store,
+        keys: [],
+        fn: x => x,
+        updateFilter: (x, y) => x % 2 === 0,
+      })
+      return <div>{x}</div>
+    }
+    const App = () => <View />
+    await render(<App />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        0
+      </div>
+    `)
+    await act(async () => {
+      update(2)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        2
+      </div>
+    `)
+    await act(async () => {
+      update(3)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        2
+      </div>
+    `)
+  })
 })
