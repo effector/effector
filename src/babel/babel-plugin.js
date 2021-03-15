@@ -380,8 +380,8 @@ module.exports = function(babel, options = {}) {
               }
             })
             const sid = generateStableID(
-              state.file.opts.root,
-              state.filename,
+              state.file.opts.root || '',
+              state.filename || '',
               resultName,
               loc.line,
               loc.column,
@@ -686,8 +686,8 @@ function setRestoreNameAfter(
       t,
       'sid',
       generateStableID(
-        state.file.opts.root,
-        state.filename,
+        state.file.opts.root || '',
+        state.filename || '',
         displayName,
         loc.line,
         loc.column,
@@ -743,8 +743,8 @@ function setStoreNameAfter(
       t,
       'sid',
       generateStableID(
-        state.file.opts.root,
-        state.filename,
+        state.file.opts.root || '',
+        state.filename || '',
         displayName,
         loc.line,
         loc.column,
@@ -800,8 +800,8 @@ function setConfigForConfigurableMethod(
       t,
       'sid',
       generateStableID(
-        state.file.opts.root,
-        state.filename,
+        state.file.opts.root || '',
+        state.filename || '',
         displayName,
         loc.line,
         loc.column,
@@ -861,8 +861,8 @@ function setEventNameAfter(
       t,
       'sid',
       generateStableID(
-        state.file.opts.root,
-        state.filename,
+        state.file.opts.root || '',
+        state.filename || '',
         displayName,
         loc.line,
         loc.column,
