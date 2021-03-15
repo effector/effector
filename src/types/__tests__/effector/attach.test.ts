@@ -259,34 +259,58 @@ describe('difference in message quality between inferred types and explicit gene
     `)
   })
 })
+describe('string subtyping', () => {
+  test('valid case (should pass)', () => {
+    const effectFx = createEffect(
+      (payload: {string: 'one' | 'two' | 'three'}) => 'response',
+    )
 
-test('string subtyping', () => {
-  const effectFx = createEffect(
-    (payload: {string: 'one' | 'two' | 'three'}) => 'response',
-  )
+    const attachedFx1: Effect<void, 'response'> = attach({
+      effect: effectFx,
+      mapParams: () => ({
+        string: 'one',
+      }),
+    })
+    const attachedFx2: Effect<void, 'response'> = attach({
+      effect: effectFx,
+      mapParams: () => ({
+        string: 'one' as const,
+      }),
+    })
 
-  function run() {
-    effectFx({string: 'one'})
-  }
+    function run() {
+      effectFx({string: 'one'})
+      attachedFx1()
+      attachedFx2()
+    }
 
-  const attachedFx1 = attach({
-    effect: effectFx,
-    mapParams: () => ({
-      string: 'one',
-    }),
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
+      "
+    `)
   })
-  const attachedFx2 = attach({
-    effect: effectFx,
-    mapParams: () => ({
-      string: 'one' as const,
-    }),
-  })
+  test('type mismatch (should fail)', () => {
+    const effectFx = createEffect(
+      (payload: {string: 'one' | 'two' | 'three'}) => 'response',
+    )
 
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
-    "
-  `)
+    const attachedFx3 = attach({
+      effect: effectFx,
+      mapParams: () => ({
+        //@ts-expect-error
+        string: 'ones',
+      }),
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
+      "
+    `)
+  })
 })
