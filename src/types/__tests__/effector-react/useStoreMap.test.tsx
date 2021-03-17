@@ -92,7 +92,7 @@ describe('useStoreMap', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type '[number, \\"email\\" | \\"username\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
+        Type '[number, keyof User]' is not assignable to type '[number, number]'.
           Type 'string' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
         Type 'unknown' is not assignable to type 'ReactNode'.
