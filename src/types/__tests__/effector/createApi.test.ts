@@ -1,18 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  createApi,
-  createStoreObject,
-  restore,
-  combine,
-  Store,
-  Event,
-  /*::type*/ CompositeName,
-  /*::type*/ kind,
-  sample,
-} from 'effector'
+import {createStore, createApi, Store, Event} from 'effector'
 
 const typecheck = '{global}'
 
@@ -73,8 +60,8 @@ test('createApi void calls', () => {
     multiply: (count, mp = 2) => count * mp,
   })
 
-  api.double() // Expected 1 arguments, but got 0.
-  api.multiply() // Expected 1 arguments, but got 0.
+  api.double()
+  api.multiply()
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -109,7 +96,7 @@ test('createApi void calls edge case (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+    no errors
     "
   `)
 })
