@@ -102,21 +102,9 @@ const users = [
     alt: 'Avito',
   },
   {
-    url: 'redmadrobot.png',
-    alt: 'REDMADROBOT',
-    yOffset: true,
-  },
-  {
-    url: 'automationhero.svg',
-    alt: 'automation hero',
-  },
-  {
     url: 'docsvision.png',
     alt: 'Docsvision',
-  },
-  {
-    url: 'radity.png',
-    alt: 'Radity',
+    scale: 1.2,
   },
   {
     url: 'okoo.png',
@@ -124,12 +112,17 @@ const users = [
     yOffset: true,
   },
   {
-    url: 'globalCtoForum.png',
-    alt: 'Global CTO Forum',
+    url: 'redmadrobot.png',
+    alt: 'REDMADROBOT',
+    yOffset: true,
   },
   {
     url: 'junto.png',
     alt: 'Junto',
+  },
+  {
+    url: 'space307.svg',
+    alt: 'space307',
   },
   {
     url: 'stellarX.svg',
@@ -138,6 +131,18 @@ const users = [
   {
     url: 'stmLabs.png',
     alt: 'STM Labs',
+  },
+  {
+    url: 'automationhero.svg',
+    alt: 'automation hero',
+  },
+  {
+    url: 'radity.png',
+    alt: 'Radity',
+  },
+  {
+    url: 'globalCtoForum.png',
+    alt: 'Global CTO Forum',
   },
 ]
 
@@ -148,9 +153,13 @@ function CompaniesUsingEffector() {
         <h1 data-users-header>Companies using effector</h1>
       </header>
       <section data-users-logos>
-        {users.map(({url, alt, yOffset}, i) => {
+        {users.map(({url, alt, yOffset, scale}, i) => {
           return (
-            <div key={i} data-users-logo data-logo-offset={yOffset}>
+            <div
+              key={i}
+              data-users-logo
+              data-logo-offset={yOffset}
+              style={scale ? {'--logoScale': scale} : null}>
               <img alt={alt} src={useBaseUrl(`img/logo/${url}`)} title={alt} />
             </div>
           )
