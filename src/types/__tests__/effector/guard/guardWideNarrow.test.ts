@@ -44,8 +44,6 @@ test('wide union (should fail)', () => {
           Types of parameters 'watcher' and 'watcher' are incompatible.
             Types of parameters 'payload' and 'payload' are incompatible.
               Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-                Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-                  Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.

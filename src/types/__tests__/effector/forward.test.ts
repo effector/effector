@@ -320,7 +320,12 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Event<number>' is not assignable to type 'Unit<string>'.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type 'Event<string>' is not assignable to type 'Unit<number>'.
           "
         `)
       })
@@ -372,7 +377,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<string>': kind, __
+              Type '(Event<number> | Event<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
           "
         `)
       })
