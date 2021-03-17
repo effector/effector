@@ -92,3 +92,19 @@ test('createApi unknown/void support', () => {
     "
   `)
 })
+
+test('createApi void calls edge case (should pass)', () => {
+  const $isLoading = createStore(false)
+  const {start, end} = createApi($isLoading, {
+    start: () => true,
+    end: () => false,
+  })
+
+  start()
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+    "
+  `)
+})
