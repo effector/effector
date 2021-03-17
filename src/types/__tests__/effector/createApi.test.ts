@@ -119,6 +119,7 @@ describe('type validation', () => {
     const {inc} = createApi(x, {
       inc: (x, y: number) => x + y,
     })
+    //@ts-expect-error
     inc()
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -131,6 +132,7 @@ describe('type validation', () => {
     const {inc} = createApi(x, {
       inc: (x, y: number) => x + y,
     })
+    //@ts-expect-error
     inc('no')
     expect(typecheck).toMatchInlineSnapshot(`
       "
