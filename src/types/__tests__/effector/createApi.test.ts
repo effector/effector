@@ -100,3 +100,46 @@ test('createApi void calls edge case (should pass)', () => {
     "
   `)
 })
+
+describe('type validation', () => {
+  test('correct call (should pass)', () => {
+    const x = createStore(0)
+    const {inc} = createApi(x, {
+      inc: (x, y: number) => x + y,
+    })
+    inc(1)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('void instead of value (should fail)', () => {
+    const x = createStore(0)
+    const {inc} = createApi(x, {
+      inc: (x, y: number) => x + y,
+    })
+    inc()
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+      "
+    `)
+  })
+  test('incorrect value (should fail)', () => {
+    const x = createStore(0)
+    const {inc} = createApi(x, {
+      inc: (x, y: number) => x + y,
+    })
+    inc('no')
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        Overload 1 of 2, '(payload: number): number', gave the following error.
+          Argument of type 'string' is not assignable to parameter of type 'number'.
+        Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+          The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+      "
+    `)
+  })
+})
