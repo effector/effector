@@ -104,7 +104,7 @@ test('createApi void calls edge case (should pass)', () => {
 test('createApi returns nothing from reducer (should pass)', () => {
   const $isLoading = createStore(false)
   const {start} = createApi($isLoading, {
-    start: (_, p) => p === 1 ? true : undefined,
+    start: (_, p) => (p === 1 ? true : undefined),
   })
 
   start()
@@ -179,26 +179,7 @@ test('optional return (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '(pos: number, n: number) => number | undefined' is not assignable to type '(store: number, e: any) => number'.
-      Type 'number | undefined' is not assignable to type 'number'.
-        Type 'undefined' is not assignable to type 'number'.
-    Type 'number | undefined' is not assignable to type 'number'.
-      Type 'undefined' is not assignable to type 'number'.
-    No overload matches this call.
-      Overload 1 of 2, '(payload: void): void', gave the following error.
-        Argument of type 'number' is not assignable to parameter of type 'void'.
-      Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
-        Argument of type '10' is not assignable to parameter of type 'void | undefined'.
-    No overload matches this call.
-      Overload 1 of 2, '(payload: void): void', gave the following error.
-        Argument of type 'number' is not assignable to parameter of type 'void'.
-      Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
-        Argument of type '5' is not assignable to parameter of type 'void | undefined'.
-    No overload matches this call.
-      Overload 1 of 2, '(payload: void): void', gave the following error.
-        Argument of type 'number' is not assignable to parameter of type 'void'.
-      Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
-        Argument of type '2' is not assignable to parameter of type 'void | undefined'.
+    no errors
     "
   `)
 })
