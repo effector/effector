@@ -288,7 +288,7 @@ export class Domain implements Unit<any> {
   createStore<State>(
     defaultState: State,
     config?: {
-      name?: string 
+      name?: string
       sid?: string
       updateFilter?: (update: State, current: State) => boolean
     },
@@ -542,7 +542,7 @@ export function split<
 
 export function createApi<
   S,
-  Api extends {[name: string]: (store: S, e: any) => S}
+  Api extends {[name: string]: (store: S, e: any) => S | void}
 >(
   store: Store<S>,
   api: Api,
@@ -620,7 +620,7 @@ type UnitObject = Store<any> | Event<any> | Effect<any, any, any> | Unit<any>
 
 /**
  * Force typescript to print real type instead of geneic types
- * 
+ *
  * It's better to see {a: string; b: number}
  * instead of GetCombinedValue<{a: Store<string>; b: Store<number>}>
  * */
@@ -1299,11 +1299,11 @@ export function attach<
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
 export function attach<FN extends ((params: any) => any), FX extends Effect<any, any, any>>(config: {
   effect: FX
-  mapParams: FN extends (...args: any[]) => NoInfer<EffectParams<FX>> 
+  mapParams: FN extends (...args: any[]) => NoInfer<EffectParams<FX>>
     ? FN
     : never
   name?: string
-}): FN extends (...args: infer Args) => NoInfer<EffectParams<FX>> 
+}): FN extends (...args: infer Args) => NoInfer<EffectParams<FX>>
   ? Effect<
     Args['length'] extends 0
       ? void

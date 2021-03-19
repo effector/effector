@@ -101,6 +101,21 @@ test('createApi void calls edge case (should pass)', () => {
   `)
 })
 
+test('createApi returns nothing from reducer (should pass)', () => {
+  const $isLoading = createStore(false)
+  const {start} = createApi($isLoading, {
+    start: (_, p) => p === 1 ? true : undefined,
+  })
+
+  start()
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
 describe('type validation', () => {
   test('correct call (should pass)', () => {
     const x = createStore(0)
