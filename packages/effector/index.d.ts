@@ -1350,13 +1350,20 @@ type UnionToStoresUnion<T> = (T extends never
       ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
       : never
     : never
-type CombineState<State> = {
-  [K in keyof State]:
-    | State[K]
-    | (undefined extends State[K]
-      ? Store<Exclude<State[K], undefined>>
-      : Store<State[K]>)
-    | UnionToStoresUnion<Exclude<State[K], undefined>>
+
+type CombineState<State> = State[keyof State] extends Store<any>
+  // ensure that CombineState will be used only with explicit generics
+  // without Store type in them
+  ? never
+  : {
+    [K in keyof State]:
+      | State[K]
+      | (undefined extends State[K]
+        ? Store<Exclude<State[K], undefined>>
+        : Store<State[K]>)
+      // probably not needed
+      // as CombineState isn't dealing with implicit generics anymore
+      | UnionToStoresUnion<Exclude<State[K], undefined>>
 }
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
@@ -1366,8 +1373,9 @@ export function combine<T extends Store<any>>(
 export function combine<State extends Tuple>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
+export function combine<State>(shape: CombineState<State>): Store<State>
 export function combine<State>(
-  shape: CombineState<State>,
+  shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 export function combine<State extends Tuple, R>(
