@@ -184,7 +184,7 @@ test('optional return (should pass)', () => {
   `)
 })
 
-test('optional return false-positive check (should pass)', () => {
+test('optional return false-positive check (should fail)', () => {
   const playerPosition = createStore(0)
   const api = createApi(playerPosition, {
     moveRight(pos, n: number) {
