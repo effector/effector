@@ -345,3 +345,24 @@ describe('error inference (should fail with number -> string error)', () => {
     `)
   })
 })
+
+test('possibly undefined store error message mismatch (should pass)', () => {
+  const $vacancyField = createStore<{id: string} | null>(null)
+  const $hasNotActiveFunnels = createStore<boolean>(true)
+
+  combine({
+    hasNotActiveFunnels: $hasNotActiveFunnels,
+    vacancyId: $vacancyField.map(v => {
+      if (v) return v.id
+    }),
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Argument of type '[{ hasNotActiveFunnels: Store<boolean>; vacancyId: Store<string | undefined>; }]' is not assignable to parameter of type 'Tuple<Store<any>>'.
+      Type '[{ hasNotActiveFunnels: Store<boolean>; vacancyId: Store<string | undefined>; }]' is not assignable to type '[Store<any>]'.
+        Type '{ hasNotActiveFunnels: Store<boolean>; vacancyId: Store<string | undefined>; }' is not assignable to type 'Store<any>'.
+          Object literal may only specify known properties, and 'hasNotActiveFunnels' does not exist in type 'Store<any>'.
+    "
+  `)
+})
