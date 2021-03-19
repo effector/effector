@@ -184,7 +184,7 @@ test('optional return (should pass)', () => {
   `)
 })
 
-test('optional return false-positive check (should fail)', () => {
+test('optional return false-positive check (should pass)', () => {
   const playerPosition = createStore(0)
   const api = createApi(playerPosition, {
     moveRight(pos, n: number) {
@@ -199,7 +199,12 @@ test('optional return false-positive check (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    The 'this' context of type '{ moveRight: Event<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+    No overload matches this call.
+      Overload 1 of 2, '(payload: number): number', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'number'.
+      Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+        The 'this' context of type '{ moveRight: Event<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
     "
   `)
 })
