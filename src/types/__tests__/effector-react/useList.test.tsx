@@ -65,6 +65,46 @@ test('readonly array support', () => {
   `)
 })
 
+test('getKey support', () => {
+  const users = createStore<User[]>([
+    {
+      username: 'alice',
+      email: 'alice@example.com',
+      bio: '. . .',
+    },
+    {
+      username: 'bob',
+      email: 'bob@example.com',
+      bio: '~/ - /~',
+    },
+    {
+      username: 'carol',
+      email: 'carol@example.com',
+      bio: '- - -',
+    },
+  ])
+
+  const UserList = () =>
+    useList(users, {
+      getKey: ({email}) => email,
+      fn: ({username}, key: string) => (
+        <p>
+          user: {username}, email: {key}
+        </p>
+      ),
+    })
+  const App = () => (
+    <div>
+      <UserList />
+    </div>
+  )
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
 test("usage as components' return value", () => {
   const users = createStore<User[]>([
     {
