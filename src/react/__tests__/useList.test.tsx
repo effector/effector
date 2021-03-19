@@ -47,7 +47,7 @@ it('should render store items', async () => {
 
 it('should handle updates without dull re-renders', async () => {
   const fn = jest.fn()
-  const update = createEvent()
+  const update = createEvent<{key: number; value: string}>()
   const list = createStore(['foo', 'bar', 'baz']).on(
     update,
     (list, {key, value}) => {
@@ -112,7 +112,7 @@ it('should handle updates without dull re-renders', async () => {
 
 it('should handle inserts without dull re-renders', async () => {
   const fn = jest.fn()
-  const insert = createEvent()
+  const insert = createEvent<string>()
   const list = createStore(['foo', 'bar', 'baz']).on(insert, (list, value) => [
     ...list,
     value,
@@ -177,7 +177,7 @@ it('should handle inserts without dull re-renders', async () => {
 })
 
 it('should update when keys are changed', async () => {
-  const changeDependency = createEvent()
+  const changeDependency = createEvent<string>()
   const list = createStore(['foo', 'bar', 'baz'])
   const dependency = restore(changeDependency, 'dep')
 
@@ -255,7 +255,6 @@ describe('zombie childrens are not allowed', () => {
     const List = () => (
       <div>
         {useList(members, {
-          //@ts-ignore
           getKey: ({name}) => name,
           fn({name}) {
             React.useLayoutEffect(() => {

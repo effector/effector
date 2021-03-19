@@ -1,13 +1,19 @@
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
-import {createStore, createEvent, createEffect, createDomain} from 'effector'
+import {
+  createStore,
+  createEvent,
+  createEffect,
+  createDomain,
+  Store,
+} from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('useStore', () => {
   it('should render', async () => {
     const store = createStore('foo')
-    const changeText = createEvent()
+    const changeText = createEvent<string>()
     store.on(changeText, (_, e) => e)
 
     const Display = () => {
@@ -37,7 +43,7 @@ describe('useStore', () => {
     const fn = jest.fn()
     const ErrorDisplay = () => {
       try {
-        //$off
+        //@ts-expect-error
         useStore(undefined)
       } catch (error) {
         fn(error.message)
@@ -57,13 +63,13 @@ describe('useStore', () => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
-    const changeCurrentStore = createEvent()
+    const changeCurrentStore = createEvent<Store<string>>()
     const currentStore = createStore(storeA).on(
       changeCurrentStore,
       (_, store) => store,
     )
 
-    const Target = ({store}) => {
+    const Target = ({store}: {store: Store<string>}) => {
       const state = useStore(store)
       fn(state)
       return <span>Store text: {state}</span>
@@ -92,29 +98,30 @@ describe('useStore', () => {
   })
   it('should correct work, when store contains function', async () => {
     const fn = jest.fn()
-    const changeStore = createEvent()
-    const $store = createStore(() => 'initial').on(
-      changeStore,
-      (_, data) => p => data[p] || 'initial',
-    )
+    const changeStore = createEvent<Record<string, string>>()
+    const $store = createStore<(e: string) => string>(
+      () => 'initial',
+    ).on(changeStore, (_, data) => p => data[p] || 'initial')
 
     const Display = () => {
       const store = useStore($store)
-      fn()
-      return store('key')
+      fn(store('key'))
+      return <>{store('key')}</>
     }
 
     await render(<Display />)
 
     expect(container.firstChild).toMatchInlineSnapshot(`initial`)
-    expect(fn).toHaveBeenCalledTimes(1)
-
     await act(async () => {
       changeStore({key: 'value'})
     })
-
     expect(container.firstChild).toMatchInlineSnapshot(`value`)
-    expect(fn).toHaveBeenCalledTimes(2)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "initial",
+        "value",
+      ]
+    `)
   })
   it('should subscribe before any react hook will change store', async () => {
     const fn = jest.fn()
@@ -327,9 +334,9 @@ describe('useStore', () => {
 })
 describe('useStoreMap', () => {
   it('should render', async () => {
-    const removeUser = createEvent()
-    const changeUserAge = createEvent()
-    const users = createStore({
+    const removeUser = createEvent<string>()
+    const changeUserAge = createEvent<{nickname: string; age: number}>()
+    const users = createStore<Record<string, {age: number; name: string}>>({
       alex: {age: 20, name: 'Alex'},
       john: {age: 30, name: 'John'},
     })
@@ -347,7 +354,7 @@ describe('useStoreMap', () => {
       [nickname]: {...users[nickname], age},
     }))
 
-    const Card = ({nickname}) => {
+    const Card = ({nickname}: {nickname: string}) => {
       const {name, age} = useStoreMap({
         store: users,
         keys: [nickname],
