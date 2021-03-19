@@ -542,16 +542,16 @@ export function split<
 
 export function createApi<
   S,
-  Api extends {[name: string]: (((store: S, e: any) => S) | ((store: S, e: any) => void))}
+  Api extends {[name: string]: ((store: S, e: any) => (S | void))}
 >(
   store: Store<S>,
   api: Api,
 ): {
-  [K in keyof Api]: (((store: S, e: void) => S) | ((store: S, e: void) => void)) extends Api[K]
+  [K in keyof Api]: ((store: S, e: void) => (S | void)) extends Api[K]
     ? Event<void>
-    : Api[K] extends (((store: S) => S) | ((store: S) => void))
+    : Api[K] extends ((store: S) => (S | void))
     ? Event<void>
-    : Api[K] extends (((store: S, e: infer E) => S) | ((store: S, e: infer E) => void))
+    : Api[K] extends ((store: S, e: infer E) => (S | void))
     ? Event<E extends void ? Exclude<E, undefined> | void : E>
     : any
 }
