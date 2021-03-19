@@ -273,7 +273,6 @@ describe('zombie childrens are not allowed', () => {
       // await 0
       addMember('bob')
     })
-    await render(<List />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         <div>
@@ -295,4 +294,193 @@ describe('zombie childrens are not allowed', () => {
       ]
     `)
   })
+})
+
+test('getKey', async () => {
+  const fn = jest.fn()
+  const renameUser = createEvent<{id: number; name: string}>()
+  const removeUser = createEvent<number>()
+  const sortById = createEvent()
+  const $members = createStore([
+    {name: 'alice', id: 1},
+    {name: 'bob', id: 3},
+    {name: 'carol', id: 2},
+  ])
+    .on(renameUser, (list, {id, name}) =>
+      list.map(e => (e.id === id ? {id, name} : e)),
+    )
+    .on(removeUser, (list, id) => list.filter(e => e.id !== id))
+    .on(sortById, list => [...list].sort((a, b) => a.id - b.id))
+
+  const List = () => (
+    <div>
+      {useList($members, {
+        fn({name}, id) {
+          fn({name, id})
+          return <p>{name}</p>
+        },
+        getKey: e => e.id,
+      })}
+    </div>
+  )
+
+  await render(<List />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <p>
+        alice
+      </p>
+      <p>
+        bob
+      </p>
+      <p>
+        carol
+      </p>
+    </div>
+  `)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+    ]
+  `)
+  await act(async () => {
+    sortById()
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <p>
+        alice
+      </p>
+      <p>
+        carol
+      </p>
+      <p>
+        bob
+      </p>
+    </div>
+  `)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+    ]
+  `)
+  await act(async () => {
+    renameUser({id: 2, name: 'charlie'})
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <p>
+        alice
+      </p>
+      <p>
+        charlie
+      </p>
+      <p>
+        bob
+      </p>
+    </div>
+  `)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "charlie",
+      },
+    ]
+  `)
+  await act(async () => {
+    removeUser(2)
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <p>
+        alice
+      </p>
+      <p>
+        bob
+      </p>
+    </div>
+  `)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "charlie",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+    ]
+  `)
 })
