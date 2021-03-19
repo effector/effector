@@ -366,3 +366,18 @@ test('possibly undefined store error message mismatch (should pass)', () => {
     "
   `)
 })
+
+test('support optional parameters of explicit generic type', () => {
+  type I = {
+    foo?: string | number
+  }
+  const $store = createStore<string | number>('')
+  combine<I>({
+    foo: $store,
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
