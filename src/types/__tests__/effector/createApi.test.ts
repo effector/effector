@@ -145,3 +145,45 @@ describe('type validation', () => {
     `)
   })
 })
+
+test('optional return (should pass)', () => {
+  const playerPosition = createStore(0)
+
+  const api = createApi(playerPosition, {
+    moveLeft: (pos, n: number) => pos - n,
+    moveRight(pos, n: number) {
+      if (pos + n !== 7) return pos + n
+    },
+    jump: pos => (pos === 7 ? undefined : 0),
+  })
+
+  api.moveRight(10)
+  api.moveLeft(5)
+  api.moveRight(2)
+  api.jump()
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type '(pos: number, n: number) => number | undefined' is not assignable to type '(store: number, e: any) => number'.
+      Type 'number | undefined' is not assignable to type 'number'.
+        Type 'undefined' is not assignable to type 'number'.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+    No overload matches this call.
+      Overload 1 of 2, '(payload: void): void', gave the following error.
+        Argument of type 'number' is not assignable to parameter of type 'void'.
+      Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
+        Argument of type '10' is not assignable to parameter of type 'void | undefined'.
+    No overload matches this call.
+      Overload 1 of 2, '(payload: void): void', gave the following error.
+        Argument of type 'number' is not assignable to parameter of type 'void'.
+      Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
+        Argument of type '5' is not assignable to parameter of type 'void | undefined'.
+    No overload matches this call.
+      Overload 1 of 2, '(payload: void): void', gave the following error.
+        Argument of type 'number' is not assignable to parameter of type 'void'.
+      Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
+        Argument of type '2' is not assignable to parameter of type 'void | undefined'.
+    "
+  `)
+})
