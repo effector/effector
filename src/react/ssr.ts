@@ -15,6 +15,7 @@ function createDefer() {
     result.rs = rs
     result.rj = rj
   })
+  result.req.catch((err: any) => {})
   return result
 }
 
