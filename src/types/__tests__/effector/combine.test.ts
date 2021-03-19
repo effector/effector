@@ -350,30 +350,110 @@ test('possibly undefined store error message mismatch (should pass)', () => {
   const $vacancyField = createStore<{id: string} | null>(null)
   const $hasNotActiveFunnels = createStore<boolean>(true)
 
-  combine({
+  const result = combine({
     hasNotActiveFunnels: $hasNotActiveFunnels,
     vacancyId: $vacancyField.map(v => {
       if (v) return v.id
     }),
   })
 
+  const resultType: Store<{
+    hasNotActiveFunnels: boolean
+    vacancyId: string | undefined
+  }> = result
+
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '[{ hasNotActiveFunnels: Store<boolean>; vacancyId: Store<string | undefined>; }]' is not assignable to parameter of type 'Tuple<Store<any>>'.
-      Type '[{ hasNotActiveFunnels: Store<boolean>; vacancyId: Store<string | undefined>; }]' is not assignable to type '[Store<any>]'.
-        Type '{ hasNotActiveFunnels: Store<boolean>; vacancyId: Store<string | undefined>; }' is not assignable to type 'Store<any>'.
-          Object literal may only specify known properties, and 'hasNotActiveFunnels' does not exist in type 'Store<any>'.
+    no errors
     "
   `)
 })
 
-test('support optional parameters of explicit generic type', () => {
-  type I = {
-    foo?: string | number
-  }
-  const $store = createStore<string | number>('')
-  combine<I>({
-    foo: $store,
+describe('support optional parameters of explicit generic type', () => {
+  test('basic case (should pass)', () => {
+    type I = {
+      foo?: string | number
+      bar: number
+    }
+    const $store = createStore<string | number>('')
+    const $bar = createStore(0)
+    const result = combine<I>({
+      foo: $store,
+      bar: $bar,
+    })
+    const resultType: Store<{
+      foo?: string | number
+      bar: number
+    }> = result
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('omit optional field (should pass)', () => {
+    type I = {
+      foo?: string | number
+      bar: number
+    }
+    const $bar = createStore(0)
+    const result: Store<I> = combine<I>({bar: $bar})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('plain values support (should pass)', () => {
+    type I = {
+      foo?: string | number
+      bar: number
+    }
+    const $bar = createStore(0)
+    const result: Store<I> = combine<I>({
+      foo: 0,
+      bar: $bar,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  /**
+   * wide input is not supported because if you explicitly define desired type
+   * then what's the point in passing more values?
+   */
+  test('wide input is not supported (should fail)', () => {
+    type I = {
+      foo?: string | number
+      bar: number
+    }
+    const $bar = createStore(0)
+    //@ts-expect-error
+    const result = combine<I>({
+      foo: 0,
+      bar: $bar,
+      baz: $bar,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        Overload 1 of 18, '(shape: { foo?: string | number | Store<number> | Store<string> | Store<string | number> | undefined; bar: number | Store<number>; }): Store<I>', gave the following error.
+          Argument of type '{ foo: number; bar: Store<number>; baz: Store<number>; }' is not assignable to parameter of type '{ foo?: string | number | Store<number> | Store<string> | Store<string | number> | undefined; bar: number | Store<number>; }'.
+            Object literal may only specify known properties, and 'baz' does not exist in type '{ foo?: string | number | Store<number> | Store<string> | Store<string | number> | undefined; bar: number | Store<number>; }'.
+        Overload 2 of 18, '(shape: I): Store<{ foo?: string | number | undefined; bar: number; }>', gave the following error.
+          Type 'Store<number>' is not assignable to type 'number'.
+      "
+    `)
+  })
+})
+
+test('support plain values as well as stores', () => {
+  const $bar = createStore(0)
+  const result: Store<{foo: number; bar: number}> = combine({
+    foo: 0,
+    bar: $bar,
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
