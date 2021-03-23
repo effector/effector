@@ -28,6 +28,7 @@ useList<T>(
   config: {
     keys: any[]
     fn: (value: T, index: number) => React.Node
+    getKey?: (value: T) => React.Key
   }
 ): React.Node
 ```
@@ -43,6 +44,11 @@ In such case, we need to tell react about our dependencies and pass keys explici
 1. `store` (_Store_): Store with array of items
 2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useList`
 3. `fn` (_Function_): Render function which will be called for every item in list
+4. `getKey` (_(value) => React.Key_): Optional function to compute key for every item of list
+
+::note
+`getKey` option introduced in `effector-react@21.3.0`
+::
 
 ## Examples
 
