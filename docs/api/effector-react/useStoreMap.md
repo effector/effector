@@ -8,19 +8,41 @@ React hook, which subscribes to [store](../effector/Store.md) and transforms its
 Common use case: subscribe to changes in selected part of store only
 
 ```ts
+useStoreMap<State, Result>(
+  store: Store<State>,
+  fn: (state: State) => Result
+): Result
+```
+::note
+Short version of `useStoreMap` introduced in `effector-react@21.3.0`
+::
+
+**Arguments**
+
+1. `store`: Source [store](../effector/Store.md)
+2. `fn` (_(state) => result_): Selector function to receive part of source store
+
+**Returns**
+
+(_Result_)
+
+
+```ts
 useStoreMap({store, keys, fn})
 ```
+
+Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed).
 
 **Arguments**
 
 1. `params` (_Object_): Configuration object
    - `store`: Source [store](../effector/Store.md)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
-   - `fn` (_(store, keys) => result_): Selector function to receive part of source store
+   - `fn` (_(state, keys) => result_): Selector function to receive part of source store
 
 **Returns**
 
-(_State_)
+(_Result_)
 
 #### Example
 
