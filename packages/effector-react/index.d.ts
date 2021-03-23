@@ -27,6 +27,10 @@ export function useStoreMap<
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
 }): Result
+export function useStoreMap<State, Result>(
+  store: Store<State>,
+  fn: (state: State) => Result,
+): Result
 export function useList<T, Key extends React.Key>(
   list: Store<T[]> | Store<ReadonlyArray<T>>,
   renderItem: {
