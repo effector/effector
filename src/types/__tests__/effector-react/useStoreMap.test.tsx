@@ -54,6 +54,7 @@ describe('useStoreMap', () => {
         const value = useStoreMap({
           store: users,
           keys: [id] as const,
+          //@ts-expect-error
           fn: (users, [id, field]) => null,
         })
         return <div>{value}</div>
@@ -85,9 +86,11 @@ describe('useStoreMap', () => {
       const UserProperty = ({id, field}: Props) => {
         const value = useStoreMap({
           store: users,
+          //@ts-expect-error
           keys: [id, field] as [number, keyof User],
           fn: (users, [id, field]: [number, number]) => null,
         })
+        //@ts-expect-error
         return <div>{value}</div>
       }
       expect(typecheck).toMatchInlineSnapshot(`
