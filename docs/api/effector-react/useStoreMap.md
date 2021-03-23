@@ -28,10 +28,10 @@ Short version of `useStoreMap` introduced in `effector-react@21.3.0`
 
 
 ```ts
-useStoreMap({store, keys, fn})
+useStoreMap({store, keys, fn, updateFilter?})
 ```
 
-Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed).
+Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
 
 **Arguments**
 
@@ -39,14 +39,19 @@ Overload used when you need to pass dependencies to react (to update items when 
    - `store`: Source [store](../effector/Store.md)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
+   - `updateFilter` (_(newResult, oldResult) => boolean_): Optional function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](../effector/createStore.md) option under the hood
 
 **Returns**
 
 (_Result_)
 
+::note
+`updateFilter` option introduced in `effector-react@21.3.0`
+::
+
 #### Example
 
-This hook is very useful for working with lists, especially with large ones.
+This hook is very useful for working with lists, especially with large ones
 
 ```js
 import {createStore} from 'effector'
