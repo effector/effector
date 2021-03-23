@@ -21,8 +21,8 @@ Mode in which each case sequentially matched by stores and functions in fields o
 If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
 
 **See also**:
-* [matching store](./split.md#matching-store)
-* [matching function](./split.md#matching-function)
+* [matching store](./split.md#matcher-store)
+* [matching function](./split.md#matcher-function)
 
 ### Case store
 
