@@ -54,15 +54,11 @@ export function createGateImplementation<State>({
   const open = createEvent<State>(`${fullName}.open`)
   const close = createEvent<State>(`${fullName}.close`)
   const status = createStore(Boolean(false), {
-    //@ts-ignore
-    named: 'status',
     name: `${fullName}.status`,
   })
     .on(open, () => Boolean(true))
     .on(close, () => Boolean(false))
   const state = createStore(defaultState as State, {
-    //@ts-ignore
-    named: 'state',
     name: `${fullName}.state`,
   })
     .on(set, (_, state) => state)
