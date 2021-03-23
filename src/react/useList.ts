@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react'
 import {Store, is} from 'effector'
-import {useStoreMap} from './useStore'
+import {useStore, useStoreMap} from './useStore'
 import {withDisplayName} from './withDisplayName'
 import {throwError} from './throw'
 
@@ -32,35 +32,39 @@ export function useList<T>(
   const Item = React.useMemo(() => {
     const Item = withDisplayName(
       `${list.shortName || 'Unknown'}.Item`,
-      (props: {index: number; keys: any[]; keyVal?: string}) => {
-        const {index, keys, keyVal} = props
+      (
+        props:
+          | {index: number; keys: any[]; keyVal: never; value: never}
+          | {index: never; keys: any[]; keyVal: string; value: T},
+      ) => {
+        const {index, keys, keyVal, value} = props
+        const isKeyed = !!fnRef.current[1]
+        if (isKeyed) {
+          return fnRef.current[0](value, keyVal as any)
+        }
         const item = useStoreMap({
           store: list,
           keys: [index, ...keys],
           fn: (list, keys) => list[keys[0]],
         })
-        return fnRef.current(item, 'keyVal' in props ? (keyVal as any) : index)
+        return fnRef.current[0](item, index)
       },
     )
     return React.memo(Item)
-  }, [list])
-  const fnRef = React.useRef(fn)
-  fnRef.current = fn
+  }, [list, !!getKey!])
+  const fnRef = React.useRef([fn, getKey!] as const)
+  fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
   if (getKey!) {
-    const keysList = useStoreMap({
-      store: list,
-      keys: [list],
-      fn: list => list.map(getKey),
-    })
-    return Array.from(keysList, (key, i) =>
-      React.createElement(Item, {
-        index: i,
+    return useStore(list).map(value => {
+      const key = fnRef.current[1](value)
+      return React.createElement(Item, {
         keyVal: key,
         key,
         keys: keysSelfMemo,
-      }),
-    )
+        value,
+      })
+    })
   } else {
     const length = useStoreMap({
       store: list,

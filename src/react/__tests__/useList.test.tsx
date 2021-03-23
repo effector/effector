@@ -421,14 +421,6 @@ test('getKey', async () => {
         "id": 2,
         "name": "carol",
       },
-      Object {
-        "id": 2,
-        "name": "carol",
-      },
-      Object {
-        "id": 3,
-        "name": "bob",
-      },
     ]
   `)
   expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
@@ -476,14 +468,6 @@ test('getKey', async () => {
       Object {
         "id": 2,
         "name": "carol",
-      },
-      Object {
-        "id": 2,
-        "name": "carol",
-      },
-      Object {
-        "id": 3,
-        "name": "bob",
       },
       Object {
         "id": 2,
@@ -540,19 +524,7 @@ test('getKey', async () => {
       },
       Object {
         "id": 2,
-        "name": "carol",
-      },
-      Object {
-        "id": 3,
-        "name": "bob",
-      },
-      Object {
-        "id": 2,
         "name": "charlie",
-      },
-      Object {
-        "id": 3,
-        "name": "bob",
       },
     ]
   `)
