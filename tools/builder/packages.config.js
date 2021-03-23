@@ -152,7 +152,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       react: '>=16.8.0 <18.0.0',
-      effector: '^21.0.2',
+      effector: '^21.8.0',
     },
     files: [
       ...getFiles('effector-react'),
