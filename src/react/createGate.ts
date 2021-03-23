@@ -49,15 +49,22 @@ export function createGateImplementation<State>({
   defaultState: State | {}
   hook: typeof useGate
 }): Gate<State> {
-  const set = createEvent<State>()
-  const open = createEvent<State>()
-  const close = createEvent<State>()
-  //@ts-ignore
-  const status = createStore(Boolean(false), {named: 'status'})
+  const fullName = `${domain ? `${domain.compositeName.fullName}/` : ''}${name}`
+  const set = createEvent<State>(`${fullName}.set`)
+  const open = createEvent<State>(`${fullName}.open`)
+  const close = createEvent<State>(`${fullName}.close`)
+  const status = createStore(Boolean(false), {
+    //@ts-ignore
+    named: 'status',
+    name: `${fullName}.status`,
+  })
     .on(open, () => Boolean(true))
     .on(close, () => Boolean(false))
-  //@ts-ignore
-  const state: Store<Props> = createStore(defaultState, {named: 'state'})
+  const state = createStore(defaultState as State, {
+    //@ts-ignore
+    named: 'state',
+    name: `${fullName}.state`,
+  })
     .on(set, (_, state) => state)
     .reset(close)
   if (domain) {
@@ -82,7 +89,7 @@ export function createGateImplementation<State>({
   GateComponent.status = status
   GateComponent.state = state
   GateComponent.set = set
-  return withDisplayName(`Gate:${name}`, GateComponent)
+  return withDisplayName(`Gate:${fullName}`, GateComponent)
 }
 export function createGate<Props>(
   name: string = 'gate',
