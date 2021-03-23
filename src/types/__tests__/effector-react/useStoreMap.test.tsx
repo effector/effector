@@ -120,3 +120,16 @@ describe('useStoreMap', () => {
     `)
   })
 })
+
+test('useStoreMap(store, fn)', () => {
+  const store = createStore({foo: 0, bar: 'ok'})
+  const Foo = () => {
+    const value = useStoreMap(store, ({foo}) => foo)
+    return <div>{value}</div>
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
