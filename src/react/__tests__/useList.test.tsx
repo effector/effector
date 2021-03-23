@@ -1,4 +1,5 @@
 import * as React from 'react'
+//@ts-expect-error
 import {render, container, act} from 'effector/fixtures/react'
 
 import {
@@ -298,6 +299,7 @@ describe('zombie childrens are not allowed', () => {
 
 test('getKey', async () => {
   const fn = jest.fn()
+  const fn2 = jest.fn()
   const renameUser = createEvent<{id: number; name: string}>()
   const removeUser = createEvent<number>()
   const sortById = createEvent()
@@ -312,6 +314,19 @@ test('getKey', async () => {
     .on(removeUser, (list, id) => list.filter(e => e.id !== id))
     .on(sortById, list => [...list].sort((a, b) => a.id - b.id))
 
+  const PlainComponent = React.memo(
+    ({name, id}: {name: string; id: number}) => {
+      fn2({name, id})
+      return <p>{name}</p>
+    },
+  )
+  const ListPlain = () => (
+    <div>
+      {useStore($members).map(({name, id}) => {
+        return <PlainComponent key={id} name={name} id={id} />
+      })}
+    </div>
+  )
   const List = () => (
     <div>
       {useList($members, {
@@ -323,8 +338,14 @@ test('getKey', async () => {
       })}
     </div>
   )
+  const App = () => (
+    <>
+      <List />
+      <ListPlain />
+    </>
+  )
 
-  await render(<List />)
+  await render(<App />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <p>
@@ -339,6 +360,22 @@ test('getKey', async () => {
     </div>
   `)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+    ]
+  `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
     Array [
       Object {
         "id": 1,
@@ -394,6 +431,22 @@ test('getKey', async () => {
       },
     ]
   `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+    ]
+  `)
   await act(async () => {
     renameUser({id: 2, name: 'charlie'})
   })
@@ -431,6 +484,26 @@ test('getKey', async () => {
       Object {
         "id": 3,
         "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "charlie",
+      },
+    ]
+  `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
       },
       Object {
         "id": 2,
@@ -480,6 +553,26 @@ test('getKey', async () => {
       Object {
         "id": 3,
         "name": "bob",
+      },
+    ]
+  `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": 1,
+        "name": "alice",
+      },
+      Object {
+        "id": 3,
+        "name": "bob",
+      },
+      Object {
+        "id": 2,
+        "name": "carol",
+      },
+      Object {
+        "id": 2,
+        "name": "charlie",
       },
     ]
   `)
