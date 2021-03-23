@@ -2,6 +2,15 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 21.3.0
+
+- Add support for `updateFilter` to `useStoreMap`. It helps to control component rerendering, e.g. when component should rerender only when `id` field is changed
+- Add `useStoreMap($store, value => result)` shorthand
+- Add support for `getKey` to `useList`. Function in this field will be used to compute key for every item of list
+- Add support for stores with functions in them to `useStore` ([PR #431](https://github.com/effector/effector/pull/431))
+- Add domain name passed to `createGate` to `gate.displayName` and gate units ([issue #449](https://github.com/effector/effector/issues/449))
+- Fix unhandled promise rejection in `useEvent` when used effect throw an error
+
 ## effector 21.8.0
 
 - Add type support for arrays in `sample` `target` ([PR #284](https://github.com/effector/effector/pull/284), [#445](https://github.com/effector/effector/pull/445))
