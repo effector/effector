@@ -30,9 +30,9 @@ const fetchUserFx = createEffect(async () => {
 There is no any real preferred rules on that. But the proposal is to name events, which directly trigger store updates like it has already done in the past.
 
 ```js
-const changedEmail = createEvent()
+const emailChanged = createEvent()
 
-$user.on(changedEmail, (state, email) => {
+$user.on(emailChanged, (state, email) => {
   ...state,
   email
 })
