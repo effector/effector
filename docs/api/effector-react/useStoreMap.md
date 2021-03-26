@@ -13,9 +13,10 @@ useStoreMap<State, Result>(
   fn: (state: State) => Result
 ): Result
 ```
-::note
+
+:::note
 Short version of `useStoreMap` introduced in `effector-react@21.3.0`
-::
+:::
 
 **Arguments**
 
@@ -25,7 +26,6 @@ Short version of `useStoreMap` introduced in `effector-react@21.3.0`
 **Returns**
 
 (_Result_)
-
 
 ```ts
 useStoreMap({store, keys, fn, updateFilter?})
@@ -39,15 +39,15 @@ Overload used when you need to pass dependencies to react (to update items when 
    - `store`: Source [store](../effector/Store.md)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): Optional function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](../effector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](../effector/createStore.md) option under the hood
 
 **Returns**
 
 (_Result_)
 
-::note
+:::note
 `updateFilter` option introduced in `effector-react@21.3.0`
-::
+:::
 
 #### Example
 
