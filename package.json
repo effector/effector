@@ -28,6 +28,7 @@
   "repository": "https://github.com/effector/effector",
   "devDependencies": {
     "@babel/core": "^7.12.3",
+    "@babel/eslint-parser": "^7.13.10",
     "@babel/helper-plugin-utils": "^7.10.4",
     "@babel/parser": "^7.12.3",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
@@ -57,7 +58,6 @@
     "@vue/runtime-core": "^3.0.2",
     "@vue/test-utils": "^1.1.0",
     "@wdio/cli": "^6.5.2",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
