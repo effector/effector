@@ -116,8 +116,8 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-gkotb4": "alice",
-      "lfsgrq": Array [
+      "-g3n6wx": "alice",
+      "lwu35x": Array [
         "bob",
         "carol",
       ],
@@ -125,8 +125,8 @@ it('works', async () => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-gkotb4": "bob",
-      "lfsgrq": Array [
+      "-g3n6wx": "bob",
+      "lwu35x": Array [
         "alice",
       ],
     }
@@ -234,21 +234,21 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-e155w4": Array [
+      "-dk3jhx": Array [
         "bob",
         "carol",
       ],
-      "b01fqe": "https://ssr.effector.dev/api",
-      "ta8t8a": "alice",
+      "bh324l": "https://ssr.effector.dev/api",
+      "trafmh": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-e155w4": Array [
+      "-dk3jhx": Array [
         "alice",
       ],
-      "b01fqe": "https://ssr.effector.dev/api",
-      "ta8t8a": "bob",
+      "bh324l": "https://ssr.effector.dev/api",
+      "trafmh": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -720,12 +720,12 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           Alex
-          :
+          : 
           20
         </li>
         <li>
           John
-          :
+          : 
           30
         </li>
       </ul>
@@ -741,12 +741,12 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           Alex
-          :
+          : 
           21
         </li>
         <li>
           John
-          :
+          : 
           30
         </li>
       </ul>
@@ -758,7 +758,7 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           John
-          :
+          : 
           30
         </li>
       </ul>

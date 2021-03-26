@@ -112,10 +112,10 @@ export function useStoreMap(configOrStore: any, separateFn: any) {
   if (separateFn)
     return commonUseStoreMap(useScopeStore(configOrStore), separateFn)
   return commonUseStoreMap({
-    store: useScopeStore(separateFn.store),
-    keys: separateFn.keys,
-    fn: separateFn.fn,
-    updateFilter: separateFn.updateFilter,
+    store: useScopeStore(configOrStore.store),
+    keys: configOrStore.keys,
+    fn: configOrStore.fn,
+    updateFilter: configOrStore.updateFilter,
   })
 }
 
