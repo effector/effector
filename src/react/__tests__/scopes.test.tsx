@@ -21,6 +21,7 @@ import {
   useList,
   useGate,
   useEvent,
+  useStoreMap,
 } from 'effector-react/ssr'
 
 it('works', async () => {
@@ -115,8 +116,8 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-gkotb4": "alice",
-      "lfsgrq": Array [
+      "-g3n6wx": "alice",
+      "lwu35x": Array [
         "bob",
         "carol",
       ],
@@ -124,8 +125,8 @@ it('works', async () => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-gkotb4": "bob",
-      "lfsgrq": Array [
+      "-g3n6wx": "bob",
+      "lwu35x": Array [
         "alice",
       ],
     }
@@ -140,7 +141,7 @@ test('attach support', async () => {
   const start = app.createEvent<string>()
   const indirectCall = app.createEvent()
   const sendStats = app.createEffect({
-    async handler(user) {
+    async handler(user: string) {
       await new Promise(resolve => {
         // let bob loading longer
         setTimeout(resolve, user === 'bob' ? 500 : 100)
@@ -233,21 +234,21 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-e155w4": Array [
+      "-dk3jhx": Array [
         "bob",
         "carol",
       ],
-      "b01fqe": "https://ssr.effector.dev/api",
-      "ta8t8a": "alice",
+      "bh324l": "https://ssr.effector.dev/api",
+      "trafmh": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-e155w4": Array [
+      "-dk3jhx": Array [
         "alice",
       ],
-      "b01fqe": "https://ssr.effector.dev/api",
-      "ta8t8a": "bob",
+      "bh324l": "https://ssr.effector.dev/api",
+      "trafmh": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -469,9 +470,7 @@ test('object in useEvent', async () => {
   const app = createDomain()
   const inc = app.createEvent()
   const dec = app.createEvent()
-  const fx = app.createEffect(async () => {
-    return 100
-  })
+  const fx = app.createEffect(async () => 100)
   const count = app
     .createStore(0)
     .on(inc, x => x + 1)
@@ -567,9 +566,7 @@ test('array in useEvent', async () => {
   const app = createDomain()
   const inc = app.createEvent()
   const dec = app.createEvent()
-  const fx = app.createEffect(async () => {
-    return 100
-  })
+  const fx = app.createEffect(async () => 100)
   const count = app
     .createStore(0)
     .on(inc, x => x + 1)
@@ -659,4 +656,221 @@ test('array in useEvent', async () => {
   })
   expect(count.getState()).toBe(0)
   expect(scope.getState(count)).toBe(101)
+})
+
+describe('useStoreMap', () => {
+  it('should render', async () => {
+    const app = createDomain()
+
+    const userRemove = app.createEvent<string>()
+    const userAgeChange = app.createEvent<{nickname: string; age: number}>()
+    const $users = app.createStore<Record<string, {age: number; name: string}>>(
+      {
+        alex: {age: 20, name: 'Alex'},
+        john: {age: 30, name: 'John'},
+      },
+    )
+    const $userNames = app.createStore(['alex', 'john'])
+
+    $userNames.on(userRemove, (list, username) =>
+      list.filter(item => item !== username),
+    )
+    $users
+      .on(userRemove, (users, nickname) => {
+        const upd = {...users}
+        delete upd[nickname]
+        return upd
+      })
+      .on(userAgeChange, (users, {nickname, age}) => ({
+        ...users,
+        [nickname]: {...users[nickname], age},
+      }))
+
+    const Card = ({nickname}: {nickname: string}) => {
+      const {name, age} = useStoreMap({
+        store: $users,
+        keys: [nickname],
+        fn: (users, [nickname]) => users[nickname],
+      })
+      return (
+        <li>
+          {name}: {age}
+        </li>
+      )
+    }
+
+    const Cards = () => (
+      <ul>
+        {useList($userNames, name => (
+          <Card nickname={name} key={name} />
+        ))}
+      </ul>
+    )
+
+    const App = ({root}: {root: Scope}) => (
+      <Provider value={root}>
+        <Cards />
+      </Provider>
+    )
+
+    const scope = fork(app)
+
+    await render(<App root={scope} />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <ul>
+        <li>
+          Alex
+          : 
+          20
+        </li>
+        <li>
+          John
+          : 
+          30
+        </li>
+      </ul>
+    `)
+    await act(async () => {
+      await allSettled(userAgeChange, {
+        scope,
+        params: {nickname: 'alex', age: 21},
+      })
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <ul>
+        <li>
+          Alex
+          : 
+          21
+        </li>
+        <li>
+          John
+          : 
+          30
+        </li>
+      </ul>
+    `)
+    await act(async () => {
+      await allSettled(userRemove, {scope, params: 'alex'})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <ul>
+        <li>
+          John
+          : 
+          30
+        </li>
+      </ul>
+    `)
+  })
+  it('should support domains', async () => {
+    const app = createDomain()
+    const toggle = app.createEvent()
+    const inc = app.createEvent()
+    const $show = app
+      .createStore('A')
+      .on(toggle, current => (current === 'A' ? 'B' : 'A'))
+    const $a = app.createStore(10).on(inc, x => x + 1)
+    const $b = app.createStore(20).on(inc, x => x + 1)
+    const View = () => {
+      const current = useStore($show)
+      const selectedStore = current === 'A' ? $a : $b
+      const value = useStoreMap({
+        store: selectedStore,
+        keys: [selectedStore],
+        fn: x => x,
+      })
+      return <div>{value}</div>
+    }
+    const App = ({root}: {root: Scope}) => (
+      <Provider value={root}>
+        <View />
+      </Provider>
+    )
+
+    const scope = fork(app)
+    await render(<App root={scope} />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        10
+      </div>
+    `)
+    await act(async () => {
+      await allSettled(inc, {scope})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        11
+      </div>
+    `)
+    await act(async () => {
+      await allSettled(toggle, {scope})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        21
+      </div>
+    `)
+    await act(async () => {
+      await allSettled(inc, {scope})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        22
+      </div>
+    `)
+    await act(async () => {
+      await allSettled(toggle, {scope})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        12
+      </div>
+    `)
+  })
+  test('updateFilter support', async () => {
+    const app = createDomain()
+    const setValue = app.createEvent<number>()
+    const $store = app.createStore(0).on(setValue, (_, x) => x)
+
+    const View = () => {
+      const x = useStoreMap({
+        store: $store,
+        keys: [],
+        fn: x => x,
+        updateFilter: (update: number, current: number) => update % 2 === 0,
+      })
+      return <div>{x}</div>
+    }
+    const App = ({root}: {root: Scope}) => (
+      <Provider value={root}>
+        <View />
+      </Provider>
+    )
+    const scope = fork(app)
+
+    await render(<App root={scope} />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        0
+      </div>
+    `)
+    await act(async () => {
+      await allSettled(setValue, {scope, params: 2})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        2
+      </div>
+    `)
+    await act(async () => {
+      await allSettled(setValue, {scope, params: 3})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        2
+      </div>
+    `)
+  })
 })
