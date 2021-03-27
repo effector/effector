@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 21.3.1
+
+- Fixed TypeError in `useStoreMap` with scope ([PR #474](https://github.com/effector/effector/pull/474))
+
 ## effector-react 21.3.0
 
 - Add support for `updateFilter` to `useStoreMap`. It helps to control component rerendering, e.g. when component should rerender only when `id` field is changed
@@ -26,7 +30,6 @@ sample({
 - Add support for case functions, case stores and matcher stores to `split`. Case functions and stores will choose target case by its name, matcher stores are boolean stores which indicate whether to choose given case
 
 ```typescript
-
 const source = createEvent()
 const even = createEvent()
 const odd = createStore(0)
@@ -41,7 +44,7 @@ split({
   cases: {
     even,
     odd,
-  }
+  },
 })
 
 const $currentPage = createStore('dashboard')
@@ -53,36 +56,35 @@ split({
   cases: {
     dashboard: even,
     __: odd,
-  }
+  },
 })
 
 const tryUpdatePage = createEvent()
 const updatePageFx = createEffect()
 
-
-
 const $hasWriteAccess = createStore(false)
-
 
 split({
   source: tryUpdatePage,
   match: {
     // matcher store
-    admin: $hasWriteAccess
+    admin: $hasWriteAccess,
   },
   cases: {
     admin: updatePageFx,
-  }
+  },
 })
-
 ```
 
 - Add `updateFilter` config field to `createStore` to skip arbitrary store updates ([discussion #428](https://github.com/effector/effector/discussions/428))
 
 ```js
-const $playerPosition = createStore({x: 0, y: 0}, {
-  updateFilter: (update, current) => update.x !== current.x
-})
+const $playerPosition = createStore(
+  {x: 0, y: 0},
+  {
+    updateFilter: (update, current) => update.x !== current.x,
+  },
+)
 ```
 
 - Add support for `sample` with `clock` without `source`. For example, it useful in cases when `clock` is array of units and no `source` stores is needed
@@ -119,7 +121,6 @@ guard({
 - Improve typechecking for `attach` ([issue #439](https://github.com/effector/effector/issues/439))
 
 - Fix various type issues in `sample` and `guard` typings
-
 
 ## effector-react 21.2.0
 
