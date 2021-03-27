@@ -72,6 +72,10 @@ We don't want you to waste your efforts on a pull request that we won't want to 
 
 Before opening a feature request, please read the [exists RFC](https://github.com/effector/effector/tree/master/rfc) to make sure your feature hasn't already requested.
 
+### Publishing
+
+Change version in [packages.config.js](https://github.com/effector/effector/blob/master/tools/builder/packages.config.js#L50), run `yarn build` and commit changes to `master` branch
+
 ## Submitting Changes
 
 - Open a new issue in the [Issue tracker](https://github.com/effector/effector/issues).
