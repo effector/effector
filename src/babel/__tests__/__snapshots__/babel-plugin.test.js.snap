@@ -1637,33 +1637,410 @@ const f = () => guard({
 exports[`babel-plugin should imports 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/imports.js\\";
 //@flow
-import { createStore as createStoreEffector } from 'effector';
+import { createStore as createStoreEffector, attach as attachEffector, clearNode as clearNodeEffector, combine as combineEffector, createApi as createApiEffector, createDomain as createDomainEffector, createEffect as createEffectEffector, createNode as createNodeEffector, createEvent as createEventEffector, forward as forwardEffector, fromObservable as fromObservableEffector, guard as guardEffector, launch as launchEffector, merge as mergeEffector, restore as restoreEffector, sample as sampleEffector, split as splitEffector, withRegion as withRegionEffector, hydrate as hydrateEffector, serialize as serializeEffector, scopeBind as scopeBindEffector, fork as forkEffector, allSettled as allSettledEffector } from 'effector';
 import { createStore } from 'redux';
-const x = createStoreEffector(0, {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10
-  },
-  name: \\"x\\",
-  sid: \\"-x1t9c8\\"
-});
-const e = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 10
-  },
-  name: \\"e\\",
-  sid: \\"-s0v3ue\\"
-});
-const reduxStore = createStore(() => 0);
-
-function foo() {
-  const val = createEffect();
+{
+  const domain = createDomainEffector({
+    loc: {
+      file: _effectorFileName,
+      line: 31,
+      column: 17
+    },
+    name: \\"domain\\",
+    sid: \\"crobcd\\"
+  });
+  const event = createEventEffector({
+    loc: {
+      file: _effectorFileName,
+      line: 32,
+      column: 16
+    },
+    name: \\"event\\",
+    sid: \\"-l79y9p\\"
+  });
+  const store = createStoreEffector(0, {
+    loc: {
+      file: _effectorFileName,
+      line: 33,
+      column: 16
+    },
+    name: \\"store\\",
+    sid: \\"2u1g89\\"
+  });
+  const effect = createEffectEffector({
+    loc: {
+      file: _effectorFileName,
+      line: 34,
+      column: 17
+    },
+    name: \\"effect\\",
+    sid: \\"-hjxlwp\\"
+  });
+  const domainEvent = domain.createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 35,
+      column: 22
+    },
+    name: \\"domainEvent\\",
+    sid: \\"vnavwh\\"
+  });
+  const scope = forkEffector(domain);
+  const node = createNodeEffector();
+  const a = attachEffector({
+    ɔ: {
+      effect
+    },
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 39,
+        column: 12
+      },
+      name: \\"a\\",
+      sid: \\"-1nlqzd\\"
+    }
+  });
+  const b = clearNodeEffector(node);
+  const c = combineEffector({
+    ɔ: [{
+      store
+    }],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 41,
+        column: 12
+      },
+      name: \\"c\\",
+      sid: \\"-obc2z2\\"
+    }
+  });
+  const d = createApiEffector({
+    ɔ: [store, {}],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 42,
+        column: 12
+      },
+      sid: \\"-wdxjiq\\"
+    }
+  });
+  const j = forwardEffector({
+    ɔ: {
+      from: event,
+      to: store
+    },
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 43,
+        column: 12
+      },
+      name: \\"j\\",
+      sid: \\"-y8rhxl\\"
+    }
+  });
+  const l = guardEffector({
+    ɔ: [{
+      source: event,
+      filter: Boolean
+    }],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 44,
+        column: 12
+      },
+      name: \\"l\\",
+      sid: \\"3pmjdk\\"
+    }
+  });
+  const m = launchEffector(event, null);
+  const n = mergeEffector([event], {
+    loc: {
+      file: _effectorFileName,
+      line: 46,
+      column: 12
+    },
+    name: \\"n\\",
+    sid: \\"-sw1uw8\\"
+  });
+  const o = restoreEffector(event, null, {
+    loc: {
+      file: _effectorFileName,
+      line: 47,
+      column: 12
+    },
+    name: \\"o\\",
+    sid: \\"-9oc11k\\"
+  });
+  const p = sampleEffector({
+    ɔ: [{
+      source: store,
+      clock: event
+    }],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 48,
+        column: 12
+      },
+      name: \\"p\\",
+      sid: \\"9jdst4\\"
+    }
+  });
+  const q = splitEffector({
+    ɔ: [event, {}],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 49,
+        column: 12
+      },
+      sid: \\"-t2m6rd\\"
+    }
+  });
+  const r = withRegionEffector(node, () => {});
+  const s = hydrateEffector(scope, {
+    values: {}
+  });
+  const t = serializeEffector(scope);
+  const u = scopeBindEffector(domainEvent);
+  const w = allSettledEffector(domainEvent, {
+    scope
+  });
 }
 
-import { createStore as createEffect } from 'redux';"
+function nameClashCheck() {
+  const domain = createDomain();
+  const event = createEvent();
+  const store = createStore(0);
+  const effect = createEffect();
+  const domainEvent = domain.createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 62,
+      column: 22
+    },
+    name: \\"domainEvent\\",
+    sid: \\"388tev\\"
+  });
+  const scope = fork(domain);
+  const node = createNode();
+  const a = attach({
+    effect
+  });
+  const b = clearNode(node);
+  const c = combine({
+    store
+  });
+  const d = createApi(store, {});
+  const j = forward({
+    from: event,
+    to: store
+  });
+  const l = guard({
+    source: event,
+    filter: Boolean
+  });
+  const m = launch(event, null);
+  const n = merge([event]);
+  const o = restore(event, null);
+  const p = sample({
+    source: store,
+    clock: event
+  });
+  const q = split(event, {});
+  const r = withRegion(node, () => {});
+  const s = hydrate(scope, {
+    values: {}
+  });
+  const t = serialize(scope);
+  const u = scopeBind(domainEvent);
+  const w = allSettled(domainEvent, {
+    scope
+  });
+}
+
+const reduxStore = createStore(() => 0);
+import { createStore as attach, createStore as clearNode, createStore as combine, createStore as createApi, createStore as createDomain, createStore as createEffect, createStore as createNode, createStore as createEvent, createStore as forward, createStore as fromObservable, createStore as guard, createStore as launch, createStore as merge, createStore as restore, createStore as sample, createStore as split, createStore as withRegion, createStore as hydrate, createStore as serialize, createStore as scopeBind, createStore as fork, createStore as allSettled } from 'redux';"
+`;
+
+exports[`babel-plugin should imports globals 1`] = `
+"var _effectorFileName = \\"/src/babel/__tests__/fixtures/imports-globals.js\\";
+const domain = createDomain({
+  loc: {
+    file: _effectorFileName,
+    line: 1,
+    column: 15
+  },
+  name: \\"domain\\",
+  sid: \\"10o82x\\"
+});
+const event = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 2,
+    column: 14
+  },
+  name: \\"event\\",
+  sid: \\"q4qjpv\\"
+});
+const store = createStore(0, {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 14
+  },
+  name: \\"store\\",
+  sid: \\"iq0y2z\\"
+});
+const effect = createEffect({
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 15
+  },
+  name: \\"effect\\",
+  sid: \\"-mo4l0n\\"
+});
+const domainEvent = domain.createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 20
+  },
+  name: \\"domainEvent\\",
+  sid: \\"t0scbd\\"
+});
+const scope = fork(domain);
+const node = createNode();
+const a = attach({
+  ɔ: {
+    effect
+  },
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 9,
+      column: 10
+    },
+    name: \\"a\\",
+    sid: \\"-27a7xz\\"
+  }
+});
+const b = clearNode(node);
+const c = combine({
+  ɔ: [{
+    store
+  }],
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 11,
+      column: 10
+    },
+    name: \\"c\\",
+    sid: \\"-vtehbg\\"
+  }
+});
+const d = createApi({
+  ɔ: [store, {}],
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 12,
+      column: 10
+    },
+    sid: \\"6v1ads\\"
+  }
+});
+const e = forward({
+  ɔ: {
+    from: event,
+    to: store
+  },
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 13,
+      column: 10
+    },
+    name: \\"e\\",
+    sid: \\"-llhht8\\"
+  }
+});
+const f = guard({
+  ɔ: [{
+    source: event,
+    filter: Boolean
+  }],
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 14,
+      column: 10
+    },
+    name: \\"f\\",
+    sid: \\"-ghj024\\"
+  }
+});
+const g = launch(event, null);
+const h = merge([event], {
+  loc: {
+    file: _effectorFileName,
+    line: 16,
+    column: 10
+  },
+  name: \\"h\\",
+  sid: \\"-69m0jw\\"
+});
+const i = restore(event, null, {
+  loc: {
+    file: _effectorFileName,
+    line: 17,
+    column: 10
+  },
+  name: \\"i\\",
+  sid: \\"-15niss\\"
+});
+const j = sample({
+  ɔ: [{
+    source: store,
+    clock: event
+  }],
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 18,
+      column: 10
+    },
+    name: \\"j\\",
+    sid: \\"3yayyc\\"
+  }
+});
+const k = split({
+  ɔ: [event, {}],
+  config: {
+    loc: {
+      file: _effectorFileName,
+      line: 19,
+      column: 10
+    },
+    sid: \\"a6cn55\\"
+  }
+});
+const l = withRegion(node, () => {});
+const n = hydrate(scope, {
+  values: {}
+});
+const o = serialize(scope);
+const p = scopeBind(domainEvent);
+const q = allSettled(domainEvent, {
+  scope
+});"
 `;
 
 exports[`babel-plugin should merge 1`] = `
@@ -1726,6 +2103,213 @@ const c = merge(...args, {
   name: \\"c\\",
   sid: \\"fp5o1j\\"
 });"
+`;
+
+exports[`babel-plugin should references 1`] = `
+"var _effectorFileName = \\"/src/babel/__tests__/fixtures/references.js\\";
+
+function outerScope() {
+  const createDomain = bar;
+  const createEvent = bar;
+  const createStore = foo;
+  const createEffect = foo;
+  const fork = foo;
+  const createNode = foo;
+  const attach = foo;
+  const clearNode = foo;
+  const combine = foo;
+  const createApi = foo;
+  const forward = foo;
+  const guard = foo;
+  const launch = foo;
+  const merge = foo;
+  const restore = foo;
+  const sample = foo;
+  const split = foo;
+  const withRegion = foo;
+  const hydrate = foo;
+  const serialize = foo;
+  const scopeBind = foo;
+  const allSettled = foo;
+
+  function nameClashCheck() {
+    const domain = createDomain({
+      loc: {
+        file: _effectorFileName,
+        line: 25,
+        column: 19
+      },
+      name: \\"domain\\",
+      sid: \\"-bw6u54\\"
+    });
+    const event = createEvent({
+      loc: {
+        file: _effectorFileName,
+        line: 26,
+        column: 18
+      },
+      name: \\"event\\",
+      sid: \\"-utoer2\\"
+    });
+    const store = createStore(0, {
+      loc: {
+        file: _effectorFileName,
+        line: 27,
+        column: 18
+      },
+      name: \\"store\\",
+      sid: \\"am2yve\\"
+    });
+    const effect = createEffect({
+      loc: {
+        file: _effectorFileName,
+        line: 28,
+        column: 19
+      },
+      name: \\"effect\\",
+      sid: \\"-sjvrag\\"
+    });
+    const domainEvent = domain.createEvent({
+      loc: {
+        file: _effectorFileName,
+        line: 29,
+        column: 24
+      },
+      name: \\"domainEvent\\",
+      sid: \\"pmdftk\\"
+    });
+    const scope = fork(domain);
+    const node = createNode();
+    const a = attach({
+      ɔ: {
+        effect
+      },
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 33,
+          column: 14
+        },
+        name: \\"a\\",
+        sid: \\"-oczfal\\"
+      }
+    });
+    const b = clearNode(node);
+    const c = combine({
+      ɔ: [{
+        store
+      }],
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 35,
+          column: 14
+        },
+        name: \\"c\\",
+        sid: \\"-8xc1wx\\"
+      }
+    });
+    const d = createApi({
+      ɔ: [store, {}],
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 36,
+          column: 14
+        },
+        sid: \\"-fac70v\\"
+      }
+    });
+    const e = forward({
+      ɔ: {
+        from: event,
+        to: store
+      },
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 37,
+          column: 14
+        },
+        name: \\"e\\",
+        sid: \\"6ibbgr\\"
+      }
+    });
+    const f = guard({
+      ɔ: [{
+        source: event,
+        filter: Boolean
+      }],
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 38,
+          column: 14
+        },
+        name: \\"f\\",
+        sid: \\"e8505l\\"
+      }
+    });
+    const g = launch(event, null);
+    const h = merge([event], {
+      loc: {
+        file: _effectorFileName,
+        line: 40,
+        column: 14
+      },
+      name: \\"h\\",
+      sid: \\"-vfdm5s\\"
+    });
+    const i = restore(event, null, {
+      loc: {
+        file: _effectorFileName,
+        line: 41,
+        column: 14
+      },
+      name: \\"i\\",
+      sid: \\"-npjxgy\\"
+    });
+    const j = sample({
+      ɔ: [{
+        source: store,
+        clock: event
+      }],
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 42,
+          column: 14
+        },
+        name: \\"j\\",
+        sid: \\"-fzq8s4\\"
+      }
+    });
+    const k = split({
+      ɔ: [event, {}],
+      config: {
+        loc: {
+          file: _effectorFileName,
+          line: 43,
+          column: 14
+        },
+        sid: \\"-212rzf\\"
+      }
+    });
+    const l = withRegion(node, () => {});
+    const n = hydrate(scope, {
+      values: {}
+    });
+    const o = serialize(scope);
+    const p = scopeBind(domainEvent);
+    const q = allSettled(domainEvent, {
+      scope
+    });
+  }
+}
+
+function foo() {}
+
+const bar = () => {};"
 `;
 
 exports[`babel-plugin should restore 1`] = `
