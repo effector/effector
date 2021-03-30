@@ -1685,15 +1685,7 @@ exports[`babel-plugin should import from another packages 1`] = `
   '/src/babel/__tests__/fixtures/import-from-another-packages.js'
 import merge from 'mergedeep'
 import {createStore} from 'redux'
-const example = merge([a, b], {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 16,
-  },
-  name: 'example',
-  sid: '-hyjmpq',
-})
+const example = merge([a, b])
 const store = createStore(0)
 "
 `;

@@ -126,7 +126,8 @@ module.exports = function(babel, options = {}) {
       } else {
         for (let i = 0; i < specifiers.length; i++) {
           const s = specifiers[i]
-          if (!s.imported) continue
+          const isDefaultImport = t.isImportDefaultSpecifier(s)
+          if (!s.imported && !isDefaultImport) continue
           const localName = s.local.name
           if (creatorsList.some(set => set.has(localName))) {
             this.effector_ignoredImports.add(localName)
