@@ -74,7 +74,7 @@ const f = () => attach({
     sid: \\"hf8d25\\"
   }
 });"
-`;
+`
 
 exports[`babel-plugin should combine 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/combine.js\\";
@@ -207,7 +207,7 @@ const f = a => combine({
     sid: \\"-arx9a6\\"
   }
 });"
-`;
+`
 
 exports[`babel-plugin should create domain 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-domain.js\\";
@@ -279,7 +279,7 @@ createDomain({
   },
   sid: \\"-kkwa7c\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create domain domain 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-domain-domain.js\\";
@@ -378,7 +378,7 @@ domain.createDomain({
   },
   sid: \\"au2ew5\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create domain effect 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-domain-effect.js\\";
@@ -521,7 +521,7 @@ domain.createEffect({
   },
   sid: \\"ekm5qp\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create domain event 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-domain-event.js\\";
@@ -672,7 +672,7 @@ domain.createEvent('foo', {
   },
   sid: \\"-uw8zjq\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create domain store 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-domain-store.js\\";
@@ -858,7 +858,7 @@ domain.createStore(null, {
   },
   sid: \\"l815ns\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create effect 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-effect.js\\";
@@ -970,7 +970,7 @@ createEffect({
   },
   sid: \\"-gpy6lw\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create event 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-event.js\\";
@@ -1064,7 +1064,7 @@ createEvent({
   },
   sid: \\"-4u7g4p\\"
 });"
-`;
+`
 
 exports[`babel-plugin should create store 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/create-store.js\\";
@@ -1172,7 +1172,7 @@ createStore(null, {
   },
   sid: \\"-ns4y31\\"
 });"
-`;
+`
 
 exports[`babel-plugin should createApi 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/createApi.js\\";
@@ -1250,7 +1250,7 @@ const f = () => createApi({
     sid: \\"-klmwfe\\"
   }
 });"
-`;
+`
 
 exports[`babel-plugin should factories 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/factories.js\\";
@@ -1355,7 +1355,7 @@ const g1_val = withFactory({
   }
 });
 const g2_val = g2(0);"
-`;
+`
 
 exports[`babel-plugin should factories without name with options 1`] = `
 "import { withFactory } from \\"effector\\";
@@ -1391,7 +1391,7 @@ const result = withFactory({
     source: arcade
   })
 });"
-`;
+`
 
 exports[`babel-plugin should forward 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/forward.js\\";
@@ -1505,7 +1505,7 @@ const f = () => forward({
     sid: \\"7acgzo\\"
   }
 });"
-`;
+`
 
 exports[`babel-plugin should guard 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/guard.js\\";
@@ -1632,7 +1632,23 @@ const f = () => guard({
     sid: \\"-7ro5ad\\"
   }
 });"
-`;
+`
+
+exports[`babel-plugin should import from another packages 1`] = `
+"var _effectorFileName = \\"/src/babel/__tests__/fixtures/import-from-another-packages.js\\";
+import merge from 'mergedeep';
+import { createStore } from 'redux';
+const example = merge([a, b], {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 16
+  },
+  name: \\"example\\",
+  sid: \\"-hyjmpq\\"
+});
+const store = createStore(0);"
+`
 
 exports[`babel-plugin should imports 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/imports.js\\";
@@ -1866,7 +1882,7 @@ function nameClashCheck() {
 
 const reduxStore = createStore(() => 0);
 import { createStore as attach, createStore as clearNode, createStore as combine, createStore as createApi, createStore as createDomain, createStore as createEffect, createStore as createNode, createStore as createEvent, createStore as forward, createStore as fromObservable, createStore as guard, createStore as launch, createStore as merge, createStore as restore, createStore as sample, createStore as split, createStore as withRegion, createStore as hydrate, createStore as serialize, createStore as scopeBind, createStore as fork, createStore as allSettled } from 'redux';"
-`;
+`
 
 exports[`babel-plugin should imports globals 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/imports-globals.js\\";
@@ -2041,7 +2057,7 @@ const p = scopeBind(domainEvent);
 const q = allSettled(domainEvent, {
   scope
 });"
-`;
+`
 
 exports[`babel-plugin should merge 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/merge.js\\";
@@ -2103,7 +2119,7 @@ const c = merge(...args, {
   name: \\"c\\",
   sid: \\"fp5o1j\\"
 });"
-`;
+`
 
 exports[`babel-plugin should references 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/references.js\\";
@@ -2310,7 +2326,7 @@ function outerScope() {
 function foo() {}
 
 const bar = () => {};"
-`;
+`
 
 exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/restore.js\\";
@@ -2418,7 +2434,7 @@ restore(foo, null, {
   },
   sid: \\"5u6tph\\"
 });"
-`;
+`
 
 exports[`babel-plugin should sample 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/sample.js\\";
@@ -2539,7 +2555,7 @@ const f = () => sample({
     sid: \\"hzwgc2\\"
   }
 });"
-`;
+`
 
 exports[`babel-plugin should split 1`] = `
 "var _effectorFileName = \\"/src/babel/__tests__/fixtures/split.js\\";
@@ -2675,7 +2691,7 @@ const f = () => split({
     sid: \\"pldjp\\"
   }
 });"
-`;
+`
 
 exports[`babel-plugin should units without name with options 1`] = `
 "import { createDomain, createEffect, createEvent, createStore, restore } from 'effector';
@@ -2953,4 +2969,4 @@ exports[`babel-plugin should units without name with options 1`] = `
     sid: \\"vv2bpf\\"
   });
 }"
-`;
+`
