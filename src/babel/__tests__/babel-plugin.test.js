@@ -3,6 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 import {transformFileSync} from '@babel/core'
+import {format} from 'prettier'
 
 describe('babel-plugin', () => {
   const fixturesDir = path.join(__dirname, 'fixtures')
@@ -35,7 +36,7 @@ describe('babel-plugin', () => {
           plugins: [[path.resolve(__dirname, '../babel-plugin.js'), options]],
         })?.code
 
-        expect(fixture).toMatchSnapshot()
+        expect(formatCode(fixture)).toMatchSnapshot()
       })
     } else {
       it(`should ${caseName}`, () => {
@@ -44,8 +45,22 @@ describe('babel-plugin', () => {
           configFile: path.join(__dirname, '.babelrc'),
         })?.code
 
-        expect(fixture).toMatchSnapshot()
+        expect(formatCode(fixture)).toMatchSnapshot()
       })
     }
   }
 })
+
+function formatCode(code) {
+  return format(code, {
+    semi: false,
+    printWidth: 80,
+    tabWidth: 2,
+    singleQuote: true,
+    trailingComma: 'all',
+    bracketSpacing: false,
+    jsxBracketSameLine: true,
+    arrowParens: 'avoid',
+    parser: 'babel',
+  })
+}
