@@ -1,7 +1,6 @@
 const sidebar = {
   Introduction: [
     'introduction/installation',
-    'introduction/core-concepts',
     'glossary',
     'introduction/examples',
     'ecosystem',
@@ -125,10 +124,7 @@ const sidebar = {
         {
           type: 'category',
           label: 'Hooks',
-          items: [
-            'api/effector-vue/useStore',
-            'api/effector-vue/useVModel',
-          ],
+          items: ['api/effector-vue/useStore', 'api/effector-vue/useVModel'],
         },
         'api/effector-vue/vue',
       ],
