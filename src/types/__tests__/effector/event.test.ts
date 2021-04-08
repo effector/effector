@@ -48,11 +48,7 @@ test('#map', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<string>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -249,9 +245,7 @@ test('assign event to a function (should fail)', () => {
   const fn1: (event: number) => unknown = createEvent<string>()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<string>' is not assignable to type '(event: number) => unknown'.
-      Types of parameters 'payload' and 'event' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+    no errors
     "
   `)
 })
@@ -276,6 +270,7 @@ describe('event as function argument', () => {
     fn(e => event(e))
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Type 'string' is not assignable to type 'number'.
       No overload matches this call.
         Overload 1 of 2, '(payload: string): string', gave the following error.
           Argument of type 'number' is not assignable to parameter of type 'string'.
@@ -290,7 +285,9 @@ test('createEvent edge case', () => {
   const fn: (event: number) => number = createEvent()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Type 'Event<void>' is not assignable to type '(event: number) => number'.
+      Types of parameters 'payload' and 'event' are incompatible.
+        Type 'number' is not assignable to type 'void'.
     "
   `)
 })

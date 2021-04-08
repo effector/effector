@@ -178,8 +178,7 @@ describe('guard(source, config)', () => {
           The last overload gave the following error.
             Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
-                The types returned by 'getState()' are incompatible between these types.
-                  Type 'string' is not assignable to type 'boolean'.
+                Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -315,11 +314,7 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
@@ -596,11 +591,7 @@ describe('guard(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })

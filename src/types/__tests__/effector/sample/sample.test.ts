@@ -168,11 +168,7 @@ test('event by event with handler', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -202,11 +198,7 @@ test('store by event with handler', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -236,11 +228,7 @@ test('effect by event with handler', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
     "
   `)
 })
@@ -256,8 +244,7 @@ test('store by store', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Store<boolean>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type 'boolean' is not assignable to type 'string'.
+      Type 'boolean' is not assignable to type 'string'.
     "
   `)
 })
@@ -272,8 +259,7 @@ test('store by store with handler', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })

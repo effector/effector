@@ -186,8 +186,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<{ R: number; G: number; B: number; }>' is not assignable to type 'Store<{ R: string; G: string; B: string; }>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
+        Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
+          Types of property 'R' are incompatible.
+            Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -200,8 +201,8 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '[number, number, number]' is not assignable to type '[string, string, string]'.
+        Type '[number, number, number]' is not assignable to type '[string, string, string]'.
+          Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -212,8 +213,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<{ Color: string; }>' is not assignable to type 'Store<{ Color: number; }>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
+        Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
+          Types of property 'Color' are incompatible.
+            Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -224,8 +226,8 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[string]>' is not assignable to type 'Store<[number]>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '[string]' is not assignable to type '[number]'.
+        Type '[string]' is not assignable to type '[number]'.
+          Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -245,8 +247,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -339,8 +340,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[string]>' is not assignable to type 'Store<number>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '[string]' is not assignable to type 'number'.
+        Type '[string]' is not assignable to type 'number'.
       "
     `)
   })

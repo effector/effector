@@ -22,8 +22,7 @@ test('createStore', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Store<number>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type 'number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
     "
   `)
 })

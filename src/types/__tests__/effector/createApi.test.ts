@@ -25,11 +25,7 @@ test('check2', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<number>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -43,11 +39,7 @@ test('check3', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<void>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: void) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'void' is not assignable to type 'string'.
+      Type 'void' is not assignable to type 'string'.
     "
   `)
 })
