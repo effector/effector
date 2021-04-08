@@ -284,3 +284,19 @@ test('#thru', () => {
     "
   `)
 })
+
+test('store edge case', () => {
+  type State = {
+    page: number
+    limit: number
+    [key: string]: any
+  }
+
+  const $values: Store<State> = createStore({page: 0, limit: 0, id: 1})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})

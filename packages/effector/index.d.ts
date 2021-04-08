@@ -120,14 +120,16 @@ export type CompositeName = {
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
 
 export interface Event<Payload> extends Unit<Payload> {
-  (payload: Payload): Payload
-  (this: Payload extends void ? void : `Error: Expected 1 argument, but got 0`, payload?: Payload): void
+  <T extends Payload>(payload: Payload): T
+  <T extends Payload>(this: Payload extends void ? void : `Error: Expected 1 argument, but got 0`, payload?: T): void
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
   filter<T extends Payload>(config: {
     fn(payload: Payload): payload is T
   }): EventAsReturnType<T>
-  filter(config: {fn(payload: Payload): boolean}): EventAsReturnType<Payload>
+  filter<T extends Payload>(config: {
+    fn(payload: Payload): boolean
+  }): EventAsReturnType<T>
   filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
   prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
