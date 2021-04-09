@@ -284,3 +284,22 @@ test('#thru', () => {
     "
   `)
 })
+
+test('unsafe widening (should fail)', () => {
+  //@ts-expect-error
+  const $values: Store<{
+    page: number
+    limit: number
+    [key: string]: any
+  }> = createStore({page: 0, limit: 0, id: 1})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'Store<{ page: number; limit: number; id: number; }>' is not assignable to type 'Store<{ [key: string]: any; page: number; limit: number; }>'.
+      Types of property 'updates' are incompatible.
+        Type 'Event<{ page: number; limit: number; id: number; }>' is not assignable to type 'Event<{ [key: string]: any; page: number; limit: number; }>'.
+          Types of parameters 'payload' and 'payload' are incompatible.
+            Type '{ [key: string]: any; page: number; limit: number; }' is not assignable to type '{ page: number; limit: number; id: number; }'.
+    "
+  `)
+})
