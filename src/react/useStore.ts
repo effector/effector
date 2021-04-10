@@ -5,19 +5,36 @@ import {throwError} from './throw'
 
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
-  const currentStore = React.useRef(store)
-  const setState = React.useReducer(
-    (_: any, action: any) => action,
-    store.getState(),
-  )[1]
+
+  const currentValue = store.getState()
+  const inc = React.useReducer((n: any, action: void) => n + 1, 0)[1]
+  const currentStore = React.useRef({
+    store,
+    value: currentValue,
+    pending: false,
+  })
   useIsomorphicLayoutEffect(() => {
-    if (currentStore.current === store) {
-      setState(store.getState())
+    const stop = store.updates.watch(upd => {
+      const ref = currentStore.current
+      if (!ref.pending) {
+        ref.value = upd
+        ref.pending = true
+        inc()
+        ref.pending = false
+      }
+    })
+    const newValue = store.getState()
+    const ref = currentStore.current
+    if (ref.store === store && ref.value !== newValue) {
+      ref.value = newValue
+      ref.pending = true
+      inc()
+      ref.pending = false
     }
-    currentStore.current = store
-    return store.updates.watch(setState)
+    ref.store = store
+    return stop
   }, [store])
-  return store.getState()
+  return currentValue
 }
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
