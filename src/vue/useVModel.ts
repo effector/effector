@@ -1,5 +1,6 @@
 import {Store, Subscription} from 'effector'
-import {onMounted, onUnmounted, ref, watch} from 'vue-next'
+import {onUnmounted, ref, watch} from 'vue-next'
+
 import {unwrapProxy} from './lib/unwrapProxy'
 import {deepCopy} from './lib/deepCopy'
 
@@ -10,15 +11,13 @@ export function useVModel<T>(store: Store<T>) {
   let fromEvent = false
   let unwatch: Subscription
 
-  onMounted(() => {
-    unwatch = store.updates.watch(payload => {
-      if (isSelfUpdate) {
-        return
-      }
+  unwatch = store.updates.watch(payload => {
+    if (isSelfUpdate) {
+      return
+    }
 
-      fromEvent = true
-      _.value = ref(deepCopy(payload)).value
-    })
+    fromEvent = true
+    _.value = ref(deepCopy(payload)).value
   })
 
   onUnmounted(() => {

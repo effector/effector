@@ -1,7 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {shallowMount} from 'vue-test-utils-next'
-import {useStore, useGate, createGate} from 'effector-vue/composition'
-import {reactive, ref} from 'vue-next'
+import {
+  useStore,
+  useVModel,
+  useGate,
+  createGate,
+} from 'effector-vue/composition'
+import {reactive, ref, nextTick} from 'vue-next'
 import {createEvent, createStore} from 'effector'
 
 jest.mock('vue', () => require('vue-next'))
@@ -13,7 +18,7 @@ it('plain gate', async () => {
     template: `<div></div>`,
     setup() {
       useGate(Gate)
-    }
+    },
   })
   expect(Gate.status.getState()).toBeTruthy()
   wrapper.unmount()
@@ -23,37 +28,37 @@ it('plain gate', async () => {
 it('gate with props', () => {
   const Gate = createGate({
     defaultState: {
-      meet: 'Hello world'
-    }
+      meet: 'Hello world',
+    },
   })
 
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello world'
+    meet: 'Hello world',
   })
 
   const wrapper = shallowMount({
     template: `<div></div>`,
     setup() {
       useGate(Gate, () => ({
-        meet: 'Hello Vue Gate'
+        meet: 'Hello Vue Gate',
       }))
-    }
+    },
   })
 
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello Vue Gate'
+    meet: 'Hello Vue Gate',
   })
   wrapper.unmount()
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello world'
+    meet: 'Hello world',
   })
 })
 
 it('update props to gate from [ref]', async () => {
   const Gate = createGate({
     defaultState: {
-      meet: 'Hello world'
-    }
+      meet: 'Hello world',
+    },
   })
 
   const wrapper = shallowMount({
@@ -62,28 +67,28 @@ it('update props to gate from [ref]', async () => {
     `,
     setup() {
       const meet = ref('Hello Vue Gate')
-      const handleClick = () => meet.value = 'Hello effector'
+      const handleClick = () => (meet.value = 'Hello effector')
       useGate(Gate, () => ({meet: meet.value}))
       return {handleClick}
-    }
+    },
   })
 
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello Vue Gate'
+    meet: 'Hello Vue Gate',
   })
 
   await wrapper.find('button').trigger('click')
 
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello effector'
+    meet: 'Hello effector',
   })
 })
 
 it('update props to gate from [reactive]', async () => {
   const Gate = createGate({
     defaultState: {
-      meet: 'Hello world'
-    }
+      meet: 'Hello world',
+    },
   })
 
   const wrapper = shallowMount({
@@ -92,22 +97,22 @@ it('update props to gate from [reactive]', async () => {
     `,
     setup() {
       const obj = reactive({
-        meet: 'Hello Vue Gate'
+        meet: 'Hello Vue Gate',
       })
-      const handleClick = () => obj.meet = 'Hello effector'
+      const handleClick = () => (obj.meet = 'Hello effector')
       useGate(Gate, () => obj)
       return {handleClick}
-    }
+    },
   })
 
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello Vue Gate'
+    meet: 'Hello Vue Gate',
   })
 
   await wrapper.find('button').trigger('click')
 
   expect(Gate.state.getState()).toEqual({
-    meet: 'Hello effector'
+    meet: 'Hello effector',
   })
 })
 
@@ -129,10 +134,63 @@ it('works with effector store', async () => {
       return {
         updated,
       }
-    }
+    },
   })
 
   expect(Gate.state.getState()).toBe('John Doe')
   await wrapper.find('button').trigger('click')
   expect(Gate.state.getState()).toBe('Alan Doe')
+})
+
+it('gate used before useStore hook', async () => {
+  const Gate = createGate()
+  const $loading = createStore(false).on(Gate.open, () => true)
+
+  const wrapper = shallowMount({
+    template: `
+      <div>
+        {{loading}}
+      </div>
+    `,
+    setup() {
+      useGate(Gate)
+      const loading = useStore($loading)
+
+      return {
+        loading,
+      }
+    },
+  })
+
+  await nextTick()
+  expect(wrapper.vm.$el.innerHTML).toBeTruthy()
+})
+
+it('gate used before useStore hook', async () => {
+  const Gate = createGate()
+  const $isEnabled = createStore(false).on(Gate.open, () => true)
+
+  const wrapper = shallowMount({
+    template: `
+      <div>
+        <input
+          type="checkbox"
+          v-model="isEnabled"
+          data-test="checkbox"
+        >
+      </div>
+    `,
+    setup() {
+      useGate(Gate)
+      const isEnabled = useVModel($isEnabled)
+
+      return {
+        isEnabled,
+      }
+    },
+  })
+
+  await nextTick()
+  // @ts-ignore
+  expect(wrapper.find('[data-test="checkbox"]').element.checked).toBeTruthy()
 })
