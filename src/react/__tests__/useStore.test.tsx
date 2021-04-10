@@ -1,4 +1,5 @@
 import * as React from 'react'
+//@ts-ignore
 import {render, container, act} from 'effector/fixtures/react'
 import {
   createStore,
@@ -6,6 +7,7 @@ import {
   createEffect,
   createDomain,
   Store,
+  Event,
 } from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
@@ -211,6 +213,95 @@ describe('useStore', () => {
       <div>
         12
       </div>
+    `)
+  })
+  it('should be in sync in case of store change', async () => {
+    const toggleS0 = createEvent<unknown>()
+    const toggleS1 = createEvent<unknown>()
+    const s0 = createStore(false).on(toggleS0, v => !v)
+    const s1 = createStore(false).on(toggleS1, v => !v)
+
+    const stores = [s0, s1]
+    const events = [toggleS0, toggleS1]
+    const toggleMetaStore = createEvent<unknown>()
+    const metaStore = createStore([s0, toggleS0, 0 as 0 | 1] as const).on(
+      toggleMetaStore,
+      v => {
+        const nv = v[2] === 0 ? 1 : 0
+        return [stores[nv], events[nv], nv] as const
+      },
+    )
+
+    const Meta = (props: {
+      store: Store<boolean>
+      toggle: Event<unknown>
+      v: 0 | 1
+    }) => {
+      const v = useStore(props.store)
+      return (
+        <>
+          <span>
+            store {props.v} = {JSON.stringify(v)}
+          </span>
+          <button type="button" onClick={props.toggle} id="toggle">
+            toggle value
+          </button>
+        </>
+      )
+    }
+
+    const App = () => {
+      const [meta, toggle, v] = useStore(metaStore)
+      return (
+        <>
+          <Meta store={meta} toggle={toggle} v={v} />
+          <button type="button" onClick={toggleMetaStore} id="meta">
+            toggle store
+          </button>
+        </>
+      )
+    }
+    await render(<App />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        store 
+        0
+         = 
+        false
+      </span>
+    `)
+    await act(async () => {
+      container.querySelector('#toggle').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        store 
+        0
+         = 
+        true
+      </span>
+    `)
+    await act(async () => {
+      container.querySelector('#meta').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        store 
+        1
+         = 
+        false
+      </span>
+    `)
+    await act(async () => {
+      container.querySelector('#toggle').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        store 
+        1
+         = 
+        true
+      </span>
     `)
   })
   describe('strict mode support', () => {
