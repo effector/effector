@@ -1,0 +1,5 @@
+{
+  "factories": ["c/d", "@/f", "patronum/split-map"],
+  "addNames": true,
+  "addLoc": false
+}

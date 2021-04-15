@@ -1379,6 +1379,57 @@ const g2_val = g2(0)
 "
 `;
 
+exports[`babel-plugin should factories only with name with options 1`] = `
+"import {withFactory} from 'effector'
+import {itIsALongName, Randomizing} from 'c/d'
+import Defaulting, {AnotherImport} from '@/f'
+import {splitMap} from 'patronum/split-map'
+const longer = withFactory({
+  sid: 'sxdi9p',
+  fn: () => itIsALongName(0),
+  name: 'longer',
+  method: 'itIsALongName',
+})
+const arcade = withFactory({
+  sid: '-rwb2il',
+  fn: () =>
+    Defaulting({
+      source: longer,
+      condition: withFactory({
+        sid: '-6rcqb6',
+        fn: () =>
+          AnotherImport({
+            test: true,
+          }),
+        name: 'condition',
+        method: 'AnotherImport',
+      }),
+    }),
+  name: 'arcade',
+  method: 'default',
+})
+withFactory({
+  sid: '-dr78v0',
+  fn: () =>
+    Randomizing({
+      arcade,
+    }),
+  name: 'none',
+  method: 'Randomizing',
+})
+const result = withFactory({
+  sid: '-fbu55p',
+  fn: () =>
+    splitMap({
+      longer,
+      source: arcade,
+    }),
+  name: 'result',
+  method: 'splitMap',
+})
+"
+`;
+
 exports[`babel-plugin should factories without name with options 1`] = `
 "import {withFactory} from 'effector'
 import {itIsALongName, Randomizing} from 'c/d'

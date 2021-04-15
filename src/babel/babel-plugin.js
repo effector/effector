@@ -169,9 +169,12 @@ module.exports = function(babel, options = {}) {
           if (!this.effector_factoryMap) {
             this.effector_factoryMap = new Map()
             if (!factoryTemplate) {
+              let tpl
               factoryTemplate = template(
                 addLoc
                   ? 'withFactory({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
+                  : addNames
+                  ? 'withFactory({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
                   : 'withFactory({sid: SID,fn:()=>FN})',
               )
             }
@@ -392,11 +395,13 @@ module.exports = function(babel, options = {}) {
               SID: JSON.stringify(sid),
               FN: path.node,
             }
-            if (addLoc) {
+            if (addLoc || addNames) {
               factoryConfig.NAME = JSON.stringify(
                 !resultName || resultName === '' ? 'none' : resultName,
               )
               factoryConfig.METHOD = JSON.stringify(importedName)
+            }
+            if (addLoc) {
               factoryConfig.LOC = makeTrace(
                 state.fileNameIdentifier,
                 loc.line,
