@@ -2,13 +2,13 @@ parser: '@babel/eslint-parser'
 parserOptions:
   ecmaVersion: 2018
 extends:
-  - 'plugin:react/recommended'
-  - prettier
+- plugin:react/recommended
+- prettier
 plugins:
-  - babel
-  - jest
-  - react
-  - react-hooks
+- babel
+- jest
+- react
+- react-hooks
 settings:
   react:
     version: '16.13'
@@ -21,79 +21,78 @@ env:
   jasmine: true
 rules:
   react-hooks/rules-of-hooks: error
-  react/react-in-jsx-scope: 'off'
-  react/no-children-prop: 'off'
-  react/prop-types: 'off'
-  react/display-name: 'off'
-  react/jsx-key: 'off'
-  react/no-unknown-property: 'off'
-  no-console: 'off'
+  react/react-in-jsx-scope: off
+  react/no-children-prop: off
+  react/prop-types: off
+  react/display-name: off
+  react/jsx-key: off
+  react/no-unknown-property: off
+  no-console: off
   no-cond-assign: warn
   no-unused-vars: warn
-  prefer-template: 'off'
-  no-nested-ternary: 'off'
+  prefer-template: off
+  no-nested-ternary: off
   no-unneeded-ternary: warn
   no-underscore-dangle: off
   prefer-const: warn
-  no-unused-labels: 'off'
+  no-unused-labels: off
   no-extra-bind: error
   no-case-declarations: error
   no-useless-call: error
   prefer-arrow-callback:
-    - error
-    - allowNamedFunctions: true
-  object-shorthand:
-    - off
-  no-extra-parens: 'off'
-  multiline-ternary: 'off'
+  - error
+  - allowNamedFunctions: true
+  object-shorthand: off
+  no-extra-parens: off
+  multiline-ternary: off
   arrow-body-style:
-    - error
-    - as-needed
+  - error
+  - as-needed
   no-var: error
-  no-duplicate-imports: 'off'
+  no-duplicate-imports: off
   quotes:
-    - error
-    - single
-    - allowTemplateLiterals: true
-      avoidEscape: true
+  - error
+  - single
+  - allowTemplateLiterals: true
+    avoidEscape: true
   key-spacing:
-    - warn
-    - beforeColon: false
-      afterColon: true
-      mode: strict
+  - warn
+  - beforeColon: false
+    afterColon: true
+    mode: strict
   comma-spacing:
-    - error
-    - before: false
-      after: true
+  - error
+  - before: false
+    after: true
   block-spacing:
-    - error
-    - never
+  - error
+  - never
   object-curly-spacing:
-    - warn
-    - never
+  - warn
+  - never
   semi-spacing:
-    - error
-    - before: false
-      after: true
+  - error
+  - before: false
+    after: true
   indent: off
   newline-per-chained-call:
-    - error
+  - error
   keyword-spacing:
-    - error
+  - error
   space-unary-ops:
-    - error
-    - words: true
-      nonwords: false
+  - error
+  - words: true
+    nonwords: false
   no-whitespace-before-property: error
   arrow-spacing:
-    - error
-    - before: true
-      after: true
+  - error
+  - before: true
+    after: true
   space-before-function-paren:
-    - off
+  - false
   rest-spread-spacing:
-    - error
-    - never
+  - error
+  - never
   no-alert: error
   no-bitwise: 0
   no-caller: error
@@ -102,21 +101,21 @@ rules:
   no-implied-eval: error
   no-proto: error
   no-iterator: error
-  no-lone-blocks: 'off'
+  no-lone-blocks: off
   no-self-compare: error
   no-self-assign:
-    - error
-    - props: true
+  - error
+  - props: true
   no-invalid-regexp:
-    - error
-    - allowConstructorFlags:
-        - u
-        - 'y'
+  - error
+  - allowConstructorFlags:
+    - u
+    - y
   no-with: error
   no-new-func: error
   prefer-rest-params: error
   prefer-spread: error
   no-extra-semi: off
   semi:
-    - error
-    - never
+  - error
+  - never
