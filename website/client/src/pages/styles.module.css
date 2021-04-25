@@ -65,6 +65,7 @@ header[data-section-header] {
 
 .features > [data-features-grid] {
   grid-row: 2;
+  margin: 0;
 }
 
 .features [data-feature-image] {
