@@ -81,6 +81,10 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'dev.to',
+              href: 'https://dev.to/effector',
+            },
+            {
               label: 'Twitter',
               href: 'https://twitter.com/effectorjs',
             },
