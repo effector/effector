@@ -126,6 +126,7 @@ For additional information, guides and api reference visit [our documentation si
 - [Twitter](https://twitter.com/effectorjs)
 - [Telegram](https://t.me/effector_en) (@effector_en)
 - [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
+- [dev.to](https://dev.to/effector)
 - [Gitter](https://gitter.im/effector-js/community)
 - [Discord](https://discord.gg/yHcMcuRWeC)
 - Add a [GitHub Topic `effector`](https://github.com/topics/effector) to your project's home page
