@@ -3,7 +3,7 @@ function find(list, f) {
   return list.filter(f)[0]
 }
 
-export function deepCopy(obj, cache = []) {
+export function deepCopy<T>(obj, cache = []): T {
   if (obj === null || typeof obj !== 'object') {
     return obj
   }

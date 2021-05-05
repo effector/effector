@@ -9,9 +9,8 @@ export function useVModel<T>(store: Store<T>) {
 
   let isSelfUpdate = false
   let fromEvent = false
-  let unwatch: Subscription
 
-  unwatch = store.updates.watch(payload => {
+  const unwatch = store.updates.watch(payload => {
     if (isSelfUpdate) {
       return
     }
