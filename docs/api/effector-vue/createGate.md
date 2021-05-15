@@ -2,13 +2,15 @@
 id: createGate
 title: createGate
 hide_title: true
+description: Creates a gate to consume data from view. Designed for vue 3
 ---
 
 # createGate
 
 ## `createGate(config?: {defaultState?, domain?, name?})`
 
-Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Gate.md#state) will be created with passed value
+Creates a [_`Gate`_](./Gate.md) to consume data from view, designed for vue 3.
+If `defaultState` is defined, [Gate.state](./Gate.md#state) will be created with passed value
 
 **Arguments**
 
@@ -22,7 +24,7 @@ Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Ga
 
 [_Gate_](./Gate.md)
 
-#### Example
+### Example
 
 ```js
 import {createGate, useGate} from 'effector-vue/composition'

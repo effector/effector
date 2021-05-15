@@ -2,11 +2,14 @@
 id: useGate
 title: useGate
 hide_title: true
+description: Using a gate to consume data from view. Designed for vue 3
 ---
 
-# `useGate(GateComponent, props)`
+# useGate
 
-Creates a [_`Gate`_](Gate.md)
+## `useGate(GateComponent, props)`
+
+Using a [_`Gate`_](Gate.md) to consume data from view. Designed for vue 3
 
 **Arguments**
 
@@ -17,6 +20,6 @@ Creates a [_`Gate`_](Gate.md)
 
 (_`void`_)
 
-#### Example
+### Example
 
 [See example](./Gate.md)

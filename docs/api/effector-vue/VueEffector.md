@@ -2,11 +2,14 @@
 id: vue-effector
 title: VueEffector
 hide_title: true
+description: effector-vue plugin for vue 2
 ---
 
-# `VueEffector(Vue, options?)`
+# VueEffector
 
-`effector-vue` plugin
+`effector-vue` plugin for vue 2
+
+## `VueEffector(Vue, options?)`
 
 **Arguments**
 
@@ -17,7 +20,7 @@ hide_title: true
 
 (_`void`_)
 
-#### Example
+### Example
 
 ```js
 import Vue from 'vue'

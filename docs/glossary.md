@@ -4,7 +4,7 @@ title: Glossary
 description: Glossary of basic terms in effector
 ---
 
-Glossary of basic terms in effector, along with their type signatures. The types are documented using [TypeScript notation](http://typescriptlang.org).
+Glossary of basic terms in effector
 
 ## Event
 

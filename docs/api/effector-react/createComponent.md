@@ -2,9 +2,12 @@
 id: createComponent
 title: createComponent
 hide_title: true
+description: Creates store-based React component
 ---
 
-# `createComponent(store, render)`
+# createComponent
+
+## `createComponent(store, render)`
 
 Creates store-based React component. The `createComponent` is useful for transfering logic and data of state to your View component.
 
@@ -21,10 +24,9 @@ You can use hooks in `createComponent` since effector-react@20.3.0.
 
 (_`React.Component`_)
 
-#### Example
+### Example
 
-```js
-import ReactDOM from 'react-dom'
+```jsx
 import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
 
@@ -44,8 +46,6 @@ const MyOwnComponent = () => {
   // any staff here
   return <MyCounter />
 }
-
-ReactDOM.render(<MyOwnComponent />, document.getElementById('root'))
 ```
 
 [Try it](https://share.effector.dev/kJoLGB6g)

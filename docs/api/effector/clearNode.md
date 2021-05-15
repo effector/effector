@@ -2,10 +2,15 @@
 id: clearNode
 title: clearNode
 hide_title: true
+description: Method for destroying stores, events, effects, subscriptions and domains
 ---
-# `clearNode(unit, config?: {deep?: boolean}): void`
 
-Method for destroying stores, events, effects, subscriptions and domains. 
+# clearNode
+
+## `clearNode(unit, config?: {deep?: boolean}): void`
+
+
+Method for destroying stores, events, effects, subscriptions and domains
 
 **Arguments**
 
@@ -17,7 +22,7 @@ Method for destroying stores, events, effects, subscriptions and domains.
 
 `void`
 
-#### Example 1
+### Example 1
 
 ```js
 import {createStore, createEvent, clearNode} from 'effector'
@@ -37,7 +42,7 @@ inc()
 
 [Try it](https://share.effector.dev/WjuSl6aN)
 
-#### Example 2 (with deep)
+### Example 2 (with deep)
 
 ```js
 import {createStore, createEvent, clearNode} from 'effector'

@@ -2,12 +2,17 @@
 id: useVModel
 title: useVModel
 hide_title: true
+description: hook function, which subscribes to watcher, that observes changes in the current store. Designed for vue 3
 ---
 
-# `useVModel(store)`
+# useVModel
 
-Creates a hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
-Basically this hook use when need to work with forms (`v-model`)
+## `useVModel(store)`
+
+A hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
+Basically this hook use when need to work with forms (`v-model`).
+
+Designed for vue 3
 
 **Arguments**
 
@@ -17,7 +22,7 @@ Basically this hook use when need to work with forms (`v-model`)
 
 (_State_)
 
-#### Example
+### Example
 
 ```js
 import {createStore, createApi} from 'effector'

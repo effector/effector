@@ -2,12 +2,17 @@
 id: useStore
 title: useStore
 hide_title: true
+description: Hook function, which subscribes to watcher, that observes changes in store. Designed for vue 3
 ---
 
-# `useStore(store)`
+# useStore
 
-Creates a hook function, which subscribes to watcher, that observes changes in the current **readonly**` store, so when recording results, the component will update automatically.
-You can mutate this data **only from createEvent**
+## `useStore(store)`
+
+A hook function, which subscribes to watcher, that observes changes in the current **readonly**` store, so when recording results, the component will update automatically.
+You can mutate this data **only from createEvent**.
+
+Designed for vue 3
 
 **Arguments**
 
@@ -17,7 +22,7 @@ You can mutate this data **only from createEvent**
 
 _readonly(State)_
 
-#### Example
+### Example
 
 ```js
 import {createStore, createApi} from 'effector'

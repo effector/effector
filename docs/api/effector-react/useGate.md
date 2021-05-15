@@ -2,11 +2,14 @@
 id: useGate
 title: useGate
 hide_title: true
+description: Hook for passing data to Gate
 ---
 
-# `useGate(GateComponent, props)`
+# useGate
 
-Creates a [_`Gate`_](Gate.md)
+## `useGate(GateComponent, props)`
+
+Hook for passing data to [_`Gate`_](Gate.md)
 
 **Arguments**
 
@@ -17,7 +20,7 @@ Creates a [_`Gate`_](Gate.md)
 
 (_`void`_)
 
-#### Example
+### Example
 
 ```js
 import {createGate, useGate} from 'effector-react'
@@ -32,5 +35,5 @@ const Home = props => {
   return <section>Home</section>
 }
 
-;<Route component={Home} />
+const App = () => <Route component={Home} />
 ```

@@ -2,6 +2,7 @@
 id: createGate
 title: createGate
 hide_title: true
+description: Creates a gate to consume data from view
 ---
 
 # createGate
