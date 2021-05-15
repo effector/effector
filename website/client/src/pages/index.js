@@ -1,13 +1,15 @@
 import React from 'react'
 import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
+import Translate from '@docusaurus/Translate'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from './styles.module.css'
 
 import {Code} from '../components/Code'
 
-const codeExample = `import {createEvent, createStore, createEffect, sample} from 'effector'
+const codeExample = {
+  en: `import {createEvent, createStore, createEffect, sample} from 'effector'
 
 const nextPost = createEvent()
 
@@ -47,42 +49,139 @@ nextPost()
 
 // => Loading post... 
 // => Post 2 has 5 comments 
-`
+`,
+  ru: `import {createEvent, createStore, createEffect, sample} from 'effector'
+
+const nextPost = createEvent()
+
+const getCommentsFx = createEffect(async postId => {
+  const url = \`posts/\${postId}/comments\`
+  const base = 'https://jsonplaceholder.typicode.com'
+  const req = await fetch(\`\${base}\/\${url}\`)
+  return req.json()
+})
+
+const $postComments = createStore([])
+  .on(getCommentsFx.doneData, (_, posts) => posts)
+
+const $currentPost = createStore(1)
+  .on(getCommentsFx.done, (_, {params: postId}) => postId)
+
+const $status = combine(
+  $currentPost, $postComments, getCommentsFx.pending,
+  (postId, comments, isLoading) => isLoading
+    ? 'Загрузка поста...'
+    : \`Пост \${postId} имеет \${comments.length} комментариев\`
+)
+
+sample({
+  source: $currentPost,
+  clock: nextPost,
+  fn: postId => postId + 1,
+  target: getCommentsFx,
+})
+
+$status.watch(status => {
+  console.log(status)
+})
+// => Пост 1 имеет 0 комментариев
+
+nextPost()
+
+// => Загрузка поста... 
+// => Пост 2 имеет 5 комментариев 
+`,
+}
 
 const features = [
   {
-    title: 'Type safe',
     imageUrl: 'img/shield.svg',
-    description: 'TypeScript and Flow support out of box.',
+    content: {
+      en: {
+        title: 'Type safe',
+        description: 'TypeScript support out of box',
+      },
+      ru: {
+        title: 'Типизация',
+        description: 'Поддержка TypeScript в комплекте поставки',
+      },
+    },
   },
   {
-    title: 'Framework agnostic',
     imageUrl: 'img/settings.svg',
-    description: 'Can work with any UI or server framework.',
+    content: {
+      en: {
+        title: 'Framework agnostic',
+        description: 'Can work with any UI or server framework',
+      },
+      ru: {
+        title: 'Независимость от фреймворков',
+        description: 'Работает с любыми UI и серверными фреймворками',
+      },
+    },
   },
   {
-    title: 'Developer-friendly',
     imageUrl: 'img/laptop.svg',
-    description: 'Simple API surface and helpful community.',
+    content: {
+      en: {
+        title: 'Developer-friendly',
+        description: 'Simple API surface and helpful community',
+      },
+      ru: {
+        title: 'Удобство в разработке',
+        description: 'Логичный API и отзывчивое сообщество',
+      },
+    },
   },
   {
-    title: 'Maximum performance',
     imageUrl: 'img/bolt.svg',
-    description:
-      'Static initialization provides boost in performance for runtime.',
+    content: {
+      en: {
+        title: 'Maximum performance',
+        description:
+          'Static initialization provides boost in performance for runtime',
+      },
+      ru: {
+        title: 'Производительность',
+        description: 'Статическая инициализация улучшает производительность',
+      },
+    },
   },
   {
-    title: 'Tiny bundle size',
     imageUrl: 'img/box.svg',
-    description: 'Effector uses Rollup and Terser to provide small builds.',
+    content: {
+      en: {
+        title: 'Tiny bundle size',
+        description: 'Effector provide small builds and support tree-shaking',
+      },
+      ru: {
+        title: 'Малый размер',
+        description:
+          'Эффектор - компактная библиотека и поддерживает tree-shaking',
+      },
+    },
   },
   {
-    title: 'Plain javascript',
     imageUrl: 'img/js-logo.svg',
-    description:
-      'No decorators, no proxies, no classes required. Only you and your data.',
+    content: {
+      en: {
+        title: 'Plain, predictable javascript',
+        description: 'No proxies, no classes required. Only you and your data',
+      },
+      ru: {
+        title: 'Чистый, предсказуемый javascript',
+        description: 'Никаких прокси и классов',
+      },
+    },
   },
 ]
+
+const headings = {
+  ru: {
+    title: 'эффектор',
+    tagline: 'Менеджер состояний',
+  },
+}
 
 const users = [
   {
@@ -150,7 +249,13 @@ function CompaniesUsingEffector() {
   return (
     <footer className={styles.usersSection}>
       <header data-section-header>
-        <h1 data-users-header>Companies using effector</h1>
+        <h1 data-users-header>
+          <Translate
+            id="landing.companies.using"
+            description="companies using effector">
+            Companies using effector
+          </Translate>
+        </h1>
       </header>
       <section data-users-logos>
         {users.map(({url, alt, yOffset, scale}, i) => {
@@ -168,32 +273,45 @@ function CompaniesUsingEffector() {
       <div data-users-add-yours>
         <i>
           <span data-users-add-yours-plain-text>
-            Want to appear on this page?
+            <Translate
+              id="landing.companies.want_to_appear"
+              description="Want to appear on this page">
+              Want to appear on this page?
+            </Translate>
           </span>{' '}
-          <a href="https://github.com/effector/effector/issues/278">Tell us</a>
+          <a href="https://github.com/effector/effector/issues/278">
+            <Translate id="landing.companies.tell_us" description="Tell us">
+              Tell us
+            </Translate>
+          </a>
         </i>
       </div>
     </footer>
   )
 }
 
-function FeatureGrid() {
+function FeatureGrid({locale}) {
   return (
     <section className={styles.features}>
       <header data-section-header>
-        <h1>Features</h1>
+        <h1>
+          <Translate id="landing.features" description="Features">
+            Features
+          </Translate>
+        </h1>
       </header>
       <div className="row" data-features-grid>
         {features.map((props, idx) => (
-          <Feature key={idx} {...props} />
+          <Feature key={idx} locale={locale} {...props} />
         ))}
       </div>
     </section>
   )
 }
 
-function Feature({imageUrl, title, description}) {
+function Feature({imageUrl, content, locale}) {
   const imgUrl = useBaseUrl(imageUrl)
+  const {title, description} = content[locale]
   return (
     <div className="col col--4">
       <div className="text--center">
@@ -206,47 +324,61 @@ function Feature({imageUrl, title, description}) {
 }
 
 function Hero() {
-  const {siteConfig = {}} = useDocusaurusContext()
+  const {
+    siteConfig = {},
+    i18n: {currentLocale = 'en'} = {},
+  } = useDocusaurusContext()
+  const {title, tagline} = headings[currentLocale] || siteConfig
   return (
     <header className={`hero ${styles.heroBanner}`}>
       <div className="container">
         <div className="row" data-hero-row>
           <div className="col col--6 margin-bottom--md" data-hero-content>
-            <h1 className="hero__title">{siteConfig.title}</h1>
-            <p className="hero__subtitle">{siteConfig.tagline}</p>
+            <h1 className="hero__title">{title}</h1>
+            <p className="hero__subtitle">{tagline}</p>
             <div data-hero-controls>
               <Link
                 className="button button--outline button--primary button--lg"
                 to={useBaseUrl('docs/introduction/installation')}>
-                Get Started
+                <Translate id="landing.get_started" description="Get Started">
+                  Get Started
+                </Translate>
               </Link>
               <Link
                 className="button button--outline button--secondary button--lg"
                 to="https://share.effector.dev">
-                Try it out
+                <Translate id="landing.try_it" description="Try it out">
+                  Try it out
+                </Translate>
               </Link>
             </div>
             <div data-hero-explainer="first-row">
-              Explainer{' '}
               <Link
                 to="https://www.youtube.com/watch?v=rslADuhtF4Y"
                 id="explainer_video_link"
                 key="explainer_video_link">
-                video
+                <Translate
+                  id="landing.video_introduction"
+                  description="Video introduction">
+                  Video introduction
+                </Translate>
               </Link>
             </div>
             <div data-hero-explainer="second-row">
-              Explainer{' '}
               <Link
                 to="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4"
                 id="explainer_article_link"
                 key="explainer_article_link">
-                article
+                <Translate
+                  id="landing.introduction_article"
+                  description="Introduction article">
+                  Introduction article
+                </Translate>
               </Link>
             </div>
           </div>
           <div className="col col--6" data-hero-code>
-            <Code language="js">{codeExample}</Code>
+            <Code language="js">{codeExample[currentLocale]}</Code>
           </div>
         </div>
       </div>
@@ -256,11 +388,11 @@ function Hero() {
 
 function Home() {
   const context = useDocusaurusContext()
-  const {siteConfig = {}} = context
+  const {siteConfig = {}, i18n: {currentLocale = 'en'} = {}} = context
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       <Hero />
-      <FeatureGrid />
+      <FeatureGrid locale={currentLocale} />
       <CompaniesUsingEffector />
     </Layout>
   )

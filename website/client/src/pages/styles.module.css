@@ -44,6 +44,18 @@ header[data-section-header] {
   grid-row: 1;
 }
 
+html:not([lang='ru']) .heroBanner [data-hero-controls] {
+  --heroControlsMultiplier: var(--ifm-button-size-multiplier);
+}
+html[lang='ru'] .heroBanner [data-hero-controls] {
+  /* default size is too large for russian words so we scale it down */
+  --heroControlsMultiplier: calc(var(--ifm-button-size-multiplier) / 1.227);
+}
+
+html[lang='ru'] .heroBanner [data-hero-controls] a {
+  --ifm-button-size-multiplier: var(--heroControlsMultiplier);
+}
+
 .heroBanner [data-hero-content] {
   text-align: center;
   align-self: center;

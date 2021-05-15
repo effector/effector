@@ -1,4 +1,8 @@
 module.exports = {
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'ru'],
+  },
   title: 'effector',
   tagline: 'The state manager',
   url: process.env.SITE_URL || 'https://effector.dev',
@@ -49,6 +53,10 @@ module.exports = {
         {
           href: 'https://github.com/effector/effector',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          type: 'localeDropdown',
           position: 'right',
         },
       ],

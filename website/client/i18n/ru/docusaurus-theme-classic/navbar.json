@@ -1,0 +1,34 @@
+{
+  "title": {
+    "message": "эффектор",
+    "description": "The title in the navbar"
+  },
+  "item.label.Docs": {
+    "message": "Документация",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.API": {
+    "message": "API",
+    "description": "Navbar item with label API"
+  },
+  "item.label.Blog": {
+    "message": "Блог",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.REPL": {
+    "message": "REPL",
+    "description": "Navbar item with label REPL"
+  },
+  "item.label.Changelog": {
+    "message": "Что нового",
+    "description": "Navbar item with label Changelog"
+  },
+  "item.label.Twitter": {
+    "message": "Twitter",
+    "description": "Navbar item with label Twitter"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}
