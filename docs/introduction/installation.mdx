@@ -1,0 +1,113 @@
+---
+id: installation
+title: Installation
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+  defaultValue="npm"
+  groupId="package-manager"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'yarn', value: 'yarn'},
+    {label: 'deno', value: 'deno'},
+  ]}>
+  <TabItem value="npm">
+
+```bash
+npm install --save effector
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add effector
+```
+
+  </TabItem>
+  <TabItem value="deno">
+
+Import `effector.mjs` from any CDN
+
+```typescript
+import {createStore} from 'https://unpkg.com/effector/effector.mjs'
+```
+
+:::note since
+effector 21.0.0
+:::
+
+  </TabItem>
+</Tabs>
+
+## Complementary packages
+
+### For react
+
+<Tabs
+  defaultValue="npm"
+  groupId="package-manager"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
+
+```bash
+npm install --save effector effector-react
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add effector effector-react
+```
+
+  </TabItem>
+</Tabs>
+
+### For vue
+
+<Tabs
+  defaultValue="npm"
+  groupId="package-manager"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
+
+```bash
+npm install --save effector effector-vue
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add effector effector-vue
+```
+
+  </TabItem>
+</Tabs>
+
+### For svelte
+
+Svelte works with effector out of the box, no additional packages needed. See [word chain](https://github.com/today-/citycatch) game application written with svelte and effector.
+
+## Compatibility
+
+:::note since
+effector 20.1.0
+:::
+
+Use `effector/compat`, `effector-react/compat` and `effector-vue/compat` modules to support IE11 and Chrome 47 (Smart TV browser) without babel.
+
+```diff
+- import {createStore} from 'effector'
++ import {createStore} from 'effector/compat'
+```
