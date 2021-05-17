@@ -17,12 +17,12 @@ It provides a way to control one dataflow with the help of another: when the con
 guard({ clock?, source, filter, target? }): target
 ```
 
-When `clock` is triggered, check `filter` for thruthy and call `target` with data from `source` if `true`.
+When `clock` is triggered, check `filter` for [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) and call `target` with data from `source` if `true`.
 
 - If the `clock` is not passed, guard will be trigged on every `source` update
 - If `target` is not passed, create [_Event_](Event.md) with type of `source` and return it from `guard()`
-- If `filter` is [_Store_](Store.md), check it value for `thruthy`
-- If `filter` is `Function`, call it with data from `source` and check result for `thruthy`
+- If `filter` is [_Store_](Store.md), check it value for [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) 
+- If `filter` is `Function`, call it with data from `source` and check result for [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) 
 
 :::note since
 `clock` in guard is available since `effector 21.8.0`
@@ -41,7 +41,7 @@ When `clock` is triggered, check `filter` for thruthy and call `target` with dat
 #### Example
 
 ```js
-import {createStore, createEffect, createEvent, guard, sample} from 'effector'
+import {createStore, createEffect, createEvent, guard} from 'effector'
 
 const clickRequest = createEvent()
 const fetchRequest = createEffect(
@@ -54,14 +54,16 @@ const requests = createStore(0).on(fetchRequest, x => x + 1)
 const isIdle = fetchRequest.pending.map(pending => !pending)
 
 /*
-on clickRequest, take current clicks value,
-and call fetchRequest with it
-if isIdle value is true
+1. on clickRequest
+2. if isIdle is true
+3. take current clicks value
+4. and call fetchRequest with it
 */
 guard({
-  source: sample(clicks, clickRequest),
-  filter: isIdle,
-  target: fetchRequest,
+  clock: clickRequest, /* 1 */
+  filter: isIdle, /* 2 */
+  source: clicks, /* 3 */
+  target: fetchRequest, /* 4 */
 })
 ```
 
