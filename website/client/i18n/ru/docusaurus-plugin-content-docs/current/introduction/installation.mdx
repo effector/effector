@@ -1,0 +1,114 @@
+---
+id: installation
+title: Установка
+description: Установка эффектора и сопутствующих пакетов
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+  defaultValue="npm"
+  groupId="package-manager"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'yarn', value: 'yarn'},
+    {label: 'deno', value: 'deno'},
+  ]}>
+  <TabItem value="npm">
+
+```bash
+npm install --save effector
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add effector
+```
+
+  </TabItem>
+  <TabItem value="deno">
+
+Импортируй `effector.mjs` с любого CDN
+
+```typescript
+import {createStore} from 'https://unpkg.com/effector/effector.mjs'
+```
+
+:::note 
+`effector.mjs` поддерживается начиная с effector 21.0.0
+:::
+
+  </TabItem>
+</Tabs>
+
+## Дополнительные пакеты
+
+### Для react
+
+<Tabs
+  defaultValue="npm"
+  groupId="package-manager"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
+
+```bash
+npm install --save effector effector-react
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add effector effector-react
+```
+
+  </TabItem>
+</Tabs>
+
+### Для vue
+
+<Tabs
+  defaultValue="npm"
+  groupId="package-manager"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
+
+```bash
+npm install --save effector effector-vue
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash
+yarn add effector effector-vue
+```
+
+  </TabItem>
+</Tabs>
+
+### Для svelte
+
+Svelte изначально работает с effector без дополнительных пакетов. [Пример игры](https://github.com/today-/citycatch) написанной с помощью svelte и effector
+
+## Совместимость
+
+:::note
+Добавлено в effector 20.1.0
+:::
+
+Используй `effector/compat`, `effector-react/compat` и `effector-vue/compat` модули для поддержки IE11 и Chrome 47 (браузер Smart TV устройств) без необходимости компиляции через babel.
+
+```diff
+- import {createStore} from 'effector'
++ import {createStore} from 'effector/compat'
+```

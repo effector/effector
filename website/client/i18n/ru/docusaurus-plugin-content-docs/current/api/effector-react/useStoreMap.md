@@ -1,0 +1,102 @@
+---
+id: useStoreMap
+title: useStoreMap
+---
+
+Реакт-хук, который подписывается на [стор](../effector/Store.md) и трансформирует его значение с переданной функцией. Компонент будет обновляться только когда результат функции будет отличаться от предыдущего
+
+Типичный вариант использования: подписаться на изменения отдельного поля в сторе
+
+```ts
+useStoreMap<State, Result>(
+  store: Store<State>,
+  fn: (state: State) => Result
+): Result
+```
+
+:::note
+Краткая форма `useStoreMap` добавлена в `effector-react@21.3.0`
+:::
+
+**Аргументы**
+
+1. `store`: Используемый [стор](../effector/Store.md)
+2. `fn` (_(state) => result_): Функция-селектор
+
+**Возвращает**
+
+(_Result_)
+
+```ts
+useStoreMap({store, keys, fn, updateFilter})
+```
+
+Перегрузка для случаев, когда требуется передать зависимости в react (для обновления элементов при изменении этих зависимостей)
+
+**Аргументы**
+
+1. `params` (_Object_): Объект конфигурации
+   - `store`: Используемый [стор](../effector/Store.md)
+   - `keys` (_Array_): Массив, который будет передан в React.useMemo
+   - `fn` (_(state, keys) => result_): Функция-селектор
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Опционально_ функция, используемая для сравнения старого и нового результата работы хука, предназначено для избежания лишних ререндеров. Реализация опции для работы использует [createStore updateFilter](../effector/createStore.md)
+
+**Возвращает**
+
+(_Result_)
+
+:::note
+Опция `updateFilter` добавлена в `effector-react@21.3.0`
+:::
+
+#### Пример
+
+Этот хук полезен для работы со списками, особенно с большими
+
+```jsx
+import {createStore} from 'effector'
+import {useStore, useStoreMap} from 'effector-react'
+
+const data = [
+  {
+    id: 1,
+    name: 'Yung',
+  },
+  {
+    id: 2,
+    name: 'Lean',
+  },
+  {
+    id: 3,
+    name: 'Kyoto',
+  },
+  {
+    id: 4,
+    name: 'Sesh',
+  },
+]
+
+const $users = createStore(data)
+const $ids = createStore(data.map(({id}) => id))
+
+const User = ({id}) => {
+  const user = useStoreMap({
+    store: $users,
+    keys: [id],
+    fn: (users, [userId]) => users.find(({id}) => id === userId),
+  })
+
+  return (
+    <div>
+      <strong>[{user.id}]</strong> {user.name}
+    </div>
+  )
+}
+
+const UserList = () => {
+  const ids = useStore($ids)
+  return ids.map(id => <User key={id} id={id} />)
+}
+```
+
+[Запустить пример](https://share.effector.dev/cAZWHCit)
