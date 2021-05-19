@@ -419,30 +419,36 @@ const result = $store.thru(fn)
 #### Example
 
 ```js
-import {createStore} from 'effector'
+import {createStore, createEvent} from 'effector'
 
 const enhance = fn => store => store.map(fn)
 
-const store = createStore(1)
+const inc = createEvent()
+const $num = createStore(1)
 
-console.log(store.thru(() => 'plain value'))
+$num.on(inc, n => n + 1)
 
-// => plain value
+//prettier-ignore
+const $result = $num
+  .thru(enhance(x => x + 1))
+  .thru(enhance(x => x * 10))
 
-const newStore = store.thru(enhance(x => x + 1)).thru(enhance(x => x * 10))
-
-console.log(newStore)
-
-// => Store
-
-newStore.watch(state => {
-  console.log(`newStore: ${state}`)
+$num.watch(n => {
+  console.log('num', n)
 })
+// => num 1
 
-// => newStore: 20
+$result.watch(n => {
+  console.log('result', n)
+})
+// => result 20
+
+inc()
+// => num 2
+// => result 30
 ```
 
-[Try it](https://share.effector.dev/A9T6JQZh)
+[Try it](https://share.effector.dev/RRSyqVus)
 
 <hr />
 
@@ -526,15 +532,22 @@ Prefer declarative [sample](sample.md) to pass data from store and [attach](atta
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
-const updated = createEvent()
+const add = createEvent()
 
-store.on(updated, (state, value) => state + value)
+const $number = createStore(0)
 
-updated(2)
-updated(3)
+$number.on(add, (state, data) => state + data)
 
-store.watch(console.log) // => 5
+$number.watch(n => {
+  console.log(n)
+})
+// => 0
+
+add(2)
+// => 2
+
+add(3)
+// => 5
 ```
 
-[Try it](https://share.effector.dev/gmXolqQL)
+[Try it](https://share.effector.dev/YrnlMuRj)
