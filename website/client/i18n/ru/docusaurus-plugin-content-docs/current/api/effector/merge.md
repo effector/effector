@@ -16,8 +16,8 @@ description: метод для объединения апдейтов масс�
 
 ```ts
 declare const $store: Store<T> // триггер
-declare const event: Event<S> // триггер
-declare const fx: Effect<S, any> // триггер
+declare const event: Event<T> // триггер
+declare const fx: Effect<T, any> // триггер
 
 const result: Event<T> = merge(/*clock*/ [$store, event, fx])
 ```
