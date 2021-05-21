@@ -10,6 +10,7 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'effector', // Usually your GitHub org/user name.
   projectName: 'effector', // Usually your repo name.
+  onBrokenLinks: 'ignore', // Temporal option for smoother transition to multilang docs
   themeConfig: {
     sidebarCollapsible: false,
     image: 'img/comet.png',
