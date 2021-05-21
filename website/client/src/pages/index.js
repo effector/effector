@@ -243,6 +243,11 @@ const users = [
     url: 'globalCtoForum.png',
     alt: 'Global CTO Forum',
   },
+  {
+    url: 'aviasales.png',
+    alt: 'Aviasales',
+    yOffset: true,
+  },
 ]
 
 function CompaniesUsingEffector() {
