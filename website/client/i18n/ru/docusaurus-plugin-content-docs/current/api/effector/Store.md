@@ -23,8 +23,9 @@ _Store (стор)_ - это объект, который хранит значе
 - **Свойства**
 
   - [**updates**](#updates): дочернее событие, представляющее обновления данного стора
-  - [**shortName**](#shortName): имя стора
   - [**defaultState**](#defaultState): начальное состояние стора
+  - [**shortName**](#shortName): имя стора
+  - [**sid**](#sid): стабильный идентификатор стора
 
 ## Примеры {#all-examples}
 
@@ -485,6 +486,18 @@ const $store = createStore('DEFAULT')
 
 console.log($store.defaultState === 'DEFAULT')
 // => true
+```
+
+### sid {#sid}
+
+Стабильный идентификатор стора. Задаётся автоматически через [babel-plugin](./babel-plugin.md)
+
+#### Формула {#sid-formulae}
+
+```ts
+declare const $store: Store<any>
+
+$store.sid as string | null
 ```
 
 <hr />
