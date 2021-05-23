@@ -340,7 +340,8 @@ triggerB()
 ```ts
 declare const $store: Store<T>
 
-const stop: Subscription = $store.watch(/*watcher*/ (state: T) => any)
+$store.watch(/*watcher*/ (state: T) => any)
+-> Subscription
 ```
 
 #### Аргументы {#watch-args}
@@ -392,7 +393,8 @@ add(3)
 ```ts
 declare const $store: Store<T>
 
-$store.updates as Event<T>
+$store.updates
+-> Event<T>
 ```
 
 #### Примеры {#updates-examples}
@@ -438,7 +440,8 @@ click()
 ```ts
 declare const $store: Store<any>
 
-$store.shortName as string
+$store.shortName
+-> string
 ```
 
 #### Примеры {#shortName-examples}
@@ -477,6 +480,15 @@ increment()
 
 Начальное состояние стора, то, с которым он создавался. К этому состоянию будет возвращать метод [reset](./#reset)
 
+#### Формула {#defaultState-formulae}
+
+```ts
+declare const $store: Store<T>
+
+$store.defaultState
+-> T
+```
+
 #### Примеры {#defaultState-examples}
 
 ##### Пример использования defaultState {#defaultState-usage-example}
@@ -497,7 +509,8 @@ console.log($store.defaultState === 'DEFAULT')
 ```ts
 declare const $store: Store<any>
 
-$store.sid as string | null
+$store.sid
+-> string | null
 ```
 
 <hr />
@@ -566,10 +579,11 @@ add(3)
 declare const $store: Store<T>
 declare const trigger: Event<S>
 
-const stop: Subscription = $store.watch(
+$store.watch(
   /*clock*/ trigger,
   /*fn*/ (state: T, data: S) => any,
 )
+-> Subscription
 ```
 
 #### Аргументы {#clock-watch-args}
