@@ -212,7 +212,6 @@ const second = first.filterMap(fn)
 
 ```jsx
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {createEvent, createStore} from 'effector'
 
 const openModal = createEvent()
@@ -221,41 +220,41 @@ const closeModal = createEvent()
 const openModalUnboxed = openModal.filterMap(ref => {
   if (ref.current) return ref.current
 })
+const closeModalUnboxed = closeModal.filterMap(ref => {
+  if (ref.current) return ref.current
+})
 
 openModalUnboxed.watch(modal => modal.showModal())
+closeModalUnboxed.watch(modal => modal.close())
 
-closeModal
-  .filter({
-    fn: ref => {
-      if (ref.current) return ref.current
-    },
-  })
-  .watch(modal => modal.close())
+const App = () => {
+  const modalRef = React.useRef(null)
+  return (
+    <>
+      <dialog ref={modalRef}>
+        <form method="dialog">
+          <fieldset>
+            <legend>Modal</legend>
+            Tap to close
+            <button
+              type="submit"
+              onSubmit={() => closeModal(modalRef)}
+            >
+              ❌
+            </button>
+          </fieldset>
+        </form>
+      </dialog>
 
-const modalRef = React.createRef()
-
-const App = () => (
-  <>
-    <dialog ref={modalRef}>
-      <form method="dialog">
-        <fieldset>
-          <legend>Modal</legend>
-          Tap to close
-          <button type="submit" onSubmit={() => closeModal(modalRef)}>
-            ❌
-          </button>
-        </fieldset>
-      </form>
-    </dialog>
-
-    <button onClick={() => openModal(modalRef)}>Open modal</button>
-  </>
-)
-
-ReactDOM.render(<App />, document.getElementById('root'))
+      <button onClick={() => openModal(modalRef)}>
+        Open modal
+      </button>
+    </>
+  )
+}
 ```
 
-[Try it](https://share.effector.dev/abn4EMNa)
+[Try it](https://share.effector.dev/v7rx5NaS)
 
 <hr/>
 
