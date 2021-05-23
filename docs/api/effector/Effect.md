@@ -133,21 +133,17 @@ const unwatch = effect.watch(fn)
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect(value => value)
+const fx = createEffect(params => params)
 
-const unsubscribe = effectFx.watch(payload => {
-  console.log('called with', payload)
-  unsubscribe()
+fx.watch(params => {
+  console.log('effect called with value', params)
 })
 
-await effectFx(10)
-// => called with 10
-
-await effectFx(20)
-// no reaction
+await fx(10)
+// => effect called with value 10
 ```
 
-[Try it](https://share.effector.dev/Q8ZlN0Ce)
+[Try it](https://share.effector.dev/VN1ef0TZ)
 
 <hr />
 
