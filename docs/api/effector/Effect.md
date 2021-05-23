@@ -67,7 +67,7 @@ effect.use(fn)
 ```
 
 - Set handler `fn` for `effect`
-- If `effect` was handler before, it will be replaced
+- If effect already had an implementation at the time of the call, it will be replaced by a new one
 - Hint: current handler can be extracted with [`effect.use.getCurrent()`](#usegetcurrent)
 
 :::note
