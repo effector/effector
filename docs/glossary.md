@@ -164,7 +164,7 @@ There are four units types: [store], [event], [effect] and [domain]
 
 ## Common unit
 
-Common units can be used to trigger updates of other units. There are three common unit types: [store], [event] and [effect]. **When a method accepts units, it means that it accepts events, effects, and stores** a source of reactive updates
+Common units can be used to trigger updates of other units. There are three common unit types: [store], [event] and [effect]. **When a method accepts units, it means that it accepts events, effects, and stores** as a source of reactive updates
 
 ## Purity
 
