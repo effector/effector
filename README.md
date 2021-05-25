@@ -2,11 +2,12 @@
 
 The state manager
 
+## Visit [effector.dev](https://effector.dev) for docs, guides and examples
+
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
@@ -17,22 +18,10 @@ The state manager
 - [Community](#community)
 - [Online playground](#online-playground)
 - [DevTools](#devtools)
-- [Examples](#examples)
-  - [Increment/decrement with React](#incrementdecrement-with-react)
-  - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
-  - [Stores and events](#stores-and-events)
-- [More examples](#more-examples)
-- [API](#api)
-  - [Event](#event)
-  - [Effect](#effect)
-  - [Store](#store)
-    - [Store composition/decomposition](#store-compositiondecomposition)
-  - [Domain](#domain)
-  - [Learn more](#learn-more)
+- [More examples in documentation](#more-examples-in-documentation)
+- [Learn more](#learn-more)
 - [Support us](#support-us)
-- [Tested with browserstack](#tested-with-browserstack)
 - [Contributors](#contributors)
-- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -51,25 +40,19 @@ Effector is an effective multi-store state manager for Javascript apps **(React/
 ## Installation
 
 ```sh
-npm install --save effector
-# or
-yarn add effector
+npm install effector
 ```
 
 **React**
 
 ```sh
-npm install --save effector effector-react
-# or
-yarn add effector effector-react
+npm install effector effector-react
 ```
 
 **Vue**
 
 ```sh
-npm install --save effector effector-vue
-# or
-yarn add effector effector-vue
+npm install effector effector-vue
 ```
 
 **Svelte**
@@ -89,27 +72,9 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Packages
 
-|      Package       |             Version              |               Size               |
-| :----------------: | :------------------------------: | :------------------------------: |
-|    [`effector`]    | [![npm-effector]][pack-effector] | [![size-effector]][pho-effector] |
-| [`effector-react`] |    [![npm-react]][pack-react]    |    [![size-react]][pho-react]    |
-|  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![size-vue]][pho-vue]      |
-
-[`effector`]: https://effector.dev/docs/api/effector/effector
-[`effector-react`]: https://effector.dev/docs/api/effector-react/effector-react
-[`effector-vue`]: https://effector.dev/docs/api/effector-vue/effector-vue
-[npm-effector]: https://img.shields.io/npm/v/effector.svg?maxAge=3600
-[npm-react]: https://img.shields.io/npm/v/effector-react.svg?maxAge=3600
-[npm-vue]: https://img.shields.io/npm/v/effector-vue.svg?maxAge=3600
-[pack-effector]: https://npmjs.com/effector
-[pack-react]: https://npmjs.com/effector-react
-[pack-vue]: https://npmjs.com/effector-vue
-[size-effector]: https://img.shields.io/bundlephobia/minzip/effector
-[size-react]: https://img.shields.io/bundlephobia/minzip/effector-react
-[size-vue]: https://img.shields.io/bundlephobia/minzip/effector-vue
-[pho-effector]: https://bundlephobia.com/result?p=effector
-[pho-react]: https://bundlephobia.com/result?p=effector-react
-[pho-vue]: https://bundlephobia.com/result?p=effector-vue
+- [effector](https://effector.dev/docs/api/effector/effector)
+- [effector-react](https://effector.dev/docs/api/effector-react/effector-react)
+- [effector-vue](https://effector.dev/docs/api/effector-vue/effector-vue)
 
 ## Articles
 
@@ -139,297 +104,23 @@ Code sharing, Typescript and react supported out of the box. [REPL repository](h
 
 ## DevTools
 
-Use [effector-logger](https://github.com/effector/logger) for printing updates to console, displaying current store values with ui or connecting application to redux devtools
-
-## Examples
-
-### Increment/decrement with React
-
-```jsx
-import {createStore, createEvent} from 'effector'
-import {useStore} from 'effector-react'
-
-const increment = createEvent()
-const decrement = createEvent()
-const resetCounter = createEvent()
-
-const counter = createStore(0)
-  .on(increment, state => state + 1)
-  .on(decrement, state => state - 1)
-  .reset(resetCounter)
-
-counter.watch(console.log)
-
-const Counter = () => {
-  const value = useStore(counter)
-  return <div>{value}</div>
-}
-
-const App = () => {
-  const value = useStore(counter)
-
-  return (
-    <>
-      <Counter />
-      <button onClick={increment}>+</button>
-      <button onClick={decrement}>-</button>
-      <button onClick={resetCounter}>reset</button>
-    </>
-  )
-}
-```
-
-[Run example](https://share.effector.dev/qVLO42Cs)
+Use [effector-logger](https://github.com/effector/logger) for printing updates to console, displaying current store values with ui or connecting application to familiar redux devtools
 
 <hr />
 
-### Hello world with events and nodejs
+## More examples [in documentation](https://effector.dev/docs/introduction/examples)
 
-```js
-const {createEvent} = require('effector')
+## Learn more
 
-const messageEvent = createEvent()
-
-messageEvent.watch(text => console.log(`new message: ${text}`))
-
-messageEvent('hello world')
-// => new message: hello world
-```
-
-[Run example](https://share.effector.dev/CSKJUI4E)
-
-<hr />
-
-### Stores and events
-
-```js
-const {createStore, createEvent} = require('effector')
-
-const turnOn = createEvent()
-const turnOff = createEvent()
-
-const status = createStore('offline')
-  .on(turnOn, () => 'online')
-  .on(turnOff, () => 'offline')
-
-status.watch(newStatus => {
-  console.log(`status changed: ${newStatus}`)
-})
-// for store watchs callback invokes immediately
-// "status changed: offline"
-
-turnOff() // nothing has changed, callback is not triggered
-turnOn() // "status changed: online"
-turnOff() // "status changed: offline"
-turnOff() // nothing has changed
-```
-
-[Run example](https://share.effector.dev/iXQVXIEv)
-
-<hr />
-
-## More examples
-
-- [Snake game (interactive A\* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
-- [Ballcraft game](https://ballcraft.now.sh/) ([source code](https://github.com/kobzarvs/effector-craftball))
-- [Client-server interaction with effects](https://github.com/effector/effector/tree/master/examples/worker-rpc) Github
-- [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
-- [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
-- [Dynamic typing status](https://share.effector.dev/tAnzG5oJ)
-- [Forward data between effects](https://share.effector.dev/RYQ5z59Q)
-- [Range input component](https://share.effector.dev/oRB2iB8M)
-- [Modal dialog](https://share.effector.dev/B2ShiBzm)
-- [Conditional filtering](https://share.effector.dev/1EsAGMyq)
-- [Request cancellation](https://share.effector.dev/W4I0ghLt)
-- [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
-- [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
-- [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
-- [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
-- [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
-- [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq)
-- [Values history](https://share.effector.dev/NsPi84mV)
-- [Read default state from backend](https://share.effector.dev/hA3WTBIT)
-- [Requests cache](https://share.effector.dev/jvE7r0By)
-- [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
-- [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
-- [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
-- [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld))
-- [Recent users projects](https://github.com/effector/effector/network/dependents)
-
-## API
-
-### Event
-
-Event is an intention to change state.
-
-```js
-import {createEvent} from 'effector'
-const send = createEvent() // unnamed event
-const onMessage = createEvent('message') // named event
-
-const socket = new WebSocket('wss://echo.websocket.org')
-socket.onmessage = msg => onMessage(msg)
-socket.onopen = () => send('{"text": "hello"}')
-
-const onMessageParse = onMessage.map(msg => JSON.parse(msg.data))
-
-onMessageParse.watch(data => {
-  console.log('Message from server ', data)
-})
-
-send.watch(data => {
-  socket.send(data)
-})
-```
-
-[Run example](https://share.effector.dev/8rZm1G6k)
-
-### Effect
-
-**Effect** is a container for async function.
-It can be safely used in place of the original async function.
-
-```js
-import {createEffect} from 'effector'
-
-const fetchUserReposFx = createEffect(async ({name}) => {
-  const url = `https://api.github.com/users/${name}/repos`
-  const req = await fetch(url)
-  return req.json()
-})
-
-// subscribe to pending store status
-fetchUserReposFx.pending.watch(pending => {
-  console.log(pending) // false
-})
-
-// subscribe to handler resolve
-fetchUserReposFx.done.watch(({params, result}) => {
-  console.log(params) // {name: 'zerobias'}
-  console.log(result) // resolved value
-})
-
-// subscribe to handler reject or throw error
-fetchUserReposFx.fail.watch(({params, error}) => {
-  console.error(params) // {name: 'zerobias'}
-  console.error(error) // rejected value
-})
-
-// subscribe to both cases
-fetchUserReposFx.finally.watch(data => {
-  if (data.status === 'done') {
-    const {params, result} = data
-    console.log(params) // {name: 'zerobias'}
-    console.log(result) // resolved value
-  } else {
-    const {params, error} = data
-    console.error(params) // {name: 'zerobias'}
-    console.error(error) // rejected value
-  }
-})
-
-// you can replace handler anytime
-fetchUserReposFx.use(requestMock)
-
-// calling effect will return a promise
-const result = await fetchUserReposFx({name: 'zerobias'})
-```
-
-[Run example](https://share.effector.dev/iMJILHbh)
-
-### Store
-
-**Store** is an object that holds the state tree. There can be multiple stores.
-
-```js
-// `getUsers` - is an effect
-// `addUser` - is an event
-const users = createStore([{ name: Joe }])
-  // subscribe store reducers to events
-  .on(getUsers.done, (oldState, payload) => payload)
-  .on(addUser, (oldState, payload) => [...oldState, payload]))
-
-// subscribe to store updates
-users.watch(state => console.log(state)) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
-// `callback` will be triggered each time when `.on` handler returns the new state
-```
-
-#### Store composition/decomposition
-
-Most profit thing of stores.
-
-Get smaller part of the store:
-
-```js
-// `.map` accept state of parent store and return new memoized store. No more reselect ;)
-const firstUser = users.map(list => list[0])
-firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) // "first user name: Joe"
-
-addUser({name: Joseph}) // `firstUser` is not updated
-getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
-```
-
-Compose stores:
-
-```js
-import {createStore, combine} from 'effector'
-
-const a = createStore(1)
-const b = createStore('b')
-
-const c = combine({a, b})
-
-c.watch(console.log)
-// => {a: 1, b: "b"}
-```
-
-See [`combine`](http://effector.dev/api/effector/combine) in docs
-
-[Run example](https://share.effector.dev/MuLF8xGB)
-
-### Domain
-
-**Domain** is a namespace for your events, stores and effects.
-Domain can subscribe to event, effect, store or nested domain creation with **onCreateEvent**, **onCreateStore**, **onCreateEffect**, **onCreateDomain(to handle nested domains)** methods.
-
-```js
-import {createDomain} from 'effector'
-const mainPage = createDomain('main page')
-mainPage.onCreateEvent(event => {
-  console.log('new event: ', event.getType())
-})
-mainPage.onCreateStore(store => {
-  console.log('new store: ', store.getState())
-})
-const mount = mainPage.createEvent('mount')
-// => new event: main page/mount
-
-const pageStore = mainPage.createStore(0)
-// => new store: 0
-```
-
-See [`Domain`](http://effector.dev/api/effector/domain) in docs
-
-[Run example](https://share.effector.dev/PgwRuYja)
-
-> See also [worker-rpc](https://github.com/effector/effector/tree/master/examples/worker-rpc) example, which uses shared domain for effects
-
-### Learn more
-
-- [Core concepts](https://effector.dev/en/introduction/core-concepts)
-- [API docs](https://effector.dev/en/api/effector/effector)
+- [Glossary](https://effector.dev/docs/glossary)
 - [Usage with TypeScript](https://effector.dev/docs/typescript/typing-effector)
-- [Glossary](https://effector.dev/en/glossary)
+- [API docs](https://effector.dev/en/api/effector/effector)
 - [Changelog](https://changelog.effector.dev)
 
 ## Support us
 
 More articles about effector at patreon
 <a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
-
-## Tested with browserstack
-
-[![Tested with browserstack](https://raw.githubusercontent.com/effector/effector/master/website/media/Browserstack-logo.svg?sanitize=true)](https://BrowserStack.com)
 
 ## Contributors
 
@@ -496,6 +187,4 @@ More articles about effector at patreon
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## License
-
-[MIT](LICENSE)
+[![Tested with browserstack](https://raw.githubusercontent.com/effector/effector/master/website/media/Browserstack-logo.svg?sanitize=true)](https://BrowserStack.com)
