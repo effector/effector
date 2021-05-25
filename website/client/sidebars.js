@@ -1,9 +1,9 @@
 const sidebar = {
   Introduction: [
     'introduction/installation',
+    'ecosystem',
     'glossary',
     'introduction/examples',
-    'ecosystem',
   ],
   API: [
     {
