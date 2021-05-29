@@ -17,12 +17,14 @@ It provides a way to control one dataflow with the help of another: when the con
 guard({ clock?, source, filter, target? }): target
 ```
 
-When `clock` is triggered, check `filter` for [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) and call `target` with data from `source` if `true`.
+When `clock` is triggered, check `filter` for [truthy] and call `target` with data from `source` if `true`.
 
 - If the `clock` is not passed, guard will be trigged on every `source` update
 - If `target` is not passed, create [_Event_](Event.md) with type of `source` and return it from `guard()`
-- If `filter` is [_Store_](Store.md), check it value for [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) 
-- If `filter` is `Function`, call it with data from `source` and check result for [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) 
+- If `filter` is [_Store_](Store.md), check it value for [truthy]
+- If `filter` is `Function`, call it with data from `source` and check result for [truthy]
+
+[truthy]: https://developer.mozilla.org/en-US/docs/Glossary/Truthy
 
 :::note since
 `clock` in guard is available since `effector 21.8.0`
