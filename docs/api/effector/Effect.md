@@ -67,7 +67,7 @@ effect.use(fn)
 ```
 
 - Set handler `fn` for `effect`
-- If `effect` was handler before, it will be replaced
+- If effect already had an implementation at the time of the call, it will be replaced by a new one
 - Hint: current handler can be extracted with [`effect.use.getCurrent()`](#usegetcurrent)
 
 :::note
@@ -133,21 +133,17 @@ const unwatch = effect.watch(fn)
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect(value => value)
+const fx = createEffect(params => params)
 
-const unsubscribe = effectFx.watch(payload => {
-  console.log('called with', payload)
-  unsubscribe()
+fx.watch(params => {
+  console.log('effect called with value', params)
 })
 
-await effectFx(10)
-// => called with 10
-
-await effectFx(20)
-// no reaction
+await fx(10)
+// => effect called with value 10
 ```
 
-[Try it](https://share.effector.dev/Q8ZlN0Ce)
+[Try it](https://share.effector.dev/VN1ef0TZ)
 
 <hr />
 
@@ -289,17 +285,17 @@ effector 20.12.0
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect(value => Promise.resolve(value + 1))
+const fx = createEffect(value => value + 1)
 
-effectFx.doneData.watch(result => {
-  console.log('Done with result', result)
+fx.doneData.watch(result => {
+  console.log(`Effect was successfully resolved, returning ${result}`)
 })
 
-await effectFx(2)
-// => Done with result 3
+await fx(2)
+// => Effect was successfully resolved, returning 3
 ```
 
-[Try it](https://share.effector.dev/KvC1KWYe)
+[Try it](https://share.effector.dev/rNesMDtw)
 
 ### `failData`
 
@@ -328,18 +324,19 @@ effector 20.12.0
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect()
-
-effectFx.use(value => Promise.reject(value - 1))
-
-effectFx.failData.watch(error => {
-  console.log('Fail with error', error)
+const fx = createEffect(async value => {
+  throw Error(value - 1)
 })
 
-effectFx(2) // => Fail with error 1
+fx.failData.watch(error => {
+  console.log(`Execution failed with error ${error.message}`)
+})
+
+fx(2)
+// => Execution failed with error 1
 ```
 
-[Try it](https://share.effector.dev/DQFsvWqy)
+[Try it](https://share.effector.dev/rNU3tqEx)
 
 ### `done`
 
@@ -361,17 +358,20 @@ Event triggered with object of `params` and `result`:
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect(value => Promise.resolve(value + 1))
+const fx = createEffect(value => value + 1)
 
-effectFx.done.watch(({params, result}) => {
-  console.log('Done with params', params, 'and result', result)
+fx.done.watch(({params, result}) => {
+  console.log(
+    'Call with params', params, 
+    'resolved with value', result,
+	)
 })
 
-await effectFx(2)
-// => Done with params 2 and result 3
+await fx(2)
+// => Call with params 2 resolved with value 3
 ```
 
-[Try it](https://share.effector.dev/guHlMj5l)
+[Try it](https://share.effector.dev/VogsNaDn)
 
 ### `fail`
 
@@ -393,18 +393,22 @@ Event triggered with object of `params` and `error`:
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect()
-
-effectFx.use(value => Promise.reject(value - 1))
-
-effectFx.fail.watch(({params, error}) => {
-  console.log('Fail with params', params, 'and error', error)
+const fx = createEffect(async value => {
+  throw Error(value - 1)
 })
 
-effectFx(2) // => Fail with params 2 and error 1
+fx.fail.watch(({params, error}) => {
+  console.log(
+    'Call with params', params,
+    'rejected with error', error.message
+  )
+})
+
+fx(2)
+// => Call with params 2 rejected with error 1
 ```
 
-[Try it](https://share.effector.dev/UaHRvZrE)
+[Try it](https://share.effector.dev/hCPCHQ5N)
 
 ### `finally`
 
@@ -432,21 +436,43 @@ Do not manually call this event. It is event that depends on effect.
 ```js
 import {createEffect} from 'effector'
 
-const fetchApiFx = createEffect(
-  ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
-)
+const fetchApiFx = createEffect(async ({time, ok}) => {
+  await new Promise(resolve => setTimeout(resolve, time))
+  if (ok) return `${time} ms`
+  throw Error(`${time} ms`)
+})
 
-fetchApiFx.finally.watch(console.log)
+fetchApiFx.finally.watch(value => {
+  switch (value.status) {
+    case 'done':
+  		console.log(
+        'Call with params',
+        value.params,
+        'resolved with value',
+        value.result
+      )
+      break
+    case 'fail':
+  		console.log(
+        'Call with params',
+        value.params,
+        'rejected with error',
+        value.error.message
+      )
+      break
+  }
+})
 
-fetchApiFx(100)
-// if resolved
-// => {status: 'done', result: '100 ms', params: 100}
+await fetchApiFx({time: 100, ok: true})
+// => Call with params {time: 100, ok: true}
+//    resolved with value 100 ms
 
-// if rejected
-// => {status: 'fail', error: Error, params: 100}
+fetchApiFx({time: 100, ok: false})
+// => Call with params {time: 100, ok: false}
+//    rejected with error 100 ms
 ```
 
-[Try it](https://share.effector.dev/CGMI4F9E)
+[Try it](https://share.effector.dev/f90vETOc)
 
 ### `pending`
 

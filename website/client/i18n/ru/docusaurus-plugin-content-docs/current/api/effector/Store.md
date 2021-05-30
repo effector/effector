@@ -23,8 +23,9 @@ _Store (стор)_ - это объект, который хранит значе
 - **Свойства**
 
   - [**updates**](#updates): дочернее событие, представляющее обновления данного стора
-  - [**shortName**](#shortName): имя стора
   - [**defaultState**](#defaultState): начальное состояние стора
+  - [**shortName**](#shortName): имя стора
+  - [**sid**](#sid): стабильный идентификатор стора
 
 ## Примеры {#all-examples}
 
@@ -339,7 +340,8 @@ triggerB()
 ```ts
 declare const $store: Store<T>
 
-const stop: Subscription = $store.watch(/*watcher*/ (state: T) => any)
+$store.watch(/*watcher*/ (state: T) => any)
+-> Subscription
 ```
 
 #### Аргументы {#watch-args}
@@ -391,7 +393,8 @@ add(3)
 ```ts
 declare const $store: Store<T>
 
-$store.updates as Event<T>
+$store.updates
+-> Event<T>
 ```
 
 #### Примеры {#updates-examples}
@@ -437,7 +440,8 @@ click()
 ```ts
 declare const $store: Store<any>
 
-$store.shortName as string
+$store.shortName
+-> string
 ```
 
 #### Примеры {#shortName-examples}
@@ -476,6 +480,15 @@ increment()
 
 Начальное состояние стора, то, с которым он создавался. К этому состоянию будет возвращать метод [reset](./#reset)
 
+#### Формула {#defaultState-formulae}
+
+```ts
+declare const $store: Store<T>
+
+$store.defaultState
+-> T
+```
+
 #### Примеры {#defaultState-examples}
 
 ##### Пример использования defaultState {#defaultState-usage-example}
@@ -485,6 +498,19 @@ const $store = createStore('DEFAULT')
 
 console.log($store.defaultState === 'DEFAULT')
 // => true
+```
+
+### sid {#sid}
+
+Стабильный идентификатор стора. Задаётся автоматически через [babel-plugin](./babel-plugin.md)
+
+#### Формула {#sid-formulae}
+
+```ts
+declare const $store: Store<any>
+
+$store.sid
+-> string | null
 ```
 
 <hr />
@@ -553,10 +579,11 @@ add(3)
 declare const $store: Store<T>
 declare const trigger: Event<S>
 
-const stop: Subscription = $store.watch(
+$store.watch(
   /*clock*/ trigger,
   /*fn*/ (state: T, data: S) => any,
 )
+-> Subscription
 ```
 
 #### Аргументы {#clock-watch-args}

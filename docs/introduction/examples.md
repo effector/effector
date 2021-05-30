@@ -29,6 +29,32 @@ To connect react modal with state
 
 To connect custom range input component with state
 
+## More examples
 
+- [Snake game (interactive A\* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
+- [Ballcraft game](https://ballcraft.now.sh/) ([source code](https://github.com/kobzarvs/effector-craftball))
+- [Client-server interaction with effects](https://github.com/effector/effector/tree/master/examples/worker-rpc) Github
+- [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
+- [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
+- [Dynamic typing status](https://share.effector.dev/tAnzG5oJ)
+- [Forward data between effects](https://share.effector.dev/RYQ5z59Q)
+- [Range input component](https://share.effector.dev/oRB2iB8M)
+- [Modal dialog](https://share.effector.dev/B2ShiBzm)
+- [Conditional filtering](https://share.effector.dev/1EsAGMyq)
+- [Request cancellation](https://share.effector.dev/W4I0ghLt)
+- [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
+- [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
+- [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
+- [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
+- [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
+- [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq)
+- [Values history](https://share.effector.dev/NsPi84mV)
+- [Read default state from backend](https://share.effector.dev/hA3WTBIT)
+- [Requests cache](https://share.effector.dev/jvE7r0By)
+- [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
+- [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
+- [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
+- [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld))
+- [Recent users projects](https://github.com/effector/effector/network/dependents)
 
 

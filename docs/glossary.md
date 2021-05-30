@@ -12,66 +12,12 @@ _Event_ is a function you can subscribe to. It can be an intention to change the
 
 [Event](./api/effector/Event.md) in api documentation
 
-```typescript
-function createEvent<E>(eventName?: string): Event<E>
-```
-
-- [createEvent(eventName)](./api/effector/createEvent.md) creates event
-
-```typescript
-type Event<Payload> = {
-  (payload: Payload): Payload
-  watch(watcher: (payload: Payload) => any): Subscription
-  map<T>(fn: (payload: Payload) => T): Event<T>
-  filter(options: {fn(payload: Payload): boolean}): Event<Payload>
-  filterMap<T>(fn: (payload: Payload) => T | void): Event<T>
-  prepend<Before>(fn: (params: Before) => Payload): Event<Before>
-}
-```
-
-- `(payload)` calls `Event` with payload
-- [watch(watcher)](./api/effector/Event.md#watchwatcher) listens to the event and calls provided [`watcher`](#watcher)
-- [map(fn)](./api/effector/Event.md#mapfn) creates a new event, which will be trigger after the original event was triggered, transforming the payload with provided `fn`
-- [filter({fn})](./api/effector/Event.md#filterfn) creates a new event that will trigger only if provided `fn` function returns `true`
-- [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates a new event that will be triggered with the result of `fn` applied to the payload, but only if the result is not `undefined`. Use cases: extract value from react's refs; statically typed filters;
-- [prepend(fn)](./api/effector/Event.md#prependfn) creates a new event that will trigger the original event with a payload transformed by `fn`
-
 ## Store
 
 _Store_ is an object that holds state.
 There can be multiple stores.
 
 [Store](./api/effector/Store.md) in api documentation
-
-```typescript
-function createStore<State>(defaultState: State): Store<State>
-```
-
-- [createStore(defaultState)](./api/effector/createStore.md) creates a new store
-- [combine(stores)](./api/effector/combine.md) combines multiple stores into one
-
-```typescript
-type Store<State> = {
-  on<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
-    reducer: (state: State, payload: E) => State | void,
-  ): this
-  map<T>(fn: (_: State) => T): Store<T>
-  reset(
-    ...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>
-  ): this
-  watch<E>(watcher: (state: State) => any): Subscription
-  updates: Event<State>
-  defaultState: State
-}
-```
-
-- [on(event, reducer)](./api/effector/Store.md#ontrigger-reducer) calls [`reducer`](#reducer) on store whenever an event occurs
-- [map(fn)](./api/effector/Store.md#mapfn-state-state-laststate-t--t) creates computed store from given one
-- [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default whenever any of the triggers occur
-- [watch(watcher)](./api/effector/Store.md#watchwatcher) registers a [`watcher`](#watcher) to be called with the new state when the store is updated
-- [updates](./api/effector/Store.md#updates) is an `event` that triggers when the `store` is updated
-- [defaultState](./api/effector/Store.md#defaultstate) initial state of the given store
 
 ## Effect
 
@@ -88,35 +34,6 @@ The only requirement for the function:
 
 [Effect](./api/effector/Effect.md) in api documentation
 
-```typescript
-function createEffect<Params, Done, Fail>(config?: {
-  handler?: (params: Params) => Promise<Done> | Done
-}): Effect<Params, Done, Fail>
-```
-
-- [createEffect(config)](./api/effector/createEffect.md) creates an effect
-
-```typescript
-type Effect<Params, Done, Fail = Error> = {
-  (payload: Params): Promise<Done>
-  doneData: Event<Done>
-  failData: Event<Fail>
-  done: Event<{params: Params; result: Done}>
-  fail: Event<{params: Params; error: Fail}>
-  pending: Store<boolean>
-  inFlight: Store<number>
-  use: {
-    (asyncFunction: (params: Params) => Promise<Done>): this
-    getCurrent(): (params: Params) => Promise<Done>
-  }
-  watch(watcher: (payload: Params) => any): Subscription
-}
-```
-
-- `(payload)` starts the `Effect` with payload and returns a Promise
-- [use(function)](./api/effector/Effect.md#usehandler) replaces the handler in the effect (can be called multiple times)
-- [watch(watcher)](./api/effector/Effect.md#watchwatcher) listens to the effect and calls provided [`watcher`](#watcher) when effect starts
-
 ## Domain
 
 _Domain_ is a namespace for your events, stores and effects.
@@ -127,36 +44,6 @@ It is useful for logging or other side effects.
 
 [Domain](./api/effector/Domain.md) in api documentation
 
-```typescript
-function createDomain(domainName?: string): Domain
-```
-
-- [createDomain(domainName)](./api/effector/createDomain.md) creates a new domain
-
-```typescript
-type Domain = {
-  onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
-  onCreateEffect(
-    hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
-  ): Subscription
-  onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription
-  onCreateDomain(hook: (newDomain: Domain) => any): Subscription
-  createEvent<Payload>(name?: string): Event<Payload>
-  createEffect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
-  createStore<State>(defaultState: State): Store<State>
-  createDomain(name?: string): Domain
-}
-```
-
-- [onCreateEvent(hook)](./api/effector/Domain.md#oncreateeventhook) calls the hook when nested [`Event`](#Event) is created
-- [onCreateEffect(hook)](./api/effector/Domain.md#oncreateeffecthook) calls the hook when nested [`Effect`](#Effect) is created
-- [onCreateStore(hook)](./api/effector/Domain.md#oncreatestorehook) calls the hook when nested [`Store`](#Store) is created
-- [onCreateDomain(hook)](./api/effector/Domain.md#oncreatedomainhook) calls the hook when nested [`Domain`](#Domain) is created
-- [createEvent(name)](./api/effector/Domain.md#createeventname) creates a domain-bound [`Event`](#Event)
-- [createEffect(name)](./api/effector/Domain.md#createeffectname) creates a domain-bound [`Effect`](#Effect)
-- [createStore(defaultState)](./api/effector/Domain.md#createstoredefaultstate) creates a domain-bound [`Store`](#Store)
-- [createDomain(name)](./api/effector/Domain.md#createdomainname) creates a nested, domain-bound [`Domain`](#Domain)
-
 ## Unit
 
 Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
@@ -164,7 +51,7 @@ There are four units types: [store], [event], [effect] and [domain]
 
 ## Common unit
 
-Common units can be used to trigger updates of other units. There are three common unit types: [store], [event] and [effect]. **When a method accepts units, it means that it accepts events, effects, and stores** a source of reactive updates
+Common units can be used to trigger updates of other units. There are three common unit types: [store], [event] and [effect]. **When a method accepts units, it means that it accepts events, effects, and stores** as a source of reactive updates
 
 ## Purity
 
@@ -255,6 +142,10 @@ type Subscription = {
 ```
 
 Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
+
+:::caution Managing subscriptions manually distracts from business logic improvements
+Effector provides a wide range of features to minimize the need to remove subscriptions. This sets it apart from most other reactive libraries
+:::
 
 [effect]: ./api/effector/Effect.md
 [store]: ./api/effector/Store.md
