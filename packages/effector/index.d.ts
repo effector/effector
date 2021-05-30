@@ -446,6 +446,7 @@ export function launch<T>(config: {
   defer?: boolean
   page?: any
 }): void
+export function fromObservable<T>(observable: Observable<T>): Event<T>
 export function fromObservable<T>(observable: unknown): Event<T>
 
 export function createEvent<E = void>(eventName?: string): Event<E>
