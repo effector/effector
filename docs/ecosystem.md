@@ -30,3 +30,4 @@ More content in [awesome-effector repository](https://github.com/effector/awesom
 
 - [effector SSR](https://github.com/effector/razzle-template) - SSR on React, TypeScript, Razzle and Styled.
 - [CRA template](https://github.com/effector/cra-template) - Simple CreateReactApp template.
+- [Vite+typescript template](https://github.com/mmnkuh/effector-vite-template)
