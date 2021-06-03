@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
   <TabItem value="npm">
 
 ```bash
-npm install --save effector
+npm install effector
 ```
 
   </TabItem>
@@ -57,7 +57,7 @@ effector 21.0.0
   <TabItem value="npm">
 
 ```bash
-npm install --save effector effector-react
+npm install effector effector-react
 ```
 
   </TabItem>
@@ -82,7 +82,7 @@ yarn add effector effector-react
   <TabItem value="npm">
 
 ```bash
-npm install --save effector effector-vue
+npm install effector effector-vue
 ```
 
   </TabItem>
@@ -111,13 +111,26 @@ Examples in this documentation are running in [our online playground](https://sh
 
 ## Compatibility
 
-:::note since
-effector 20.1.0
-:::
+The library provides separate modules with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices): `effector/compat`, `effector-react/compat` and `effector-vue/compat`
 
-Use `effector/compat`, `effector-react/compat` and `effector-vue/compat` modules to support IE11 and Chrome 47 (Smart TV browser) without babel.
+Usage with manual import replacement:
 
 ```diff
 - import {createStore} from 'effector'
 + import {createStore} from 'effector/compat'
+```
+
+Usage with [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver):
+
+```json title=".babelrc"
+{
+  "plugins": [
+    ["babel-plugin-module-resolver", {
+      "alias": {
+        "^effector$": "effector/compat",
+        "^effector-react$": "effector-react/compat"
+      }
+    }]
+  ]
+}
 ```

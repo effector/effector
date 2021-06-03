@@ -18,7 +18,7 @@ import TabItem from '@theme/TabItem';
   <TabItem value="npm">
 
 ```bash
-npm install --save effector
+npm install effector
 ```
 
   </TabItem>
@@ -31,7 +31,7 @@ yarn add effector
   </TabItem>
   <TabItem value="deno">
 
-Импортируй `effector.mjs` с любого CDN
+Можно импортировать `effector.mjs` с любого CDN, например так:
 
 ```typescript
 import {createStore} from 'https://unpkg.com/effector/effector.mjs'
@@ -58,7 +58,7 @@ import {createStore} from 'https://unpkg.com/effector/effector.mjs'
   <TabItem value="npm">
 
 ```bash
-npm install --save effector effector-react
+npm install effector effector-react
 ```
 
   </TabItem>
@@ -83,7 +83,7 @@ yarn add effector effector-react
   <TabItem value="npm">
 
 ```bash
-npm install --save effector effector-vue
+npm install effector effector-vue
 ```
 
   </TabItem>
@@ -100,15 +100,38 @@ yarn add effector effector-vue
 
 Svelte изначально работает с effector без дополнительных пакетов. [Пример игры](https://github.com/today-/citycatch) написанной с помощью svelte и effector
 
+## DevTools
+
+Пакет [effector-logger](https://github.com/effector/logger) позволяет выводить обновления в консоль и отображать текущие значения состояний в ui браузера, а также подключать приложение к redux devtools
+
+## Online playground
+
+Примеры в этой документации работают в [effector playground](https://share.effector.dev), который позволяет быстро тестировать идеи и делиться ими. Typescript и react поддерживаются из коробки
+
+[Репозиторий проекта](https://github.com/effector/repl)
+
 ## Совместимость
 
-:::note
-Добавлено в effector 20.1.0
-:::
+Библиотека предоставляет отдельные модули с совместимостью вплоть до IE11 и Chrome 47 (браузера для Smart TV устройств):  `effector/compat`, `effector-react/compat` и `effector-vue/compat`
 
-Используй `effector/compat`, `effector-react/compat` и `effector-vue/compat` модули для поддержки IE11 и Chrome 47 (браузер Smart TV устройств) без необходимости компиляции через babel.
+Использование с заменой импорта:
 
 ```diff
 - import {createStore} from 'effector'
 + import {createStore} from 'effector/compat'
+```
+
+Использование с [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver):
+
+```json title=".babelrc"
+{
+  "plugins": [
+    ["babel-plugin-module-resolver", {
+      "alias": {
+        "^effector$": "effector/compat",
+        "^effector-react$": "effector-react/compat"
+      }
+    }]
+  ]
+}
 ```
