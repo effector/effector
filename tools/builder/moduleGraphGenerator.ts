@@ -1,7 +1,5 @@
-//@flow
 import * as Path from 'path'
 import {outputFileSync} from 'fs-extra'
-//$off
 import chroma from 'chroma-js'
 
 const scale = chroma.scale([chroma('#fafa6e').darken(2), '#2A4858']).mode('lch')
@@ -10,15 +8,15 @@ function field({
   name,
   value,
   quotes = false,
-}: {|
-  name: string,
-  value: *,
-  quotes?: boolean,
-|}) {
+}: {
+  name: string
+  value: any
+  quotes?: boolean
+}) {
   if (quotes) value = quote(value)
   return `${name}=${value}`
 }
-function quote(text) {
+function quote(text: any) {
   return `"${String(text)}"`
 }
 function definition({name, spaces, props}) {
@@ -270,16 +268,16 @@ function getPrefix(ids) {
 }
 
 type Opts = {
-  exclude?: string,
-  prune?: boolean,
-  output: string,
+  exclude?: string
+  prune?: boolean
+  output?: string
 }
 
 export default function plugin(options: Opts = {}): any {
-  const exclude = str => options.exclude && str.match(options.exclude)
+  const exclude = (str: string) => options.exclude && str.match(options.exclude)
 
   return {
-    generateBundle(bundleOptions, bundle, isWrite) {
+    generateBundle(bundleOptions: any, bundle: any, isWrite: boolean) {
       const ids = []
       for (const moduleId of this.moduleIds) {
         if (!exclude(moduleId)) {
@@ -288,7 +286,7 @@ export default function plugin(options: Opts = {}): any {
       }
 
       const prefix = getPrefix(ids)
-      const strip = str => str.substring(prefix.length)
+      const strip = (str: string) => str.substring(prefix.length)
 
       const modules = []
       ids.forEach(id => {

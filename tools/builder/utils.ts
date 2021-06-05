@@ -1,12 +1,12 @@
-//@flow
 import {resolve, join, relative} from 'path'
 import * as fs from 'fs-extra'
 
+//@ts-ignore
 import execa from 'execa'
 
 export const cliArgs: {
-  current: string[],
-  original: string[],
+  current: string[]
+  original: string[]
 } = {
   current: process.argv.slice(2),
   original: process.argv.slice(2),
@@ -19,7 +19,7 @@ export function dir(...paths: string[]) {
 
 export async function outputPackageJSON(
   path: string,
-  config: {[key: string]: any, ...},
+  config: {[key: string]: any},
 ) {
   let fullPath
   if (path.endsWith('package.json')) fullPath = dir(path)
@@ -48,7 +48,7 @@ export function booleanEnv(
 }
 
 export function publishScript(name: string) {
-  const onCatch = error => {
+  const onCatch = (error: any) => {
     if (booleanEnv(process.env.PRINT_ERRORS, false)) {
       console.error(error)
     }

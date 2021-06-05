@@ -1,12 +1,11 @@
-//@flow
 const nameCache = {}
 
 export const minifyConfig = ({
   beautify,
   inline = true,
 }: {
-  beautify: boolean,
-  inline?: boolean,
+  beautify: boolean
+  inline?: boolean
 }) => ({
   parse: {
     bare_returns: false,

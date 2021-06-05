@@ -1,5 +1,3 @@
-//@flow
-/* eslint-disable max-len */
 import * as fs from 'fs-extra'
 import {load} from 'js-yaml'
 import {cliArgs} from 'Builder/utils'
@@ -8,10 +6,10 @@ import {setConfig} from 'Builder/taskList'
 export default {
   beforeAll: [
     () => fs.emptyDir(`${process.cwd()}/npm`),
-    async() => {
+    async () => {
       process.env.IS_BUILD = 'true'
     },
-    async() => {
+    async () => {
       if (cliArgs.current.length < 1) return
       const argRaw = cliArgs.current[0]
       let body

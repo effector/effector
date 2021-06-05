@@ -1,11 +1,6 @@
-//@flow
-
 import {readFile, outputFile} from 'fs-extra'
-//$off
 import Viz from 'viz.js'
-//$off
 import {Module, render} from 'viz.js/full.render.js'
-//$off
 import sharp from 'sharp'
 import {massCopy, publishScript} from 'Builder/utils'
 import {

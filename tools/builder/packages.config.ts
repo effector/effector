@@ -1,5 +1,3 @@
-//@flow
-
 const common = {
   author: 'Zero Bias',
   maintainers: [
@@ -54,10 +52,10 @@ const version = {
   forest: '0.19.6',
 }
 
-const compiledFile = name => [`${name}.js`, `${name}.js.map`]
-const esmFile = name => [`${name}.mjs`, `${name}.mjs.map`]
+const compiledFile = (name: string) => [`${name}.js`, `${name}.js.map`]
+const esmFile = (name: string) => [`${name}.mjs`, `${name}.mjs.map`]
 
-const getFiles = name => [
+const getFiles = (name: string) => [
   'README.md',
   'LICENSE',
   'index.d.ts',

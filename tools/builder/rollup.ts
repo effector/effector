@@ -1,17 +1,12 @@
-//@flow
 import {rollup} from 'rollup'
-//$off
 import {babel} from '@rollup/plugin-babel'
 import json from '@rollup/plugin-json'
-//$off
 import resolve from '@rollup/plugin-node-resolve'
-//$off
 import {terser} from 'rollup-plugin-terser'
-//$off
 import commonjs from '@rollup/plugin-commonjs'
-//$off
+//@ts-ignore
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
-//$off
+//@ts-ignore
 import analyze from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
 
@@ -20,7 +15,7 @@ import {dir, getSourcemapPathTransform} from './utils'
 import {minifyConfig} from './minificationConfig'
 
 const compatNameCache = {}
-const onwarn = (warning, rollupWarn: any) => {
+const onwarn = (warning: any, rollupWarn: any) => {
   if (
     warning.code !== 'CIRCULAR_DEPENDENCY' &&
     warning.code !== 'NON_EXISTENT_EXPORT'
@@ -114,7 +109,7 @@ const getPlugins = (
     minifyConfig({
       beautify: !!process.env.PRETTIFY,
       inline: !name.endsWith('.umd'),
-    }),
+    }) as any,
   ),
   graph: graphPlugin({
     output: 'modules.dot',
@@ -224,7 +219,7 @@ export async function rollupEffectorReact() {
   async function createSSR({
     file: {cjs, es},
   }: {
-    file: {cjs: string, es: string},
+    file: {cjs: string; es: string}
   }) {
     await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
     async function runBuild(file: string, format) {
@@ -291,7 +286,7 @@ export async function rollupEffectorVue() {
 }
 
 async function createUmd(
-  name,
+  name: string,
   {external, file, umdName, globals, extension = 'js', bundleEffector = false},
 ) {
   const plugins = getPlugins(`${name}.umd`)
@@ -320,7 +315,7 @@ async function createUmd(
     globals,
   })
 }
-async function createCompat(name, extension = 'js') {
+async function createCompat(name: string, extension = 'js') {
   const plugins = getPlugins(`${name}.compat`)
   //$off
   const {getAliases} = require('../babel.config')
@@ -425,20 +420,20 @@ async function createCompat(name, extension = 'js') {
   })
 }
 async function createEsCjs(
-  name,
+  name: string,
   {
     file: {es, cjs},
     renderModuleGraph = false,
     input = 'index',
     inputExtension = 'js',
     replaceVueReactivity = false,
-  }: {|
-    file: {|es?: string, cjs: string|},
-    renderModuleGraph?: boolean,
-    input?: string,
-    inputExtension?: string,
-    replaceVueReactivity?: boolean,
-  |},
+  }: {
+    file: {es?: string; cjs: string}
+    renderModuleGraph?: boolean
+    input?: string
+    inputExtension?: string
+    replaceVueReactivity?: boolean
+  },
 ) {
   const pluginsCjs = getPlugins(input === 'index' ? name : input, {
     replaceVueNext: true,

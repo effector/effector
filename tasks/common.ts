@@ -1,5 +1,3 @@
-//@flow
-
 import {massCopy, outputPackageJSON} from 'Builder/utils'
 import packages from 'Builder/packages.config'
 

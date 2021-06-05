@@ -5,14 +5,16 @@ const {nodeResolve: resolvePlugin} = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
 const json = require('@rollup/plugin-json')
 
+const extensions = ['.js', '.mjs', '.ts', '.tsx', '.json']
 const input = {
-  input: resolve(__dirname, 'index.js'),
+  input: resolve(__dirname, 'index.ts'),
   plugins: [
     babel({
       babelrc: false,
       skipPreflightCheck: true,
+      extensions,
       presets: [
-        '@babel/preset-flow',
+        ['@babel/preset-typescript', {allExtensions: true}],
         [
           '@babel/preset-env',
           {
@@ -36,8 +38,8 @@ const input = {
       babelHelpers: 'bundled',
     }),
     json(),
-    resolvePlugin(),
-    commonjs(),
+    resolvePlugin({extensions}),
+    commonjs({extensions}),
   ],
   external: [
     'path',
