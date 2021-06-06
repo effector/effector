@@ -66,9 +66,12 @@ const grouping = {
       cur.fn ? `, fn:${cur.fnDescription}` : ''
     }`,
   sortByFields: {
-    source: ['ab', 'a', 'tuple_aa', 'tuple_a'],
-    fn: [false, true],
     hasClock: [false, true],
+    source: ['ab', 'a', 'tuple_aa', 'tuple_a'],
+    sourceDescription: 'string',
+    fnDescription: [undefined, 'untyped', 'typed', 'assert'],
+    fnText: 'string',
+    fn: [false, true],
   },
 }
 

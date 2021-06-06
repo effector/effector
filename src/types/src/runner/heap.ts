@@ -33,7 +33,7 @@ function merge<T>(a: item<T>, b: item<T>, isAafterB: (a: T, b: T) => boolean) {
   if (!b) return a
 
   let ret
-  if (!isAafterB(a.value, b.value)) {
+  if (!isAafterB(a.value, b.value) && isAafterB(b.value, a.value)) {
     ret = a
     a = b
     b = ret

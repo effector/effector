@@ -13,6 +13,9 @@ import {
 import {forIn} from './runner/forIn'
 
 export {generateCaseSetFile, byFields, createGroupedCases}
+
+type VariantDef = Record<string, any>
+
 function createGroupedCases(
   casesDefs,
   {createTestLines, getHash, describeGroup, sortByFields, filter},
@@ -59,7 +62,14 @@ function createGroupedCases(
   }
   // console.log(...casesDefs)
   // console.log(...casesDefsPending)
-  const defsGroups = new Map()
+  type Group = {
+    itemsPass: any[]
+    itemsFail: any[]
+    description: string
+    largeGroup: string | null
+    noGroup: boolean
+  }
+  const defsGroups = new Map<string, Group>()
   let cur
   while ((cur = casesDefsPending.pop())) {
     const hash = getHash(cur)
@@ -84,7 +94,7 @@ function createGroupedCases(
       set.largeGroup = description.largeGroup || null
     }
   }
-  const descriptions = {} as Record<string, any>
+  const descriptions = {} as Record<string, Group>
   for (const [hash, group] of [...defsGroups]) {
     const text = `${group.largeGroup || ''} ${group.description}`
     if (text in descriptions) {
@@ -106,7 +116,7 @@ function createGroupedCases(
     largeGroup,
   } of defsGroups.values()) {
     if (itemsPass.length === 0 && itemsFail.length === 0) continue
-    const testSuiteItems = []
+    const testSuiteItems = [] as string[]
     if (itemsPass.length > 0) {
       //itemsPass = sortList(itemsPass)
       const blockOpen = itemsPass.length === 1 ? null : '{'
@@ -143,7 +153,7 @@ function createGroupedCases(
         ]),
       )
     }
-    const lines = []
+    const lines = [] as string[]
     if (noGroup || testSuiteItems.length === 1) {
       lines.push(...testSuiteItems)
     } else {
@@ -176,6 +186,7 @@ const valid = {
     'permute',
     'flag',
     'split',
+    'ref',
   ],
   split: ['cases', 'variant', 'match', 'variants'],
   flag: ['needs', 'need', 'avoid'],
@@ -197,10 +208,16 @@ function validateConfig(config: any, validFields: string[]) {
   if (keys.length > 0) throw Error(`incorrect fields ${printArray(keys)})`)
 }
 
-function byFields(values, {shape = {}}) {
+function byFields(values: Array<object>, {shape = {}}) {
   for (const key in shape) {
     const def = shape[key]
     validateConfig(def, valid.def)
+    if ('ref' in def) {
+      values = computeField(values, {
+        field: key,
+        fn: scope => scope[def.ref],
+      })
+    }
     if (def.union) {
       values = permuteField(values, key, {
         items: def.union,
@@ -256,8 +273,8 @@ function byFields(values, {shape = {}}) {
     if (def.flag) {
       validateConfig(def.flag, valid.flag)
       const {flag} = def
-      const ignoreChecks = []
-      const computedFields = {}
+      const ignoreChecks = [] as Array<(value: any) => boolean>
+      const computedFields = {} as Record<string, any>
       let computedCount = 0
       if (flag.need) flag.needs = flag.need
       if (flag.needs) {
@@ -297,7 +314,7 @@ function byFields(values, {shape = {}}) {
         unbox: true,
         ignore:
           ignoreChecks.length > 0
-            ? item => ignoreChecks.every(fn => fn(item))
+            ? (item: any) => ignoreChecks.every(fn => fn(item))
             : null,
       })
     }
@@ -308,14 +325,14 @@ function byFields(values, {shape = {}}) {
   return values
 }
 
-function splitField(values, field, config) {
+function splitField(values: Array<object>, field: string, config) {
   validateConfig(config, valid.split)
   const {cases, variant, match = variant, variants} = config
   if (variants) {
     const variantGroupNames = Object.keys(variants)
-    function buildFullCases(depth, currentCases) {
+    function buildFullCases(depth: number, currentCases) {
       const isLastGroup = depth === variantGroupNames.length - 1
-      const casesFull = {}
+      const casesFull = {} as Record<string, any>
       const variantGroupName = variantGroupNames[depth]
       const variantGroup = variants[variantGroupName]
       function processCase(currentCase) {
@@ -344,20 +361,7 @@ function splitField(values, field, config) {
         ) {
           // if current case contains only operation names in keys
           // then it is already an operation
-          if (
-            caseKeys.every(key => {
-              switch (key) {
-                case 'compute':
-                case 'split':
-                case 'union':
-                case 'flag':
-                case 'permute':
-                  return true
-                default:
-                  return false
-              }
-            })
-          ) {
+          if (caseKeys.every(key => valid.def.includes(key))) {
             return currentCase
           }
           // if not every case keys is valid operation name then it is
@@ -382,7 +386,7 @@ function splitField(values, field, config) {
           },
         }
       }
-      function processCaseName(caseName) {
+      function processCaseName(caseName: string) {
         const currentCase = currentCases[caseName]
         if (currentCase === undefined) return
         if (Array.isArray(currentCase)) {
@@ -407,14 +411,14 @@ function splitField(values, field, config) {
   const result = []
   let matcher
   if (typeof match === 'object' && match !== null) {
-    const matchCases = {}
+    const matchCases = {} as Record<string, string>
     for (const key in match) matchCases[key] = key
     matcher = matchDeep({
       variants: {_: match},
       cases: matchCases,
     })
   } else if (typeof match === 'string') {
-    matcher = item => item[match]
+    matcher = (item: any) => item[match]
   } else {
     matcher = match
   }
@@ -440,17 +444,39 @@ function splitField(values, field, config) {
   }
   return result
 }
-function computeField(values, config) {
+function computeField(
+  values: Array<object>,
+  config:
+    | {
+        field: string
+        cases: any
+        variant: VariantDef
+      }
+    | {
+        field: string
+        fn: (value: any) => any
+      }
+    | {
+        field: string
+        cases: any
+        variants: Record<string, VariantDef>
+      },
+) {
   validateConfig(config, valid.compute)
-  let {field, fn, cases, variants, variant} = config
-  if (cases) {
-    fn = variants
-      ? matchDeep({variants, cases})
-      : matchDeep({variants: {_: variant}, cases})
+  const {field} = config
+  let fn: (value: any) => any
+  if ('fn' in config) {
+    fn = config.fn
+  } else if ('variants' in config) {
+    const {variants, cases} = config
+    fn = matchDeep({variants, cases})
+  } else {
+    const {variant, cases} = config
+    fn = matchDeep({variants: {_: variant}, cases})
   }
   return values.map(val => ({...val, [field]: fn(val)}))
 }
-function permuteField(values, field, config) {
+function permuteField(values: Array<object>, field: string, config) {
   if (Array.isArray(config)) {
     return permuteField(values, field, {
       items: config,
@@ -503,15 +529,20 @@ function permuteField(values, field, config) {
   if (ignore) return results.filter(ignore)
   return results
 }
-function selectFromNToM(items, from, to, noReorder) {
-  const result = []
+function selectFromNToM<T>(
+  items: T[],
+  from: number,
+  to: number,
+  noReorder: boolean,
+) {
+  const result = [] as T[][]
   const fn = noReorder ? selectNNoReorder : selectN
   for (let i = from; i < Math.min(to + 1, items.length + 1); i++) {
     result.push(...fn(items, i))
   }
   return result
 }
-function selectNNoReorder(items, n) {
+function selectNNoReorder<T>(items: T[], n: number): T[][] {
   if (n > items.length) return [[]]
   if (n === 0) return [[]]
   if (n === 1) return items.map(item => [item])
@@ -529,7 +560,7 @@ function selectNNoReorder(items, n) {
   }
   return result
 }
-function selectN(items, n) {
+function selectN<T>(items: T[], n: number): T[][] {
   if (n === 0) return [[]]
   if (n === 1) return items.map(item => [item])
   const result = []
@@ -669,26 +700,50 @@ ${suite}`
   await promises.writeFile(fullFileName, content)
 }
 
+const collator = new Intl.Collator('en', {
+  caseFirst: 'upper',
+  usage: 'sort',
+  sensitivity: 'variant',
+  numeric: true,
+})
 function skewHeapSortFieldsComparator<
-  Obj extends Record<string, ReadonlyArray<any>>
+  Obj extends Record<string, ReadonlyArray<any> | 'string'>
 >(sortByFields: Obj) {
-  const fields = [] as Array<{
-    field: keyof Obj
-    isVoidFalse: boolean
-    prioritySet: ReadonlyArray<any>
-  }>
-  forIn(sortByFields, (prioritySet, field) => {
-    const isVoidFalse =
-      prioritySet.includes(false) && !prioritySet.includes(undefined)
-    fields.push({
-      field,
-      isVoidFalse,
-      prioritySet: [...prioritySet], //.reverse(),
-    })
+  const fields = [] as Array<
+    | {
+        field: keyof Obj
+        isVoidFalse: boolean
+        type: 'prioritySet'
+        prioritySet: ReadonlyArray<any>
+      }
+    | {
+        field: keyof Obj
+        isVoidFalse: boolean
+        type: 'string'
+      }
+  >
+  forIn(sortByFields, (prioritySet: ReadonlyArray<any> | 'string', field) => {
+    if (prioritySet === 'string') {
+      fields.push({
+        field,
+        isVoidFalse: false,
+        type: 'string',
+      })
+    } else {
+      const isVoidFalse =
+        prioritySet.includes(false) && !prioritySet.includes(undefined)
+      fields.push({
+        field,
+        isVoidFalse,
+        type: 'prioritySet',
+        prioritySet: [...prioritySet], //.reverse(),
+      })
+    }
   })
   return function isAafterB(a: any, b: any) {
     for (let i = 0; i < fields.length; i++) {
-      const {field, isVoidFalse, prioritySet} = fields[i]
+      const item = fields[i]
+      const {field, isVoidFalse} = item
       let aVal = a[field]
       let bVal = b[field]
       if (isVoidFalse) {
@@ -696,14 +751,22 @@ function skewHeapSortFieldsComparator<
         if (bVal === undefined) bVal = false
       }
       if (aVal === bVal) continue
-      const ai = prioritySet.indexOf(aVal)
-      const bi = prioritySet.indexOf(bVal)
-      const hasA = ai !== -1
-      const hasB = bi !== -1
-      if (hasA && !hasB) return false
-      if (!hasA && hasB) return true
-      if (!hasA && !hasB) continue
-      return ai > bi
+      switch (item.type) {
+        case 'prioritySet': {
+          const {prioritySet} = item
+          const ai = prioritySet.indexOf(aVal)
+          const bi = prioritySet.indexOf(bVal)
+          const hasA = ai !== -1
+          const hasB = bi !== -1
+          if (hasA && !hasB) return false
+          if (!hasA && hasB) return true
+          if (!hasA && !hasB) continue
+          return ai > bi
+        }
+        case 'string': {
+          return collator.compare(aVal, bVal) > 0
+        }
+      }
     }
     const idDiff = a.__casesDefsID - b.__casesDefsID
     if (idDiff !== 0) return idDiff > 0
