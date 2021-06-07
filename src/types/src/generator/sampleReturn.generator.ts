@@ -5,12 +5,13 @@ import {
   computeFn,
   union,
   value,
-  matcher,
   computeVariant,
   computeVariants,
+  separate,
 } from '../runner/declarator'
 
 const grouping = {
+  dedupeHash: ({dedupeHash}: any) => dedupeHash,
   getHash: ({getHash}: any) => getHash,
   describeGroup: ({describeGroup}: any) => describeGroup,
   createTestLines: ({createTestLines}: any) => createTestLines,
@@ -27,34 +28,34 @@ const shapeNew = exec(() => {
   const source = union(['event', 'store', 'combinable'], 'source')
   const clock = union(['none', 'event', 'store', 'tuple'], 'clock')
   const target = union(['none', 'event', 'store', 'tuple'], 'target')
-  const fn = insert<string>('fn', {
-    split: {
-      match: matcher(
-        {clock},
-        {
-          noClock: {
-            clock: 'none',
-          },
-        },
-      ),
-      cases: exec(() => {
-        union(['none', 'noArgs', 'arg'], 'noClock')
-        union(['none', 'noArgs', 'arg', 'argPair'], '__')
-      }),
+  const fn = separate({
+    name: 'fn',
+    source: {clock},
+    variant: {
+      _: {
+        noClock: {clock: 'none'} as const,
+      },
+    },
+    cases: {
+      noClock: union<'none' | 'noArgs' | 'arg' | 'argPair'>([
+        'none',
+        'noArgs',
+        'arg',
+      ]),
+      __: union(['none', 'noArgs', 'arg', 'argPair']),
     },
   })
-  const typedFn = insert<boolean>('typedFn', {
-    split: {
-      match: matcher(
-        {fn},
-        {
-          hasFnArgs: [{fn: 'arg'}, {fn: 'argPair'}],
-        },
-      ),
-      cases: exec(() => {
-        insert<boolean>('hasFnArgs', {flag: {}})
-        value(false, '__')
-      }),
+  const typedFn = separate({
+    name: 'typedFn',
+    source: {fn},
+    variant: {
+      _: {
+        hasFnArgs: [{fn: 'arg' as const}, {fn: 'argPair' as const}],
+      },
+    },
+    cases: {
+      hasFnArgs: insert<boolean>({flag: {}}),
+      __: value(false),
     },
   })
 
@@ -146,7 +147,7 @@ const shapeNew = exec(() => {
             typed: {typedFn: true},
             untyped: {typedFn: false},
           },
-        },
+        } as const,
         cases: {
           none: null,
           noArgs: 'fn0',
@@ -233,6 +234,11 @@ const shapeNew = exec(() => {
       !pass && '//@ts-expect-error',
       `{const result: ${returnCode} = ${methodCode}}`,
     ],
+  })
+  const dedupeHash = computeFn({
+    name: 'dedupeHash',
+    source: {createTestLines},
+    fn: ({createTestLines}) => createTestLines.join(`\n`),
   })
 })
 

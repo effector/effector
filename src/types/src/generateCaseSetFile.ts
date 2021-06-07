@@ -18,11 +18,12 @@ type VariantDef = Record<string, any>
 
 function createGroupedCases(
   casesDefs,
-  {createTestLines, getHash, describeGroup, sortByFields, filter},
+  {createTestLines, getHash, describeGroup, sortByFields, filter, dedupeHash},
 ) {
   if (filter) {
     casesDefs = casesDefs.filter(filter)
   }
+  const testLinesSet = new Map<string, any>()
   let align = false
   if (typeof createTestLines === 'object' && createTestLines !== null) {
     const {method, shape, addExpectError = true} = createTestLines
@@ -72,6 +73,17 @@ function createGroupedCases(
   const defsGroups = new Map<string, Group>()
   let cur
   while ((cur = casesDefsPending.pop())) {
+    if (dedupeHash) {
+      const caseDefHash = dedupeHash(cur)
+      if (testLinesSet.has(caseDefHash)) {
+        // console.log(`duplicated dedupeHash "${caseDefHash}"`, {
+        //   cur,
+        //   saved: testLinesSet.get(caseDefHash),
+        // })
+        continue
+      }
+      testLinesSet.set(caseDefHash, cur)
+    }
     const hash = getHash(cur)
     let set = defsGroups.get(hash)
     if (!set) {
@@ -189,7 +201,7 @@ const valid = {
     'ref',
   ],
   split: ['cases', 'variant', 'match', 'variants'],
-  flag: ['needs', 'need', 'avoid'],
+  flag: ['needs', 'avoid'],
   permute: [
     'field',
     'items',
@@ -208,7 +220,7 @@ function validateConfig(config: any, validFields: string[]) {
   if (keys.length > 0) throw Error(`incorrect fields ${printArray(keys)})`)
 }
 
-function byFields(values: Array<object>, {shape = {}}) {
+function byFields(values: Array<object>, shape: Record<string, any>) {
   for (const key in shape) {
     const def = shape[key]
     validateConfig(def, valid.def)
@@ -276,7 +288,6 @@ function byFields(values: Array<object>, {shape = {}}) {
       const ignoreChecks = [] as Array<(value: any) => boolean>
       const computedFields = {} as Record<string, any>
       let computedCount = 0
-      if (flag.need) flag.needs = flag.need
       if (flag.needs) {
         const needs = Array.isArray(flag.needs) ? flag.needs : [flag.needs]
         for (let i = 0; i < needs.length; i++) {
@@ -306,7 +317,7 @@ function byFields(values: Array<object>, {shape = {}}) {
         })
       }
       if (computedCount > 0) {
-        values = byFields(values, {shape: computedFields})
+        values = byFields(values, computedFields)
       }
       values = permuteField(values, key, {
         items: [false, true],
@@ -324,8 +335,13 @@ function byFields(values: Array<object>, {shape = {}}) {
   }
   return values
 }
-
-function splitField(values: Array<object>, field: string, config) {
+type SplitConfig = {
+  cases: Record<string, any>
+  match?: string | Record<string, any>
+  variant?: Record<string, any>
+  variants?: Record<string, Record<string, any>>
+}
+function splitField(values: Array<object>, field: string, config: SplitConfig) {
   validateConfig(config, valid.split)
   const {cases, variant, match = variant, variants} = config
   if (variants) {
@@ -408,7 +424,7 @@ function splitField(values: Array<object>, field: string, config) {
       cases: buildFullCases(0, cases),
     })
   }
-  const result = []
+  const result = [] as object[]
   let matcher
   if (typeof match === 'object' && match !== null) {
     const matchCases = {} as Record<string, string>
@@ -435,11 +451,11 @@ function splitField(values: Array<object>, field: string, config) {
     if (Array.isArray(currentCase)) {
       result.push(
         ...currentCase.flatMap(subCase =>
-          byFields([value], {shape: {[field]: subCase}}),
+          byFields([value], {[field]: subCase}),
         ),
       )
     } else {
-      result.push(...byFields([value], {shape: {[field]: currentCase}}))
+      result.push(...byFields([value], {[field]: currentCase}))
     }
   }
   return result

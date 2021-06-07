@@ -3,25 +3,20 @@ const nextID = (() => {
   return () => (++id).toString(36)
 })()
 type Tuple<T = unknown> = [T] | [T, ...T[]]
-type Matcher<Src extends Record<string, Declarator>> = Partial<
+type SourceRec = Record<string, Declarator>
+type Matcher<Src extends SourceRec> = Partial<
   {[K in keyof Src]: Src[K] extends Ref<infer S, unknown> ? S : never}
 >
-type MatcherDeep<
-  SrcLayers extends Record<string, Record<string, Declarator>>
-> = {
-  [L in keyof SrcLayers]: Partial<
-    {
-      [K in keyof SrcLayers[L]]: SrcLayers[L][K] extends Ref<infer S, unknown>
-        ? S
-        : never
-    }
-  >
-}
+type SingleVariant<Src extends SourceRec> = Tuple<Matcher<Src>> | Matcher<Src>
+
+type VariantLevel<Src extends SourceRec> = Record<string, SingleVariant<Src>>
+type VariantLevelRec<Src extends SourceRec> = Record<string, VariantLevel<Src>>
 type Ref<T, K> = {
   id: string
   name: string
   kind: K
   __t: T
+  prepared: object
 }
 type Declarator =
   | Union
@@ -29,6 +24,11 @@ type Declarator =
   | Fn<unknown>
   | Raw<unknown>
   | ComputeVariant<unknown>
+  | Bool
+  | Separate<unknown>
+
+type Separate<T> = Ref<T, 'separate'>
+
 type Union<Cases extends string = string> = Ref<Cases, 'union'> & {
   variants: Tuple<Cases>
 }
@@ -39,12 +39,10 @@ type Fn<T> = Ref<T, 'fn'> & {fn: (args: any) => T}
 type ComputeVariant<T> = Ref<T, 'computeVariant'> & {
   cases: Record<string, T>
 }
-type RawCase =
-  | {compute: object}
-  | {value: any}
-  | {split: object}
-  | {flag: object}
-  | {true: object}
+
+type Bool = Ref<boolean, 'bool'>
+
+type RawCase = {compute: object} | {split: object} | {flag: object}
 type Raw<T = unknown> = Ref<T, 'raw'> & {value: RawCase}
 
 type BuiltInObject =
@@ -98,13 +96,9 @@ type UnionToTuple<Union> = UnionToIntersection<
   ? readonly [...UnionToTuple<Exclude<Union, Intersection>>, Intersection]
   : []
 
-type VariantRec<Src extends Record<string, Declarator>> = Record<
-  string,
-  Tuple<Matcher<Src>> | Matcher<Src>
->
 type CaseLayerLast<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   CurrentCase extends keyof Variants
 > = {
   [K in keyof Variants[CurrentCase]]: unknown
@@ -112,8 +106,8 @@ type CaseLayerLast<
 
 //prettier-ignore
 type CaseLayerMiddle<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   CurrentCase extends keyof Variants,
   CaseNames extends Tuple<keyof Variants>
 > = CaseNames extends readonly [infer NextCase, ...infer NextCaseNames]
@@ -129,8 +123,8 @@ type CaseLayerMiddle<
   : 'CaseLayerMiddle never'
 
 type CaseLayer<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>
 > = UnionToTuple<keyof Variants> extends readonly [
   infer CurrentCase,
   ...(infer CaseNames),
@@ -151,15 +145,15 @@ type ValueOf<Obj extends Record<string, unknown>> = Show<
 >
 
 type TypeOfCaseLayerLast<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   CurrentCase extends keyof Variants,
   Layer extends CaseLayerLast<Src, Variants, CurrentCase>
 > = ValueOf<Layer>
 
 type TypeOfCaseLayerMiddle<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   CurrentCase extends keyof Variants,
   CaseNames extends Tuple<keyof Variants>,
   Layer extends CaseLayerMiddle<Src, Variants, CurrentCase, CaseNames>
@@ -201,8 +195,8 @@ type TypeOfCaseLayerMiddle<
   : 'TypeOf CaseLayerMiddle never'
 type IsEq<A, B> = A extends B ? (B extends A ? 1 : 0) : 0
 type TypeOfCaseLayer<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   Layer extends CaseLayer<Src, Variants>
 > = UnionToTuple<keyof Variants> extends readonly [
   infer CurrentCase,
@@ -262,8 +256,8 @@ type TypeOfCaseLayer<
     : 'CurrentCase not a string'
   : 'TypeOf CaseLayer never'
 type LayerValue<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   Case extends keyof Variants,
   Layer extends CaseLayer<Src, Variants>,
   K extends keyof Layer
@@ -278,6 +272,204 @@ function getName(id: string, name?: string) {
   if (result in currentShape) result = `${id}_${result}`
   return result
 }
+type SepCases_<
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
+  AllCases extends Tuple<keyof Variants>
+> = AllCases extends readonly [infer CurrentCase, ...(infer CaseNames)]
+  ? CurrentCase extends string
+    ? CaseNames extends readonly []
+      ? Partial<{[K in keyof Variants[CurrentCase]]: Declarator}>
+      : CaseNames extends Tuple<string>
+      ? {
+          [K in keyof Variants[CurrentCase]]:
+            | Declarator
+            | SepCases_<Src, Variants, CaseNames>
+        }
+      : 'CaseNames not a string[]'
+    : 'CurrentCase not a string'
+  : 'TypeOf CaseLayer never'
+type SepCases<
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>
+> = UnionToTuple<keyof Variants> extends readonly [...(infer Keys)]
+  ? Keys extends Tuple<keyof Variants>
+    ? SepCases_<Src, Variants, Keys>
+    : never
+  : never
+
+type TypeofSepCases_<
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
+  Cases extends SepCases<Src, Variants>,
+  AllCases extends Tuple<keyof Variants>
+> = AllCases extends readonly [infer CurrentCase, ...(infer CaseNames)]
+  ? CurrentCase extends string
+    ? CaseNames extends readonly []
+      ? ValueOf<
+          {
+            [K in keyof Variants[CurrentCase]]: Cases[K] extends Ref<
+              infer T,
+              unknown
+            >
+              ? T
+              : never
+          }
+        >
+      : CaseNames extends Tuple<string>
+      ? ValueOf<
+          {
+            [K in keyof Variants[CurrentCase]]: Cases[K] extends SepCases_<
+              Src,
+              Variants,
+              CaseNames
+            >
+              ? TypeofSepCases_<Src, Variants, Cases[K], CaseNames>
+              : Cases[K] extends Ref<infer T, unknown>
+              ? T
+              : unknown
+          }
+        >
+      : 'CaseNames not a string[]'
+    : 'CurrentCase not a string'
+  : 'TypeOf CaseLayer never'
+
+type TypeofSepCases<
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
+  Cases extends SepCases<Src, Variants>
+> = UnionToTuple<keyof Variants> extends readonly [...(infer Keys)]
+  ? Keys extends Tuple<keyof Variants>
+    ? TypeofSepCases_<Src, Variants, Cases, Keys>
+    : never
+  : never
+
+// ------
+function isRef(value: unknown): value is Ref<unknown, unknown> {
+  return typeof value === 'object' && value !== null && '__t' in value
+}
+/**
+ * default cases '__' are not used in type inference
+ */
+export function separate<
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
+  Cases extends SepCases<Src, Variants>
+>({
+  name,
+  variant,
+  cases,
+  source,
+}: {
+  source: Src
+  name?: string
+  variant: Variants
+  cases: Cases
+}): Separate<TypeofSepCases<Src, Variants, Cases>> {
+  const id = nextID()
+
+  const variants = {} as any
+  for (const variantName in variant) {
+    variants[variantName] = matcher(source, variant[variantName])
+  }
+
+  const val: Separate<TypeofSepCases<Src, Variants, Cases>> = {
+    id,
+    name: getName(id, name),
+    kind: 'separate',
+    __t: null as any,
+    prepared: {
+      split: {
+        variants,
+        cases: traverseCases(variant, cases),
+      },
+    },
+  }
+
+  currentShape[val.name] = val.prepared
+  return val
+}
+function traverseCases(
+  variants: Record<string, Record<string, unknown>>,
+  cases: Record<string, any>,
+): Record<string, any> {
+  const variantNames = Object.keys(variants)
+  if (variantNames.length === 0) {
+    console.warn(`empty variants for cases`, cases)
+    return {}
+  }
+  const [first, ...rest] = variantNames
+  return traverseCases_(first, rest, variants, cases)
+  function traverseCases_(
+    currentVariantName: string,
+    nextVariants: string[],
+    variants: Record<string, Record<string, unknown>>,
+    cases: Record<string, any>,
+  ) {
+    const resultCases: Record<string, any> = {}
+    const variant = variants[currentVariantName]
+    const branchNames = [...Object.keys(variant), '__']
+    for (const branchName of branchNames) {
+      if (!(branchName in cases)) continue
+      const caseValue = cases[branchName]
+      if (isRef(caseValue)) {
+        resultCases[branchName] = caseValue.prepared
+        // {
+        //   ref: caseValue.name,
+        // }
+      } else if (typeof caseValue === 'object' && caseValue !== null) {
+        if (nextVariants.length > 0) {
+          const [first, ...rest] = nextVariants
+          resultCases[branchName] = traverseCases_(
+            first,
+            rest,
+            variants,
+            caseValue,
+          )
+        } else {
+          console.warn(
+            `incorrect case value for last branch "${branchName}"`,
+            caseValue,
+          )
+        }
+      } else {
+        console.warn(
+          `incorrect case value for branch "${branchName}"`,
+          caseValue,
+        )
+      }
+    }
+    return resultCases
+  }
+}
+
+export function bool<Src extends SourceRec>({
+  source,
+  name,
+  true: onTrue,
+  false: onFalse,
+}: {
+  source: Src
+  name?: string
+  true?: SingleVariant<Src>
+  false?: SingleVariant<Src>
+}) {
+  const id = nextID()
+  const val: Bool = {
+    id,
+    name: getName(id, name),
+    kind: 'bool',
+    __t: false,
+    prepared: {
+      bool: {
+        true: onTrue && singleMatcher(source, onTrue),
+        false: onFalse && singleMatcher(source, onFalse),
+      },
+    },
+  }
+  if (name === val.name) currentShape[val.name] = val.prepared
+  return val
+}
 export function value<T>(value: T, name?: string) {
   const id = nextID()
   const val: Value<T> = {
@@ -286,8 +478,9 @@ export function value<T>(value: T, name?: string) {
     kind: 'value',
     value,
     __t: value,
+    prepared: {value},
   }
-  currentShape[val.name] = {value}
+  if (name === val.name) currentShape[val.name] = val.prepared
   return val
 }
 export function union<OneOf extends string>(
@@ -301,14 +494,12 @@ export function union<OneOf extends string>(
     kind: 'union',
     variants: oneOf,
     __t: null as any,
+    prepared: {union: oneOf},
   }
-  currentShape[val.name] = {union: oneOf}
+  if (name === val.name) currentShape[val.name] = val.prepared
   return val
 }
-export function computeFn<
-  Src extends Tuple<Declarator> | Record<string, Declarator>,
-  T
->({
+export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
   source,
   fn,
   name,
@@ -328,24 +519,25 @@ export function computeFn<
     kind: 'fn',
     fn,
     __t: null as any,
-  }
-  currentShape[val.name] = {
-    compute: {
-      fn(args: Record<string, any>) {
-        return val.fn(
-          argsToSource({
-            source,
-            args,
-          }),
-        )
+    prepared: {
+      compute: {
+        fn(args: Record<string, any>) {
+          return val.fn(
+            argsToSource({
+              source,
+              args,
+            }),
+          )
+        },
       },
     },
   }
+  currentShape[val.name] = val.prepared
   return val
 }
 export function computeVariants<
-  Src extends Record<string, Declarator>,
-  Variants extends Record<string, VariantRec<Src>>,
+  Src extends SourceRec,
+  Variants extends VariantLevelRec<Src>,
   Cases extends CaseLayer<Src, Variants>
 >({
   source,
@@ -360,55 +552,27 @@ export function computeVariants<
 }): ComputeVariant<TypeOfCaseLayer<Src, Variants, Cases>> {
   const id = nextID()
 
+  const variants = {} as any
+  for (const variantName in variant) {
+    variants[variantName] = matcher(source, variant[variantName])
+  }
   const val: ComputeVariant<TypeOfCaseLayer<Src, Variants, Cases>> = {
     id,
     name: getName(id, name),
     kind: 'computeVariant',
     cases: cases as any,
     __t: null as any,
+    prepared: {
+      compute: {variants, cases},
+    },
   }
-  const variants = {} as any
-  for (const variantName in variant) {
-    variants[variantName] = matcher(source, variant[variantName])
-  }
-  currentShape[val.name] = {
-    compute: {variants, cases},
-  }
+
+  currentShape[val.name] = val.prepared
   return val
 }
 export function computeVariant<
-  Src extends Record<string, Declarator>,
-  Variant extends Record<string, Tuple<Matcher<Src>> | Matcher<Src>>,
-  Cases extends {[K in keyof Variant]: unknown}
->({
-  source,
-  variant,
-  cases,
-  name,
-}: {
-  source: Src
-  variant: Variant
-  cases: Cases
-  name?: string
-}): ComputeVariant<Cases[keyof Cases]>
-// export function computeVariant<
-//   SrcLayers extends Record<string, Record<string, Declarator>>,
-//   Variant extends Record<string, MatcherDeep<SrcLayers>>,
-//   Cases extends {[K in keyof Variant]: }
-// >({
-//   source,
-//   variant,
-//   cases,
-//   name,
-// }: {
-//   source: Src
-//   variant: Variant
-//   cases: Cases
-//   name?: string
-// }): ComputeVariant<Cases[keyof Cases]>
-export function computeVariant<
-  Src extends Record<string, Declarator>,
-  Variant extends Record<string, Tuple<Matcher<Src>> | Matcher<Src>>,
+  Src extends SourceRec,
+  Variant extends VariantLevel<Src>,
   Cases extends {[K in keyof Variant]: unknown}
 >({
   source,
@@ -429,13 +593,14 @@ export function computeVariant<
     kind: 'computeVariant',
     cases: cases as any,
     __t: null as any,
-  }
-  currentShape[val.name] = {
-    compute: {
-      variant: matcher(source, variant),
-      cases,
+    prepared: {
+      compute: {
+        variant: matcher(source, variant),
+        cases,
+      },
     },
   }
+  currentShape[val.name] = val.prepared
   return val
 }
 /** convert internal variable map to object with human-readable fields
@@ -446,9 +611,7 @@ export function computeVariant<
  *        source = [bar_2, foo_1]
  *          return = ['ok', 0]
  */
-function argsToSource<
-  Src extends Tuple<Declarator> | Record<string, Declarator>
->({
+function argsToSource<Src extends Tuple<Declarator> | SourceRec>({
   source,
   args,
 }: {
@@ -463,7 +626,7 @@ function argsToSource<
   } else {
     const argsMap: Record<string, any> = {}
     for (const key in source) {
-      argsMap[key] = args[(source as Record<string, Declarator>)[key].name]
+      argsMap[key] = args[(source as SourceRec)[key].name]
     }
     namedArgs = argsMap
   }
@@ -476,7 +639,7 @@ function argsToSource<
  *        return = {foo_1: 0, bar_2: 'ok'}
  */
 function sourceToArgs<
-  Src extends Record<string, Declarator>,
+  Src extends SourceRec,
   Case extends Partial<
     {[K in keyof Src]: Src[K] extends Ref<infer S, unknown> ? S : never}
   >
@@ -490,12 +653,12 @@ function sourceToArgs<
 }
 
 export function matcher<
-  Src extends Record<string, Declarator>,
-  Cases extends Record<string, Tuple<Matcher<Src>> | Matcher<Src>>
->(source: Src, cases: Cases) {
+  Src extends SourceRec,
+  Variant extends VariantLevel<Src>
+>(source: Src, cases: Variant) {
   const result = {} as {
-    [K in keyof Cases]: Cases[K] extends Tuple<unknown>
-      ? {[L in keyof Cases[K]]: Record<string, any>}
+    [K in keyof Variant]: Variant[K] extends Tuple<unknown>
+      ? {[L in keyof Variant[K]]: Record<string, any>}
       : Record<string, any>
   }
   for (const key in cases) {
@@ -504,13 +667,16 @@ export function matcher<
   return result
 }
 function singleMatcher<
-  Src extends Record<string, Declarator>,
-  Case extends Tuple<Matcher<Src>> | Matcher<Src>
->(source: Src, caseItem: Case) {
+  Src extends SourceRec,
+  VariantField extends SingleVariant<Src>
+>(source: Src, caseItem: VariantField) {
   if (Array.isArray(caseItem)) {
     return caseItem.map(caseItem => sourceToArgs(source, caseItem))
   }
-  return sourceToArgs(source, caseItem as Exclude<Case, Tuple<Matcher<Src>>>)
+  return sourceToArgs(
+    source,
+    caseItem as Exclude<VariantField, Tuple<Matcher<Src>>>,
+  )
 }
 export function insert<T = unknown>(name: string, shape: RawCase): Raw<T>
 export function insert<T = unknown>(shape: RawCase): Raw<T>
@@ -530,8 +696,9 @@ export function insert<T = unknown>(...args: [RawCase] | [string, RawCase]) {
     kind: 'raw',
     value: shape,
     __t: null as any,
+    prepared: shape,
   }
-  currentShape[val.name] = shape
+  if (name === val.name) currentShape[val.name] = val.prepared
   return val
 }
 let currentShape: Record<string, any>

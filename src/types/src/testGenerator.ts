@@ -44,9 +44,7 @@ generateCaseSetFile({
   usedMethods: ['createStore', 'createEvent', 'sample'],
   header: sampleClockArray.header,
   generateCases() {
-    const casesDefs = byFields([{}], {
-      shape: sampleClockArray.shape,
-    })
+    const casesDefs = byFields([{}], sampleClockArray.shape)
     const resultCases = createGroupedCases(casesDefs, sampleClockArray.grouping)
     return {
       description: '',
@@ -60,9 +58,7 @@ generateCaseSetFile({
   shape: [{combinable: false}, {combinable: true}],
   generateCases({combinable}: any) {
     if (combinable) {
-      const casesDefs = byFields([{}], {
-        shape: sampleArrayTargetCombinable.shape,
-      })
+      const casesDefs = byFields([{}], sampleArrayTargetCombinable.shape)
       const resultCases = createGroupedCases(
         casesDefs,
         sampleArrayTargetCombinable.grouping,
@@ -72,9 +68,7 @@ generateCaseSetFile({
         cases: resultCases,
       }
     }
-    const casesDefs = byFields([{}], {
-      shape: sampleArrayTargetPlain.shape,
-    })
+    const casesDefs = byFields([{}], sampleArrayTargetPlain.shape)
     const resultCases = createGroupedCases(
       casesDefs,
       sampleArrayTargetPlain.grouping,
@@ -172,9 +166,7 @@ const fn = {
 
 generateCaseSetFile({
   generateCases() {
-    const casesDefs = byFields([{}], {
-      shape: sampleReturn.shape,
-    })
+    const casesDefs = byFields([{}], sampleReturn.shape)
     const resultCases = createGroupedCases(casesDefs, sampleReturn.grouping)
     return {
       description: '-',
@@ -190,9 +182,7 @@ generateCaseSetFile({
 
 generateCaseSetFile({
   generateCases() {
-    const casesDefs = byFields([{}], {
-      shape: guardGenerator.shape,
-    })
+    const casesDefs = byFields([{}], guardGenerator.shape)
     const resultCases = createGroupedCases(casesDefs, guardGenerator.grouping)
     return {
       description: '-',

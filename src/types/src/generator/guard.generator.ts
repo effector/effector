@@ -1,22 +1,30 @@
 import {printArray} from '../runner/text'
+import {
+  exec,
+  insert,
+  computeFn,
+  union,
+  value,
+  computeVariant,
+  computeVariants,
+  bool,
+  separate,
+} from '../runner/declarator'
 
 const Source = {
-  none: {sourceType: 'no'},
-  unit: {sourceType: 'unit'},
-  object: {sourceType: 'object'},
-  tuple: {sourceType: 'tuple'},
+  none: {sourceType: 'no' as const},
+  unit: {sourceType: 'unit' as const},
+  object: {sourceType: 'object' as const},
+  tuple: {sourceType: 'tuple' as const},
 }
 const Filter = {
   fn: {filterType: 'fn'},
   store: {filterType: 'store'},
   bool: {filterType: 'bool'},
 }
-const Target = {
-  unit: {targetType: 'unit'},
-  array: {targetType: 'array'},
-}
 
 const grouping = {
+  dedupeHash: ({dedupeHash}: any) => dedupeHash,
   getHash: ({descriptionTokens}: any) => descriptionTokens,
   describeGroup: ({groupTokens, largeGroup}: any) => ({
     largeGroup,
@@ -101,15 +109,10 @@ function permuteTargets({
     },
   }
 }
-
-const shape = {
-  clockType: {
-    union: ['no', 'unit', 'array'],
-  },
-  filterType: {
-    union: ['fn', 'store', 'bool'],
-  },
-  sourceType: {
+const shape = exec(() => {
+  const clockType = union(['no', 'unit', 'array'], 'clockType')
+  const filterType = union(['fn', 'store', 'bool'], 'filterType')
+  const sourceType = insert<string>('sourceType', {
     split: {
       variant: {
         noClock: {clockType: 'no'},
@@ -123,40 +126,38 @@ const shape = {
         },
       },
     },
-  },
-  targetType: {
-    union: ['unit', 'array'],
-  },
-  sourceSubtype: {
-    split: {
-      variants: {
-        source: {
-          object: Source.object,
-          tuple: Source.tuple,
-        },
-        target: {
-          targetUnit: Target.unit,
-          // targetArray: Target.array,
-        },
+  })
+  const targetType = union(['unit', 'array'], 'targetType')
+  const sourceSubtype = separate({
+    name: 'sourceSubtype',
+    source: {sourceType, targetType},
+    variant: {
+      source: {
+        object: {sourceType: 'object' as const},
+        tuple: {sourceType: 'tuple' as const},
       },
-      cases: {
-        object: {
-          targetUnit: {
-            union: ['fullObject', 'nullableField', 'smallObject'],
-          },
-        },
-        tuple: {
-          targetUnit: {
-            union: ['fullTuple', 'smallTuple'],
-          },
-        },
+      target: {
+        targetUnit: {targetType: 'unit' as const},
+        // targetArray: {targetType: "array" as const},
       },
     },
-  },
-  noSource: {
-    true: Source.none,
-  },
-  targetVoid: {
+    cases: {
+      object: {
+        targetUnit: union(['fullObject', 'nullableField', 'smallObject']),
+      },
+      tuple: {
+        targetUnit: union(['fullTuple', 'smallTuple']),
+      },
+    },
+  })
+
+  const noSource = bool({
+    name: 'noSource',
+    source: {sourceType},
+    true: {sourceType: 'no'},
+  })
+
+  const targetVoid = insert<boolean>('targetVoid', {
     flag: {
       avoid: [
         'noSource',
@@ -169,15 +170,18 @@ const shape = {
         },
       ],
     },
-  },
-  noTargetAny: {
+  })
+  const noTargetAny = bool({
+    name: 'noTargetAny',
+    source: {sourceSubtype},
     true: [
       {sourceSubtype: 'smallTuple'},
       {sourceSubtype: 'nullableField'},
       {sourceSubtype: 'smallObject'},
     ],
-  },
-  targetAny: {
+  })
+
+  const targetAny = insert<boolean>('targetAny', {
     split: {
       match: 'targetType',
       cases: {
@@ -189,76 +193,71 @@ const shape = {
         array: {flag: {}},
       },
     },
-  },
-  targetIsTyped: {
-    compute: {
-      variants: {
-        Target,
-        targetType: {
-          nonAny: {targetAny: false, targetVoid: false},
-          any: [{targetAny: true}, {targetVoid: true}],
-        },
+  })
+  const targetIsTyped = computeVariant({
+    name: 'targetIsTyped',
+    source: {targetAny, targetVoid, targetType},
+    variant: {
+      array: {targetType: 'array' as const},
+      nonAny: {
+        targetAny: false,
+        targetVoid: false,
+        targetType: 'unit' as const,
       },
-      cases: {
-        array: true,
-        unit: {
-          nonAny: true,
-          any: false,
-        },
-      },
+      any: [
+        {targetAny: true, targetType: 'unit' as const},
+        {targetVoid: true, targetType: 'unit' as const},
+      ],
     },
-  },
-  combinable: {
-    bool: {
-      true: [Source.object, Source.tuple],
-      false: [Source.none, Source.unit],
+    cases: {
+      array: true,
+      nonAny: true,
+      any: false,
     },
-  },
-  wrongTarget: {
+  })
+  const combinable = bool({
+    name: 'combinable',
+    source: {sourceType},
+    true: [Source.object, Source.tuple],
+    false: [Source.none, Source.unit],
+  })
+  const wrongTarget = insert<boolean>('wrongTarget', {
     flag: {
       needs: ['targetIsTyped'],
       avoid: 'noSource',
     },
-  },
-  targetSubtype: {
-    split: {
-      variants: {
-        src: {
-          smallObject: {sourceSubtype: 'smallObject'},
-          nullableField: {sourceSubtype: 'nullableField'},
-          smallTuple: {sourceSubtype: 'smallTuple'},
-        },
-        isCorrect: {
-          correct: {wrongTarget: false},
-          wrong: {wrongTarget: true},
-        },
+  })
+  const targetSubtype = separate({
+    name: 'targetSubtype',
+    source: {sourceSubtype, wrongTarget},
+    variant: {
+      src: {
+        smallObject: {sourceSubtype: 'smallObject' as const},
+        nullableField: {sourceSubtype: 'nullableField' as const},
+        smallTuple: {sourceSubtype: 'smallTuple' as const},
       },
-      cases: {
-        smallObject: {
-          correct: {
-            value: 'smallObject',
-          },
-          wrong: {
-            union: ['tooWideObject', 'wrongFieldSmall'],
-          },
-        },
-        nullableField: {
-          correct: {
-            value: 'smallObject',
-          },
-          wrong: {
-            value: 'nonNullFieldSmall',
-          },
-        },
-        smallTuple: {
-          correct: {
-            value: 'smallTuple',
-          },
-        },
+      isCorrect: {
+        correct: {wrongTarget: false},
+        wrong: {wrongTarget: true},
       },
     },
-  },
-  sourceIsWiderThatTargetCond: {
+    cases: {
+      smallObject: {
+        correct: value('smallObject' as const),
+        wrong: union(['tooWideObject', 'wrongFieldSmall']),
+      },
+      nullableField: {
+        correct: value('smallObject' as const),
+        wrong: value('nonNullFieldSmall' as const),
+      },
+      smallTuple: {
+        correct: value('smallTuple' as const),
+      },
+    },
+  })
+  const sourceIsWiderThatTargetCond = bool({
+    name: 'sourceIsWiderThatTargetCond',
+    source: {sourceType, sourceSubtype, targetSubtype},
     true: [
       Source.tuple,
       Source.none,
@@ -267,24 +266,27 @@ const shape = {
       {sourceSubtype: 'nullableField'},
       {targetSubtype: 'smallTuple'},
     ],
-  },
-  sourceIsWiderThatTarget: {
-    split: {
-      variant: {
-        nullableField: {sourceSubtype: 'nullableField'},
-      },
-      cases: {
-        nullableField: {value: true},
-        __: {
-          flag: {
-            needs: ['targetIsTyped'],
-            avoid: ['noSource', 'sourceIsWiderThatTargetCond'],
-          },
-        },
+  })
+  const sourceIsWiderThatTarget = separate({
+    name: 'sourceIsWiderThatTarget',
+    source: {sourceSubtype},
+    variant: {
+      _: {
+        nullableField: {sourceSubtype: 'nullableField' as const},
       },
     },
-  },
-  inferByFilter: {
+    cases: {
+      nullableField: value(true),
+      __: insert({
+        flag: {
+          needs: ['targetIsTyped'],
+          avoid: ['noSource', 'sourceIsWiderThatTargetCond'],
+        },
+      }),
+    },
+  })
+
+  const inferByFilter = insert('inferByFilter', {
     flag: {
       needs: [
         {
@@ -320,8 +322,8 @@ const shape = {
         },
       },
     },
-  },
-  fnSecondArg: {
+  })
+  const fnSecondArg = insert('fnSecondArg', {
     flag: {
       needs: {
         true: [
@@ -337,8 +339,8 @@ const shape = {
       },
       avoid: ['wrongTarget', {true: Source.none}],
     },
-  },
-  targetValue: {
+  })
+  const targetValue = insert('targetValue', {
     split: {
       variants: {
         targetKind: {
@@ -449,54 +451,55 @@ const shape = {
         }),
       },
     },
-  },
-  targetCode: {
-    compute: {
-      fn: ({targetValue}: any) =>
-        Array.isArray(targetValue) ? printArray(targetValue) : targetValue,
+  })
+  const targetCode = computeFn({
+    name: 'targetCode',
+    source: {targetValue},
+    fn({targetValue}) {
+      return Array.isArray(targetValue) ? printArray(targetValue) : targetValue
     },
-  },
-  clockCode: {
-    compute: {
-      variants: {
-        clock: {
-          noClock: {clockType: 'no'},
-          clockSingle: {clockType: 'unit'},
-          clockArray: {clockType: 'array'},
-        },
-        fnArg: {
-          hasFnSecondArg: {fnSecondArg: true},
-          noFnSecondArg: {},
-        },
-      },
-      cases: {
-        noClock: null,
-        clockSingle: {
-          hasFnSecondArg: 'numt',
-          noFnSecondArg: 'anyt',
-        },
-        clockArray: {
-          hasFnSecondArg: '[numt,$num]',
-          noFnSecondArg: '[anyt]',
-        },
-      },
-    },
-  },
-  clockDescription: {
-    compute: {
-      variant: {
+  })
+  const clockCode = separate({
+    name: 'clockCode',
+    source: {clockType, fnSecondArg},
+    variant: {
+      clock: {
         noClock: {clockType: 'no'},
         clockSingle: {clockType: 'unit'},
         clockArray: {clockType: 'array'},
-      },
-      cases: {
-        noClock: '',
-        clockSingle: ' + clock',
-        clockArray: ' + [clock]',
+      } as const,
+      fnArg: {
+        hasFnSecondArg: {fnSecondArg: true},
+        noFnSecondArg: {},
       },
     },
-  },
-  sourceCode: {
+    cases: {
+      noClock: value(null),
+      clockSingle: {
+        hasFnSecondArg: value('numt'),
+        noFnSecondArg: value('anyt'),
+      },
+      clockArray: {
+        hasFnSecondArg: value('[numt,$num]'),
+        noFnSecondArg: value('[anyt]'),
+      },
+    },
+  })
+  const clockDescription = computeVariant({
+    name: 'clockDescription',
+    source: {clockType},
+    variant: {
+      noClock: {clockType: 'no'},
+      clockSingle: {clockType: 'unit'},
+      clockArray: {clockType: 'array'},
+    },
+    cases: {
+      noClock: '',
+      clockSingle: ' + clock',
+      clockArray: ' + [clock]',
+    },
+  })
+  const sourceCode = insert('sourceCode', {
     split: {
       variants: {
         sourceSubtype: {
@@ -537,8 +540,8 @@ const shape = {
         },
       },
     },
-  },
-  filterCode: {
+  })
+  const filterCode = insert('filterCode', {
     compute: {
       variants: {
         Filter,
@@ -625,50 +628,73 @@ const shape = {
         bool: 'Boolean',
       },
     },
-  },
-  descriptionTokens: {
-    compute: {
-      fn: ({
-        inferByFilter,
-        sourceIsWiderThatTarget,
-        filterType,
-        sourceType,
-        targetType,
-        clockType,
-      }: any) =>
-        `${inferByFilter} ${sourceType} ${filterType} ${targetType} ${clockType} ${
-          sourceIsWiderThatTarget ? 'wide' : 'same'
-        }`,
+  })
+  const descriptionTokens = computeFn({
+    name: 'descriptionTokens',
+    source: {
+      inferByFilter,
+      sourceIsWiderThatTarget,
+      filterType,
+      sourceType,
+      targetType,
+      clockType,
     },
-  },
-  groupTokens: {
-    compute: {
-      fn({
-        inferByFilter,
-        sourceIsWiderThatTarget,
-        sourceType,
-        targetType,
-        clockDescription,
-      }: any) {
-        const nullable = inferByFilter ? 'nullable ' : ''
-        return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
-          sourceIsWiderThatTarget ? 'wide' : 'same'
-        }`
-      },
+    fn: ({
+      inferByFilter,
+      sourceIsWiderThatTarget,
+      filterType,
+      sourceType,
+      targetType,
+      clockType,
+    }) =>
+      `${inferByFilter} ${sourceType} ${filterType} ${targetType} ${clockType} ${
+        sourceIsWiderThatTarget ? 'wide' : 'same'
+      }`,
+  })
+  const groupTokens = computeFn({
+    name: 'groupTokens',
+    source: {
+      inferByFilter,
+      sourceIsWiderThatTarget,
+      sourceType,
+      targetType,
+      clockDescription,
     },
-  },
-  largeGroup: {
-    compute: {
-      fn: ({sourceType}: any) => `${sourceType} source`,
+    fn({
+      inferByFilter,
+      sourceIsWiderThatTarget,
+      sourceType,
+      targetType,
+      clockDescription,
+    }) {
+      const nullable = inferByFilter ? 'nullable ' : ''
+      return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
+        sourceIsWiderThatTarget ? 'wide' : 'same'
+      }`
     },
-  },
-  pass: {
-    bool: {
-      true: {wrongTarget: false},
-      false: {wrongTarget: true},
+  })
+
+  const largeGroup = computeFn({
+    name: 'largeGroup',
+    source: {sourceType},
+    fn: ({sourceType}) => `${sourceType} source`,
+  })
+
+  const pass = bool({
+    name: 'pass',
+    source: {wrongTarget},
+    true: {wrongTarget: false},
+    false: {wrongTarget: true},
+  })
+
+  const dedupeHash = computeFn({
+    name: 'dedupeHash',
+    source: {sourceCode, clockCode, targetCode, filterCode},
+    fn({sourceCode, clockCode, targetCode, filterCode}) {
+      return `guard({source: ${sourceCode}, clock: ${clockCode}, target: ${targetCode}, filter: ${filterCode}})`
     },
-  },
-}
+  })
+})
 
 const header = `
 type Astr = {a: string}
