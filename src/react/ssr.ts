@@ -8,6 +8,8 @@ import {useList as commonUseList} from './useList'
 import {withDisplayName} from './withDisplayName'
 import {useGate as commonUseGate, createGateImplementation} from './createGate'
 import {Gate} from './index.h'
+import {watchUnit} from '../effector/watch'
+import {bind} from '../effector/bind'
 
 function createDefer() {
   const result = {} as any
@@ -121,18 +123,24 @@ export function useStoreMap(configOrStore: any, separateFn: any) {
 
 function resolveUnit(unit: any, scope: any) {
   const localUnit = scope.find(unit)
-  return is.effect(unit)
-    ? (params: any) => {
-        const req = createDefer()
-        //@ts-ignore
-        launch({target: localUnit, params: {params, req}, forkPage: scope})
-        return req.req
-      }
-    : (payload: any) => {
-        //@ts-ignore
-        launch({target: localUnit, params: payload, forkPage: scope})
-        return payload
-      }
+  const resolvedDummy = is.effect(unit)
+      ? (params: any) => {
+          const req = createDefer()
+          //@ts-ignore
+          launch({target: localUnit, params: {params, req}, forkPage: scope})
+          return req.req
+        }
+      : (payload: any) => {
+          //@ts-ignore
+          launch({target: localUnit, params: payload, forkPage: scope})
+          return payload
+        }
+    // ;(resolvedDummy as any).watch = bind(watchUnit, unit)
+  ;(resolvedDummy as any).watch = (handler: any) => {
+    return watchUnit(localUnit, handler)
+  }
+
+  return resolvedDummy
 }
 
 /**

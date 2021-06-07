@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch'
 import * as React from 'react'
-import {render, container, act} from 'effector/fixtures/react'
+import {render, container, act, cleanup} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {
   createDomain,
@@ -873,4 +873,41 @@ describe('useStoreMap', () => {
       </div>
     `)
   })
+})
+
+test('watcher for event', async () => {
+  const app = createDomain()
+  const triggered = app.createEvent<number>()
+
+  const fn = jest.fn()
+
+  const View = () => {
+    const event = useEvent(triggered)
+    React.useEffect(() => {
+      return event.watch(fn)
+    }, [event, fn])
+
+    return null
+  }
+
+  const App = ({root}: {root: Scope}) => (
+    <Provider value={root}>
+      <View />
+    </Provider>
+  )
+
+  const scope = fork(app)
+  await render(<App root={scope} />)
+  expect(fn).toBeCalledTimes(0)
+
+  await act(async () => {
+    await allSettled(triggered, {scope, params: 100})
+  })
+  expect(fn).toBeCalledWith(100)
+
+  await cleanup()
+  await act(async () => {
+    await allSettled(triggered, {scope, params: 200})
+  })
+  expect(fn).toBeCalledTimes(1)
 })
