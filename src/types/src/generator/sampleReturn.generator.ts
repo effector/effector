@@ -1,30 +1,17 @@
 import {printMethod} from '../runner/text'
 import {
   exec,
-  insert,
   computeFn,
   union,
   value,
   computeVariant,
   computeVariants,
   separate,
+  flag,
+  config,
 } from '../runner/declarator'
 
-const grouping = {
-  dedupeHash: ({dedupeHash}: any) => dedupeHash,
-  getHash: ({getHash}: any) => getHash,
-  describeGroup: ({describeGroup}: any) => describeGroup,
-  createTestLines: ({createTestLines}: any) => createTestLines,
-  sortByFields: {
-    targetToken: ['no target', 'unit target', 'tuple target'],
-    typedFn: [false, true],
-    source: ['event', 'store', 'combinable'],
-    clock: ['none', 'event', 'store', 'tuple'],
-    fn: ['none', 'noArgs', 'arg', 'argPair'],
-    methodCode: 'string',
-  },
-}
-const shapeNew = exec(() => {
+export default exec(() => {
   const source = union(['event', 'store', 'combinable'], 'source')
   const clock = union(['none', 'event', 'store', 'tuple'], 'clock')
   const target = union(['none', 'event', 'store', 'tuple'], 'target')
@@ -33,15 +20,11 @@ const shapeNew = exec(() => {
     source: {clock},
     variant: {
       _: {
-        noClock: {clock: 'none'} as const,
+        noClock: {clock: 'none'},
       },
-    },
+    } as const,
     cases: {
-      noClock: union<'none' | 'noArgs' | 'arg' | 'argPair'>([
-        'none',
-        'noArgs',
-        'arg',
-      ]),
+      noClock: union(['none', 'noArgs', 'arg']),
       __: union(['none', 'noArgs', 'arg', 'argPair']),
     },
   })
@@ -50,17 +33,18 @@ const shapeNew = exec(() => {
     source: {fn},
     variant: {
       _: {
-        hasFnArgs: [{fn: 'arg' as const}, {fn: 'argPair' as const}],
+        hasFnArgs: [{fn: 'arg'}, {fn: 'argPair'}],
       },
-    },
+    } as const,
     cases: {
-      hasFnArgs: insert<boolean>({flag: {}}),
+      hasFnArgs: flag(),
       __: value(false),
     },
   })
 
   const pass = value(true, 'pass')
   const typedFnToken = computeVariant({
+    name: 'typedFnToken',
     source: {typedFn},
     variant: {
       typed: {typedFn: true},
@@ -92,6 +76,7 @@ const shapeNew = exec(() => {
     source: {
       pass,
       sourceCode: computeVariant({
+        name: 'methodCode/sourceCode',
         source: {source},
         variant: {
           event: {source: 'event'},
@@ -105,6 +90,7 @@ const shapeNew = exec(() => {
         },
       }),
       clockCode: computeVariant({
+        name: 'methodCode/clockCode',
         source: {clock},
         variant: {
           none: {clock: 'none'},
@@ -120,6 +106,7 @@ const shapeNew = exec(() => {
         },
       }),
       targetCode: computeVariant({
+        name: 'methodCode/targetCode',
         source: {target},
         variant: {
           none: {target: 'none'},
@@ -135,6 +122,7 @@ const shapeNew = exec(() => {
         },
       }),
       fnCode: computeVariants({
+        name: 'methodCode/fnCode',
         source: {fn, typedFn},
         variant: {
           fn: {
@@ -178,13 +166,13 @@ const shapeNew = exec(() => {
   })
   const largeGroup = computeFn({
     name: 'largeGroup',
-    source: [typedFnToken, targetToken],
-    fn: ([typedFnToken, targetToken]) => `${targetToken}${typedFnToken}`,
+    source: {typedFnToken, targetToken},
+    fn: ({typedFnToken, targetToken}) => `${targetToken}${typedFnToken}`,
   })
   const describeGroup = computeFn({
     name: 'describeGroup',
-    source: [targetToken, typedFnToken, clock, largeGroup],
-    fn: ([targetToken, typedFnToken, clock, largeGroup]) => ({
+    source: {targetToken, typedFnToken, clock, largeGroup},
+    fn: ({targetToken, typedFnToken, clock, largeGroup}) => ({
       largeGroup,
       noGroup: true,
       description: `${targetToken}${typedFnToken}, ${clock} clock`,
@@ -192,8 +180,8 @@ const shapeNew = exec(() => {
   })
   const getHash = computeFn({
     name: 'getHash',
-    source: [targetToken, clock, typedFn],
-    fn: ([targetToken, clock, typedFn]) => `${targetToken} ${clock} ${typedFn}`,
+    source: {targetToken, clock, typedFn},
+    fn: ({targetToken, clock, typedFn}) => `${targetToken} ${clock} ${typedFn}`,
   })
   const createTestLines = computeFn({
     name: 'createTestLines',
@@ -201,6 +189,7 @@ const shapeNew = exec(() => {
       methodCode,
       pass,
       returnCode: computeVariants({
+        name: 'createTestLines/bl',
         source: {target, source, clock},
         variant: {
           Target: {
@@ -240,11 +229,8 @@ const shapeNew = exec(() => {
     source: {createTestLines},
     fn: ({createTestLines}) => createTestLines.join(`\n`),
   })
-})
-
-const shape = shapeNew
-
-const header = `
+  config({
+    header: `
 type AN = {a: number}
 const $num = createStore(0)
 const a = createStore({a: 0})
@@ -255,6 +241,23 @@ const aNumT = createEvent<AN>()
 const fn0 = () => ({a: 0})
 const fn1 = ({a}: AN) => ({a})
 const fn2 = ({a}: AN, c: number) => ({a: a + c})
-`
-
-export default {shape, grouping, header}
+`,
+    grouping: {
+      dedupeHash: (args: any) => {
+        // console.log(args)
+        return args.dedupeHash
+      },
+      getHash: ({getHash}: any) => getHash,
+      describeGroup: ({describeGroup}: any) => describeGroup,
+      createTestLines: ({createTestLines}: any) => createTestLines,
+      sortByFields: {
+        targetToken: ['no target', 'unit target', 'tuple target'],
+        typedFn: [false, true],
+        source: ['event', 'store', 'combinable'],
+        clock: ['none', 'event', 'store', 'tuple'],
+        fn: ['none', 'noArgs', 'arg', 'argPair'],
+        methodCode: 'string',
+      },
+    },
+  })
+})

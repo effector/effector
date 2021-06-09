@@ -1,6 +1,5 @@
 import {promises} from 'fs'
 import {resolve} from 'path'
-import {sortListBySkewHeap} from './runner/heap'
 import {
   leftPad,
   wrapText,
@@ -50,19 +49,20 @@ function createGroupedCases(
   const isAafterB = sortByFields && skewHeapSortFieldsComparator(sortByFields)
   function sortList<T>(list: T[]) {
     if (!sortByFields) return [...list]
-    return sortListBySkewHeap(list, isAafterB)
+    return [...list].sort((a, b) => {
+      const ab = isAafterB(a, b)
+      const ba = isAafterB(b, a)
+      if (!ab && !ba) return 0
+      if (ab && ba) return 0
+      return ab ? -1 : 1
+    })
   }
   const casesDefsPending = sortList([...casesDefs])
   if (sortByFields) {
-    // forIn(sortByFields, prioritySet => {
-    //   prioritySet.reverse()
-    // })
     casesDefsPending.forEach((e, id) => {
       e.__casesDefsID = id
     })
   }
-  // console.log(...casesDefs)
-  // console.log(...casesDefsPending)
   type Group = {
     itemsPass: any[]
     itemsFail: any[]
@@ -73,6 +73,7 @@ function createGroupedCases(
   const defsGroups = new Map<string, Group>()
   let cur
   while ((cur = casesDefsPending.pop())) {
+    // console.log('cur', cur)
     if (dedupeHash) {
       const caseDefHash = dedupeHash(cur)
       if (testLinesSet.has(caseDefHash)) {

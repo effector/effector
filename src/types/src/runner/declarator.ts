@@ -2,7 +2,7 @@ const nextID = (() => {
   let id = 0
   return () => (++id).toString(36)
 })()
-type Tuple<T = unknown> = [T] | [T, ...T[]]
+type Tuple<T = unknown> = readonly [T] | readonly [T, ...(readonly T[])]
 type SourceRec = Record<string, Declarator>
 type Matcher<Src extends SourceRec> = Partial<
   {[K in keyof Src]: Src[K] extends Ref<infer S, unknown> ? S : never}
@@ -11,7 +11,7 @@ type SingleVariant<Src extends SourceRec> = Tuple<Matcher<Src>> | Matcher<Src>
 
 type VariantLevel<Src extends SourceRec> = Record<string, SingleVariant<Src>>
 type VariantLevelRec<Src extends SourceRec> = Record<string, VariantLevel<Src>>
-type Ref<T, K> = {
+export type Ref<T, K> = {
   id: string
   name: string
   kind: K
@@ -26,23 +26,26 @@ type Declarator =
   | ComputeVariant<unknown>
   | Bool
   | Separate<unknown>
+  | Flag
+  | Permute<unknown>
+
+type Permute<T> = Ref<T[], 'permute'>
+type Flag = Ref<boolean, 'flag'>
 
 type Separate<T> = Ref<T, 'separate'>
 
 type Union<Cases extends string = string> = Ref<Cases, 'union'> & {
   variants: Tuple<Cases>
 }
-type Value<T> = Ref<T, 'value'> & {
-  value: T
-}
-type Fn<T> = Ref<T, 'fn'> & {fn: (args: any) => T}
+type Value<T> = Ref<T, 'value'>
+type Fn<T> = Ref<T, 'fn'>
 type ComputeVariant<T> = Ref<T, 'computeVariant'> & {
   cases: Record<string, T>
 }
 
 type Bool = Ref<boolean, 'bool'>
 
-type RawCase = {compute: object} | {split: object} | {flag: object}
+type RawCase = {compute: object} | {split: object}
 type Raw<T = unknown> = Ref<T, 'raw'> & {value: RawCase}
 
 type BuiltInObject =
@@ -94,7 +97,7 @@ type UnionToTuple<Union> = UnionToIntersection<
   Union extends unknown ? (distributed: Union) => void : never
 > extends (merged: infer Intersection) => void // Transforms ('A' | 'B') into [[[], "A"], "B"], but destructures the arrays
   ? readonly [...UnionToTuple<Exclude<Union, Intersection>>, Intersection]
-  : []
+  : readonly []
 
 type CaseLayerLast<
   Src extends SourceRec,
@@ -269,7 +272,7 @@ type LayerValue<
 
 function getName(id: string, name?: string) {
   let result = name ?? id
-  if (result in currentShape) result = `${id}_${result}`
+  if (result in ctx.shape) result = `${id}_${result}`
   return result
 }
 type SepCases_<
@@ -279,16 +282,47 @@ type SepCases_<
 > = AllCases extends readonly [infer CurrentCase, ...(infer CaseNames)]
   ? CurrentCase extends string
     ? CaseNames extends readonly []
-      ? Partial<{[K in keyof Variants[CurrentCase]]: Declarator}>
+      ? Partial<
+          {
+            [K in keyof Variants[CurrentCase]]: Declarator
+          } & {
+            __: Declarator
+          }
+        >
       : CaseNames extends Tuple<string>
-      ? {
-          [K in keyof Variants[CurrentCase]]:
-            | Declarator
-            | SepCases_<Src, Variants, CaseNames>
-        }
+      ? Partial<
+          {
+            [K in keyof Variants[CurrentCase]]:
+              | SepCases_<Src, Variants, CaseNames>
+              | Declarator
+          } &
+            (CaseNames extends readonly [
+              infer CurrentCaseA,
+              ...(infer CaseNamesA),
+            ]
+              ? CurrentCaseA extends string
+                ? CaseNamesA extends readonly []
+                  ? {__: Declarator}
+                  : CaseNamesA extends Tuple<string>
+                  ? {
+                      __:
+                        | Declarator
+                        | Partial<
+                            {
+                              [K in keyof Variants[CurrentCaseA]]:
+                                | Declarator
+                                | SepCases_<Src, Variants, CaseNamesA>
+                            }
+                          >
+                    }
+                  : 'SepCases_ CaseNamesA not a string[]'
+                : 'SepCases_ CaseNames not a string[] 2'
+              : 'SepCases_ CurrentCaseA not a string')
+        >
       : 'CaseNames not a string[]'
     : 'CurrentCase not a string'
   : 'TypeOf CaseLayer never'
+
 type SepCases<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>
@@ -313,8 +347,11 @@ type TypeofSepCases_<
               unknown
             >
               ? T
-              : never
-          }
+              : 'never'
+          } &
+            ('__' extends keyof Cases
+              ? {__: Cases['__'] extends Ref<infer T, unknown> ? T : 'never 2'}
+              : {})
         >
       : CaseNames extends Tuple<string>
       ? ValueOf<
@@ -328,7 +365,16 @@ type TypeofSepCases_<
               : Cases[K] extends Ref<infer T, unknown>
               ? T
               : unknown
-          }
+          } &
+            ('__' extends keyof Cases
+              ? {
+                  __: Cases['__'] extends SepCases_<Src, Variants, CaseNames>
+                    ? TypeofSepCases_<Src, Variants, Cases['__'], CaseNames>
+                    : Cases['__'] extends Ref<infer T, unknown>
+                    ? T
+                    : unknown
+                }
+              : {})
         >
       : 'CaseNames not a string[]'
     : 'CurrentCase not a string'
@@ -341,19 +387,17 @@ type TypeofSepCases<
 > = UnionToTuple<keyof Variants> extends readonly [...(infer Keys)]
   ? Keys extends Tuple<keyof Variants>
     ? TypeofSepCases_<Src, Variants, Cases, Keys>
-    : never
-  : never
+    : 'never'
+  : 'never'
 
 // ------
 function isRef(value: unknown): value is Ref<unknown, unknown> {
   return typeof value === 'object' && value !== null && '__t' in value
 }
-/**
- * default cases '__' are not used in type inference
- */
+
 export function separate<
   Src extends SourceRec,
-  Variants extends VariantLevelRec<Src>,
+  Variants extends Record<string, VariantLevel<Src> /* | VariantLevel<Src>[]*/>,
   Cases extends SepCases<Src, Variants>
 >({
   name,
@@ -367,8 +411,39 @@ export function separate<
   cases: Cases
 }): Separate<TypeofSepCases<Src, Variants, Cases>> {
   const id = nextID()
-
+  const sources: Declarator[] = Object.values(source)
   const variants = {} as any
+  for (const variantName in variant) {
+    const variantRec = variant[variantName]
+    if (
+      typeof variantRec !== 'object' ||
+      variantRec === null ||
+      Array.isArray(variantRec)
+    ) {
+      throw Error(
+        `variant "${variantName}" should be an object with cases-objects`,
+      )
+    }
+    for (const singleMatchName in variantRec) {
+      const singleMatch = variantRec[singleMatchName]
+      if (typeof singleMatch !== 'object' || singleMatch === null) {
+        throw Error(
+          `variant "${variantName}/${singleMatchName}" should be an object with cases-objects`,
+        )
+      }
+      for (const singleMatchItem of Array.isArray(singleMatch)
+        ? singleMatch
+        : [singleMatch]) {
+        for (const field in singleMatchItem) {
+          if (!(field in source)) {
+            throw Error(
+              `variant "${variantName}/${singleMatchName}" has field "${field}" without source`,
+            )
+          }
+        }
+      }
+    }
+  }
   for (const variantName in variant) {
     variants[variantName] = matcher(source, variant[variantName])
   }
@@ -386,60 +461,149 @@ export function separate<
     },
   }
 
-  currentShape[val.name] = val.prepared
+  ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id, sources)
   return val
-}
-function traverseCases(
-  variants: Record<string, Record<string, unknown>>,
-  cases: Record<string, any>,
-): Record<string, any> {
-  const variantNames = Object.keys(variants)
-  if (variantNames.length === 0) {
-    console.warn(`empty variants for cases`, cases)
-    return {}
-  }
-  const [first, ...rest] = variantNames
-  return traverseCases_(first, rest, variants, cases)
-  function traverseCases_(
-    currentVariantName: string,
-    nextVariants: string[],
-    variants: Record<string, Record<string, unknown>>,
+
+  function traverseCases(
+    variants: Record<
+      string,
+      Record<string, unknown> | Record<string, unknown>[]
+    >,
     cases: Record<string, any>,
-  ) {
-    const resultCases: Record<string, any> = {}
-    const variant = variants[currentVariantName]
-    const branchNames = [...Object.keys(variant), '__']
-    for (const branchName of branchNames) {
-      if (!(branchName in cases)) continue
-      const caseValue = cases[branchName]
-      if (isRef(caseValue)) {
-        resultCases[branchName] = caseValue.prepared
-        // {
-        //   ref: caseValue.name,
-        // }
-      } else if (typeof caseValue === 'object' && caseValue !== null) {
-        if (nextVariants.length > 0) {
-          const [first, ...rest] = nextVariants
-          resultCases[branchName] = traverseCases_(
-            first,
-            rest,
-            variants,
-            caseValue,
-          )
+  ): Record<string, any> {
+    const variantNames = Object.keys(variants)
+    if (variantNames.length === 0) {
+      console.warn(`empty variants for cases`, cases)
+      return {}
+    }
+    const [first, ...rest] = variantNames
+    return traverseCases_(first, rest, variants, cases)
+    function traverseCases_(
+      currentVariantName: string,
+      nextVariants: string[],
+      variants: Record<
+        string,
+        Record<string, unknown> | Record<string, unknown>[]
+      >,
+      cases: Record<string, any>,
+    ) {
+      const resultCases: Record<string, any> = {}
+      const variant = variants[currentVariantName]
+      const branchNames = [
+        ...new Set(
+          Array.isArray(variant)
+            ? variant.flatMap(e => Object.keys(e))
+            : Object.keys(variant),
+        ),
+        '__',
+      ]
+      for (const branchName of branchNames) {
+        if (!(branchName in cases)) continue
+        const caseValue = cases[branchName]
+        if (isRef(caseValue)) {
+          resultCases[branchName] = caseValue.prepared
+          ctx.targets[id] = ctx.targets[id] ?? []
+          ctx.targets[id].push(caseValue.id)
+          // {
+          //   ref: caseValue.name,
+          // }
+        } else if (typeof caseValue === 'object' && caseValue !== null) {
+          if (nextVariants.length > 0) {
+            const [first, ...rest] = nextVariants
+            resultCases[branchName] = traverseCases_(
+              first,
+              rest,
+              variants,
+              caseValue,
+            )
+          } else {
+            console.warn(
+              `incorrect case value for last branch "${branchName}"`,
+              caseValue,
+            )
+          }
         } else {
           console.warn(
-            `incorrect case value for last branch "${branchName}"`,
+            `incorrect case value for branch "${branchName}"`,
             caseValue,
           )
         }
-      } else {
-        console.warn(
-          `incorrect case value for branch "${branchName}"`,
-          caseValue,
-        )
       }
+      return resultCases
     }
-    return resultCases
+  }
+}
+
+export function permute<T>({
+  name,
+  items,
+  noReorder,
+  amount,
+}: {
+  name?: string
+  items: T[]
+  amount?: {min: number; max: number}
+  noReorder?: boolean
+}) {
+  const id = nextID()
+  const permute = {items} as any
+  if (typeof noReorder === 'boolean') {
+    permute.noReorder = noReorder
+  }
+  if (amount) permute.amount = amount
+  const val: Permute<T> = {
+    id,
+    name: getName(id, name),
+    kind: 'permute',
+    __t: null as any,
+    prepared: {permute},
+  }
+  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id)
+  return val
+}
+
+export function flag({
+  name,
+  needs,
+  avoid,
+}: {
+  name?: string
+  needs?: Declarator | Tuple<Declarator>
+  avoid?: Declarator | Tuple<Declarator>
+} = {}) {
+  const id = nextID()
+  const flag = {} as any
+  const source: Declarator[] = []
+  if (needs) {
+    flag.needs = Array.isArray(needs)
+      ? needs.map(processDeclarator)
+      : processDeclarator(needs as Declarator)
+  }
+  if (avoid) {
+    flag.avoid = Array.isArray(avoid)
+      ? avoid.map(processDeclarator)
+      : processDeclarator(avoid as Declarator)
+  }
+  const val: Flag = {
+    id,
+    name: getName(id, name),
+    kind: 'flag',
+    __t: null as any,
+    prepared: {flag},
+  }
+  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id, source)
+  return val
+
+  function processDeclarator(decl: Declarator) {
+    source.push(decl)
+    if (decl.name !== decl.id) return decl.name
+    return decl.prepared
   }
 }
 
@@ -467,7 +631,9 @@ export function bool<Src extends SourceRec>({
       },
     },
   }
-  if (name === val.name) currentShape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id, source)
   return val
 }
 export function value<T>(value: T, name?: string) {
@@ -476,11 +642,12 @@ export function value<T>(value: T, name?: string) {
     id,
     name: getName(id, name),
     kind: 'value',
-    value,
     __t: value,
     prepared: {value},
   }
-  if (name === val.name) currentShape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id)
   return val
 }
 export function union<OneOf extends string>(
@@ -496,7 +663,9 @@ export function union<OneOf extends string>(
     __t: null as any,
     prepared: {union: oneOf},
   }
-  if (name === val.name) currentShape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id)
   return val
 }
 export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
@@ -517,22 +686,28 @@ export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
     id,
     name: getName(id, name),
     kind: 'fn',
-    fn,
     __t: null as any,
     prepared: {
       compute: {
         fn(args: Record<string, any>) {
-          return val.fn(
-            argsToSource({
-              source,
-              args,
-            }),
-          )
+          try {
+            return fn(
+              argsToSource({
+                source,
+                args,
+              }),
+            )
+          } catch (err) {
+            console.error(err)
+            console.log({source, val, args})
+          }
         },
       },
     },
   }
-  currentShape[val.name] = val.prepared
+  ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id, source)
   return val
 }
 export function computeVariants<
@@ -567,7 +742,9 @@ export function computeVariants<
     },
   }
 
-  currentShape[val.name] = val.prepared
+  ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id, source)
   return val
 }
 export function computeVariant<
@@ -600,7 +777,9 @@ export function computeVariant<
       },
     },
   }
-  currentShape[val.name] = val.prepared
+  ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id, source)
   return val
 }
 /** convert internal variable map to object with human-readable fields
@@ -622,11 +801,22 @@ function argsToSource<Src extends Tuple<Declarator> | SourceRec>({
 } {
   let namedArgs: any
   if (Array.isArray(source)) {
-    namedArgs = source.map(({name}) => args[name])
+    namedArgs = source.map(item => {
+      const {name} = item
+      // if (!(name in args)) {
+      //   throw Error(`no "${item.name}/${item.id}" in args`)
+      // }
+      return name
+    })
   } else {
     const argsMap: Record<string, any> = {}
     for (const key in source) {
-      argsMap[key] = args[(source as SourceRec)[key].name]
+      const item = (source as SourceRec)[key]
+      // if (!(item.name in args)) {
+      //   console.warn({source, args, key, name: item.name})
+      //   throw Error(`no "${key}/${item.name}/${item.id}" in args`)
+      // }
+      argsMap[key] = args[item.name]
     }
     namedArgs = argsMap
   }
@@ -646,8 +836,13 @@ function sourceToArgs<
 >(source: Src, caseItem: Case) {
   const realMatchMap = {} as Record<string, any>
   for (const alias in caseItem) {
-    const resolvedName = source[alias].name
-    realMatchMap[resolvedName] = caseItem[alias]
+    if (alias in source) {
+      const resolvedName = source[alias].name
+      realMatchMap[resolvedName] = caseItem[alias]
+    } else {
+      console.warn(`no alias "${alias}" in caseItem`, caseItem)
+      console.trace('no alias')
+    }
   }
   return realMatchMap
 }
@@ -655,12 +850,34 @@ function sourceToArgs<
 export function matcher<
   Src extends SourceRec,
   Variant extends VariantLevel<Src>
+>(
+  source: Src,
+  cases: Variant,
+): {
+  [K in keyof Variant]: Variant[K] extends Tuple<unknown>
+    ? {[L in keyof Variant[K]]: Record<string, any>}
+    : Record<string, any>
+}
+export function matcher<
+  Src extends SourceRec,
+  Variants extends VariantLevel<Src>[]
+>(
+  source: Src,
+  cases: Variants,
+): [
+  ...{
+    [L in keyof Variants]: {
+      [K in keyof Variants[L]]: Variants[L][K] extends Tuple<unknown>
+        ? {[M in keyof Variants[L][K]]: Record<string, any>}
+        : Record<string, any>
+    }
+  },
+]
+export function matcher<
+  Src extends SourceRec,
+  Variant extends VariantLevel<Src> | VariantLevel<Src>[]
 >(source: Src, cases: Variant) {
-  const result = {} as {
-    [K in keyof Variant]: Variant[K] extends Tuple<unknown>
-      ? {[L in keyof Variant[K]]: Record<string, any>}
-      : Record<string, any>
-  }
+  const result = {} as any
   for (const key in cases) {
     result[key] = singleMatcher(source, cases[key]) as any
   }
@@ -698,17 +915,401 @@ export function insert<T = unknown>(...args: [RawCase] | [string, RawCase]) {
     __t: null as any,
     prepared: shape,
   }
-  if (name === val.name) currentShape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  ctx.items[val.id] = val
+  addSourceRefs(val.id)
   return val
 }
-let currentShape: Record<string, any>
+let ctx: {
+  shape: Record<string, any>
+  configUsed: boolean
+  items: Record<string, Declarator>
+  /**
+   * references TO id
+   *
+   * bool({source: {sourceReference}}): referencedBy
+   *
+   * {[sourceReference]: referencedBy[]}
+   * sourceReference -> referencedBy
+   * */
+  references: Record<string, string[]>
+  /**
+   * inline references FROM id
+   *
+   * separate({cases: {_: targetReference}}): referencedBy
+   *
+   * {[referencedBy]: targetReference[]}
+   * referencedBy -> targetReference
+   **/
+  targets: Record<string, string[]>
+  config: {
+    header: string
+    grouping: Record<string, any>
+  }
+}
+export function config({
+  header,
+  grouping,
+}: {
+  header: string
+  grouping: Record<string, any>
+}) {
+  ctx.configUsed = true
+  ctx.config.header = header
+  ctx.config.grouping = grouping
+}
+
+function addSourceRefs(
+  id: string,
+  source?: Record<string, Declarator> | Tuple<Declarator> | Declarator[],
+) {
+  ctx.references[id] = []
+  if (source) {
+    if (Array.isArray(source)) {
+      for (const sourceItem of source) {
+        ctx.references[sourceItem.id] = ctx.references[sourceItem.id] ?? []
+        ctx.references[sourceItem.id].push(id)
+      }
+    } else {
+      for (const field in source) {
+        const sourceId = (source as Record<string, Declarator>)[field].id
+        ctx.references[sourceId] = ctx.references[sourceId] ?? []
+        ctx.references[sourceId].push(id)
+      }
+    }
+  }
+}
+
+/** {[reference]: referencedBy[]} */
+function toposort(rawGraph: Record<string, string[]>) {
+  const graph = {} as Record<string, string[]>
+  for (const id in rawGraph) {
+    graph[id] = [...new Set(rawGraph[id])]
+  }
+  const result = [] as string[]
+  const visited = {} as Record<string, boolean>
+  const temp = {} as Record<string, boolean>
+  for (const node in graph) {
+    if (!visited[node] && !temp[node]) {
+      topologicalSortHelper(node)
+    }
+  }
+  result.reverse()
+  return result
+  function topologicalSortHelper(node: string) {
+    temp[node] = true
+    const neighbors = graph[node]
+    for (let i = 0; i < neighbors.length; i++) {
+      const n = neighbors[i]
+      if (temp[n]) {
+        // continue
+        throw Error('found cycle in DAG')
+      }
+      if (!visited[n]) {
+        topologicalSortHelper(n)
+      }
+    }
+    temp[node] = false
+    visited[node] = true
+    result.push(node)
+  }
+}
+/**
+ * foo bar
+ *
+ *
+ *         const a = value('inline')
+ *         const b = value('root', 'b')
+ *         const c = flag({source: {a}})
+ *         const d = flag({source: {b}, name: 'd'})
+ *         const e = value('inline')
+ *         const f = value('root', 'f')
+ *         const g = separate({source: {a}, cases: {e}})
+ *         const h = separate({source: {a}, cases: {f}})
+ *         //
+ *         const i = value('inline')
+ *         const j = separate({source: {a}, cases: {i}})
+ *         const k = value('root', 'k')
+ *         const l = separate({source: {a}, cases: {k}})
+ *         const m = value('inline')
+ *         const n = separate({source: {a}, cases: {m}})
+ *         //
+ *         const o = value('inline')
+ *         const p = separate({source: {a}, cases: {o}, name: 'p'})
+ *         const q = value('root', 'q')
+ *         const r = separate({source: {a}, cases: {q}, name: 'r'})
+ *         const s = value('inline')
+ *         const t = separate({source: {a}, cases: {s}, name: 't'})
+ *
+ * named roots
+ *
+ *
+ *
+ *         [b, d, f, k, p, q, r, t]
+ *
+ *
+ * inline targets
+ *
+ *         g ~> e
+ *         h ~> f
+ *         j ~> i
+ *         l ~> k
+ *         n ~> m
+ *         p ~> o
+ *         r ~> q
+ *         t ~> s
+ *
+ * non-inline targets
+ *
+ *         a -> [c, g, h, j, l, n, p, r, t]
+ *         b -> d
+ *
+ *
+ * source -> target chains
+ *
+ *         a -> [c, g, h, j, l, n, p, r, t]
+ *         b -> d
+ *         c -> []
+ *         d -> []
+ *         e -> []
+ *         f -> []
+ *         g -> e
+ *         h -> f
+ *         i -> []
+ *         j -> i
+ *         k -> []
+ *         l -> k
+ *         m -> []
+ *         n -> m
+ *         o -> []
+ *         p -> o
+ *         q -> []
+ *         r -> q
+ *         s -> []
+ *         t -> s
+ *
+ *
+ * target <- source chains
+ *
+ *         a <- []
+ *         b <- []
+ *         c <- a
+ *         d <- []
+ *         e <- g
+ *         f <- h
+ *         g <- a
+ *         h <- a
+ *         i <- j
+ *         j <- a
+ *         k <- l
+ *         l <- a
+ *         m <- n
+ *         n <- a
+ *         o <- p
+ *         p <- a
+ *         q <- r
+ *         r <- a
+ *         s <- t
+ *         t <- a
+ *
+ *
+ * node -> source / target chains
+ *
+ *         a -> [] / [c, g, h, j, l, n, p, r, t]
+ *         b -> [] / d
+ *         c -> a / []
+ *         d -> [] / []
+ *         e -> g / []
+ *         f -> h / []
+ *         g -> a / e
+ *         h -> a / f
+ *         i -> j / []
+ *         j -> a / i
+ *         k -> l / []
+ *         l -> a / k
+ *         m -> n / []
+ *         n -> a / m
+ *         o -> p / []
+ *         p -> a / o
+ *         q -> r / []
+ *         r -> a / q
+ *         s -> t / []
+ *         t -> a / s
+ */
+function processDeclaratorsToShape() {
+  /** graph roots */
+  const named = new Set<string>()
+  const appearAsInlineTarget = new Set<string>()
+  /**
+   * inline references FROM id
+   *
+   * separate({cases: {_: targetReference}}): referencedBy
+   *
+   * {[referencedBy]: targetReference[]}
+   *
+   * referencedBy -> targetReference
+   **/
+  const inlineRefs: Record<string, string[]> = {}
+  /**
+   * inline references TO id
+   *
+   * separate({cases: {_: targetReference}}): referencedBy
+   *
+   * {[targetReference]: referencedBy[]}
+   *
+   * referencedBy -> targetReference
+   **/
+  const inlineRefsBack: Record<string, string[]> = {}
+  /**
+   * array of references FROM id
+   *
+   * sourceReference -> referencedBy
+   *
+   * {[sourceReference]: referencedBy[]}
+   **/
+  const refGraph: Record<string, string[]> = {}
+  /**
+   * array of references TO id
+   *
+   * sourceReference[] -> referencedBy
+   *
+   * {[referencedBy]: sourceReference[]}
+   **/
+  const refGraphBack: Record<string, string[]> = {}
+  const graph: Record<string, string[]> = {}
+  for (const id in ctx.items) {
+    const val = ctx.items[id]
+    const refs = ctx.references[id]
+    const targets = ctx.targets[id]
+    const hasName = val.name !== val.id
+    if (hasName) {
+      named.add(id)
+    }
+    if (!refGraph[id]) refGraph[id] = []
+    if (!inlineRefsBack[id]) inlineRefsBack[id] = []
+    refGraphBack[id] = []
+    inlineRefs[id] = []
+    graph[id] = []
+    // refGraph[id] ?? []
+    if (refs)
+      for (const refID of refs) {
+        refGraph[refID] = refGraph[refID] ?? []
+        refGraph[refID].push(id)
+        refGraphBack[id].push(refID)
+      }
+    if (targets) {
+      for (const target of targets) {
+        appearAsInlineTarget.add(target)
+        inlineRefs[id].push(target)
+        inlineRefsBack[target] = inlineRefsBack[target] ?? []
+        inlineRefsBack[target].push(id)
+      }
+    }
+  }
+  const visited = new Set<string>()
+  const only = new Set<string>()
+  const stack: [string, 'up' | 'down' | 'target'][] = []
+  for (const rootId of named) {
+    only.add(rootId)
+    visitDecl(rootId)
+  }
+  for (const id in graph) {
+    graph[id].sort((a, b) => {
+      const an = parseInt(a, 36)
+      const bn = parseInt(b, 36)
+      return an - bn
+    })
+  }
+  const sortedIds = toposort(graph)
+  const resultShape: Record<string, any> = {}
+  for (const id of sortedIds) {
+    if (!only.has(id)) continue
+    const item = ctx.items[id]
+    resultShape[item.name] = item.prepared
+  }
+  console.log(
+    `\n\n\n+++++++++\n`,
+    sortedIds
+      .filter(e => only.has(e))
+      .map(
+        id =>
+          `${ctx.items[id].name}#${ctx.items[id].kind} => ${graph[id]
+            .map(e => `${ctx.items[e].name}#${ctx.items[e].kind}`)
+            .join(', ')}`,
+      )
+      .join(`\n`),
+    `\n\n---------\n\n`,
+  )
+
+  return resultShape
+  function visitDecl(id: string, mode: 'up' | 'down' | 'target' = 'up') {
+    const item = ctx.items[id]
+    if (
+      named.has(id) ||
+      !appearAsInlineTarget.has(id) ||
+      refGraphBack[id].length > 0 ||
+      inlineRefsBack[id].length > 1 ||
+      mode === 'up'
+    )
+      only.add(id)
+    if (visited.has(id)) return
+    visited.add(id)
+    stack.push([
+      item.name === item.id ? `${item.kind}#${item.name}` : item.name,
+      mode,
+    ])
+    console.log(stack.map(([id, mode]) => `${id}:${mode}`).join(' -> '))
+    refGraph[id].forEach(sourceID => {
+      // only.add(sourceID)
+      graph[sourceID].push(id)
+      visitDecl(sourceID, 'up')
+    })
+    inlineRefs[id].forEach(targetID => {
+      // only.add(targetID)
+      graph[targetID].push(id)
+      visitDecl(targetID, 'target')
+    })
+    console.log(
+      `${stack[0][0]} ~>`,
+      graph[id].map(id => ctx.items[id].name).join(' '),
+    )
+    stack.pop()
+  }
+}
 export function exec(fn: () => void) {
-  const prevShape = currentShape
-  currentShape = {}
+  const prevShape = ctx
+  ctx = {
+    shape: {},
+    configUsed: false,
+    items: {},
+    references: {},
+    targets: {},
+    config: {
+      header: '',
+      grouping: {},
+    },
+  }
   try {
     fn()
-    return currentShape
+    const shape = processDeclaratorsToShape()
+    if (ctx.configUsed)
+      return {
+        shape,
+        grouping: ctx.config.grouping,
+        header: ctx.config.header,
+      }
+    return shape
+  } catch (err) {
+    console.error(err)
+    const shape = processDeclaratorsToShape()
+    if (ctx.configUsed)
+      return {
+        shape,
+        grouping: ctx.config.grouping,
+        header: ctx.config.header,
+      }
+    return shape
   } finally {
-    currentShape = prevShape
+    ctx = prevShape
   }
 }
