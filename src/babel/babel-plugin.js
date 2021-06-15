@@ -474,49 +474,49 @@ function addFileNameIdentifier(addLoc, enableFileName, t, path, state) {
 const normalizeOptions = options => {
   const defaults = options.noDefaults
     ? {
-      store: [],
-      event: [],
-      effect: [],
-      domain: [],
-      restore: [],
-      combine: [],
-      sample: [],
-      forward: [],
-      guard: [],
-      attach: [],
-      split: [],
-      createApi: [],
-      merge: [],
-      domainMethods: {
         store: [],
         event: [],
         effect: [],
         domain: [],
-      },
-      factories: [],
-    }
+        restore: [],
+        combine: [],
+        sample: [],
+        forward: [],
+        guard: [],
+        attach: [],
+        split: [],
+        createApi: [],
+        merge: [],
+        domainMethods: {
+          store: [],
+          event: [],
+          effect: [],
+          domain: [],
+        },
+        factories: [],
+      }
     : {
-      store: ['createStore'],
-      event: ['createEvent'],
-      effect: ['createEffect'],
-      domain: ['createDomain'],
-      restore: ['restore'],
-      combine: ['combine'],
-      sample: ['sample'],
-      forward: ['forward'],
-      guard: ['guard'],
-      attach: ['attach'],
-      split: ['split'],
-      createApi: ['createApi'],
-      merge: ['merge'],
-      domainMethods: {
-        store: ['store', 'createStore'],
-        event: ['event', 'createEvent'],
-        effect: ['effect', 'createEffect'],
-        domain: ['domain', 'createDomain'],
-      },
-      factories: [],
-    }
+        store: ['createStore'],
+        event: ['createEvent'],
+        effect: ['createEffect'],
+        domain: ['createDomain'],
+        restore: ['restore'],
+        combine: ['combine'],
+        sample: ['sample'],
+        forward: ['forward'],
+        guard: ['guard'],
+        attach: ['attach'],
+        split: ['split'],
+        createApi: ['createApi'],
+        merge: ['merge'],
+        domainMethods: {
+          store: ['store', 'createStore'],
+          event: ['event', 'createEvent'],
+          effect: ['effect', 'createEffect'],
+          domain: ['domain', 'createDomain'],
+        },
+        factories: [],
+      }
   let exportMetadata
   if ('exportMetadata' in options) {
     if (typeof options.exportMetadata === 'function') {
@@ -553,18 +553,18 @@ const normalizeOptions = options => {
       importName: new Set(
         options.importName
           ? Array.isArray(options.importName)
-          ? options.importName
-          : [options.importName]
+            ? options.importName
+            : [options.importName]
           : [
-            'effector',
-            'effector/compat',
-            'effector-root',
-            'effector-root/compat',
-            'effector-logger',
-            'trail/runtime',
-            '@zerobias/effector',
-            '@effector/effector',
-          ],
+              'effector',
+              'effector/compat',
+              'effector-root',
+              'effector-root/compat',
+              'effector-logger',
+              'trail/runtime',
+              '@zerobias/effector',
+              '@effector/effector',
+            ],
       ),
       exportMetadata,
       storeCreators: new Set(options.storeCreators || defaults.store),

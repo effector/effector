@@ -1275,7 +1275,7 @@ const f = () =>
 
 exports[`babel-plugin should factories 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/factories.js'
-import {withFactory as _withFactory2} from 'effector'
+import {withFactory as _withFactory} from 'effector'
 import {a} from '../a'
 import {a1} from './a'
 import {b} from './b'
@@ -1286,14 +1286,38 @@ import f1 from '@/f'
 import {g} from '../g'
 import {g1} from '../g.ts'
 import {g2} from './g.ts'
-const withFactory = 1
-const _withFactory = 2
 
-const a_val = _withFactory2({
-  sid: 'f933k3',
+const a_val = _withFactory({
+  sid: 'dty8di',
   fn: () => a(0),
   name: 'a_val',
   method: 'a',
+  loc: {
+    file: _effectorFileName,
+    line: 12,
+    column: 14,
+  },
+})
+
+const a1_val = a1(0)
+
+const b_val = _withFactory({
+  sid: 'p7ee5h',
+  fn: () => b(0),
+  name: 'b_val',
+  method: 'b',
+  loc: {
+    file: _effectorFileName,
+    line: 14,
+    column: 14,
+  },
+})
+
+const c_val = _withFactory({
+  sid: '-yxb4fv',
+  fn: () => c(0),
+  name: 'c_val',
+  method: 'c',
   loc: {
     file: _effectorFileName,
     line: 15,
@@ -1301,13 +1325,23 @@ const a_val = _withFactory2({
   },
 })
 
-const a1_val = a1(0)
+const e_val = _withFactory({
+  sid: '-dljo2i',
+  fn: () => e(0),
+  name: 'e_val',
+  method: 'e',
+  loc: {
+    file: _effectorFileName,
+    line: 16,
+    column: 14,
+  },
+})
 
-const b_val = _withFactory2({
-  sid: 'qmj9c2',
-  fn: () => b(0),
-  name: 'b_val',
-  method: 'b',
+const f_val = _withFactory({
+  sid: '-2p54oq',
+  fn: () => f(0),
+  name: 'f_val',
+  method: 'f',
   loc: {
     file: _effectorFileName,
     line: 17,
@@ -1315,23 +1349,23 @@ const b_val = _withFactory2({
   },
 })
 
-const c_val = _withFactory2({
-  sid: '-xi699a',
-  fn: () => c(0),
-  name: 'c_val',
-  method: 'c',
+const f1_val = _withFactory({
+  sid: 'o30e09',
+  fn: () => f1(0),
+  name: 'f1_val',
+  method: 'default',
   loc: {
     file: _effectorFileName,
     line: 18,
-    column: 14,
+    column: 15,
   },
 })
 
-const e_val = _withFactory2({
-  sid: '-c6esvx',
-  fn: () => e(0),
-  name: 'e_val',
-  method: 'e',
+const g_val = _withFactory({
+  sid: '8ob139',
+  fn: () => g(0),
+  name: 'g_val',
+  method: 'g',
   loc: {
     file: _effectorFileName,
     line: 19,
@@ -1339,50 +1373,14 @@ const e_val = _withFactory2({
   },
 })
 
-const f_val = _withFactory2({
-  sid: '8nxsry',
-  fn: () => f(0),
-  name: 'f_val',
-  method: 'f',
-  loc: {
-    file: _effectorFileName,
-    line: 20,
-    column: 14,
-  },
-})
-
-const f1_val = _withFactory2({
-  sid: 'zg3bgx',
-  fn: () => f1(0),
-  name: 'f1_val',
-  method: 'default',
-  loc: {
-    file: _effectorFileName,
-    line: 21,
-    column: 15,
-  },
-})
-
-const g_val = _withFactory2({
-  sid: 'k1dyjx',
-  fn: () => g(0),
-  name: 'g_val',
-  method: 'g',
-  loc: {
-    file: _effectorFileName,
-    line: 22,
-    column: 14,
-  },
-})
-
-const g1_val = _withFactory2({
-  sid: '4gqp0u',
+const g1_val = _withFactory({
+  sid: '31ltu9',
   fn: () => g1(0),
   name: 'g1_val',
   method: 'g1',
   loc: {
     file: _effectorFileName,
-    line: 23,
+    line: 20,
     column: 15,
   },
 })
