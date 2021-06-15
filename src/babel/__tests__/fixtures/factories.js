@@ -9,6 +9,9 @@ import {g} from '../g'
 import {g1} from '../g.ts'
 import {g2} from './g.ts'
 
+const withFactory = 1
+const _withFactory = 2
+
 const a_val = a(0)
 const a1_val = a1(0)
 const b_val = b(0)
