@@ -126,80 +126,80 @@ module.exports = {
   projects: createProjectList(
     boolean(process.env.DOM, false)
       ? [
-          {
-            forestBrowser: {
-              automock: false,
-              testEnvironment: 'node',
-              testMatch: ['<rootDir>/src/forest/__tests__/**/*.test.ts'],
-              testPathIgnorePatterns: ['<rootDir>/src/forest/__tests__/ssr/'],
-              transform,
-              testTimeout: 120e3,
-              runner:
-                './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
-              globals: {
-                needForest: true,
-                effectorBuild: 'cjs',
-                needPolyfill: false,
-                capabilitiesTag: 'forest',
-                noAsyncAwait: false,
-                capabilities: {
-                  'bstack:options': {
-                    os: 'OS X',
-                    osVersion: 'Mojave',
-                    projectName: 'forest',
-                    buildName: 'macos Safari',
-                    seleniumVersion: '3.141.59',
-                  },
-                  browserName: 'Safari',
-                  browserVersion: '12.1',
+        {
+          forestBrowser: {
+            automock: false,
+            testEnvironment: 'node',
+            testMatch: ['<rootDir>/src/forest/__tests__/**/*.test.ts'],
+            testPathIgnorePatterns: ['<rootDir>/src/forest/__tests__/ssr/'],
+            transform,
+            testTimeout: 120e3,
+            runner:
+              './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
+            globals: {
+              needForest: true,
+              effectorBuild: 'cjs',
+              needPolyfill: false,
+              capabilitiesTag: 'forest',
+              noAsyncAwait: false,
+              capabilities: {
+                'bstack:options': {
+                  os: 'OS X',
+                  osVersion: 'Mojave',
+                  projectName: 'forest',
+                  buildName: 'macos Safari',
+                  seleniumVersion: '3.141.59',
                 },
+                browserName: 'Safari',
+                browserVersion: '12.1',
               },
             },
           },
-        ]
+        },
+      ]
       : boolean(process.env.COMPAT, false)
       ? [createCompatProjects(compatBrowsers)]
       : [
-          {
-            effector: {
-              testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
-              transform,
-            },
+        {
+          effector: {
+            testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
+            transform,
           },
-          'babel',
-          {
-            react: {
-              testEnvironment: 'jsdom',
-              testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
-              transform,
-            },
-            vue: {
-              testEnvironment: 'jsdom',
-              testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
-              transform,
-            },
-            forest: {
-              automock: false,
-              testEnvironment: 'node',
-              testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
-              transform,
-              testTimeout: 60e3,
-            },
+        },
+        'babel',
+        {
+          react: {
+            testEnvironment: 'jsdom',
+            testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
+            transform,
           },
-          !boolean(process.env.NO_TYPE_TESTS, false) && {
-            types: {
-              testMatch: [
-                `<rootDir>/src/types/__tests__/**/*.test.js`,
-                `<rootDir>/src/types/__tests__/**/*.test.ts`,
-                `<rootDir>/src/types/__tests__/**/*.test.tsx`,
-              ],
-              globalSetup: './src/types/src/globalSetup.js',
-              globalTeardown: './src/types/src/globalTeardown.js',
-              maxConcurrency: 25,
-              transform,
-            },
+          vue: {
+            testEnvironment: 'jsdom',
+            testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
+            transform,
           },
-        ],
+          forest: {
+            automock: false,
+            testEnvironment: 'node',
+            testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
+            transform,
+            testTimeout: 60e3,
+          },
+        },
+        !boolean(process.env.NO_TYPE_TESTS, false) && {
+          types: {
+            testMatch: [
+              `<rootDir>/src/types/__tests__/**/*.test.js`,
+              `<rootDir>/src/types/__tests__/**/*.test.ts`,
+              `<rootDir>/src/types/__tests__/**/*.test.tsx`,
+            ],
+            globalSetup: './src/types/src/globalSetup.js',
+            globalTeardown: './src/types/src/globalTeardown.js',
+            maxConcurrency: 25,
+            transform,
+          },
+        },
+      ],
   ),
 }
 
