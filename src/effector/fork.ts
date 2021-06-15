@@ -13,14 +13,14 @@ import {removeItem, forEach, includes, forIn} from './collection'
 import {DOMAIN, STORE, EVENT, EFFECT, SAMPLER, MAP, FORK_COUNTER} from './tag'
 
 /**
-hydrate state on client
+ hydrate state on client
 
-const root = createDomain()
-hydrate(root, {
+ const root = createDomain()
+ hydrate(root, {
   values: window.__initialState__
 })
 
-*/
+ */
 export function hydrate(domain: Domain, {values}: {values: any}) {
   const isScope = isObject(domain) && (domain as any).cloneOf
   if (!is.domain(domain) && !isScope) {
@@ -106,6 +106,7 @@ function fillValues({
     storeWatches,
     storeWatchesRefs,
   }
+
   function execRef(ref: StateRef) {
     let isFresh = false
     if (ref.before && !predefinedRefs.has(ref)) {
@@ -170,8 +171,8 @@ function createRefGraph(refsMap: Record<string, StateRef>) {
 }
 
 /**
-serialize state on server
-*/
+ serialize state on server
+ */
 export function serialize(
   {clones, changedStores}: any,
   {
@@ -220,30 +221,45 @@ export function scopeBind(unit: any) {
       }
 }
 
-function normalizeValues(values: Map<Store<any>, any> | Record<string, any>) {
+function normalizeValues(
+  values: Map<Store<any>, any> | Record<string, any>,
+  assertEach = (key: any, value: any) => {},
+) {
   if (values instanceof Map) {
     const result = {} as Record<string, any>
     for (const [key, value] of values) {
       if (!is.unit(key)) throwError('Map key should be a unit')
+      assertEach(key, value)
       result[key.sid!] = value
     }
     return result
   }
   return values
 }
+
 export function fork(
   domain: Domain,
   {values, handlers}: {values?: any; handlers?: any} = {},
 ) {
   if (!is.domain(domain)) throwError('first argument of fork should be domain')
   const needToFill = !!values
-  values = normalizeValues(values || {})
+  values = normalizeValues(
+    values || {},
+    unit =>
+      !is.store(unit) &&
+      throwError('Values map can contain only stores as keys'),
+  )
   const forked = cloneGraph(domain)
   if (needToFill) {
     fillValues()
   }
   if (handlers) {
-    handlers = normalizeValues(handlers)
+    handlers = normalizeValues(
+      handlers,
+      unit =>
+        !is.effect(unit) &&
+        throwError(`Handlers map can contain only effects as keys`),
+    )
     const handlerKeys = Object.keys(handlers)
     forEach(forked.clones, ({scope, meta}) => {
       if (meta.sid && includes(handlerKeys, meta.sid)) {
@@ -335,6 +351,7 @@ export function fork(
     }
   }
 }
+
 function toposort(rawGraph: Record<string, string[]>, ignore?: Set<string>) {
   const graph = {} as Record<string, string[]>
   for (const id in rawGraph) {
@@ -365,6 +382,7 @@ function toposort(rawGraph: Record<string, string[]>, ignore?: Set<string>) {
     })
   }
   return result
+
   function topologicalSortHelper(node: string) {
     temp[node] = true
     const neighbors = graph[node]
@@ -383,6 +401,7 @@ function toposort(rawGraph: Record<string, string[]>, ignore?: Set<string>) {
     result.push(node)
   }
 }
+
 export function allSettled(
   start: any,
   {scope, params: ctx}: {scope: any; params?: any},
@@ -424,6 +443,7 @@ export function allSettled(
   })
   return defer.req
 }
+
 function flatGraph(unit: any) {
   const list = [] as Node[]
   ;(function traverse(node) {
@@ -433,10 +453,11 @@ function flatGraph(unit: any) {
   })(getGraph(unit))
   return list
 }
+
 /**
-everything we need to clone graph section
-reachable from given unit
-*/
+ everything we need to clone graph section
+ reachable from given unit
+ */
 function cloneGraph(unit: any) {
   const list = flatGraph(unit)
   const refs = new Map()
@@ -581,6 +602,7 @@ function cloneGraph(unit: any) {
       scope: {forkInFlightCounter},
     }),
   }
+
   function findClone(unit: any) {
     const node = getGraph(unit)
     const index = list.indexOf(node)
@@ -604,6 +626,7 @@ function wrapStore(node: Node) {
     family: node.family,
   }
 }
+
 function forEachRelatedNode(
   node: Node,
   cb: (node: Node, index: number, siblings: Node[]) => void,

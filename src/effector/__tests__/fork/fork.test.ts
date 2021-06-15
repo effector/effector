@@ -2,6 +2,7 @@ import {
   createDomain,
   forward,
   attach,
+  createEvent,
   fork,
   allSettled,
   serialize,
@@ -61,6 +62,17 @@ describe('fork values support', () => {
       })
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
   })
+  test('passed non effect to handler map should throw', () => {
+    const app = createDomain()
+    const unit = createEvent()
+    expect(() => {
+      fork(app, {
+        values: new Map().set(unit, 0),
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only stores as keys"`,
+    )
+  })
 })
 
 describe('fork handlers support', () => {
@@ -112,5 +124,16 @@ describe('fork handlers support', () => {
         handlers: new Map().set(null, () => {}),
       })
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
+  })
+  test('passed non effect to handler map should throw', () => {
+    const app = createDomain()
+    const unit = createEvent()
+    expect(() => {
+      fork(app, {
+        handlers: new Map().set(unit, () => {}),
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Handlers map can contain only effects as keys"`,
+    )
   })
 })
