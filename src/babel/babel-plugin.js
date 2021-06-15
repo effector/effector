@@ -66,23 +66,30 @@ module.exports = function(babel, options = {}) {
     apiCreators,
     mergeCreators,
   ]
-  function addFactoryImport(path) {
+  function addImport(path, method) {
     const programPath = path.find(path => path.isProgram())
     const [newPath] = programPath.unshiftContainer(
       'body',
       t.importDeclaration(
         [
           t.importSpecifier(
-            t.identifier('withFactory'),
-            t.identifier('withFactory'),
+            programPath.scope.generateUidIdentifier(method),
+            t.identifier(method),
           ),
         ],
         t.stringLiteral('effector'),
       ),
     )
-    newPath.get('specifiers').forEach(specifier => {
-      programPath.scope.registerBinding('module', specifier)
-    })
+    let found;
+
+    newPath.get('specifiers').forEach((specifier) => {
+      if (specifier.node.imported.name === method) {
+        found = specifier;
+      }
+    });
+
+    programPath.scope.registerBinding('module', found);
+    return found.node.local.name;
   }
   const importVisitor = {
     ImportDeclaration(path, state) {
@@ -172,10 +179,10 @@ module.exports = function(babel, options = {}) {
               let tpl
               factoryTemplate = template(
                 addLoc
-                  ? 'withFactory({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
+                  ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
                   : addNames
-                  ? 'withFactory({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
-                  : 'withFactory({sid: SID,fn:()=>FN})',
+                  ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
+                  : 'FACTORY({sid: SID,fn:()=>FN})',
               )
             }
           }
@@ -199,11 +206,13 @@ module.exports = function(babel, options = {}) {
     name: 'effector/babel-plugin',
     pre() {
       this.effector_ignoredImports = new Set()
+      this.effector_withFactoryName = null;
     },
     post() {
       this.effector_ignoredImports.clear()
       this.effector_needFactoryImport = false
       this.effector_factoryImportAdded = false
+      this.effector_withFactoryName = null;
       if (this.effector_factoryMap) {
         this.effector_factoryMap.clear()
         delete this.effector_factoryMap
@@ -366,7 +375,7 @@ module.exports = function(babel, options = {}) {
           ) {
             if (!this.effector_factoryImportAdded) {
               this.effector_factoryImportAdded = true
-              addFactoryImport(path)
+              this.effector_withFactoryName = addImport(path, 'withFactory')
             }
             const {
               source,
@@ -394,6 +403,7 @@ module.exports = function(babel, options = {}) {
             const factoryConfig = {
               SID: JSON.stringify(sid),
               FN: path.node,
+              FACTORY: this.effector_withFactoryName,
             }
             if (addLoc || addNames) {
               factoryConfig.NAME = JSON.stringify(
@@ -621,17 +631,6 @@ function createMetadataVisitor(plugin, exportMetadata) {
     })
   }
 }
-// function addImportDeclaration(path, t, names) {
-//   if (!path) return
-//   const importDeclaration = t.importDeclaration(
-//     names.map(name =>
-//       t.importSpecifier(t.identifier(name), t.identifier(name)),
-//     ),
-//     t.stringLiteral(importName),
-//   )
-//   importDeclaration.leadingComments = path.node.body[0].leadingComments
-//   path.unshiftContainer('body', importDeclaration)
-// }
 
 function findCandidateNameForExpression(path) {
   let id

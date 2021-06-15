@@ -1275,7 +1275,7 @@ const f = () =>
 
 exports[`babel-plugin should factories 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/factories.js'
-import {withFactory} from 'effector'
+import {withFactory as _withFactory} from 'effector'
 import {a} from '../a'
 import {a1} from './a'
 import {b} from './b'
@@ -1286,7 +1286,8 @@ import f1 from '@/f'
 import {g} from '../g'
 import {g1} from '../g.ts'
 import {g2} from './g.ts'
-const a_val = withFactory({
+
+const a_val = _withFactory({
   sid: 'dty8di',
   fn: () => a(0),
   name: 'a_val',
@@ -1297,8 +1298,10 @@ const a_val = withFactory({
     column: 14,
   },
 })
+
 const a1_val = a1(0)
-const b_val = withFactory({
+
+const b_val = _withFactory({
   sid: 'p7ee5h',
   fn: () => b(0),
   name: 'b_val',
@@ -1309,7 +1312,8 @@ const b_val = withFactory({
     column: 14,
   },
 })
-const c_val = withFactory({
+
+const c_val = _withFactory({
   sid: '-yxb4fv',
   fn: () => c(0),
   name: 'c_val',
@@ -1320,7 +1324,8 @@ const c_val = withFactory({
     column: 14,
   },
 })
-const e_val = withFactory({
+
+const e_val = _withFactory({
   sid: '-dljo2i',
   fn: () => e(0),
   name: 'e_val',
@@ -1331,7 +1336,8 @@ const e_val = withFactory({
     column: 14,
   },
 })
-const f_val = withFactory({
+
+const f_val = _withFactory({
   sid: '-2p54oq',
   fn: () => f(0),
   name: 'f_val',
@@ -1342,7 +1348,8 @@ const f_val = withFactory({
     column: 14,
   },
 })
-const f1_val = withFactory({
+
+const f1_val = _withFactory({
   sid: 'o30e09',
   fn: () => f1(0),
   name: 'f1_val',
@@ -1353,7 +1360,8 @@ const f1_val = withFactory({
     column: 15,
   },
 })
-const g_val = withFactory({
+
+const g_val = _withFactory({
   sid: '8ob139',
   fn: () => g(0),
   name: 'g_val',
@@ -1364,7 +1372,8 @@ const g_val = withFactory({
     column: 14,
   },
 })
-const g1_val = withFactory({
+
+const g1_val = _withFactory({
   sid: '31ltu9',
   fn: () => g1(0),
   name: 'g1_val',
@@ -1375,27 +1384,30 @@ const g1_val = withFactory({
     column: 15,
   },
 })
+
 const g2_val = g2(0)
 "
 `;
 
 exports[`babel-plugin should factories only with name with options 1`] = `
-"import {withFactory} from 'effector'
+"import {withFactory as _withFactory} from 'effector'
 import {itIsALongName, Randomizing} from 'c/d'
 import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
-const longer = withFactory({
+
+const longer = _withFactory({
   sid: 'sxdi9p',
   fn: () => itIsALongName(0),
   name: 'longer',
   method: 'itIsALongName',
 })
-const arcade = withFactory({
+
+const arcade = _withFactory({
   sid: '-rwb2il',
   fn: () =>
     Defaulting({
       source: longer,
-      condition: withFactory({
+      condition: _withFactory({
         sid: '-6rcqb6',
         fn: () =>
           AnotherImport({
@@ -1408,7 +1420,8 @@ const arcade = withFactory({
   name: 'arcade',
   method: 'default',
 })
-withFactory({
+
+_withFactory({
   sid: '-dr78v0',
   fn: () =>
     Randomizing({
@@ -1417,7 +1430,8 @@ withFactory({
   name: 'none',
   method: 'Randomizing',
 })
-const result = withFactory({
+
+const result = _withFactory({
   sid: '-fbu55p',
   fn: () =>
     splitMap({
@@ -1431,20 +1445,22 @@ const result = withFactory({
 `;
 
 exports[`babel-plugin should factories without name with options 1`] = `
-"import {withFactory} from 'effector'
+"import {withFactory as _withFactory} from 'effector'
 import {itIsALongName, Randomizing} from 'c/d'
 import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
-const longer = withFactory({
+
+const longer = _withFactory({
   sid: 'mn9l4u',
   fn: () => itIsALongName(0),
 })
-const arcade = withFactory({
+
+const arcade = _withFactory({
   sid: 'xpbz5w',
   fn: () =>
     Defaulting({
       source: longer,
-      condition: withFactory({
+      condition: _withFactory({
         sid: 'lijhe7',
         fn: () =>
           AnotherImport({
@@ -1453,14 +1469,16 @@ const arcade = withFactory({
       }),
     }),
 })
-withFactory({
+
+_withFactory({
   sid: '-yfq3bv',
   fn: () =>
     Randomizing({
       arcade,
     }),
 })
-const result = withFactory({
+
+const result = _withFactory({
   sid: 'lwwnia',
   fn: () =>
     splitMap({

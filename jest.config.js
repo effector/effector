@@ -13,6 +13,8 @@ const watchPathIgnorePatterns = [
   '<rootDir>/tasks/',
   '<rootDir>/tools/',
   '<rootDir>/website/',
+  // 'node_modules',
+  'docs',
 ]
 
 const transform = {
