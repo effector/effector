@@ -130,7 +130,7 @@ function moduleRequest(name, field, result) {
   return moduleRequests[name].req
 }
 
-module.exports = class BSTestRunner extends require('jest-runner') {
+module.exports = class BSTestRunner extends require('jest-runner').default {
   constructor(...args) {
     super(...args)
     this.isSerial = true
