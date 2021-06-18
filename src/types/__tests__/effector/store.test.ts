@@ -176,20 +176,15 @@ test('#on triggers[] (should pass)', () => {
   `)
 })
 
-test('#on triggers[] failing', () => {
+test('#on triggers[] non-intersecting types (should pass)', () => {
   const event = createEvent<number>()
   const another = createStore('')
   const store = createStore(0)
-  //@ts-expect-error
+
   store.on([event, another], (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      Overload 1 of 2, '(trigger: Unit<unknown>, reducer: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
-        Argument of type '(Store<string> | Event<number>)[]' is not assignable to parameter of type 'Unit<unknown>'.
-          Type '(Store<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      Overload 2 of 2, '(triggers: Unit<string>[], reducer: (state: number, payload: string) => number | void): Store<number>', gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
+    no errors
     "
   `)
 })

@@ -180,6 +180,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   sid: string | null
   shortName: string
 }
+type InferValueFromTupleOfUnits<T extends Tuple<Unit<any>>> =
+  T[number] extends Unit<infer R> ? R : never
 
 export interface Store<State> extends Unit<State> {
   reset(...triggers: Array<Unit<any>>): this
@@ -194,6 +196,10 @@ export interface Store<State> extends Unit<State> {
   on<E>(
     triggers: Unit<E>[],
     reducer: (state: State, payload: E) => State | void,
+  ): this
+  on<E extends Tuple<Unit<any>>>(
+    triggers: E,
+    reducer: (state: State, payload: InferValueFromTupleOfUnits<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
   subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
