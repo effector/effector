@@ -41,7 +41,7 @@ const ListItem = {
   `,
   props: {
     id: {
-      type: STring,
+      type: String,
       required: true,
     },
   },
