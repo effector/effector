@@ -61,9 +61,29 @@ test('useEvent of Event', () => {
   `)
 })
 
+test('useEvent of Event<void>', () => {
+  const runEvent: () => void = useEvent(createEvent<void>())
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
 test('useEvent of Effect', () => {
   const runEffect: (payload: number) => Promise<string> = useEvent(
     createEffect<number, string, Error>(),
+  )
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+test('useEvent of Effect<void, unknown, Error>', () => {
+  const runEffect: () => Promise<unknown> = useEvent(
+    createEffect<void, unknown, Error>(),
   )
   expect(typecheck).toMatchInlineSnapshot(`
     "
