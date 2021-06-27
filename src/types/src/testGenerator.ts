@@ -1,8 +1,6 @@
-import {
-  generateCaseSetFile,
-  byFields,
-  createGroupedCases,
-} from './generateCaseSetFile'
+import {createGroupedCases} from './runner/declarator/createGroupedCases'
+import {byFields} from './runner/declarator/byFields'
+import {generateFile} from './runner/declarator/generateFile'
 
 import sampleClockArray from './generator/sampleClockArray.generator'
 import sampleArrayTargetCombinable from './generator/sampleArrayTargetCombinable.generator'
@@ -38,13 +36,13 @@ import guardGenerator from './generator/guard.generator'
   - [str, anyt, voidt]
   */
 
-generateCaseSetFile({
+generateFile({
   file: 'clockArrayGen',
   dir: 'sample/generated',
   usedMethods: ['createStore', 'createEvent', 'sample'],
   header: sampleClockArray.header,
   generateCases() {
-    const casesDefs = byFields([{}], sampleClockArray.shape)
+    const casesDefs = byFields(sampleClockArray.shape)
     const resultCases = createGroupedCases(casesDefs, sampleClockArray.grouping)
     return {
       description: '',
@@ -54,21 +52,22 @@ generateCaseSetFile({
   },
 })
 
-generateCaseSetFile({
-  shape: [{combinable: false}, {combinable: true}],
-  generateCases({combinable}: any) {
-    if (combinable) {
-      const casesDefs = byFields([{}], sampleArrayTargetCombinable.shape)
-      const resultCases = createGroupedCases(
-        casesDefs,
-        sampleArrayTargetCombinable.grouping,
-      )
-      return {
-        description: 'combinable',
-        cases: resultCases,
-      }
+generateFile({
+  // shape: [{combinable: false}, {combinable: true}],
+  generateCases() {
+    {
+      sampleArrayTargetCombinable()
+      // const casesDefs = byFields(sampleArrayTargetCombinable.shape)
+      // const resultCases = createGroupedCases(
+      //   casesDefs,
+      //   sampleArrayTargetCombinable.grouping,
+      // )
+      // return {
+      //   description: 'combinable',
+      //   // cases: resultCases,
+      // }
     }
-    const casesDefs = byFields([{}], sampleArrayTargetPlain.shape)
+    const casesDefs = byFields(sampleArrayTargetPlain.shape)
     const resultCases = createGroupedCases(
       casesDefs,
       sampleArrayTargetPlain.grouping,
@@ -164,15 +163,16 @@ const fn = {
 `,
 })
 
-generateCaseSetFile({
+generateFile({
   generateCases() {
-    const casesDefs = byFields([{}], sampleReturn.shape)
-    const resultCases = createGroupedCases(casesDefs, sampleReturn.grouping)
-    return {
-      description: '-',
-      noGroup: true,
-      cases: resultCases,
-    }
+    sampleReturn()
+    // const casesDefs = byFields(sampleReturn.shape)
+    // const resultCases = createGroupedCases(casesDefs, sampleReturn.grouping)
+    // return {
+    //   description: '-',
+    //   noGroup: true,
+    //   cases: resultCases,
+    // }
   },
   file: 'sampleReturnGen',
   dir: 'sample/generated',
@@ -180,15 +180,16 @@ generateCaseSetFile({
   header: sampleReturn.header,
 })
 
-generateCaseSetFile({
+generateFile({
   generateCases() {
-    const casesDefs = byFields([{}], guardGenerator.shape)
-    const resultCases = createGroupedCases(casesDefs, guardGenerator.grouping)
-    return {
-      description: '-',
-      noGroup: true,
-      cases: resultCases,
-    }
+    guardGenerator()
+    // const casesDefs = byFields(guardGenerator.shape)
+    // const resultCases = createGroupedCases(casesDefs, guardGenerator.grouping)
+    // return {
+    //   description: '-',
+    //   noGroup: true,
+    //   cases: resultCases,
+    // }
   },
   file: 'guardGen',
   dir: 'generated',

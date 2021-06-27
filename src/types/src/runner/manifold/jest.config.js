@@ -7,6 +7,6 @@ module.exports = {
   },
   collectCoverage: false,
   testMatch: [`<rootDir>/__tests__/**/*.test.ts`],
-  watchPathIgnorePatterns: [`<rootDir>/__tests__/node.json`],
-  modulePathIgnorePatterns: [`<rootDir>/__tests__/node.json`],
+  //   watchPathIgnorePatterns: [],
+  //   modulePathIgnorePatterns: [],
 }

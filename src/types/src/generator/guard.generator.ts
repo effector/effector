@@ -1,6 +1,5 @@
 import {printArray} from '../runner/text'
 import {
-  exec,
   computeFn,
   union,
   value,
@@ -10,9 +9,9 @@ import {
   separate,
   flag,
   config,
-} from '../runner/declarator'
+} from '../runner/manifold'
 
-export default exec(() => {
+export default () => {
   const clockType = union(['no', 'unit', 'array'], 'clockType')
   const filterType = union(['fn', 'store', 'bool'], 'filterType')
   const sourceType = separate({
@@ -734,4 +733,4 @@ const lNumNum = createEvent<[number, number]>()
 const abn = createEvent<ABN>()
 `,
   })
-})
+}

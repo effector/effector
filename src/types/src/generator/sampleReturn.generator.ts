@@ -1,6 +1,5 @@
 import {printMethod} from '../runner/text'
 import {
-  exec,
   computeFn,
   union,
   value,
@@ -9,9 +8,9 @@ import {
   separate,
   flag,
   config,
-} from '../runner/declarator'
+} from '../runner/manifold'
 
-export default exec(() => {
+export default () => {
   const source = union(['event', 'store', 'combinable'], 'source')
   const clock = union(['none', 'event', 'store', 'tuple'], 'clock')
   const target = union(['none', 'event', 'store', 'tuple'], 'target')
@@ -219,10 +218,11 @@ export default exec(() => {
         },
       }),
     },
-    fn: ({methodCode, pass, returnCode}) => [
-      !pass && '//@ts-expect-error',
-      `{const result: ${returnCode} = ${methodCode}}`,
-    ],
+    fn: ({methodCode, pass, returnCode}) =>
+      [
+        !pass && ('//@ts-expect-error' as string),
+        `{const result: ${returnCode} = ${methodCode}}` as string,
+      ] as (string | boolean)[],
   })
   const dedupeHash = computeFn({
     name: 'dedupeHash',
@@ -260,4 +260,4 @@ const fn2 = ({a}: AN, c: number) => ({a: a + c})
       },
     },
   })
-})
+}

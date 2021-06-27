@@ -64,6 +64,56 @@ export function printMethod({
   }
   return methodBody
 }
+export function printTable({
+  values,
+  only: fieldSet,
+}: {
+  values: Record<string, any>[]
+  only: string[]
+}) {
+  const fieldsValues: Record<string, {values: string[]; maxSize: number}> = {}
+  fieldSet.forEach(field => {
+    fieldsValues[field] = {values: [], maxSize: field.length}
+  })
+  const resultLines: string[] = []
+  for (const value of values) {
+    resultLines.push('| ')
+    for (const field of fieldSet) {
+      const fieldItem = fieldsValues[field]
+      if (!(field in value)) {
+        fieldItem.values.push('')
+      } else {
+        const result = String(value[field])
+        fieldItem.values.push(result)
+        fieldItem.maxSize = Math.max(fieldItem.maxSize, result.length)
+      }
+    }
+  }
+  for (let i = 0; i < values.length; i++) {
+    let resultLine = resultLines[i]
+    for (const field of fieldSet) {
+      const fieldItem = fieldsValues[field]
+      const textValue = fieldItem.values[i]
+      resultLine += textValue
+      if (textValue.length < fieldItem.maxSize) {
+        resultLine += ' '.repeat(fieldItem.maxSize - textValue.length)
+      }
+      resultLine += ' | '
+    }
+    resultLines[i] = resultLine
+  }
+  let titleLine = '* '
+  for (const field of fieldSet) {
+    const fieldItem = fieldsValues[field]
+    titleLine += field
+    if (field.length < fieldItem.maxSize) {
+      titleLine += ' '.repeat(fieldItem.maxSize - field.length)
+    }
+    titleLine += ' * '
+  }
+  resultLines.unshift(titleLine)
+  return resultLines
+}
 export function printMethodValues({
   method,
   values,
@@ -74,7 +124,7 @@ export function printMethodValues({
   method: string
   values: Record<string, any>[]
   shape: Record<string, string | {field: string; when?: string}>
-  addExpectError?: boolean
+  addExpectError?: boolean | ((value: any) => boolean)
   align?: boolean
 }) {
   const parts = Array.from(values, () => [method, '({'])
@@ -124,9 +174,13 @@ export function printMethodValues({
   parts.forEach(part => {
     part.push('})')
   })
-  if (addExpectError) {
+  if (addExpectError !== undefined || addExpectError !== false) {
+    const readExpectError =
+      typeof addExpectError === 'boolean'
+        ? (value: any) => addExpectError && !value.pass
+        : addExpectError
     values.forEach((value, i) => {
-      if (!value.pass) parts[i].unshift(`//@ts-expect-error\n`)
+      if (readExpectError(value)) parts[i].unshift('//' + `@ts-expect-error\n`)
     })
   }
   return parts.map(part => part.join(''))

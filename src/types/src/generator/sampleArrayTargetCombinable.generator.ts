@@ -1,5 +1,4 @@
 import {
-  exec,
   computeFn,
   union,
   value,
@@ -10,8 +9,8 @@ import {
   permute,
   config,
   bool,
-  Ref,
-} from '../runner/declarator'
+} from '../runner/manifold'
+import {Ref} from '../runner/manifold/types'
 
 const variables = {
   number: 'num',
@@ -51,7 +50,7 @@ const failCases = {
   tuple_aa: ['l_str', 'l_num_num'],
 }
 
-export default exec(() => {
+export default () => {
   const source = union(['a', 'ab', 'tuple_a', 'tuple_aa'], 'source')
   const hasClock = flag({name: 'hasClock'})
   const sourceType = computeVariant({
@@ -338,4 +337,4 @@ export default exec(() => {
       },
     },
   })
-})
+}

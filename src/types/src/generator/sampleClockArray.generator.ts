@@ -80,7 +80,7 @@ const shape = {
   },
   clock: {
     split: {
-      match: {
+      variant: {
         none: {noClock: true},
         only: {noSource: true},
         noAnyNoFalsePositiveFnClock: {
