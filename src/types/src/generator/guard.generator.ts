@@ -9,23 +9,29 @@ import {
   separate,
   flag,
   config,
+  sortOrder,
 } from '../runner/manifold/operators'
 
 export default () => {
-  const clockType = union(['no', 'unit', 'array'], 'clockType')
-  const filterType = union(['fn', 'store', 'bool'], 'filterType')
+  const clockType = union({
+    oneOf: ['no', 'unit', 'array'],
+    sort: ['no', 'unit', 'array'],
+  })
+  const filterType = union({
+    oneOf: ['fn', 'store', 'bool'],
+    sort: ['fn', 'store', 'bool'],
+  })
   const sourceType = separate({
-    name: 'sourceType',
     source: {clockType},
     variant: {_: {noClock: {clockType: 'no'}}} as const,
     cases: {
       noClock: union(['unit', 'object', 'tuple']),
       __: union(['no', 'unit', 'object', 'tuple']),
     },
+    sort: ['unit', 'object', 'tuple', 'no'],
   })
-  const targetType = union(['unit', 'array'], 'targetType')
+  const targetType = union({oneOf: ['unit', 'array'], sort: ['unit', 'array']})
   const sourceSubtype = separate({
-    name: 'sourceSubtype',
     source: {sourceType, targetType},
     variant: {
       source: {
@@ -34,7 +40,6 @@ export default () => {
       },
       target: {
         targetUnit: {targetType: 'unit'},
-        // targetArray: {targetType: "array"},
       },
     } as const,
     cases: {
@@ -46,16 +51,21 @@ export default () => {
         targetUnit: union(['fullTuple', 'smallTuple']),
       },
     },
+    sort: [
+      'fullObject',
+      'nullableField',
+      'smallObject',
+      'fullTuple',
+      'smallTuple',
+    ],
   })
 
   const noSource = bool({
-    name: 'noSource',
     source: {sourceType},
     true: {sourceType: 'no'},
   })
 
   const targetVoid = flag({
-    name: 'targetVoid',
     avoid: [
       noSource,
       bool({
@@ -69,7 +79,6 @@ export default () => {
     ],
   })
   const noTargetAny = bool({
-    name: 'noTargetAny',
     source: {sourceSubtype},
     true: [
       {sourceSubtype: 'smallTuple'},
@@ -79,7 +88,6 @@ export default () => {
   })
 
   const targetAny = separate({
-    name: 'targetAny',
     source: {targetType},
     variant: {
       _: {
@@ -93,7 +101,6 @@ export default () => {
     },
   })
   const targetIsTyped = computeVariant({
-    name: 'targetIsTyped',
     source: {targetAny, targetVoid, targetType},
     variant: {
       array: {targetType: 'array'},
@@ -114,17 +121,14 @@ export default () => {
     },
   })
   const combinable = bool({
-    name: 'combinable',
     source: {sourceType},
     true: [{sourceType: 'object'}, {sourceType: 'tuple'}],
   })
   const wrongTarget = flag({
-    name: 'wrongTarget',
     needs: targetIsTyped,
     avoid: noSource,
   })
   const targetSubtype = separate({
-    name: 'targetSubtype',
     source: {sourceSubtype, wrongTarget},
     variant: {
       src: {
@@ -150,9 +154,15 @@ export default () => {
         correct: value('smallTuple' as const),
       },
     },
+    sort: [
+      'smallObject',
+      'tooWideObject',
+      'nonNullFieldSmall',
+      'wrongFieldSmall',
+      'smallTuple',
+    ],
   })
   const sourceIsWiderThatTargetCond = bool({
-    name: 'sourceIsWiderThatTargetCond',
     source: {sourceType, sourceSubtype, targetSubtype},
     true: [
       {sourceType: 'tuple'},
@@ -164,7 +174,6 @@ export default () => {
     ],
   })
   const sourceIsWiderThatTarget = separate({
-    name: 'sourceIsWiderThatTarget',
     source: {sourceSubtype},
     variant: {
       _: {
@@ -178,10 +187,10 @@ export default () => {
         avoid: [noSource, sourceIsWiderThatTargetCond],
       }),
     },
+    sort: [false, true],
   })
 
   const inferByFilter = flag({
-    name: 'inferByFilter',
     needs: [
       computeVariants({
         source: {filterType, sourceSubtype, combinable},
@@ -215,9 +224,9 @@ export default () => {
         sourceIsWiderThatTarget: true,
       },
     }),
+    sort: [false, true],
   })
   const fnSecondArg = flag({
-    name: 'fnSecondArg',
     needs: [
       bool({
         source: {filterType, clockType},
@@ -234,6 +243,7 @@ export default () => {
         true: {sourceType: 'no'},
       }),
     ],
+    sort: [false, true],
   })
   function permuteTargets({
     correctObject,
@@ -269,7 +279,6 @@ export default () => {
     }
   }
   const targetValue = separate({
-    name: 'targetValue',
     source: {
       targetType,
       targetSubtype,
@@ -390,14 +399,12 @@ export default () => {
     },
   })
   const targetCode = computeFn({
-    name: 'targetCode',
     source: {targetValue},
     fn({targetValue}) {
       return Array.isArray(targetValue) ? printArray(targetValue) : targetValue
     },
   })
   const clockCode = separate({
-    name: 'clockCode',
     source: {clockType, fnSecondArg},
     variant: {
       clock: {
@@ -423,7 +430,6 @@ export default () => {
     },
   })
   const clockDescription = computeVariant({
-    name: 'clockDescription',
     source: {clockType},
     variant: {
       noClock: {clockType: 'no'},
@@ -437,7 +443,6 @@ export default () => {
     },
   })
   const sourceCode = separate({
-    name: 'sourceCode',
     source: {sourceType, sourceSubtype, filterType, inferByFilter},
     variant: {
       AsourceSubtype: {
@@ -488,7 +493,6 @@ export default () => {
     },
   })
   const filterCode = separate({
-    name: 'filterCode',
     source: {filterType, fnSecondArg, sourceType, sourceSubtype, inferByFilter},
     variant: {
       Afilter: {
@@ -583,28 +587,6 @@ export default () => {
     },
   })
 
-  const descriptionTokens = computeFn({
-    name: 'descriptionTokens',
-    source: {
-      inferByFilter,
-      sourceIsWiderThatTarget,
-      filterType,
-      sourceType,
-      targetType,
-      clockType,
-    },
-    fn: ({
-      inferByFilter,
-      sourceIsWiderThatTarget,
-      filterType,
-      sourceType,
-      targetType,
-      clockType,
-    }) =>
-      `${inferByFilter} ${sourceType} ${filterType} ${targetType} ${clockType} ${
-        sourceIsWiderThatTarget ? 'wide' : 'same'
-      }`,
-  })
   const groupTokens = computeFn({
     name: 'groupTokens',
     source: {
@@ -635,7 +617,6 @@ export default () => {
   })
 
   const pass = bool({
-    name: 'pass',
     source: {wrongTarget},
     true: {wrongTarget: false},
   })
@@ -648,6 +629,18 @@ export default () => {
     },
   })
 
+  sortOrder([
+    inferByFilter,
+    sourceType,
+    sourceSubtype,
+    targetType,
+    targetSubtype,
+    filterType,
+    clockType,
+    sourceIsWiderThatTarget,
+    fnSecondArg,
+  ])
+
   config({
     file: 'generatedNew/guard',
     usedMethods: ['createStore', 'createEvent', 'guard'],
@@ -655,7 +648,14 @@ export default () => {
     grouping: {
       pass,
       dedupeHash: ({dedupeHash}: any) => dedupeHash,
-      getHash: [descriptionTokens],
+      getHash: [
+        inferByFilter,
+        sourceIsWiderThatTarget,
+        filterType,
+        sourceType,
+        targetType,
+        clockType,
+      ],
       describeGroup: ({groupTokens, largeGroup}: any) => ({
         largeGroup,
         description: groupTokens,
@@ -669,38 +669,6 @@ export default () => {
           filter: filterCode,
         },
       },
-      sortByFields: {
-        inferByFilter: [false, true],
-        sourceType: ['unit', 'object', 'tuple', 'no'],
-        sourceSubtype: [
-          'fullObject',
-          'nullableField',
-          'smallObject',
-          'fullTuple',
-          'smallTuple',
-        ],
-        targetType: ['unit', 'array'],
-        targetSubtype: [
-          'smallObject',
-          'tooWideObject',
-          'nonNullFieldSmall',
-          'wrongFieldSmall',
-          'smallTuple',
-        ],
-        filterType: ['fn', 'store', 'bool'],
-        clockType: ['no', 'unit', 'array'],
-        sourceIsWiderThatTarget: [false, true],
-        fnSecondArg: [false, true],
-      },
-      // filter(val: any) {
-      //   if (val.sourceSubtype === 'nullableField') {
-      //     if (val.filterType !== 'fn') return false
-      //     if (val.wrongTarget) return false
-      //     if (!val.inferByFilter) return false
-      //     // if (!val.inferByFilter && !val.targetVoid && !val.targetAny) return false
-      //   }
-      //   return true
-      // },
     },
   })
 }

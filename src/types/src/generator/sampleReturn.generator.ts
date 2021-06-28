@@ -8,14 +8,20 @@ import {
   separate,
   flag,
   config,
+  sortOrder,
 } from '../runner/manifold/operators'
 
 export default () => {
-  const source = union(['event', 'store', 'combinable'], 'source')
-  const clock = union(['none', 'event', 'store', 'tuple'], 'clock')
-  const target = union(['none', 'event', 'store', 'tuple'], 'target')
+  const source = union({
+    oneOf: ['event', 'store', 'combinable'],
+    sort: ['event', 'store', 'combinable'],
+  })
+  const clock = union({
+    oneOf: ['none', 'event', 'store', 'tuple'],
+    sort: ['none', 'event', 'store', 'tuple'],
+  })
+  const target = union({oneOf: ['none', 'event', 'store', 'tuple']})
   const fn = separate({
-    name: 'fn',
     source: {clock},
     variant: {
       _: {
@@ -26,9 +32,9 @@ export default () => {
       noClock: union(['none', 'noArgs', 'arg']),
       __: union(['none', 'noArgs', 'arg', 'argPair']),
     },
+    sort: ['none', 'noArgs', 'arg', 'argPair'],
   })
   const typedFn = separate({
-    name: 'typedFn',
     source: {fn},
     variant: {
       _: {
@@ -39,11 +45,11 @@ export default () => {
       hasFnArgs: flag(),
       __: value(false),
     },
+    sort: [false, true],
   })
 
-  const pass = value(true, 'pass')
+  const pass = value(true)
   const typedFnToken = computeVariant({
-    name: 'typedFnToken',
     source: {typedFn},
     variant: {
       typed: {typedFn: true},
@@ -56,7 +62,6 @@ export default () => {
   })
 
   const targetToken = computeVariant({
-    name: 'targetToken',
     source: {target},
     variant: {
       unit: [{target: 'event'}, {target: 'store'}],
@@ -68,10 +73,10 @@ export default () => {
       none: 'no target',
       tuple: 'tuple target',
     },
+    sort: ['no target', 'unit target', 'tuple target'],
   })
 
   const methodCode = computeFn({
-    name: 'methodCode',
     source: {
       pass,
       sourceCode: computeVariant({
@@ -158,20 +163,11 @@ export default () => {
         addExpectError: false,
       })
     },
+    sort: 'string',
   })
   const largeGroup = computeFn({
-    name: 'largeGroup',
     source: {typedFnToken, targetToken},
     fn: ({typedFnToken, targetToken}) => `${targetToken}${typedFnToken}`,
-  })
-  const describeGroup = computeFn({
-    name: 'describeGroup',
-    source: {targetToken, typedFnToken, clock, largeGroup},
-    fn: ({targetToken, typedFnToken, clock, largeGroup}) => ({
-      largeGroup,
-      noGroup: true,
-      description: `${targetToken}${typedFnToken}, ${clock} clock`,
-    }),
   })
   const createTestLines = computeFn({
     name: 'createTestLines',
@@ -219,6 +215,7 @@ export default () => {
     source: {createTestLines},
     fn: ({createTestLines}) => createTestLines.join(`\n`),
   })
+  sortOrder([targetToken, typedFn, source, clock, fn, methodCode])
   config({
     header,
     file: 'generatedNew/sampleReturn',
@@ -230,16 +227,15 @@ export default () => {
         return args.dedupeHash
       },
       getHash: [targetToken, clock, typedFn],
-      describeGroup: ({describeGroup}: any) => describeGroup,
+      describeGroup: computeFn({
+        source: {targetToken, typedFnToken, clock, largeGroup},
+        fn: ({targetToken, typedFnToken, clock, largeGroup}) => ({
+          largeGroup,
+          noGroup: true,
+          description: `${targetToken}${typedFnToken}, ${clock} clock`,
+        }),
+      }),
       createTestLines: ({createTestLines}: any) => createTestLines,
-      sortByFields: {
-        targetToken: ['no target', 'unit target', 'tuple target'],
-        typedFn: [false, true],
-        source: ['event', 'store', 'combinable'],
-        clock: ['none', 'event', 'store', 'tuple'],
-        fn: ['none', 'noArgs', 'arg', 'argPair'],
-        methodCode: 'string',
-      },
     },
   })
 }

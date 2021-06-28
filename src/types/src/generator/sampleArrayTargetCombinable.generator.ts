@@ -9,6 +9,7 @@ import {
   permute,
   config,
   bool,
+  sortOrder,
 } from '../runner/manifold/operators'
 import {Ref} from '../runner/manifold/types'
 
@@ -51,10 +52,12 @@ const failCases = {
 }
 
 export default () => {
-  const source = union(['a', 'ab', 'tuple_a', 'tuple_aa'], 'source')
-  const hasClock = flag({name: 'hasClock'})
+  const source = union({
+    oneOf: ['a', 'ab', 'tuple_a', 'tuple_aa'],
+    sort: ['ab', 'a', 'tuple_aa', 'tuple_a'],
+  })
+  const hasClock = flag({sort: [false, true]})
   const sourceType = computeVariant({
-    name: 'sourceType',
     source: {source},
     variant: {
       object: [{source: 'a'}, {source: 'ab'}],
@@ -65,30 +68,25 @@ export default () => {
       tuple: 'tuple',
     } as const,
   })
-  const fn = flag({name: 'fn'})
-  const fnClock = flag({name: 'fnClock', needs: [fn, hasClock]})
-  const typedFn = flag({name: 'typedFn', needs: [fn]})
+  const fn = flag({name: 'fn', sort: [false, true]})
+  const fnClock = flag({needs: [fn, hasClock]})
+  const typedFn = flag({needs: [fn]})
   const noFalsePositiveFnClock = flag({
-    name: 'noFalsePositiveFnClock',
     needs: [fn, typedFn, fnClock, hasClock],
   })
   const noFalsePositiveFnSource = flag({
-    name: 'noFalsePositiveFnSource',
     needs: [fn, typedFn],
     avoid: noFalsePositiveFnClock,
   })
   const noFalsePositive = bool({
-    name: 'noFalsePositive',
     source: {noFalsePositiveFnSource, noFalsePositiveFnClock},
     true: [{noFalsePositiveFnSource: true}, {noFalsePositiveFnClock: true}],
   })
   const fnWithoutArgs = flag({
-    name: 'fnWithoutArgs',
     needs: fn,
     avoid: [fnClock, typedFn, noFalsePositiveFnClock, noFalsePositiveFnSource],
   })
   const isPairOfSourceFields = bool({
-    name: 'isPairOfSourceFields',
     source: {sourceType, source},
     true: [
       {sourceType: 'object', source: 'ab'},
@@ -96,7 +94,6 @@ export default () => {
     ],
   })
   const fnText = computeVariants({
-    name: 'fnText',
     source: {
       fnWithoutArgs,
       typedFn,
@@ -190,6 +187,7 @@ export default () => {
         },
       },
     },
+    sort: 'string',
   })
   const fnDescription = computeVariant({
     name: 'fnDescription',
@@ -211,6 +209,7 @@ export default () => {
       fnClock: 'untyped',
       noFnClock: 'untyped',
     } as const,
+    sort: [undefined as any, 'untyped', 'typed', 'assert'],
   })
   const sourceDescription = computeVariant({
     name: 'sourceDescription',
@@ -227,9 +226,9 @@ export default () => {
       tupleSolo: 'same',
       tuplePair: 'wide',
     } as const,
+    sort: 'string',
   })
   const sourceCode = computeVariant({
-    name: 'sourceCode',
     source: {sourceType, source},
     variant: {
       objectSolo: {sourceType: 'object', source: 'a'},
@@ -246,7 +245,6 @@ export default () => {
   })
   //@ts-ignore
   const target: Ref<string[], 'separate'> = separate({
-    name: 'target',
     source: {fn, sourceType},
     variant: {
       _: {
@@ -267,9 +265,8 @@ export default () => {
       }),
     },
   })
-  const clockText = value('num' as const, 'clockText')
+  const clockText = value('num' as const)
   const targetText = computeFn({
-    name: 'targetText',
     source: {target},
     fn({target}) {
       return target.map(
@@ -279,7 +276,6 @@ export default () => {
     },
   })
   const pass = computeFn({
-    name: 'pass',
     source: {
       target,
       noFalsePositive,
@@ -294,6 +290,7 @@ export default () => {
       )
     },
   })
+  sortOrder([hasClock, source, sourceDescription, fnDescription, fnText, fn])
   config({
     header,
     file: 'generatedNew/sampleArrayTarget',
@@ -321,14 +318,6 @@ export default () => {
         `source:${cur.sourceDescription}${
           cur.fn ? `, fn:${cur.fnDescription}` : ''
         }`,
-      sortByFields: {
-        hasClock: [false, true],
-        source: ['ab', 'a', 'tuple_aa', 'tuple_a'],
-        sourceDescription: 'string',
-        fnDescription: [undefined, 'untyped', 'typed', 'assert'],
-        fnText: 'string',
-        fn: [false, true],
-      },
     },
   })
 }

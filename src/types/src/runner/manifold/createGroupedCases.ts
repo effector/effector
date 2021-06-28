@@ -297,7 +297,7 @@ function skewHeapSortFieldsComparator<
         field,
         isVoidFalse,
         type: 'prioritySet',
-        prioritySet: [...prioritySet], //.reverse(),
+        prioritySet: [...prioritySet].reverse(),
       })
     }
   })

@@ -52,11 +52,13 @@ export function separate<
   variant,
   cases,
   source,
+  sort,
 }: {
   source: Src
   name?: string
   variant: Variants
   cases: Cases
+  sort?: Array<TypeofSepCases<Src, Variants, Cases>> | 'string'
 }): Separate<TypeofSepCases<Src, Variants, Cases>> {
   const id = nextID()
   const sources: Declarator[] = Object.values(source)
@@ -112,6 +114,7 @@ export function separate<
   ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id, sources)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 
   function traverseCases(
@@ -189,11 +192,13 @@ export function permute<T>({
   items,
   noReorder,
   amount,
+  sort,
 }: {
   name?: string
   items: T[]
   amount?: {min: number; max: number}
   noReorder?: boolean
+  sort?: T[] | 'string'
 }) {
   const id = nextID()
   const permute = {items} as any
@@ -211,6 +216,7 @@ export function permute<T>({
   /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 }
 
@@ -218,10 +224,12 @@ export function flag({
   name,
   needs,
   avoid,
+  sort,
 }: {
   name?: string
   needs?: Declarator | Tuple<Declarator>
   avoid?: Declarator | Tuple<Declarator>
+  sort?: boolean[]
 } = {}) {
   const id = nextID()
   const flag = {} as any
@@ -246,6 +254,7 @@ export function flag({
   /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 
   function processDeclarator(decl: Declarator) {
@@ -261,11 +270,13 @@ export function bool<Src extends SourceRec>({
   name,
   true: onTrue,
   false: onFalse,
+  sort,
 }: {
   source: Src
   name?: string
   true?: SingleVariant<Src>
   false?: SingleVariant<Src>
+  sort?: boolean[]
 }) {
   assert(
     (!onTrue && onFalse) || (onTrue && !onFalse),
@@ -287,6 +298,7 @@ export function bool<Src extends SourceRec>({
   /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 }
 export function value<T>(value: T, name?: string) {
@@ -306,25 +318,39 @@ export function value<T>(value: T, name?: string) {
 export function union<OneOf extends string>(
   oneOf: Tuple<OneOf>,
   name?: string,
-) {
+): Union<OneOf>
+export function union<OneOf extends string>(config: {
+  oneOf: Tuple<OneOf>
+  sort?: OneOf[] | 'string'
+}): Union<OneOf>
+export function union<OneOf extends string>(
+  oneOf: Tuple<OneOf> | {oneOf: Tuple<OneOf>; sort?: OneOf[] | 'string'},
+  name?: string,
+): Union<OneOf> {
+  //@ts-ignore
+  const items: Tuple<OneOf> = Array.isArray(oneOf) ? oneOf : oneOf.oneOf
   const id = nextID()
   const val: Union<OneOf> = {
     id,
     name: getName(id, name),
     kind: 'union',
-    variants: oneOf,
+    variants: items,
     __t: null as any,
-    prepared: {union: oneOf},
+    prepared: {union: items},
   }
   /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id)
+  if (!Array.isArray(oneOf) && 'sort' in oneOf) {
+    config({grouping: {sortByFields: {[val.name]: oneOf.sort!}}})
+  }
   return val
 }
 export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
   source,
   fn,
   name,
+  sort,
 }: {
   source: Src
   fn: (
@@ -333,6 +359,7 @@ export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
     },
   ) => T
   name?: string
+  sort?: T[] | 'string'
 }) {
   const id = nextID()
   const val: Fn<T> = {
@@ -361,6 +388,7 @@ export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
   ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 }
 export function computeVariants<
@@ -372,11 +400,13 @@ export function computeVariants<
   variant,
   cases,
   name,
+  sort,
 }: {
   source: Src
   variant: Variants
   cases: Cases
   name?: string
+  sort?: Array<TypeOfCaseLayer<Src, Variants, Cases>> | 'string'
 }): ComputeVariant<TypeOfCaseLayer<Src, Variants, Cases>> {
   const id = nextID()
 
@@ -398,6 +428,7 @@ export function computeVariants<
   ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 }
 export function computeVariant<
@@ -409,11 +440,13 @@ export function computeVariant<
   variant,
   cases,
   name,
+  sort,
 }: {
   source: Src
   variant: Variant
   cases: Cases
   name?: string
+  sort?: Array<Cases[keyof Cases]> | 'string'
 }): ComputeVariant<Cases[keyof Cases]> {
   const id = nextID()
 
@@ -433,7 +466,29 @@ export function computeVariant<
   ctx.shape[val.name] = val.prepared
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
+}
+export function sortOrder(decls: Declarator[]) {
+  const sortByFields = ctx.config.grouping!.sortByFields!
+  const keys = Object.keys(sortByFields)
+  const declNames = decls.map(decl => decl.name)
+  assert(
+    declNames.every(name => keys.includes(name)),
+    () => {
+      const missedDecls = declNames
+        .filter(name => !keys.includes(name))
+        .join(',')
+      return `decls ${missedDecls} are not sorted`
+    },
+  )
+  const declNamesOrdered = [
+    ...declNames,
+    ...keys.filter(key => !declNames.includes(key)),
+  ]
+  const result: Record<string, any> = {}
+  for (const name of declNamesOrdered) result[name] = sortByFields[name]
+  ctx.config.grouping!.sortByFields = result
 }
 /** convert internal variable map to object with human-readable fields
  *
