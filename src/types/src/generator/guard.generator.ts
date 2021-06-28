@@ -9,7 +9,7 @@ import {
   separate,
   flag,
   config,
-} from '../runner/manifold'
+} from '../runner/manifold/operators'
 
 export default () => {
   const clockType = union(['no', 'unit', 'array'], 'clockType')
@@ -117,7 +117,6 @@ export default () => {
     name: 'combinable',
     source: {sourceType},
     true: [{sourceType: 'object'}, {sourceType: 'tuple'}],
-    false: [{sourceType: 'no'}, {sourceType: 'unit'}],
   })
   const wrongTarget = flag({
     name: 'wrongTarget',
@@ -175,7 +174,6 @@ export default () => {
     cases: {
       nullableField: value(true),
       __: flag({
-        name: 'sourceIsWiderThatTarget/_',
         needs: targetIsTyped,
         avoid: [noSource, sourceIsWiderThatTargetCond],
       }),
@@ -186,7 +184,6 @@ export default () => {
     name: 'inferByFilter',
     needs: [
       computeVariants({
-        name: 'inferByFilter/a',
         source: {filterType, sourceSubtype, combinable},
         variant: {
           filter: {
@@ -211,7 +208,6 @@ export default () => {
       targetIsTyped,
     ],
     avoid: bool({
-      name: 'inferByFilter/b',
       source: {sourceType, filterType, sourceIsWiderThatTarget},
       true: {
         sourceType: 'unit',
@@ -224,19 +220,16 @@ export default () => {
     name: 'fnSecondArg',
     needs: [
       bool({
-        name: 'fnSecondArg/a',
         source: {filterType, clockType},
         true: [
           {filterType: 'fn', clockType: 'unit'},
           {filterType: 'fn', clockType: 'array'},
         ],
-        false: {},
       }),
     ],
     avoid: [
       wrongTarget,
       bool({
-        name: 'fnSecondArg/b',
         source: {sourceType},
         true: {sourceType: 'no'},
       }),
@@ -463,7 +456,7 @@ export default () => {
       Cfilter: {
         fn: {filterType: 'fn'},
         store: {filterType: 'store'},
-        bool: {filterType: 'bool'},
+        boolFn: {filterType: 'bool'},
       } as const,
       Dinfer: {
         infer: {inferByFilter: true},
@@ -483,7 +476,7 @@ export default () => {
             infer: value('abNull'),
             noInfer: value('ab'),
           },
-          bool: {
+          boolFn: {
             infer: value('nullableAB'),
             noInfer: value('ab'),
           },
@@ -501,7 +494,7 @@ export default () => {
       Afilter: {
         fn: {filterType: 'fn'},
         store: {filterType: 'store'},
-        bool: {filterType: 'bool'},
+        boolFn: {filterType: 'bool'},
       },
       BfnArg: {
         hasFnSecondArg: {fnSecondArg: true},
@@ -586,7 +579,7 @@ export default () => {
         },
       },
       store: value('$filter'),
-      bool: value('Boolean'),
+      boolFn: value('Boolean'),
     },
   })
 
@@ -645,7 +638,6 @@ export default () => {
     name: 'pass',
     source: {wrongTarget},
     true: {wrongTarget: false},
-    false: {wrongTarget: true},
   })
 
   const dedupeHash = computeFn({
@@ -657,21 +649,24 @@ export default () => {
   })
 
   config({
+    file: 'generatedNew/guard',
+    usedMethods: ['createStore', 'createEvent', 'guard'],
+    header,
     grouping: {
+      pass,
       dedupeHash: ({dedupeHash}: any) => dedupeHash,
-      getHash: ({descriptionTokens}: any) => descriptionTokens,
+      getHash: [descriptionTokens],
       describeGroup: ({groupTokens, largeGroup}: any) => ({
         largeGroup,
         description: groupTokens,
       }),
       createTestLines: {
         method: 'guard',
-        align: true,
         shape: {
-          source: 'sourceCode',
-          clock: 'clockCode',
-          target: 'targetCode',
-          filter: 'filterCode',
+          source: sourceCode,
+          clock: clockCode,
+          target: targetCode,
+          filter: filterCode,
         },
       },
       sortByFields: {
@@ -707,7 +702,10 @@ export default () => {
       //   return true
       // },
     },
-    header: `
+  })
+}
+
+const header = `
 type Astr = {a: string}
 type AB = {a: number; b: string}
 type AoptB = {a: number | null; b: string}
@@ -731,6 +729,4 @@ const lStr = createEvent<[string]>()
 const lNumStr = createEvent<[number, string]>()
 const lNumNum = createEvent<[number, number]>()
 const abn = createEvent<ABN>()
-`,
-  })
-}
+`

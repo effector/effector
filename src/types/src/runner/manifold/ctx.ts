@@ -1,31 +1,8 @@
-import {Declarator, PartialCtxConfig} from './types'
+import {Ctx} from './types'
 
-export let ctx: {
-  shape: Record<string, any>
-  configUsed: boolean
-  items: Record<string, Declarator>
-  /**
-   * references TO id
-   *
-   * bool({source: {sourceReference}}): referencedBy
-   *
-   * {[sourceReference]: referencedBy[]}
-   * sourceReference -> referencedBy
-   * */
-  references: Record<string, string[]>
-  /**
-   * inline references FROM id
-   *
-   * separate({cases: {_: targetReference}}): referencedBy
-   *
-   * {[referencedBy]: targetReference[]}
-   * referencedBy -> targetReference
-   **/
-  targets: Record<string, string[]>
-  config: PartialCtxConfig
-}
+export let ctx: Ctx
 
-export function ctxWrap<T>(val: typeof ctx, fn: (val: typeof ctx) => T): T {
+export function ctxWrap<T>(val: Ctx, fn: (val: Ctx) => T): T {
   const prevCtx = ctx
   ctx = val
   try {

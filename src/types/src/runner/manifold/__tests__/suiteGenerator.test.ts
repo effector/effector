@@ -8,65 +8,61 @@ import {
   separate,
   flag,
   config,
-} from '../../manifold'
+  bool,
+} from '../operators'
 
 test('it works', () => {
   const suite = suiteGenerator(() => {
     const source = union(['event', 'store', 'combinable'], 'source')
     const clock = union(['none', 'event', 'store', 'tuple'], 'clock')
-    const getHash = computeFn({
-      name: 'getHash',
-      source: {source, clock},
-      fn: ({source, clock}) => `${source} ${clock}`,
-    })
 
     config({
       grouping: {
-        getHash,
+        getHash: [source, clock],
         describeGroup: source,
-        pass: value(true, 'pass'),
+        pass: value(true),
         createTestLines: {
           method: 'method',
           shape: {
-            src: 'source',
-            clk: 'clock',
+            src: source,
+            clk: clock,
           },
         },
       },
     })
   })
   expect(suite).toMatchInlineSnapshot(`
-"test('combinable (should pass)', () => {
-  //prettier-ignore
-  {
-    method({src:combinable, clk:tuple})
-    method({src:combinable, clk:store})
-    method({src:combinable, clk:event})
-    method({src:combinable, clk:none })
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})
-test('store (should pass)', () => {
-  //prettier-ignore
-  {
-    method({src:store, clk:tuple})
-    method({src:store, clk:store})
-    method({src:store, clk:event})
-    method({src:store, clk:none })
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})
-test('event (should pass)', () => {
-  //prettier-ignore
-  {
-    method({src:event, clk:tuple})
-    method({src:event, clk:store})
-    method({src:event, clk:event})
-    method({src:event, clk:none })
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+    "test('event (should pass)', () => {
+      //prettier-ignore
+      {
+        method({src:event, clk:none })
+        method({src:event, clk:event})
+        method({src:event, clk:store})
+        method({src:event, clk:tuple})
+      }
+      expect(typecheck).toMatchInlineSnapshot()
+    })
+    test('store (should pass)', () => {
+      //prettier-ignore
+      {
+        method({src:store, clk:none })
+        method({src:store, clk:event})
+        method({src:store, clk:store})
+        method({src:store, clk:tuple})
+      }
+      expect(typecheck).toMatchInlineSnapshot()
+    })
+    test('combinable (should pass)', () => {
+      //prettier-ignore
+      {
+        method({src:combinable, clk:none })
+        method({src:combinable, clk:event})
+        method({src:combinable, clk:store})
+        method({src:combinable, clk:tuple})
+      }
+      expect(typecheck).toMatchInlineSnapshot()
+    })"
+  `)
 })
 describe('group', () => {
   test('group by union value', () => {
@@ -74,47 +70,42 @@ describe('group', () => {
       const source = union(['event', 'store', 'combinable'], 'source')
       const clock = union(['none', 'event', 'store', 'tuple'], 'clock')
 
-      const getHash = computeFn({
-        name: 'getHash',
-        source: {source, clock},
-        fn: ({source, clock}) => `${source} ${clock}`,
-      })
       const pass = value(true, 'pass')
       config({
         grouping: {
-          getHash,
-          describeGroup: value('', 'describeGroup'),
+          getHash: [source, clock],
+          describeGroup: value(''),
           pass,
           createTestLines: {
             method: 'method',
             shape: {
-              src: 'source',
-              clk: 'clock',
+              src: source,
+              clk: clock,
             },
           },
         },
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    method({src:combinable, clk:tuple})
-    method({src:combinable, clk:store})
-    method({src:combinable, clk:event})
-    method({src:combinable, clk:none })
-    method({src:store     , clk:tuple})
-    method({src:store     , clk:store})
-    method({src:store     , clk:event})
-    method({src:store     , clk:none })
-    method({src:event     , clk:tuple})
-    method({src:event     , clk:store})
-    method({src:event     , clk:event})
-    method({src:event     , clk:none })
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          method({src:event     , clk:none })
+          method({src:event     , clk:event})
+          method({src:event     , clk:store})
+          method({src:event     , clk:tuple})
+          method({src:store     , clk:none })
+          method({src:store     , clk:event})
+          method({src:store     , clk:store})
+          method({src:store     , clk:tuple})
+          method({src:combinable, clk:none })
+          method({src:combinable, clk:event})
+          method({src:combinable, clk:store})
+          method({src:combinable, clk:tuple})
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   describe('pass', () => {
     test('pass by union value', () => {
@@ -124,11 +115,7 @@ describe('group', () => {
 
         config({
           grouping: {
-            getHash: computeFn({
-              name: 'getHash',
-              source: {source, clock},
-              fn: ({source, clock}) => `${source} ${clock}`,
-            }),
+            getHash: [source, clock],
             describeGroup: source,
             pass: computeFn({
               name: 'pass',
@@ -138,33 +125,33 @@ describe('group', () => {
             createTestLines: {
               method: 'method',
               shape: {
-                src: 'source',
-                clk: 'clock',
+                src: source,
+                clk: clock,
               },
             },
           },
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-"test('store (should fail)', () => {
-  //prettier-ignore
-  {
-    //@ts-expect-error
-    method({src:store, clk:event})
-    //@ts-expect-error
-    method({src:store, clk:none })
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})
-test('event (should pass)', () => {
-  //prettier-ignore
-  {
-    method({src:event, clk:event})
-    method({src:event, clk:none })
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+        "test('event (should pass)', () => {
+          //prettier-ignore
+          {
+            method({src:event, clk:none })
+            method({src:event, clk:event})
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })
+        test('store (should fail)', () => {
+          //prettier-ignore
+          {
+            //@ts-expect-error
+            method({src:store, clk:none })
+            //@ts-expect-error
+            method({src:store, clk:event})
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })"
+      `)
     })
     test('edge case when pass field split groups', () => {
       const suite = suiteGenerator(() => {
@@ -173,11 +160,7 @@ test('event (should pass)', () => {
 
         config({
           grouping: {
-            getHash: computeFn({
-              name: 'getHash',
-              source: {source, clock},
-              fn: ({source, clock}) => `${source} ${clock}`,
-            }),
+            getHash: [source, clock],
             describeGroup: source,
             pass: computeFn({
               name: 'pass',
@@ -187,41 +170,41 @@ test('event (should pass)', () => {
             createTestLines: {
               method: 'method',
               shape: {
-                src: 'source',
-                clk: 'clock',
+                src: source,
+                clk: clock,
               },
             },
           },
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-"describe('store', () => {
-  test('store (should pass)', () => {
-    //prettier-ignore
-    method({src:store, clk:event})
-    expect(typecheck).toMatchInlineSnapshot()
-  })
-  test('store (should fail)', () => {
-    //prettier-ignore
-    //@ts-expect-error
-    method({src:store, clk:none})
-    expect(typecheck).toMatchInlineSnapshot()
-  })
-})
-describe('event', () => {
-  test('event (should pass)', () => {
-    //prettier-ignore
-    method({src:event, clk:event})
-    expect(typecheck).toMatchInlineSnapshot()
-  })
-  test('event (should fail)', () => {
-    //prettier-ignore
-    //@ts-expect-error
-    method({src:event, clk:none})
-    expect(typecheck).toMatchInlineSnapshot()
-  })
-})"
-`)
+        "describe('event', () => {
+          test('event (should pass)', () => {
+            //prettier-ignore
+            method({src:event, clk:event})
+            expect(typecheck).toMatchInlineSnapshot()
+          })
+          test('event (should fail)', () => {
+            //prettier-ignore
+            //@ts-expect-error
+            method({src:event, clk:none})
+            expect(typecheck).toMatchInlineSnapshot()
+          })
+        })
+        describe('store', () => {
+          test('store (should pass)', () => {
+            //prettier-ignore
+            method({src:store, clk:event})
+            expect(typecheck).toMatchInlineSnapshot()
+          })
+          test('store (should fail)', () => {
+            //prettier-ignore
+            //@ts-expect-error
+            method({src:store, clk:none})
+            expect(typecheck).toMatchInlineSnapshot()
+          })
+        })"
+      `)
     })
   })
 })
@@ -271,13 +254,9 @@ describe('config', () => {
         })
         config({
           grouping: {
-            getHash: computeFn({
-              name: 'getHash',
-              source: {source, clock},
-              fn: ({source, clock}) => `${source} ${clock}`,
-            }),
-            describeGroup: value('', 'describeGroup'),
-            pass: value(true, 'pass'),
+            getHash: [source, clock],
+            describeGroup: value(''),
+            pass: value(true),
             createTestLines: {
               type: 'table',
               fields: [source, clock, tag],
@@ -286,20 +265,20 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * tag          * 
-    | store  | none  | no clock     | 
-    | store  | event | source store | 
-    | store  | store | source store | 
-    | event  | none  | no clock     | 
-    | event  | event | events only  | 
-    | event  | store | rest         | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+        "test(' (should pass)', () => {
+          //prettier-ignore
+          {
+            * source * clock * tag          * 
+            | event  | store | rest         | 
+            | event  | event | events only  | 
+            | event  | none  | no clock     | 
+            | store  | store | source store | 
+            | store  | event | source store | 
+            | store  | none  | no clock     | 
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })"
+      `)
     })
     test('silent hash clash', () => {
       const suite = suiteGenerator(() => {
@@ -323,13 +302,9 @@ describe('config', () => {
         })
         config({
           grouping: {
-            getHash: computeFn({
-              name: 'getHash',
-              source: {source},
-              fn: ({source}) => `${source}`,
-            }),
-            describeGroup: value('', 'describeGroup'),
-            pass: value(true, 'pass'),
+            getHash: [source],
+            describeGroup: value(''),
+            pass: value(true),
             createTestLines: {
               type: 'table',
               fields: [source, clock, tag],
@@ -338,20 +313,20 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * tag          * 
-    | store  | none  | no clock     | 
-    | store  | event | source store | 
-    | store  | store | source store | 
-    | event  | none  | no clock     | 
-    | event  | event | events only  | 
-    | event  | store | rest         | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+        "test(' (should pass)', () => {
+          //prettier-ignore
+          {
+            * source * clock * tag          * 
+            | event  | store | rest         | 
+            | event  | event | events only  | 
+            | event  | none  | no clock     | 
+            | store  | store | source store | 
+            | store  | event | source store | 
+            | store  | none  | no clock     | 
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })"
+      `)
     })
     test('real hash clash', () => {
       const suite = suiteGenerator(() => {
@@ -375,13 +350,9 @@ describe('config', () => {
         })
         config({
           grouping: {
-            getHash: computeFn({
-              name: 'getHash',
-              source: {source},
-              fn: ({source}) => `${source}`,
-            }),
+            getHash: [source],
             describeGroup: source,
-            pass: value(true, 'pass'),
+            pass: value(true),
             createTestLines: {
               type: 'table',
               fields: [source, clock, tag],
@@ -390,27 +361,27 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-"test('store (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * tag          * 
-    | store  | none  | no clock     | 
-    | store  | event | source store | 
-    | store  | store | source store | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})
-test('event (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * tag         * 
-    | event  | none  | no clock    | 
-    | event  | event | events only | 
-    | event  | store | rest        | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+        "test('event (should pass)', () => {
+          //prettier-ignore
+          {
+            * source * clock * tag         * 
+            | event  | store | rest        | 
+            | event  | event | events only | 
+            | event  | none  | no clock    | 
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })
+        test('store (should pass)', () => {
+          //prettier-ignore
+          {
+            * source * clock * tag          * 
+            | store  | store | source store | 
+            | store  | event | source store | 
+            | store  | none  | no clock     | 
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })"
+      `)
     })
     test('real hash/describeGroup clash', () => {
       const suite = suiteGenerator(() => {
@@ -434,13 +405,9 @@ test('event (should pass)', () => {
         })
         config({
           grouping: {
-            getHash: computeFn({
-              name: 'getHash',
-              source: {source},
-              fn: ({source}) => `${source}`,
-            }),
+            getHash: [source],
             describeGroup: clock,
-            pass: value(true, 'pass'),
+            pass: value(true),
             createTestLines: {
               type: 'table',
               fields: [source, clock, tag],
@@ -449,20 +416,20 @@ test('event (should pass)', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-"test('store (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * tag          * 
-    | store  | none  | no clock     | 
-    | store  | event | source store | 
-    | store  | store | source store | 
-    | event  | none  | no clock     | 
-    | event  | event | events only  | 
-    | event  | store | rest         | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+        "test('none  (should pass)', () => {
+          //prettier-ignore
+          {
+            * source * clock * tag          * 
+            | event  | store | rest         | 
+            | event  | event | events only  | 
+            | event  | none  | no clock     | 
+            | store  | store | source store | 
+            | store  | event | source store | 
+            | store  | none  | no clock     | 
+          }
+          expect(typecheck).toMatchInlineSnapshot()
+        })"
+      `)
     })
   })
 })
@@ -490,13 +457,9 @@ describe('computeVariant', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock},
-            fn: ({source, clock}) => `${source} ${clock}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, tag],
@@ -505,20 +468,20 @@ describe('computeVariant', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * tag          * 
-    | store  | none  | no clock     | 
-    | store  | event | source store | 
-    | store  | store | source store | 
-    | event  | none  | no clock     | 
-    | event  | event | events only  | 
-    | event  | store | rest         | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * tag          * 
+          | event  | store | rest         | 
+          | event  | event | events only  | 
+          | event  | none  | no clock     | 
+          | store  | store | source store | 
+          | store  | event | source store | 
+          | store  | none  | no clock     | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
 })
 
@@ -559,13 +522,9 @@ describe('computeVariants', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -574,26 +533,26 @@ describe('computeVariants', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | b       | no b clock   | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | b       | no b clock   | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | b       | rest b       | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b       | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b clock   | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b clock   | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('unused match group', () => {
     const suite = suiteGenerator(() => {
@@ -625,13 +584,9 @@ describe('computeVariants', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -640,26 +595,26 @@ describe('computeVariants', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | b       | no clock     | 
-    | store  | none  | a       | no clock     | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | b       | no clock     | 
-    | event  | none  | a       | no clock     | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | b       | rest         | 
-    | event  | store | a       | rest         | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest         | 
+          | event  | store | b       | rest         | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | none  | a       | no clock     | 
+          | event  | none  | b       | no clock     | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | none  | a       | no clock     | 
+          | store  | none  | b       | no clock     | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('unused match', () => {
     const suite = suiteGenerator(() => {
@@ -697,13 +652,9 @@ describe('computeVariants', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -712,32 +663,32 @@ describe('computeVariants', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | c       | source store | 
-    | store  | none  | b       | no b clock   | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | c       | source store | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | c       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | c       |              | 
-    | event  | none  | b       | no b clock   | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | c       | events only  | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | c       |              | 
-    | event  | store | b       | rest b       | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b       | 
+          | event  | store | c       |              | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | event | c       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b clock   | 
+          | event  | none  | c       |              | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | store | c       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | event | c       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b clock   | 
+          | store  | none  | c       | source store | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('rest match', () => {
     const suite = suiteGenerator(() => {
@@ -775,13 +726,9 @@ describe('computeVariants', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -790,32 +737,32 @@ describe('computeVariants', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | c       | no b|c clock | 
-    | store  | none  | b       | no b|c clock | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | c       | source store | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | c       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | c       | no b|c clock | 
-    | event  | none  | b       | no b|c clock | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | c       | events only  | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | c       | rest b|c     | 
-    | event  | store | b       | rest b|c     | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b|c     | 
+          | event  | store | c       | rest b|c     | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | event | c       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b|c clock | 
+          | event  | none  | c       | no b|c clock | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | store | c       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | event | c       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b|c clock | 
+          | store  | none  | c       | no b|c clock | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('array match', () => {
     const suite = suiteGenerator(() => {
@@ -853,13 +800,9 @@ describe('computeVariants', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -868,32 +811,32 @@ describe('computeVariants', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | c       | no b|c clock | 
-    | store  | none  | b       | no b|c clock | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | c       | source store | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | c       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | c       | no b|c clock | 
-    | event  | none  | b       | no b|c clock | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | c       | events only  | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | c       | rest b|c     | 
-    | event  | store | b       | rest b|c     | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b|c     | 
+          | event  | store | c       | rest b|c     | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | event | c       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b|c clock | 
+          | event  | none  | c       | no b|c clock | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | store | c       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | event | c       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b|c clock | 
+          | store  | none  | c       | no b|c clock | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   // test('field validation')
 })
@@ -935,13 +878,9 @@ describe('separate', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -950,26 +889,26 @@ describe('separate', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | b       | no b clock   | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | b       | no b clock   | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | b       | rest b       | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b       | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b clock   | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b clock   | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('unused match group', () => {
     const suite = suiteGenerator(() => {
@@ -1001,13 +940,9 @@ describe('separate', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -1016,26 +951,26 @@ describe('separate', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | b       | no clock     | 
-    | store  | none  | a       | no clock     | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | b       | no clock     | 
-    | event  | none  | a       | no clock     | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | b       | rest         | 
-    | event  | store | a       | rest         | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest         | 
+          | event  | store | b       | rest         | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | none  | a       | no clock     | 
+          | event  | none  | b       | no clock     | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | none  | a       | no clock     | 
+          | store  | none  | b       | no clock     | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('unused match', () => {
     const suite = suiteGenerator(() => {
@@ -1073,13 +1008,9 @@ describe('separate', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -1088,32 +1019,32 @@ describe('separate', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | c       | source store | 
-    | store  | none  | b       | no b clock   | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | c       | source store | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | c       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | c       |              | 
-    | event  | none  | b       | no b clock   | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | c       | events only  | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | c       |              | 
-    | event  | store | b       | rest b       | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b       | 
+          | event  | store | c       |              | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | event | c       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b clock   | 
+          | event  | none  | c       |              | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | store | c       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | event | c       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b clock   | 
+          | store  | none  | c       | source store | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('rest match', () => {
     const suite = suiteGenerator(() => {
@@ -1151,13 +1082,9 @@ describe('separate', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -1167,32 +1094,32 @@ describe('separate', () => {
     })
 
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | c       | no b|c clock | 
-    | store  | none  | b       | no b|c clock | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | c       | source store | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | c       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | c       | no b|c clock | 
-    | event  | none  | b       | no b|c clock | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | c       | events only  | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | c       | rest b|c     | 
-    | event  | store | b       | rest b|c     | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b|c     | 
+          | event  | store | c       | rest b|c     | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | event | c       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b|c clock | 
+          | event  | none  | c       | no b|c clock | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | store | c       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | event | c       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b|c clock | 
+          | store  | none  | c       | no b|c clock | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('array match', () => {
     const suite = suiteGenerator(() => {
@@ -1230,13 +1157,9 @@ describe('separate', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -1245,32 +1168,32 @@ describe('separate', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | c       | no b|c clock | 
-    | store  | none  | b       | no b|c clock | 
-    | store  | none  | a       | no a clock   | 
-    | store  | event | c       | source store | 
-    | store  | event | b       | source store | 
-    | store  | event | a       | source store | 
-    | store  | store | c       | source store | 
-    | store  | store | b       | source store | 
-    | store  | store | a       | source store | 
-    | event  | none  | c       | no b|c clock | 
-    | event  | none  | b       | no b|c clock | 
-    | event  | none  | a       | no a clock   | 
-    | event  | event | c       | events only  | 
-    | event  | event | b       | events only  | 
-    | event  | event | a       | events only  | 
-    | event  | store | c       | rest b|c     | 
-    | event  | store | b       | rest b|c     | 
-    | event  | store | a       | rest a       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | a       | rest a       | 
+          | event  | store | b       | rest b|c     | 
+          | event  | store | c       | rest b|c     | 
+          | event  | event | a       | events only  | 
+          | event  | event | b       | events only  | 
+          | event  | event | c       | events only  | 
+          | event  | none  | a       | no a clock   | 
+          | event  | none  | b       | no b|c clock | 
+          | event  | none  | c       | no b|c clock | 
+          | store  | store | a       | source store | 
+          | store  | store | b       | source store | 
+          | store  | store | c       | source store | 
+          | store  | event | a       | source store | 
+          | store  | event | b       | source store | 
+          | store  | event | c       | source store | 
+          | store  | none  | a       | no a clock   | 
+          | store  | none  | b       | no b|c clock | 
+          | store  | none  | c       | no b|c clock | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   // test('field validation')
 })
@@ -1314,13 +1237,9 @@ describe('flag', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, feature},
-            fn: ({source, clock, feature}) => `${source} ${clock} ${feature}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, feature],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, feature, tag],
@@ -1329,26 +1248,26 @@ describe('flag', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * clock * feature * tag          * 
-    | store  | none  | true    | no a clock   | 
-    | store  | none  | false   | no b clock   | 
-    | store  | event | true    | source store | 
-    | store  | event | false   | source store | 
-    | store  | store | true    | source store | 
-    | store  | store | false   | source store | 
-    | event  | none  | true    | no a clock   | 
-    | event  | none  | false   | no b clock   | 
-    | event  | event | true    | events only  | 
-    | event  | event | false   | events only  | 
-    | event  | store | true    | rest a       | 
-    | event  | store | false   | rest b       | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * feature * tag          * 
+          | event  | store | false   | rest b       | 
+          | event  | store | true    | rest a       | 
+          | event  | event | false   | events only  | 
+          | event  | event | true    | events only  | 
+          | event  | none  | false   | no b clock   | 
+          | event  | none  | true    | no a clock   | 
+          | store  | store | false   | source store | 
+          | store  | store | true    | source store | 
+          | store  | event | false   | source store | 
+          | store  | event | true    | source store | 
+          | store  | none  | false   | no b clock   | 
+          | store  | none  | true    | no a clock   | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
   })
   test('avoid', () => {
     const suite = suiteGenerator(() => {
@@ -1395,14 +1314,9 @@ describe('flag', () => {
       })
       config({
         grouping: {
-          getHash: computeFn({
-            name: 'getHash',
-            source: {source, clock, featureA, featureB},
-            fn: ({source, clock, featureA, featureB}) =>
-              `${source} ${clock} ${featureA} ${featureB}`,
-          }),
-          describeGroup: value('', 'describeGroup'),
-          pass: value(true, 'pass'),
+          getHash: [source, clock, featureA, featureB],
+          describeGroup: value(''),
+          pass: value(true),
           createTestLines: {
             type: 'table',
             fields: [source, clock, featureA, featureB, tag],
@@ -1411,31 +1325,288 @@ describe('flag', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * clock * featureA * featureB * tag          * 
+          | event  | store | false    | false    | rest none    | 
+          | event  | store | true     | false    | rest a       | 
+          | event  | store | false    | true     | rest b       | 
+          | event  | event | false    | false    | events only  | 
+          | event  | event | true     | false    | events only  | 
+          | event  | event | false    | true     | events only  | 
+          | event  | none  | false    | false    | no a|b none  | 
+          | event  | none  | true     | false    | no a clock   | 
+          | event  | none  | false    | true     | no b clock   | 
+          | store  | store | false    | false    | source store | 
+          | store  | store | true     | false    | source store | 
+          | store  | store | false    | true     | source store | 
+          | store  | event | false    | false    | source store | 
+          | store  | event | true     | false    | source store | 
+          | store  | event | false    | true     | source store | 
+          | store  | none  | false    | false    | no a|b none  | 
+          | store  | none  | true     | false    | no a clock   | 
+          | store  | none  | false    | true     | no b clock   | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
+  })
+})
+
+describe('name usage', () => {
+  test('inline operator with name', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b'], 'source')
+      const feature = flag({
+        name: 'feature',
+      })
+
+      const tag = separate({
+        name: 'tag',
+        source: {feature},
+        variant: {
+          byFeature: {
+            aBranch: {feature: true},
+            none: {feature: false},
+          },
+        } as const,
+        cases: {
+          aBranch: value('-'),
+          none: union(['A', 'B'], 'clock'),
+        },
+      })
+      config({
+        grouping: {
+          getHash: [source, feature],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: [source, feature, tag],
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * feature * tag * 
+          | a      | false   | A   | 
+          | a      | false   | B   | 
+          | a      | false   | A   | 
+          | a      | false   | B   | 
+          | a      | true    | -   | 
+          | a      | true    | -   | 
+          | b      | false   | A   | 
+          | b      | false   | B   | 
+          | b      | false   | A   | 
+          | b      | false   | B   | 
+          | b      | true    | -   | 
+          | b      | true    | -   | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
+  })
+  test('inline operator without name', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b'], 'source')
+      const feature = flag({
+        name: 'feature',
+      })
+
+      const tag = separate({
+        name: 'tag',
+        source: {feature},
+        variant: {
+          byFeature: {
+            aBranch: {feature: true},
+            none: {feature: false},
+          },
+        } as const,
+        cases: {
+          aBranch: value('-'),
+          none: union(['A', 'B']),
+        },
+      })
+      config({
+        grouping: {
+          getHash: [source, feature],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: [source, feature, tag],
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * source * feature * tag * 
+          | a      | false   | A   | 
+          | a      | false   | B   | 
+          | a      | true    | -   | 
+          | b      | false   | A   | 
+          | b      | false   | B   | 
+          | b      | true    | -   | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
+  })
+  test('flag edge case', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b', 'c'], 'source')
+      const feature = flag({
+        name: 'feature',
+        needs: [
+          computeVariants({
+            source: {source},
+            variant: {
+              src: {
+                a: {source: 'a'},
+                b: {source: 'b'},
+              },
+            },
+            cases: {
+              a: false,
+              b: true,
+            },
+          }),
+        ],
+      })
+      config({
+        grouping: {
+          getHash: [source, feature],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: [source, feature],
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
 "test(' (should pass)', () => {
   //prettier-ignore
   {
-    * source * clock * featureA * featureB * tag          * 
-    | store  | none  | false    | true     | no b clock   | 
-    | store  | none  | true     | false    | no a clock   | 
-    | store  | none  | false    | false    | no a|b none  | 
-    | store  | event | false    | true     | source store | 
-    | store  | event | true     | false    | source store | 
-    | store  | event | false    | false    | source store | 
-    | store  | store | false    | true     | source store | 
-    | store  | store | true     | false    | source store | 
-    | store  | store | false    | false    | source store | 
-    | event  | none  | false    | true     | no b clock   | 
-    | event  | none  | true     | false    | no a clock   | 
-    | event  | none  | false    | false    | no a|b none  | 
-    | event  | event | false    | true     | events only  | 
-    | event  | event | true     | false    | events only  | 
-    | event  | event | false    | false    | events only  | 
-    | event  | store | false    | true     | rest b       | 
-    | event  | store | true     | false    | rest a       | 
-    | event  | store | false    | false    | rest none    | 
+    * source * feature * 
+    | a      | false   | 
+    | b      | false   | 
+    | c      | false   | 
+    | b      | true    | 
   }
   expect(typecheck).toMatchInlineSnapshot()
 })"
 `)
+  })
+})
+
+describe('bool', () => {
+  test('basic case', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b', 'c'], 'union')
+      const tag = bool({
+        name: 'tag',
+        source: {source},
+        true: {source: 'a'},
+      })
+      config({
+        grouping: {
+          getHash: [source],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: [source, tag],
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * union * tag   * 
+          | a     | true  | 
+          | b     | false | 
+          | c     | false | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
+  })
+  test('array support', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b', 'c'], 'union')
+      const tag = bool({
+        name: 'tag',
+        source: {source},
+        true: [{source: 'a'}, {source: 'b'}],
+      })
+      config({
+        grouping: {
+          getHash: [source],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: [source, tag],
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+      "test(' (should pass)', () => {
+        //prettier-ignore
+        {
+          * union * tag   * 
+          | a     | true  | 
+          | b     | true  | 
+          | c     | false | 
+        }
+        expect(typecheck).toMatchInlineSnapshot()
+      })"
+    `)
+  })
+  test('non-exhaustive', () => {
+    expect(() => {
+      suiteGenerator(() => {
+        const source = union(['a', 'b', 'c'], 'source')
+        const pass = bool({
+          name: 'pass',
+          source: {source},
+          true: {source: 'a'},
+          false: {source: 'b'},
+        })
+
+        const failed = computeFn({
+          source: {pass},
+          name: 'failed',
+          fn: ({pass}) => !pass,
+        })
+
+        config({
+          grouping: {
+            getHash: [source, failed],
+            describeGroup: value(''),
+            pass,
+            createTestLines: {
+              method: 'method',
+              shape: {source},
+              addExpectError: failed,
+            },
+          },
+        })
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"either true or false should be defined but not both"`,
+    )
   })
 })

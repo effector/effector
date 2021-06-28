@@ -411,9 +411,13 @@ export type TypeofSepCases<
     : 'never'
   : 'never'
 
-export type Grouping<T> = {
+export type Grouping<T extends Record<string, any>> = {
   filter?: (obj: T) => boolean
-  getHash: DataDecl<string> | ((obj: T) => string)
+  getHash:
+    | DataDecl<string>
+    | ((obj: T) => string)
+    | Record<string, Declarator>
+    | Declarator[]
   describeGroup:
     | ((
         obj: T,
@@ -439,25 +443,28 @@ export type Grouping<T> = {
       }
     | {
         method: string
-        shape: keyof T extends string
-          ? Record<string, keyof T | {field: keyof T; when: keyof T}>
-          : never
+        shape: Record<
+          string,
+          Declarator | {field: Declarator; when: Declarator}
+        >
         addExpectError?: boolean | BoolDecl
       }
 
   sortByFields?: {[K in keyof T]: Array<T[K]> | 'string'}
-  pass?: boolean | BoolDecl | ((obj: T) => string)
+  pass?: boolean | BoolDecl | ((obj: T) => boolean)
 }
 
 export type CtxConfig = {
   header?: string
   grouping: Grouping<any>
   file?: string
+  usedMethods?: string[]
 }
 export type PartialCtxConfig = {
   header?: string
   grouping?: Partial<Grouping<any>>
   file?: string
+  usedMethods?: string[]
 }
 
 export type ConfigStructShape = {
@@ -476,3 +483,29 @@ export type ConfigStruct =
     }
   | ConfigStructShape
   | ConfigStructKV
+
+export type Ctx = {
+  shape: Record<string, any>
+  configUsed: boolean
+  items: Record<string, Declarator>
+  /**
+   * references TO id
+   *
+   * bool({source: {sourceReference}}): referencedBy
+   *
+   * {[sourceReference]: referencedBy[]}
+   * sourceReference -> referencedBy
+   * */
+  references: Record<string, string[]>
+  /**
+   * inline references FROM id
+   *
+   * separate({cases: {_: targetReference}}): referencedBy
+   *
+   * {[referencedBy]: targetReference[]}
+   * referencedBy -> targetReference
+   **/
+  targets: Record<string, string[]>
+  config: PartialCtxConfig
+  configValidator: ConfigStructShape
+}

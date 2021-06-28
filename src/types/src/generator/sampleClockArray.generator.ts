@@ -1,3 +1,16 @@
+import {
+  computeFn,
+  union,
+  value,
+  computeVariant,
+  computeVariants,
+  bool,
+  separate,
+  flag,
+  config,
+  permute,
+} from '../runner/manifold/operators'
+
 const grouping = {
   getHash: ({descriptionTokens, noTarget, noClock, noSource}: any) =>
     `${descriptionTokens}${noTarget}${noClock}${noSource}`,
@@ -322,4 +335,124 @@ const fnAStringClockAny = (a:string, clock:any) => ({a,clock})
 const fnAb = ({a,b}:AB) => ({a,b})
 `
 
-export default {grouping, shape, header}
+export default () => {
+  const noSource = flag({name: 'noSource'})
+  const clockArray = flag({name: 'clockArray', needs: noSource})
+  const combinable = flag({name: 'combinable', avoid: noSource})
+  const fn = flag({name: 'fn'})
+  const noTarget = flag({name: 'noTarget'})
+  const noClock = flag({name: 'noClock', avoid: noSource})
+  const secondArgument = flag({
+    name: 'secondArgument',
+    needs: fn,
+    avoid: [noClock, noSource],
+  })
+  const explicitArgumentTypes = flag({
+    name: 'explicitArgumentTypes',
+    needs: fn,
+  })
+  const unificationToAny = flag({
+    name: 'unificationToAny',
+    avoid: [noClock, noSource],
+  })
+  const fnClockTypeAssertion = flag({
+    name: 'fnClockTypeAssertion',
+    needs: [fn, secondArgument, explicitArgumentTypes],
+    avoid: noClock,
+  })
+  const fnWithoutArgs = flag({
+    name: 'fnWithoutArgs',
+    needs: fn,
+    avoid: [fnClockTypeAssertion, secondArgument, explicitArgumentTypes],
+  })
+  const clock = separate({
+    name: 'clock',
+    source: {noClock, noSource, unificationToAny, fnClockTypeAssertion},
+    variant: {
+      _: {
+        none: {noClock: true},
+        only: {noSource: true},
+        noAnyNoFalsePositiveFnClock: {
+          unificationToAny: false,
+          fnClockTypeAssertion: true,
+        },
+        noAny: {unificationToAny: false},
+        withAnyNoFalsePositiveFnClock: {
+          unificationToAny: true,
+          fnClockTypeAssertion: true,
+        },
+        withAny: {unificationToAny: true},
+      },
+    },
+    cases: {
+      none: value(null),
+      only: separate({
+        name: 'clock/only',
+        source: {fnWithoutArgs, fn, clockArray},
+        variant: {
+          fn: {
+            noArgs: {fnWithoutArgs: true},
+            noFn: {fn: false},
+            fn: {},
+          },
+          amount: {
+            singleClock: {clockArray: false},
+            manyClocks: {clockArray: true},
+          },
+        },
+        cases: {
+          noArgs: {
+            singleClock: union(
+              ['voidt', 'num', 'strClk', 'anyt'],
+              'clock/only/1',
+            ),
+            manyClocks: permute({
+              name: 'clock/only/2',
+              items: ['voidt', 'num', 'strClk', 'anyt'],
+              amount: {min: 1, max: 2},
+              noReorder: true,
+            }),
+          },
+          noFn: {
+            singleClock: union(['strClk', 'anyt'], 'clock/only/3'),
+            manyClocks: permute({
+              name: 'clock/only/4',
+              items: ['strClk', 'anyt'],
+              amount: {min: 1, max: 2},
+              noReorder: true,
+            }),
+          },
+          fn: {
+            singleClock: union(['strClk', 'anyt'], 'clock/only/5'),
+            manyClocks: permute({
+              name: 'clock/only/6',
+              items: ['strClk', 'anyt'],
+              amount: {min: 1, max: 2},
+              noReorder: true,
+            }),
+          },
+        },
+      }),
+      noAnyNoFalsePositiveFnClock: permute({
+        name: 'clock/noAnyNoFalsePositiveFnClock',
+        items: ['voidt', 'num'],
+        amount: {min: 1, max: 2},
+        noReorder: true,
+      }),
+      noAny: permute({
+        name: 'clock/noAny',
+        items: ['voidt', 'str'],
+        amount: {min: 1, max: 2},
+        noReorder: true,
+      }),
+      withAnyNoFalsePositiveFnClock: permute({
+        name: 'clock/withAnyNoFalsePositiveFnClock',
+        items: ['anyt', 'voidt', 'num'],
+      }),
+      withAny: permute({
+        name: 'clock/withAny',
+        items: ['anyt', 'voidt', 'str'],
+      }),
+    },
+  })
+}

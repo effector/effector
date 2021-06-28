@@ -1,4 +1,40 @@
+import {forIn} from '../forIn'
 import {ctx} from './ctx'
+import {isRef} from './isRef'
+import {Ref} from './types'
+
+function getDeclsReferencedByConfig(): string[] {
+  const results: Ref<unknown, unknown>[] = []
+  const grouping = ctx.config.grouping!
+  const {pass, getHash, describeGroup, createTestLines} = grouping
+  if (isRef(pass)) {
+    results.push(pass)
+  }
+  if (isRef(getHash)) {
+    results.push(getHash)
+  } else if (typeof getHash === 'object' && getHash !== null) {
+    results.push(...Object.values(getHash))
+  }
+  if (isRef(describeGroup)) {
+    results.push(describeGroup)
+  }
+  if (
+    createTestLines &&
+    'type' in createTestLines &&
+    createTestLines.type === 'table'
+  ) {
+    results.push(...createTestLines.fields)
+  } else if (createTestLines && 'method' in createTestLines) {
+    forIn(createTestLines.shape, value => {
+      if (isRef(value)) results.push(value)
+      else results.push(value.field, value.when)
+    })
+    if (isRef(createTestLines.addExpectError)) {
+      results.push(createTestLines.addExpectError)
+    }
+  }
+  return results.map(decl => decl.id)
+}
 
 /** {[reference]: referencedBy[]} */
 function toposort(rawGraph: Record<string, string[]>) {
@@ -158,7 +194,7 @@ function toposort(rawGraph: Record<string, string[]>) {
  */
 export function processDeclaratorsToShape() {
   /** graph roots */
-  const named = new Set<string>()
+  const named = new Set<string>(getDeclsReferencedByConfig())
   const appearAsInlineTarget = new Set<string>()
   /**
    * inline references FROM id

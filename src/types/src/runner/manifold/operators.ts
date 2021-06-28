@@ -23,15 +23,12 @@ import {
   Matcher,
   Grouping,
   ConfigStructShape,
-} from './manifold/types'
-import {isRef} from './manifold/isRef'
-import {processDeclaratorsToShape} from './manifold/processDeclaratorsToShape'
-import {ctx, ctxWrap} from './manifold/ctx'
-import {
-  applyConfigStruct,
-  confStruct,
-  validateRequiredFields,
-} from './manifold/config'
+} from './types'
+import {isRef} from './isRef'
+import {processDeclaratorsToShape} from './processDeclaratorsToShape'
+import {ctx, ctxWrap} from './ctx'
+import {applyConfigStruct, confStruct, validateRequiredFields} from './config'
+import {assert} from './assert'
 
 const nextID = (() => {
   let id = 0
@@ -253,8 +250,9 @@ export function flag({
 
   function processDeclarator(decl: Declarator) {
     source.push(decl)
-    if (decl.name !== decl.id) return decl.name
-    return decl.prepared
+    // if (decl.name !== decl.id)
+    return decl.name
+    // return decl.prepared
   }
 }
 
@@ -269,6 +267,10 @@ export function bool<Src extends SourceRec>({
   true?: SingleVariant<Src>
   false?: SingleVariant<Src>
 }) {
+  assert(
+    (!onTrue && onFalse) || (onTrue && !onFalse),
+    'either true or false should be defined but not both',
+  )
   const id = nextID()
   const val: Bool = {
     id,
@@ -574,17 +576,27 @@ export function insert<T = unknown>(...args: [RawCase] | [string, RawCase]) {
 
 export function config(data: {
   header?: string
+  file?: string
+  usedMethods?: string[]
   grouping?: Partial<Grouping<any>>
 }): void
 export function config<T>(data: {
   header?: string
+  file?: string
+  usedMethods?: string[]
   grouping: Partial<Grouping<T>>
 }): void
 export function config(data: {
   header?: string
+  file?: string
+  usedMethods?: string[]
   grouping?: Partial<Grouping<any>>
 }) {
-  const configUpdated = applyConfigStruct(confStruct.shape, ctx.config, data)
+  const configUpdated = applyConfigStruct(
+    ctx.configValidator.shape,
+    ctx.config,
+    data,
+  )
   if (configUpdated) ctx.configUsed = true
 }
 
@@ -618,21 +630,20 @@ export function exec(fn: () => void, struct: ConfigStructShape = confStruct) {
       references: {},
       targets: {},
       config: {},
+      configValidator: struct,
     },
     currCtx => {
-      try {
-        fn()
-      } catch (err) {
-        console.error(err)
-      }
-      const shape = processDeclaratorsToShape()
+      fn()
       if (!currCtx.configUsed) throw Error('no config() used')
-      validateRequiredFields(struct, currCtx.config)
+      validateRequiredFields(currCtx.configValidator, currCtx.config)
+      const shape = processDeclaratorsToShape()
       return {
         shape,
         grouping: currCtx.config.grouping,
         header: currCtx.config.header ?? null,
         file: currCtx.config.file ?? null,
+        config: currCtx.config,
+        usedMethods: currCtx.config.usedMethods ?? null,
       }
     },
   )

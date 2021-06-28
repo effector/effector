@@ -7,7 +7,8 @@ import {
 } from '../text'
 import {forIn} from '../forIn'
 import {DataDecl, BoolDecl, Grouping} from './types'
-import {isDataDecl, isBoolDecl, assertRef} from './isRef'
+import {isDataDecl, isBoolDecl, assertRef, isRef} from './isRef'
+import {assert} from './assert'
 
 type Obj = Record<string, any>
 
@@ -40,7 +41,23 @@ function createReader<T, O extends Obj>(
     return result
   }
 }
-
+function createHashReader<T extends Obj>(getHash: Grouping<T>['getHash']) {
+  if (typeof getHash === 'function' || isDataDecl(getHash))
+    return createReader(getHash)
+  const declList = Array.isArray(getHash) ? getHash : Object.values(getHash)
+  declList.forEach(value => {
+    assertRef(value)
+  })
+  return (obj: T) => {
+    const values: string[] = []
+    declList.forEach(decl => {
+      const value = obj[decl.name]
+      assert(value !== undefined, `undefined getHash for ${decl.name}`)
+      values.push(String(value))
+    })
+    return values.join(' ')
+  }
+}
 export function createGroupedCases<T extends Obj>(
   casesDefs: T[],
   {
@@ -53,9 +70,9 @@ export function createGroupedCases<T extends Obj>(
     pass,
   }: Grouping<T>,
 ) {
-  const hashGetter = createReader(getHash)
+  const hashGetter = createHashReader(getHash)
   const groupDescriber = createReader(describeGroup)
-  const passGetter = createReader(pass || ((obj: T) => obj.pass), {
+  const passGetter = createReader(pass!, {
     isBool: true,
     defaultVal: true,
   })
@@ -79,18 +96,28 @@ export function createGroupedCases<T extends Obj>(
         addExpectError = (obj: T) => !passGetter(obj),
       } = createTestLines
       const readExpectError = createReader(addExpectError, {isBool: true})
+      const printShape: Record<
+        string,
+        string | {field: string; when: string}
+      > = {}
+      forIn(shape, (value, key) => {
+        printShape[key] = isRef(value)
+          ? value.name
+          : {field: value.field.name, when: value.when.name}
+      })
       //prettier-ignore
       createLinesForTestList = (values: T[]) => printMethodValues({
-      method,
-      values,
-      shape,
-      addExpectError: readExpectError,
-      align: true,
-    })
+        method,
+        values,
+        shape: printShape,
+        addExpectError: readExpectError,
+      })
     }
   } else {
     createLinesForTestList = (values: T[]) =>
-      values.flatMap(item => createTestLines(item))
+      values.flatMap(item =>
+        createTestLines(item).filter(line => typeof line === 'string'),
+      )
   }
   const isAafterB = (sortByFields &&
     skewHeapSortFieldsComparator(sortByFields))!
@@ -121,7 +148,7 @@ export function createGroupedCases<T extends Obj>(
 
   const defsGroups = new Map<string, Group>()
   let cur
-  while ((cur = casesDefsPending.pop())) {
+  while ((cur = casesDefsPending.shift())) {
     // console.log('cur', cur)
     if (dedupeHash) {
       const caseDefHash = dedupeHash(cur)

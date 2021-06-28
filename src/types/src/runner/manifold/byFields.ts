@@ -137,7 +137,9 @@ function normalizeSplitConfig(splitConfig: SplitConfig) {
             const conflicted = validBranchNames.filter(name =>
               valid.def.includes(name),
             )
-            return `branch/op conflict fields ${conflicted.join(',')}`
+            return `branch/op conflict fields ${conflicted.join(
+              ',',
+            )} at path ${path.join('/')}`
           },
         )
         if (caseKeys.length === 1 && valid.def.includes(caseKeys[0])) {
@@ -496,80 +498,4 @@ function selectN<T>(items: T[], n: number): T[][] {
     )
   }
   return result
-}
-
-function computeCaseIfMatch(
-  value: Record<string, unknown>,
-  matcher: Record<string, unknown>,
-  fn: string | ((value: any) => string),
-) {
-  for (const field in matcher) {
-    const matcherValue = matcher[field]
-    const valueField = value[field]
-    if (matcherValue === false) {
-      if (valueField !== false && valueField !== undefined) return
-    }
-    if (matcherValue !== valueField) return
-  }
-  if (typeof fn === 'function') return fn(value)
-  return fn
-}
-
-function matchDeep({
-  variants: variantGroups,
-  cases,
-}: {
-  variants: any
-  cases: any
-}) {
-  const matchCases: {
-    matcher: Record<string, unknown>
-    variantCase: string | ((value: any) => string)
-  }[] = []
-  const variantGroupsNames = Object.keys(variantGroups)
-  if (variantGroupsNames.length === 0) return () => {}
-  function iterateVariantGroup(index: number, matcherParts: any[], cases: any) {
-    const isLastVariant = index === variantGroupsNames.length - 1
-    const variantGroupName = variantGroupsNames[index]
-    const variantGroup = variantGroups[variantGroupName]
-    forIn(variantGroup, (variant, variantName) => {
-      if (Array.isArray(variant)) {
-        for (const alt of variant) {
-          //@ts-ignore
-          matchVariant(alt, variantName)
-        }
-      } else {
-        //@ts-ignore
-        matchVariant(variant, variantName)
-      }
-      function matchVariant(variant: any, variantName: string) {
-        assert(
-          variant !== undefined,
-          `case ${variantName} exists but nod defined`,
-        )
-        const childMatcherParts = [...matcherParts, variant]
-        const variantCase = cases[variantName]
-        if (variantCase === undefined) return
-        if (
-          isLastVariant ||
-          typeof variantCase !== 'object' ||
-          variantCase === null
-        ) {
-          matchCases.push({
-            matcher: Object.assign({}, ...[...childMatcherParts].reverse()),
-            variantCase,
-          })
-          return
-        }
-        iterateVariantGroup(index + 1, childMatcherParts, variantCase)
-      }
-    })
-  }
-  iterateVariantGroup(0, [], cases)
-  return (value: Record<string, unknown>) => {
-    for (const {matcher, variantCase} of matchCases) {
-      const computedResult = computeCaseIfMatch(value, matcher, variantCase)
-      if (computedResult !== undefined) return computedResult
-    }
-  }
 }

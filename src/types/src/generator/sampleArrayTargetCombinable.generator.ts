@@ -9,7 +9,7 @@ import {
   permute,
   config,
   bool,
-} from '../runner/manifold'
+} from '../runner/manifold/operators'
 import {Ref} from '../runner/manifold/types'
 
 const variables = {
@@ -81,7 +81,6 @@ export default () => {
     name: 'noFalsePositive',
     source: {noFalsePositiveFnSource, noFalsePositiveFnClock},
     true: [{noFalsePositiveFnSource: true}, {noFalsePositiveFnClock: true}],
-    // false: {},
   })
   const fnWithoutArgs = flag({
     name: 'fnWithoutArgs',
@@ -95,13 +94,8 @@ export default () => {
       {sourceType: 'object', source: 'ab'},
       {sourceType: 'tuple', source: 'tuple_aa'},
     ],
-    false: [
-      {sourceType: 'object', source: 'a'},
-      {sourceType: 'tuple', source: 'tuple_a'},
-    ],
   })
-  //@ts-ignore
-  const fnText: Ref<string, 'computeVariant'> = computeVariants({
+  const fnText = computeVariants({
     name: 'fnText',
     source: {
       fnWithoutArgs,
@@ -262,13 +256,11 @@ export default () => {
     },
     cases: {
       tuple: permute({
-        // name: 'target/a',
         items: ['l_num', 'l_str', 'l_num_str', 'l_num_num'],
         amount: {min: 1, max: 2},
         noReorder: true,
       }),
       object: permute({
-        // name: 'target/b',
         items: ['a_num', 'a_str', 'abn', 'ab'],
         amount: {min: 1, max: 2},
         noReorder: true,
@@ -303,21 +295,23 @@ export default () => {
     },
   })
   config({
-    header: '',
+    header,
+    file: 'generatedNew/sampleArrayTarget',
+    usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
     grouping: {
+      pass,
       createTestLines: {
         method: 'sample',
-        align: true,
         shape: {
-          source: 'sourceCode',
+          source: sourceCode,
           clock: {
-            field: 'clockText',
-            when: 'hasClock',
+            field: clockText,
+            when: hasClock,
           },
-          target: 'targetText',
+          target: targetText,
           fn: {
-            field: 'fnText',
-            when: 'fn',
+            field: fnText,
+            when: fn,
           },
         },
       },
@@ -338,3 +332,85 @@ export default () => {
     },
   })
 }
+
+const header = `
+/** used as valid source type */
+type AN = {a: number}
+/** used as invalid source type */
+type AS = {a: string}
+/** used as valid source type */
+type AB = {a: number; b: string}
+/** used as invalid source type */
+type ABN = {a: number; b: number}
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const str = createEvent<string>()
+const num = createEvent<number>()
+const numStr = createEvent<number | string>()
+const strBool = createEvent<string | boolean>()
+const $num = createStore<number>(0)
+const $str = createStore<string>('')
+const a_num = createEvent<AN>()
+const a_str = createEvent<AS>()
+const ab = createEvent<AB>()
+const abn = createEvent<ABN>()
+const l_num = createEvent<[number]>()
+const l_str = createEvent<[string]>()
+const l_num_str = createEvent<[number, string]>()
+const l_num_num = createEvent<[number, number]>()
+
+const fn = {
+  noArgs: () => ({a:2,b:''}),
+  assertFirst: {
+    object: {
+      solo: ({a}:AS, cl:number) => ({a: cl, b: a}),
+      pair: ({a,b}:ABN, cl:number) => ({a:b+cl,b:''})
+    },
+    tuple: {
+      solo: ([a]:[string], cl:number) => ({a:cl,b:a}),
+      pair: ([a,b]:[number,number], cl:number) => ({a:b+cl,b:''}),
+    }
+  },
+  assertFirstOnly: {
+    object: {
+      solo: ({a}:AS) => ({a:0,b:a}),
+      pair: ({b}:ABN) => ({a:b,b:''}),
+    },
+    tuple: {
+      solo: ([a]:[string]) => ({a:2,b:a}),
+      pair: ([,b]:[number,number]) => ({a:b,b:''}),
+    }
+  },
+  assertSecond: {
+    object: {
+      solo: ({a}:AN, cl:string) => ({a,b:cl}),
+      pair: ({a}:AB, cl:string) => ({a,b:cl}),
+    },
+    tuple: {
+      solo: ([a]:[number], cl:string) => ({a,b:cl}),
+      pair: ([a]:[number,string], cl:string) => ({a,b:cl}),
+    }
+  },
+  typedSrc: {
+    object: {
+      solo: ({a}:AN) => ({a,b:''}),
+      pair: ({a,b}:AB) => ({a,b})
+    },
+    tuple: {
+      solo: ([a]:[number]) => ({a,b:''}),
+      pair: ([a,b]:[number,string]) => ({a,b}),
+    }
+  },
+  typedSrcClock: {
+    object: {
+      solo: ({a}:AN, cl:number) => ({a:a+cl,b:''}),
+      pair: ({a,b}:AB, cl:number) => ({a:a+cl,b})
+    },
+    tuple: {
+      solo: ([a]:[number], cl:number) => ({a:a+cl,b:''}),
+      pair: ([a,b]:[number,string], cl:number) => ({a:a+cl,b}),
+    }
+  },
+}
+
+`

@@ -118,14 +118,12 @@ export function printMethodValues({
   method,
   values,
   shape,
-  addExpectError = true,
-  align = false,
+  addExpectError,
 }: {
   method: string
   values: Record<string, any>[]
   shape: Record<string, string | {field: string; when?: string}>
-  addExpectError?: boolean | ((value: any) => boolean)
-  align?: boolean
+  addExpectError: (value: any) => boolean
 }) {
   const parts = Array.from(values, () => [method, '({'])
   const isFirstField = Array.from(values, () => true)
@@ -135,20 +133,18 @@ export function printMethodValues({
     const when: string | null | void =
       typeof schemaRecord === 'string' ? null : schemaRecord.when
     let max = 0
-    if (align) {
-      for (const value of values) {
-        const objectFieldValue = value[objectField]
-        if (when && !value[when]) continue
-        if (
-          !when &&
-          (objectFieldValue === undefined || objectFieldValue === null)
-        )
-          continue
-        const content = Array.isArray(objectFieldValue)
-          ? printArray(objectFieldValue)
-          : `${objectFieldValue}`
-        max = Math.max(max, content.length)
-      }
+    for (const value of values) {
+      const objectFieldValue = value[objectField]
+      if (when && !value[when]) continue
+      if (
+        !when &&
+        (objectFieldValue === undefined || objectFieldValue === null)
+      )
+        continue
+      const content = Array.isArray(objectFieldValue)
+        ? printArray(objectFieldValue)
+        : `${objectFieldValue}`
+      max = Math.max(max, content.length)
     }
     for (let i = 0; i < values.length; i++) {
       const value = values[i]
@@ -162,7 +158,7 @@ export function printMethodValues({
       const content = Array.isArray(objectFieldValue)
         ? printArray(objectFieldValue)
         : `${objectFieldValue}`
-      const alignPad = align ? ' '.repeat(max - content.length) : ''
+      const alignPad = ' '.repeat(max - content.length)
       if (isFirstField[i]) {
         parts[i].push(`${methodField}:${content}`, alignPad)
       } else {
@@ -174,14 +170,8 @@ export function printMethodValues({
   parts.forEach(part => {
     part.push('})')
   })
-  if (addExpectError !== undefined || addExpectError !== false) {
-    const readExpectError =
-      typeof addExpectError === 'boolean'
-        ? (value: any) => addExpectError && !value.pass
-        : addExpectError
-    values.forEach((value, i) => {
-      if (readExpectError(value)) parts[i].unshift('//' + `@ts-expect-error\n`)
-    })
-  }
+  values.forEach((value, i) => {
+    if (addExpectError(value)) parts[i].unshift('//' + `@ts-expect-error\n`)
+  })
   return parts.map(part => part.join(''))
 }

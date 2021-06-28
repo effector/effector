@@ -6,6 +6,50 @@ import {
 } from './types'
 import {forIn} from '../forIn'
 
+const Conf = {
+  val: (required: boolean = false): ConfigStruct => ({
+    type: 'value',
+    required,
+  }),
+  kv: (required: boolean = false): ConfigStruct => ({
+    type: 'kv',
+    required,
+  }),
+  shape: (shape: Record<string, ConfigStruct>): ConfigStructShape => ({
+    type: 'shape',
+    shape,
+    required: isRequiredConfShape(shape),
+  }),
+}
+export const confStruct = Conf.shape({
+  header: Conf.val(),
+  file: Conf.val(),
+  grouping: Conf.shape({
+    filter: Conf.val(),
+    getHash: Conf.val(true),
+    describeGroup: Conf.val(true),
+    dedupeHash: Conf.val(),
+    createTestLines: Conf.val(true),
+    sortByFields: Conf.kv(),
+    pass: Conf.val(),
+  }),
+})
+
+export const fileGeneratorConfStruct = Conf.shape({
+  header: Conf.val(true),
+  file: Conf.val(true),
+  usedMethods: Conf.val(true),
+  grouping: Conf.shape({
+    filter: Conf.val(),
+    getHash: Conf.val(true),
+    describeGroup: Conf.val(true),
+    dedupeHash: Conf.val(),
+    createTestLines: Conf.val(true),
+    sortByFields: Conf.kv(),
+    pass: Conf.val(),
+  }),
+})
+
 export function validateRequiredFields(
   cfg: ConfigStructShape,
   value: any,
@@ -95,34 +139,6 @@ function isRequiredConfShape(shape: Record<string, ConfigStruct>) {
   }
   return false
 }
-const Conf = {
-  val: (required: boolean = false): ConfigStruct => ({
-    type: 'value',
-    required,
-  }),
-  kv: (required: boolean = false): ConfigStruct => ({
-    type: 'kv',
-    required,
-  }),
-  shape: (shape: Record<string, ConfigStruct>): ConfigStructShape => ({
-    type: 'shape',
-    shape,
-    required: isRequiredConfShape(shape),
-  }),
-}
-export const confStruct = Conf.shape({
-  header: Conf.val(),
-  file: Conf.val(),
-  grouping: Conf.shape({
-    filter: Conf.val(),
-    getHash: Conf.val(true),
-    describeGroup: Conf.val(true),
-    dedupeHash: Conf.val(),
-    createTestLines: Conf.val(true),
-    sortByFields: Conf.kv(),
-    pass: Conf.val(),
-  }),
-})
 
 export function applyConfigStruct(
   cfg: Record<string, ConfigStruct>,

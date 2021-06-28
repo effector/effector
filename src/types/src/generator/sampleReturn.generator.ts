@@ -8,7 +8,7 @@ import {
   separate,
   flag,
   config,
-} from '../runner/manifold'
+} from '../runner/manifold/operators'
 
 export default () => {
   const source = union(['event', 'store', 'combinable'], 'source')
@@ -75,7 +75,6 @@ export default () => {
     source: {
       pass,
       sourceCode: computeVariant({
-        name: 'methodCode/sourceCode',
         source: {source},
         variant: {
           event: {source: 'event'},
@@ -89,7 +88,6 @@ export default () => {
         },
       }),
       clockCode: computeVariant({
-        name: 'methodCode/clockCode',
         source: {clock},
         variant: {
           none: {clock: 'none'},
@@ -105,7 +103,6 @@ export default () => {
         },
       }),
       targetCode: computeVariant({
-        name: 'methodCode/targetCode',
         source: {target},
         variant: {
           none: {target: 'none'},
@@ -121,7 +118,6 @@ export default () => {
         },
       }),
       fnCode: computeVariants({
-        name: 'methodCode/fnCode',
         source: {fn, typedFn},
         variant: {
           fn: {
@@ -177,18 +173,12 @@ export default () => {
       description: `${targetToken}${typedFnToken}, ${clock} clock`,
     }),
   })
-  const getHash = computeFn({
-    name: 'getHash',
-    source: {targetToken, clock, typedFn},
-    fn: ({targetToken, clock, typedFn}) => `${targetToken} ${clock} ${typedFn}`,
-  })
   const createTestLines = computeFn({
     name: 'createTestLines',
     source: {
       methodCode,
       pass,
       returnCode: computeVariants({
-        name: 'createTestLines/bl',
         source: {target, source, clock},
         variant: {
           Target: {
@@ -230,24 +220,16 @@ export default () => {
     fn: ({createTestLines}) => createTestLines.join(`\n`),
   })
   config({
-    header: `
-type AN = {a: number}
-const $num = createStore(0)
-const a = createStore({a: 0})
-const num = createEvent<number>()
-const aNum = createEvent<AN>()
-const aT = createStore({a: 0})
-const aNumT = createEvent<AN>()
-const fn0 = () => ({a: 0})
-const fn1 = ({a}: AN) => ({a})
-const fn2 = ({a}: AN, c: number) => ({a: a + c})
-`,
+    header,
+    file: 'generatedNew/sampleReturn',
+    usedMethods: ['createStore', 'createEvent', 'sample', 'Event', 'Store'],
     grouping: {
+      pass,
       dedupeHash: (args: any) => {
         // console.log(args)
         return args.dedupeHash
       },
-      getHash: ({getHash}: any) => getHash,
+      getHash: [targetToken, clock, typedFn],
       describeGroup: ({describeGroup}: any) => describeGroup,
       createTestLines: ({createTestLines}: any) => createTestLines,
       sortByFields: {
@@ -261,3 +243,16 @@ const fn2 = ({a}: AN, c: number) => ({a: a + c})
     },
   })
 }
+
+const header = `
+type AN = {a: number}
+const $num = createStore(0)
+const a = createStore({a: 0})
+const num = createEvent<number>()
+const aNum = createEvent<AN>()
+const aT = createStore({a: 0})
+const aNumT = createEvent<AN>()
+const fn0 = () => ({a: 0})
+const fn1 = ({a}: AN) => ({a})
+const fn2 = ({a}: AN, c: number) => ({a: a + c})
+`

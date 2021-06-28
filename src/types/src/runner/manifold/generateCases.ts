@@ -1,4 +1,4 @@
-import {exec} from '../manifold'
+import {exec} from './operators'
 import {createGroupedCases} from './createGroupedCases'
 import {byFields} from './byFields'
 
