@@ -1,3 +1,4 @@
+import {Value} from '../runner/manifold/types'
 import {
   computeFn,
   union,
@@ -9,310 +10,8 @@ import {
   flag,
   config,
   permute,
+  sortOrder,
 } from '../runner/manifold/operators'
-
-const grouping = {
-  getHash: ({descriptionTokens, noTarget, noClock, noSource}: any) =>
-    `${descriptionTokens}${noTarget}${noClock}${noSource}`,
-  describeGroup: ({descriptionTokens, noGroup, largeGroup}: any) => ({
-    description: descriptionTokens,
-    noGroup,
-    largeGroup,
-  }),
-  createTestLines: {
-    method: 'sample',
-    align: true,
-    shape: {
-      source: 'sourceCode',
-      clock: 'clock',
-      target: 'target',
-      fn: 'fnCode',
-    },
-  },
-  sortByFields: {
-    clockArray: [false, true],
-    combinable: [false, true],
-    noSource: [false, true],
-    fn: [false, true],
-    unificationToAny: [false, true],
-    fnClockTypeAssertion: [false, true],
-    noTarget: [true, false],
-    noClock: [true, false],
-    fnWithoutArgs: [true, false],
-  },
-}
-
-const shape = {
-  noSource: {flag: {}},
-  clockArray: {
-    flag: {needs: 'noSource'},
-  },
-  combinable: {
-    flag: {avoid: 'noSource'},
-  },
-  fn: {
-    flag: {},
-  },
-  noTarget: {
-    flag: {},
-  },
-  noClock: {
-    flag: {avoid: 'noSource'},
-  },
-  secondArgument: {
-    flag: {
-      needs: 'fn',
-      avoid: ['noClock', 'noSource'],
-    },
-  },
-  explicitArgumentTypes: {
-    flag: {
-      needs: 'fn',
-    },
-  },
-  unificationToAny: {
-    flag: {
-      avoid: ['noClock', 'noSource'],
-    },
-  },
-  fnClockTypeAssertion: {
-    flag: {
-      needs: ['fn', 'secondArgument', 'explicitArgumentTypes'],
-      avoid: ['noClock'],
-    },
-  },
-  fnWithoutArgs: {
-    flag: {
-      needs: 'fn',
-      avoid: [
-        'fnClockTypeAssertion',
-        'secondArgument',
-        'explicitArgumentTypes',
-      ],
-    },
-  },
-  clock: {
-    split: {
-      variant: {
-        none: {noClock: true},
-        only: {noSource: true},
-        noAnyNoFalsePositiveFnClock: {
-          unificationToAny: false,
-          fnClockTypeAssertion: true,
-        },
-        noAny: {unificationToAny: false},
-        withAnyNoFalsePositiveFnClock: {
-          unificationToAny: true,
-          fnClockTypeAssertion: true,
-        },
-        withAny: {unificationToAny: true},
-      },
-      cases: {
-        none: {
-          value: null,
-        },
-        only: {
-          split: {
-            variants: {
-              fn: {
-                noArgs: {fnWithoutArgs: true},
-                noFn: {fn: false},
-                fn: {},
-              },
-              amount: {
-                singleClock: {clockArray: false},
-                manyClocks: {clockArray: true},
-              },
-            },
-            cases: {
-              noArgs: {
-                singleClock: {
-                  union: ['voidt', 'num', 'strClk', 'anyt'],
-                },
-                manyClocks: {
-                  permute: {
-                    items: ['voidt', 'num', 'strClk', 'anyt'],
-                    amount: {min: 1, max: 2},
-                    noReorder: true,
-                  },
-                },
-              },
-              noFn: {
-                singleClock: {
-                  union: ['strClk', 'anyt'],
-                },
-                manyClocks: {
-                  permute: {
-                    items: ['strClk', 'anyt'],
-                    amount: {min: 1, max: 2},
-                    noReorder: true,
-                  },
-                },
-              },
-              fn: {
-                singleClock: {
-                  union: ['strClk', 'anyt'],
-                },
-                manyClocks: {
-                  permute: {
-                    items: ['strClk', 'anyt'],
-                    amount: {min: 1, max: 2},
-                    noReorder: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        noAnyNoFalsePositiveFnClock: {
-          permute: {
-            items: ['voidt', 'num'],
-            amount: {min: 1, max: 2},
-            noReorder: true,
-          },
-        },
-        noAny: {
-          permute: {
-            items: ['voidt', 'str'],
-            amount: {min: 1, max: 2},
-            noReorder: true,
-          },
-        },
-        withAnyNoFalsePositiveFnClock: {
-          permute: ['anyt', 'voidt', 'num'],
-        },
-        withAny: {
-          permute: ['anyt', 'voidt', 'str'],
-        },
-      },
-    },
-  },
-  pass: {
-    bool: {
-      true: [{noClock: true}, {noSource: true}, {fnClockTypeAssertion: false}],
-      false: {fnClockTypeAssertion: true},
-    },
-  },
-  target: {
-    compute: {
-      variant: {
-        none: {noTarget: true},
-        abclock: {combinable: true, fn: true, secondArgument: true},
-        ab: {combinable: true},
-        aclock: {fn: true, secondArgument: true},
-        a: {fn: true, secondArgument: false},
-        string: {fn: false},
-      },
-      cases: {
-        none: null,
-        abclock: 'abclock',
-        ab: 'abTarget',
-        aclock: 'aclock',
-        a: 'aTarget',
-        string: 'str',
-      },
-    },
-  },
-  descriptionTokens: {
-    compute: {
-      fn(shape: any) {
-        const res = []
-        if (shape.fnClockTypeAssertion) {
-          shape.combinable ? res.push('combinable') : res.push('plain')
-          shape.noTarget && res.push('noTarget')
-        }
-        shape.noSource && res.push('noSource')
-        shape.noClock && res.push('noClock')
-        if (!shape.fnClockTypeAssertion) {
-          shape.fn && res.push('fn')
-          shape.secondArgument && res.push('fnClock')
-        }
-        return res.join(', ')
-      },
-    },
-  },
-  sourceCode: {
-    compute: {
-      variant: {
-        none: {noSource: true},
-        plain: {combinable: false},
-        combinable: {combinable: true},
-      },
-      cases: {
-        none: null,
-        plain: 'a',
-        combinable: '{a,b}',
-      },
-    },
-  },
-  //prettier-ignore
-  fnCode: {
-    compute: {
-      variants: {
-        shape: {
-          none: {noSource: true, fn: true},
-          plain: {combinable: false, fn: true},
-          shape: {combinable: true, fn: true},
-        },
-        fn: {
-          noArgs: {fnWithoutArgs: true},
-          typedFnClock: {secondArgument: true, explicitArgumentTypes: true},
-          untypedFnClock: {secondArgument: true, explicitArgumentTypes: false},
-          typed: {explicitArgumentTypes: true},
-          untyped: {explicitArgumentTypes: false},
-        },
-        clock: {
-          assert: {fnClockTypeAssertion: true},
-          keep: {fnClockTypeAssertion: false},
-        }
-      },
-      cases: {
-        none: {
-          noArgs: "()=>({a:'',b:2})",
-          typed: 'fnAString',
-          untyped: '(a) => ({a})'
-        },
-        shape: {
-          noArgs: "()=>({a:'',b:2})",
-          typedFnClock: {
-            assert: 'fnAbClockString',
-            keep: 'fnAbClockAny'
-          },
-          untypedFnClock: '({a,b}, clock) => ({a,b,clock})',
-          typed: 'fnAb',
-          untyped: '({a,b}) => ({a,b})'
-        },
-        plain: {
-          noArgs: "()=>({a:''})",
-          typedFnClock: {
-            assert: 'fnAStringClockString',
-            keep: 'fnAStringClockAny'
-          },
-          untypedFnClock: '(a,clock) => ({a,clock})',
-          typed: 'fnAString',
-          untyped: '(a) => ({a})',
-        }
-      },
-    },
-  },
-  noGroup: {
-    true: [{noClock: true}, {noSource: true}, {unificationToAny: true}],
-  },
-  largeGroup: {
-    compute: {
-      variant: {
-        fnAssertion: {fnClockTypeAssertion: true},
-        noSource: {noSource: true},
-        __: {},
-      },
-      cases: {
-        fnAssertion: 'fn clock assertion',
-        noSource: 'clock only',
-        __: null,
-      },
-    },
-  },
-}
 
 const header = `
 type AB = {a: string; b: number}
@@ -336,37 +35,34 @@ const fnAb = ({a,b}:AB) => ({a,b})
 `
 
 export default () => {
-  const noSource = flag({name: 'noSource'})
-  const clockArray = flag({name: 'clockArray', needs: noSource})
-  const combinable = flag({name: 'combinable', avoid: noSource})
-  const fn = flag({name: 'fn'})
-  const noTarget = flag({name: 'noTarget'})
-  const noClock = flag({name: 'noClock', avoid: noSource})
+  const noSource = flag({sort: [false, true]})
+  const clockArray = flag({sort: [false, true], needs: noSource})
+  const combinable = flag({sort: [false, true], avoid: noSource})
+  const fn = flag({sort: [false, true]})
+  const noTarget = flag({sort: [true, false]})
+  const noClock = flag({sort: [true, false], avoid: noSource})
   const secondArgument = flag({
-    name: 'secondArgument',
     needs: fn,
     avoid: [noClock, noSource],
   })
   const explicitArgumentTypes = flag({
-    name: 'explicitArgumentTypes',
     needs: fn,
   })
   const unificationToAny = flag({
-    name: 'unificationToAny',
+    sort: [false, true],
     avoid: [noClock, noSource],
   })
   const fnClockTypeAssertion = flag({
-    name: 'fnClockTypeAssertion',
+    sort: [false, true],
     needs: [fn, secondArgument, explicitArgumentTypes],
     avoid: noClock,
   })
   const fnWithoutArgs = flag({
-    name: 'fnWithoutArgs',
+    sort: [true, false],
     needs: fn,
     avoid: [fnClockTypeAssertion, secondArgument, explicitArgumentTypes],
   })
   const clock = separate({
-    name: 'clock',
     source: {noClock, noSource, unificationToAny, fnClockTypeAssertion},
     variant: {
       _: {
@@ -387,7 +83,6 @@ export default () => {
     cases: {
       none: value(null),
       only: separate({
-        name: 'clock/only',
         source: {fnWithoutArgs, fn, clockArray},
         variant: {
           fn: {
@@ -402,30 +97,24 @@ export default () => {
         },
         cases: {
           noArgs: {
-            singleClock: union(
-              ['voidt', 'num', 'strClk', 'anyt'],
-              'clock/only/1',
-            ),
+            singleClock: union(['voidt', 'num', 'strClk', 'anyt']),
             manyClocks: permute({
-              name: 'clock/only/2',
               items: ['voidt', 'num', 'strClk', 'anyt'],
               amount: {min: 1, max: 2},
               noReorder: true,
             }),
           },
           noFn: {
-            singleClock: union(['strClk', 'anyt'], 'clock/only/3'),
+            singleClock: union(['strClk', 'anyt']),
             manyClocks: permute({
-              name: 'clock/only/4',
               items: ['strClk', 'anyt'],
               amount: {min: 1, max: 2},
               noReorder: true,
             }),
           },
           fn: {
-            singleClock: union(['strClk', 'anyt'], 'clock/only/5'),
+            singleClock: union(['strClk', 'anyt']),
             manyClocks: permute({
-              name: 'clock/only/6',
               items: ['strClk', 'anyt'],
               amount: {min: 1, max: 2},
               noReorder: true,
@@ -434,25 +123,196 @@ export default () => {
         },
       }),
       noAnyNoFalsePositiveFnClock: permute({
-        name: 'clock/noAnyNoFalsePositiveFnClock',
         items: ['voidt', 'num'],
         amount: {min: 1, max: 2},
         noReorder: true,
       }),
       noAny: permute({
-        name: 'clock/noAny',
         items: ['voidt', 'str'],
         amount: {min: 1, max: 2},
         noReorder: true,
       }),
       withAnyNoFalsePositiveFnClock: permute({
-        name: 'clock/withAnyNoFalsePositiveFnClock',
         items: ['anyt', 'voidt', 'num'],
       }),
       withAny: permute({
-        name: 'clock/withAny',
         items: ['anyt', 'voidt', 'str'],
       }),
+    },
+  })
+  const pass = bool({
+    sort: [true, false],
+    source: {noClock, noSource, fnClockTypeAssertion},
+    true: [{noClock: true}, {noSource: true}, {fnClockTypeAssertion: false}],
+  })
+  const target = computeVariant({
+    source: {noTarget, combinable, fn, secondArgument},
+    variant: {
+      none: {noTarget: true},
+      abclock: {combinable: true, fn: true, secondArgument: true},
+      ab: {combinable: true},
+      aclock: {fn: true, secondArgument: true},
+      a: {fn: true, secondArgument: false},
+      string: {fn: false},
+    },
+    cases: {
+      none: null,
+      abclock: 'abclock',
+      ab: 'abTarget',
+      aclock: 'aclock',
+      a: 'aTarget',
+      string: 'str',
+    },
+  })
+  const descriptionTokens = computeFn({
+    source: {
+      fnClockTypeAssertion,
+      combinable,
+      noTarget,
+      noSource,
+      noClock,
+      fn,
+      secondArgument,
+    },
+    fn(shape) {
+      const res = []
+      if (shape.fnClockTypeAssertion) {
+        shape.combinable ? res.push('combinable') : res.push('plain')
+        shape.noTarget && res.push('noTarget')
+      }
+      shape.noSource && res.push('noSource')
+      shape.noClock && res.push('noClock')
+      if (!shape.fnClockTypeAssertion) {
+        shape.fn && res.push('fn')
+        shape.secondArgument && res.push('fnClock')
+      }
+      return res.join(', ')
+    },
+  })
+  const sourceCode = computeVariant({
+    source: {noSource, combinable},
+    variant: {
+      none: {noSource: true},
+      plain: {combinable: false},
+      combinable: {combinable: true},
+    },
+    cases: {
+      none: null,
+      plain: 'a',
+      combinable: '{a,b}',
+    },
+  })
+  //@ts-ignore
+  const fnCode: Value<string> = separate({
+    source: {
+      noSource,
+      fn,
+      combinable,
+      fnWithoutArgs,
+      secondArgument,
+      explicitArgumentTypes,
+      fnClockTypeAssertion,
+    },
+    variant: {
+      shape: {
+        none: {noSource: true, fn: true},
+        plain: {combinable: false, fn: true},
+        shape: {combinable: true, fn: true},
+      },
+      fn: {
+        noArgs: {fnWithoutArgs: true},
+        typedFnClock: {secondArgument: true, explicitArgumentTypes: true},
+        untypedFnClock: {secondArgument: true, explicitArgumentTypes: false},
+        typed: {explicitArgumentTypes: true},
+        untyped: {explicitArgumentTypes: false},
+      },
+      clock: {
+        assert: {fnClockTypeAssertion: true},
+        keep: {fnClockTypeAssertion: false},
+      },
+    },
+    cases: {
+      //@ts-ignore
+      none: {
+        noArgs: value("()=>({a:'',b:2})"),
+        typed: value('fnAString'),
+        untyped: value('(a) => ({a})'),
+      },
+      shape: {
+        noArgs: value("()=>({a:'',b:2})"),
+        typedFnClock: {
+          assert: value('fnAbClockString'),
+          keep: value('fnAbClockAny'),
+        },
+        untypedFnClock: value('({a,b}, clock) => ({a,b,clock})'),
+        typed: value('fnAb'),
+        untyped: value('({a,b}) => ({a,b})'),
+      },
+      plain: {
+        noArgs: value("()=>({a:''})"),
+        typedFnClock: {
+          assert: value('fnAStringClockString'),
+          keep: value('fnAStringClockAny'),
+        },
+        untypedFnClock: value('(a,clock) => ({a,clock})'),
+        typed: value('fnAString'),
+        untyped: value('(a) => ({a})'),
+      },
+    },
+  })
+  const noGroup = bool({
+    source: {noClock, noSource, unificationToAny},
+    true: [{noClock: true}, {noSource: true}, {unificationToAny: true}],
+  })
+  const largeGroup = computeVariant({
+    source: {fnClockTypeAssertion, noSource},
+    variant: {
+      fnAssertion: {fnClockTypeAssertion: true},
+      noSource: {noSource: true},
+      __: {},
+    },
+    cases: {
+      fnAssertion: 'fn clock assertion',
+      noSource: 'clock only',
+      __: null,
+    },
+  })
+  sortOrder([
+    pass,
+    clockArray,
+    combinable,
+    noSource,
+    fn,
+    unificationToAny,
+    fnClockTypeAssertion,
+    noTarget,
+    noClock,
+    fnWithoutArgs,
+  ])
+  config({
+    header,
+    file: 'generatedNew/sampleClockArray',
+    usedMethods: ['createStore', 'createEvent', 'sample'],
+    grouping: {
+      getHash: [descriptionTokens, noTarget, noClock, noSource],
+      pass,
+      describeGroup: computeFn({
+        source: {descriptionTokens, noGroup, largeGroup},
+        fn: ({descriptionTokens, noGroup, largeGroup}) => ({
+          description: descriptionTokens,
+          noGroup,
+          largeGroup,
+        }),
+      }),
+      createTestLines: {
+        method: 'sample',
+        shape: {
+          source: sourceCode,
+          clock,
+          target,
+          fn: fnCode,
+        },
+      },
     },
   })
 }

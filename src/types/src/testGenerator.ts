@@ -1,6 +1,6 @@
 import {generateFile} from './runner/manifold/generateFile'
 
-// import sampleClockArray from './generator/sampleClockArray.generator'
+import sampleClockArray from './generator/sampleClockArray.generator'
 import sampleArrayTargetCombinable from './generator/sampleArrayTargetCombinable.generator'
 import sampleArrayTargetPlain from './generator/sampleArrayTargetPlain.generator'
 import sampleReturn from './generator/sampleReturn.generator'
@@ -13,6 +13,7 @@ generateFile({
     sampleArrayTargetCombinable,
     sampleReturn,
     guardGenerator,
+    sampleClockArray,
   ]
 })
 
