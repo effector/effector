@@ -349,4 +349,186 @@ test('array match', () => {
     "
   `)
 })
+describe('branching', () => {
+  test('execution of cases', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b'])
+      const clock = union(['A', 'B'])
+      const feature = flag({})
+      const fn = computeVariant({
+        source: {source},
+        variant: {
+          hasFn: {source: 'a'},
+          noFn: {},
+        },
+        cases: {
+          hasFn: 'function',
+          noFn: null,
+        },
+      })
+
+      const tag = separate({
+        source: {feature},
+        variant: {
+          byFeature: {
+            aBranch: {feature: true},
+            none: {feature: false},
+          },
+        } as const,
+        cases: {
+          aBranch: separate({
+            source: {clock},
+            variant: {
+              _: {
+                a: {clock: 'A'},
+                b: {},
+              },
+            } as const,
+            cases: {
+              a: union(['a1', 'a2']),
+              b: union(['b1', 'b2']),
+            },
+          }),
+          none: union(['c1', 'c2']),
+        },
+      })
+      config({
+        grouping: {
+          getHash: [source, feature, clock, tag],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: {source, feature, clock, tag},
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+      "
+      ## pass
+      * source * feature * clock * tag * 
+      | a      | false   | A     | c1  | 
+      | a      | false   | A     | c2  | 
+      | a      | true    | A     | a1  | 
+      | a      | true    | A     | a2  | 
+      | a      | false   | B     | c1  | 
+      | a      | false   | B     | c2  | 
+      | a      | true    | B     | b1  | 
+      | a      | true    | B     | b2  | 
+      | b      | false   | A     | c1  | 
+      | b      | false   | A     | c2  | 
+      | b      | true    | A     | a1  | 
+      | b      | true    | A     | a2  | 
+      | b      | false   | B     | c1  | 
+      | b      | false   | B     | c2  | 
+      | b      | true    | B     | b1  | 
+      | b      | true    | B     | b2  | 
+      "
+    `)
+  })
+  test('case safety (cases executed only when they are choosen)', () => {
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b'])
+      const fn = computeVariant({
+        source: {source},
+        variant: {
+          hasFn: {source: 'a'},
+          noFn: {},
+        },
+        cases: {
+          hasFn: 'fn',
+          noFn: null,
+        },
+      })
+
+      const tag = separate({
+        source: {source},
+        variant: {
+          byFeature: {
+            hasFn: {source: 'a'},
+            none: {},
+          },
+        } as const,
+        cases: {
+          hasFn: computeFn({
+            source: {fn},
+            fn: ({fn}) => fn!.toUpperCase(),
+          }),
+          none: value(null),
+        },
+      })
+      config({
+        grouping: {
+          getHash: [source],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: {source, fn, tag},
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+      "
+      ## pass
+      * source * fn   * tag  * 
+      | a      | fn   | FN   | 
+      | b      | null | null | 
+      "
+    `)
+  })
+  test.skip('source safety (source executed only when result is needed for something else)', () => {
+    const jestFn = jest.fn(({fn}: {fn: string | null}) => fn!.toUpperCase())
+    const suite = suiteGenerator(() => {
+      const source = union(['a', 'b'])
+      const fn = computeVariant({
+        source: {source},
+        variant: {
+          hasFn: {source: 'a'},
+          noFn: {},
+        },
+        cases: {
+          hasFn: 'fn',
+          noFn: null,
+        },
+      })
+
+      const tag = separate({
+        source: {source},
+        variant: {
+          byFeature: {
+            hasFn: {source: 'a'},
+            none: {},
+          },
+        } as const,
+        cases: {
+          hasFn: computeFn({
+            source: {
+              uppercased: computeFn({
+                source: {fn},
+                fn: jestFn,
+              }),
+            },
+            fn: ({uppercased}) => uppercased,
+          }),
+          none: value(null),
+        },
+      })
+      config({
+        grouping: {
+          getHash: [source],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: {source, fn, tag},
+          },
+        },
+      })
+    })
+    expect(jestFn.mock.results.map(({type}) => type)).not.toContain('throw')
+  })
+})
 // test('field validation')
