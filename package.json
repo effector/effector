@@ -11,7 +11,7 @@
     "test:watch": "npx jest --config=jest.config.js --watch",
     "doc:update-readme": "npx doctoc README.md",
     "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
-    "test:generate": "yarn test:regen && yarn test -u"
+    "test:generate": "yarn test:regen && yarn test -u --selectProjects types"
   },
   "author": "Zero Bias",
   "license": "MIT",
