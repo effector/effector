@@ -294,7 +294,7 @@ export default () => {
   config({
     header,
     file: 'generatedNew/sampleArrayTarget',
-    usedMethods: ['createStore', 'createEvent', 'sample', 'combine'],
+    usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass,
       createTestLines: {
@@ -331,12 +331,7 @@ type AS = {a: string}
 type AB = {a: number; b: string}
 /** used as invalid source type */
 type ABN = {a: number; b: number}
-const voidt = createEvent()
-const anyt = createEvent<any>()
-const str = createEvent<string>()
 const num = createEvent<number>()
-const numStr = createEvent<number | string>()
-const strBool = createEvent<string | boolean>()
 const $num = createStore<number>(0)
 const $str = createStore<string>('')
 const a_num = createEvent<AN>()

@@ -1,74 +1,61 @@
-const grouping = {
-  getHash: ({descriptionTokens}) => descriptionTokens,
-  describeGroup: ({groupTokens}) => ({
-    // largeGroup,
-    description: groupTokens,
-  }),
-  createTestLines: {
-    method: 'sample',
-    align: true,
-    shape: {
-      source: 'source',
-      clock: 'clock',
-      target: 'targets',
-      fn: 'fnCode',
-    },
-  },
-  sortByFields: {
-    fnToken: ['no fn', 'untyped fn', 'typed fn'],
-  },
-}
+import {
+  computeFn,
+  union,
+  value,
+  computeVariant,
+  bool,
+  separate,
+  flag,
+  config,
+  permute,
+} from '../runner/manifold/operators'
 
-const shape = {
-  source: {
-    union: ['num', 'str'],
-  },
-  clock: {
-    union: ['num', 'str'],
-  },
-  fn: {
-    flag: {},
-  },
-  typedFn: {
-    flag: {
-      needs: [
-        {
-          true: [
-            {fn: true, source: 'num', clock: 'num'},
-            {fn: true, source: 'str', clock: 'num'},
-            {fn: true, source: 'num', clock: 'str'},
-          ],
-        },
+export default () => {
+  const source = union(['num', 'str'])
+  const clock = union(['num', 'str'])
+  const fn = flag()
+  const typedFn = flag({
+    needs: bool({
+      source: {fn, source, clock},
+      true: [
+        {fn: true, source: 'num', clock: 'num'},
+        {fn: true, source: 'str', clock: 'num'},
+        {fn: true, source: 'num', clock: 'str'},
       ],
+    }),
+  })
+  const targets = permute({
+    items: ['num', 'voidt', 'str', 'anyt', 'strBool', 'numStr'],
+    amount: {min: 1, max: 2},
+    noReorder: true,
+  })
+  const targetAcceptString = computeFn({
+    source: {targets},
+    fn({targets}) {
+      return targets.every(target =>
+        ['str', 'numStr', 'strBool', 'anyt', 'voidt'].includes(target),
+      )
     },
-  },
-
-  targets: {
-    permute: {
-      items: ['num', 'voidt', 'str', 'anyt', 'strBool', 'numStr'],
-      amount: {min: 1, max: 2},
-      noReorder: true,
+  })
+  const targetAcceptNumber = computeFn({
+    source: {targets},
+    fn({targets}) {
+      return targets.every(target =>
+        ['num', 'numStr', 'anyt', 'voidt'].includes(target),
+      )
     },
-  },
-  targetAcceptString: {
-    compute: {
-      fn: ({targets}) =>
-        targets.every(target =>
-          ['str', 'numStr', 'strBool', 'anyt', 'voidt'].includes(target),
-        ),
+  })
+  const pass = separate({
+    source: {
+      fn,
+      source,
+      clock,
+      typedFn,
+      targetAcceptNumber,
+      targetAcceptString,
     },
-  },
-  targetAcceptNumber: {
-    compute: {
-      fn: ({targets}) =>
-        targets.every(target =>
-          ['num', 'numStr', 'anyt', 'voidt'].includes(target),
-        ),
-    },
-  },
-  pass: {
-    compute: {
-      variant: {
+    variant: {
+      _: {
         validWithFn: [
           {
             fn: true,
@@ -104,46 +91,67 @@ const shape = {
         ],
         errorWithoutFn: {},
       },
-      cases: {
-        validWithFn: true,
-        errorWithFn: false,
-        validWithoutFn: true,
-        errorWithoutFn: false,
+    } as const,
+    cases: {
+      validWithFn: value(true),
+      errorWithFn: value(false),
+      validWithoutFn: value(true),
+      errorWithoutFn: value(false),
+    },
+  })
+  const fnCode = computeVariant({
+    source: {fn, typedFn},
+    variant: {
+      noFn: {fn: false},
+      typed: {typedFn: true},
+      untyped: {typedFn: false},
+    },
+    cases: {
+      noFn: null,
+      typed: '(src:number,clk:number) => src+clk',
+      untyped: '(src,clk) => src + clk',
+    },
+  })
+  const fnToken = computeVariant({
+    source: {fn, typedFn},
+    variant: {
+      noFn: {fn: false},
+      typed: {typedFn: true},
+      untyped: {typedFn: false},
+    },
+    cases: {
+      noFn: 'no fn' as const,
+      typed: 'typed fn' as const,
+      untyped: 'untyped fn' as const,
+    },
+    sort: ['no fn', 'untyped fn', 'typed fn'],
+  })
+  config({
+    header,
+    file: 'generatedNew/sampleArrayTarget',
+    usedMethods: ['createStore', 'createEvent', 'sample'],
+    grouping: {
+      pass,
+      getHash: [fn, typedFn, pass],
+      createTestLines: {
+        method: 'sample',
+        shape: {
+          source,
+          clock,
+          target: targets,
+          fn: fnCode,
+        },
       },
+      describeGroup: fnToken,
     },
-  },
-  fnCode: {
-    compute: {
-      variant: {
-        noFn: {fn: false},
-        typed: {typedFn: true},
-        untyped: {typedFn: false},
-      },
-      cases: {
-        noFn: null,
-        typed: '(src:number,clk:number) => src+clk',
-        untyped: '(src,clk) => src + clk',
-      },
-    },
-  },
-  fnToken: {
-    compute: {
-      fn: ({fn, typedFn}) =>
-        fn ? (typedFn ? 'typed fn' : 'untyped fn') : 'no fn',
-    },
-  },
-  groupTokens: {
-    compute: {
-      fn: ({fnToken}) => fnToken,
-    },
-  },
-  descriptionTokens: {
-    compute: {
-      fn({fn, typedFn, pass}) {
-        return `${fn} ${fn && typedFn} ${pass}`
-      },
-    },
-  },
+  })
 }
 
-export default {shape, grouping}
+const header = `
+const voidt = createEvent()
+const anyt = createEvent<any>()
+const str = createEvent<string>()
+const num = createEvent<number>()
+const numStr = createEvent<number | string>()
+const strBool = createEvent<string | boolean>()
+`

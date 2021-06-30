@@ -58,4 +58,8 @@ export async function generateFile({cases}: {cases: Array<() => void>}) {
       await promises.writeFile(fullFileName, content)
     }),
   )
+  const filesTotal = Object.keys(fileMap).map(
+    file => `__tests__/effector/${file}.test.ts`,
+  )
+  console.log(`generated files:\n${filesTotal.join(`\n`)}`)
 }
