@@ -15,7 +15,9 @@ export async function generateFile({cases}: {cases: Array<() => void>}) {
   for (const caseFn of cases) {
     const execResult = exec(caseFn, fileGeneratorConfStruct)
     const generatedLines = createGroupedCases(
-      byFields(execResult.shape),
+      byFields(execResult.plan, execResult.config, execResult.items).map(
+        e => e.value,
+      ),
       execResult.grouping,
     )
     const file = execResult.file!

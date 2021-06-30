@@ -1,7 +1,7 @@
 import {forIn} from '../forIn'
 import {ctx} from './ctx'
 import {isRef} from './isRef'
-import {Ref} from './types'
+import {Ref, ExecutionPlan} from './types'
 
 function getDeclsReferencedByConfig(): string[] {
   const results: Ref<unknown, unknown>[] = []
@@ -192,9 +192,10 @@ function toposort(rawGraph: Record<string, string[]>) {
  *         s -> t / []
  *         t -> a / s
  */
-export function processDeclaratorsToShape() {
+export function processDeclaratorsToShape(): ExecutionPlan {
+  const configReferencedIds = getDeclsReferencedByConfig()
   /** graph roots */
-  const named = new Set<string>(getDeclsReferencedByConfig())
+  const named = new Set<string>(configReferencedIds)
   const appearAsInlineTarget = new Set<string>()
   /**
    * inline references FROM id
@@ -219,19 +220,23 @@ export function processDeclaratorsToShape() {
   /**
    * array of references FROM id
    *
-   * sourceReference -> referencedBy
+   * separate({source: {_: sourceReference}}): referencedBy
    *
    * {[sourceReference]: referencedBy[]}
-   **/
-  const refGraph: Record<string, string[]> = {}
-  /**
-   * array of references TO id
    *
-   * sourceReference[] -> referencedBy
+   * sourceReference -> referencedBy
+   **/
+  const sourceFor: Record<string, string[]> = {}
+  /**
+   * sources OF id
+   *
+   * separate({source: {_: sourceReference}}): referencedBy
    *
    * {[referencedBy]: sourceReference[]}
+   *
+   * sourceReference -> referencedBy
    **/
-  const refGraphBack: Record<string, string[]> = {}
+  const sourcesOf: Record<string, string[]> = {}
   const graph: Record<string, string[]> = {}
   for (const id in ctx.items) {
     const val = ctx.items[id]
@@ -241,17 +246,17 @@ export function processDeclaratorsToShape() {
     if (hasName) {
       named.add(id)
     }
-    if (!refGraph[id]) refGraph[id] = []
+    if (!sourceFor[id]) sourceFor[id] = []
     if (!inlineRefsBack[id]) inlineRefsBack[id] = []
-    refGraphBack[id] = []
+    sourcesOf[id] = []
     inlineRefs[id] = []
     graph[id] = []
-    // refGraph[id] ?? []
+    // sourceFor[id] ?? []
     if (refs)
       for (const refID of refs) {
-        refGraph[refID] = refGraph[refID] ?? []
-        refGraph[refID].push(id)
-        refGraphBack[id].push(refID)
+        sourceFor[refID] = sourceFor[refID] ?? []
+        sourceFor[refID].push(id)
+        sourcesOf[id].push(refID)
       }
     if (targets) {
       for (const target of targets) {
@@ -281,7 +286,7 @@ export function processDeclaratorsToShape() {
   for (const id of sortedIds) {
     if (!only.has(id)) continue
     const item = ctx.items[id]
-    resultShape[item.name] = item.prepared
+    resultShape[item.name] = item
   }
   // console.log(
   //   `\n\n\n+++++++++\n`,
@@ -297,13 +302,19 @@ export function processDeclaratorsToShape() {
   //   `\n\n---------\n\n`,
   // )
 
-  return resultShape
+  return {
+    configReferencedIds,
+    shape: resultShape,
+    sourceFor,
+    sourcesOf,
+    sortedIds,
+  }
   function visitDecl(id: string, mode: 'up' | 'down' | 'target' = 'up') {
     const item = ctx.items[id]
     if (
       named.has(id) ||
       !appearAsInlineTarget.has(id) ||
-      refGraphBack[id].length > 0 ||
+      sourcesOf[id].length > 0 ||
       inlineRefsBack[id].length > 1 ||
       mode === 'up'
     )
@@ -315,7 +326,7 @@ export function processDeclaratorsToShape() {
       mode,
     ])
     // console.log(stack.map(([id, mode]) => `${id}:${mode}`).join(' -> '))
-    refGraph[id].forEach(sourceID => {
+    sourceFor[id].forEach(sourceID => {
       // only.add(sourceID)
       graph[sourceID].push(id)
       visitDecl(sourceID, 'up')

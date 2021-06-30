@@ -52,10 +52,26 @@ export type BoolDecl =
   | ComputeVariant<boolean>
   | Separate<boolean>
 
-export type Permute<T> = Ref<T[], 'permute'>
-export type Flag = Ref<boolean, 'flag'>
+export type Permute<T> = Ref<T[], 'permute'> & {
+  permute: {
+    items: T[]
+    noReorder?: boolean
+    amount?: {min: number; max: number}
+  }
+}
+export type Flag = Ref<boolean, 'flag'> & {
+  needs: string[]
+  avoid: string[]
+  decls: {
+    true: Value<boolean>
+    false: Value<boolean>
+  }
+}
 
-export type Separate<T> = Ref<T, 'separate'>
+export type Separate<T> = Ref<T, 'separate'> & {
+  variant: Record<string, Record<string, any>>
+  cases: Record<string, Ref<unknown, unknown> | Record<string, unknown>>
+}
 
 type UnionAny<Cases> = Ref<Cases, 'union'> & {
   variants: Tuple<Cases>
@@ -63,13 +79,25 @@ type UnionAny<Cases> = Ref<Cases, 'union'> & {
 export type Union<Cases extends string = string> = Ref<Cases, 'union'> & {
   variants: Tuple<Cases>
 }
-export type Value<T> = Ref<T, 'value'>
-export type Fn<T> = Ref<T, 'fn'>
+export type Value<T> = Ref<T, 'value'> & {value: T}
+export type Fn<T> = Ref<T, 'fn'> & {
+  fn(args: Record<string, any>): T | void
+}
 export type ComputeVariant<T> = Ref<T, 'computeVariant'> & {
-  cases: Record<string, T>
+  variant: Record<string, Record<string, any>>
+  cases: Record<string, Ref<unknown, unknown> | Record<string, unknown>>
 }
 
-export type Bool = Ref<boolean, 'bool'>
+export type Bool = Ref<boolean, 'bool'> & {
+  bool: {
+    true: Record<string, any> | void
+    false: Record<string, any> | void
+  }
+  decls: {
+    true: Value<boolean>
+    false: Value<boolean>
+  }
+}
 
 export type RawCase = {compute: object} | {split: object}
 export type Raw<T = unknown> = Ref<T, 'raw'> & {value: RawCase}
@@ -452,6 +480,32 @@ export type Grouping<T extends Record<string, any>> = {
 
   sortByFields?: {[K in keyof T]: Array<T[K]> | 'string'}
   pass?: boolean | BoolDecl | ((obj: T) => boolean)
+}
+
+export type ExecutionPlan = {
+  shape: Record<string, any>
+  configReferencedIds: string[]
+  /**
+   * array of references FROM id
+   *
+   * separate({source: {_: sourceReference}}): referencedBy
+   *
+   * {[sourceReference]: referencedBy[]}
+   *
+   * sourceReference -> referencedBy
+   **/
+  sourceFor: Record<string, string[]>
+  /**
+   * sources OF id
+   *
+   * separate({source: {_: sourceReference}}): referencedBy
+   *
+   * {[referencedBy]: sourceReference[]}
+   *
+   * sourceReference -> referencedBy
+   **/
+  sourcesOf: Record<string, string[]>
+  sortedIds: string[]
 }
 
 export type CtxConfig = {

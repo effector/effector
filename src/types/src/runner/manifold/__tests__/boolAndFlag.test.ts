@@ -133,29 +133,35 @@ describe('flag', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "
-      ## pass
-      * source * clock * featureA * featureB * tag          * 
-      | event  | store | false    | false    | rest none    | 
-      | event  | store | true     | false    | rest a       | 
-      | event  | store | false    | true     | rest b       | 
-      | event  | event | false    | false    | events only  | 
-      | event  | event | true     | false    | events only  | 
-      | event  | event | false    | true     | events only  | 
-      | event  | none  | false    | false    | no a|b none  | 
-      | event  | none  | true     | false    | no a clock   | 
-      | event  | none  | false    | true     | no b clock   | 
-      | store  | store | false    | false    | source store | 
-      | store  | store | true     | false    | source store | 
-      | store  | store | false    | true     | source store | 
-      | store  | event | false    | false    | source store | 
-      | store  | event | true     | false    | source store | 
-      | store  | event | false    | true     | source store | 
-      | store  | none  | false    | false    | no a|b none  | 
-      | store  | none  | true     | false    | no a clock   | 
-      | store  | none  | false    | true     | no b clock   | 
-      "
-    `)
+"
+## pass
+* source * clock * featureA * featureB * tag          * 
+| event  | store | false    | false    | rest none    | 
+| event  | store | false    | true     | rest b       | 
+| event  | store | true     | false    | rest a       | 
+| event  | store | true     | true     | rest a       | 
+| event  | event | false    | false    | events only  | 
+| event  | event | false    | true     | events only  | 
+| event  | event | true     | false    | events only  | 
+| event  | event | true     | true     | events only  | 
+| event  | none  | false    | false    | no a|b none  | 
+| event  | none  | false    | true     | no b clock   | 
+| event  | none  | true     | false    | no a clock   | 
+| event  | none  | true     | true     | no a clock   | 
+| store  | store | false    | false    | source store | 
+| store  | store | false    | true     | source store | 
+| store  | store | true     | false    | source store | 
+| store  | store | true     | true     | source store | 
+| store  | event | false    | false    | source store | 
+| store  | event | false    | true     | source store | 
+| store  | event | true     | false    | source store | 
+| store  | event | true     | true     | source store | 
+| store  | none  | false    | false    | no a|b none  | 
+| store  | none  | false    | true     | no b clock   | 
+| store  | none  | true     | false    | no a clock   | 
+| store  | none  | true     | true     | no a clock   | 
+"
+`)
   })
 })
 

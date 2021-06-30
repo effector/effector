@@ -103,90 +103,88 @@ export function separate<
     name: getName(id, name),
     kind: 'separate',
     __t: null as any,
-    prepared: {
-      split: {
-        variants,
-        cases: traverseCases(variant, cases),
-      },
-    },
+    prepared: {},
+    variant: variants,
+    cases: traverseCases(id, variant, cases),
   }
 
-  ctx.shape[val.name] = val.prepared
+  ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id, sources)
   if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
-
-  function traverseCases(
+}
+function traverseCases(
+  id: string,
+  variants: Record<string, Record<string, unknown> | Record<string, unknown>[]>,
+  cases: Record<string, any>,
+): Record<string, Declarator | Record<string, Declarator>> {
+  const variantNames = Object.keys(variants)
+  if (variantNames.length === 0) {
+    console.warn(`empty variants for cases`, cases)
+    return {}
+  }
+  const [first, ...rest] = variantNames
+  return traverseCases_(first, rest, variants, cases)
+  function traverseCases_(
+    currentVariantName: string,
+    nextVariants: string[],
     variants: Record<
       string,
       Record<string, unknown> | Record<string, unknown>[]
     >,
-    cases: Record<string, any>,
-  ): Record<string, any> {
-    const variantNames = Object.keys(variants)
-    if (variantNames.length === 0) {
-      console.warn(`empty variants for cases`, cases)
-      return {}
-    }
-    const [first, ...rest] = variantNames
-    return traverseCases_(first, rest, variants, cases)
-    function traverseCases_(
-      currentVariantName: string,
-      nextVariants: string[],
-      variants: Record<
-        string,
-        Record<string, unknown> | Record<string, unknown>[]
-      >,
-      cases: Record<string, any>,
-    ) {
-      const resultCases: Record<string, any> = {}
-      const variant = variants[currentVariantName]
-      const branchNames = [
-        ...new Set(
-          Array.isArray(variant)
-            ? variant.flatMap(e => Object.keys(e))
-            : Object.keys(variant),
-        ),
-        '__',
-      ]
-      for (const branchName of branchNames) {
-        if (!(branchName in cases)) continue
-        const caseValue = cases[branchName]
-        if (isRef(caseValue)) {
-          resultCases[branchName] = caseValue.prepared
-          ctx.targets[id] = ctx.targets[id] ?? []
-          ctx.targets[id].push(caseValue.id)
-          // {
-          //   ref: caseValue.name,
-          // }
-        } else if (typeof caseValue === 'object' && caseValue !== null) {
-          if (nextVariants.length > 0) {
-            const [first, ...rest] = nextVariants
-            resultCases[branchName] = traverseCases_(
-              first,
-              rest,
-              variants,
-              caseValue,
-            )
-          } else {
-            console.warn(
-              `incorrect case value for last branch "${branchName}"`,
-              caseValue,
-            )
-          }
+    cases: Record<string, Declarator | Record<string, unknown>>,
+  ) {
+    const resultCases: Record<
+      string,
+      Declarator | Record<string, Declarator>
+    > = {}
+    const variant = variants[currentVariantName]
+    const branchNames = [
+      ...new Set(
+        Array.isArray(variant)
+          ? variant.flatMap(e => Object.keys(e))
+          : Object.keys(variant),
+      ),
+      '__',
+    ]
+    for (const branchName of branchNames) {
+      if (!(branchName in cases)) continue
+      const caseValue = cases[branchName]
+      if (isRef(caseValue)) {
+        resultCases[branchName] = caseValue
+        addCasesRefs(id, [caseValue])
+      } else if (typeof caseValue === 'object' && caseValue !== null) {
+        if (nextVariants.length > 0) {
+          const [first, ...rest] = nextVariants
+          resultCases[branchName] = traverseCases_(
+            first,
+            rest,
+            variants,
+            caseValue as Record<string, Declarator | Record<string, unknown>>,
+          ) as Record<string, Declarator>
         } else {
-          console.warn(
-            `incorrect case value for branch "${branchName}"`,
-            caseValue,
-          )
+          const val = value(caseValue)
+          resultCases[branchName] = val
+          addCasesRefs(id, [val])
+          // console.warn(
+          //   `incorrect case value for last branch "${branchName}"`,
+          //   caseValue,
+          // )
         }
+      } else {
+        const val = value(caseValue)
+        resultCases[branchName] = val
+        addCasesRefs(id, [val])
+        // console.warn(
+        //   `incorrect case value for branch "${branchName}"`,
+        //   caseValue,
+        // )
       }
-      return resultCases
     }
+    return resultCases
   }
 }
-
 export function permute<T>({
   name,
   items,
@@ -201,7 +199,11 @@ export function permute<T>({
   sort?: T[] | 'string'
 }) {
   const id = nextID()
-  const permute = {items} as any
+  const permute: {
+    items: T[]
+    noReorder?: boolean
+    amount?: {min: number; max: number}
+  } = {items}
   if (typeof noReorder === 'boolean') {
     permute.noReorder = noReorder
   }
@@ -211,9 +213,10 @@ export function permute<T>({
     name: getName(id, name),
     kind: 'permute',
     __t: null as any,
-    prepared: {permute},
+    prepared: {},
+    permute,
   }
-  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id)
   if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
@@ -232,35 +235,39 @@ export function flag({
   sort?: boolean[]
 } = {}) {
   const id = nextID()
-  const flag = {} as any
   const source: Declarator[] = []
-  if (needs) {
-    flag.needs = Array.isArray(needs)
-      ? needs.map(processDeclarator)
-      : processDeclarator(needs as Declarator)
-  }
-  if (avoid) {
-    flag.avoid = Array.isArray(avoid)
-      ? avoid.map(processDeclarator)
-      : processDeclarator(avoid as Declarator)
-  }
   const val: Flag = {
     id,
     name: getName(id, name),
     kind: 'flag',
     __t: null as any,
-    prepared: {flag},
+    prepared: {},
+    needs: needs
+      ? Array.isArray(needs)
+        ? needs.map(processDeclarator)
+        : [processDeclarator(needs as Declarator)]
+      : [],
+    avoid: avoid
+      ? Array.isArray(avoid)
+        ? avoid.map(processDeclarator)
+        : [processDeclarator(avoid as Declarator)]
+      : [],
+    decls: {
+      true: value(true),
+      false: value(false),
+    },
   }
-  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  addCasesRefs(val.id, [val.decls.true, val.decls.false])
   if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 
   function processDeclarator(decl: Declarator) {
     source.push(decl)
     // if (decl.name !== decl.id)
-    return decl.name
+    return decl.id
     // return decl.prepared
   }
 }
@@ -288,16 +295,20 @@ export function bool<Src extends SourceRec>({
     name: getName(id, name),
     kind: 'bool',
     __t: false,
-    prepared: {
-      bool: {
-        true: onTrue && singleMatcher(source, onTrue),
-        false: onFalse && singleMatcher(source, onFalse),
-      },
+    prepared: {},
+    bool: {
+      true: onTrue && singleMatcher(source, onTrue),
+      false: onFalse && singleMatcher(source, onFalse),
+    },
+    decls: {
+      true: value(true),
+      false: value(false),
     },
   }
-  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+  addCasesRefs(val.id, [val.decls.true, val.decls.false])
   if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 }
@@ -308,9 +319,10 @@ export function value<T>(value: T, name?: string) {
     name: getName(id, name),
     kind: 'value',
     __t: value,
-    prepared: {value},
+    prepared: {},
+    value,
   }
-  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id)
   return val
@@ -336,9 +348,9 @@ export function union<OneOf extends string>(
     kind: 'union',
     variants: items,
     __t: null as any,
-    prepared: {union: items},
+    prepared: {},
   }
-  /* if (name === val.name) */ ctx.shape[val.name] = val.prepared
+  /* if (name === val.name) */ ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id)
   if (!Array.isArray(oneOf) && 'sort' in oneOf) {
@@ -367,25 +379,21 @@ export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
     name: getName(id, name),
     kind: 'fn',
     __t: null as any,
-    prepared: {
-      compute: {
-        fn(args: Record<string, any>) {
-          try {
-            return fn(
-              argsToSource({
-                source,
-                args,
-              }),
-            )
-          } catch (err) {
-            console.error(err)
-            console.log({source, val, args})
-          }
-        },
-      },
+    prepared: {},
+    fn(args: Record<string, any>) {
+      try {
+        const mapped = argsToSource({
+          source,
+          args,
+        })
+        return fn(mapped)
+      } catch (err) {
+        console.error(err)
+        console.log({source, val, args})
+      }
     },
   }
-  ctx.shape[val.name] = val.prepared
+  ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
   if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
@@ -418,16 +426,17 @@ export function computeVariants<
     id,
     name: getName(id, name),
     kind: 'computeVariant',
-    cases: cases as any,
+    variant: variants,
+    //@ts-ignore
+    cases: traverseCases(id, variant, cases),
     __t: null as any,
-    prepared: {
-      compute: {variants, cases},
-    },
+    prepared: {},
   }
 
-  ctx.shape[val.name] = val.prepared
+  ctx.shape[val.name] = val
   ctx.items[val.id] = val
   addSourceRefs(val.id, source)
+
   if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
   return val
 }
@@ -448,26 +457,32 @@ export function computeVariant<
   name?: string
   sort?: Array<Cases[keyof Cases]> | 'string'
 }): ComputeVariant<Cases[keyof Cases]> {
-  const id = nextID()
+  //@ts-ignore
+  return computeVariants({
+    source,
+    variant: {_: variant},
+    //@ts-ignore
+    cases,
+    name,
+    //@ts-ignore
+    sort,
+  })
+  // const id = nextID()
 
-  const val: ComputeVariant<Cases[keyof Cases]> = {
-    id,
-    name: getName(id, name),
-    kind: 'computeVariant',
-    cases: cases as any,
-    __t: null as any,
-    prepared: {
-      compute: {
-        variant: matcher(source, variant),
-        cases,
-      },
-    },
-  }
-  ctx.shape[val.name] = val.prepared
-  ctx.items[val.id] = val
-  addSourceRefs(val.id, source)
-  if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
-  return val
+  // const val: ComputeVariant<Cases[keyof Cases]> = {
+  //   id,
+  //   name: getName(id, name),
+  //   kind: 'computeVariant',
+  //   cases: cases as any,
+  //   variant: {_: matcher(source, variant)},
+  //   __t: null as any,
+  //   prepared: {},
+  // }
+  // ctx.shape[val.name] = val
+  // ctx.items[val.id] = val
+  // addSourceRefs(val.id, source)
+  // if (sort) config({grouping: {sortByFields: {[val.name]: sort}}})
+  // return val
 }
 export function sortOrder(decls: Declarator[]) {
   const sortByFields = ctx.config.grouping!.sortByFields!
@@ -675,7 +690,11 @@ function addSourceRefs(
     }
   }
 }
-
+/** add inline references FROM id */
+function addCasesRefs(id: string, targets: Declarator[]) {
+  ctx.targets[id] = ctx.targets[id] ?? []
+  ctx.targets[id].push(...targets.map(e => e.id))
+}
 export function exec(fn: () => void, struct: ConfigStructShape = confStruct) {
   return ctxWrap(
     {
@@ -691,9 +710,10 @@ export function exec(fn: () => void, struct: ConfigStructShape = confStruct) {
       fn()
       if (!currCtx.configUsed) throw Error('no config() used')
       validateRequiredFields(currCtx.configValidator, currCtx.config)
-      const shape = processDeclaratorsToShape()
+      const plan = processDeclaratorsToShape()
       return {
-        shape,
+        plan,
+        items: currCtx.items,
         grouping: currCtx.config.grouping,
         header: currCtx.config.header ?? null,
         file: currCtx.config.file ?? null,
