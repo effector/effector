@@ -1,3 +1,4 @@
+import {printArray} from '../../text'
 import {suiteGenerator} from '../generateCases'
 import {
   computeFn,
@@ -9,6 +10,7 @@ import {
   flag,
   config,
   bool,
+  permute,
 } from '../operators'
 
 test('it works', () => {
@@ -599,14 +601,58 @@ describe('name usage', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "
-      ## pass
-      * source * feature * 
-      | a      | false   | 
-      | b      | false   | 
-      | c      | false   | 
-      | b      | true    | 
-      "
-    `)
+"
+## pass
+* source * feature * 
+| a      | false   | 
+| b      | false   | 
+| b      | true    | 
+| c      | false   | 
+"
+`)
+  })
+})
+
+describe('permute', () => {
+  test('basic case', () => {
+    const suite = suiteGenerator(() => {
+      const source = permute({
+        items: ['a', 'b', 'c', 'd'],
+        noReorder: true,
+        amount: {min: 1, max: 2},
+      })
+      const result = computeFn({
+        source: {source},
+        fn: ({source}) => printArray(source),
+      })
+      config({
+        grouping: {
+          getHash: [result],
+          describeGroup: value(''),
+          pass: value(true),
+          createTestLines: {
+            type: 'table',
+            fields: {result},
+          },
+        },
+      })
+    })
+    expect(suite).toMatchInlineSnapshot(`
+"
+## pass
+* result * 
+| [a]    | 
+| [b]    | 
+| [c]    | 
+| [d]    | 
+| [a,b]  | 
+| [a,c]  | 
+| [a,d]  | 
+| [b,d]  | 
+| [c,b]  | 
+| [c,d]  | 
+| [d,b]  | 
+"
+`)
   })
 })
