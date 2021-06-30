@@ -588,7 +588,6 @@ export default () => {
   })
 
   const groupTokens = computeFn({
-    name: 'groupTokens',
     source: {
       inferByFilter,
       sourceIsWiderThatTarget,
@@ -611,7 +610,6 @@ export default () => {
   })
 
   const largeGroup = computeFn({
-    name: 'largeGroup',
     source: {sourceType},
     fn: ({sourceType}) => `${sourceType} source`,
   })
@@ -642,7 +640,7 @@ export default () => {
   ])
 
   config({
-    file: 'generatedNew/guard',
+    file: 'generated/guard',
     usedMethods: ['createStore', 'createEvent', 'guard'],
     header,
     grouping: {
@@ -656,10 +654,14 @@ export default () => {
         targetType,
         clockType,
       ],
-      describeGroup: ({groupTokens, largeGroup}: any) => ({
-        largeGroup,
-        description: groupTokens,
+      describeGroup: computeFn({
+        source: {groupTokens, largeGroup},
+        fn: ({groupTokens, largeGroup}: any) => ({
+          largeGroup,
+          description: groupTokens,
+        }),
       }),
+
       createTestLines: {
         method: 'guard',
         shape: {

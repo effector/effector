@@ -128,7 +128,7 @@ export default () => {
   })
   config({
     header,
-    file: 'generatedNew/sampleArrayTarget',
+    file: 'generated/sampleArrayTarget',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass,

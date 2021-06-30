@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, sample, Event, Store} from 'effector'
 const typecheck = '{global}'
-
 type AN = {a: number}
 const $num = createStore(0)
 const a = createStore({a: 0})
@@ -12,7 +11,6 @@ const aNumT = createEvent<AN>()
 const fn0 = () => ({a: 0})
 const fn1 = ({a}: AN) => ({a})
 const fn2 = ({a}: AN, c: number) => ({a: a + c})
-
 describe('no target', () => {
   test('no target, none clock (should pass)', () => {
     //prettier-ignore
@@ -167,24 +165,24 @@ describe('unit target', () => {
   test('unit target, none clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , target:aT   })}
-      {const result: Event<AN> = sample({source:aNum    , target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:aNum    , target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:aNum    , target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:aNum    , target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:aNum    , target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:a       , target:aNumT})}
+      {const result: Event<AN> = sample({source:aNum    , target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:a       , target:aT   })}
-      {const result: Event<AN> = sample({source:a       , target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:a       , target:aNumT})}
       {const result: Store<AN> = sample({source:a       , target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:a       , target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:a       , target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:a       , target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT})}
+      {const result: Event<AN> = sample({source:a       , target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:{a:$num}, target:aT   })}
-      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT})}
       {const result: Store<AN> = sample({source:{a:$num}, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:{a:$num}, target:aT   , fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT, fn:({a}) => ({a})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -195,30 +193,30 @@ describe('unit target', () => {
   test('unit target, event clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , clock:num, target:aT   })}
-      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , clock:num, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:aNum    , clock:num, target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:aNum    , clock:num, target:aT   , fn:({a},c) => ({a:a+c})})}
-      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT})}
+      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:({a},c) => ({a:a+c})})}
       {const result: Store<AN> = sample({source:a       , clock:num, target:aT   })}
-      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT})}
       {const result: Store<AN> = sample({source:a       , clock:num, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:a       , clock:num, target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:a       , clock:num, target:aT   , fn:({a},c) => ({a:a+c})})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT})}
+      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:({a},c) => ({a:a+c})})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:num, target:aT   })}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:num, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:num, target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:num, target:aT   , fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:({a},c) => ({a:a+c})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -229,30 +227,30 @@ describe('unit target', () => {
   test('unit target, store clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , clock:$num, target:aT   })}
-      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , clock:$num, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:aNum    , clock:$num, target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:aNum    , clock:$num, target:aT   , fn:({a},c) => ({a:a+c})})}
-      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT})}
+      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:({a},c) => ({a:a+c})})}
       {const result: Store<AN> = sample({source:a       , clock:$num, target:aT   })}
-      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT})}
       {const result: Store<AN> = sample({source:a       , clock:$num, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:a       , clock:$num, target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:a       , clock:$num, target:aT   , fn:({a},c) => ({a:a+c})})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT})}
+      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:({a},c) => ({a:a+c})})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:$num, target:aT   })}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:$num, target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:$num, target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:$num, target:aT   , fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:({a},c) => ({a:a+c})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -263,30 +261,30 @@ describe('unit target', () => {
   test('unit target, tuple clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , clock:[num,$num], target:aT   })}
-      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT})}
       {const result: Store<AN> = sample({source:aNum    , clock:[num,$num], target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:aNum    , clock:[num,$num], target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:aNum    , clock:[num,$num], target:aT   , fn:({a},c) => ({a:a+c})})}
-      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT})}
+      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:({a},c) => ({a:a+c})})}
       {const result: Store<AN> = sample({source:a       , clock:[num,$num], target:aT   })}
-      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT})}
       {const result: Store<AN> = sample({source:a       , clock:[num,$num], target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:a       , clock:[num,$num], target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:a       , clock:[num,$num], target:aT   , fn:({a},c) => ({a:a+c})})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT})}
+      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:({a},c) => ({a:a+c})})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:[num,$num], target:aT   })}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:fn0})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:[num,$num], target:aT   , fn:fn0})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:({a}) => ({a})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:fn0})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:[num,$num], target:aT   , fn:({a}) => ({a})})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:({a}) => ({a})})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:[num,$num], target:aT   , fn:({a},c) => ({a:a+c})})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:({a},c) => ({a:a+c})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -299,12 +297,12 @@ describe('unit target, typed fn', () => {
   test('unit target, typed fn, none clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:a       , target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:aNum    , target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:a       , target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:a       , target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:{a:$num}, target:aT   , fn:fn1})}
+      {const result: Event<AN> = sample({source:{a:$num}, target:aNumT, fn:fn1})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -315,18 +313,18 @@ describe('unit target, typed fn', () => {
   test('unit target, typed fn, event clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , clock:num, target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , clock:num, target:aT   , fn:fn2})}
-      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:aNum    , clock:num, target:aNumT, fn:fn2})}
       {const result: Store<AN> = sample({source:a       , clock:num, target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:a       , clock:num, target:aT   , fn:fn2})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:a       , clock:num, target:aNumT, fn:fn2})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:num, target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:num, target:aT   , fn:fn2})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:num, target:aNumT, fn:fn2})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -337,18 +335,18 @@ describe('unit target, typed fn', () => {
   test('unit target, typed fn, store clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , clock:$num, target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , clock:$num, target:aT   , fn:fn2})}
-      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:aNum    , clock:$num, target:aNumT, fn:fn2})}
       {const result: Store<AN> = sample({source:a       , clock:$num, target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:a       , clock:$num, target:aT   , fn:fn2})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:a       , clock:$num, target:aNumT, fn:fn2})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:$num, target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:$num, target:aT   , fn:fn2})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:$num, target:aNumT, fn:fn2})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -359,18 +357,18 @@ describe('unit target, typed fn', () => {
   test('unit target, typed fn, tuple clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , clock:[num,$num], target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:aNum    , clock:[num,$num], target:aT   , fn:fn2})}
-      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:aNum    , clock:[num,$num], target:aNumT, fn:fn2})}
       {const result: Store<AN> = sample({source:a       , clock:[num,$num], target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:a       , clock:[num,$num], target:aT   , fn:fn2})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:fn1})}
+      {const result: Event<AN> = sample({source:a       , clock:[num,$num], target:aNumT, fn:fn2})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:[num,$num], target:aT   , fn:fn1})}
-      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:fn2})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:fn1})}
       {const result: Store<AN> = sample({source:{a:$num}, clock:[num,$num], target:aT   , fn:fn2})}
+      {const result: Event<AN> = sample({source:{a:$num}, clock:[num,$num], target:aNumT, fn:fn2})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "

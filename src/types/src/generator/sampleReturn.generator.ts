@@ -218,7 +218,7 @@ export default () => {
   sortOrder([targetToken, typedFn, source, clock, fn, methodCode])
   config({
     header,
-    file: 'generatedNew/sampleReturn',
+    file: 'generated/sampleReturn',
     usedMethods: ['createStore', 'createEvent', 'sample', 'Event', 'Store'],
     grouping: {
       pass,

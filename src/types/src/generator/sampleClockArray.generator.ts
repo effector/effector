@@ -291,7 +291,7 @@ export default () => {
   ])
   config({
     header,
-    file: 'generatedNew/sampleClockArray',
+    file: 'generated/sampleClockArray',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       getHash: [descriptionTokens, noTarget, noClock, noSource],

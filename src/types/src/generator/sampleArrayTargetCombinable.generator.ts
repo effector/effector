@@ -292,7 +292,7 @@ export default () => {
   sortOrder([hasClock, source, sourceDescription, fnDescription, fnText, fn])
   config({
     header,
-    file: 'generatedNew/sampleArrayTarget',
+    file: 'generated/sampleArrayTarget',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass,
