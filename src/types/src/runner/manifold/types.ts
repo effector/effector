@@ -439,7 +439,7 @@ export type Grouping<T extends Record<string, any>> = {
     | ((obj: T) => any[])
     | {
         type: 'table'
-        fields: Array<Declarator>
+        fields: Array<Declarator> | Record<string, Declarator>
       }
     | {
         method: string

@@ -67,13 +67,16 @@ export function printMethod({
 export function printTable({
   values,
   only: fieldSet,
+  header,
 }: {
   values: Record<string, any>[]
   only: string[]
+  header: string[] | void
 }) {
   const fieldsValues: Record<string, {values: string[]; maxSize: number}> = {}
-  fieldSet.forEach(field => {
-    fieldsValues[field] = {values: [], maxSize: field.length}
+  fieldSet.forEach((field, idx) => {
+    const title = header ? header[idx] : field
+    fieldsValues[field] = {values: [], maxSize: title.length}
   })
   const resultLines: string[] = []
   for (const value of values) {
@@ -103,11 +106,13 @@ export function printTable({
     resultLines[i] = resultLine
   }
   let titleLine = '* '
-  for (const field of fieldSet) {
+  for (let i = 0; i < fieldSet.length; i++) {
+    const field = fieldSet[i]
     const fieldItem = fieldsValues[field]
-    titleLine += field
-    if (field.length < fieldItem.maxSize) {
-      titleLine += ' '.repeat(fieldItem.maxSize - field.length)
+    const title = header ? header[i] : field
+    titleLine += title
+    if (title.length < fieldItem.maxSize) {
+      titleLine += ' '.repeat(fieldItem.maxSize - title.length)
     }
     titleLine += ' * '
   }

@@ -23,7 +23,7 @@ function getDeclsReferencedByConfig(): string[] {
     'type' in createTestLines &&
     createTestLines.type === 'table'
   ) {
-    results.push(...createTestLines.fields)
+    results.push(...Object.values(createTestLines.fields))
   } else if (createTestLines && 'method' in createTestLines) {
     forIn(createTestLines.shape, value => {
       if (isRef(value)) results.push(value)

@@ -265,19 +265,16 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-        "test(' (should pass)', () => {
-          //prettier-ignore
-          {
-            * source * clock * tag          * 
-            | event  | store | rest         | 
-            | event  | event | events only  | 
-            | event  | none  | no clock     | 
-            | store  | store | source store | 
-            | store  | event | source store | 
-            | store  | none  | no clock     | 
-          }
-          expect(typecheck).toMatchInlineSnapshot()
-        })"
+        "
+        ## pass
+        * source * clock * tag          * 
+        | event  | store | rest         | 
+        | event  | event | events only  | 
+        | event  | none  | no clock     | 
+        | store  | store | source store | 
+        | store  | event | source store | 
+        | store  | none  | no clock     | 
+        "
       `)
     })
     test('silent hash clash', () => {
@@ -313,19 +310,16 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-        "test(' (should pass)', () => {
-          //prettier-ignore
-          {
-            * source * clock * tag          * 
-            | event  | store | rest         | 
-            | event  | event | events only  | 
-            | event  | none  | no clock     | 
-            | store  | store | source store | 
-            | store  | event | source store | 
-            | store  | none  | no clock     | 
-          }
-          expect(typecheck).toMatchInlineSnapshot()
-        })"
+        "
+        ## pass
+        * source * clock * tag          * 
+        | event  | store | rest         | 
+        | event  | event | events only  | 
+        | event  | none  | no clock     | 
+        | store  | store | source store | 
+        | store  | event | source store | 
+        | store  | none  | no clock     | 
+        "
       `)
     })
     test('real hash clash', () => {
@@ -361,26 +355,19 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-        "test('event (should pass)', () => {
-          //prettier-ignore
-          {
-            * source * clock * tag         * 
-            | event  | store | rest        | 
-            | event  | event | events only | 
-            | event  | none  | no clock    | 
-          }
-          expect(typecheck).toMatchInlineSnapshot()
-        })
-        test('store (should pass)', () => {
-          //prettier-ignore
-          {
-            * source * clock * tag          * 
-            | store  | store | source store | 
-            | store  | event | source store | 
-            | store  | none  | no clock     | 
-          }
-          expect(typecheck).toMatchInlineSnapshot()
-        })"
+        "
+        ## event (pass)
+        * source * clock * tag         * 
+        | event  | store | rest        | 
+        | event  | event | events only | 
+        | event  | none  | no clock    | 
+
+        ## store (pass)
+        * source * clock * tag          * 
+        | store  | store | source store | 
+        | store  | event | source store | 
+        | store  | none  | no clock     | 
+        "
       `)
     })
     test('real hash/describeGroup clash', () => {
@@ -416,19 +403,16 @@ describe('config', () => {
         })
       })
       expect(suite).toMatchInlineSnapshot(`
-        "test('none  (should pass)', () => {
-          //prettier-ignore
-          {
-            * source * clock * tag          * 
-            | event  | store | rest         | 
-            | event  | event | events only  | 
-            | event  | none  | no clock     | 
-            | store  | store | source store | 
-            | store  | event | source store | 
-            | store  | none  | no clock     | 
-          }
-          expect(typecheck).toMatchInlineSnapshot()
-        })"
+        "
+        ## none  (pass)
+        * source * clock * tag          * 
+        | event  | store | rest         | 
+        | event  | event | events only  | 
+        | event  | none  | no clock     | 
+        | store  | store | source store | 
+        | store  | event | source store | 
+        | store  | none  | no clock     | 
+        "
       `)
     })
   })
@@ -468,19 +452,16 @@ describe('computeVariant', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * source * clock * tag          * 
-          | event  | store | rest         | 
-          | event  | event | events only  | 
-          | event  | none  | no clock     | 
-          | store  | store | source store | 
-          | store  | event | source store | 
-          | store  | none  | no clock     | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * source * clock * tag          * 
+      | event  | store | rest         | 
+      | event  | event | events only  | 
+      | event  | none  | no clock     | 
+      | store  | store | source store | 
+      | store  | event | source store | 
+      | store  | none  | no clock     | 
+      "
     `)
   })
 })
@@ -520,25 +501,22 @@ describe('name usage', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * source * feature * tag * 
-          | a      | false   | A   | 
-          | a      | false   | B   | 
-          | a      | false   | A   | 
-          | a      | false   | B   | 
-          | a      | true    | -   | 
-          | a      | true    | -   | 
-          | b      | false   | A   | 
-          | b      | false   | B   | 
-          | b      | false   | A   | 
-          | b      | false   | B   | 
-          | b      | true    | -   | 
-          | b      | true    | -   | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * source * feature * tag * 
+      | a      | false   | A   | 
+      | a      | false   | B   | 
+      | a      | false   | A   | 
+      | a      | false   | B   | 
+      | a      | true    | -   | 
+      | a      | true    | -   | 
+      | b      | false   | A   | 
+      | b      | false   | B   | 
+      | b      | false   | A   | 
+      | b      | false   | B   | 
+      | b      | true    | -   | 
+      | b      | true    | -   | 
+      "
     `)
   })
   test('inline operator without name', () => {
@@ -575,19 +553,16 @@ describe('name usage', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * source * feature * tag * 
-          | a      | false   | A   | 
-          | a      | false   | B   | 
-          | a      | true    | -   | 
-          | b      | false   | A   | 
-          | b      | false   | B   | 
-          | b      | true    | -   | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * source * feature * tag * 
+      | a      | false   | A   | 
+      | a      | false   | B   | 
+      | a      | true    | -   | 
+      | b      | false   | A   | 
+      | b      | false   | B   | 
+      | b      | true    | -   | 
+      "
     `)
   })
   test('flag edge case', () => {
@@ -624,17 +599,14 @@ describe('name usage', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-"test(' (should pass)', () => {
-  //prettier-ignore
-  {
-    * source * feature * 
-    | a      | false   | 
-    | b      | false   | 
-    | c      | false   | 
-    | b      | true    | 
-  }
-  expect(typecheck).toMatchInlineSnapshot()
-})"
-`)
+      "
+      ## pass
+      * source * feature * 
+      | a      | false   | 
+      | b      | false   | 
+      | c      | false   | 
+      | b      | true    | 
+      "
+    `)
   })
 })

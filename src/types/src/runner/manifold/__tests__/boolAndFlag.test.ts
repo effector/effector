@@ -59,25 +59,22 @@ describe('flag', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * source * clock * feature * tag          * 
-          | event  | store | false   | rest b       | 
-          | event  | store | true    | rest a       | 
-          | event  | event | false   | events only  | 
-          | event  | event | true    | events only  | 
-          | event  | none  | false   | no b clock   | 
-          | event  | none  | true    | no a clock   | 
-          | store  | store | false   | source store | 
-          | store  | store | true    | source store | 
-          | store  | event | false   | source store | 
-          | store  | event | true    | source store | 
-          | store  | none  | false   | no b clock   | 
-          | store  | none  | true    | no a clock   | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * source * clock * feature * tag          * 
+      | event  | store | false   | rest b       | 
+      | event  | store | true    | rest a       | 
+      | event  | event | false   | events only  | 
+      | event  | event | true    | events only  | 
+      | event  | none  | false   | no b clock   | 
+      | event  | none  | true    | no a clock   | 
+      | store  | store | false   | source store | 
+      | store  | store | true    | source store | 
+      | store  | event | false   | source store | 
+      | store  | event | true    | source store | 
+      | store  | none  | false   | no b clock   | 
+      | store  | none  | true    | no a clock   | 
+      "
     `)
   })
   test('avoid', () => {
@@ -136,31 +133,28 @@ describe('flag', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * source * clock * featureA * featureB * tag          * 
-          | event  | store | false    | false    | rest none    | 
-          | event  | store | true     | false    | rest a       | 
-          | event  | store | false    | true     | rest b       | 
-          | event  | event | false    | false    | events only  | 
-          | event  | event | true     | false    | events only  | 
-          | event  | event | false    | true     | events only  | 
-          | event  | none  | false    | false    | no a|b none  | 
-          | event  | none  | true     | false    | no a clock   | 
-          | event  | none  | false    | true     | no b clock   | 
-          | store  | store | false    | false    | source store | 
-          | store  | store | true     | false    | source store | 
-          | store  | store | false    | true     | source store | 
-          | store  | event | false    | false    | source store | 
-          | store  | event | true     | false    | source store | 
-          | store  | event | false    | true     | source store | 
-          | store  | none  | false    | false    | no a|b none  | 
-          | store  | none  | true     | false    | no a clock   | 
-          | store  | none  | false    | true     | no b clock   | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * source * clock * featureA * featureB * tag          * 
+      | event  | store | false    | false    | rest none    | 
+      | event  | store | true     | false    | rest a       | 
+      | event  | store | false    | true     | rest b       | 
+      | event  | event | false    | false    | events only  | 
+      | event  | event | true     | false    | events only  | 
+      | event  | event | false    | true     | events only  | 
+      | event  | none  | false    | false    | no a|b none  | 
+      | event  | none  | true     | false    | no a clock   | 
+      | event  | none  | false    | true     | no b clock   | 
+      | store  | store | false    | false    | source store | 
+      | store  | store | true     | false    | source store | 
+      | store  | store | false    | true     | source store | 
+      | store  | event | false    | false    | source store | 
+      | store  | event | true     | false    | source store | 
+      | store  | event | false    | true     | source store | 
+      | store  | none  | false    | false    | no a|b none  | 
+      | store  | none  | true     | false    | no a clock   | 
+      | store  | none  | false    | true     | no b clock   | 
+      "
     `)
   })
 })
@@ -187,16 +181,13 @@ describe('bool', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * union * tag   * 
-          | a     | true  | 
-          | b     | false | 
-          | c     | false | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * union * tag   * 
+      | a     | true  | 
+      | b     | false | 
+      | c     | false | 
+      "
     `)
   })
   test('array support', () => {
@@ -220,16 +211,13 @@ describe('bool', () => {
       })
     })
     expect(suite).toMatchInlineSnapshot(`
-      "test(' (should pass)', () => {
-        //prettier-ignore
-        {
-          * union * tag   * 
-          | a     | true  | 
-          | b     | true  | 
-          | c     | false | 
-        }
-        expect(typecheck).toMatchInlineSnapshot()
-      })"
+      "
+      ## pass
+      * union * tag   * 
+      | a     | true  | 
+      | b     | true  | 
+      | c     | false | 
+      "
     `)
   })
   test('non-exhaustive', () => {

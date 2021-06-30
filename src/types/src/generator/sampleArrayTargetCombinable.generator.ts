@@ -243,15 +243,14 @@ export default () => {
       tuplePair: '[$num,$str]',
     },
   })
-  //@ts-ignore
-  const target: Ref<string[], 'separate'> = separate({
+  const target = separate({
     source: {fn, sourceType},
     variant: {
       _: {
         object: [{fn: true}, {sourceType: 'object'}],
         tuple: {sourceType: 'tuple'},
       },
-    },
+    } as const,
     cases: {
       tuple: permute({
         items: ['l_num', 'l_str', 'l_num_str', 'l_num_num'],

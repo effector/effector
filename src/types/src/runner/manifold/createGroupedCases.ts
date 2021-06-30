@@ -6,7 +6,7 @@ import {
   printTable,
 } from '../text'
 import {forIn} from '../forIn'
-import {DataDecl, BoolDecl, Grouping} from './types'
+import {DataDecl, BoolDecl, Grouping, Declarator} from './types'
 import {isDataDecl, isBoolDecl, assertRef, isRef} from './isRef'
 import {assert} from './assert'
 
@@ -79,15 +79,27 @@ export function createGroupedCases<T extends Obj>(
   if (filter) {
     casesDefs = casesDefs.filter(filter)
   }
+
+  let renderToTable = false
   let createLinesForTestList: (values: T[]) => string[]
   const testLinesSet = new Map<string, any>()
   if (typeof createTestLines === 'object' && createTestLines !== null) {
     if ('type' in createTestLines) {
-      const only = createTestLines.fields.map(e => e.name)
+      renderToTable = true
+      let header: string[] | void
+      let fields: Declarator[]
+      if (!Array.isArray(createTestLines.fields)) {
+        header = Object.keys(createTestLines.fields)
+        fields = Object.values(createTestLines.fields)
+      } else {
+        fields = createTestLines.fields
+      }
+      const only = fields.map(e => e.name)
       createLinesForTestList = (values: T[]) =>
         printTable({
           values,
           only,
+          header,
         })
     } else {
       const {
@@ -197,6 +209,39 @@ export function createGroupedCases<T extends Obj>(
   }
   const largeGroups = {} as Record<string, string[]>
   const resultCases = [] as string[]
+  const createTestSuiteItem = ({
+    pass,
+    items,
+    description,
+  }: {
+    items: T[]
+    pass: boolean
+    description: string
+  }) => {
+    const itemsFlat = createLinesForTestList(items)
+    if (renderToTable) {
+      const passText = description
+        ? pass
+          ? ' (pass)'
+          : ' (fail)'
+        : pass
+        ? 'pass'
+        : 'fail'
+      return [`\n## ${description}${passText}`, ...itemsFlat].join(`\n`)
+    } else {
+      const passText = pass ? '(should pass)' : '(should fail)'
+      const blockOpen = items.length === 1 ? null : '{'
+      const blockClose = items.length === 1 ? null : '}'
+      const itemsLines = items.length === 1 ? itemsFlat : leftPad(itemsFlat)
+      return createTest(`${description} ${passText}`, [
+        '//prettier-ignore',
+        blockOpen,
+        ...itemsLines,
+        blockClose,
+        'expect(typecheck).toMatchInlineSnapshot()',
+      ])
+    }
+  }
   for (let {
     description,
     itemsPass,
@@ -207,42 +252,24 @@ export function createGroupedCases<T extends Obj>(
     if (itemsPass.length === 0 && itemsFail.length === 0) continue
     const testSuiteItems = [] as string[]
     if (itemsPass.length > 0) {
-      //itemsPass = sortList(itemsPass)
-      const blockOpen = itemsPass.length === 1 ? null : '{'
-      const blockClose = itemsPass.length === 1 ? null : '}'
-      const itemsFlat = createLinesForTestList(itemsPass)
-      const items = itemsPass.length === 1 ? itemsFlat : leftPad(itemsFlat)
       testSuiteItems.push(
-        createTest(`${description} (should pass)`, [
-          '//prettier-ignore',
-          blockOpen,
-          ...items,
-          blockClose,
-          'expect(typecheck).toMatchInlineSnapshot()',
-        ]),
+        createTestSuiteItem({items: itemsPass, pass: true, description}),
       )
     }
     if (itemsFail.length > 0) {
-      //itemsFail = sortList(itemsFail)
-      const blockOpen = itemsFail.length === 1 ? null : '{'
-      const blockClose = itemsFail.length === 1 ? null : '}'
-      const itemsFlat = createLinesForTestList(itemsFail)
-      const items = itemsFail.length === 1 ? itemsFlat : leftPad(itemsFlat)
       testSuiteItems.push(
-        createTest(`${description} (should fail)`, [
-          '//prettier-ignore',
-          blockOpen,
-          ...items,
-          blockClose,
-          'expect(typecheck).toMatchInlineSnapshot()',
-        ]),
+        createTestSuiteItem({items: itemsFail, pass: false, description}),
       )
     }
     const lines = [] as string[]
     if (noGroup || testSuiteItems.length === 1) {
       lines.push(...testSuiteItems)
     } else {
-      lines.push(createDescribe(description, testSuiteItems))
+      lines.push(
+        renderToTable
+          ? [`# ${description}`, ...leftPad(testSuiteItems)].join(`\n`)
+          : createDescribe(description, testSuiteItems),
+      )
     }
     if (largeGroup !== null) {
       if (!(largeGroup in largeGroups)) {
@@ -253,9 +280,12 @@ export function createGroupedCases<T extends Obj>(
       resultCases.push(...lines)
     }
   }
+  if (renderToTable) resultCases.push(``)
   return [
     ...Object.entries(largeGroups).map(([text, items]) =>
-      createDescribe(text, items),
+      renderToTable
+        ? [`# ${text}`, ...leftPad(items)].join(`\n`)
+        : createDescribe(text, items),
     ),
     ...resultCases,
   ]

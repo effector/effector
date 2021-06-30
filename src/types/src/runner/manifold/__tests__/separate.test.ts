@@ -58,25 +58,22 @@ test('basic case', () => {
     })
   })
   expect(suite).toMatchInlineSnapshot(`
-    "test(' (should pass)', () => {
-      //prettier-ignore
-      {
-        * source * clock * feature * tag          * 
-        | event  | store | a       | rest a       | 
-        | event  | store | b       | rest b       | 
-        | event  | event | a       | events only  | 
-        | event  | event | b       | events only  | 
-        | event  | none  | a       | no a clock   | 
-        | event  | none  | b       | no b clock   | 
-        | store  | store | a       | source store | 
-        | store  | store | b       | source store | 
-        | store  | event | a       | source store | 
-        | store  | event | b       | source store | 
-        | store  | none  | a       | no a clock   | 
-        | store  | none  | b       | no b clock   | 
-      }
-      expect(typecheck).toMatchInlineSnapshot()
-    })"
+    "
+    ## pass
+    * source * clock * feature * tag          * 
+    | event  | store | a       | rest a       | 
+    | event  | store | b       | rest b       | 
+    | event  | event | a       | events only  | 
+    | event  | event | b       | events only  | 
+    | event  | none  | a       | no a clock   | 
+    | event  | none  | b       | no b clock   | 
+    | store  | store | a       | source store | 
+    | store  | store | b       | source store | 
+    | store  | event | a       | source store | 
+    | store  | event | b       | source store | 
+    | store  | none  | a       | no a clock   | 
+    | store  | none  | b       | no b clock   | 
+    "
   `)
 })
 test('unused match group', () => {
@@ -120,25 +117,22 @@ test('unused match group', () => {
     })
   })
   expect(suite).toMatchInlineSnapshot(`
-    "test(' (should pass)', () => {
-      //prettier-ignore
-      {
-        * source * clock * feature * tag          * 
-        | event  | store | a       | rest         | 
-        | event  | store | b       | rest         | 
-        | event  | event | a       | events only  | 
-        | event  | event | b       | events only  | 
-        | event  | none  | a       | no clock     | 
-        | event  | none  | b       | no clock     | 
-        | store  | store | a       | source store | 
-        | store  | store | b       | source store | 
-        | store  | event | a       | source store | 
-        | store  | event | b       | source store | 
-        | store  | none  | a       | no clock     | 
-        | store  | none  | b       | no clock     | 
-      }
-      expect(typecheck).toMatchInlineSnapshot()
-    })"
+    "
+    ## pass
+    * source * clock * feature * tag          * 
+    | event  | store | a       | rest         | 
+    | event  | store | b       | rest         | 
+    | event  | event | a       | events only  | 
+    | event  | event | b       | events only  | 
+    | event  | none  | a       | no clock     | 
+    | event  | none  | b       | no clock     | 
+    | store  | store | a       | source store | 
+    | store  | store | b       | source store | 
+    | store  | event | a       | source store | 
+    | store  | event | b       | source store | 
+    | store  | none  | a       | no clock     | 
+    | store  | none  | b       | no clock     | 
+    "
   `)
 })
 test('unused match', () => {
@@ -188,31 +182,28 @@ test('unused match', () => {
     })
   })
   expect(suite).toMatchInlineSnapshot(`
-    "test(' (should pass)', () => {
-      //prettier-ignore
-      {
-        * source * clock * feature * tag          * 
-        | event  | store | a       | rest a       | 
-        | event  | store | b       | rest b       | 
-        | event  | store | c       |              | 
-        | event  | event | a       | events only  | 
-        | event  | event | b       | events only  | 
-        | event  | event | c       | events only  | 
-        | event  | none  | a       | no a clock   | 
-        | event  | none  | b       | no b clock   | 
-        | event  | none  | c       |              | 
-        | store  | store | a       | source store | 
-        | store  | store | b       | source store | 
-        | store  | store | c       | source store | 
-        | store  | event | a       | source store | 
-        | store  | event | b       | source store | 
-        | store  | event | c       | source store | 
-        | store  | none  | a       | no a clock   | 
-        | store  | none  | b       | no b clock   | 
-        | store  | none  | c       | source store | 
-      }
-      expect(typecheck).toMatchInlineSnapshot()
-    })"
+    "
+    ## pass
+    * source * clock * feature * tag          * 
+    | event  | store | a       | rest a       | 
+    | event  | store | b       | rest b       | 
+    | event  | store | c       |              | 
+    | event  | event | a       | events only  | 
+    | event  | event | b       | events only  | 
+    | event  | event | c       | events only  | 
+    | event  | none  | a       | no a clock   | 
+    | event  | none  | b       | no b clock   | 
+    | event  | none  | c       |              | 
+    | store  | store | a       | source store | 
+    | store  | store | b       | source store | 
+    | store  | store | c       | source store | 
+    | store  | event | a       | source store | 
+    | store  | event | b       | source store | 
+    | store  | event | c       | source store | 
+    | store  | none  | a       | no a clock   | 
+    | store  | none  | b       | no b clock   | 
+    | store  | none  | c       | source store | 
+    "
   `)
 })
 test('rest match', () => {
@@ -263,31 +254,28 @@ test('rest match', () => {
   })
 
   expect(suite).toMatchInlineSnapshot(`
-    "test(' (should pass)', () => {
-      //prettier-ignore
-      {
-        * source * clock * feature * tag          * 
-        | event  | store | a       | rest a       | 
-        | event  | store | b       | rest b|c     | 
-        | event  | store | c       | rest b|c     | 
-        | event  | event | a       | events only  | 
-        | event  | event | b       | events only  | 
-        | event  | event | c       | events only  | 
-        | event  | none  | a       | no a clock   | 
-        | event  | none  | b       | no b|c clock | 
-        | event  | none  | c       | no b|c clock | 
-        | store  | store | a       | source store | 
-        | store  | store | b       | source store | 
-        | store  | store | c       | source store | 
-        | store  | event | a       | source store | 
-        | store  | event | b       | source store | 
-        | store  | event | c       | source store | 
-        | store  | none  | a       | no a clock   | 
-        | store  | none  | b       | no b|c clock | 
-        | store  | none  | c       | no b|c clock | 
-      }
-      expect(typecheck).toMatchInlineSnapshot()
-    })"
+    "
+    ## pass
+    * source * clock * feature * tag          * 
+    | event  | store | a       | rest a       | 
+    | event  | store | b       | rest b|c     | 
+    | event  | store | c       | rest b|c     | 
+    | event  | event | a       | events only  | 
+    | event  | event | b       | events only  | 
+    | event  | event | c       | events only  | 
+    | event  | none  | a       | no a clock   | 
+    | event  | none  | b       | no b|c clock | 
+    | event  | none  | c       | no b|c clock | 
+    | store  | store | a       | source store | 
+    | store  | store | b       | source store | 
+    | store  | store | c       | source store | 
+    | store  | event | a       | source store | 
+    | store  | event | b       | source store | 
+    | store  | event | c       | source store | 
+    | store  | none  | a       | no a clock   | 
+    | store  | none  | b       | no b|c clock | 
+    | store  | none  | c       | no b|c clock | 
+    "
   `)
 })
 test('array match', () => {
@@ -305,12 +293,12 @@ test('array match', () => {
           noClock: {clock: 'none '},
           sourceStore: {source: 'store'},
           rest: {},
-        },
+        } as const,
         byFeature: {
           aBranch: {feature: 'a'},
           restBranch: [{feature: 'b'}, {feature: 'c'}],
-        },
-      } as const,
+        } as const,
+      },
       cases: {
         events: value('events only'),
         noClock: {
@@ -337,31 +325,28 @@ test('array match', () => {
     })
   })
   expect(suite).toMatchInlineSnapshot(`
-    "test(' (should pass)', () => {
-      //prettier-ignore
-      {
-        * source * clock * feature * tag          * 
-        | event  | store | a       | rest a       | 
-        | event  | store | b       | rest b|c     | 
-        | event  | store | c       | rest b|c     | 
-        | event  | event | a       | events only  | 
-        | event  | event | b       | events only  | 
-        | event  | event | c       | events only  | 
-        | event  | none  | a       | no a clock   | 
-        | event  | none  | b       | no b|c clock | 
-        | event  | none  | c       | no b|c clock | 
-        | store  | store | a       | source store | 
-        | store  | store | b       | source store | 
-        | store  | store | c       | source store | 
-        | store  | event | a       | source store | 
-        | store  | event | b       | source store | 
-        | store  | event | c       | source store | 
-        | store  | none  | a       | no a clock   | 
-        | store  | none  | b       | no b|c clock | 
-        | store  | none  | c       | no b|c clock | 
-      }
-      expect(typecheck).toMatchInlineSnapshot()
-    })"
+    "
+    ## pass
+    * source * clock * feature * tag          * 
+    | event  | store | a       | rest a       | 
+    | event  | store | b       | rest b|c     | 
+    | event  | store | c       | rest b|c     | 
+    | event  | event | a       | events only  | 
+    | event  | event | b       | events only  | 
+    | event  | event | c       | events only  | 
+    | event  | none  | a       | no a clock   | 
+    | event  | none  | b       | no b|c clock | 
+    | event  | none  | c       | no b|c clock | 
+    | store  | store | a       | source store | 
+    | store  | store | b       | source store | 
+    | store  | store | c       | source store | 
+    | store  | event | a       | source store | 
+    | store  | event | b       | source store | 
+    | store  | event | c       | source store | 
+    | store  | none  | a       | no a clock   | 
+    | store  | none  | b       | no b|c clock | 
+    | store  | none  | c       | no b|c clock | 
+    "
   `)
 })
 // test('field validation')
