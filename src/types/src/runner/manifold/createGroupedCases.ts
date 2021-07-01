@@ -6,7 +6,7 @@ import {
   printTable,
 } from '../text'
 import {forIn} from '../forIn'
-import {DataDecl, BoolDecl, Grouping, Declarator} from './types'
+import {DataDecl, BoolDecl, Grouping, Declarator, WordValue} from './types'
 import {isDataDecl, isBoolDecl, assertRef, isRef} from './isRef'
 import {assert} from './assert'
 
@@ -70,6 +70,7 @@ export function createGroupedCases<T extends Obj>(
     pass,
   }: Grouping<T>,
 ) {
+  const dedupeGetter = dedupeHash && createReader(dedupeHash)
   const hashGetter = createHashReader(getHash)
   const groupDescriber = createReader(describeGroup)
   const passGetter = createReader(pass!, {
@@ -81,27 +82,91 @@ export function createGroupedCases<T extends Obj>(
   }
 
   let renderToTable = false
+  let renderMode: 'table' | 'text' | 'method' = 'method'
   let createLinesForTestList: (values: T[]) => string[]
+  let mode:
+    | {
+        type: 'text'
+        // passReader?: (obj: T) => boolean
+        textValueReader: (obj: T) => WordValue | WordValue[]
+      }
+    | {
+        type: 'table'
+      }
+    | {
+        type: 'method'
+      }
   const testLinesSet = new Map<string, any>()
   if (typeof createTestLines === 'object' && createTestLines !== null) {
     if ('type' in createTestLines) {
-      renderToTable = true
-      let header: string[] | void
-      let fields: Declarator[]
-      if (!Array.isArray(createTestLines.fields)) {
-        header = Object.keys(createTestLines.fields)
-        fields = Object.values(createTestLines.fields)
-      } else {
-        fields = createTestLines.fields
+      switch (createTestLines.type) {
+        case 'table': {
+          mode = {type: 'table'}
+          renderMode = 'table'
+          let header: string[] | void
+          let fields: Declarator[]
+          if (!Array.isArray(createTestLines.fields)) {
+            header = Object.keys(createTestLines.fields)
+            fields = Object.values(createTestLines.fields)
+          } else {
+            fields = createTestLines.fields
+          }
+          const only = fields.map(e => e.name)
+          createLinesForTestList = (values: T[]) =>
+            printTable({
+              values,
+              only,
+              header,
+            })
+          break
+        }
+        case 'text': {
+          renderMode = 'text'
+          //prettier-ignore
+          const renderer: Extract<typeof mode, {type: 'text'}> = mode = {
+            type: 'text',
+            textValueReader: createReader(createTestLines.value)
+          }
+          // if ('pass' in createTestLines) {
+          //   mode.passReader = createReader(createTestLines.pass!, {
+          //     isBool: true,
+          //   })
+          // }
+          const renderVisibleValues = (
+            values: WordValue[],
+            isPass: boolean,
+          ) => {
+            const lines: string[] = []
+            for (let i = 0; i < values.length; i++) {
+              const value = values[i]
+              if (value === null || value === undefined) continue
+              lines.push(String(value))
+            }
+            if (lines.length === 0) return []
+            if (!isPass) lines.push('//' + '@ts-expect-error')
+            return lines
+          }
+          createLinesForTestList = (values: T[]) => {
+            return values.flatMap(value => {
+              const linesRaw = renderer.textValueReader(value)
+              // const isPass = renderer.passReader
+              //   ? renderer.passReader(value)
+              //   : true
+              return renderVisibleValues(
+                Array.isArray(linesRaw) ? linesRaw : [linesRaw],
+                true,
+              )
+            })
+          }
+          break
+        }
+        default:
+          //@ts-expect-error
+          createTestLines.type
       }
-      const only = fields.map(e => e.name)
-      createLinesForTestList = (values: T[]) =>
-        printTable({
-          values,
-          only,
-          header,
-        })
     } else {
+      mode = {type: 'method'}
+      renderMode = 'method'
       const {
         method,
         shape,
@@ -162,15 +227,9 @@ export function createGroupedCases<T extends Obj>(
   let cur
   while ((cur = casesDefsPending.shift())) {
     // console.log('cur', cur)
-    if (dedupeHash) {
-      const caseDefHash = dedupeHash(cur)
-      if (testLinesSet.has(caseDefHash)) {
-        // console.log(`duplicated dedupeHash "${caseDefHash}"`, {
-        //   cur,
-        //   saved: testLinesSet.get(caseDefHash),
-        // })
-        continue
-      }
+    if (dedupeGetter) {
+      const caseDefHash = dedupeGetter(cur)
+      if (testLinesSet.has(caseDefHash)) continue
       testLinesSet.set(caseDefHash, cur)
     }
     const hash = hashGetter(cur)
@@ -219,27 +278,31 @@ export function createGroupedCases<T extends Obj>(
     description: string
   }) => {
     const itemsFlat = createLinesForTestList(items)
-    if (renderToTable) {
-      const passText = description
-        ? pass
-          ? ' (pass)'
-          : ' (fail)'
-        : pass
-        ? 'pass'
-        : 'fail'
-      return [`\n## ${description}${passText}`, ...itemsFlat].join(`\n`)
-    } else {
-      const passText = pass ? '(should pass)' : '(should fail)'
-      const blockOpen = items.length === 1 ? null : '{'
-      const blockClose = items.length === 1 ? null : '}'
-      const itemsLines = items.length === 1 ? itemsFlat : leftPad(itemsFlat)
-      return createTest(`${description} ${passText}`, [
-        '//prettier-ignore',
-        blockOpen,
-        ...itemsLines,
-        blockClose,
-        'expect(typecheck).toMatchInlineSnapshot()',
-      ])
+    switch (renderMode) {
+      case 'table': {
+        const passText = description
+          ? pass
+            ? ' (pass)'
+            : ' (fail)'
+          : pass
+          ? 'pass'
+          : 'fail'
+        return [`\n## ${description}${passText}`, ...itemsFlat].join(`\n`)
+      }
+      case 'text':
+      case 'method': {
+        const passText = pass ? '(should pass)' : '(should fail)'
+        const blockOpen = items.length === 1 ? null : '{'
+        const blockClose = items.length === 1 ? null : '}'
+        const itemsLines = items.length === 1 ? itemsFlat : leftPad(itemsFlat)
+        return createTest(`${description} ${passText}`, [
+          '//prettier-ignore',
+          blockOpen,
+          ...itemsLines,
+          blockClose,
+          'expect(typecheck).toMatchInlineSnapshot()',
+        ])
+      }
     }
   }
   for (let {
@@ -265,11 +328,19 @@ export function createGroupedCases<T extends Obj>(
     if (noGroup || testSuiteItems.length === 1) {
       lines.push(...testSuiteItems)
     } else {
-      lines.push(
-        renderToTable
-          ? [`# ${description}`, ...leftPad(testSuiteItems)].join(`\n`)
-          : createDescribe(description, testSuiteItems),
-      )
+      let line: string
+      switch (renderMode) {
+        case 'table':
+          line = [`# ${description}`, ...leftPad(testSuiteItems)].join(`\n`)
+          break
+        case 'method':
+          line = createDescribe(description, testSuiteItems)
+          break
+        case 'text':
+          line = '!!!'
+          break
+      }
+      lines.push(line)
     }
     if (largeGroup !== null) {
       if (!(largeGroup in largeGroups)) {
@@ -280,13 +351,17 @@ export function createGroupedCases<T extends Obj>(
       resultCases.push(...lines)
     }
   }
-  if (renderToTable) resultCases.push(``)
+  if (renderMode === 'table') resultCases.push(``)
   return [
-    ...Object.entries(largeGroups).map(([text, items]) =>
-      renderToTable
-        ? [`# ${text}`, ...leftPad(items)].join(`\n`)
-        : createDescribe(text, items),
-    ),
+    ...Object.entries(largeGroups).map(([text, items]) => {
+      switch (renderMode) {
+        case 'table':
+          return [`# ${text}`, ...leftPad(items)].join(`\n`)
+        case 'text':
+        case 'method':
+          return createDescribe(text, items)
+      }
+    }),
     ...resultCases,
   ]
 }

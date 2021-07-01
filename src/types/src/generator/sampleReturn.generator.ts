@@ -9,6 +9,7 @@ import {
   flag,
   config,
   sortOrder,
+  fmt,
 } from '../runner/manifold/operators'
 
 export default () => {
@@ -75,80 +76,85 @@ export default () => {
     },
     sort: ['no target', 'unit target', 'tuple target'],
   })
-
+  const fields = {
+    source: computeVariant({
+      source: {source},
+      variant: {
+        event: {source: 'event'},
+        store: {source: 'store'},
+        combinable: {source: 'combinable'},
+      },
+      cases: {
+        event: 'aNum    ',
+        store: 'a       ',
+        combinable: '{a:$num}',
+      },
+    }),
+    clock: computeVariant({
+      source: {clock},
+      variant: {
+        none: {clock: 'none'},
+        event: {clock: 'event'},
+        store: {clock: 'store'},
+        tuple: {clock: 'tuple'},
+      },
+      cases: {
+        none: null,
+        event: 'num',
+        store: '$num',
+        tuple: '[num,$num]',
+      },
+    }),
+    target: computeVariant({
+      source: {target},
+      variant: {
+        none: {target: 'none'},
+        event: {target: 'event'},
+        store: {target: 'store'},
+        tuple: {target: 'tuple'},
+      },
+      cases: {
+        none: null,
+        event: 'aNumT',
+        store: 'aT   ',
+        tuple: '[aNumT,aT]',
+      },
+    }),
+    fn: computeVariants({
+      source: {fn, typedFn},
+      variant: {
+        fn: {
+          none: {fn: 'none'},
+          noArgs: {fn: 'noArgs'},
+          arg: {fn: 'arg'},
+          argPair: {fn: 'argPair'},
+        },
+        types: {
+          typed: {typedFn: true},
+          untyped: {typedFn: false},
+        },
+      } as const,
+      cases: {
+        none: null,
+        noArgs: 'fn0',
+        arg: {
+          typed: 'fn1',
+          untyped: '({a}) => ({a})',
+        },
+        argPair: {
+          typed: 'fn2',
+          untyped: '({a},c) => ({a:a+c})',
+        },
+      },
+    }),
+  }
   const methodCode = computeFn({
     source: {
       pass,
-      sourceCode: computeVariant({
-        source: {source},
-        variant: {
-          event: {source: 'event'},
-          store: {source: 'store'},
-          combinable: {source: 'combinable'},
-        },
-        cases: {
-          event: 'aNum    ',
-          store: 'a       ',
-          combinable: '{a:$num}',
-        },
-      }),
-      clockCode: computeVariant({
-        source: {clock},
-        variant: {
-          none: {clock: 'none'},
-          event: {clock: 'event'},
-          store: {clock: 'store'},
-          tuple: {clock: 'tuple'},
-        },
-        cases: {
-          none: null,
-          event: 'num',
-          store: '$num',
-          tuple: '[num,$num]',
-        },
-      }),
-      targetCode: computeVariant({
-        source: {target},
-        variant: {
-          none: {target: 'none'},
-          event: {target: 'event'},
-          store: {target: 'store'},
-          tuple: {target: 'tuple'},
-        },
-        cases: {
-          none: null,
-          event: 'aNumT',
-          store: 'aT   ',
-          tuple: '[aNumT,aT]',
-        },
-      }),
-      fnCode: computeVariants({
-        source: {fn, typedFn},
-        variant: {
-          fn: {
-            none: {fn: 'none'},
-            noArgs: {fn: 'noArgs'},
-            arg: {fn: 'arg'},
-            argPair: {fn: 'argPair'},
-          },
-          types: {
-            typed: {typedFn: true},
-            untyped: {typedFn: false},
-          },
-        } as const,
-        cases: {
-          none: null,
-          noArgs: 'fn0',
-          arg: {
-            typed: 'fn1',
-            untyped: '({a}) => ({a})',
-          },
-          argPair: {
-            typed: 'fn2',
-            untyped: '({a},c) => ({a:a+c})',
-          },
-        },
-      }),
+      sourceCode: fields.source,
+      clockCode: fields.clock,
+      targetCode: fields.target,
+      fnCode: fields.fn,
     },
     fn: value => {
       return printMethod({
@@ -165,56 +171,38 @@ export default () => {
     },
     sort: 'string',
   })
-  const largeGroup = computeFn({
-    source: {typedFnToken, targetToken},
-    fn: ({typedFnToken, targetToken}) => `${targetToken}${typedFnToken}`,
-  })
-  const createTestLines = computeFn({
-    name: 'createTestLines',
-    source: {
-      methodCode,
-      pass,
-      returnCode: computeVariants({
-        source: {target, source, clock},
-        variant: {
-          Target: {
-            none: {target: 'none'},
-            event: {target: 'event'},
-            store: {target: 'store'},
-            tuple: {target: 'tuple'},
-          },
-          sources: {
-            store: [
-              {source: 'store', clock: 'store'},
-              {source: 'combinable', clock: 'store'},
-              {source: 'store', clock: 'none'},
-              {source: 'combinable', clock: 'none'},
-            ],
-            event: {},
-          },
-        },
-        cases: {
-          none: {
-            store: 'Store<AN>',
-            event: 'Event<AN>',
-          },
-          event: 'Event<AN>',
-          store: 'Store<AN>',
-          tuple: '[Event<AN>, Store<AN>]',
-        },
-      }),
+  const largeGroup = fmt`${targetToken}${typedFnToken}`
+  const returnCode = computeVariants({
+    source: {target, source, clock},
+    variant: {
+      Target: {
+        none: {target: 'none'},
+        event: {target: 'event'},
+        store: {target: 'store'},
+        tuple: {target: 'tuple'},
+      },
+      sources: {
+        store: [
+          {source: 'store', clock: 'store'},
+          {source: 'combinable', clock: 'store'},
+          {source: 'store', clock: 'none'},
+          {source: 'combinable', clock: 'none'},
+        ],
+        event: {},
+      },
     },
-    fn: ({methodCode, pass, returnCode}) =>
-      [
-        !pass && ('//@ts-expect-error' as string),
-        `{const result: ${returnCode} = ${methodCode}}` as string,
-      ] as (string | boolean)[],
+    cases: {
+      none: {
+        store: 'Store<AN>',
+        event: 'Event<AN>',
+      },
+      event: 'Event<AN>',
+      store: 'Store<AN>',
+      tuple: '[Event<AN>, Store<AN>]',
+    },
   })
-  const dedupeHash = computeFn({
-    name: 'dedupeHash',
-    source: {createTestLines},
-    fn: ({createTestLines}) => createTestLines.join(`\n`),
-  })
+  const testLine = fmt`{const result: ${returnCode} = ${methodCode}}`
+  const description = fmt`${targetToken}${typedFnToken}, ${clock} clock`
   sortOrder([targetToken, typedFn, source, clock, fn, methodCode])
   config({
     header,
@@ -222,20 +210,20 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample', 'Event', 'Store'],
     grouping: {
       pass,
-      dedupeHash: (args: any) => {
-        // console.log(args)
-        return args.dedupeHash
-      },
+      dedupeHash: testLine,
       getHash: [targetToken, clock, typedFn],
       describeGroup: computeFn({
-        source: {targetToken, typedFnToken, clock, largeGroup},
-        fn: ({targetToken, typedFnToken, clock, largeGroup}) => ({
+        source: {largeGroup, description},
+        fn: ({largeGroup, description}) => ({
           largeGroup,
           noGroup: true,
-          description: `${targetToken}${typedFnToken}, ${clock} clock`,
+          description,
         }),
       }),
-      createTestLines: ({createTestLines}: any) => createTestLines,
+      createTestLines: {
+        type: 'text',
+        value: testLine,
+      },
     },
   })
 }

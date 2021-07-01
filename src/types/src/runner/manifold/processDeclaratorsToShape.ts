@@ -18,12 +18,21 @@ function getDeclsReferencedByConfig(): string[] {
   if (isRef(describeGroup)) {
     results.push(describeGroup)
   }
-  if (
-    createTestLines &&
-    'type' in createTestLines &&
-    createTestLines.type === 'table'
-  ) {
-    results.push(...Object.values(createTestLines.fields))
+  if (createTestLines && 'type' in createTestLines) {
+    switch (createTestLines.type) {
+      case 'table':
+        results.push(...Object.values(createTestLines.fields))
+        break
+      case 'text':
+        results.push(createTestLines.value)
+        if (isRef(createTestLines.pass)) {
+          results.push(createTestLines.pass)
+        }
+        break
+      default:
+        //@ts-expect-error
+        createTestLines.type
+    }
   } else if (createTestLines && 'method' in createTestLines) {
     forIn(createTestLines.shape, value => {
       if (isRef(value)) results.push(value)
@@ -33,7 +42,7 @@ function getDeclsReferencedByConfig(): string[] {
       results.push(createTestLines.addExpectError)
     }
   }
-  return results.map(decl => decl.id)
+  return [...new Set(results)].map(decl => decl.id)
 }
 
 /** {[reference]: referencedBy[]} */

@@ -23,6 +23,9 @@ import {
   Matcher,
   Grouping,
   ConfigStructShape,
+  Word,
+  WordValue,
+  WordDecl,
 } from './types'
 import {isRef} from './isRef'
 import {processDeclaratorsToShape} from './processDeclaratorsToShape'
@@ -504,6 +507,45 @@ export function sortOrder(decls: Declarator[]) {
   const result: Record<string, any> = {}
   for (const name of declNamesOrdered) result[name] = sortByFields[name]
   ctx.config.grouping!.sortByFields = result
+}
+
+function createWordsArray(
+  x: TemplateStringsArray,
+  args: Array<WordValue>,
+): Array<WordValue> {
+  if (args.length === 0) return x as any
+  const words: Array<WordValue> = [x[0]]
+  for (let i = 0; i < args.length; i++) {
+    words.push(args[i], x[i + 1])
+  }
+  return words
+}
+export function fmt(x: TemplateStringsArray, ...args: Array<Word>) {
+  const decls = [...args.entries()]
+    .filter(([, e]) => isRef(e))
+    .map(([idx, decl]) => {
+      return {
+        decl: decl as WordDecl,
+        position: idx,
+        key: `__${idx}`,
+      }
+    })
+  const blueprint = args.map(e => (isRef(e) ? null : e))
+  const sources: Record<string, WordDecl> = {}
+  for (const {key, decl} of decls) {
+    sources[key] = decl
+  }
+  return computeFn({
+    source: sources,
+    fn(values) {
+      const resultValues = [...blueprint]
+      for (let i = 0; i < decls.length; i++) {
+        const decl = decls[i]
+        resultValues[decl.position] = String(values[decl.key])
+      }
+      return createWordsArray(x, resultValues).join('')
+    },
+  })
 }
 /** convert internal variable map to object with human-readable fields
  *

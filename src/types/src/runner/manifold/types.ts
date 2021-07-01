@@ -24,6 +24,7 @@ export type Ref<T, K> = {
 }
 export type Declarator =
   | Union
+  | UnionAny<unknown>
   | Value<unknown>
   | Fn<unknown>
   | Raw<unknown>
@@ -439,6 +440,10 @@ export type TypeofSepCases<
     : 'never'
   : 'never'
 
+export type WordValue = string | number | void | null | boolean
+export type WordDecl = DataDecl<WordValue>
+export type Word = WordValue | WordDecl
+
 export type Grouping<T extends Record<string, any>> = {
   filter?: (obj: T) => boolean
   getHash:
@@ -462,12 +467,19 @@ export type Grouping<T extends Record<string, any>> = {
         noGroup?: boolean
         largeGroup?: string | null
       }>
-  dedupeHash?: (obj: T) => string
+  dedupeHash?: ((obj: T) => string) | DataDecl<string>
   createTestLines:
     | ((obj: T) => any[])
     | {
         type: 'table'
         fields: Array<Declarator> | Record<string, Declarator>
+      }
+    | {
+        type: 'text'
+        value: DataDecl<WordValue | WordValue[]>
+        // pass?: boolean | BoolDecl
+        // inlineSnapshot?: boolean | BoolDecl
+        // addPrettierIgnore?: boolean | BoolDecl
       }
     | {
         method: string

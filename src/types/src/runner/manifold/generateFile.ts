@@ -1,6 +1,5 @@
 import {promises} from 'fs'
 import {resolve} from 'path'
-
 import {exec} from './operators'
 import {createGroupedCases} from './createGroupedCases'
 import {byFields} from './byFields'
