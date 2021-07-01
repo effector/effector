@@ -9,7 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": ["esnext"],
+    "lib": ["esnext", "es2019"],
     "baseUrl": "."
   },
   "exclude": [
