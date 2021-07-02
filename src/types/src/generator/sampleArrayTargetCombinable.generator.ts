@@ -311,6 +311,13 @@ export default () => {
           },
         },
       },
+      tags: {
+        sourceType,
+        sourceWideness: sourceDescription,
+        fn: fnDescription,
+        hasClock,
+        hasFn: fn,
+      },
       getHash: (cur: any) =>
         `${cur.sourceDescription} ${cur.fn ? cur.fnDescription : ''}`,
       describeGroup: (cur: any) =>

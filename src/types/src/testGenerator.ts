@@ -16,19 +16,3 @@ generateFile({
     sampleClockArray,
   ]
 })
-
-// generateFile({
-//   file: 'clockArrayGen',
-//   dir: 'sample/generated',
-//   usedMethods: ['createStore', 'createEvent', 'sample'],
-//   header: sampleClockArray.header,
-//   generateCases() {
-//     const casesDefs = byFields(sampleClockArray.shape)
-//     const resultCases = createGroupedCases(casesDefs, sampleClockArray.grouping)
-//     return {
-//       description: '',
-//       noGroup: true,
-//       cases: resultCases,
-//     }
-//   },
-// })

@@ -47,6 +47,7 @@ export const fileGeneratorConfStruct = Conf.shape({
     createTestLines: Conf.val(true),
     sortByFields: Conf.kv(),
     pass: Conf.val(),
+    tags: Conf.kv(),
   }),
 })
 

@@ -294,8 +294,25 @@ export default () => {
     file: 'generated/sampleClockArray',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
-      getHash: [descriptionTokens, noTarget, noClock, noSource],
+      getHash: {descriptionTokens, noTarget, noClock, noSource},
       pass,
+      tags: {
+        hasSource: bool({
+          source: {noSource},
+          true: {noSource: false},
+        }),
+        hasFn: fn,
+        hasClock: bool({
+          source: {noClock},
+          true: {noClock: false},
+        }),
+        hasTarget: bool({
+          source: {noTarget},
+          true: {noTarget: false},
+        }),
+        clockArray,
+        combinable,
+      },
       describeGroup: computeFn({
         source: {descriptionTokens, noGroup, largeGroup},
         fn: ({descriptionTokens, noGroup, largeGroup}) => ({

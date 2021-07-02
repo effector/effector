@@ -6,7 +6,14 @@ import {
   printTable,
 } from '../text'
 import {forIn} from '../forIn'
-import {DataDecl, BoolDecl, Grouping, Declarator, WordValue} from './types'
+import {
+  DataDecl,
+  BoolDecl,
+  Grouping,
+  Declarator,
+  WordValue,
+  CaseItem,
+} from './types'
 import {isDataDecl, isBoolDecl, assertRef, isRef} from './isRef'
 import {assert} from './assert'
 
@@ -58,6 +65,7 @@ function createHashReader<T extends Obj>(getHash: Grouping<T>['getHash']) {
     return values.join(' ')
   }
 }
+
 export function createGroupedCases<T extends Obj>(
   casesDefs: T[],
   {
@@ -68,8 +76,19 @@ export function createGroupedCases<T extends Obj>(
     filter,
     dedupeHash,
     pass,
+    tags,
   }: Grouping<T>,
 ) {
+  let caseSerializer: (value: T) => any = value => ({})
+  if (tags) {
+    caseSerializer = value => {
+      const result: any = {}
+      forIn(tags, (decl, field) => {
+        result[field] = value[decl.id]
+      })
+      return result
+    }
+  }
   const dedupeGetter = dedupeHash && createReader(dedupeHash)
   const hashGetter = createHashReader(getHash)
   const groupDescriber = createReader(describeGroup)
@@ -81,9 +100,15 @@ export function createGroupedCases<T extends Obj>(
     casesDefs = casesDefs.filter(filter)
   }
 
-  let renderToTable = false
   let renderMode: 'table' | 'text' | 'method' = 'method'
-  let createLinesForTestList: (values: T[]) => string[]
+  let createLinesForTestList: (
+    values: T[],
+    pass: boolean,
+    description: string,
+  ) => {
+    items: Array<CaseItem<T>>
+    textLines: string[]
+  }
   let mode:
     | {
         type: 'text'
@@ -112,12 +137,14 @@ export function createGroupedCases<T extends Obj>(
             fields = createTestLines.fields
           }
           const only = fields.map(e => e.name)
-          createLinesForTestList = (values: T[]) =>
-            printTable({
+          createLinesForTestList = (values: T[]) => ({
+            items: [],
+            textLines: printTable({
               values,
               only,
               header,
-            })
+            }),
+          })
           break
         }
         case 'text': {
@@ -146,17 +173,27 @@ export function createGroupedCases<T extends Obj>(
             if (!isPass) lines.push('//' + '@ts-expect-error')
             return lines
           }
-          createLinesForTestList = (values: T[]) => {
-            return values.flatMap(value => {
+          createLinesForTestList = (values: T[], pass, description) => {
+            const lineBlocks = values.map(value => {
               const linesRaw = renderer.textValueReader(value)
-              // const isPass = renderer.passReader
-              //   ? renderer.passReader(value)
-              //   : true
               return renderVisibleValues(
                 Array.isArray(linesRaw) ? linesRaw : [linesRaw],
                 true,
               )
             })
+            const items = values.map((value, i) => {
+              const lines = lineBlocks[i]
+              return {
+                value: caseSerializer(value),
+                pass,
+                text: lines.join(`\n`),
+                description,
+              }
+            })
+            return {
+              items,
+              textLines: lineBlocks.flat(),
+            }
           }
           break
         }
@@ -182,19 +219,43 @@ export function createGroupedCases<T extends Obj>(
           ? value.name
           : {field: value.field.name, when: value.when.name}
       })
-      //prettier-ignore
-      createLinesForTestList = (values: T[]) => printMethodValues({
-        method,
-        values,
-        shape: printShape,
-        addExpectError: readExpectError,
-      })
+      createLinesForTestList = (values: T[], pass, description) => {
+        const textLines = printMethodValues({
+          method,
+          values,
+          shape: printShape,
+          addExpectError: readExpectError,
+        })
+        return {
+          textLines,
+          items: values.map((value, i) => ({
+            value: caseSerializer(value),
+            text: textLines[i],
+            pass,
+            description,
+          })),
+        }
+      }
     }
   } else {
-    createLinesForTestList = (values: T[]) =>
-      values.flatMap(item =>
-        createTestLines(item).filter(line => typeof line === 'string'),
+    createLinesForTestList = (values: T[], pass, description) => {
+      const lineBlocks = values.map(value =>
+        createTestLines(value).filter(line => typeof line === 'string'),
       )
+      const items = values.map((value, i) => {
+        const lines = lineBlocks[i]
+        return {
+          value: caseSerializer(value),
+          pass,
+          text: lines.join(`\n`),
+          description,
+        }
+      })
+      return {
+        items,
+        textLines: lineBlocks.flat(),
+      }
+    }
   }
   const isAafterB = (sortByFields &&
     skewHeapSortFieldsComparator(sortByFields))!
@@ -268,16 +329,18 @@ export function createGroupedCases<T extends Obj>(
   }
   const largeGroups = {} as Record<string, string[]>
   const resultCases = [] as string[]
+  const resultCasesItems = [] as Array<CaseItem<T>>
   const createTestSuiteItem = ({
     pass,
     items,
     description,
+    textLinesFlat,
   }: {
     items: T[]
     pass: boolean
     description: string
+    textLinesFlat: string[]
   }) => {
-    const itemsFlat = createLinesForTestList(items)
     switch (renderMode) {
       case 'table': {
         const passText = description
@@ -287,14 +350,15 @@ export function createGroupedCases<T extends Obj>(
           : pass
           ? 'pass'
           : 'fail'
-        return [`\n## ${description}${passText}`, ...itemsFlat].join(`\n`)
+        return [`\n## ${description}${passText}`, ...textLinesFlat].join(`\n`)
       }
       case 'text':
       case 'method': {
         const passText = pass ? '(should pass)' : '(should fail)'
         const blockOpen = items.length === 1 ? null : '{'
         const blockClose = items.length === 1 ? null : '}'
-        const itemsLines = items.length === 1 ? itemsFlat : leftPad(itemsFlat)
+        const itemsLines =
+          items.length === 1 ? textLinesFlat : leftPad(textLinesFlat)
         return createTest(`${description} ${passText}`, [
           '//prettier-ignore',
           blockOpen,
@@ -315,14 +379,28 @@ export function createGroupedCases<T extends Obj>(
     if (itemsPass.length === 0 && itemsFail.length === 0) continue
     const testSuiteItems = [] as string[]
     if (itemsPass.length > 0) {
+      const itemsFull = createLinesForTestList!(itemsPass, true, description)
       testSuiteItems.push(
-        createTestSuiteItem({items: itemsPass, pass: true, description}),
+        createTestSuiteItem({
+          items: itemsPass,
+          pass: true,
+          description,
+          textLinesFlat: itemsFull.textLines,
+        }),
       )
+      resultCasesItems.push(...itemsFull.items)
     }
     if (itemsFail.length > 0) {
+      const itemsFull = createLinesForTestList!(itemsFail, false, description)
       testSuiteItems.push(
-        createTestSuiteItem({items: itemsFail, pass: false, description}),
+        createTestSuiteItem({
+          items: itemsFail,
+          pass: false,
+          description,
+          textLinesFlat: itemsFull.textLines,
+        }),
       )
+      resultCasesItems.push(...itemsFull.items)
     }
     const lines = [] as string[]
     if (noGroup || testSuiteItems.length === 1) {
@@ -334,10 +412,8 @@ export function createGroupedCases<T extends Obj>(
           line = [`# ${description}`, ...leftPad(testSuiteItems)].join(`\n`)
           break
         case 'method':
-          line = createDescribe(description, testSuiteItems)
-          break
         case 'text':
-          line = '!!!'
+          line = createDescribe(description, testSuiteItems)
           break
       }
       lines.push(line)
@@ -352,8 +428,8 @@ export function createGroupedCases<T extends Obj>(
     }
   }
   if (renderMode === 'table') resultCases.push(``)
-  return [
-    ...Object.entries(largeGroups).map(([text, items]) => {
+  const largeGroupsContent = Object.entries(largeGroups).map(
+    ([text, items]) => {
       switch (renderMode) {
         case 'table':
           return [`# ${text}`, ...leftPad(items)].join(`\n`)
@@ -361,9 +437,13 @@ export function createGroupedCases<T extends Obj>(
         case 'method':
           return createDescribe(text, items)
       }
-    }),
-    ...resultCases,
-  ]
+    },
+  )
+  const finalLines = [...largeGroupsContent, ...resultCases]
+  return {
+    finalLines,
+    resultCasesItems,
+  }
 }
 
 const collator = new Intl.Collator('en', {

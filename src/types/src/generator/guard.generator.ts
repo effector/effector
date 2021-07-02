@@ -10,7 +10,9 @@ import {
   flag,
   config,
   sortOrder,
+  fmt,
 } from '../runner/manifold/operators'
+import {Separate} from 'runner/manifold/types'
 
 export default () => {
   const clockType = union({
@@ -254,7 +256,16 @@ export default () => {
     correctTupleWide,
     wrongTuple,
     wrongTupleWide,
-  }: any) {
+  }: {
+    correctObject: string[]
+    correctObjectWide: string[]
+    wrongObject: string[]
+    wrongObjectWide: string[]
+    correctTuple: string[]
+    correctTupleWide: string[]
+    wrongTuple: string[]
+    wrongTupleWide: string[]
+  }) {
     return {
       nonTuple: {
         correct: {
@@ -278,7 +289,8 @@ export default () => {
       },
     }
   }
-  const targetValue = separate({
+  //@ts-ignore
+  const targetValue: Separate<string | string[]> = separate({
     source: {
       targetType,
       targetSubtype,
@@ -492,7 +504,7 @@ export default () => {
       },
     },
   })
-  const filterCode = separate({
+  const filterCode: Separate<string> = separate({
     source: {filterType, fnSecondArg, sourceType, sourceSubtype, inferByFilter},
     variant: {
       Afilter: {
@@ -609,22 +621,11 @@ export default () => {
     },
   })
 
-  const largeGroup = computeFn({
-    source: {sourceType},
-    fn: ({sourceType}) => `${sourceType} source`,
-  })
+  const largeGroup = fmt`${sourceType} source`
 
   const pass = bool({
     source: {wrongTarget},
     true: {wrongTarget: false},
-  })
-
-  const dedupeHash = computeFn({
-    name: 'dedupeHash',
-    source: {sourceCode, clockCode, targetCode, filterCode},
-    fn({sourceCode, clockCode, targetCode, filterCode}) {
-      return `guard({source: ${sourceCode}, clock: ${clockCode}, target: ${targetCode}, filter: ${filterCode}})`
-    },
   })
 
   sortOrder([
@@ -645,7 +646,7 @@ export default () => {
     header,
     grouping: {
       pass,
-      dedupeHash: ({dedupeHash}: any) => dedupeHash,
+      dedupeHash: fmt`guard({source: ${sourceCode}, clock: ${clockCode}, target: ${targetCode}, filter: ${filterCode}})`,
       getHash: [
         inferByFilter,
         sourceIsWiderThatTarget,
@@ -654,9 +655,17 @@ export default () => {
         targetType,
         clockType,
       ],
+      tags: {
+        inferByFilter,
+        sourceIsWiderThatTarget,
+        filter: filterType,
+        source: sourceType,
+        target: targetType,
+        clock: clockType,
+      },
       describeGroup: computeFn({
         source: {groupTokens, largeGroup},
-        fn: ({groupTokens, largeGroup}: any) => ({
+        fn: ({groupTokens, largeGroup}) => ({
           largeGroup,
           description: groupTokens,
         }),

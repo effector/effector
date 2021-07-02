@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "lib": ["esnext", "es2019"],
-    "baseUrl": "."
+    "baseUrl": "./"
   },
   "exclude": [
   ]

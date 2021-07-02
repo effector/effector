@@ -9,6 +9,6 @@ export function suiteGenerator(execFn: () => void) {
       e => e.value,
     ),
     execResult.grouping,
-  )
+  ).finalLines
   return cases.join(`\n`)
 }

@@ -6,7 +6,14 @@ import {Ref, ExecutionPlan} from './types'
 function getDeclsReferencedByConfig(): string[] {
   const results: Ref<unknown, unknown>[] = []
   const grouping = ctx.config.grouping!
-  const {pass, getHash, describeGroup, createTestLines} = grouping
+  const {
+    pass,
+    getHash,
+    describeGroup,
+    createTestLines,
+    dedupeHash,
+    tags,
+  } = grouping
   if (isRef(pass)) {
     results.push(pass)
   }
@@ -18,6 +25,12 @@ function getDeclsReferencedByConfig(): string[] {
   if (isRef(describeGroup)) {
     results.push(describeGroup)
   }
+  if (isRef(dedupeHash)) {
+    results.push(dedupeHash)
+  }
+  if (tags) {
+    results.push(...Object.values(tags))
+  }
   if (createTestLines && 'type' in createTestLines) {
     switch (createTestLines.type) {
       case 'table':
@@ -25,9 +38,6 @@ function getDeclsReferencedByConfig(): string[] {
         break
       case 'text':
         results.push(createTestLines.value)
-        if (isRef(createTestLines.pass)) {
-          results.push(createTestLines.pass)
-        }
         break
       default:
         //@ts-expect-error

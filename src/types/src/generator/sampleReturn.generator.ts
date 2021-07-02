@@ -212,6 +212,13 @@ export default () => {
       pass,
       dedupeHash: testLine,
       getHash: [targetToken, clock, typedFn],
+      tags: {
+        sourceType: source,
+        clockType: clock,
+        fnType: fn,
+        targetType: target,
+        target: targetToken,
+      },
       describeGroup: computeFn({
         source: {largeGroup, description},
         fn: ({largeGroup, description}) => ({

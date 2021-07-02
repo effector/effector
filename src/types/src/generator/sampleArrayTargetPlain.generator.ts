@@ -132,7 +132,14 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass,
-      getHash: [fn, typedFn, pass],
+      getHash: {fn, typedFn, pass},
+      tags: {
+        sourceValue: source,
+        clockValue: clock,
+        targetAcceptString,
+        targetAcceptNumber,
+        fn: fnToken,
+      },
       createTestLines: {
         method: 'sample',
         shape: {

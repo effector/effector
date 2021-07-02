@@ -492,6 +492,7 @@ export type Grouping<T extends Record<string, any>> = {
 
   sortByFields?: {[K in keyof T]: Array<T[K]> | 'string'}
   pass?: boolean | BoolDecl | ((obj: T) => boolean)
+  tags?: Record<string, Declarator>
 }
 
 export type ExecutionPlan = {
@@ -574,4 +575,21 @@ export type Ctx = {
   targets: Record<string, string[]>
   config: PartialCtxConfig
   configValidator: ConfigStructShape
+}
+
+export type CaseItem<T> = {
+  value: T
+  text: string
+  pass: boolean
+  description: string
+}
+export type JsonOutput = {
+  usedMethods: string[]
+  header: string[]
+  groups: Array<{
+    /** non-unique tag */
+    file: string
+    header: string
+    caseItems: Array<CaseItem<any>>
+  }>
 }
