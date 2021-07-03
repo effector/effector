@@ -24,7 +24,7 @@ type Layer = {
   idx: number
   stack: Stack
   type: PriorityTag
-  id: number
+  id: string
 }
 
 /** Call stack */
@@ -144,7 +144,12 @@ const pushFirstHeapItem = (
     },
     type,
   )
-const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
+const pushHeap = (
+  idx: number,
+  stack: Stack,
+  type: PriorityTag,
+  id: string = '0',
+) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
   const item: QueueItem = {
@@ -154,10 +159,8 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
       type,
       id,
     },
-    //@ts-ignore
-    l: 0,
-    //@ts-ignore
-    r: 0,
+    l: null,
+    r: null,
   }
   /**
    * second bucket is for "barrier" PriorityType (used in combine)
@@ -288,14 +291,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     stop = skip = false
     for (let stepn = idx; stepn < node.seq.length && !stop; stepn++) {
       const step = node.seq[stepn]
-      const data = step.data
       switch (step.type) {
         case BARRIER: {
-          let id = data.barrierID
-          if (page) {
-            id = `${page.fullID}_${id}`
-          }
-          const priority = data.priority
+          const {priority, barrierID} = step.data
+          const id = page ? `${page.fullID}_${barrierID}` : barrierID
           if (stepn !== idx || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
@@ -307,6 +306,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           break
         }
         case 'mov': {
+          const data = step.data
           let value
           //prettier-ignore
           switch (data.from) {
@@ -340,25 +340,26 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           }
           break
         }
-        case 'check':
-          switch (data.type) {
+        case 'check': {
+          switch (step.data.type) {
             case 'defined':
               skip = getValue(stack) === undefined
               break
             case 'changed':
               skip =
                 getValue(stack) ===
-                readRef(getPageRef(page, node, data.store.id))
+                readRef(getPageRef(page, node, step.data.store.id))
               break
           }
           break
+        }
         case FILTER:
           /**
            * handled edge case: if step.fn will throw,
            * tryRun will return null
            * thereby forcing that branch to stop
            */
-          skip = !tryRun(local, data, stack)
+          skip = !tryRun(local, step.data, stack)
           break
         case 'run':
           /** exec 'compute' step when stepn === idx */
@@ -368,7 +369,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           }
         case 'compute':
           isWatch = node.meta.op === 'watch'
-          stack.value = tryRun(local, data, stack)
+          stack.value = tryRun(local, step.data, stack)
           isWatch = lastStartedState.isWatch
           break
       }
