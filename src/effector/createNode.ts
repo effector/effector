@@ -7,18 +7,8 @@ import {own} from './own'
 
 const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
-): Node[] => {
-  const result = []
-  if (Array.isArray(list)) {
-    for (let i = 0; i < list.length; i++) {
-      if (Array.isArray(list[i])) result.push(...(list[i] as any))
-      else result.push(list[i])
-    }
-  } else {
-    result.push(list)
-  }
-  return result.map(getGraph)
-}
+): Node[] => (Array.isArray(list) ? list : [list]).flat().map(getGraph)
+
 export const addToReg = (cmd: Cmd, reg: Record<string, StateRef>) => {
   let store: StateRef
   if (cmd.type === 'check' && cmd.data.type === 'changed') {
