@@ -55,38 +55,65 @@ export type Subscription = {
   unsubscribe(): void
 }
 
-//prettier-ignore
 export type Cmd =
-  | Check
+  | CheckDefined
+  | CheckChanged
   | Run
   | Filter
   | Compute
   | Barrier
   | Mov
 
-export type Mov = {
+type FromValue<T = unknown> = {
+  from: 'value'
+  store: T
+}
+type FromStore = {
+  from: 'store'
+  store: StateRef
+}
+type FromRegister = {
+  from: 'a' | 'b' | 'stack'
+}
+
+type ToRegister = {
+  to: 'a' | 'b' | 'stack'
+}
+type ToStore = {
+  to: 'store'
+  target: StateRef
+}
+
+export type MovValueToRegister<T = unknown> = MoveCmd<FromValue<T> & ToRegister>
+export type MovValueToStore<T = unknown> = MoveCmd<FromValue<T> & ToStore>
+export type MovStoreToRegister = MoveCmd<FromStore & ToRegister>
+export type MovStoreToStore = MoveCmd<FromStore & ToStore>
+export type MovRegisterToRegister = MoveCmd<FromRegister & ToRegister>
+export type MovRegisterToStore = MoveCmd<FromRegister & ToStore>
+
+type MoveCmd<Data> = {
   id: ID
   type: 'mov'
-  data: {
-    from: 'value' | 'store' | 'stack' | 'a' | 'b'
-    to: 'stack' | 'a' | 'b'
-    store: any
-    target: any
+  data: Data
 }
-  hasRef: boolean
-}
-export type Check = {
+
+export type Mov =
+  | MovValueToRegister
+  | MovValueToStore
+  | MovStoreToRegister
+  | MovStoreToStore
+  | MovRegisterToRegister
+  | MovRegisterToStore
+
+export type CheckChanged = {
   id: ID
   type: 'check'
-  data:
-    | {
-        type: 'defined'
-      }
-    | {
-        type: 'changed'
-        store: StateRef
-      }
-  hasRef: boolean
+  data: {type: 'changed'; store: StateRef}
+}
+export type CheckDefined = {
+  id: ID
+  type: 'check'
+  data: {type: 'defined'}
 }
 
 export type Barrier = {
@@ -96,7 +123,6 @@ export type Barrier = {
     barrierID: ID
     priority: 'barrier' | 'sampler'
   }
-  hasRef: false
 }
 
 export type Run = {
@@ -105,7 +131,6 @@ export type Run = {
   data: {
     fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any
   }
-  hasRef: false
 }
 
 export type Filter = {
@@ -114,7 +139,6 @@ export type Filter = {
   data: {
     fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => boolean
   }
-  hasRef: false
 }
 export type Compute = {
   id: ID
@@ -122,5 +146,4 @@ export type Compute = {
   data: {
     fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any
   }
-  hasRef: false
 }

@@ -19,18 +19,21 @@ const arrifyNodes = (
   }
   return result.map(getGraph)
 }
-export const addToReg = (
-  {hasRef, type, data}: any,
-  reg: Record<string, StateRef>,
-) => {
-  let store
-  if (hasRef) {
-    store = data.store
+export const addToReg = (cmd: Cmd, reg: Record<string, StateRef>) => {
+  let store: StateRef
+  if (cmd.type === 'check' && cmd.data.type === 'changed') {
+    store = cmd.data.store
     reg[store.id] = store
   }
-  if (type === 'mov' && data.to === STORE) {
-    store = data.target
-    reg[store.id] = store
+  if (cmd.type === 'mov') {
+    if (cmd.data.from === STORE) {
+      store = cmd.data.store
+      reg[store.id] = store
+    }
+    if (cmd.data.to === STORE) {
+      store = cmd.data.target
+      reg[store.id] = store
+    }
   }
 }
 export function createNode({

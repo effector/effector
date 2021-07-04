@@ -529,7 +529,6 @@ function cloneGraph(unit: any): Scope {
         id: step.id,
         type: step.type,
         data: {...step.data},
-        hasRef: step.hasRef,
       })) as any,
       child: [...next],
       meta: {forkOf: node, ...meta},

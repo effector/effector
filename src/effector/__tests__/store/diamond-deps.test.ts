@@ -47,7 +47,7 @@ updated branches     └────┘                └────┘
 */
 test('olympic', async () => {
   const fn = jest.fn()
-  const A = createEvent()
+  const A = createEvent<string>()
   const B = createStore('text')
   const C = B.map(text => text.length)
   const D = C.map(ln => ({isEmpty: ln === 0, ln}))
@@ -101,7 +101,7 @@ test('display name', () => {
     and in "classic" EE `displayName` must updates
     three times (what unnecessary) if `firstName` was updated
   */
-  const updateFirstName = createEvent()
+  const updateFirstName = createEvent<string>()
 
   const firstName = createStore('John').on(updateFirstName, (_, name) => name)
   const lastName = createStore('Doe')

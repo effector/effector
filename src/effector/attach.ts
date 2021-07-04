@@ -72,7 +72,6 @@ export function attach(config: any) {
       own(attached, [state])
     }
     const readStateRef = step.mov({
-      from: STORE,
       store: getStoreState(state),
       to: REG_A,
     })

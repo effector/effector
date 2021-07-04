@@ -1,4 +1,4 @@
-import {Node, NodeUnit} from './index.h'
+import {Node, NodeUnit, StateRef} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
@@ -11,6 +11,7 @@ import {
   FILTER,
   REG_A,
 } from './tag'
+import {Scope} from './unit.h'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -28,14 +29,14 @@ type Layer = {
 }
 
 /** Call stack */
-type Stack = {
+export type Stack = {
   value: any
   a: any
   b: any
   parent: Stack | null
   node: Node
   page: {[id: string]: any} | null
-  forkPage?: any
+  forkPage?: Scope | null | void
 }
 
 /** Queue as linked list or skew heap */
@@ -129,7 +130,7 @@ const pushFirstHeapItem = (
   node: Node,
   parent: Stack | null,
   value: any,
-  forkPage: any | void,
+  forkPage?: Scope | null | void,
 ) =>
   pushHeap(
     0,
@@ -196,13 +197,13 @@ const getPriority = (t: PriorityTag) => {
   }
 }
 
-const barriers = new Set()
+const barriers = new Set<string>()
 
 let isRoot = true
 export let isWatch = false
 export let currentPage: any = null
-export let forkPage: any
-export const setForkPage = (newForkPage: any) => {
+export let forkPage: Scope | void | null
+export const setForkPage = (newForkPage: Scope) => {
   forkPage = newForkPage
 }
 export const setCurrentPage = (newPage: any) => {
@@ -228,7 +229,7 @@ export function launch(config: {
   params?: any
   defer?: boolean
   page?: any
-  forkPage?: any
+  forkPage?: Scope
   stack?: Stack
 }): void
 export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
@@ -272,12 +273,12 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   /** main execution code */
   const lastStartedState = {isRoot, currentPage, forkPage, isWatch}
   isRoot = false
-  let stop
-  let skip
-  let node
+  let stop: boolean
+  let skip: boolean
+  let node: Node
   let value
   let page
-  let reg
+  let reg: Record<string, StateRef>
   kernelLoop: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     node = stack.node
@@ -341,16 +342,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           break
         }
         case 'check': {
-          switch (step.data.type) {
-            case 'defined':
-              skip = getValue(stack) === undefined
-              break
-            case 'changed':
-              skip =
-                getValue(stack) ===
-                readRef(getPageRef(page, node, step.data.store.id))
-              break
-          }
+          skip =
+            getValue(stack) ===
+            (step.data.type === 'defined'
+              ? undefined
+              : readRef(getPageRef(page, node, step.data.store.id)))
           break
         }
         case FILTER:

@@ -1,46 +1,87 @@
-import {StateRef, Run, Filter, Compute, Barrier, Check, Mov} from './index.h'
+import {
+  StateRef,
+  Run,
+  Filter,
+  Compute,
+  Barrier,
+  CheckDefined,
+  CheckChanged,
+  MovValueToRegister,
+  MovValueToStore,
+  MovStoreToRegister,
+  MovStoreToStore,
+  MovRegisterToStore,
+} from './index.h'
 import {nextStepID} from './id'
-import {bind2} from './bind'
+import {bind} from './bind'
 import {BARRIER, FILTER, STACK, STORE} from './tag'
+import {Stack} from './kernel'
 
-const cmd = (type: any, hasRef: boolean, data: any): any => ({
+const cmd = (
+  type: 'check' | 'compute' | 'filter' | 'mov' | 'barrier',
+  data: any,
+): any => ({
   id: nextStepID(),
   type,
   data,
-  hasRef,
 })
 
 let nextBarrierID = 0
 
-export const barrier: (data: {priority?: 'barrier' | 'sampler'}) => Barrier = ({
+export const barrier = ({
   priority = BARRIER,
-}) =>
-  cmd(BARRIER, false, {
+}: {
+  priority?: 'barrier' | 'sampler'
+}): Barrier =>
+  cmd(BARRIER, {
     barrierID: ++nextBarrierID,
     priority,
   })
-export const mov: (data: {
+export const mov: {
+  <T>(data: {from: 'value'; store: T; target: StateRef}): MovValueToStore<T>
+  <T>(data: {
+    from: 'value'
+    to: 'stack' | 'a' | 'b'
+    store: T
+  }): MovValueToRegister<T>
+  (data: {from: 'a' | 'b' | 'stack'; target: StateRef}): MovRegisterToStore
+  (data: {
+    from: 'a' | 'b' | 'stack'
+    to: 'a' | 'b' | 'stack'
+  }): MovRegisterToStore
+  (data: {store: StateRef; target: StateRef}): MovStoreToStore
+  (data: {store: StateRef; to: 'stack' | 'a' | 'b'}): MovStoreToRegister
+  (data: {store: StateRef}): MovStoreToRegister
+  // (data: {
+  //   from?: 'value' | 'store' | 'stack' | 'a' | 'b'
+  //   to?: 'stack' | 'a' | 'b' | 'store'
+  //   store?: StateRef
+  //   target?: StateRef
+  // }): Mov
+} = ({
+  from = STORE,
+  store,
+  target,
+  to = target ? STORE : STACK,
+}: {
   from?: 'value' | 'store' | 'stack' | 'a' | 'b'
   to?: 'stack' | 'a' | 'b' | 'store'
-  store?: any
-  target?: any
-}) => Mov = ({from = STORE, store, target, to = target ? STORE : STACK}) =>
-  cmd('mov', from === STORE, {from, store, to, target})
-export const check: {
-  defined(): Check
-  changed(config: {store: StateRef}): Check
-} = {
-  defined: () => cmd('check', false, {type: 'defined'}),
-  changed: ({store}) => cmd('check', true, {type: 'changed', store}),
+  store?: StateRef
+  target?: StateRef
+}) => cmd('mov', {from, store, to, target})
+export const check = {
+  defined: (): CheckDefined => cmd('check', {type: 'defined'}),
+  changed: ({store}: {store: StateRef}): CheckChanged =>
+    cmd('check', {type: 'changed', store}),
 }
 export const compute: (data: {
-  fn: (data: any, scope: {[key: string]: any}, stack: any) => any
-}) => Compute = bind2(cmd, 'compute', false)
+  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
+}) => Compute = bind(cmd, 'compute')
 export const filter: (data: {
-  fn: (data: any, scope: {[key: string]: any}, stack: any) => any
-}) => Filter = bind2(cmd, FILTER, false)
+  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
+}) => Filter = bind(cmd, FILTER)
 export const run: (data: {
-  fn: (data: any, scope: {[key: string]: any}, stack: any) => any
-}) => Run = bind2(cmd, 'run', false)
-export const update: (data: {store: StateRef}) => Mov = ({store}) =>
+  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
+}) => Run = bind(cmd, 'run')
+export const update = ({store}: {store: StateRef}) =>
   mov({from: STACK, target: store})
