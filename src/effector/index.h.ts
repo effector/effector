@@ -120,7 +120,7 @@ export type Barrier = {
   id: ID
   type: 'barrier'
   data: {
-    barrierID: ID
+    barrierID: number
     priority: 'barrier' | 'sampler'
   }
 }

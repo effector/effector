@@ -25,7 +25,7 @@ type Layer = {
   idx: number
   stack: Stack
   type: PriorityTag
-  id: string
+  id: number
 }
 
 /** Call stack */
@@ -149,7 +149,7 @@ const pushHeap = (
   idx: number,
   stack: Stack,
   type: PriorityTag,
-  id: string = '0',
+  id: number = 0,
 ) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
@@ -197,7 +197,7 @@ const getPriority = (t: PriorityTag) => {
   }
 }
 
-const barriers = new Set<string>()
+const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isWatch = false
@@ -299,7 +299,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (stepn !== idx || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(stepn, stack, priority, id)
+              pushHeap(stepn, stack, priority, barrierID)
             }
             continue kernelLoop
           }
