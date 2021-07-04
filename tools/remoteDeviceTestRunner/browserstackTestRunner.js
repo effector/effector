@@ -96,10 +96,8 @@ const polyfillPath = resolve(
   '..',
   '..',
   'node_modules',
-  '@babel',
-  'polyfill',
-  'dist',
-  'polyfill.js',
+  'core-js-bundle',
+  'minified.js',
 )
 
 const moduleRequests = {
