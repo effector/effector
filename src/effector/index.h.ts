@@ -1,11 +1,6 @@
 export type ID = string
 
-//prettier-ignore
-export type kind =
-  | 'store'
-  | 'event'
-  | 'effect'
-  | 'domain'
+export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
 export type StateRef = {
   id: ID
@@ -56,7 +51,7 @@ export type Subscriber<A> = {
 }
 
 export type Subscription = {
-  /*::[[call]](): void,*/
+  (): void
   unsubscribe(): void
 }
 
@@ -77,7 +72,7 @@ export type Mov = {
     to: 'stack' | 'a' | 'b'
     store: any
     target: any
-  }
+}
   hasRef: boolean
 }
 export type Check = {

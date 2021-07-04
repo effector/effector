@@ -7,10 +7,19 @@ import {throwError} from './throw'
 import {launch, forkPage, setForkPage, currentPage} from './kernel'
 import {createNode} from './createNode'
 import {step} from './typedef'
-import {Domain, Store} from './unit.h'
+import {Domain, Scope, Store} from './unit.h'
 import {Node, StateRef} from './index.h'
 import {removeItem, forEach, includes, forIn} from './collection'
-import {DOMAIN, STORE, EVENT, EFFECT, SAMPLER, MAP, FORK_COUNTER} from './tag'
+import {
+  DOMAIN,
+  STORE,
+  EVENT,
+  EFFECT,
+  SAMPLER,
+  MAP,
+  FORK_COUNTER,
+  SCOPE,
+} from './tag'
 
 /**
  hydrate state on client
@@ -21,18 +30,16 @@ import {DOMAIN, STORE, EVENT, EFFECT, SAMPLER, MAP, FORK_COUNTER} from './tag'
 })
 
  */
-export function hydrate(domain: Domain, {values}: {values: any}) {
-  const isScope = isObject(domain) && (domain as any).cloneOf
-  if (!is.domain(domain) && !isScope) {
-    throwError('first argument of hydrate should be domain or scope')
-  }
+export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   if (!isObject(values)) {
     throwError('values property should be an object')
   }
   const normalizedValues = normalizeValues(values)
   let storeWatches: Node[]
   let storeWatchesRefs: any[]
-  if (isScope) {
+  let forkPage: Scope
+  if (is.scope(domain)) {
+    forkPage = domain
     storeWatches = []
     storeWatchesRefs = []
     forIn(normalizedValues, (val, sid) => {
@@ -44,7 +51,7 @@ export function hydrate(domain: Domain, {values}: {values: any}) {
         ;(domain as any).changedStores.add(node.meta.forkOf.id)
       }
     })
-  } else {
+  } else if (is.domain(domain)) {
     const fillResult = fillValues({
       flatGraphUnits: flatGraph(domain),
       values: normalizedValues,
@@ -52,12 +59,14 @@ export function hydrate(domain: Domain, {values}: {values: any}) {
     })
     storeWatches = fillResult.storeWatches
     storeWatchesRefs = fillResult.storeWatchesRefs.map(({current}) => current)
+  } else {
+    throwError('first argument of hydrate should be domain or scope')
   }
 
   launch({
-    target: storeWatches,
-    params: storeWatchesRefs,
-    forkPage: isScope ? domain : false,
+    target: storeWatches!,
+    params: storeWatchesRefs!,
+    forkPage: forkPage!,
   })
 }
 
@@ -201,8 +210,8 @@ export function scopeBind(unit: any) {
   if (!forkPage) {
     throwError('scopeBind cannot be called outside of forked .watch')
   }
-  const savedForkPage = forkPage
-  const localUnit = forkPage.find(unit)
+  const savedForkPage = forkPage!
+  const localUnit = forkPage!.find(unit)
   return is.effect(unit)
     ? (params: any) => {
         const req = createDefer()
@@ -458,7 +467,7 @@ function flatGraph(unit: any) {
  everything we need to clone graph section
  reachable from given unit
  */
-function cloneGraph(unit: any) {
+function cloneGraph(unit: any): Scope {
   const list = flatGraph(unit)
   const refs = new Map()
   const scope = {
@@ -593,6 +602,7 @@ function cloneGraph(unit: any) {
     find: findClone,
     reg: page,
     getState: (store: any) => findClone(store).meta.wrapped.getState(),
+    kind: SCOPE,
     graphite: createNode({
       family: {
         type: DOMAIN,

@@ -2,6 +2,7 @@ import {
   Subscription,
   Subscriber,
   Node,
+  NodeUnit,
   kind,
   StateRef,
   Unit,
@@ -162,4 +163,17 @@ export interface Domain extends Unit {
   getType(): string
   kind: kind
   graphite: Node
+}
+
+export interface Scope extends Unit {
+  kind: kind
+  graphite: Node
+  changedStores: Set<string>
+  reg: Record<string, StateRef>
+  nodeMap: Record<string, Node>
+  sidMap: Record<string, Node>
+  cloneOf: Domain
+  clones: Node[]
+  find(unit: NodeUnit): Node
+  getState<T>(store: Store<T>): T
 }
