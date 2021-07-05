@@ -7,6 +7,8 @@ import {
   allSettled,
   serialize,
   hydrate,
+  combine,
+  Store,
 } from 'effector'
 
 describe('fork values support', () => {
@@ -62,7 +64,7 @@ describe('fork values support', () => {
       })
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
   })
-  test('passed non effect to handler map should throw', () => {
+  test('passed non store to values map should throw', () => {
     const app = createDomain()
     const unit = createEvent()
     expect(() => {
@@ -72,6 +74,216 @@ describe('fork values support', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only stores as keys"`,
     )
+  })
+  test('values initialization consistency', async () => {
+    /**
+     * goal of this test is to create a lot of stores to pass to values
+     * and ensure that combined stores will work as expected
+     * */
+    const app = createDomain({sid: 'app'} as any)
+    let sumStore = app.createStore([0, []] as [number, any[]], {sid: 'sum'})
+    const stores: Store<number>[] = []
+    const storesToShow: Store<number>[] = []
+    function fab(n: number) {
+      const store = app.createStore(n, {sid: `${n}.1`})
+      sumStore = combine(
+        sumStore,
+        store,
+        (prevVal, x) => [x, prevVal] as [number, any[]],
+      )
+      const secondOne = app.createStore(n, {sid: `${n}.2`})
+      const third = store.map(x => x + 1)
+      const both = combine(third, secondOne, (x, y) => x * y)
+      sumStore = combine(
+        sumStore,
+        both,
+        (prevVal, x) => [x, prevVal] as [number, any[]],
+      )
+      stores.push(store, secondOne)
+      storesToShow.push(store, secondOne, third, both)
+    }
+    for (let i = 0; i < 10; i++) fab(i)
+    const finalStore = combine(storesToShow, items => {
+      const results: Array<{
+        store: number
+        secondOne: number
+        third: number
+        both: number
+      }> = []
+      for (let i = 0; i < items.length; i += 4) {
+        results.push({
+          store: items[i],
+          secondOne: items[i + 1],
+          third: items[i + 2],
+          both: items[i + 3],
+        })
+      }
+      return results
+    })
+    const scope = fork(app, {
+      values: new Map(
+        stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
+      ),
+    })
+    const basicCase = serialize(scope)
+    expect(scope.getState(finalStore)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "both": 0,
+    "secondOne": 0,
+    "store": 0,
+    "third": 1,
+  },
+  Object {
+    "both": 0,
+    "secondOne": 0,
+    "store": 1,
+    "third": 2,
+  },
+  Object {
+    "both": 6,
+    "secondOne": 2,
+    "store": 2,
+    "third": 3,
+  },
+  Object {
+    "both": 3,
+    "secondOne": 3,
+    "store": 0,
+    "third": 1,
+  },
+  Object {
+    "both": 0,
+    "secondOne": 0,
+    "store": 4,
+    "third": 5,
+  },
+  Object {
+    "both": 30,
+    "secondOne": 5,
+    "store": 5,
+    "third": 6,
+  },
+  Object {
+    "both": 6,
+    "secondOne": 6,
+    "store": 0,
+    "third": 1,
+  },
+  Object {
+    "both": 0,
+    "secondOne": 0,
+    "store": 7,
+    "third": 8,
+  },
+  Object {
+    "both": 72,
+    "secondOne": 8,
+    "store": 8,
+    "third": 9,
+  },
+  Object {
+    "both": 9,
+    "secondOne": 9,
+    "store": 0,
+    "third": 1,
+  },
+]
+`)
+    expect(basicCase).toMatchInlineSnapshot(`
+Object {
+  "0.1": 0,
+  "0.2": 0,
+  "1.1": 1,
+  "1.2": 0,
+  "2.1": 2,
+  "2.2": 2,
+  "3.1": 0,
+  "3.2": 3,
+  "4.1": 4,
+  "4.2": 0,
+  "5.1": 5,
+  "5.2": 5,
+  "6.1": 0,
+  "6.2": 6,
+  "7.1": 7,
+  "7.2": 0,
+  "8.1": 8,
+  "8.2": 8,
+  "9.1": 0,
+  "9.2": 9,
+  "sum": Array [
+    0,
+    Array [],
+  ],
+}
+`)
+    expect(scope.getState(sumStore)).toMatchInlineSnapshot(`
+Array [
+  9,
+  Array [
+    0,
+    Array [
+      72,
+      Array [
+        8,
+        Array [
+          0,
+          Array [
+            7,
+            Array [
+              6,
+              Array [
+                0,
+                Array [
+                  30,
+                  Array [
+                    5,
+                    Array [
+                      0,
+                      Array [
+                        4,
+                        Array [
+                          3,
+                          Array [
+                            0,
+                            Array [
+                              6,
+                              Array [
+                                2,
+                                Array [
+                                  0,
+                                  Array [
+                                    1,
+                                    Array [
+                                      0,
+                                      Array [
+                                        0,
+                                        Array [
+                                          0,
+                                          Array [],
+                                        ],
+                                      ],
+                                    ],
+                                  ],
+                                ],
+                              ],
+                            ],
+                          ],
+                        ],
+                      ],
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+    ],
+  ],
+]
+`)
   })
 })
 
