@@ -1,9 +1,8 @@
-const idCount = (useFullAlphabet?: boolean) => {
+const idCount = () => {
   let id = 0
-  const radix = useFullAlphabet ? 36 : 10
-  return () => (++id).toString(radix)
+  return () => `${++id}`
 }
 
-export const nextUnitID = idCount(true)
-export const nextStepID = idCount(true)
-export const nextNodeID = idCount(true)
+export const nextUnitID = idCount()
+export const nextStepID = idCount()
+export const nextNodeID = idCount()
