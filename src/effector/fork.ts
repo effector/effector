@@ -101,9 +101,7 @@ function fillValues({
         storeWatchesRefs.push(owner.scope.state)
       }
     }
-    forIn(reg, (ref, id) => {
-      refsMap[id] = ref
-    })
+    Object.assign(refsMap, reg)
   })
   const refGraph = createRefGraph(refsMap)
   const result = toposort(refGraph)
@@ -286,13 +284,8 @@ export function fork(
     const templateOwnedRefs = new Set<string>()
     const valuesSidList = Object.getOwnPropertyNames(values)
     forEach(sourceList, ({reg, meta}) => {
-      const {nativeTemplate} = meta
-      forIn(reg, (ref, id) => {
-        sourceRefsMap[id] = ref
-        if (nativeTemplate) {
-          templateOwnedRefs.add(id)
-        }
-      })
+      Object.assign(sourceRefsMap, reg)
+      if (meta.nativeTemplate) forIn(reg, (_, id) => templateOwnedRefs.add(id))
     })
     forEach(forked.clones, node => {
       const {reg} = node
@@ -305,9 +298,7 @@ export function fork(
           forked.changedStores.add(node.meta.forkOf.id)
         }
       }
-      forIn(reg, (ref, id) => {
-        refsMap[id] = ref
-      })
+      Object.assign(refsMap, reg)
     })
     const refGraph = createRefGraph(sourceRefsMap)
     const result = toposort(refGraph, templateOwnedRefs)
@@ -565,12 +556,12 @@ function cloneGraph(unit: any): Scope {
       forEach(onCopy, (copyField: string) => {
         const origValue = scope[copyField]
         scope[copyField] = Array.isArray(origValue)
-          ? origValue.map(findClone)
-          : findClone(origValue)
+          ? origValue.map(getCloned)
+          : getCloned(origValue)
       })
     }
     forEachRelatedNode(node, (node, i, siblings) => {
-      siblings[i] = findClone(node)
+      siblings[i] = getCloned(node)
     })
     const itemTag = op || unit
     switch (itemTag) {
@@ -611,7 +602,9 @@ function cloneGraph(unit: any): Scope {
       scope: {forkInFlightCounter},
     }),
   }
-
+  function getCloned(unit: any) {
+    return nodeMap[getGraph(unit).id]
+  }
   function findClone(unit: any) {
     const node = getGraph(unit)
     const index = list.indexOf(node)
