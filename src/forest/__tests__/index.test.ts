@@ -104,15 +104,15 @@ it('support reactive style properties', async () => {
     })
   })
   expect(s1).toMatchInlineSnapshot(`
-    "
-    <div style='justify-self: start;'>content</div>
-    "
-  `)
+"
+<div style='justify-self: start'>content</div>
+"
+`)
   expect(s2).toMatchInlineSnapshot(`
-    "
-    <div style='justify-self: center;'>content</div>
-    "
-  `)
+"
+<div style='justify-self: center'>content</div>
+"
+`)
 })
 
 describe('node(event) + upward store update', () => {
@@ -180,19 +180,19 @@ it('support reactive style variables', async () => {
     })
   })
   expect(s1).toMatchInlineSnapshot(`
-    "
-    <div style='justify-self: var(--align); --align: start;'>
-      content
-    </div>
-    "
-  `)
+"
+<div style='justify-self: var(--align); --align: start'>
+  content
+</div>
+"
+`)
   expect(s2).toMatchInlineSnapshot(`
-    "
-    <div style='justify-self: var(--align); --align: center;'>
-      content
-    </div>
-    "
-  `)
+"
+<div style='justify-self: var(--align); --align: center'>
+  content
+</div>
+"
+`)
 })
 
 it.skip('remove watch calls after node removal', async () => {
