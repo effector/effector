@@ -301,9 +301,10 @@ export function fork(
       Object.assign(refsMap, reg)
     })
     const refGraph = createRefGraph(sourceRefsMap)
-    const result = toposort(refGraph, templateOwnedRefs)
-    forEach(result, id => {
-      execRef(refsMap[id], sourceRefsMap[id])
+    forIn(refGraph, (_, id) => {
+      if (!templateOwnedRefs.has(id)) {
+        execRef(refsMap[id], sourceRefsMap[id])
+      }
     })
 
     function execRef(ref: StateRef, sourceRef?: StateRef) {
