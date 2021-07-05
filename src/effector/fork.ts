@@ -82,7 +82,7 @@ function fillValues({
   const storeWatches: Node[] = []
   const storeWatchesRefs: StateRef[] = []
   const refsMap = {} as Record<string, StateRef>
-  const predefinedRefs = new Set()
+  const predefinedRefs = new Set<StateRef>()
   const valuesSidList = Object.getOwnPropertyNames(values)
   forEach(flatGraphUnits, node => {
     const {reg} = node
@@ -103,78 +103,63 @@ function fillValues({
     }
     Object.assign(refsMap, reg)
   })
-  const refGraph = createRefGraph(refsMap)
-  const result = toposort(refGraph)
-  forEach(result, id => {
-    execRef(refsMap[id])
+  forIn(refsMap, ref => {
+    execRef(predefinedRefs, refsMap, ref, ref)
   })
 
   return {
     storeWatches,
     storeWatchesRefs,
   }
-
-  function execRef(ref: StateRef) {
-    let isFresh = false
-    if (ref.before && !predefinedRefs.has(ref)) {
-      forEach(ref.before, cmd => {
-        switch (cmd.type) {
-          case MAP: {
-            const from = cmd.from
-            ref.current = cmd.fn(from.current)
-            break
-          }
-          case 'field': {
-            const from = cmd.from
-            if (!isFresh) {
-              isFresh = true
-              if (Array.isArray(ref.current)) {
-                ref.current = [...ref.current]
-              } else {
-                ref.current = {...ref.current}
-              }
-            }
-            ref.current[cmd.field] = from.current
-            break
-          }
-          case 'closure':
-            break
-        }
-      })
-    }
-    if (!ref.after) return
-    const value = ref.current
-    forEach(ref.after, cmd => {
-      const to = cmd.to
-      // if (predefinedRefs.has(to)) continue
+}
+function execRef(
+  predefinedRefs: Set<StateRef>,
+  refsMap: Record<string, StateRef>,
+  ref: StateRef,
+  sourceRef?: StateRef,
+) {
+  if (!sourceRef) return
+  let isFresh = false
+  if (sourceRef.before && !predefinedRefs.has(ref)) {
+    forEach(sourceRef.before, cmd => {
       switch (cmd.type) {
-        case 'copy':
-          to.current = value
+        case MAP: {
+          const from = refsMap[cmd.from.id]
+          ref.current = cmd.fn(from.current)
           break
-        case MAP:
-          to.current = cmd.fn(value)
+        }
+        case 'field': {
+          const from = refsMap[cmd.from.id]
+          if (!isFresh) {
+            isFresh = true
+            if (Array.isArray(ref.current)) {
+              ref.current = [...ref.current]
+            } else {
+              ref.current = {...ref.current}
+            }
+          }
+          ref.current[cmd.field] = from.current
+          break
+        }
+        case 'closure':
           break
       }
     })
   }
-}
-
-function createRefGraph(refsMap: Record<string, StateRef>) {
-  const items = Object.values(refsMap)
-  const refGraph = {} as Record<string, string[]>
-  forEach(items, ({id}) => {
-    refGraph[id] = []
+  if (!sourceRef.after) return
+  const value = ref.current
+  forEach(sourceRef.after, cmd => {
+    const to = refsMap[cmd.to.id]
+    // if (predefinedRefs.has(to)) continue
+    switch (cmd.type) {
+      case 'copy':
+        to.current = value
+        break
+      case MAP:
+        to.current = cmd.fn(value)
+        break
+    }
   })
-  //prettier-ignore
-  forEach(items, ({id, before, after}) => {
-    before && forEach(before, cmd => {
-      refGraph[cmd.from.id].push(id)
-    })
-    after && forEach(after, cmd => {
-      refGraph[id].push(cmd.to.id)
-    })
-  })
-  return refGraph
 }
 
 /**
@@ -187,6 +172,7 @@ export function serialize(
     onlyChanges,
   }: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
+  const ignoredStores = ignore.map(({sid}) => sid)
   const result = {} as Record<string, any>
   forEach(clones, ({meta, scope, reg}) => {
     if (meta.unit !== STORE) return
@@ -195,10 +181,8 @@ export function serialize(
     if (onlyChanges || meta.isCombine) {
       if (!changedStores.has(meta.forkOf.id)) return
     }
+    if (ignoredStores.includes(sid)) return
     result[sid] = reg[scope.state.id].current
-  })
-  forEach(ignore, ({sid}) => {
-    if (sid) delete result[sid]
   })
   return result
 }
@@ -280,7 +264,7 @@ export function fork(
     const sourceList = flatGraph(domain)
     const sourceRefsMap = {} as Record<string, StateRef>
     const refsMap = {} as Record<string, StateRef>
-    const predefinedRefs = new Set()
+    const predefinedRefs = new Set<StateRef>()
     const templateOwnedRefs = new Set<string>()
     const valuesSidList = Object.getOwnPropertyNames(values)
     forEach(sourceList, ({reg, meta}) => {
@@ -300,106 +284,11 @@ export function fork(
       }
       Object.assign(refsMap, reg)
     })
-    const refGraph = createRefGraph(sourceRefsMap)
-    forIn(refGraph, (_, id) => {
+    forIn(sourceRefsMap, (sourceRef, id) => {
       if (!templateOwnedRefs.has(id)) {
-        execRef(refsMap[id], sourceRefsMap[id])
+        execRef(predefinedRefs, refsMap, refsMap[id], sourceRef)
       }
     })
-
-    function execRef(ref: StateRef, sourceRef?: StateRef) {
-      let isFresh = false
-      if (sourceRef && sourceRef.before && !predefinedRefs.has(ref)) {
-        forEach(sourceRef.before, cmd => {
-          switch (cmd.type) {
-            case MAP: {
-              const from = refsMap[cmd.from.id]
-              ref.current = cmd.fn(from.current)
-              break
-            }
-            case 'field': {
-              const from = refsMap[cmd.from.id]
-              if (!isFresh) {
-                isFresh = true
-                if (Array.isArray(ref.current)) {
-                  ref.current = [...ref.current]
-                } else {
-                  ref.current = {...ref.current}
-                }
-              }
-              ref.current[cmd.field] = from.current
-              break
-            }
-            case 'closure':
-              break
-          }
-        })
-      }
-      if (!sourceRef || !sourceRef.after) return
-      const value = ref.current
-      forEach(sourceRef.after, cmd => {
-        const to = refsMap[cmd.to.id]
-        // if (predefinedRefs.has(to)) continue
-        switch (cmd.type) {
-          case 'copy':
-            to.current = value
-            break
-          case MAP:
-            to.current = cmd.fn(value)
-            break
-        }
-      })
-    }
-  }
-}
-
-function toposort(rawGraph: Record<string, string[]>, ignore?: Set<string>) {
-  const graph = {} as Record<string, string[]>
-  for (const id in rawGraph) {
-    graph[id] = [...new Set(rawGraph[id])]
-  }
-  const result = [] as string[]
-  const visited = {} as Record<string, boolean>
-  const temp = {} as Record<string, boolean>
-  for (const node in graph) {
-    if (!visited[node] && !temp[node]) {
-      topologicalSortHelper(node)
-    }
-  }
-  result.reverse()
-  if (ignore && ignore.size > 0) {
-    const processed = [] as string[]
-    const ignored = [...ignore]
-    let item: string | void
-    while ((item = ignored.shift())) {
-      processed.push(item)
-      forEach(graph[item], child => {
-        if (includes(processed, child) || includes(ignored, child)) return
-        ignored.push(child)
-      })
-    }
-    forEach(processed, item => {
-      removeItem(result, item)
-    })
-  }
-  return result
-
-  function topologicalSortHelper(node: string) {
-    temp[node] = true
-    const neighbors = graph[node]
-    for (let i = 0; i < neighbors.length; i++) {
-      const n = neighbors[i]
-      if (temp[n]) {
-        continue
-        // throw Error('found cycle in DAG')
-      }
-      if (!visited[n]) {
-        topologicalSortHelper(n)
-      }
-    }
-    temp[node] = false
-    visited[node] = true
-    result.push(node)
   }
 }
 
