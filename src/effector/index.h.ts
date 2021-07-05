@@ -1,3 +1,5 @@
+import type {Stack} from './kernel'
+
 export type ID = string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
@@ -129,7 +131,7 @@ export type Run = {
   id: ID
   type: 'run'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any
+    fn: (data: any, scope: {[key: string]: any}, reg: Stack) => any
   }
 }
 
@@ -137,13 +139,13 @@ export type Filter = {
   id: ID
   type: 'filter'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => boolean
+    fn: (data: any, scope: {[key: string]: any}, reg: Stack) => boolean
   }
 }
 export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any
+    fn: (data: any, scope: {[key: string]: any}, reg: Stack) => any
   }
 }

@@ -1,4 +1,6 @@
-import {Node, NodeUnit, StateRef} from './index.h'
+import type {Spawn} from '../forest/index.h'
+
+import type {Cmd, Node, NodeUnit, StateRef} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
@@ -11,7 +13,7 @@ import {
   FILTER,
   REG_A,
 } from './tag'
-import {Scope} from './unit.h'
+import type {Scope} from './unit.h'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -35,7 +37,7 @@ export type Stack = {
   b: any
   parent: Stack | null
   node: Node
-  page: {[id: string]: any} | null
+  page: Spawn | null
   forkPage?: Scope | null | void
 }
 
@@ -126,7 +128,7 @@ const deleteMin = () => {
 }
 const pushFirstHeapItem = (
   type: PriorityTag,
-  page: {[id: string]: any} | null,
+  page: Spawn | null,
   node: Node,
   parent: Stack | null,
   value: any,
@@ -201,16 +203,16 @@ const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isWatch = false
-export let currentPage: any = null
+export let currentPage: Spawn | null = null
 export let forkPage: Scope | void | null
 export const setForkPage = (newForkPage: Scope) => {
   forkPage = newForkPage
 }
-export const setCurrentPage = (newPage: any) => {
+export const setCurrentPage = (newPage: Spawn | null) => {
   currentPage = newPage
 }
 
-const getPageForRef = (page: any, id: string) => {
+const getPageForRef = (page: Spawn | null, id: string) => {
   if (page) {
     while (page && !page.reg[id]) {
       page = getParent(page)
@@ -219,7 +221,7 @@ const getPageForRef = (page: any, id: string) => {
   }
   return null
 }
-const getPageRef = (page: any, node: Node, id: string) => {
+const getPageRef = (page: Spawn | null, node: Node, id: string) => {
   const pageForRef = getPageForRef(page, id)
   return (pageForRef ? pageForRef : node).reg[id]
 }
@@ -228,7 +230,7 @@ export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
-  page?: any
+  page?: Spawn
   forkPage?: Scope
   stack?: Stack
 }): void
@@ -277,7 +279,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let skip: boolean
   let node: Node
   let value
-  let page
+  let page: Spawn | null
   let reg: Record<string, StateRef>
   kernelLoop: while ((value = deleteMin())) {
     const {idx, stack, type} = value
@@ -390,7 +392,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
 }
 
 /** try catch for external functions */
-const tryRun = (local: Local, {fn}: any, stack: Stack) => {
+const tryRun = (
+  local: Local,
+  {fn}: Extract<Cmd, {data: {fn: Function}}>['data'],
+  stack: Stack,
+) => {
   try {
     return fn(getValue(stack), local.scope, stack)
   } catch (err) {
