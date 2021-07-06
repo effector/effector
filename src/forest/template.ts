@@ -524,8 +524,13 @@ export function spawn(
         switch (cmd.type) {
           case 'map': {
             const from = cmd.from
-            ensureLeafHasRef(from, leaf)
-            page[ref.id].current = cmd.fn(page[from.id].current)
+            if (!cmd.fn && !from) break
+            let value
+            if (from) {
+              ensureLeafHasRef(from, leaf)
+              value = page[from.id].current
+            }
+            page[ref.id].current = cmd.fn ? cmd.fn(value) : value
             break
           }
           case 'field': {
@@ -538,26 +543,6 @@ export function spawn(
             ensureLeafHasRef(cmd.of, leaf)
             break
         }
-      }
-    }
-    if (!ref.after) return
-    const value = page[ref.id].current
-    for (let i = 0; i < ref.after.length; i++) {
-      const cmd = ref.after[i]
-      const to = cmd.to
-      if (!page[to.id]) {
-        page[to.id] = {
-          id: to.id,
-          current: findRefValue(to, leaf.parentLeaf, forkPage),
-        }
-      }
-      switch (cmd.type) {
-        case 'copy':
-          page[to.id].current = value
-          break
-        case 'map':
-          page[to.id].current = cmd.fn(value)
-          break
       }
     }
   }

@@ -110,7 +110,7 @@ export function split(...args: any[]): any {
         if (is.store(storeOrFn)) {
           lastValues.current[key] = storeOrFn.getState()
           const storeRef = getStoreState(storeOrFn)
-          addRefOp(lastValues, true, {
+          addRefOp(lastValues, {
             type: 'field',
             field: key,
             from: storeRef,

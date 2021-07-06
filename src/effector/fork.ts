@@ -112,6 +112,7 @@ function fillValues({
     storeWatchesRefs,
   }
 }
+
 function execRef(
   predefinedRefs: Set<StateRef>,
   refsMap: Record<string, StateRef>,
@@ -124,8 +125,11 @@ function execRef(
     forEach(sourceRef.before, cmd => {
       switch (cmd.type) {
         case MAP: {
-          const from = refsMap[cmd.from.id]
-          ref.current = cmd.fn(from.current)
+          const from = cmd.from
+          if (from || cmd.fn) {
+            const value = from && refsMap[from.id].current
+            ref.current = cmd.fn ? cmd.fn(value) : value
+          }
           break
         }
         case 'field': {
@@ -146,20 +150,6 @@ function execRef(
       }
     })
   }
-  if (!sourceRef.after) return
-  const value = ref.current
-  forEach(sourceRef.after, cmd => {
-    const to = refsMap[cmd.to.id]
-    // if (predefinedRefs.has(to)) continue
-    switch (cmd.type) {
-      case 'copy':
-        to.current = value
-        break
-      case MAP:
-        to.current = cmd.fn(value)
-        break
-    }
-  })
 }
 
 /**

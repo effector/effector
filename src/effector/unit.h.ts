@@ -1,4 +1,4 @@
-import {
+import type {
   Subscription,
   Subscriber,
   Node,
@@ -8,7 +8,7 @@ import {
   Unit,
   Config,
 } from './index.h'
-import {CompositeName} from './naming'
+import type {CompositeName} from './naming'
 
 export interface Event<E> extends Unit {
   (payload: E): E

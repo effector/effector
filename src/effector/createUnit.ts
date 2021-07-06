@@ -215,7 +215,7 @@ export function createStore<State>(
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
   const template = readTemplate()
-  addRefOp(plainState, false, {type: 'copy', to: oldState})
+  addRefOp(oldState, {type: MAP, from: plainState})
   if (template) {
     template.plain.push(plainState, oldState)
   }
@@ -300,7 +300,7 @@ export function createStore<State>(
         strict: false,
       })
       const linkNode = updateStore(store, innerStore, MAP, false, fn)
-      addRefOp(getStoreState(innerStore), true, {
+      addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
         from: plainState,
@@ -407,7 +407,7 @@ const updateStore = (
         if (!includes(template.closure, ref)) {
           template.closure.push(ref)
         }
-        addRefOp(storeRef, true, {
+        addRefOp(storeRef, {
           type: 'closure',
           of: ref,
         })

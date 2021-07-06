@@ -153,7 +153,7 @@ const storeCombination = (
       meta: {op: 'combine'},
     })
     const childRef = getStoreState(child)
-    addRefOp(rawShape, true, {
+    addRefOp(rawShape, {
       type: 'field',
       field: key,
       from: childRef,
@@ -166,20 +166,11 @@ const storeCombination = (
   })
 
   store.defaultShape = obj
-  addRefOp(
-    rawShape,
-    false,
-    fn
-      ? {
-          type: MAP,
-          to: getStoreState(store),
-          fn,
-        }
-      : {
-          type: 'copy',
-          to: getStoreState(store),
-        },
-  )
+  addRefOp(getStoreState(store), {
+    type: MAP,
+    from: rawShape,
+    fn,
+  })
   if (!template) {
     store.defaultState = fn
       ? (getStoreState(store).current = fn(stateNew))

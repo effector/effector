@@ -49,7 +49,7 @@ export function createEffect<Payload, Done>(
 
   const effectRunner = createNode({
     scope: {
-      getHandler: instance.use.getCurrent = () => handler,
+      getHandler: (instance.use.getCurrent = () => handler),
       finally: anyway,
     },
     node: [
@@ -158,45 +158,47 @@ export function createEffect<Payload, Done>(
   return instance
 }
 
-export const onSettled = ({
-  params,
-  req,
-  ok,
-  anyway,
-  stack,
-}: {
-  params: any
-  req: {
-    rs(_: any): any
-    rj(_: any): any
-  }
-  ok: boolean
-  anyway: any
-  stack: any
-}) => (data: any) =>
-  launch({
-    target: [anyway, sidechain],
-    params: [
-      ok
-        ? {
-            status: 'done',
-            params,
-            result: data,
-          }
-        : {
-            status: 'fail',
-            params,
-            error: data,
-          },
-      {
-        fn: ok ? req.rs : req.rj,
-        value: data,
-      },
-    ],
-    defer: true,
-    page: stack.page,
-    forkPage: getForkPage(stack),
-  })
+export const onSettled =
+  ({
+    params,
+    req,
+    ok,
+    anyway,
+    stack,
+  }: {
+    params: any
+    req: {
+      rs(_: any): any
+      rj(_: any): any
+    }
+    ok: boolean
+    anyway: any
+    stack: any
+  }) =>
+  (data: any) =>
+    launch({
+      target: [anyway, sidechain],
+      params: [
+        ok
+          ? {
+              status: 'done',
+              params,
+              result: data,
+            }
+          : {
+              status: 'fail',
+              params,
+              error: data,
+            },
+        {
+          fn: ok ? req.rs : req.rj,
+          value: data,
+        },
+      ],
+      defer: true,
+      page: stack.page,
+      forkPage: getForkPage(stack),
+    })
 
 export const sidechain = createNode({
   node: [
