@@ -2,7 +2,7 @@ import {Event} from './unit.h'
 import {NodeUnit, Cmd} from './index.h'
 import {is, isFunction, isObject} from './is'
 import {forIn, includes} from './collection'
-import {createStateRef} from './stateRef'
+import {addRefOp, createStateRef} from './stateRef'
 import {readTemplate} from './region'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
@@ -85,7 +85,6 @@ export function split(...args: any[]): any {
   } else if (matchIsShape) {
     const lastValues = createStateRef({})
     lastValues.type = 'shape'
-    const before: any[] = (lastValues.before = [])
     const updaterSteps = [
       step.mov({
         store: lastValues,
@@ -111,7 +110,7 @@ export function split(...args: any[]): any {
         if (is.store(storeOrFn)) {
           lastValues.current[key] = storeOrFn.getState()
           const storeRef = getStoreState(storeOrFn)
-          before.push({
+          addRefOp(lastValues, true, {
             type: 'field',
             field: key,
             from: storeRef,

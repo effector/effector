@@ -4,12 +4,21 @@ export type ID = string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
+export type StateRefOpBefore =
+  | {type: 'map'; from?: StateRef; fn: (value: any) => any}
+  | {type: 'field'; from: StateRef; field: string}
+  | {type: 'closure'; of: StateRef}
+
+export type StateRefOpAfter =
+  | {type: 'copy'; to: StateRef}
+  | {type: 'map'; to: StateRef; fn: (value: any) => any}
+
 export type StateRef = {
   id: ID
   current: any
   type?: 'list' | 'shape'
-  before?: any[]
-  after?: any[]
+  before?: StateRefOpBefore[]
+  after?: StateRefOpAfter[]
 }
 
 export type Config = {

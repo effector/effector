@@ -1,10 +1,10 @@
 import {observableSymbol} from './observable'
 
 import {is, isObject, isFunction, assertObject, assertNodeSet} from './is'
-import {Store, Event} from './unit.h'
+import type {Store, Event} from './unit.h'
 
 import {step} from './typedef'
-import {createStateRef, readRef} from './stateRef'
+import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
 import {bind} from './bind'
@@ -79,11 +79,11 @@ export const initUnit = (
   const compositeName = createName(name, parent)
 
   const meta: Record<string, any> = {
-    unit: unit.kind = kind,
-    name: unit.shortName = name,
-    sid: unit.sid = readSidRoot(sid),
+    unit: (unit.kind = kind),
+    name: (unit.shortName = name),
+    sid: (unit.sid = readSidRoot(sid)),
     named,
-    unitId: unit.id = id,
+    unitId: (unit.id = id),
   }
   unit.parent = parent
   unit.compositeName = compositeName
@@ -215,7 +215,7 @@ export function createStore<State>(
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
   const template = readTemplate()
-  plainState.after = [{type: 'copy', to: oldState}]
+  addRefOp(plainState, false, {type: 'copy', to: oldState})
   if (template) {
     template.plain.push(plainState, oldState)
   }
@@ -300,14 +300,11 @@ export function createStore<State>(
         strict: false,
       })
       const linkNode = updateStore(store, innerStore, MAP, false, fn)
-
-      getStoreState(innerStore).before = [
-        {
-          type: MAP,
-          fn,
-          from: plainState,
-        },
-      ]
+      addRefOp(getStoreState(innerStore), true, {
+        type: MAP,
+        fn,
+        from: plainState,
+      })
       if (template) {
         if (!includes(template.plain, plainState)) {
           if (!includes(linkNode.seq, template.loader)) {
@@ -410,8 +407,7 @@ const updateStore = (
         if (!includes(template.closure, ref)) {
           template.closure.push(ref)
         }
-        if (!storeRef.before) storeRef.before = []
-        storeRef.before.push({
+        addRefOp(storeRef, true, {
           type: 'closure',
           of: ref,
         })

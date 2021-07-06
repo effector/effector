@@ -1,6 +1,6 @@
-import {Store} from './unit.h'
+import type {Store} from './unit.h'
 import {createStore} from './createUnit'
-import {createStateRef} from './stateRef'
+import {createStateRef, addRefOp} from './stateRef'
 import {step} from './typedef'
 import {onConfigNesting} from './config'
 import {getGraph, getStoreState} from './getter'
@@ -140,7 +140,6 @@ const storeCombination = (
       store: getStoreState(store),
     }),
   ]
-  const before: any[] = (rawShape.before = [])
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
       stateNew[key] = defaultState[key] = child
@@ -154,7 +153,7 @@ const storeCombination = (
       meta: {op: 'combine'},
     })
     const childRef = getStoreState(child)
-    before.push({
+    addRefOp(rawShape, true, {
       type: 'field',
       field: key,
       from: childRef,
@@ -167,7 +166,9 @@ const storeCombination = (
   })
 
   store.defaultShape = obj
-  rawShape.after = [
+  addRefOp(
+    rawShape,
+    false,
     fn
       ? {
           type: MAP,
@@ -178,7 +179,7 @@ const storeCombination = (
           type: 'copy',
           to: getStoreState(store),
         },
-  ]
+  )
   if (!template) {
     store.defaultState = fn
       ? (getStoreState(store).current = fn(stateNew))
