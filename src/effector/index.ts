@@ -6,7 +6,7 @@
 
 export {attach} from './attach'
 export {clearNode} from './clearNode'
-export {combine, combine as createStoreObject} from './combine'
+export {combine, createStoreObject} from './combine'
 export {createApi} from './createApi'
 export {createDomain} from './createDomain'
 export {createEffect} from './createEffect'

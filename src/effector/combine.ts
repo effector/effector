@@ -186,3 +186,8 @@ const storeCombination = (
   }
   return store
 }
+
+export function createStoreObject(...args: any[]) {
+  console.error('createStoreObject is deprecated, use combine instead')
+  return combine(...args)
+}
