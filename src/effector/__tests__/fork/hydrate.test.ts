@@ -11,7 +11,6 @@ import {
   Event,
 } from 'effector'
 
-
 test('watch calls during hydration', async () => {
   const fxHandlerFn = jest.fn()
   const storeWatchFn = jest.fn()
@@ -202,6 +201,9 @@ describe('multiple hydrate calls', () => {
           "combfn: 1",
           "$n: 1",
           "## second hydration, $n = 1",
+          "combined: {n:1}",
+          "combfn: 1",
+          "$n: 1",
           "## setN(2)",
           "setN: 2",
           "$n: 2",
