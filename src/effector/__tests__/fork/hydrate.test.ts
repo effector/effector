@@ -7,7 +7,10 @@ import {
   allSettled,
   serialize,
   hydrate,
+  Store,
+  Event,
 } from 'effector'
+
 
 test('watch calls during hydration', async () => {
   const fxHandlerFn = jest.fn()
@@ -135,6 +138,283 @@ test('watch calls during hydration', async () => {
       1,
     ]
   `)
+})
+
+describe('multiple hydrate calls', () => {
+  test('reference: no hydrate calls', () => {
+    const fn = jest.fn()
+    const app = createDomain()
+    const setN = app.createEvent<number>()
+    const $n = app.createStore(0).on(setN, (_, n) => n)
+    const combined = combine({n: $n})
+    const combfn = combine($n, n => n)
+    storeWatch('$n', $n, fn)
+    storeWatch('combined', combined, fn)
+    storeWatch('combfn', combfn, fn)
+    unitWatch('setN', setN, fn)
+    fn(`## setN(2)`)
+    setN(2)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$n: 0",
+        "combined: {n:0}",
+        "combfn: 0",
+        "## setN(2)",
+        "setN: 2",
+        "$n: 2",
+        "$n.updates: 2",
+        "combined: {n:2}",
+        "combined.updates: {n:2}",
+        "combfn: 2",
+        "combfn.updates: 2",
+      ]
+    `)
+  })
+  describe('with same value', () => {
+    test('domain', () => {
+      const fn = jest.fn()
+      const app = createDomain()
+      const setN = app.createEvent<number>()
+      const $n = app.createStore(0).on(setN, (_, n) => n)
+      const combined = combine({n: $n})
+      const combfn = combine($n, n => n)
+      storeWatch('$n', $n, fn)
+      storeWatch('combined', combined, fn)
+      storeWatch('combfn', combfn, fn)
+      unitWatch('setN', setN, fn)
+      fn(`## first hydration, $n = 1`)
+      hydrate(app, {
+        values: new Map([[$n, 1]]),
+      })
+      fn(`## second hydration, $n = 1`)
+      hydrate(app, {
+        values: new Map([[$n, 1]]),
+      })
+      fn(`## setN(2)`)
+      setN(2)
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          "$n: 0",
+          "combined: {n:0}",
+          "combfn: 0",
+          "## first hydration, $n = 1",
+          "$n: 1",
+          "$n.updates: 1",
+          "combined: {n:1}",
+          "combined.updates: {n:1}",
+          "combfn: 1",
+          "combfn.updates: 1",
+          "## second hydration, $n = 1",
+          "## setN(2)",
+          "setN: 2",
+          "$n: 2",
+          "$n.updates: 2",
+          "combined: {n:2}",
+          "combined.updates: {n:2}",
+          "combfn: 2",
+          "combfn.updates: 2",
+        ]
+      `)
+    })
+    test('scope', async () => {
+      const fn = jest.fn()
+      const app = createDomain()
+      const setN = app.createEvent<number>()
+      const $n = app.createStore(0).on(setN, (_, n) => n)
+      const combined = combine({n: $n})
+      const combfn = combine($n, n => n)
+      storeWatch('$n', $n, fn)
+      storeWatch('combined', combined, fn)
+      storeWatch('combfn', combfn, fn)
+      unitWatch('setN', setN, fn)
+      fn(`## forking, $n = -2`)
+      const scope = fork(app, {
+        values: new Map([[$n, -2]]),
+      })
+      fn(`## first hydration, $n = 1`)
+      hydrate(scope, {
+        values: new Map([[$n, 1]]),
+      })
+      fn(`## second hydration, $n = 1`)
+      hydrate(scope, {
+        values: new Map([[$n, 1]]),
+      })
+      fn(`## setN(2)`)
+      await allSettled(setN, {
+        params: 2,
+        scope,
+      })
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          "$n: 0",
+          "combined: {n:0}",
+          "combfn: 0",
+          "## forking, $n = -2",
+          "$n: -2",
+          "combined: {n:-2}"
+          "combfn: -2",
+          "## first hydration, $n = 1",
+          "$n: 1",
+          "$n.updates: 1",
+          "combined: {n:1}",
+          "combined.updates: {n:1}",
+          "combfn: 1",
+          "combfn.updates: 1",
+          "## second hydration, $n = 1",
+          "## setN(2)",
+          "setN: 2",
+          "$n: 2",
+          "$n.updates: 2",
+          "combined: {n:2}",
+          "combined.updates: {n:2}",
+          "combfn: 2",
+          "combfn.updates: 2",
+        ]
+      `)
+    })
+  })
+  describe('with different values', () => {
+    test('domain', () => {
+      const fn = jest.fn()
+      const app = createDomain()
+      const setN = app.createEvent<number>()
+      const $n = app.createStore(0).on(setN, (_, n) => n)
+      const combined = combine({n: $n})
+      const combfn = combine($n, n => n)
+      storeWatch('$n', $n, fn)
+      storeWatch('combined', combined, fn)
+      storeWatch('combfn', combfn, fn)
+      unitWatch('setN', setN, fn)
+      fn(`## first hydration, $n = 1`)
+      hydrate(app, {
+        values: new Map([[$n, 1]]),
+      })
+      fn(`## second hydration, $n = -1`)
+      hydrate(app, {
+        values: new Map([[$n, -1]]),
+      })
+      fn(`## setN(2)`)
+      setN(2)
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          "$n: 0",
+          "combined: {n:0}",
+          "combfn: 0",
+          "## first hydration, $n = 1",
+          "$n: 1",
+          "$n.updates: 1",
+          "combined: {n:1}",
+          "combined.updates: {n:1}",
+          "combfn: 1",
+          "combfn.updates: 1",
+          "## second hydration, $n = -1",
+          "$n: -1",
+          "$n.updates: -1",
+          "combined: {n:-1}",
+          "combined.updates: {n:-1}",
+          "combfn: -1",
+          "combfn.updates: -1",
+          "## setN(2)",
+          "setN: 2",
+          "$n: 2",
+          "$n.updates: 2",
+          "combined: {n:2}",
+          "combined.updates: {n:2}",
+          "combfn: 2",
+          "combfn.updates: 2",
+        ]
+      `)
+    })
+    test('scope', async () => {
+      const fn = jest.fn()
+      const app = createDomain()
+      const setN = app.createEvent<number>()
+      const $n = app.createStore(0).on(setN, (_, n) => n)
+      const combined = combine({n: $n})
+      const combfn = combine($n, n => n)
+      storeWatch('$n', $n, fn)
+      storeWatch('combined', combined, fn)
+      storeWatch('combfn', combfn, fn)
+      unitWatch('setN', setN, fn)
+      fn(`## forking, $n = -2`)
+      const scope = fork(app, {
+        values: new Map([[$n, -2]]),
+      })
+      fn(`## first hydration, $n = 1`)
+      hydrate(scope, {
+        values: new Map([[$n, 1]]),
+      })
+      fn(`## second hydration, $n = -1`)
+      hydrate(scope, {
+        values: new Map([[$n, -1]]),
+      })
+      fn(`## setN(2)`)
+      await allSettled(setN, {
+        params: 2,
+        scope,
+      })
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          "$n: 0",
+          "combined: {n:0}",
+          "combfn: 0",
+          "## forking, $n = -2",
+          "$n: -2"
+          "combined: {n:-2}"
+          "combfn: {n:-2}"
+          "## first hydration, $n = 1",
+          "$n: 1",
+          "$n.updates: 1",
+          "combined: {n:1}",
+          "combined.updates: {n:1}",
+          "combfn: 1",
+          "combfn.updates: 1",
+          "## second hydration, $n = -1",
+          "$n: -1",
+          "$n.updates: -1",
+          "combined: {n:-1}",
+          "combined.updates: {n:-1}",
+          "combfn: -1",
+          "combfn.updates: -1",
+          "## setN(2)",
+          "setN: 2",
+          "$n: 2",
+          "$n.updates: 2",
+          "combined: {n:2}",
+          "combined.updates: {n:2}",
+          "combfn: 2",
+          "combfn.updates: 2",
+        ]
+      `)
+    })
+  })
+  function storeWatch<T>(
+    tag: string,
+    store: Store<T>,
+    fn: jest.Mock<any, any>,
+  ) {
+    unitWatch(`${tag}`, store, fn)
+    unitWatch(`${tag}.updates`, store.updates, fn)
+  }
+  function unitWatch<T>(
+    tag: string,
+    unit: Store<T> | Event<T>,
+    fn: jest.Mock<any, any>,
+    log: boolean = false,
+  ) {
+    unit.watch(value => {
+      let text: string
+      if (typeof value === 'object' && value !== null) {
+        text = `{n:${(value as any).n}}`
+      } else {
+        text = `${value}`
+      }
+      fn(`${tag}: ${text}`)
+      if (log) {
+        console.log(tag, text)
+      }
+    })
+  }
 })
 
 describe('hydrate edge cases', () => {
