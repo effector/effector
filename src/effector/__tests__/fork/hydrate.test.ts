@@ -38,7 +38,7 @@ test('watch calls during hydration', async () => {
   const combined = combine({a: store, b: store})
   const combinedFn = combine(store, store, (a, b) => ({a, b}))
 
-  const mapped = store.map(x => `"${x}"`)
+  const mapped = store.map(x => `'${x}'`)
 
   store.watch(storeWatchFn)
   store.updates.watch(eventWatchFn)
@@ -55,87 +55,95 @@ test('watch calls during hydration', async () => {
       [store.sid!]: 0,
     },
   })
-
-  await allSettled(start, {
-    scope: fork(app),
-  })
-
-  expect(argumentHistory(storeWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      -1,
-      0,
-      1,
-    ]
-  `)
-  expect(argumentHistory(eventWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      1,
-    ]
-  `)
-  expect(argumentHistory(combineWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "a": -1,
-        "b": -1,
+  await allSettled(start, {scope: fork(app)})
+  expect({
+    store: {
+      watch: argumentHistory(storeWatchFn),
+      'updates.watch': argumentHistory(eventWatchFn),
+    },
+    combined: {
+      watch: argumentHistory(combineWatchFn),
+      'updates.watch': argumentHistory(combineUpdatesWatchFn),
+    },
+    combinedFn: {
+      watch: argumentHistory(combineFnWatchFn),
+      'updates.watch': argumentHistory(combineFnUpdatesWatchFn),
+    },
+    mapped: {
+      watch: argumentHistory(mapWatchFn),
+      'updates.watch': argumentHistory(mapUpdatesWatchFn),
+    },
+    fxHandlerFn: argumentHistory(fxHandlerFn),
+  }).toMatchInlineSnapshot(`
+    Object {
+      "combined": Object {
+        "updates.watch": Array [
+          Object {
+            "a": 1,
+            "b": 1,
+          },
+        ],
+        "watch": Array [
+          Object {
+            "a": -1,
+            "b": -1,
+          },
+          Object {
+            "a": 0,
+            "b": 0,
+          },
+          Object {
+            "a": 1,
+            "b": 1,
+          },
+        ],
       },
-      Object {
-        "a": 0,
-        "b": 0,
+      "combinedFn": Object {
+        "updates.watch": Array [
+          Object {
+            "a": 1,
+            "b": 1,
+          },
+        ],
+        "watch": Array [
+          Object {
+            "a": -1,
+            "b": -1,
+          },
+          Object {
+            "a": 0,
+            "b": 0,
+          },
+          Object {
+            "a": 1,
+            "b": 1,
+          },
+        ],
       },
-      Object {
-        "a": 1,
-        "b": 1,
+      "fxHandlerFn": Array [
+        1,
+      ],
+      "mapped": Object {
+        "updates.watch": Array [
+          "'1\'",
+        ],
+        "watch": Array [
+          "'-1'",
+          "'0'",
+          "'1'",
+        ],
       },
-    ]
-  `)
-  expect(argumentHistory(combineUpdatesWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "a": 1,
-        "b": 1,
+      "store": Object {
+        "updates.watch": Array [
+          1,
+        ],
+        "watch": Array [
+          -1,
+          0,
+          1,
+        ],
       },
-    ]
-  `)
-  expect(argumentHistory(combineFnWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "a": -1,
-        "b": -1,
-      },
-      Object {
-        "a": 0,
-        "b": 0,
-      },
-      Object {
-        "a": 1,
-        "b": 1,
-      },
-    ]
-  `)
-  expect(argumentHistory(combineFnUpdatesWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "a": 1,
-        "b": 1,
-      },
-    ]
-  `)
-  expect(argumentHistory(mapWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      "\\"-1\\"",
-      "\\"0\\"",
-      "\\"1\\"",
-    ]
-  `)
-  expect(argumentHistory(mapUpdatesWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      "\\"1\\"",
-    ]
-  `)
-  expect(argumentHistory(fxHandlerFn)).toMatchInlineSnapshot(`
-    Array [
-      1,
-    ]
+    }
   `)
 })
 
