@@ -1,4 +1,12 @@
 import {createStore, createStoreObject} from 'effector'
+let consoleError: any
+beforeEach(() => {
+  consoleError = console.error
+  console.error = () => {}
+})
+afterEach(() => {
+  console.error = consoleError
+})
 
 describe('createStoreObject', () => {
   test('.defaultState', () => {
