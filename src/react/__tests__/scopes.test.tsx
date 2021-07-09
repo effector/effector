@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch'
-import * as React from 'react'
+import React from 'react'
+//@ts-ignore
 import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {
@@ -14,7 +15,6 @@ import {
   hydrate,
   Scope,
 } from 'effector'
-import {createGate} from 'effector-react'
 import {
   Provider,
   useStore,
@@ -22,6 +22,7 @@ import {
   useGate,
   useEvent,
   useStoreMap,
+  createGate,
 } from 'effector-react/ssr'
 
 it('works', async () => {
@@ -31,7 +32,7 @@ it('works', async () => {
   const start = app.createEvent<string>()
   const indirectCall = app.createEvent()
   const sendStats = app.createEffect({
-    async handler(user) {
+    async handler(user: any) {
       await new Promise(resolve => {
         // let bob loading longer
         setTimeout(resolve, user === 'bob' ? 500 : 100)
@@ -40,7 +41,7 @@ it('works', async () => {
   })
 
   const fetchUser = app.createEffect({
-    async handler(user) {
+    async handler(user: any) {
       return (
         await fetch('https://ssr.effector.dev/api/' + user, {
           method: 'POST',
@@ -116,8 +117,8 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-g3n6wx": "alice",
-      "lwu35x": Array [
+      "-fmlkiq": "alice",
+      "mdvpk4": Array [
         "bob",
         "carol",
       ],
@@ -125,8 +126,8 @@ it('works', async () => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-g3n6wx": "bob",
-      "lwu35x": Array [
+      "-fmlkiq": "bob",
+      "mdvpk4": Array [
         "alice",
       ],
     }
@@ -234,21 +235,21 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-dk3jhx": Array [
+      "-d31x3q": Array [
         "bob",
         "carol",
       ],
-      "bh324l": "https://ssr.effector.dev/api",
-      "trafmh": "alice",
+      "by4ois": "https://ssr.effector.dev/api",
+      "u8c20o": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-dk3jhx": Array [
+      "-d31x3q": Array [
         "alice",
       ],
-      "bh324l": "https://ssr.effector.dev/api",
-      "trafmh": "bob",
+      "by4ois": "https://ssr.effector.dev/api",
+      "u8c20o": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()

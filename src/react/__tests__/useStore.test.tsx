@@ -101,9 +101,10 @@ describe('useStore', () => {
   it('should correct work, when store contains function', async () => {
     const fn = jest.fn()
     const changeStore = createEvent<Record<string, string>>()
-    const $store = createStore<(e: string) => string>(
-      () => 'initial',
-    ).on(changeStore, (_, data) => p => data[p] || 'initial')
+    const $store = createStore<(e: string) => string>(() => 'initial').on(
+      changeStore,
+      (_, data) => p => data[p] || 'initial',
+    )
 
     const Display = () => {
       const store = useStore($store)
@@ -581,7 +582,7 @@ describe('useStoreMap', () => {
         store,
         keys: [],
         fn: x => x,
-        updateFilter: (x, y) => x % 2 === 0,
+        updateFilter: (x: number, y) => x % 2 === 0,
       })
       return <div>{x}</div>
     }
@@ -605,6 +606,62 @@ describe('useStoreMap', () => {
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
+        2
+      </div>
+    `)
+  })
+  it('should not hold obsolete fn', async () => {
+    const update = createEvent<number>()
+    const store = createStore(0).on(update, (_, x) => x)
+    let count = 0
+    const View = () => {
+      const storeValue = useStore(store)
+      const n = count
+      const x = useStoreMap({
+        store,
+        keys: [count],
+        fn: x => x + n,
+      })
+      return (
+        <div>
+          {storeValue}/{x}/{count}
+        </div>
+      )
+    }
+    const App = () => <View />
+    await render(<App />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        0
+        /
+        0
+        /
+        0
+      </div>
+    `)
+    await act(async () => {
+      count += 1
+      update(2)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        2
+        /
+        3
+        /
+        1
+      </div>
+    `)
+    await act(async () => {
+      count += 1
+      update(3)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        3
+        /
+        5
+        /
         2
       </div>
     `)
