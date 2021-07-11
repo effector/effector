@@ -166,17 +166,12 @@ describe('port', () => {
     const eff = domain.createEvent()
     event.watch(used)
     eff.watch(usedEff)
-    const str$ = periodic(100)
+    const str$ = periodic(50)
       .scan(a => a + 1, 0)
-      .take(10)
-
-    str$.map(event).drain()
-    await new Promise(rs => setTimeout(rs, 1500))
-    expect(used).toHaveBeenCalledTimes(10)
-
-    str$.map(eff).drain()
-    await new Promise(rs => setTimeout(rs, 1500))
-    expect(usedEff).toHaveBeenCalledTimes(10)
+      .take(5)
+    await Promise.all([str$.map(event).drain(), str$.map(eff).drain()])
+    expect(used).toHaveBeenCalledTimes(5)
+    expect(usedEff).toHaveBeenCalledTimes(5)
   })
 })
 
