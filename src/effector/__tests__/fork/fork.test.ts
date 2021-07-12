@@ -75,6 +75,23 @@ describe('fork values support', () => {
       `"Values map can contain only stores as keys"`,
     )
   })
+  describe('consistency simple', () => {
+    test('consistency simple with getState', async () => {
+      const app = createDomain({sid: 'app'} as any)
+      const secondOne1 = app.createStore(1, {sid: `1.2`})
+      const both1 = combine(secondOne1, y => 2 * y)
+
+      const finalStore = combine([secondOne1, both1], ([secondOne, both]) => ({
+        secondOne,
+        both,
+      }))
+      const scope = fork(app, {
+        values: new Map([[secondOne1, 0]]),
+      })
+      expect(scope.getState(secondOne1)).toEqual(0)
+      expect(scope.getState(finalStore)).toEqual({secondOne: 0, both: 0})
+    })
+  })
   test('values initialization consistency', async () => {
     /**
      * goal of this test is to create a lot of stores to pass to values
