@@ -51,7 +51,7 @@ test('watch calls during hydration', async () => {
 
   hydrate(app, {
     values: {
-      ...serialize(fork(app)),
+      ...serialize(fork(app), {onlyChanges: true}),
       [store.sid!]: 0,
     },
   })
@@ -434,7 +434,7 @@ describe('hydrate edge cases', () => {
 
     hydrate(app, {
       values: {
-        ...serialize(fork(app)),
+        ...serialize(fork(app), {onlyChanges: true}),
         [listsContainer$.sid!]: {
           a: [0, 1, 2, 3],
           b: [1, 8, 5],

@@ -27,7 +27,7 @@ describe('fork values support', () => {
     })
 
     hydrate(app, {
-      values: serialize(scope),
+      values: serialize(scope, {onlyChanges: true}),
     })
 
     expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
@@ -49,7 +49,7 @@ describe('fork values support', () => {
     })
 
     hydrate(app, {
-      values: serialize(scope),
+      values: serialize(scope, {onlyChanges: true}),
     })
 
     expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
@@ -142,7 +142,7 @@ describe('fork values support', () => {
         stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
       ),
     })
-    const basicCase = serialize(scope)
+    const basicCase = serialize(scope, {onlyChanges: true})
     expect(scope.getState(finalStore)).toMatchInlineSnapshot(`
 Array [
   Object {
@@ -210,29 +210,12 @@ Array [
     expect(basicCase).toMatchInlineSnapshot(`
 Object {
   "0.1": 0,
-  "0.2": 0,
-  "1.1": 1,
   "1.2": 0,
-  "2.1": 2,
-  "2.2": 2,
   "3.1": 0,
-  "3.2": 3,
-  "4.1": 4,
   "4.2": 0,
-  "5.1": 5,
-  "5.2": 5,
   "6.1": 0,
-  "6.2": 6,
-  "7.1": 7,
   "7.2": 0,
-  "8.1": 8,
-  "8.2": 8,
   "9.1": 0,
-  "9.2": 9,
-  "sum": Array [
-    0,
-    Array [],
-  ],
 }
 `)
     expect(scope.getState(sumStore)).toMatchInlineSnapshot(`

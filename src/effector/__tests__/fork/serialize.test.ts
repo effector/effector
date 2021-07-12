@@ -11,18 +11,20 @@ it('serialize stores to object of sid as keys', () => {
   const app = createDomain()
   const $a = app.createStore('value', {sid: 'a'})
   const $b = app.createStore([], {sid: 'b'})
-  const $c = app.createStore(null, {sid: 'c'})
+  const $c = app.createStore(null as null | number, {sid: 'c'})
   const $d = app.createStore(false, {sid: 'd'})
 
-  const scope = fork(app)
-  const values = serialize(scope)
+  const scope = fork(app, {
+    values: new Map().set($a, 'value2').set($b, []).set($c, 0).set($d, true),
+  })
+  const values = serialize(scope, {onlyChanges: true})
 
   expect(values).toMatchInlineSnapshot(`
     Object {
-      "a": "value",
+      "a": "value2",
       "b": Array [],
-      "c": null,
-      "d": false,
+      "c": 0,
+      "d": true,
     }
   `)
 })
@@ -31,16 +33,18 @@ it('serialize stores with ignore parameter', () => {
   const app = createDomain()
   const $a = app.createStore('value', {sid: 'a'})
   const $b = app.createStore([], {sid: 'b'})
-  const $c = app.createStore(null, {sid: 'c'})
+  const $c = app.createStore(null as null | number, {sid: 'c'})
   const $d = app.createStore(false, {sid: 'd'})
 
-  const scope = fork(app)
-  const values = serialize(scope, {ignore: [$b, $d]})
+  const scope = fork(app, {
+    values: new Map().set($a, 'value2').set($b, []).set($c, 0).set($d, true),
+  })
+  const values = serialize(scope, {ignore: [$b, $d], onlyChanges: true})
 
   expect(values).toMatchInlineSnapshot(`
     Object {
-      "a": "value",
-      "c": null,
+      "a": "value2",
+      "c": 0,
     }
   `)
 })
@@ -52,16 +56,18 @@ it('serialize stores in nested domain', () => {
   const third = second.createDomain()
   const $a = first.createStore('value', {sid: 'a'})
   const $b = second.createStore([], {sid: 'b'})
-  const $c = third.createStore(null, {sid: 'c'})
+  const $c = third.createStore(null as null | number, {sid: 'c'})
   const $d = app.createStore(false, {sid: 'd'})
 
-  const scope = fork(app)
-  const values = serialize(scope, {ignore: [$d, $a]})
+  const scope = fork(app, {
+    values: new Map().set($a, 'value2').set($b, []).set($c, 0).set($d, true),
+  })
+  const values = serialize(scope, {ignore: [$d, $a], onlyChanges: true})
 
   expect(values).toMatchInlineSnapshot(`
     Object {
       "b": Array [],
-      "c": null,
+      "c": 0,
     }
 `)
 })
@@ -70,7 +76,9 @@ describe('onlyChanges', () => {
   it('avoid serializing combined stores when they are not changed', async () => {
     const app = createDomain()
     const newMessage = app.createEvent()
-    const messages = app.createStore(0).on(newMessage, x => x + 1)
+    const messages = app
+      .createStore(0, {sid: '-i1guvk'})
+      .on(newMessage, x => x + 1)
     const stats = combine({messages})
     const scope = fork(app)
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
@@ -86,7 +94,9 @@ describe('onlyChanges', () => {
   it('skip unchanged objects', async () => {
     const app = createDomain()
     const newMessage = app.createEvent()
-    const messages = app.createStore(0).on(newMessage, x => x + 1)
+    const messages = app
+      .createStore(0, {sid: '-isuad'})
+      .on(newMessage, x => x + 1)
     const scope = fork(app)
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
       `Object {}`,
@@ -104,7 +114,7 @@ describe('onlyChanges', () => {
     const newMessage = app.createEvent()
     const resetMessages = app.createEvent()
     const messages = app
-      .createStore(0)
+      .createStore(0, {sid: 'a0ikkx'})
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork(app)
@@ -121,7 +131,7 @@ describe('onlyChanges', () => {
     const newMessage = app.createEvent()
     const resetMessages = app.createEvent()
     const messages = app
-      .createStore(0)
+      .createStore(0, {sid: '-x2xs4q'})
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork(app, {
@@ -144,7 +154,7 @@ describe('onlyChanges', () => {
     const newMessage = app.createEvent()
     const resetMessages = app.createEvent()
     const messages = app
-      .createStore(0)
+      .createStore(0, {sid: '-2b0ci3'})
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork(app)
@@ -169,12 +179,12 @@ describe('serializing combine', () => {
   it('should not serialize combine in default case', async () => {
     const app = createDomain()
     const trigger = app.createEvent()
-    const foo = app.createStore(0).on(trigger, x => x + 1)
-    const bar = app.createStore(0).on(trigger, x => x + 1)
+    const foo = app.createStore(0, {sid: '19cuby'}).on(trigger, x => x + 1)
+    const bar = app.createStore(0, {sid: 'q3ihek'}).on(trigger, x => x + 1)
     const combined = combine({foo, bar})
     const scope = fork(app)
     await allSettled(trigger, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
         "19cuby": 1,
         "q3ihek": 1,
@@ -184,22 +194,20 @@ describe('serializing combine', () => {
   it('should serialize combine when it updated by on', async () => {
     const app = createDomain()
     const trigger = app.createEvent()
-    const foo = app.createStore(0)
-    const bar = app.createStore(0)
+    const foo = app.createStore(0, {sid: '-rvz6dk'})
+    const bar = app.createStore(0, {sid: 'iaz8iy'})
     const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
       foo: foo + 1,
       bar: bar + 1,
     }))
     const scope = fork(app)
     await allSettled(trigger, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-7gr20z": Object {
+        "77n872": Object {
           "bar": 1,
           "foo": 1,
         },
-        "-rvz6dk": 0,
-        "iaz8iy": 0,
       }
     `)
   })
