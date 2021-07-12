@@ -21,7 +21,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 
 ## Schema
 
-![](https://s7.gifyu.com/images/ezgif.com-video-to-gif855ab4c69b9b103c.gif)
+![](./images/sample-visualization.gif)
 
 ## Type of the created `target`
 
