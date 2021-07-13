@@ -43,7 +43,7 @@ const MyCounter = createComponent($counter, (props, state) => (
 ))
 
 const MyOwnComponent = () => {
-  // any staff here
+  // any stuff here
   return <MyCounter />
 }
 ```
