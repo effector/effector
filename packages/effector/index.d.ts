@@ -497,6 +497,9 @@ export function createStore<State>(
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
 
+/**
+ * @deprecated use combine() instead of
+ */
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
