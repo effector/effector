@@ -1,4 +1,6 @@
-import {Store, Event, Step, StateRef, Filter, Fork} from 'effector'
+import {Store, Event, Step, Filter} from 'effector'
+import type {Scope} from '../effector/unit.h'
+import type {StateRef} from '../effector/index.h'
 
 import {
   ElementBlock,
@@ -315,7 +317,7 @@ export type Leaf = {
   }
   svgRoot: SVGSVGElement | null
   hydration: boolean
-  forkPage?: Fork
+  forkPage?: Scope
   env: Env
   mountNode: DOMElement
 }

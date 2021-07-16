@@ -696,42 +696,6 @@ test('forked scope update itself on new domain units access', async () => {
   expect(fn).not.toBeCalled()
 })
 
-describe('unit name in not found error', () => {
-  it('should show name if present', async () => {
-    const app = createDomain()
-    const eventA = createEvent()
-    const scope = fork(app)
-    expect(() => {
-      //@ts-ignore
-      scope.find(eventA)
-    }).toThrowErrorMatchingInlineSnapshot(`"eventA not found in forked scope"`)
-  })
-  it('should show default message for nameless units', async () => {
-    const app = createDomain()
-    const eventA = {_: createEvent}._()
-    const otherDomain = createDomain()
-    const eventB = {_: otherDomain.createEvent}._()
-    const scope = fork(app)
-    expect(() => {
-      //@ts-ignore
-      scope.find(eventA)
-    }).toThrowErrorMatchingInlineSnapshot(`"unit not found in forked scope"`)
-    expect(() => {
-      //@ts-ignore
-      scope.find(eventB)
-    }).toThrowErrorMatchingInlineSnapshot(`"unit not found in forked scope"`)
-  })
-  it('works with named child units', async () => {
-    const app = createDomain()
-    const fx = {_: createEffect}._()
-    const scope = fork(app)
-    expect(() => {
-      //@ts-ignore
-      scope.find(fx.pending)
-    }).toThrowErrorMatchingInlineSnapshot(`"pending not found in forked scope"`)
-  })
-})
-
 test('fork should pass through attach', () => {
   const app = createDomain()
   const source = app.createEvent()

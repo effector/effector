@@ -13,6 +13,7 @@ import {getStoreState} from './getter'
 import {REG_A} from './tag'
 import {throwError} from './throw'
 import {createEvent} from './createUnit'
+import {splitTempl} from './template'
 
 const launchCase = (
   scopeTargets: Record<string, NodeUnit>,
@@ -52,8 +53,6 @@ export function split(...args: any[]): any {
     })
     targets.__ = createEvent(metadata)
   }
-  //@ts-ignore
-  const template = readTemplate()
   const owners = new Set(
     ([] as NodeUnit[]).concat(source, Object.values(targets)),
   )
@@ -115,16 +114,12 @@ export function split(...args: any[]): any {
             field: key,
             from: storeRef,
           })
-          if (template) {
-            if (!includes(template.plain, storeRef)) {
-              updater.seq.unshift(template.loader)
-            }
-          }
+          splitTempl.initMatchStore(storeRef, updater)
         }
       }
     })
-    if (needBarrier! && template) {
-      template.plain.push(lastValues)
+    if (needBarrier!) {
+      splitTempl.initBase(lastValues)
     }
     splitterSeq = [
       needBarrier! && step.barrier({priority: 'sampler'}),

@@ -168,12 +168,16 @@ export interface Domain extends Unit {
 export interface Scope extends Unit {
   kind: kind
   graphite: Node
-  changedStores: Set<string>
+  // changedStores: Set<string>
   reg: Record<string, StateRef>
-  nodeMap: Record<string, Node>
-  sidMap: Record<string, Node>
   cloneOf: Domain
-  clones: Node[]
-  find(unit: NodeUnit): Node
   getState<T>(store: Store<T>): T
+  getState(ref: StateRef): any
+  /** value could be set only for stores with sid (they can be created by createStore, restore and combine) */
+  sidValuesMap: Record<string, any>
+  sidIdMap: Record<string, string>
+  additionalLinks: Record<string, Node[]>
+  handlers: Record<string, Function>
+  fxCount: Node
+  storeChange: Node
 }

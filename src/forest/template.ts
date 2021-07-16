@@ -8,9 +8,9 @@ import {
   restore,
   Step,
   createEvent,
-  StateRef,
-  Fork,
 } from 'effector'
+import type {Scope} from '../effector/unit.h'
+import type {StateRef} from '../effector/index.h'
 import {
   Leaf,
   Actor,
@@ -147,7 +147,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
           if (targetTemplate) {
             if (stackTemplates.includes(targetTemplate)) {
               launch({
-                target: getForkedUnit(node, stack.forkPage),
+                target: node,
                 params: upd,
                 defer: true,
                 page: stackPages[stackTemplates.indexOf(targetTemplate)],
@@ -161,7 +161,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
             }
           } else {
             launch({
-              target: getForkedUnit(node, stack.forkPage),
+              target: node,
               params: upd,
               defer: true,
               page: stack.page,
@@ -197,7 +197,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 }
                 launch({
                   params: upd,
-                  target: getForkedUnit(stack.node, stack.forkPage),
+                  target: stack.node,
                   page,
                   defer: true,
                   //@ts-ignore
@@ -220,7 +220,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 if (targetPageIndex === -1) {
                   launch({
                     params: upd,
-                    target: getForkedUnit(stack.node, stack.forkPage),
+                    target: stack.node,
                     page: stack.page,
                     defer: true,
                     //@ts-ignore
@@ -229,7 +229,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 } else {
                   launch({
                     params: upd,
-                    target: getForkedUnit(stack.node, stack.forkPage),
+                    target: stack.node,
                     page: stackPages[targetPageIndex],
                     defer: true,
                     //@ts-ignore
@@ -252,7 +252,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   ) {
                     launch({
                       params: upd,
-                      target: getForkedUnit(stack.node, stack.forkPage),
+                      target: stack.node,
                       page,
                       defer: true,
                       //@ts-ignore
@@ -262,7 +262,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     if (fullID.startsWith(`${page.fullID}_`)) {
                       launch({
                         params: upd,
-                        target: getForkedUnit(stack.node, stack.forkPage),
+                        target: stack.node,
                         page: stack.page,
                         defer: true,
                         //@ts-ignore
@@ -286,7 +286,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
               }
               launch({
                 params: upd,
-                target: getForkedUnit(stack.node, stack.forkPage),
+                target: stack.node,
                 page,
                 defer: true,
                 //@ts-ignore
@@ -356,33 +356,27 @@ export function createTemplate<Api extends {[method: string]: any}>({
   return actor
 }
 
-export function getForkedUnit(unit: any, forkPage?: Fork) {
-  if (!forkPage) return unit
-  unit = unit.graphite || unit
-  //@ts-ignore
-  return forkPage.nodeMap[unit.id] || unit
-}
-
 function getCurrent(
   ref: {type?: string; current: any; id: string},
-  forkPage?: Fork,
+  forkPage?: Scope,
 ) {
-  let usedRef = ref
+  let result
   //@ts-ignore
-  if (forkPage && regRef(forkPage, ref)) usedRef = regRef(forkPage, ref)
+  if (forkPage) result = forkPage.getState(ref)
+  else result = ref.current
   switch (ref.type) {
     case 'list':
-      return [...usedRef.current]
+      return [...result]
     case 'shape':
-      return {...usedRef.current}
+      return {...result}
     default:
-      return usedRef.current
+      return result
   }
 }
 function findRef(
   ref: {current: any; id: string},
   targetLeaf: Leaf | null,
-  forkPage?: Fork,
+  forkPage?: Scope,
 ): StateRef {
   let currentLeaf = targetLeaf
   while (currentLeaf && !regRef(currentLeaf.spawn, ref)) {
@@ -390,9 +384,9 @@ function findRef(
   }
   if (!currentLeaf) {
     //@ts-ignore
-    if (forkPage && regRef(forkPage, ref)) {
-      //@ts-ignore
-      return regRef(forkPage, ref)
+    if (forkPage) {
+      forkPage.getState(ref)
+      return forkPage.reg[ref.id]
     }
     return ref
   }
@@ -401,7 +395,7 @@ function findRef(
 function findRefValue(
   ref: {current: any; id: string},
   targetLeaf: Leaf | null,
-  forkPage?: Fork,
+  forkPage?: Scope,
 ) {
   return findRef(ref, targetLeaf, forkPage).current
 }
@@ -434,7 +428,7 @@ export function spawn(
     opGroup: OpGroup
     domSubtree: OpGroup
     hydration: boolean
-    forkPage?: Fork
+    forkPage?: Scope
     env?: Env
   },
 ): Leaf {
@@ -495,9 +489,9 @@ export function spawn(
       parent = parent.parent
     }
     //@ts-ignore
-    if (!parent && forkPage && regRef(forkPage, ref)) {
-      //@ts-ignore
-      closureRef = regRef(forkPage, ref)
+    if (!parent && forkPage) {
+      forkPage.getState(ref)
+      closureRef = forkPage.reg[ref.id]
     }
     page[ref.id] = closureRef
   }

@@ -239,7 +239,6 @@ test('attach support', async () => {
         "bob",
         "carol",
       ],
-      "by4ois": "https://ssr.effector.dev/api",
       "u8c20o": "alice",
     }
   `)
@@ -248,7 +247,6 @@ test('attach support', async () => {
       "-d31x3q": Array [
         "alice",
       ],
-      "by4ois": "https://ssr.effector.dev/api",
       "u8c20o": "bob",
     }
   `)

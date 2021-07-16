@@ -1,6 +1,6 @@
 import React from 'react'
 import {Store} from 'effector'
-import {useStore} from './useStore'
+import {useStore} from './nossr'
 import {withDisplayName} from './withDisplayName'
 
 export const createContextComponent = <Props, State, Context>(

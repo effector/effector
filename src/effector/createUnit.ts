@@ -10,7 +10,13 @@ import {callStackAReg, callARegStack, callStack} from './caller'
 import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, currentPage, forkPage, setCurrentPage} from './kernel'
+import {
+  launch,
+  currentPage,
+  forkPage,
+  setCurrentPage,
+  initRefInScope,
+} from './kernel'
 
 import {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
@@ -165,8 +171,7 @@ export function createEvent<Payload = any>(
   })
   //eslint-disable-next-line no-unused-vars
   event.create = (params: any, _: any) => {
-    const target = forkPage ? forkPage.find(event) : event
-    launch(target, params)
+    launch({target: event, params, forkPage: forkPage!})
     return params
   }
   event.watch = bind(watchUnit, event)
@@ -215,7 +220,6 @@ export function createStore<State>(
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
   const template = readTemplate()
-  addRefOp(oldState, {type: MAP, from: plainState})
   if (template) {
     template.plain.push(plainState, oldState)
   }
@@ -235,22 +239,19 @@ export function createStore<State>(
         }
         if (page) reachedPage = page
       }
-      if (!reachedPage && forkPage && forkPage.reg[plainStateId]) {
+      if (!reachedPage && forkPage) {
+        initRefInScope(forkPage, plainState, true)
         reachedPage = forkPage
       }
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
       return readRef(targetRef)
     },
     setState(state: any) {
-      let target
-      if (forkPage) {
-        target = forkPage.nodeMap[getGraph(store).id]
-      }
-      if (!target) target = store
       launch({
-        target,
+        target: store,
         params: state,
         defer: true,
+        forkPage: forkPage!,
       })
     },
     reset(...units: any[]) {
@@ -305,6 +306,7 @@ export function createStore<State>(
         fn,
         from: plainState,
       })
+      getStoreState(innerStore).noInit = true
       if (template) {
         if (!includes(template.plain, plainState)) {
           if (!includes(linkNode.seq, template.loader)) {
@@ -366,6 +368,10 @@ export function createStore<State>(
     meta,
     regional: true,
   })
+  if (meta.sid) {
+    meta.storeChange = true
+    plainState.sid = meta.sid
+  }
   if (isStrict && defaultState === undefined)
     throwError("current state can't be undefined, use null instead")
   own(store, [updates])

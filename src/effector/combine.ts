@@ -11,6 +11,7 @@ import {throwError} from './throw'
 import {readTemplate} from './region'
 import {forIn, includes} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
+import {combineTempl} from './template'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -85,17 +86,18 @@ const storeCombination = (
 ) => {
   const clone = isArray ? (list: any) => list.slice() : (obj: any) => ({...obj})
   const defaultState: any = isArray ? [] : {}
-  const template = readTemplate()
+
   const stateNew = clone(defaultState)
   const rawShape = createStateRef(stateNew)
   const isFresh = createStateRef(true)
   rawShape.type = isArray ? 'list' : 'shape'
-  if (template) {
-    template.plain.push(rawShape, isFresh)
-  }
+  rawShape.noInit = true
+  combineTempl.initBase(rawShape, isFresh)
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
   })
+  const storeStateRef = getStoreState(store)
+  storeStateRef.noInit = true
   getGraph(store).meta.isCombine = true
   const node = [
     step.check.defined(),
@@ -137,7 +139,7 @@ const storeCombination = (
     step.mov({store: rawShape}),
     fn && step.compute({fn}),
     step.check.changed({
-      store: getStoreState(store),
+      store: storeStateRef,
     }),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
@@ -158,22 +160,18 @@ const storeCombination = (
       field: key,
       from: childRef,
     })
-    if (template) {
-      if (!includes(template.plain, childRef)) {
-        linkNode.seq.unshift(template.loader)
-      }
-    }
+    combineTempl.initField(childRef, linkNode)
   })
 
   store.defaultShape = obj
-  addRefOp(getStoreState(store), {
+  addRefOp(storeStateRef, {
     type: MAP,
     from: rawShape,
     fn,
   })
-  if (!template) {
+  if (!readTemplate()) {
     store.defaultState = fn
-      ? (getStoreState(store).current = fn(stateNew))
+      ? (storeStateRef.current = fn(stateNew))
       : defaultState
   }
   return store

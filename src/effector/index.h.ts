@@ -14,6 +14,8 @@ export type StateRef = {
   current: any
   type?: 'list' | 'shape'
   before?: StateRefOp[]
+  noInit?: boolean
+  sid?: string
 }
 
 export type Config = {

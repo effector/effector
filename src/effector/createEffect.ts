@@ -51,10 +51,11 @@ export function createEffect<Payload, Done>(
     scope: {
       getHandler: (instance.use.getCurrent = () => handler),
       finally: anyway,
+      handlerId: node.meta.sid,
     },
     node: [
       step.run({
-        fn({params, req}, {finally: anyway, getHandler}, stack) {
+        fn({params, req}, {finally: anyway, getHandler, handlerId}, stack) {
           const onResolve = onSettled({
             params,
             req,
@@ -71,7 +72,14 @@ export function createEffect<Payload, Done>(
           })
           let result
           try {
-            result = getHandler()(params)
+            let handler: (data: any) => any
+            if (getForkPage(stack)) {
+              const handler_ = getForkPage(stack).handlers[handlerId]
+              handler = handler_ ? handler_ : getHandler()
+            } else {
+              handler = getHandler()
+            }
+            result = handler(params)
           } catch (err) {
             return void onReject(err)
           }
@@ -128,7 +136,11 @@ export function createEffect<Payload, Done>(
           })
           .catch(() => {})
       }
-      launch(forkPage.find(instance), payload)
+      launch({
+        target: instance,
+        params: payload,
+        forkPage,
+      })
     } else {
       launch(instance, payload)
     }
@@ -138,7 +150,8 @@ export function createEffect<Payload, Done>(
   const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1))
-
+  getGraph(anyway).meta.needFxCounter = getGraph(instance).meta.needFxCounter =
+    true
   const pending = (instance.pending = inFlight.map({
     //@ts-ignore
     fn: amount => amount > 0,

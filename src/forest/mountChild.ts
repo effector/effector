@@ -157,6 +157,7 @@ export function mountChild({
               if (leaf.hydration) {
                 // console.count('hydration')
               }
+
               if (value) {
                 appendChild(elementBlock)
                 if ((leafData as any).needToCallNode) {
@@ -172,10 +173,20 @@ export function mountChild({
                     forkPage: leaf.forkPage,
                   })
                 }
+                elementBlock.visible = true
               } else {
                 elementBlock.value.remove()
                 elementBlock.visible = false
               }
+              // console.log(
+              //   'mountChild runOp',
+              //   value,
+              //   elementBlock.visible,
+              //   elementBlock.value,
+              //   elementBlock.value.isConnected,
+              //   leaf.data,
+              //   JSON.stringify(elementBlock.value.innerHTML),
+              // )
             },
             group: parentDomSubtree,
           }),

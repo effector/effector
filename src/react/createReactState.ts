@@ -1,7 +1,7 @@
 import React from 'react'
 import {Store} from 'effector'
 
-import {useStore} from './useStore'
+import {useStore} from './nossr'
 import {withDisplayName} from './withDisplayName'
 
 export function createReactState<State>(
@@ -11,6 +11,6 @@ export function createReactState<State>(
   const wrappedComponentName =
     Component.displayName || Component.name || 'Unknown'
   return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
-    React.createElement(Component, Object.assign({}, props, useStore(store))),
+    React.createElement(Component, {...props, ...(useStore(store) as any)}),
   )
 }

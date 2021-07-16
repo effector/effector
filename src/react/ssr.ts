@@ -1,32 +1,18 @@
 import React from 'react'
-import {Domain, is, launch} from 'effector'
-import {
-  useStore as commonUseStore,
-  useStoreMap as commonUseStoreMap,
-} from './useStore'
-import {useList as commonUseList} from './useList'
+import {Domain, is, Scope, Store, scopeBind} from 'effector'
+import {useStoreBase, useStoreMapBase, useListBase} from './apiBase'
 import {withDisplayName} from './withDisplayName'
 import {useGate as commonUseGate, createGateImplementation} from './createGate'
 import {Gate} from './index.h'
+import {throwError} from './throw'
 
-function createDefer() {
-  const result = {} as any
-  result.req = new Promise((rs, rj) => {
-    result.rs = rs
-    result.rj = rj
-  })
-  result.req.catch((err: any) => {})
-  return result
-}
-
-const Scope = React.createContext(null)
-export const {Provider} = Scope
-
-function useScopeStore(store: any) {
-  const scope = React.useContext(Scope) as any
+const ScopeContext = React.createContext(null as Scope | null)
+export const {Provider} = ScopeContext
+function getScope() {
+  const scope = React.useContext(ScopeContext)
   if (!scope)
-    throw Error('No scope found, consider adding <Provider> to app root')
-  return scope.find(store).meta.wrapped
+    throwError('No scope found, consider adding <Provider> to app root')
+  return scope as Scope
 }
 
 export function createGate<Props>(config: {
@@ -35,7 +21,7 @@ export function createGate<Props>(config: {
   name?: string
 }) {
   if (!config || !is.domain(config.domain))
-    throw Error('config.domain should exists')
+    throwError('config.domain should exists')
 
   return createGateImplementation({
     domain: config.domain,
@@ -49,9 +35,11 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
 ) {
-  const open = useEvent(GateComponent.open)
-  const close = useEvent(GateComponent.close)
-  const set = useEvent(GateComponent.set)
+  const [open, close, set] = useEvent([
+    GateComponent.open,
+    GateComponent.close,
+    GateComponent.set,
+  ])
   const ForkedGate = React.useMemo(
     () =>
       ({
@@ -84,14 +72,14 @@ export function createContextComponent(
 }
 
 export function createComponent(shape: any) {
-  throw new Error('not implemented')
+  throwError('not implemented')
 }
 
 export function createReactState(store: any, Component: any) {
   const wrappedComponentName =
     Component.displayName || Component.name || 'Unknown'
   return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
-    React.createElement(Component, Object.assign({}, props, useStore(store))),
+    React.createElement(Component, {...props, ...(useStore(store) as any)}),
   )
 }
 
@@ -100,39 +88,28 @@ export function connect(Component: any) {
 }
 
 /** useStore wrapper for scopes */
-export function useStore(store: any) {
-  return commonUseStore(useScopeStore(store))
+export function useStore<T>(store: Store<T>): T {
+  return useStoreBase(store, getScope())
 }
 /** useList wrapper for scopes */
 export function useList(store: any, opts: any) {
-  return commonUseList(useScopeStore(store), opts)
+  return useListBase(store, opts, getScope())
 }
 /** useStoreMap wrapper for scopes */
 export function useStoreMap(configOrStore: any, separateFn: any) {
-  if (separateFn)
-    return commonUseStoreMap(useScopeStore(configOrStore), separateFn)
-  return commonUseStoreMap({
-    store: useScopeStore(configOrStore.store),
-    keys: configOrStore.keys,
-    fn: configOrStore.fn,
-    updateFilter: configOrStore.updateFilter,
-  })
-}
-
-function resolveUnit(unit: any, scope: any) {
-  const localUnit = scope.find(unit)
-  return is.effect(unit)
-    ? (params: any) => {
-        const req = createDefer()
-        //@ts-ignore
-        launch({target: localUnit, params: {params, req}, forkPage: scope})
-        return req.req
-      }
-    : (payload: any) => {
-        //@ts-ignore
-        launch({target: localUnit, params: payload, forkPage: scope})
-        return payload
-      }
+  const scope = getScope()
+  if (separateFn) return useStoreMapBase([configOrStore, separateFn], scope)
+  return useStoreMapBase(
+    [
+      {
+        store: configOrStore.store,
+        keys: configOrStore.keys,
+        fn: configOrStore.fn,
+        updateFilter: configOrStore.updateFilter,
+      },
+    ],
+    scope,
+  )
 }
 
 /**
@@ -141,17 +118,19 @@ bind event to scope
 works like React.useCallback, but for scopes
 */
 export function useEvent(eventObject: any) {
-  const scope = React.useContext(Scope) as any
+  const scope = getScope()
   const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
   const events = isShape ? eventObject : {event: eventObject}
 
   return React.useMemo(() => {
     if (is.unit(eventObject)) {
-      return resolveUnit(eventObject, scope)
+      //@ts-expect-error
+      return scopeBind(eventObject, {scope})
     }
     const shape = Array.isArray(eventObject) ? [] : ({} as any)
     for (const key in eventObject) {
-      shape[key] = resolveUnit(eventObject[key], scope)
+      //@ts-expect-error
+      shape[key] = scopeBind(eventObject[key], {scope})
     }
     return shape
   }, [scope, ...Object.keys(events), ...Object.values(events)])

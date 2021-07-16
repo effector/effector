@@ -1,6 +1,6 @@
 import React from 'react'
 import {Store, is, combine, createEvent} from 'effector'
-import {useStore} from './useStore'
+import {useStore} from './nossr'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {StoreView} from './index.h'
 import {withDisplayName} from './withDisplayName'

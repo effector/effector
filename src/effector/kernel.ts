@@ -1,7 +1,7 @@
 import type {Spawn} from '../forest/index.h'
 
 import type {Cmd, Node, NodeUnit, StateRef} from './index.h'
-import {readRef} from './stateRef'
+import {createStateRef, readRef} from './stateRef'
 import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
   STORE,
@@ -12,8 +12,10 @@ import {
   VALUE,
   FILTER,
   REG_A,
+  MAP,
 } from './tag'
 import type {Scope} from './unit.h'
+import {forEach} from './collection'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -221,18 +223,29 @@ const getPageForRef = (page: Spawn | null, id: string) => {
   }
   return null
 }
-const getPageRef = (page: Spawn | null, node: Node, id: string) => {
-  const pageForRef = getPageForRef(page, id)
-  return (pageForRef ? pageForRef : node).reg[id]
+export const getPageRef = (
+  page: Spawn | null,
+  forkPage: Scope | null | void,
+  node: Node | null,
+  ref: StateRef,
+  isGetState?: boolean,
+) => {
+  const pageForRef = getPageForRef(page, ref.id)
+  if (pageForRef) return pageForRef.reg[ref.id]
+  if (forkPage) {
+    initRefInScope(forkPage!, ref, isGetState)
+    return forkPage.reg[ref.id]
+  }
+  return node ? node.reg[ref.id] : ref
 }
 
 export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
-  page?: Spawn
-  forkPage?: Scope
-  stack?: Stack
+  page?: Spawn | void
+  forkPage?: Scope | void
+  stack?: Stack | void
 }): void
 export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
 export function launch(unit: any, payload?: any, upsert?: boolean) {
@@ -286,7 +299,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
-    reg = (page ? page : node).reg
+    reg = (page ? page : forkPage ? forkPage : node).reg
+    const hasPageReg = !!page
+    const hasScopeReg = !!forkPage
     const local: Local = {
       fail: false,
       scope: node.scope,
@@ -322,11 +337,27 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             case STORE:
               if (!reg[data.store.id]) {
                 // if (!page.parent) {
-                stack.page = page = getPageForRef(page, data.store.id)
-                reg = page ? page.reg : node.reg
+                if (hasPageReg) {
+                  const pageForRef = getPageForRef(page, data.store.id)
+                  stack.page = page = pageForRef
+                  if (pageForRef) {
+                    reg = pageForRef.reg
+                  } else if (hasScopeReg) {
+                    initRefInScope(forkPage!, data.store)
+                    reg = forkPage!.reg
+                  } else {
+                    reg = node.reg
+                  }
+                } else if (hasScopeReg) {
+                  /** StateRef in Scope.reg created only when needed */
+                  initRefInScope(forkPage!, data.store)
+                } else {
+                  // console.error('should not happen')
+                  /** StateRef should exists at least in Node itself, but it is not found */
+                }
                 // }
               }
-              // value = getPageRef(page, node, data.store.id).current
+              // value = getPageRef(page, forkPage, node, data.store.id).current
               value = readRef(reg[data.store.id])
               break
           }
@@ -338,7 +369,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               stack[data.to] = value
               break
             case STORE:
-              getPageRef(page, node, data.target.id).current = value
+              getPageRef(page, forkPage, node, data.target).current = value
               break
           }
           break
@@ -348,7 +379,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             getValue(stack) ===
             (step.data.type === 'defined'
               ? undefined
-              : readRef(getPageRef(page, node, step.data.store.id)))
+              : readRef(getPageRef(page, forkPage, node, step.data.store)))
           break
         }
         case FILTER:
@@ -384,11 +415,95 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           getForkPage(stack),
         )
       }
+      const forkPage: Scope | null = getForkPage(stack)
+      if (forkPage) {
+        const meta = node.meta
+        if (meta.needFxCounter)
+          pushFirstHeapItem('child', page, forkPage.fxCount, stack, 0, forkPage)
+        if (meta.storeChange)
+          pushFirstHeapItem(
+            'child',
+            page,
+            forkPage.storeChange,
+            stack,
+            0,
+            forkPage,
+          )
+        const additionalLinks = forkPage.additionalLinks[node.id]
+        if (additionalLinks) {
+          for (let stepn = 0; stepn < additionalLinks.length; stepn++) {
+            pushFirstHeapItem(
+              'child',
+              page,
+              additionalLinks[stepn],
+              stack,
+              getValue(stack),
+              forkPage,
+            )
+          }
+        }
+      }
     }
   }
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
+}
+
+export const initRefInScope = (
+  scope: {
+    reg: Record<string, StateRef>
+    sidValuesMap: Record<string, any>
+    sidIdMap: Record<string, string>
+  },
+  sourceRef: StateRef,
+  isGetState?: boolean,
+) => {
+  const refsMap = scope.reg
+  if (refsMap[sourceRef.id]) return
+  const ref: StateRef = {
+    id: sourceRef.id,
+    current: sourceRef.current,
+  }
+  if (sourceRef.sid) scope.sidIdMap[sourceRef.sid] = sourceRef.id
+  if (sourceRef.sid && sourceRef.sid in scope.sidValuesMap) {
+    ref.current = scope.sidValuesMap[sourceRef.sid]
+  } else {
+    const noInit = !isGetState && sourceRef.noInit
+    if (!noInit && sourceRef.before) {
+      let isFresh = false
+      forEach(sourceRef.before, cmd => {
+        switch (cmd.type) {
+          case MAP: {
+            const from = cmd.from
+            if (from || cmd.fn) {
+              if (from) initRefInScope(scope, from, isGetState)
+              const value = from && refsMap[from.id].current
+              ref.current = cmd.fn ? cmd.fn(value) : value
+            }
+            break
+          }
+          case 'field': {
+            initRefInScope(scope, cmd.from, isGetState)
+            const from = refsMap[cmd.from.id]
+            if (!isFresh) {
+              isFresh = true
+              if (Array.isArray(ref.current)) {
+                ref.current = [...ref.current]
+              } else {
+                ref.current = {...ref.current}
+              }
+            }
+            ref.current[cmd.field] = refsMap[from.id].current
+            break
+          }
+          case 'closure':
+            break
+        }
+      })
+    }
+  }
+  refsMap[sourceRef.id] = ref
 }
 
 /** try catch for external functions */

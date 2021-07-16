@@ -8,8 +8,9 @@ import {
   sample,
   merge,
   combine,
-  Fork,
 } from 'effector'
+
+import type {Scope} from '../effector/unit.h'
 
 import {
   DOMElement,
@@ -72,7 +73,6 @@ import {
   currentActor,
   currentTemplate,
   currentLeaf,
-  getForkedUnit,
 } from './template'
 import {
   findParentDOMElement,
@@ -663,7 +663,7 @@ export function h(tag: string, opts?: any) {
                   if (item.options.prevent) value.preventDefault()
                   if (item.options.stop) value.stopPropagation()
                   launch({
-                    target: getForkedUnit(item.handler, leaf.forkPage),
+                    target: item.handler,
                     params: value,
                     page,
                     //@ts-ignore
@@ -791,17 +791,6 @@ function getDefaultEnv(): {
   if (typeof document !== 'undefined') return {document}
   throw Error('your environment has no document')
 }
-function collectScopeRefs(scope?: any) {
-  if (!scope) return
-  if (!scope.nodeMap) {
-    const nodeMap: Record<string, any> = {}
-    for (let i = 0; i < scope.clones.length; i++) {
-      const node = scope.clones[i]
-      nodeMap[node.meta.forkOf.id] = node
-    }
-    scope.nodeMap = nodeMap
-  }
-}
 export function using(node: DOMElement, cb: () => any): void
 export function using(
   node: DOMElement,
@@ -813,7 +802,7 @@ export function using(
     }
     onComplete?: () => void
     onRoot?: (config: {template: Actor<{mount: any}>; leaf: Leaf}) => void
-    scope?: Fork
+    scope?: Scope
   },
 ): void
 export function using(node: DOMElement, opts: any): void {
@@ -826,7 +815,7 @@ export function using(node: DOMElement, opts: any): void {
   let onRoot:
     | ((config: {template: Actor<{mount: any}>; leaf: Leaf}) => void)
     | undefined
-  let scope: Fork
+  let scope: Scope
   if (typeof opts === 'function') {
     cb = opts
     env = getDefaultEnv()
@@ -878,7 +867,6 @@ export function using(node: DOMElement, opts: any): void {
   }
   usingBlock.child.parent = usingBlock
 
-  collectScopeRefs(scope!)
   const queue = createOpQueue({onComplete})
   const rootLeaf = spawn(usingTemplate, {
     parentLeaf: currentLeaf || null,
@@ -1392,7 +1380,7 @@ export function rec<T>(
 
 export function tree<
   T,
-  ChildField extends keyof T
+  ChildField extends keyof T,
   // KeyField extends keyof T
 >(config: {
   source: Store<T[]>
@@ -1490,15 +1478,13 @@ export function list<T>(opts: any, maybeFn?: any) {
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, e) => e)
           if (draft.itemVisible) {
-            const {
-              onMount: mountAndVisible,
-              onState: onVisibleChanges,
-            } = mutualSample({
-              mount,
-              state: draft.itemVisible,
-              onMount: (visible, leaf) => ({visible, leaf}),
-              onState: (leaf, visible) => ({visible, leaf}),
-            })
+            const {onMount: mountAndVisible, onState: onVisibleChanges} =
+              mutualSample({
+                mount,
+                state: draft.itemVisible,
+                onMount: (visible, leaf) => ({visible, leaf}),
+                onState: (leaf, visible) => ({visible, leaf}),
+              })
             mountAndVisible.watch(({visible, leaf}) => {
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = visible

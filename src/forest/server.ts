@@ -1,16 +1,16 @@
-import {Fork} from 'effector'
+import type {Scope} from '../effector/unit.h'
 import {render, createEnv} from './customDocument'
 import {using} from 'forest'
 
 export function renderStatic(fn: () => void): Promise<string>
 export function renderStatic(config: {
-  scope?: Fork
+  scope?: Scope
   fn: () => void
 }): Promise<string>
 export function renderStatic(fn: any) {
   const env = createEnv()
   const root = env.document.createDocumentFragment() as any
-  let scope: Fork
+  let scope: Scope
   if (typeof fn === 'object' && fn !== null) {
     scope = fn.scope
     fn = fn.fn
