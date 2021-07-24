@@ -157,6 +157,21 @@ describe('node(event) + upward store update', () => {
     expect(result).toMatchInlineSnapshot(`"DIV"`)
   })
 })
+test('node() is called exactly once', async () => {
+  const result = await execFunc(async () => {
+    let result = 0
+    using(el, () => {
+      h('div', () => {
+        node(() => {
+          result += 1
+        })
+      })
+    })
+    await act()
+    return result
+  })
+  expect(result).toBe(1)
+})
 
 it('support reactive style variables', async () => {
   const [s1, s2] = await exec(async () => {
