@@ -1,97 +1,46 @@
-import {DOMElement} from './index.h'
+import type {DOMElement} from './index.h'
+import {printTree} from './printTree'
 
-import {
+import type {
   ElementBlock,
   TextBlock,
   UsingBlock,
-  ListBlock,
-  FF,
-  LF,
   Block,
-  RF,
-  RouteBlock,
-  FragmentBlock,
-  RecBlock,
-  RecItemBlock,
   BlockBlock,
-  BlockItemBlock,
+  ChildBlock,
 } from './relation.h'
 
-export function getParentBlock(block: Exclude<Block, UsingBlock>) {
-  switch (block.type) {
-    case 'text':
-    case 'element':
-    case 'list':
-    case 'route':
-    case 'rec':
-    case 'recItem':
-    case 'block':
-    case 'blockItem':
-      return block.parent
-    case 'fragment':
-    default:
-      const _: 'fragment' = block.type
-      switch (block.parent.type) {
-        case 'using':
-        case 'block':
-          return block.parent
-        default:
-          return block.parent.parent
-      }
-  }
-}
-
-function findParentDOMElementBlock(block: Block): UsingBlock | ElementBlock {
-  switch (block.type) {
-    case 'using':
-      return block
-    case 'fragment':
-      switch (block.parent.type) {
-        case 'element':
-        case 'using':
-          return block.parent
-      }
-    default:
-      const _ = block.type
-      return findParentDOMElementBlock(getParentBlock(block))
-  }
-}
 export function findParentDOMElement(
   block: Exclude<Block, UsingBlock | BlockBlock>,
 ): DOMElement | null {
-  const child = findParentDOMElementBlock(block)
-  if (child) return child.value
+  let parent = block.parent
+  while (parent.type !== 'element' && parent.type !== 'using') {
+    parent = parent.parent
+  }
+  if (parent) return parent.value
   return null
 }
 function findLastVisibleChildBlock(
-  block:
-    | FF
-    | ElementBlock
-    | ListBlock
-    | TextBlock
-    | RouteBlock
-    | LF
-    | RF
-    | RecItemBlock
-    | RecBlock
-    | BlockBlock
-    | BlockItemBlock,
+  block: Exclude<Block, UsingBlock>,
 ): ElementBlock | TextBlock | null {
   if (!block.visible) return null
   switch (block.type) {
     case 'text':
     case 'element':
       return block
-    case 'route':
-      return findLastVisibleChildBlock(block.child)
     case 'LF':
-    case 'RF':
-    case 'FF':
+    case 'route':
     case 'rec':
     case 'recItem':
     case 'block':
-    case 'blockItem':
-      return findLastVisibleFragmentChild(block.child)
+    case 'blockItem': {
+      for (let i = block.child.length - 1; i >= 0; i--) {
+        const child = block.child[i]
+        const visibleChild = findLastVisibleChildBlock(child)
+        if (visibleChild) return visibleChild
+      }
+      return null
+    }
     case 'list': {
       let child = block.lastChild
       if (!child) return null
@@ -108,62 +57,22 @@ function findLastVisibleChildBlock(
     }
   }
 }
-function findLastVisibleFragmentChild(fragment: FragmentBlock) {
-  const childs = fragment.child
-  for (let i = childs.length - 1; i >= 0; i--) {
-    const child = childs[i]
-    const visibleChild = findLastVisibleChildBlock(child)
-    if (visibleChild) return visibleChild
-  }
-  return null
-}
+
 export function findPreviousVisibleSiblingBlock(
-  block: Exclude<Block, UsingBlock>,
+  block: Block,
 ): TextBlock | ElementBlock | null {
   switch (block.type) {
-    case 'fragment':
-      switch (block.parent.type) {
-        case 'element':
-        case 'using':
-          return null
-        case 'RF': {
-          const parent = block.parent.parent
-          const parentFragment = parent.parent
-          for (let i = parent.index - 1; i >= 0; i--) {
-            const sibling = parentFragment.child[i]
-            const visibleChild = findLastVisibleChildBlock(sibling)
-            if (visibleChild) return visibleChild
-          }
-          return findPreviousVisibleSiblingBlock(parentFragment)
-        }
-        case 'rec':
-        case 'recItem':
-        case 'block':
-        case 'blockItem':
-        case 'FF': {
-          const parent = block.parent
-          const parentFragment = parent.parent
-          for (let i = parent.index - 1; i >= 0; i--) {
-            const sibling = parentFragment.child[i]
-            const visibleChild = findLastVisibleChildBlock(sibling)
-            if (visibleChild) return visibleChild
-          }
-          return findPreviousVisibleSiblingBlock(parentFragment)
-        }
-        case 'LF': {
-          let sibling = block.parent.left
-          while (sibling) {
-            const visibleChild = findLastVisibleChildBlock(sibling)
-            if (visibleChild) return visibleChild
-            sibling = sibling.left
-          }
-          return findPreviousVisibleSiblingBlock(block.parent.parent)
-        }
-        default: {
-          const _: never = block.parent
-          return null
-        }
+    case 'using':
+      return null
+    case 'LF': {
+      let sibling = block.left
+      while (sibling) {
+        const visibleChild = findLastVisibleChildBlock(sibling)
+        if (visibleChild) return visibleChild
+        sibling = sibling.left
       }
+      return findPreviousVisibleSiblingBlock(block.parent)
+    }
     case 'element':
     case 'text':
     case 'route':
@@ -178,6 +87,11 @@ export function findPreviousVisibleSiblingBlock(
         if (!sibling) continue
         const visibleChild = findLastVisibleChildBlock(sibling)
         if (visibleChild) return visibleChild
+      }
+      switch (parentFragment.type) {
+        case 'element':
+        case 'using':
+          return null
       }
       return findPreviousVisibleSiblingBlock(parentFragment)
     }

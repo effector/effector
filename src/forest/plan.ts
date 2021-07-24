@@ -291,13 +291,11 @@ export function createAsyncValue({
   group,
   onInit,
   onChange,
-  onTerminate,
 }: {
   value: any
   group: OpGroup
   onInit: (value: any) => void
   onChange: (value: any) => void
-  onTerminate: (wasActive: boolean) => void
 }): AsyncValue {
   const change = createOp({
     value,
@@ -311,9 +309,6 @@ export function createAsyncValue({
   const item: AsyncValue = {
     status: 'IA',
     value: change.value,
-    hooks: {
-      onTerminate,
-    },
     ops: {
       init: createOp({
         value: false,
@@ -330,7 +325,6 @@ export function createAsyncValue({
         group,
         runOp(value) {
           item.status = 'T'
-          item.hooks.onTerminate(true)
         },
         priority: 'data',
       }),
@@ -358,7 +352,6 @@ export function stopAsyncValue(item: AsyncValue) {
     case 'IA':
       item.status = 'T'
       pushOpToQueue(false, item.ops.init)
-      item.hooks.onTerminate(false)
       break
   }
 }

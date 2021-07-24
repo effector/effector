@@ -11,6 +11,7 @@ import {
 } from 'effector'
 
 import type {Scope} from '../effector/unit.h'
+import type {StateRef} from '../effector/index.h'
 
 import {
   DOMElement,
@@ -95,16 +96,16 @@ const mountFn = {
     const data = leaf.data as LeafDataUsing
     const block = data.block
     mountChildTemplates(data.draft, {
-      parentBlockFragment: block.child,
+      parentBlockFragment: block,
       leaf,
     })
   },
   routeItem(leaf: Leaf) {
     const draft = leaf.draft as RouteDraft
     const data = leaf.data as LeafDataRoute
-    data.block.child.visible = true
+    data.block.visible = true
     mountChildTemplates(draft, {
-      parentBlockFragment: data.block.child.child,
+      parentBlockFragment: data.block,
       leaf,
     })
   },
@@ -112,7 +113,7 @@ const mountFn = {
     const draft = leaf.draft as BlockDraft
     const data = leaf.data as LeafDataBlock
     mountChildTemplates(draft, {
-      parentBlockFragment: data.block.child,
+      parentBlockFragment: data.block,
       leaf,
     })
   },
@@ -120,7 +121,7 @@ const mountFn = {
     const draft = leaf.draft as BlockItemDraft
     const data = leaf.data as LeafDataBlockItem
     mountChild({
-      parentBlockFragment: data.block.child,
+      parentBlockFragment: data.block,
       leaf,
       actor: draft.itemOf,
     })
@@ -129,7 +130,7 @@ const mountFn = {
     const draft = leaf.draft as RecDraft
     const data = leaf.data as LeafDataRec
     mountChildTemplates(draft, {
-      parentBlockFragment: data.block.child,
+      parentBlockFragment: data.block,
       leaf,
     })
   },
@@ -139,7 +140,7 @@ const mountFn = {
     block.visible = true
     block.childInitialized = true
     mountChildTemplates(data.listDraft, {
-      parentBlockFragment: block.child,
+      parentBlockFragment: block,
       leaf,
     })
   },
@@ -216,8 +217,7 @@ export function h(tag: string, opts?: any) {
         ? env.document.createElementNS('http://www.w3.org/2000/svg', tag)
         : env.document.createElement(tag)
   }
-  //@ts-ignore
-  const stencil = node
+  const stencil = node!
   const draft: ElementDraft = {
     type: 'element',
     tag,
@@ -391,8 +391,8 @@ export function h(tag: string, opts?: any) {
             value: item.value,
             childIndex: item.index,
           })
-          //@ts-ignore
-          const ref = item.value.stateRef
+          //@ts-expect-error
+          const ref: StateRef = item.value.stateRef
           const templ: Template = currentTemplate!
           if (!templ.plain.includes(ref) && !templ.closure.includes(ref)) {
             templ.closure.push(ref)
@@ -411,7 +411,7 @@ export function h(tag: string, opts?: any) {
           draft.seq.push({
             type: 'handler',
             for: key,
-            //@ts-ignore
+            //@ts-expect-error
             handler: item.map[key],
             options: item.options,
             domConfig: item.domConfig,
@@ -457,7 +457,7 @@ export function h(tag: string, opts?: any) {
             ? (parentBlock.value as any)
             : null
           mountChildTemplates(draft, {
-            parentBlockFragment: parentBlock.child,
+            parentBlockFragment: parentBlock,
             leaf,
             node: parentBlock.value,
             svgRoot,
@@ -473,7 +473,7 @@ export function h(tag: string, opts?: any) {
                 },
                 page: leaf.spawn,
                 defer: true,
-                //@ts-ignore
+                //@ts-expect-error
                 forkPage: leaf.forkPage,
               })
             }
@@ -483,7 +483,7 @@ export function h(tag: string, opts?: any) {
             params: leaf,
             defer: true,
             page: leaf.spawn,
-            //@ts-ignore
+            //@ts-expect-error
             forkPage: leaf.forkPage,
           })
         })
@@ -639,7 +639,7 @@ export function h(tag: string, opts?: any) {
           }
           case 'handler': {
             const handlerTemplate: Template | null =
-              //@ts-ignore
+              //@ts-expect-error
               item.handler.graphite.meta.nativeTemplate || null
             domElementCreated.watch(leaf => {
               let page: Spawn | null = null
@@ -666,7 +666,7 @@ export function h(tag: string, opts?: any) {
                     target: item.handler,
                     params: value,
                     page,
-                    //@ts-ignore
+                    //@ts-expect-error
                     forkPage: leaf.forkPage,
                   })
                 },
@@ -705,7 +705,7 @@ export function h(tag: string, opts?: any) {
             ? (parentBlock.value as any)
             : null
           mountChildTemplates(draft, {
-            parentBlockFragment: parentBlock.child,
+            parentBlockFragment: parentBlock,
             leaf,
             node: parentBlock.value,
             svgRoot,
@@ -715,7 +715,7 @@ export function h(tag: string, opts?: any) {
             params: leaf,
             defer: true,
             page: leaf.spawn,
-            //@ts-ignore
+            //@ts-expect-error
             forkPage: leaf.forkPage,
           })
           if (leaf.hydration) {
@@ -729,7 +729,7 @@ export function h(tag: string, opts?: any) {
                 },
                 page: leaf.spawn,
                 defer: true,
-                //@ts-ignore
+                //@ts-expect-error
                 forkPage: leaf.forkPage,
               })
             }
@@ -747,15 +747,14 @@ export function h(tag: string, opts?: any) {
   }
   function installTextNode(leaf: Leaf, value: string, childIndex: number) {
     const parentBlock = (leaf.data as any).block as ElementBlock
-    const parentBlockFragment = parentBlock.child
     const textBlock: TextBlock = {
       type: 'text',
-      parent: parentBlockFragment,
+      parent: parentBlock,
       visible: false,
       index: childIndex,
       value: null as any,
     }
-    parentBlockFragment.child[childIndex] = textBlock
+    parentBlock.child[childIndex] = textBlock
     if (leaf.hydration) {
       const siblingBlock = findPreviousVisibleSiblingBlock(textBlock)
       if (siblingBlock) {
@@ -843,7 +842,6 @@ export function using(node: DOMElement, opts: any): void {
     childCount: 0,
     inParentIndex: -1,
   }
-
   const usingTemplate = createTemplate({
     name: 'using',
     draft,
@@ -858,15 +856,9 @@ export function using(node: DOMElement, opts: any): void {
 
   const usingBlock: UsingBlock = {
     type: 'using',
-    child: {
-      type: 'fragment',
-      parent: null as any,
-      child: [],
-    },
+    child: [],
     value: node,
   }
-  usingBlock.child.parent = usingBlock
-
   const queue = createOpQueue({onComplete})
   const rootLeaf = spawn(usingTemplate, {
     parentLeaf: currentLeaf || null,
@@ -981,7 +973,7 @@ export function spec(config: {
   if (config.style) {
     const escaped = {} as StylePropertyMap
     for (const field in config.style) {
-      //@ts-ignore
+      //@ts-expect-error
       escaped[escapeTag(field)] = config.style[field]
     }
     draft.styleProp.push(escaped)
@@ -1177,14 +1169,14 @@ export function route<T>({
           mount.watch(mountFn.routeItem)
           onValueUpdate.watch(({leaf, visible, value}) => {
             const data = leaf.data as LeafDataRoute
-            data.block.child.visible = visible
+            data.block.visible = visible
             if (visible) {
               launch({
                 target: itemUpdater,
                 params: value,
                 defer: true,
                 page: leaf.spawn,
-                //@ts-ignore
+                //@ts-expect-error
                 forkPage: leaf.forkPage,
               })
             }
@@ -1209,10 +1201,10 @@ export function route<T>({
       })
       merge([onMount, onVisibleChange]).watch(({leaf, visible, value}) => {
         const data = leaf.data as LeafDataRoute
-        data.block.child.visible = visible
+        data.block.visible = visible
         if (visible && !data.initialized) {
           mountChild({
-            parentBlockFragment: data.block.child.child,
+            parentBlockFragment: data.block,
             leaf,
             actor: routeItemTemplate,
             values: {store: value},
@@ -1366,7 +1358,7 @@ export function rec<T>(
         onMount.watch(({leaf, state}) => {
           const data = leaf.data as LeafDataRecItem
           mountChild({
-            parentBlockFragment: data.block.child,
+            parentBlockFragment: data.block,
             leaf,
             actor: recTemplate,
             values: {store: state},
@@ -1491,7 +1483,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               parentBlock.childInitialized = visible
               if (visible) {
                 mountChildTemplates(draft, {
-                  parentBlockFragment: parentBlock.child,
+                  parentBlockFragment: parentBlock,
                   leaf,
                 })
               }
@@ -1503,7 +1495,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 if (visible) {
                   parentBlock.childInitialized = true
                   mountChildTemplates(draft, {
-                    parentBlockFragment: parentBlock.child,
+                    parentBlockFragment: parentBlock,
                     leaf,
                   })
                 }
@@ -1579,11 +1571,7 @@ export function list<T>(opts: any, maybeFn?: any) {
             const listItemBlock: LF = {
               type: 'LF',
               parent: parentBlock,
-              child: {
-                type: 'fragment',
-                parent: null as any,
-                child: [],
-              },
+              child: [],
               childInitialized: false,
               visible: false,
               left: null,
@@ -1602,7 +1590,6 @@ export function list<T>(opts: any, maybeFn?: any) {
               asyncValue: createAsyncValue({
                 value,
                 group,
-                onTerminate(wasActive) {},
                 onChange(value) {
                   if (item.instance) {
                     item.instance.api.itemUpdater(value)
@@ -1635,7 +1622,6 @@ export function list<T>(opts: any, maybeFn?: any) {
                 ? resultRecords[inParentIndex - 1].leafData
                 : null
 
-            listItemBlock.child.parent = listItemBlock
             parentBlock.child.push(listItemBlock)
             if (leftSibling) {
               const leftBlock = leftSibling.block

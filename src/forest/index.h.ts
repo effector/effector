@@ -160,9 +160,6 @@ export type AsyncValue = {
     active: any
     pending: any
   }
-  hooks: {
-    onTerminate: (wasActive: boolean) => void
-  }
   ops: {
     init: Op
     change: Op

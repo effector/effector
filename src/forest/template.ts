@@ -55,7 +55,7 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
   }
   isBlock?: boolean
 }): Actor<Api>
-//@ts-ignore
+//@ts-expect-error
 export function createTemplate(config: {
   fn: (
     state: {
@@ -118,7 +118,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     closure: [],
     childTemplates: [],
     upward: step.filter({
-      //@ts-ignore
+      //@ts-expect-error
       fn(upd, scope, stack) {
         if (!stack.page) {
           if (stack.parent && stack.parent.page) {
@@ -151,9 +151,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 params: upd,
                 defer: true,
                 page: stackPages[stackTemplates.indexOf(targetTemplate)],
-                //@ts-ignore
+                //@ts-expect-error
                 stack,
-                //@ts-ignore
                 forkPage: stack.forkPage,
               })
             } else {
@@ -165,9 +164,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               params: upd,
               defer: true,
               page: stack.page,
-              //@ts-ignore
+              //@ts-expect-error
               stack,
-              //@ts-ignore
               forkPage: stack.forkPage,
             })
           }
@@ -176,7 +174,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
       },
     }),
     loader: step.filter({
-      //@ts-ignore
+      //@ts-expect-error
       fn(upd, scope, stack) {
         if (stack.parent) {
           const forkId = stack.forkPage ? stack.forkPage.graphite.id : null
@@ -185,7 +183,9 @@ export function createTemplate<Api extends {[method: string]: any}>({
               console.count('inactive page loader')
               return false
             }
-            if (stack.page.template === template) return true
+            if (stack.page.template === template) {
+              return true
+            }
             if (stack.page.childSpawns[template.id]) {
               stack.page.childSpawns[template.id].forEach((page: Spawn) => {
                 if (forkId) {
@@ -200,7 +200,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   target: stack.node,
                   page,
                   defer: true,
-                  //@ts-ignore
+                  //@ts-expect-error
                   forkPage: stack.forkPage,
                 })
               })
@@ -223,7 +223,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     target: stack.node,
                     page: stack.page,
                     defer: true,
-                    //@ts-ignore
+                    //@ts-expect-error
                     forkPage: stack.forkPage,
                   })
                 } else {
@@ -232,7 +232,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     target: stack.node,
                     page: stackPages[targetPageIndex],
                     defer: true,
-                    //@ts-ignore
+                    //@ts-expect-error
                     forkPage: stack.forkPage,
                   })
                 }
@@ -255,7 +255,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                       target: stack.node,
                       page,
                       defer: true,
-                      //@ts-ignore
+                      //@ts-expect-error
                       forkPage: stack.forkPage,
                     })
                   } else {
@@ -265,7 +265,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                         target: stack.node,
                         page: stack.page,
                         defer: true,
-                        //@ts-ignore
+                        //@ts-expect-error
                         forkPage: stack.forkPage,
                       })
                     } else {
@@ -289,12 +289,11 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 target: stack.node,
                 page,
                 defer: true,
-                //@ts-ignore
+                //@ts-expect-error
                 forkPage: stack.forkPage,
               })
             })
           }
-
           return false
         }
         return true
@@ -351,17 +350,13 @@ export function createTemplate<Api extends {[method: string]: any}>({
   }
   currentActor = parentActor
   currentTemplate = parent
-  //@ts-ignore
+  //@ts-expect-error
   template.actor = actor
   return actor
 }
 
-function getCurrent(
-  ref: {type?: string; current: any; id: string},
-  forkPage?: Scope,
-) {
+function getCurrent(ref: StateRef, forkPage?: Scope) {
   let result
-  //@ts-ignore
   if (forkPage) result = forkPage.getState(ref)
   else result = ref.current
   switch (ref.type) {
@@ -374,7 +369,7 @@ function getCurrent(
   }
 }
 function findRef(
-  ref: {current: any; id: string},
+  ref: StateRef,
   targetLeaf: Leaf | null,
   forkPage?: Scope,
 ): StateRef {
@@ -383,7 +378,6 @@ function findRef(
     currentLeaf = currentLeaf.parentLeaf
   }
   if (!currentLeaf) {
-    //@ts-ignore
     if (forkPage) {
       forkPage.getState(ref)
       return forkPage.reg[ref.id]
@@ -393,7 +387,7 @@ function findRef(
   return regRef(currentLeaf.spawn, ref)
 }
 function findRefValue(
-  ref: {current: any; id: string},
+  ref: StateRef,
   targetLeaf: Leaf | null,
   forkPage?: Scope,
 ) {
@@ -488,7 +482,6 @@ export function spawn(
       }
       parent = parent.parent
     }
-    //@ts-ignore
     if (!parent && forkPage) {
       forkPage.getState(ref)
       closureRef = forkPage.reg[ref.id]
@@ -511,7 +504,7 @@ export function spawn(
       current: values[name],
     }
   }
-  function execRef(ref: any) {
+  function execRef(ref: StateRef) {
     if (ref.before) {
       for (let i = 0; i < ref.before.length; i++) {
         const cmd = ref.before[i]
@@ -546,7 +539,7 @@ export function spawn(
   function runWatchersFrom(
     list: any[],
     state: {i: number; stop: boolean},
-    page: Record<string, any>,
+    page: Record<string, StateRef>,
   ) {
     state.stop = true
     let val
@@ -577,15 +570,10 @@ export function spawn(
       parentSpawn.childSpawns[id].push(...result.childSpawns[id])
     }
   }
-  api.mount = (params: any, defer = true) =>
-    runMount({
-      target: actor.trigger.mount,
-      params,
-      defer,
-      page: result,
-      //@ts-ignore
-      forkPage,
-    })
+  //@ts-expect-error
+  leaf.spawn.api = api
+  //@ts-expect-error
+  leaf.spawn.leaf = leaf
   if (actor.api) {
     for (const key in actor.api) {
       api[key] = (params: any, defer = true) =>
@@ -594,16 +582,43 @@ export function spawn(
           params,
           defer,
           page: result,
-          //@ts-ignore
+          //@ts-expect-error
           forkPage,
         })
     }
   }
-  //@ts-ignore
-  leaf.spawn.api = api
-  //@ts-ignore
-  leaf.spawn.leaf = leaf
-  leaf.api.mount(leaf)
+  if (mountQueue) {
+    mountQueue.steps.push({
+      target: actor.trigger.mount,
+      params: leaf,
+      defer: true,
+      page: result,
+      forkPage,
+    })
+  } else {
+    mountQueue = {
+      parent: mountQueue,
+      steps: [
+        {
+          target: actor.trigger.mount,
+          params: leaf,
+          defer: true,
+          page: result,
+          forkPage,
+        },
+      ],
+    }
+    let step: any
+    do {
+      while ((step = mountQueue.steps.shift())) {
+        mountQueue = {
+          parent: mountQueue,
+          steps: [],
+        }
+        launch(step)
+      }
+    } while ((mountQueue = mountQueue.parent))
+  }
   currentLeaf = previousSpawn
   return leaf
 }
@@ -614,24 +629,3 @@ type MountQueue = {
 }
 
 let mountQueue: MountQueue | null = null
-
-function runMount(config: any) {
-  if (mountQueue) {
-    mountQueue.steps.push(config)
-    return
-  }
-  mountQueue = {
-    parent: mountQueue,
-    steps: [config],
-  }
-  let step: any
-  do {
-    while ((step = mountQueue.steps.shift())) {
-      mountQueue = {
-        parent: mountQueue,
-        steps: [],
-      }
-      launch(step)
-    }
-  } while ((mountQueue = mountQueue.parent))
-}

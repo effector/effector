@@ -1,7 +1,6 @@
-import {DOMElement} from './index.h'
+import type {DOMElement} from './index.h'
 
 export type ChildBlock =
-  | FF
   | ElementBlock
   | ListBlock
   | TextBlock
@@ -12,7 +11,7 @@ export type ChildBlock =
   | BlockItemBlock
 
 export type Block =
-  | FragmentBlock
+  | LF
   | ListBlock
   | UsingBlock
   | TextBlock
@@ -23,33 +22,28 @@ export type Block =
   | BlockBlock
   | BlockItemBlock
 
+export type FragmentParent =
+  | LF
+  | UsingBlock
+  | ElementBlock
+  | RouteBlock
+  | RecItemBlock
+  | RecBlock
+  | BlockBlock
+  | BlockItemBlock
+
 export type RouteBlock = {
   type: 'route'
-  parent: FragmentBlock
-  child: RF
+  parent: FragmentParent
+  child: ChildBlock[]
   visible: boolean
   index: number
 }
 
-export type FragmentBlock = {
-  type: 'fragment'
-  parent:
-    | FF
-    | UsingBlock
-    | ElementBlock
-    | LF
-    | RF
-    | RecItemBlock
-    | RecBlock
-    | BlockBlock
-    | BlockItemBlock
-  child: ChildBlock[]
-}
-
 export type ElementBlock = {
   type: 'element'
-  parent: FragmentBlock
-  child: FragmentBlock
+  parent: FragmentParent
+  child: ChildBlock[]
   value: DOMElement
   visible: boolean
   index: number
@@ -57,7 +51,7 @@ export type ElementBlock = {
 
 export type ListBlock = {
   type: 'list'
-  parent: FragmentBlock
+  parent: FragmentParent
   child: LF[]
   lastChild: LF | null
   visible: boolean
@@ -66,7 +60,7 @@ export type ListBlock = {
 
 export type TextBlock = {
   type: 'text'
-  parent: FragmentBlock
+  parent: ElementBlock
   value: Text
   visible: boolean
   index: number
@@ -74,30 +68,14 @@ export type TextBlock = {
 
 export type UsingBlock = {
   type: 'using'
-  child: FragmentBlock
+  child: ChildBlock[]
   value: DOMElement
-}
-
-export type RF = {
-  type: 'RF'
-  parent: RouteBlock
-  child: FragmentBlock
-  visible: boolean
-  // index: number
-}
-
-export type FF = {
-  type: 'FF'
-  parent: FragmentBlock
-  child: FragmentBlock
-  visible: boolean
-  index: number
 }
 
 export type LF = {
   type: 'LF'
   parent: ListBlock
-  child: FragmentBlock
+  child: ChildBlock[]
   visible: boolean
   childInitialized: boolean
   left: LF | null
@@ -106,32 +84,32 @@ export type LF = {
 
 export type RecItemBlock = {
   type: 'recItem'
-  parent: FragmentBlock
-  child: FragmentBlock
+  parent: FragmentParent
+  child: ChildBlock[]
   visible: boolean
   index: number
 }
 
 export type RecBlock = {
   type: 'rec'
-  parent: FragmentBlock
-  child: FragmentBlock
+  parent: FragmentParent
+  child: ChildBlock[]
   visible: boolean
   index: number
 }
 
 export type BlockBlock = {
   type: 'block'
-  parent: FragmentBlock
-  child: FragmentBlock
+  parent: FragmentParent
+  child: ChildBlock[]
   visible: boolean
   index: number
 }
 
 export type BlockItemBlock = {
   type: 'blockItem'
-  parent: FragmentBlock
-  child: FragmentBlock
+  parent: FragmentParent
+  child: ChildBlock[]
   visible: boolean
   index: number
 }

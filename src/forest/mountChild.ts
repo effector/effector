@@ -1,13 +1,20 @@
 import {launch, createEvent} from 'effector'
 
-import {DOMElement, Actor, Leaf, BindingsDraft, LeafData, Env} from './index.h'
+import type {
+  DOMElement,
+  Actor,
+  Leaf,
+  BindingsDraft,
+  LeafData,
+  Env,
+} from './index.h'
 
-import {
+import type {
   ElementBlock,
   ListBlock,
   TextBlock,
   RouteBlock,
-  FragmentBlock,
+  FragmentParent,
   RecItemBlock,
   RecBlock,
   BlockBlock,
@@ -19,6 +26,8 @@ import {createOpGroup, createOp} from './plan'
 import {spawn} from './template'
 import {findParentDOMElement, findPreviousVisibleSibling} from './search'
 import {applyStaticOps} from './bindings'
+import {printTree} from './printTree'
+import {assert} from './assert'
 
 export function mountChildTemplates(
   draft: BindingsDraft,
@@ -29,7 +38,7 @@ export function mountChildTemplates(
     svgRoot,
     values,
   }: {
-    parentBlockFragment: FragmentBlock
+    parentBlockFragment: FragmentParent
     leaf: Leaf
     node?: DOMElement
     svgRoot?: SVGSVGElement | null
@@ -47,7 +56,27 @@ export function mountChildTemplates(
     })
   })
 }
-
+const fragmentParentTypes: Array<FragmentParent['type']> = [
+  'LF',
+  'using',
+  'element',
+  'recItem',
+  'rec',
+  'block',
+  'blockItem',
+  'route',
+]
+function assertNoRewriteChild(
+  parent: FragmentParent,
+  child: {inParentIndex: number},
+  active: boolean = false,
+) {
+  if (!active) return
+  assert(
+    !parent.child[child.inParentIndex],
+    `override current child at index ${child.inParentIndex}`,
+  )
+}
 export function mountChild({
   parentBlockFragment,
   leaf,
@@ -56,13 +85,17 @@ export function mountChild({
   svgRoot,
   values,
 }: {
-  parentBlockFragment: FragmentBlock
+  parentBlockFragment: FragmentParent
   leaf: Leaf
   node?: DOMElement
   actor: Actor<any>
   svgRoot?: SVGSVGElement | null
   values?: {[name: string]: any}
 }) {
+  assert(
+    fragmentParentTypes.includes(parentBlockFragment.type),
+    `incorrect parent ${parentBlockFragment.type}`,
+  )
   let leafData: LeafData
   const {draft} = actor
   const {queue} = leaf.ops.group
@@ -74,21 +107,11 @@ export function mountChild({
       const routeBlock: RouteBlock = {
         type: 'route',
         parent: parentBlockFragment,
-        child: {
-          type: 'RF',
-          parent: null as any,
-          child: {
-            type: 'fragment',
-            parent: null as any,
-            child: [],
-          },
-          visible: false,
-        },
-        visible: true,
+        child: [],
+        visible: false,
         index: draft.inParentIndex,
       }
-      routeBlock.child.parent = routeBlock
-      routeBlock.child.child.parent = routeBlock.child
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = routeBlock
       leafData = {
         type: 'route',
@@ -135,17 +158,19 @@ export function mountChild({
       const elementBlock: ElementBlock = {
         type: 'element',
         parent: parentBlockFragment,
-        child: {
-          type: 'fragment',
-          parent: null as any,
-          child: [],
-        },
+        child: [],
         value: element!,
         visible: false,
         index: draft.inParentIndex,
       }
-      elementBlock.child.parent = elementBlock
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = elementBlock
+      // {
+      //   const tag = elementBlock.value.tagName.toLowerCase()
+      //   if (tag === 'h1') {
+      //     printTree(parentBlockFragment, false)
+      //   }
+      // }
       leafData = {
         type: 'element',
         block: elementBlock,
@@ -169,7 +194,7 @@ export function mountChild({
                       fns: draft.node,
                     },
                     page: childSpawn.spawn,
-                    //@ts-ignore
+                    //@ts-expect-error
                     forkPage: leaf.forkPage,
                   })
                 }
@@ -205,6 +230,7 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = listBlock
       leafData = {
         type: 'list',
@@ -221,15 +247,11 @@ export function mountChild({
       const recBlock: RecBlock = {
         type: 'rec',
         parent: parentBlockFragment,
-        child: {
-          type: 'fragment',
-          parent: null as any,
-          child: [],
-        },
+        child: [],
         visible: true,
         index: draft.inParentIndex,
       }
-      recBlock.child.parent = recBlock
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = recBlock
       leafData = {
         type: 'rec',
@@ -241,15 +263,11 @@ export function mountChild({
       const recItemBlock: RecItemBlock = {
         type: 'recItem',
         parent: parentBlockFragment,
-        child: {
-          type: 'fragment',
-          parent: null as any,
-          child: [],
-        },
+        child: [],
         visible: true,
         index: draft.inParentIndex,
       }
-      recItemBlock.child.parent = recItemBlock
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = recItemBlock
       leafData = {
         type: 'rec item',
@@ -261,15 +279,11 @@ export function mountChild({
       const block: BlockBlock = {
         type: 'block',
         parent: parentBlockFragment,
-        child: {
-          type: 'fragment',
-          parent: null as any,
-          child: [],
-        },
+        child: [],
         visible: true,
         index: draft.inParentIndex,
       }
-      block.child.parent = block
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'block',
@@ -281,15 +295,11 @@ export function mountChild({
       const block: BlockItemBlock = {
         type: 'blockItem',
         parent: parentBlockFragment,
-        child: {
-          type: 'fragment',
-          parent: null as any,
-          child: [],
-        },
+        child: [],
         visible: true,
         index: draft.inParentIndex,
       }
-      block.child.parent = block
+      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'block item',
@@ -298,7 +308,7 @@ export function mountChild({
       break
     }
     default: {
-      //@ts-ignore
+      //@ts-expect-error
       console.warn(`unexpected draft type ${draft.type}`)
     }
   }
@@ -307,7 +317,7 @@ export function mountChild({
     parentLeaf: leaf,
     mountNode: node,
     svgRoot: svgRoot ? svgRoot : leaf.svgRoot,
-    //@ts-ignore
+    //@ts-expect-error
     leafData,
     opGroup,
     domSubtree,
@@ -318,10 +328,14 @@ export function mountChild({
 
 export function appendChild(block: TextBlock | ElementBlock) {
   const visibleSibling = findPreviousVisibleSibling(block)
+  if (block.type === 'element' && block.value.nodeName.toLowerCase() === 'h1') {
+    debugger
+  }
   if (visibleSibling) {
     visibleSibling.after(block.value)
   } else {
-    findParentDOMElement(block)!.prepend(block.value)
+    const parent = findParentDOMElement(block)
+    parent!.prepend(block.value)
   }
   block.visible = true
 }
