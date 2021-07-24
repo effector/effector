@@ -384,6 +384,115 @@ describe('update store from nested block', () => {
           "
         `)
       })
+      describe('#3', () => {
+        test('external store and event', async () => {
+          const [s1, s2, s3] = await exec(async () => {
+            const enable = createEvent<any>()
+            const disable = createEvent<any>()
+            const enabled = createStore(false)
+              .on(enable, () => true)
+              .on(disable, () => false)
+            const disabled = enabled.map(is => !is)
+            await new Promise((rs: any) => {
+              using(el, {
+                fn() {
+                  h('button', {
+                    text: 'Enable',
+                    attr: {disabled: enabled, id: 'a'},
+                    handler: {click: enable},
+                  })
+                  h('button', {
+                    text: 'Disable',
+                    attr: {disabled, id: 'b'},
+                    handler: {click: disable},
+                  })
+                },
+                onComplete: rs,
+              })
+            })
+            await act()
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#a')!.click()
+            })
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#b')!.click()
+            })
+          })
+          expect(s1).toMatchInlineSnapshot(`
+            "
+            <button id='a'>Enable</button
+            ><button id='b' disabled='true'>Disable</button>
+            "
+          `)
+          expect(s2).toMatchInlineSnapshot(`
+            "
+            <button id='a' disabled='true'>Enable</button
+            ><button id='b'>Disable</button>
+            "
+          `)
+          /**
+           * TODO wrong behavior!
+           */
+          expect(s3).toMatchInlineSnapshot(`
+            "
+            <button id='a' disabled='true'>Enable</button
+            ><button id='b' disabled='true'>Disable</button>
+            "
+          `)
+        })
+        test('internal store and event', async () => {
+          const [s1, s2, s3] = await exec(async () => {
+            await new Promise((rs: any) => {
+              using(el, {
+                fn() {
+                  const enable = createEvent<any>()
+                  const disable = createEvent<any>()
+                  const enabled = createStore(false)
+                    .on(enable, () => true)
+                    .on(disable, () => false)
+                  const disabled = enabled.map(is => !is)
+                  h('button', {
+                    text: 'Enable',
+                    attr: {disabled: enabled, id: 'a'},
+                    handler: {click: enable},
+                  })
+                  h('button', {
+                    text: 'Disable',
+                    attr: {disabled, id: 'b'},
+                    handler: {click: disable},
+                  })
+                },
+                onComplete: rs,
+              })
+            })
+            await act()
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#a')!.click()
+            })
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#b')!.click()
+            })
+          })
+          expect(s1).toMatchInlineSnapshot(`
+            "
+            <button id='a'>Enable</button
+            ><button id='b' disabled='true'>Disable</button>
+            "
+          `)
+          expect(s2).toMatchInlineSnapshot(`
+            "
+            <button id='a' disabled='true'>Enable</button
+            ><button id='b'>Disable</button>
+            "
+          `)
+          expect(s3).toMatchInlineSnapshot(`
+            "
+            <button id='a'>Enable</button
+            ><button id='b' disabled='true'>Disable</button>
+            "
+          `)
+        })
+      })
     })
   })
 })
