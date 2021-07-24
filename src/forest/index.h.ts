@@ -17,8 +17,8 @@ import {
 export type Template = {
   id: number
   name: string
-  plain: any[]
-  closure: any[]
+  plain: StateRef[]
+  closure: StateRef[]
   watch: any[]
   nameMap: Record<string, any>
   pages: Spawn[]
