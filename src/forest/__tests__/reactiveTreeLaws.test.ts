@@ -248,34 +248,142 @@ describe('update store from nested block', () => {
         "
       `)
     })
-    test('handler + on edge case', async () => {
-      const updates = await execFunc(async () => {
-        const updates = [] as number[]
-        const count = createStore(0)
+    describe('handler + on edge cases', () => {
+      test('#1', async () => {
+        const updates = await execFunc(async () => {
+          const updates = [] as number[]
+          const count = createStore(0)
 
-        count.watch(upd => {
-          updates.push(upd)
+          count.watch(upd => {
+            updates.push(upd)
+          })
+          await new Promise((rs: any) => {
+            using(el, {
+              onComplete: rs,
+              fn() {
+                const click = createEvent<any>()
+                count.on(click, x => x + 1)
+                h('button', {
+                  text: 'Store',
+                  handler: {click},
+                  attr: {id: 'click'},
+                })
+              },
+            })
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#click')!.click()
+          })
+          return updates
         })
-        await new Promise((rs: any) => {
-          using(el, {
-            onComplete: rs,
-            fn() {
-              const click = createEvent<any>()
-              count.on(click, x => x + 1)
-              h('button', {
-                text: 'Store',
-                handler: {click},
-                attr: {id: 'click'},
-              })
-            },
+        expect(updates).toEqual([0, 1])
+      })
+      test('#2', async () => {
+        const [s1, s2, s3, s4] = await exec(async () => {
+          const inc = createEvent<any>()
+          const $counter = createStore(0)
+          $counter.on(inc, count => count + 1)
+          await new Promise((rs: any) => {
+            using(el, {
+              fn() {
+                /**
+                  model-bound component
+                  same external $counter
+                */
+                h('p', () => {
+                  h('button', {
+                    handler: {click: inc},
+                    text: $counter,
+                    attr: {id: 'a'},
+                  })
+                })
+                h('p', () => {
+                  h('button', {
+                    handler: {click: inc},
+                    text: $counter,
+                    attr: {id: 'b'},
+                  })
+                })
+                /**
+                  With internal units bounded to external units
+                  $counter -> $myCount, inc <- u
+                */
+                h('p', () => {
+                  const up = createEvent<any>()
+                  const $myCount = createStore(0)
+                  forward({from: $counter, to: $myCount})
+                  forward({from: up, to: inc})
+                  h('button', {
+                    handler: {click: up},
+                    text: $myCount,
+                    attr: {id: 'c'},
+                  })
+                })
+                h('p', () => {
+                  const up = createEvent<any>()
+                  const $myCount = createStore(0)
+                  forward({from: $counter, to: $myCount})
+                  forward({from: up, to: inc})
+                  h('button', {
+                    handler: {click: up},
+                    text: $myCount,
+                    attr: {id: 'd'},
+                  })
+                })
+              },
+              onComplete: rs,
+            })
+          })
+          await act()
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#a')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#c')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#b')!.click()
           })
         })
-        await act(async () => {
-          el.querySelector<HTMLButtonElement>('#click')!.click()
-        })
-        return updates
+        expect(s1).toMatchInlineSnapshot(`
+          "
+          <p><button id='a'>0</button></p>
+          <p><button id='b'>0</button></p>
+          <p><button id='c'>0</button></p>
+          <p><button id='d'>0</button></p>
+          "
+        `)
+        /**
+         * TODO wrong behavior!
+         */
+        expect(s2).toMatchInlineSnapshot(`
+          "
+          <p><button id='a'>1</button></p>
+          <p><button id='b'>0</button></p>
+          <p><button id='c'>0</button></p>
+          <p><button id='d'>0</button></p>
+          "
+        `)
+        expect(s3).toMatchInlineSnapshot(`
+          "
+          <p><button id='a'>2</button></p>
+          <p><button id='b'>2</button></p>
+          <p><button id='c'>2</button></p>
+          <p><button id='d'>2</button></p>
+          "
+        `)
+        /**
+         * TODO wrong behavior!
+         */
+        expect(s4).toMatchInlineSnapshot(`
+          "
+          <p><button id='a'>2</button></p>
+          <p><button id='b'>3</button></p>
+          <p><button id='c'>2</button></p>
+          <p><button id='d'>2</button></p>
+          "
+        `)
       })
-      expect(updates).toEqual([0, 1])
     })
   })
 })
