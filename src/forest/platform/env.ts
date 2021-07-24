@@ -1,3 +1,3 @@
 export const USE_PERF = true
 
-export const TASK_DEADLINE = 10
+export const TASK_DEADLINE = 1000
