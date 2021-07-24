@@ -1,4 +1,4 @@
-import {BrowserObject} from 'webdriverio'
+import type {BrowserObject} from 'webdriverio'
 import {
   createStore,
   createEffect,

@@ -6,7 +6,7 @@ export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
     const childs = page.childSpawns[key]
     for (let i = 0; i < childs.length; i++) {
       const childSpawn = childs[i]
-      //@ts-ignore
+      //@ts-expect-error
       cb(childSpawn.leaf)
     }
   }

@@ -1,4 +1,4 @@
-import {BrowserObject} from 'webdriverio'
+import type {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, restore, combine, sample} from 'effector'
 import {
   h,
@@ -630,7 +630,7 @@ describe('text``', () => {
       const name = createStore('alice')
       using(el, () => {
         h('span', () => {
-          //@ts-ignore
+          //@ts-expect-error
           text(name)
         })
       })
@@ -646,7 +646,7 @@ describe('text``', () => {
     const [s1] = await exec(async () => {
       using(el, () => {
         h('span', () => {
-          //@ts-ignore
+          //@ts-expect-error
           text('alice')
         })
       })
@@ -663,7 +663,7 @@ describe('text``', () => {
       const name = createStore('alice')
       using(el, () => {
         h('span', () => {
-          //@ts-ignore
+          //@ts-expect-error
           text(['username: ', name])
         })
       })

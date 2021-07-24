@@ -3,7 +3,7 @@ import {createDomain, forward, fork} from 'effector'
 import {h, using, list, spec, rec, variant, remap, block} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
-//@ts-ignore
+//@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
 
 test('block nesting', async () => {

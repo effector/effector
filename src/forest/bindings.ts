@@ -88,11 +88,11 @@ export function applyAttr(
   if (isFalse(value)) {
     switch (field) {
       case 'value':
-        //@ts-ignore
+        //@ts-expect-error
         delete element.value
         break
       case 'checked':
-        //@ts-ignore
+        //@ts-expect-error
         element.checked = false
         break
       case 'spellcheck':
@@ -106,11 +106,11 @@ export function applyAttr(
   } else {
     switch (field) {
       case 'value':
-        //@ts-ignore
+        //@ts-expect-error
         element.value = `${value}`
         break
       case 'checked':
-        //@ts-ignore
+        //@ts-expect-error
         element.checked = `${value}`
         break
     }

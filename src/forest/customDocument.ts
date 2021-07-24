@@ -153,11 +153,11 @@ class DOMNode {
 }
 class CSSStyle {
   setProperty(property: string, value: string): void {
-    //@ts-ignore
+    //@ts-expect-error
     this[escapeTag(property)] = escapeTagValue(value)
   }
   removeProperty(property: string): void {
-    //@ts-ignore
+    //@ts-expect-error
     delete this[escapeTag(property)]
   }
 }
@@ -221,7 +221,7 @@ export function createEnv(): Env {
       }
       const node = new DOMNode()
       node.tagName = escapeTag(tag)
-      //@ts-ignore
+      //@ts-expect-error
       node.namespaceURI = namespace
       node.isFragment = false
       return node
@@ -231,7 +231,7 @@ export function createEnv(): Env {
     },
   }
   return {
-    //@ts-ignore
+    //@ts-expect-error
     document,
   }
 }
@@ -269,7 +269,7 @@ function renderPart(node: DOMNode, parts: string[]) {
   }
   const styles = [] as string[]
   for (const property in node.style) {
-    //@ts-ignore
+    //@ts-expect-error
     const value = node.style[property]
     if (property.startsWith('--')) {
       styles.push(`${property}: ${value}`)

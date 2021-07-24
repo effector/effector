@@ -1,4 +1,4 @@
-import {BrowserObject} from 'webdriverio'
+import type {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, createApi} from 'effector'
 import {h, using, list, remap, variant} from 'forest'
 
@@ -87,7 +87,7 @@ test('with key function', async () => {
             const text = remap(store, 'text')
             variant({
               source: store,
-              //@ts-ignore
+              //@ts-expect-error
               key: ({type}) => type,
               cases: {
                 plain() {

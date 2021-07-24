@@ -9,7 +9,7 @@ import {
 import {h, using, block, text, spec, variant, rec, list, remap} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
-//@ts-ignore
+//@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
 
 test('fork support', async () => {
@@ -183,6 +183,7 @@ test('hydrate', async () => {
 
   client.el.innerHTML = htmlSource
   await new Promise(rs => {
+    //@ts-expect-error
     using(client.el, {
       scope: fork(app),
       onComplete: rs,
@@ -287,7 +288,7 @@ test('fork isolation', async () => {
   client.el.appendChild(elA)
   client.el.appendChild(elB)
 
-  //@ts-ignore
+  //@ts-expect-error
   using(elA, {
     scope: scopeA,
     fn: App,

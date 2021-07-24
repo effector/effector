@@ -1,4 +1,4 @@
-import {BrowserObject} from 'webdriverio'
+import type {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, combine} from 'effector'
 import {using, h, spec, text, list, rec, remap} from 'forest'
 import {Leaf} from '../index.h'
@@ -80,7 +80,7 @@ test('rec visible support', async () => {
         .map(item => ({item, level: 0})),
     )
     let rootLeaf: Leaf
-    //@ts-ignore
+    //@ts-expect-error
     using(el, {
       fn() {
         const Row = rec<{item: FlatItem; level: number}>(({store}) => {
@@ -123,7 +123,6 @@ test('rec visible support', async () => {
       },
     })
     await act()
-    //@ts-ignore
     // printLeaf(rootLeaf)
     await act(() => {
       toggleNestedRows()
@@ -131,7 +130,6 @@ test('rec visible support', async () => {
     await act(() => {
       toggleNestedRows()
     })
-    //@ts-ignore
     // printLeaf(rootLeaf)
   })
   expect(s1).toMatchInlineSnapshot(`
@@ -223,7 +221,7 @@ test('rec style update support', async () => {
         .map(item => ({item, level: 0})),
     )
     let rootLeaf: Leaf
-    //@ts-ignore
+    //@ts-expect-error
     using(el, {
       fn() {
         const Row = rec<{item: FlatItem; level: number}>(({store}) => {
@@ -268,7 +266,6 @@ test('rec style update support', async () => {
       },
     })
     await act()
-    //@ts-ignore
     // printLeaf(rootLeaf)
     await act(() => {
       toggleNestedRows()
@@ -276,7 +273,6 @@ test('rec style update support', async () => {
     await act(() => {
       toggleNestedRows()
     })
-    //@ts-ignore
     // printLeaf(rootLeaf)
   })
   expect(s1).toMatchInlineSnapshot(`
@@ -383,7 +379,7 @@ function printLeaf(leaf: Leaf) {
       const childs = page.childSpawns[key]
       for (let i = 0; i < childs.length; i++) {
         const childSpawn = childs[i]
-        //@ts-ignore
+        //@ts-expect-error
         cb(childSpawn.leaf)
       }
     }

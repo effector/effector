@@ -1,4 +1,4 @@
-import {BrowserObject} from 'webdriverio'
+import type {BrowserObject} from 'webdriverio'
 import {createStore, createEvent} from 'effector'
 import {h, using, list, spec} from 'forest'
 
