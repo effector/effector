@@ -32,9 +32,9 @@ import {
   getGraph,
   getParent,
 } from './getter'
-import {includes} from './collection'
 import {throwError} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A} from './tag'
+import {eventTempl, storeTempl} from './template'
 
 const normalizeConfig = (part: any, config: any) => {
   if (isObject(part)) {
@@ -200,10 +200,7 @@ export function createEvent<Payload = any>(
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
       parent: getParent(event),
     })
-    const template = readTemplate()
-    if (template) {
-      getGraph(contramapped).seq.push(template.upward)
-    }
+    eventTempl.initPrepend(getGraph(contramapped))
     createComputation(contramapped, event, 'prepend', fn)
     applyParentHook(event, contramapped)
     return contramapped
@@ -219,10 +216,7 @@ export function createStore<State>(
   const plainState = createStateRef(defaultState)
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
-  const template = readTemplate()
-  if (template) {
-    template.plain.push(plainState, oldState)
-  }
+  storeTempl.initStore(plainState, oldState)
   const plainStateId = plainState.id
   const store: any = {
     subscribers: new Map(),
@@ -307,25 +301,13 @@ export function createStore<State>(
         from: plainState,
       })
       getStoreState(innerStore).noInit = true
-      if (template) {
-        if (!includes(template.plain, plainState)) {
-          if (!includes(linkNode.seq, template.loader)) {
-            linkNode.seq.unshift(template.loader)
-          }
-        }
-      }
+      storeTempl.initMap(plainState, linkNode)
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
-        const template = readTemplate()
-        if (template) {
-          template.watch.push({
-            of: plainState,
-            fn: eventOrFn,
-          })
-        } else {
+        if (!storeTempl.initWatch(plainState, eventOrFn)) {
           eventOrFn(store.getState())
         }
         return subscription
@@ -400,30 +382,7 @@ const updateStore = (
       }),
     step.update({store: storeRef}),
   ]
-  const template = readTemplate()
-  if (template) {
-    node.unshift(template.loader)
-    node.push(template.upward)
-    if (is.store(from)) {
-      const ref = getStoreState(from)
-      if (!includes(template.plain, ref)) {
-        //if (!includes(node, template.loader)) {
-        //  node.unshift(template.loader)
-        //}
-        if (!includes(template.closure, ref)) {
-          template.closure.push(ref)
-        }
-        addRefOp(storeRef, {
-          type: 'closure',
-          of: ref,
-        })
-      }
-    } else {
-      //if (!includes(node, template.loader)) {
-      //  node.unshift(template.loader)
-      //}
-    }
-  }
+  storeTempl.initOnMap(storeRef, node, is.store(from) && getStoreState(from))
   return createLinkNode(from, store, {
     scope: {fn},
     node,
