@@ -268,6 +268,10 @@ const users = [
     url: 'travelpayouts.svg',
     alt: 'Travelpayouts',
   },
+  {
+    url: 'smartomato.svg',
+    alt: 'смартомато',
+  },
 ]
 
 function CompaniesUsingEffector() {
