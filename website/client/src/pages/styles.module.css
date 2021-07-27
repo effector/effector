@@ -90,10 +90,10 @@ html[lang='ru'] .heroBanner [data-hero-controls] a {
   display: grid;
   justify-items: center;
   padding-bottom: 2rem;
-  --maxWidth: 70vw;
+  --maxWidth: 90vw;
   --maxHeight: 60%;
-  --logoCardSize: 220px;
-  --logoCardGap: 2rem;
+  --logoCardSize: 130px;
+  --logoCardGap: 1rem;
 }
 
 .usersSection [data-users-header] {
