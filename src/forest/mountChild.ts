@@ -7,6 +7,7 @@ import type {
   BindingsDraft,
   LeafData,
   Env,
+  LeafDataElement,
 } from './index.h'
 
 import type {
@@ -185,8 +186,8 @@ export function mountChild({
 
               if (value) {
                 appendChild(elementBlock)
-                if ((leafData as any).needToCallNode) {
-                  ;(leafData as any).needToCallNode = false
+                if ((leafData as LeafDataElement).needToCallNode) {
+                  ;(leafData as LeafDataElement).needToCallNode = false
                   launch({
                     target: onMount,
                     params: {
@@ -340,10 +341,11 @@ export function appendChild(block: TextBlock | ElementBlock) {
   block.visible = true
 }
 
+//@ts-expect-error
 export const onMount = createEvent<{
   fns: Array<(node: DOMElement) => (() => void) | void>
   element: DOMElement
-}>()
+}>({named: 'onMount'})
 
 onMount.watch(({fns, element}) => {
   fns.forEach(fn => {

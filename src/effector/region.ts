@@ -1,6 +1,7 @@
 import {getValue, getGraph, getParent} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
+import type {Template} from '../forest/index.h'
 
 type RegionStack = {
   parent: RegionStack | null
@@ -11,7 +12,8 @@ type RegionStack = {
 
 export let regionStack: RegionStack | null = null
 
-export const readTemplate = () => regionStack && regionStack.template
+export const readTemplate = (): Template | null =>
+  regionStack && regionStack.template
 export const readSidRoot = (sid?: string | null) => {
   if (sid && regionStack && regionStack.sidRoot)
     sid = `${regionStack.sidRoot}ɔ${sid}`

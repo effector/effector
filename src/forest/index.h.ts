@@ -36,6 +36,7 @@ export type Spawn = {
   parent: Spawn | null
   childSpawns: {[id: string]: Spawn[]}
   active: boolean
+  leaf: Leaf
 }
 
 export type DOMProperty = string | number | null | boolean

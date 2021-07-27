@@ -6,19 +6,14 @@ import {
   createNode,
   withRegion,
   restore,
-  Step,
   createEvent,
 } from 'effector'
 import type {Scope} from '../effector/unit.h'
 import type {StateRef} from '../effector/index.h'
+import type {Stack} from '../effector/kernel'
 import {
   Leaf,
   Actor,
-  ElementDraft,
-  ListType,
-  ListItemType,
-  UsingDraft,
-  RouteDraft,
   NSType,
   DOMElement,
   LeafData,
@@ -119,7 +114,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     childTemplates: [],
     upward: step.filter({
       //@ts-expect-error
-      fn(upd, scope, stack) {
+      fn(upd, scope, stack: Stack) {
         if (!stack.page) {
           if (stack.parent && stack.parent.page) {
             stack.page = stack.parent.page
@@ -142,16 +137,16 @@ export function createTemplate<Api extends {[method: string]: any}>({
             currentStackPage = currentStackPage.parent
           }
         }
-        stack.node.next.forEach((node: Step) => {
+        stack.node.next.forEach(node => {
           const targetTemplate = node.meta.nativeTemplate
           if (targetTemplate) {
             if (stackTemplates.includes(targetTemplate)) {
               launch({
+                //@ts-expect-error
                 target: node,
                 params: upd,
                 defer: true,
                 page: stackPages[stackTemplates.indexOf(targetTemplate)],
-                //@ts-expect-error
                 stack,
                 forkPage: stack.forkPage,
               })
@@ -160,11 +155,11 @@ export function createTemplate<Api extends {[method: string]: any}>({
             }
           } else {
             launch({
+              //@ts-expect-error
               target: node,
               params: upd,
               defer: true,
               page: stack.page,
-              //@ts-expect-error
               stack,
               forkPage: stack.forkPage,
             })
@@ -175,7 +170,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     }),
     loader: step.filter({
       //@ts-expect-error
-      fn(upd, scope, stack) {
+      fn(upd, scope, stack: Stack) {
         if (stack.parent) {
           const forkId = stack.forkPage ? stack.forkPage.graphite.id : null
           if (stack.page) {
@@ -187,20 +182,20 @@ export function createTemplate<Api extends {[method: string]: any}>({
               return true
             }
             if (stack.page.childSpawns[template.id]) {
-              stack.page.childSpawns[template.id].forEach((page: Spawn) => {
+              stack.page.childSpawns[template.id].forEach(page => {
                 if (forkId) {
                   if (
-                    !((page as any).leaf as Leaf).forkPage ||
-                    forkId !== (page as any).leaf.forkPage.graphite.id
+                    !page.leaf.forkPage ||
+                    forkId !== page.leaf.forkPage.graphite.id
                   )
                     return
                 }
                 launch({
                   params: upd,
+                  //@ts-expect-error
                   target: stack.node,
                   page,
                   defer: true,
-                  //@ts-expect-error
                   forkPage: stack.forkPage,
                 })
               })
@@ -220,19 +215,19 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 if (targetPageIndex === -1) {
                   launch({
                     params: upd,
+                    //@ts-expect-error
                     target: stack.node,
                     page: stack.page,
                     defer: true,
-                    //@ts-expect-error
                     forkPage: stack.forkPage,
                   })
                 } else {
                   launch({
                     params: upd,
+                    //@ts-expect-error
                     target: stack.node,
                     page: stackPages[targetPageIndex],
                     defer: true,
-                    //@ts-expect-error
                     forkPage: stack.forkPage,
                   })
                 }
@@ -240,32 +235,32 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 template.pages.forEach(page => {
                   if (forkId) {
                     if (
-                      !((page as any).leaf as Leaf).forkPage ||
-                      forkId !== (page as any).leaf.forkPage.graphite.id
+                      !page.leaf.forkPage ||
+                      forkId !== page.leaf.forkPage.graphite.id
                     )
                       return
                   }
-                  const fullID = stack.page.fullID
+                  const fullID = stack.page!.fullID
                   if (
                     page.fullID === fullID ||
                     page.fullID.startsWith(`${fullID}_`)
                   ) {
                     launch({
                       params: upd,
+                      //@ts-expect-error
                       target: stack.node,
                       page,
                       defer: true,
-                      //@ts-expect-error
                       forkPage: stack.forkPage,
                     })
                   } else {
                     if (fullID.startsWith(`${page.fullID}_`)) {
                       launch({
                         params: upd,
+                        //@ts-expect-error
                         target: stack.node,
                         page: stack.page,
                         defer: true,
-                        //@ts-expect-error
                         forkPage: stack.forkPage,
                       })
                     } else {
@@ -279,17 +274,17 @@ export function createTemplate<Api extends {[method: string]: any}>({
             template.pages.forEach(page => {
               if (forkId) {
                 if (
-                  !((page as any).leaf as Leaf).forkPage ||
-                  forkId !== (page as any).leaf.forkPage.graphite.id
+                  !page.leaf.forkPage ||
+                  forkId !== page.leaf.forkPage.graphite.id
                 )
                   return
               }
               launch({
                 params: upd,
+                //@ts-expect-error
                 target: stack.node,
                 page,
                 defer: true,
-                //@ts-expect-error
                 forkPage: stack.forkPage,
               })
             })
@@ -315,7 +310,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
     node,
     api: null as any,
     trigger: {
-      mount: createEvent<Leaf>(),
+      //@ts-expect-error
+      mount: createEvent<Leaf>({named: 'mount'}),
     },
     draft,
     isSvgRoot,
@@ -326,7 +322,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
   if (!defer) {
     withRegion(node, () => {
       const state = restore(values)
-      actor.api = fn(state, actor.trigger) as any
+      //@ts-expect-error
+      actor.api = fn(state, actor.trigger)
       template.nameMap = state
     })
   } else {
@@ -339,7 +336,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
       try {
         withRegion(node, () => {
           const state = restore(values)
-          actor.api = fn(state, actor.trigger) as any
+          //@ts-expect-error
+          actor.api = fn(state, actor.trigger)
           template.nameMap = state
         })
       } finally {
@@ -400,6 +398,16 @@ function ensureLeafHasRef(ref: StateRef, leaf: Leaf) {
 }
 const regRef = (page: {reg: Record<string, StateRef>}, ref: StateRef) =>
   page.reg[ref.id]
+function addMapItems<T>(
+  values: T[],
+  id: string | number,
+  record: Record<string | number, T[]>,
+) {
+  if (!(id in record)) {
+    record[id] = []
+  }
+  record[id].push(...values)
+}
 export function spawn(
   actor: Actor<any>,
   {
@@ -438,6 +446,7 @@ export function spawn(
     parent: parentSpawn,
     childSpawns: {},
     active: true,
+    leaf: null as unknown as Leaf,
   }
   template.pages.push(result)
   const api = {} as any
@@ -461,10 +470,7 @@ export function spawn(
   const previousSpawn = currentLeaf
   currentLeaf = leaf
   if (parentSpawn) {
-    if (!parentSpawn.childSpawns[template.id]) {
-      parentSpawn.childSpawns[template.id] = []
-    }
-    parentSpawn.childSpawns[template.id].push(result)
+    addMapItems([result], template.id, parentSpawn.childSpawns)
   }
   if (parentSpawn) {
     result.fullID = `${parentSpawn.fullID}_${result.id}`
@@ -491,9 +497,10 @@ export function spawn(
 
   for (let i = 0; i < template.plain.length; i++) {
     const ref = template.plain[i]
-    const next = {
+    const next: StateRef = {
       id: ref.id,
       current: getCurrent(ref, forkPage),
+      instanceId: `${--refID}`,
     }
     page[ref.id] = next
   }
@@ -502,6 +509,7 @@ export function spawn(
     page[id] = {
       id,
       current: values[name],
+      instanceId: `${--refID}`,
     }
   }
   function execRef(ref: StateRef) {
@@ -564,15 +572,12 @@ export function spawn(
   }
   if (parentSpawn) {
     for (const id in result.childSpawns) {
-      if (!(id in parentSpawn.childSpawns)) {
-        parentSpawn.childSpawns[id] = []
-      }
-      parentSpawn.childSpawns[id].push(...result.childSpawns[id])
+      addMapItems(result.childSpawns[id], id, parentSpawn.childSpawns)
     }
   }
+  perfEnd('copyChildSpawns')
   //@ts-expect-error
   leaf.spawn.api = api
-  //@ts-expect-error
   leaf.spawn.leaf = leaf
   if (actor.api) {
     for (const key in actor.api) {
@@ -587,6 +592,7 @@ export function spawn(
         })
     }
   }
+  perfStart('leaf runMount')
   if (mountQueue) {
     mountQueue.steps.push({
       target: actor.trigger.mount,
@@ -619,7 +625,9 @@ export function spawn(
       }
     } while ((mountQueue = mountQueue.parent))
   }
+  perfEnd('leaf runMount')
   currentLeaf = previousSpawn
+  perfEnd('spawn')
   return leaf
 }
 

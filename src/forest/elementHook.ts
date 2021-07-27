@@ -256,7 +256,8 @@ export function h(tag: string, opts?: any) {
     isSvgRoot: tag === 'svg',
     namespace: ns,
     fn(_, {mount}) {
-      const domElementCreated = createEvent<Leaf>()
+      //@ts-expect-error
+      const domElementCreated = createEvent<Leaf>({named: 'domElementCreated'})
       function valueElementMutualSample(value: Store<DOMProperty>) {
         return mutualSample({
           mount: domElementCreated,
@@ -454,7 +455,7 @@ export function h(tag: string, opts?: any) {
             }
           }
           const svgRoot = elementTemplate.isSvgRoot
-            ? (parentBlock.value as any)
+            ? (parentBlock.value as SVGSVGElement)
             : null
           mountChildTemplates(draft, {
             parentBlockFragment: parentBlock,
@@ -702,7 +703,7 @@ export function h(tag: string, opts?: any) {
             parentBlock.visible = true
           }
           const svgRoot = elementTemplate.isSvgRoot
-            ? (parentBlock.value as any)
+            ? (parentBlock.value as SVGSVGElement)
             : null
           mountChildTemplates(draft, {
             parentBlockFragment: parentBlock,
@@ -746,13 +747,14 @@ export function h(tag: string, opts?: any) {
     return (leaf.data as LeafDataElement).block.value
   }
   function installTextNode(leaf: Leaf, value: string, childIndex: number) {
-    const parentBlock = (leaf.data as any).block as ElementBlock
+    const parentBlock = leaf.data.block as ElementBlock
     const textBlock: TextBlock = {
       type: 'text',
       parent: parentBlock,
       visible: false,
       index: childIndex,
-      value: null as any,
+      //@ts-expect-error
+      value: null,
     }
     parentBlock.child[childIndex] = textBlock
     if (leaf.hydration) {
@@ -864,7 +866,7 @@ export function using(node: DOMElement, opts: any): void {
     parentLeaf: currentLeaf || null,
     mountNode: node,
     svgRoot: usingTemplate.isSvgRoot
-      ? (node as any)
+      ? (node as SVGSVGElement)
       : currentLeaf
       ? currentLeaf.svgRoot
       : null,
@@ -981,10 +983,13 @@ export function spec(config: {
   if (config.styleVar) draft.styleVar.push(config.styleVar)
   if (config.visible) draft.visible = config.visible
   if (config.handler) {
-    const handlerDef = config.handler as any
+    const handlerDef = config.handler
+    //@ts-expect-error
     if (typeof handlerDef.on === 'object') {
+      //@ts-expect-error
       handler(handlerDef.config || {}, handlerDef.on)
     } else {
+      //@ts-expect-error
       handler(handlerDef)
     }
   }
@@ -1082,7 +1087,8 @@ export function variant<T, K extends keyof T>({
     route({
       source,
       visible: value => !nonDefaultCases.includes(keyReader(value)),
-      fn: (cases as any).__,
+      //@ts-expect-error
+      fn: cases.__,
     })
   }
 }
@@ -1153,7 +1159,8 @@ export function route<T>({
         draft: childDraft,
         state: {store: null},
         fn({store}, {mount}) {
-          const itemUpdater = createEvent<any>()
+          //@ts-expect-error
+          const itemUpdater = createEvent<any>({named: 'itemUpdater'})
           store.on(itemUpdater, (_, upd) => upd)
           fn({store})
           const onValueUpdate = sample({
@@ -1313,14 +1320,17 @@ export function rec<T>(
     name: 'rec',
     state: {store: null},
     isSvgRoot: false,
-    namespace: null as any,
-    env: null as any,
+    //@ts-expect-error
+    namespace: null,
+    //@ts-expect-error
+    env: null,
     draft: recDraft,
     defer: true,
     isBlock: true,
     fn({store}, {mount}) {
       fn({store, state: store})
-      const itemUpdater = createEvent<any>()
+      //@ts-expect-error
+      const itemUpdater = createEvent<any>({named: 'itemUpdater'})
       store.on(itemUpdater, (_, e) => e)
       mount.watch(mountFn.rec)
       return {itemUpdater}
@@ -1467,7 +1477,8 @@ export function list<T>(opts: any, maybeFn?: any) {
         namespace,
         fn({id, store}, {mount}) {
           cb({store, key: id, fields: remap(store, fields)})
-          const itemUpdater = createEvent<any>()
+          //@ts-expect-error
+          const itemUpdater = createEvent<any>({named: 'itemUpdater'})
           store.on(itemUpdater, (_, e) => e)
           if (draft.itemVisible) {
             const {onMount: mountAndVisible, onState: onVisibleChanges} =
@@ -1478,7 +1489,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 onState: (leaf, visible) => ({visible, leaf}),
               })
             mountAndVisible.watch(({visible, leaf}) => {
-              const parentBlock = (leaf.data as any).block as LF
+              const parentBlock = leaf.data.block as LF
               parentBlock.visible = visible
               parentBlock.childInitialized = visible
               if (visible) {
@@ -1489,7 +1500,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               }
             })
             onVisibleChanges.watch(({visible, leaf}) => {
-              const parentBlock = (leaf.data as any).block as LF
+              const parentBlock = leaf.data.block as LF
               parentBlock.visible = visible
               if (!parentBlock.childInitialized) {
                 if (visible) {
@@ -1542,7 +1553,7 @@ export function list<T>(opts: any, maybeFn?: any) {
         clock: [mountData, parentNodeUpdateSpawn],
         greedy: true,
         fn(records: ListItemType[], {updates: input, leaf, hydration}) {
-          const listData = (leaf as any).data as LeafDataList
+          const listData = leaf.data as LeafDataList
           const parentBlock = listData.block
           beginMark('list update [' + source.shortName + ']')
           const skipNode: boolean[] = Array(input.length).fill(false)
@@ -1579,8 +1590,8 @@ export function list<T>(opts: any, maybeFn?: any) {
             }
             const item: ListItemType = {
               type: 'listItem',
-              key: id as any,
-              index: id as any,
+              key: id as string,
+              index: id as number,
               active: true,
               leafData: {
                 type: 'list item',
