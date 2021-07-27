@@ -185,20 +185,33 @@ const headings = {
 
 const users = [
   {
-    url: 'sber.png',
-    alt: 'Sber',
+    url: 'aviasales.png',
+    alt: 'Aviasales',
+    yOffset: true,
   },
   {
-    url: 'mts.svg',
-    alt: 'MTS',
+    url: 'healthSamurai.svg',
+    alt: 'Health Samurai',
   },
   {
     url: 'raiffeisen.svg',
     alt: 'Raiffeisen Bank Russia',
   },
   {
+    url: 'unicef.svg',
+    alt: 'UNICEF (United Nations Children’s Fund)',
+  },
+  {
+    url: 'sber.png',
+    alt: 'Sber',
+  },
+  {
     url: 'avito.svg',
     alt: 'Avito',
+  },
+  {
+    url: 'mts.svg',
+    alt: 'MTS',
   },
   {
     url: 'docsvision.png',
@@ -211,6 +224,10 @@ const users = [
     yOffset: true,
   },
   {
+    url: 'space307.svg',
+    alt: 'space307',
+  },
+  {
     url: 'redmadrobot.png',
     alt: 'REDMADROBOT',
     yOffset: true,
@@ -218,18 +235,6 @@ const users = [
   {
     url: 'junto.png',
     alt: 'Junto',
-  },
-  {
-    url: 'space307.svg',
-    alt: 'space307',
-  },
-  {
-    url: 'stellarX.svg',
-    alt: 'StellarX',
-  },
-  {
-    url: 'stmLabs.png',
-    alt: 'STM Labs',
   },
   {
     url: 'automationhero.svg',
@@ -244,9 +249,24 @@ const users = [
     alt: 'Global CTO Forum',
   },
   {
-    url: 'aviasales.png',
-    alt: 'Aviasales',
-    yOffset: true,
+    url: 'stellarX.svg',
+    alt: 'StellarX',
+  },
+  {
+    url: 'stmLabs.png',
+    alt: 'STM Labs',
+  },
+  {
+    url: 'tenpixls.png',
+    alt: 'TenPixls',
+  },
+  {
+    url: 'uptarget.png',
+    alt: 'Uptarget',
+  },
+  {
+    url: 'travelpayouts.svg',
+    alt: 'Travelpayouts',
   },
 ]
 
@@ -329,10 +349,8 @@ function Feature({imageUrl, content, locale}) {
 }
 
 function Hero() {
-  const {
-    siteConfig = {},
-    i18n: {currentLocale = 'en'} = {},
-  } = useDocusaurusContext()
+  const {siteConfig = {}, i18n: {currentLocale = 'en'} = {}} =
+    useDocusaurusContext()
   const {title, tagline} = headings[currentLocale] || siteConfig
   return (
     <header className={`hero ${styles.heroBanner}`}>
