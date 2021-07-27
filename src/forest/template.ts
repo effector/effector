@@ -575,7 +575,6 @@ export function spawn(
       addMapItems(result.childSpawns[id], id, parentSpawn.childSpawns)
     }
   }
-  perfEnd('copyChildSpawns')
   //@ts-expect-error
   leaf.spawn.api = api
   leaf.spawn.leaf = leaf
