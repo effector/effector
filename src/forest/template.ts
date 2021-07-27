@@ -500,7 +500,6 @@ export function spawn(
     const next: StateRef = {
       id: ref.id,
       current: getCurrent(ref, forkPage),
-      instanceId: `${--refID}`,
     }
     page[ref.id] = next
   }
@@ -509,7 +508,6 @@ export function spawn(
     page[id] = {
       id,
       current: values[name],
-      instanceId: `${--refID}`,
     }
   }
   function execRef(ref: StateRef) {
@@ -591,7 +589,6 @@ export function spawn(
         })
     }
   }
-  perfStart('leaf runMount')
   if (mountQueue) {
     mountQueue.steps.push({
       target: actor.trigger.mount,
@@ -624,9 +621,7 @@ export function spawn(
       }
     } while ((mountQueue = mountQueue.parent))
   }
-  perfEnd('leaf runMount')
   currentLeaf = previousSpawn
-  perfEnd('spawn')
   return leaf
 }
 
