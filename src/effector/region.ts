@@ -2,6 +2,7 @@ import {getValue, getGraph, getParent} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import type {Template} from '../forest/index.h'
+import {OPEN_O} from './tag'
 
 type RegionStack = {
   parent: RegionStack | null
@@ -16,7 +17,7 @@ export const readTemplate = (): Template | null =>
   regionStack && regionStack.template
 export const readSidRoot = (sid?: string | null) => {
   if (sid && regionStack && regionStack.sidRoot)
-    sid = `${regionStack.sidRoot}ɔ${sid}`
+    sid = `${regionStack.sidRoot}${OPEN_O}${sid}`
   return sid
 }
 
