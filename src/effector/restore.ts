@@ -3,6 +3,7 @@ import {is} from './is'
 import {forIn} from './collection'
 import {getParent} from './getter'
 import {OPEN_O} from './tag'
+import {forward} from './forward'
 
 export function restore(obj: any, defaultState: any, config?: any): any {
   if (is.store(obj)) {
@@ -23,7 +24,8 @@ export function restore(obj: any, defaultState: any, config?: any): any {
         parent: domain,
         name: obj.shortName,
         [OPEN_O]: config,
-      }).on(obj.done, (_: any, {result}: any) => result)
+      })
+      forward({from: obj.doneData, to: result})
     }
     if (domain) domain.hooks.store(result)
     return result
