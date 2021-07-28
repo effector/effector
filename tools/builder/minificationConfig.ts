@@ -80,7 +80,7 @@ export const minifyConfig = ({
     // },
   },
   output: {
-    ascii_only: false,
+    ascii_only: true,
     braces: false, //?
     // comments: /#/i,
     comments: false,
