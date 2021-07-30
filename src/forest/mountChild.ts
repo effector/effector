@@ -196,7 +196,7 @@ export function mountChild({
                     },
                     page: childSpawn.spawn,
                     //@ts-expect-error
-                    forkPage: leaf.forkPage,
+                    forkPage: leaf.root.forkPage,
                   })
                 }
                 elementBlock.visible = true
@@ -323,7 +323,7 @@ export function mountChild({
     opGroup,
     domSubtree,
     hydration: leaf.hydration,
-    forkPage: leaf.forkPage,
+    root: leaf.root,
   })
 }
 

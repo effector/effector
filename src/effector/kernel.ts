@@ -1,7 +1,7 @@
 import type {Spawn} from '../forest/index.h'
 
 import type {Cmd, Node, NodeUnit, StateRef} from './index.h'
-import {createStateRef, readRef} from './stateRef'
+import {readRef} from './stateRef'
 import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
   STORE,

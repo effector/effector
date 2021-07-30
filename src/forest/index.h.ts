@@ -37,6 +37,7 @@ export type Spawn = {
   childSpawns: {[id: string]: Spawn[]}
   active: boolean
   leaf: Leaf
+  root: Root
 }
 
 export type DOMProperty = string | number | null | boolean
@@ -315,9 +316,13 @@ export type Leaf = {
   }
   svgRoot: SVGSVGElement | null
   hydration: boolean
+  root: Root
+  mountNode: DOMElement
+}
+
+export type Root = {
   forkPage?: Scope
   env: Env
-  mountNode: DOMElement
 }
 
 export type BindingsDraft = {

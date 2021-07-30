@@ -21,7 +21,7 @@ import {
   Template,
   Spawn,
   NodeDraft,
-  Env,
+  Root,
 } from './index.h'
 
 let templateID = 0
@@ -185,8 +185,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               stack.page.childSpawns[template.id].forEach(page => {
                 if (forkId) {
                   if (
-                    !page.leaf.forkPage ||
-                    forkId !== page.leaf.forkPage.graphite.id
+                    !page.leaf.root.forkPage ||
+                    forkId !== page.leaf.root.forkPage.graphite.id
                   )
                     return
                 }
@@ -235,8 +235,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 template.pages.forEach(page => {
                   if (forkId) {
                     if (
-                      !page.leaf.forkPage ||
-                      forkId !== page.leaf.forkPage.graphite.id
+                      !page.leaf.root.forkPage ||
+                      forkId !== page.leaf.root.forkPage.graphite.id
                     )
                       return
                   }
@@ -274,8 +274,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
             template.pages.forEach(page => {
               if (forkId) {
                 if (
-                  !page.leaf.forkPage ||
-                  forkId !== page.leaf.forkPage.graphite.id
+                  !page.leaf.root.forkPage ||
+                  forkId !== page.leaf.root.forkPage.graphite.id
                 )
                   return
               }
@@ -393,7 +393,7 @@ function findRefValue(
 }
 function ensureLeafHasRef(ref: StateRef, leaf: Leaf) {
   if (!regRef(leaf.spawn, ref)) {
-    leaf.spawn.reg[ref.id] = findRef(ref, leaf.parentLeaf, leaf.forkPage)
+    leaf.spawn.reg[ref.id] = findRef(ref, leaf.parentLeaf, leaf.root.forkPage)
   }
 }
 const regRef = (page: {reg: Record<string, StateRef>}, ref: StateRef) =>
@@ -419,8 +419,7 @@ export function spawn(
     opGroup,
     domSubtree,
     hydration,
-    forkPage,
-    env,
+    root,
   }: {
     values?: {[field: string]: any}
     parentLeaf: Leaf | null
@@ -430,8 +429,7 @@ export function spawn(
     opGroup: OpGroup
     domSubtree: OpGroup
     hydration: boolean
-    forkPage?: Scope
-    env?: Env
+    root: Root
   },
 ): Leaf {
   if (!env && parentLeaf) env = parentLeaf.env
@@ -447,6 +445,7 @@ export function spawn(
     childSpawns: {},
     active: true,
     leaf: null as unknown as Leaf,
+    root,
   }
   template.pages.push(result)
   const api = {} as any
@@ -463,9 +462,8 @@ export function spawn(
     data: leafData,
     parentLeaf,
     hydration,
-    forkPage,
-    env: env!,
     mountNode,
+    root,
   }
   const previousSpawn = currentLeaf
   currentLeaf = leaf
@@ -488,9 +486,9 @@ export function spawn(
       }
       parent = parent.parent
     }
-    if (!parent && forkPage) {
-      forkPage.getState(ref)
-      closureRef = forkPage.reg[ref.id]
+    if (!parent && root.forkPage) {
+      root.forkPage.getState(ref)
+      closureRef = root.forkPage.reg[ref.id]
     }
     page[ref.id] = closureRef
   }
@@ -499,7 +497,7 @@ export function spawn(
     const ref = template.plain[i]
     const next: StateRef = {
       id: ref.id,
-      current: getCurrent(ref, forkPage),
+      current: getCurrent(ref, root.forkPage),
     }
     page[ref.id] = next
   }
@@ -556,7 +554,7 @@ export function spawn(
         val.fn(
           page[val.of.id]
             ? page[val.of.id].current
-            : findRefValue(val.of, leaf.parentLeaf, forkPage),
+            : findRefValue(val.of, leaf.parentLeaf, leaf.root.forkPage),
         )
       }
     } catch (err) {
@@ -585,7 +583,7 @@ export function spawn(
           defer,
           page: result,
           //@ts-expect-error
-          forkPage,
+          forkPage: root.forkPage,
         })
     }
   }
@@ -595,7 +593,7 @@ export function spawn(
       params: leaf,
       defer: true,
       page: result,
-      forkPage,
+      forkPage: root.forkPage,
     })
   } else {
     mountQueue = {
@@ -606,7 +604,7 @@ export function spawn(
           params: leaf,
           defer: true,
           page: result,
-          forkPage,
+          forkPage: root.forkPage,
         },
       ],
     }

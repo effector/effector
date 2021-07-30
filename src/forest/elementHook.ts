@@ -43,6 +43,7 @@ import {
   LeafDataList,
   LeafDataUsing,
   LeafDataListItem,
+  Root,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
@@ -475,7 +476,7 @@ export function h(tag: string, opts?: any) {
                 page: leaf.spawn,
                 defer: true,
                 //@ts-expect-error
-                forkPage: leaf.forkPage,
+                forkPage: leaf.root.forkPage,
               })
             }
           }
@@ -485,7 +486,7 @@ export function h(tag: string, opts?: any) {
             defer: true,
             page: leaf.spawn,
             //@ts-expect-error
-            forkPage: leaf.forkPage,
+            forkPage: leaf.root.forkPage,
           })
         })
         merge([onState, onMount]).watch(({leaf, value, hydration}) => {
@@ -668,7 +669,7 @@ export function h(tag: string, opts?: any) {
                     params: value,
                     page,
                     //@ts-expect-error
-                    forkPage: leaf.forkPage,
+                    forkPage: leaf.root.forkPage,
                   })
                 },
                 item.domConfig,
@@ -717,7 +718,7 @@ export function h(tag: string, opts?: any) {
             defer: true,
             page: leaf.spawn,
             //@ts-expect-error
-            forkPage: leaf.forkPage,
+            forkPage: leaf.root.forkPage,
           })
           if (leaf.hydration) {
             if (leafData.needToCallNode) {
@@ -731,7 +732,7 @@ export function h(tag: string, opts?: any) {
                 page: leaf.spawn,
                 defer: true,
                 //@ts-expect-error
-                forkPage: leaf.forkPage,
+                forkPage: leaf.root.forkPage,
               })
             }
           } else {
@@ -762,7 +763,7 @@ export function h(tag: string, opts?: any) {
       if (siblingBlock) {
         switch (siblingBlock.type) {
           case 'text': {
-            textBlock.value = leaf.env.document.createTextNode(value)
+            textBlock.value = leaf.root.env.document.createTextNode(value)
             siblingBlock.value.after(textBlock.value)
             break
           }
@@ -779,7 +780,7 @@ export function h(tag: string, opts?: any) {
       }
       textBlock.visible = true
     } else {
-      textBlock.value = leaf.env.document.createTextNode(value)
+      textBlock.value = leaf.root.env.document.createTextNode(value)
       appendChild(textBlock)
     }
     return textBlock
@@ -830,6 +831,7 @@ export function using(node: DOMElement, opts: any): void {
     scope = opts.scope
   } else throw Error('using() second argument is missing')
   assert(node, 'using() first argument is missing')
+  const root: Root = {forkPage: scope!, env}
   const namespaceURI = node.namespaceURI
   const tag = node.tagName.toLowerCase()
   const ns: NSType =
@@ -879,8 +881,7 @@ export function using(node: DOMElement, opts: any): void {
     opGroup: createOpGroup(queue),
     domSubtree: createOpGroup(queue),
     hydration: hydrate,
-    forkPage: scope!,
-    env,
+    root,
   })
 
   if (onRoot) {
@@ -1184,7 +1185,7 @@ export function route<T>({
                 defer: true,
                 page: leaf.spawn,
                 //@ts-expect-error
-                forkPage: leaf.forkPage,
+                forkPage: leaf.root.forkPage,
               })
             }
             changeChildLeafsVisible(visible, leaf)
@@ -1621,7 +1622,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                     opGroup: group,
                     domSubtree: leaf.ops.domSubtree,
                     hydration,
-                    forkPage: leaf.forkPage,
+                    root: leaf.root,
                   })
                 },
               }),
@@ -1661,7 +1662,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 opGroup: group,
                 domSubtree: leaf.ops.domSubtree,
                 hydration,
-                forkPage: leaf.forkPage,
+                root: leaf.root,
               })
             }
           }
