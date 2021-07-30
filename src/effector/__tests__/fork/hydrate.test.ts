@@ -424,11 +424,11 @@ describe('hydrate edge cases', () => {
     const greaterThan$ = app.createStore(2)
 
     const listA$ = listsContainer$.map(x => x.a)
-    const filteredA$ = {combine}.combine(listA$, greaterThan$, (xs, gt) =>
+    const filteredA$ = combine(listA$, greaterThan$, (xs, gt) =>
       xs.filter(x => x > gt),
     )
     const listB$ = listsContainer$.map(x => x.b)
-    const filteredB$ = {combine}.combine(listB$, greaterThan$, (xs, gt) =>
+    const filteredB$ = combine(listB$, greaterThan$, (xs, gt) =>
       xs.filter(x => x > gt),
     )
 

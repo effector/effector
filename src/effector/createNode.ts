@@ -9,23 +9,6 @@ const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
 ): Node[] => (Array.isArray(list) ? list : [list]).flat().map(getGraph)
 
-export const addToReg = (cmd: Cmd, reg: Record<string, StateRef>) => {
-  let store: StateRef
-  if (cmd.type === 'check' && cmd.data.type === 'changed') {
-    store = cmd.data.store
-    reg[store.id] = store
-  }
-  if (cmd.type === 'mov') {
-    if (cmd.data.from === STORE) {
-      store = cmd.data.store
-      reg[store.id] = store
-    }
-    if (cmd.data.to === STORE) {
-      store = cmd.data.target
-      reg[store.id] = store
-    }
-  }
-}
 export function createNode({
   node = [],
   from,
@@ -59,12 +42,10 @@ export function createNode({
   const links = arrifyNodes(familyRaw.links)
   const owners = arrifyNodes(familyRaw.owners)
   const seq: Cmd[] = []
-  const reg: {[id: string]: StateRef} = {}
   for (let i = 0; i < node.length; i++) {
     const item = node[i]
     if (!item) continue
     seq.push(item)
-    addToReg(item, reg)
   }
   const result: Node = {
     id: nextNodeID(),
@@ -77,7 +58,6 @@ export function createNode({
       links,
       owners,
     },
-    reg,
   }
   for (let i = 0; i < links.length; i++) {
     getOwners(links[i]).push(result)

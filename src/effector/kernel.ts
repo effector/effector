@@ -236,7 +236,7 @@ export const getPageRef = (
     initRefInScope(forkPage!, ref, isGetState)
     return forkPage.reg[ref.id]
   }
-  return node ? node.reg[ref.id] : ref
+  return ref
 }
 
 export function launch(config: {
@@ -293,13 +293,15 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let node: Node
   let value
   let page: Spawn | null
-  let reg: Record<string, StateRef>
+  let reg: Record<string, StateRef> | void
   kernelLoop: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
-    reg = (page ? page : forkPage ? forkPage : node).reg
+    if (page) reg = page.reg
+    else if (forkPage) reg = forkPage.reg
+    // reg = (page ? page : forkPage ? forkPage : node).reg
     const hasPageReg = !!page
     const hasScopeReg = !!forkPage
     const local: Local = {
@@ -335,7 +337,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               break
             case VALUE: value = data.store; break
             case STORE:
-              if (!reg[data.store.id]) {
+              if (reg && !reg[data.store.id]) {
                 // if (!page.parent) {
                 if (hasPageReg) {
                   const pageForRef = getPageForRef(page, data.store.id)
@@ -346,7 +348,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                     initRefInScope(forkPage!, data.store)
                     reg = forkPage!.reg
                   } else {
-                    reg = node.reg
+                    reg = undefined //node.reg
                   }
                 } else if (hasScopeReg) {
                   /** StateRef in Scope.reg created only when needed */
@@ -358,7 +360,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                 // }
               }
               // value = getPageRef(page, forkPage, node, data.store.id).current
-              value = readRef(reg[data.store.id])
+              value = readRef(reg ? reg[data.store.id] : data.store)
               break
           }
           //prettier-ignore

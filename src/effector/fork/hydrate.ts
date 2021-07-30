@@ -61,7 +61,6 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
     const valuesToUpdate = new Map<StateRef, any>()
     // const nodeValueMap: Record<string, {node: Node; value: any}> = {}
     forEach(flatGraphUnits, node => {
-      const {reg} = node
       const {op, unit, sid} = node.meta
       if (unit === STORE) {
         if (sid && includes(valuesSidList, sid)) {
@@ -81,7 +80,23 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
           watchesToCall.push(node)
         }
       }
-      Object.assign(refsMap, reg)
+      forEach(node.seq, cmd => {
+        switch (cmd.type) {
+          case 'check':
+            if (cmd.data.type === 'changed') {
+              refsMap[cmd.data.store.id] = cmd.data.store
+            }
+            break
+          case 'mov':
+            if (cmd.data.from === 'store') {
+              refsMap[cmd.data.store.id] = cmd.data.store
+            }
+            if (cmd.data.to === 'store') {
+              refsMap[cmd.data.target.id] = cmd.data.target
+            }
+            break
+        }
+      })
     })
     forIn(refsMap, ref => {
       let isFresh = false

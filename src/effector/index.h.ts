@@ -39,7 +39,7 @@ export type Node = {
   next: Array<Node>
   seq: Array<Cmd>
   scope: {[key: string]: any}
-  reg: {[id: string]: StateRef}
+  // reg: {[id: string]: StateRef}
   meta: {[tag: string]: any}
   family: {
     type: 'regular' | 'crosslink' | 'domain'

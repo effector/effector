@@ -7,7 +7,6 @@ import {own} from './own'
 import {is} from './is'
 import {step} from './typedef'
 import {launch} from './kernel'
-import {addToReg} from './createNode'
 import {STORE, EFFECT, REG_A} from './tag'
 
 export function attach(config: any) {
@@ -83,7 +82,6 @@ export function attach(config: any) {
       /* no need for step.run because of first step */
       step.compute({fn: runnerFn}),
     ]
-    addToReg(readStateRef, runner.reg)
   } else {
     runnerSteps = [step.run({fn: runnerFn})]
   }
