@@ -532,13 +532,16 @@ export function h(tag: string, opts?: any) {
                   runOp(value) {
                     applyAttr(element, field, value)
                   },
-                  group: leaf.ops.group,
+                  group: leaf.root.leafOps[leaf.spawn.fullID].group,
                 })
-                leaf.ops.group.ops[opID] = op
+                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
                 applyAttr(element, field, value)
               })
               onState.watch(({value, leaf}) => {
-                pushOpToQueue(value, leaf.ops.group.ops[opID])
+                pushOpToQueue(
+                  value,
+                  leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+                )
               })
             }
             break
@@ -555,13 +558,16 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyDataAttr(element, field, value)
                 },
-                group: leaf.ops.group,
+                group: leaf.root.leafOps[leaf.spawn.fullID].group,
               })
-              leaf.ops.group.ops[opID] = op
+              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
               applyDataAttr(element, field, value)
             })
             onState.watch(({value, leaf}) => {
-              pushOpToQueue(value, leaf.ops.group.ops[opID])
+              pushOpToQueue(
+                value,
+                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+              )
             })
             break
           }
@@ -578,13 +584,16 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyStyle(element, field, value)
                 },
-                group: leaf.ops.group,
+                group: leaf.root.leafOps[leaf.spawn.fullID].group,
               })
-              leaf.ops.group.ops[opID] = op
+              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
               applyStyle(element, field, value)
             })
             onState.watch(({value, leaf}) => {
-              pushOpToQueue(value, leaf.ops.group.ops[opID])
+              pushOpToQueue(
+                value,
+                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+              )
             })
             break
           }
@@ -600,13 +609,16 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyStyleVar(element, field, value)
                 },
-                group: leaf.ops.group,
+                group: leaf.root.leafOps[leaf.spawn.fullID].group,
               })
-              leaf.ops.group.ops[opID] = op
+              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
               applyStyleVar(element, field, value)
             })
             onState.watch(({value, leaf}) => {
-              pushOpToQueue(value, leaf.ops.group.ops[opID])
+              pushOpToQueue(
+                value,
+                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+              )
             })
             break
           }
@@ -631,9 +643,9 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyText(textBlock.value, value)
                 },
-                group: leaf.ops.group,
+                group: leaf.root.leafOps[leaf.spawn.fullID].group,
               })
-              leaf.ops.group.ops[opID] = op
+              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
               const textBlock = installTextNode(leaf, value, item.childIndex)
             })
             sample({
@@ -642,7 +654,10 @@ export function h(tag: string, opts?: any) {
               fn: (leaf, text) => ({leaf, text}),
               greedy: true,
             }).watch(({leaf, text}) => {
-              pushOpToQueue(text, leaf.ops.group.ops[opID])
+              pushOpToQueue(
+                text,
+                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+              )
             })
             break
           }
@@ -843,6 +858,7 @@ export function using(node: DOMElement, opts: any): void {
     env,
     activeSpawns: new Set(),
     childSpawns: {},
+    leafOps: {},
   }
   const namespaceURI = node.namespaceURI
   const tag = node.tagName.toLowerCase()
@@ -1375,7 +1391,14 @@ export function rec<T>(
         })
         onState.watch(({state, leaf}) => {
           iterateChildLeafs(leaf, child => {
-            child.api.itemUpdater(state)
+            launch({
+              target: child.actor.api.itemUpdater,
+              params: state,
+              defer: true,
+              page: leaf.spawn,
+              //@ts-expect-error
+              forkPage: leaf.root.forkPage,
+            })
           })
         })
         onMount.watch(({leaf, state}) => {
@@ -1591,7 +1614,9 @@ export function list<T>(opts: any, maybeFn?: any) {
             if (skipNode[i]) continue
             const value = input[i]
             const id = keys[i]
-            const group = createOpGroup(leaf.ops.group.queue)
+            const group = createOpGroup(
+              leaf.root.leafOps[leaf.spawn.fullID].group.queue,
+            )
             const listItemBlock: LF = {
               type: 'LF',
               parent: parentBlock,
@@ -1616,7 +1641,14 @@ export function list<T>(opts: any, maybeFn?: any) {
                 group,
                 onChange(value) {
                   if (item.instance) {
-                    item.instance.api.itemUpdater(value)
+                    launch({
+                      target: item.instance.actor.api.itemUpdater,
+                      params: value,
+                      defer: true,
+                      page: item.instance.spawn,
+                      //@ts-expect-error
+                      forkPage: item.instance.root.forkPage,
+                    })
                   }
                 },
                 onInit(value) {
@@ -1632,7 +1664,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                     svgRoot: leaf.svgRoot,
                     leafData: item.leafData,
                     opGroup: group,
-                    domSubtree: leaf.ops.domSubtree,
+                    domSubtree: leaf.root.leafOps[leaf.spawn.fullID].domSubtree,
                     hydration,
                     root: leaf.root,
                   })
@@ -1672,7 +1704,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 svgRoot: leaf.svgRoot,
                 leafData: item.leafData,
                 opGroup: group,
-                domSubtree: leaf.ops.domSubtree,
+                domSubtree: leaf.root.leafOps[leaf.spawn.fullID].domSubtree,
                 hydration,
                 root: leaf.root,
               })

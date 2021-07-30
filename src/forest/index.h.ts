@@ -306,14 +306,6 @@ export type Leaf = {
   parentLeaf: Leaf | null
   draft: NodeDraft
   data: LeafData
-  ops: {
-    group: OpGroup
-    domSubtree: OpGroup
-  }
-  api: {
-    mount(data: Leaf): void
-    itemUpdater(update: any): void
-  }
   svgRoot: SVGSVGElement | null
   hydration: boolean
   root: Root
@@ -325,6 +317,13 @@ export type Root = {
   env: Env
   activeSpawns: Set<string>
   childSpawns: Record<string, {[id: string]: Spawn[]}>
+  leafOps: Record<
+    string,
+    {
+      group: OpGroup
+      domSubtree: OpGroup
+    }
+  >
 }
 
 export type BindingsDraft = {

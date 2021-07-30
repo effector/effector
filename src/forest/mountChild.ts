@@ -99,9 +99,9 @@ export function mountChild({
   )
   let leafData: LeafData
   const {draft} = actor
-  const {queue} = leaf.ops.group
+  const {queue} = leaf.root.leafOps[leaf.spawn.fullID].group
   const opGroup = createOpGroup(queue)
-  const parentDomSubtree = leaf.ops.domSubtree
+  const parentDomSubtree = leaf.root.leafOps[leaf.spawn.fullID].domSubtree
   let domSubtree = parentDomSubtree
   switch (draft.type) {
     case 'route': {

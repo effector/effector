@@ -28,6 +28,7 @@ export function unmountLeafTree(leaf: Leaf) {
         root.activeSpawns.delete(spawn.fullID)
         const childSpawns = root.childSpawns[spawn.fullID]
         delete root.childSpawns[spawn.fullID]
+        delete root.leafOps[spawn.fullID]
         removeItem(spawn, spawn.template.pages)
         for (const id in childSpawns) {
           childSpawns[id].forEach(halt)
@@ -98,6 +99,7 @@ export function unmountLeafTree(leaf: Leaf) {
     }
   }
   delete root.childSpawns[spawn.fullID]
+  delete root.leafOps[spawn.fullID]
 }
 
 function removeItem<T>(item: T, list?: T[]) {

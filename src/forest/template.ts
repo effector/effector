@@ -448,16 +448,10 @@ export function spawn(
     root,
   }
   template.pages.push(result)
-  const api = {} as any
   const leaf: Leaf = {
     actor,
     spawn: result,
-    api,
     draft: actor.draft,
-    ops: {
-      group: opGroup,
-      domSubtree,
-    },
     svgRoot,
     data: leafData,
     parentLeaf,
@@ -477,6 +471,7 @@ export function spawn(
   }
   root.childSpawns[result.fullID] = {}
   root.activeSpawns.add(result.fullID)
+  root.leafOps[result.fullID] = {group: opGroup, domSubtree}
   for (let i = 0; i < template.closure.length; i++) {
     const ref = template.closure[i]
     let closureRef = ref
@@ -577,22 +572,7 @@ export function spawn(
       )
     }
   }
-  //@ts-expect-error
-  leaf.spawn.api = api
   leaf.spawn.leaf = leaf
-  if (actor.api) {
-    for (const key in actor.api) {
-      api[key] = (params: any, defer = true) =>
-        launch({
-          target: actor.api[key],
-          params,
-          defer,
-          page: result,
-          //@ts-expect-error
-          forkPage: root.forkPage,
-        })
-    }
-  }
   if (mountQueue) {
     mountQueue.steps.push({
       target: actor.trigger.mount,
