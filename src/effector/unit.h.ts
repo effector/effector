@@ -103,6 +103,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
     params: Params
     error: Fail
   }>
+  doneData: Event<Done>
+  failData: Event<Fail>
   finally: Event<
     | {
         status: 'done'
