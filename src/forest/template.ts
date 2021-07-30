@@ -123,7 +123,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
             return true
           }
         }
-        if (!stack.page.active) {
+        if (!stack.page.root.activeSpawns.has(stack.page.fullID)) {
           console.count('inactive page upward')
           return false
         }
@@ -174,15 +174,18 @@ export function createTemplate<Api extends {[method: string]: any}>({
         if (stack.parent) {
           const forkId = stack.forkPage ? stack.forkPage.graphite.id : null
           if (stack.page) {
-            if (!stack.page.active) {
+            if (!stack.page.root.activeSpawns.has(stack.page.fullID)) {
               console.count('inactive page loader')
               return false
             }
             if (stack.page.template === template) {
               return true
             }
-            if (stack.page.childSpawns[template.id]) {
-              stack.page.childSpawns[template.id].forEach(page => {
+
+            if (stack.page.root.childSpawns[stack.page.fullID][template.id]) {
+              stack.page.root.childSpawns[stack.page.fullID][
+                template.id
+              ].forEach(page => {
                 if (forkId) {
                   if (
                     !page.leaf.root.forkPage ||
@@ -432,7 +435,6 @@ export function spawn(
     root: Root
   },
 ): Leaf {
-  if (!env && parentLeaf) env = parentLeaf.env
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
   const page = {} as Record<string, StateRef>
@@ -442,8 +444,6 @@ export function spawn(
     reg: page,
     template,
     parent: parentSpawn,
-    childSpawns: {},
-    active: true,
     leaf: null as unknown as Leaf,
     root,
   }
@@ -468,13 +468,15 @@ export function spawn(
   const previousSpawn = currentLeaf
   currentLeaf = leaf
   if (parentSpawn) {
-    addMapItems([result], template.id, parentSpawn.childSpawns)
+    addMapItems([result], template.id, root.childSpawns[parentSpawn.fullID])
   }
   if (parentSpawn) {
     result.fullID = `${parentSpawn.fullID}_${result.id}`
   } else {
     result.fullID = `${result.id}`
   }
+  root.childSpawns[result.fullID] = {}
+  root.activeSpawns.add(result.fullID)
   for (let i = 0; i < template.closure.length; i++) {
     const ref = template.closure[i]
     let closureRef = ref
@@ -567,8 +569,12 @@ export function spawn(
     runWatchersFrom(template.watch, state, page)
   }
   if (parentSpawn) {
-    for (const id in result.childSpawns) {
-      addMapItems(result.childSpawns[id], id, parentSpawn.childSpawns)
+    for (const id in root.childSpawns[result.fullID]) {
+      addMapItems(
+        root.childSpawns[result.fullID][id],
+        id,
+        root.childSpawns[parentSpawn.fullID],
+      )
     }
   }
   //@ts-expect-error

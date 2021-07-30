@@ -831,7 +831,12 @@ export function using(node: DOMElement, opts: any): void {
     scope = opts.scope
   } else throw Error('using() second argument is missing')
   assert(node, 'using() first argument is missing')
-  const root: Root = {forkPage: scope!, env}
+  const root: Root = {
+    forkPage: scope!,
+    env,
+    activeSpawns: new Set(),
+    childSpawns: {},
+  }
   const namespaceURI = node.namespaceURI
   const tag = node.tagName.toLowerCase()
   const ns: NSType =

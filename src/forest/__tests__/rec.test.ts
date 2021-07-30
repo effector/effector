@@ -375,8 +375,8 @@ function printLeaf(leaf: Leaf) {
   console.log(rows.join(`\n`))
   function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
     const {spawn: page} = leaf
-    for (const key in page.childSpawns) {
-      const childs = page.childSpawns[key]
+    for (const key in page.root.childSpawns[page.fullID]) {
+      const childs = page.root.childSpawns[page.fullID][key]
       for (let i = 0; i < childs.length; i++) {
         const childSpawn = childs[i]
         cb(childSpawn.leaf)

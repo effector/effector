@@ -34,8 +34,8 @@ export type Spawn = {
   reg: {[id: string]: StateRef}
   template: Template
   parent: Spawn | null
-  childSpawns: {[id: string]: Spawn[]}
-  active: boolean
+  // childSpawns: {[id: string]: Spawn[]}
+  // active: boolean
   leaf: Leaf
   root: Root
 }
@@ -323,6 +323,8 @@ export type Leaf = {
 export type Root = {
   forkPage?: Scope
   env: Env
+  activeSpawns: Set<string>
+  childSpawns: Record<string, {[id: string]: Spawn[]}>
 }
 
 export type BindingsDraft = {
