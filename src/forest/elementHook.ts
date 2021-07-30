@@ -146,7 +146,14 @@ const mountFn = {
     })
   },
 }
-
+function processStoreRef(store: Store<any>) {
+  //@ts-expect-error
+  const ref: StateRef = store.stateRef
+  const templ: Template = currentTemplate!
+  if (!templ.plain.includes(ref) && !templ.closure.includes(ref)) {
+    templ.closure.push(ref)
+  }
+}
 export function h(tag: string): void
 export function h(tag: string, cb: () => void): void
 export function h(
@@ -319,6 +326,7 @@ export function h(tag: string, opts?: any) {
           type: 'visible',
           value: merged.visible,
         })
+        processStoreRef(merged.visible)
       }
       for (const attr in merged.attr) {
         const value = merged.attr[attr]
@@ -328,6 +336,7 @@ export function h(tag: string, opts?: any) {
             field: attr,
             value,
           })
+          processStoreRef(value)
         } else {
           draft.staticSeq.push({
             type: 'attr',
@@ -344,6 +353,7 @@ export function h(tag: string, opts?: any) {
             field: data,
             value,
           })
+          processStoreRef(value)
         } else {
           draft.staticSeq.push({
             type: 'data',
@@ -360,6 +370,7 @@ export function h(tag: string, opts?: any) {
             field: propName,
             value,
           })
+          processStoreRef(value)
         } else {
           draft.staticSeq.push({
             type: 'style',
@@ -376,6 +387,7 @@ export function h(tag: string, opts?: any) {
             field,
             value,
           })
+          processStoreRef(value)
         } else {
           draft.staticSeq.push({
             type: 'styleVar',
@@ -393,12 +405,7 @@ export function h(tag: string, opts?: any) {
             value: item.value,
             childIndex: item.index,
           })
-          //@ts-expect-error
-          const ref: StateRef = item.value.stateRef
-          const templ: Template = currentTemplate!
-          if (!templ.plain.includes(ref) && !templ.closure.includes(ref)) {
-            templ.closure.push(ref)
-          }
+          processStoreRef(item.value)
         } else {
           draft.seq.push({
             type: 'staticText',
