@@ -1,5 +1,5 @@
 import type {BrowserObject} from 'webdriverio'
-import {createStore, createEvent, combine} from 'effector'
+import {createStore, createEvent, combine, sample} from 'effector'
 import {using, h, spec, text, list, rec, remap} from 'forest'
 import {Leaf} from '../index.h'
 
@@ -525,142 +525,431 @@ describe('recursion', () => {
     expect(dClicked).toMatchInlineSnapshot()
     expect(aClicked).toMatchInlineSnapshot()
   })
-  test('store update #2', async () => {
-    type ValueType = {id: string; child: ValueType[]}
-    const [initial, cClicked, bClicked, dClicked, aClicked] = await exec(
-      async () => {
-        const Value = rec<ValueType>(({store}) => {
-          const [id, child] = remap(store, ['id', 'child'])
-          const click = createEvent<any>()
-          const count = createStore(0).on(click, x => x + 1)
-          h('div', () => {
-            h('button', {
-              attr: {id},
-              handler: {click},
-              text: ['Click ', id],
-            })
-            h('b', {text: count})
-            list(child, ({store}) => {
-              Value({store})
+  describe('store update #2', () => {
+    //prettier-ignore
+    type ValueType = {id: string; child: ValueType[]};
+    test('with on', async () => {
+      const [initial, cClicked, bClicked, dClicked, aClicked] = await exec(
+        async () => {
+          const Value = rec<ValueType>(({store}) => {
+            const [id, child] = remap(store, ['id', 'child'])
+            const click = createEvent<any>()
+            const count = createStore(0).on(click, x => x + 1)
+            h('div', () => {
+              h('button', {
+                attr: {id},
+                handler: {click},
+                text: ['Click ', id],
+              })
+              h('b', {text: count})
+              list(child, ({store}) => {
+                Value({store})
+              })
             })
           })
-        })
-        const root = createStore<ValueType>({
-          id: 'a',
-          child: [
-            {id: 'b', child: [{id: 'c', child: []}]},
-            {id: 'd', child: [{id: 'e', child: []}]},
-            {id: 'f', child: []},
-          ],
-        })
-        using(el, {
-          fn() {
-            Value({store: root})
-          },
-        })
-        await act()
-        await act(async () => {
-          el.querySelector<HTMLButtonElement>('#c')!.click()
-        })
-        await act(async () => {
-          el.querySelector<HTMLButtonElement>('#b')!.click()
-        })
-        await act(async () => {
-          el.querySelector<HTMLButtonElement>('#d')!.click()
-        })
-        await act(async () => {
-          el.querySelector<HTMLButtonElement>('#a')!.click()
-        })
-      },
-    )
+          const root = createStore<ValueType>({
+            id: 'a',
+            child: [
+              {id: 'b', child: [{id: 'c', child: []}]},
+              {id: 'd', child: [{id: 'e', child: []}]},
+              {id: 'f', child: []},
+            ],
+          })
+          using(el, {
+            fn() {
+              Value({store: root})
+            },
+          })
+          await act()
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#c')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#b')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#d')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#a')!.click()
+          })
+        },
+      )
 
-    expect(initial).toMatchInlineSnapshot(`
-"
-<div>
-  <button id='a'>Click a</button><b>0</b>
+      expect(initial).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='b'>Click b</button><b>0</b>
-    <div><button id='c'>Click c</button><b>0</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>0</b>
+      <div><button id='c'>Click c</button><b>0</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
+  "
+  `)
+      expect(cClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='d'>Click d</button><b>0</b>
-    <div><button id='e'>Click e</button><b>0</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>0</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
-  <div><button id='f'>Click f</button><b>0</b></div>
-</div>
-"
-`)
-    expect(cClicked).toMatchInlineSnapshot(`
-"
-<div>
-  <button id='a'>Click a</button><b>0</b>
+  "
+  `)
+      expect(bClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='b'>Click b</button><b>0</b>
-    <div><button id='c'>Click c</button><b>1</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
+  "
+  `)
+      /**
+       * TODO wrong behavior!
+       * e count shouldn't change
+       */
+      expect(dClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='d'>Click d</button><b>0</b>
-    <div><button id='e'>Click e</button><b>0</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>1</b>
+      <div><button id='e'>Click e</button><b>1</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
-  <div><button id='f'>Click f</button><b>0</b></div>
-</div>
-"
-`)
-    expect(bClicked).toMatchInlineSnapshot(`
-"
-<div>
-  <button id='a'>Click a</button><b>0</b>
+  "
+  `)
+      /**
+       * TODO wrong behavior!
+       * f count shouldn't change
+       */
+      expect(aClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='b'>Click b</button><b>1</b>
-    <div><button id='c'>Click c</button><b>1</b></div>
+    <button id='a'>Click a</button><b>1</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>1</b>
+      <div><button id='e'>Click e</button><b>1</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>1</b></div>
   </div>
+  "
+  `)
+    })
+    test('with sample single target', async () => {
+      const [initial, cClicked, bClicked, dClicked, aClicked] = await exec(
+        async () => {
+          const Value = rec<ValueType>(({store}) => {
+            const [id, child] = remap(store, ['id', 'child'])
+            const click = createEvent<any>()
+            const count = createStore(0)
+            sample({
+              clock: click,
+              source: count,
+              target: count,
+              fn: x => x + 1,
+            })
+            h('div', () => {
+              h('button', {
+                attr: {id},
+                handler: {click},
+                text: ['Click ', id],
+              })
+              h('b', {text: count})
+              list(child, ({store}) => {
+                Value({store})
+              })
+            })
+          })
+          const root = createStore<ValueType>({
+            id: 'a',
+            child: [
+              {id: 'b', child: [{id: 'c', child: []}]},
+              {id: 'd', child: [{id: 'e', child: []}]},
+              {id: 'f', child: []},
+            ],
+          })
+          using(el, {
+            fn() {
+              Value({store: root})
+            },
+          })
+          await act()
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#c')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#b')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#d')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#a')!.click()
+          })
+        },
+      )
+
+      expect(initial).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='d'>Click d</button><b>0</b>
-    <div><button id='e'>Click e</button><b>0</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>0</b>
+      <div><button id='c'>Click c</button><b>0</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
-  <div><button id='f'>Click f</button><b>0</b></div>
-</div>
-"
-`)
-    /**
-     * TODO wrong behavior!
-     * e count shouldn't change
-     */
-    expect(dClicked).toMatchInlineSnapshot(`
-"
-<div>
-  <button id='a'>Click a</button><b>0</b>
+  "
+  `)
+      expect(cClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='b'>Click b</button><b>1</b>
-    <div><button id='c'>Click c</button><b>1</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>0</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
+  "
+  `)
+      expect(bClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='d'>Click d</button><b>1</b>
-    <div><button id='e'>Click e</button><b>1</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
-  <div><button id='f'>Click f</button><b>0</b></div>
-</div>
-"
-`)
-    /**
-     * TODO wrong behavior!
-     * f count shouldn't change
-     */
-    expect(aClicked).toMatchInlineSnapshot(`
-"
-<div>
-  <button id='a'>Click a</button><b>1</b>
+  "
+  `)
+      /**
+       * TODO wrong behavior!
+       * e count shouldn't change
+       */
+      expect(dClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='b'>Click b</button><b>1</b>
-    <div><button id='c'>Click c</button><b>1</b></div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>1</b>
+      <div><button id='e'>Click e</button><b>1</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
+  "
+  `)
+      /**
+       * TODO wrong behavior!
+       * f count shouldn't change
+       */
+      expect(aClicked).toMatchInlineSnapshot(`
+  "
   <div>
-    <button id='d'>Click d</button><b>1</b>
-    <div><button id='e'>Click e</button><b>1</b></div>
+    <button id='a'>Click a</button><b>1</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>1</b>
+      <div><button id='e'>Click e</button><b>1</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>1</b></div>
   </div>
-  <div><button id='f'>Click f</button><b>1</b></div>
-</div>
-"
-`)
+  "
+  `)
+    })
+    test('with sample array target', async () => {
+      const [initial, cClicked, bClicked, dClicked, aClicked] = await exec(
+        async () => {
+          const Value = rec<ValueType>(({store}) => {
+            const [id, child] = remap(store, ['id', 'child'])
+            const click = createEvent<any>()
+            const count = createStore(0)
+            sample({
+              clock: click,
+              source: count,
+              target: [count],
+              fn: x => x + 1,
+            })
+            h('div', () => {
+              h('button', {
+                attr: {id},
+                handler: {click},
+                text: ['Click ', id],
+              })
+              h('b', {text: count})
+              list(child, ({store}) => {
+                Value({store})
+              })
+            })
+          })
+          const root = createStore<ValueType>({
+            id: 'a',
+            child: [
+              {id: 'b', child: [{id: 'c', child: []}]},
+              {id: 'd', child: [{id: 'e', child: []}]},
+              {id: 'f', child: []},
+            ],
+          })
+          using(el, {
+            fn() {
+              Value({store: root})
+            },
+          })
+          await act()
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#c')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#b')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#d')!.click()
+          })
+          await act(async () => {
+            el.querySelector<HTMLButtonElement>('#a')!.click()
+          })
+        },
+      )
+
+      expect(initial).toMatchInlineSnapshot(`
+  "
+  <div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>0</b>
+      <div><button id='c'>Click c</button><b>0</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
+  </div>
+  "
+  `)
+      expect(cClicked).toMatchInlineSnapshot(`
+  "
+  <div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>0</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
+  </div>
+  "
+  `)
+      expect(bClicked).toMatchInlineSnapshot(`
+  "
+  <div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>0</b>
+      <div><button id='e'>Click e</button><b>0</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
+  </div>
+  "
+  `)
+      /**
+       * TODO wrong behavior!
+       * e count shouldn't change
+       */
+      expect(dClicked).toMatchInlineSnapshot(`
+  "
+  <div>
+    <button id='a'>Click a</button><b>0</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>1</b>
+      <div><button id='e'>Click e</button><b>1</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>0</b></div>
+  </div>
+  "
+  `)
+      /**
+       * TODO wrong behavior!
+       * f count shouldn't change
+       */
+      expect(aClicked).toMatchInlineSnapshot(`
+  "
+  <div>
+    <button id='a'>Click a</button><b>1</b>
+    <div>
+      <button id='b'>Click b</button><b>1</b>
+      <div><button id='c'>Click c</button><b>1</b></div>
+    </div>
+    <div>
+      <button id='d'>Click d</button><b>1</b>
+      <div><button id='e'>Click e</button><b>1</b></div>
+    </div>
+    <div><button id='f'>Click f</button><b>1</b></div>
+  </div>
+  "
+  `)
+    })
   })
 })
