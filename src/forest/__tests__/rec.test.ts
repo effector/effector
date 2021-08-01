@@ -624,10 +624,6 @@ describe('recursion', () => {
   </div>
   "
   `)
-      /**
-       * TODO wrong behavior!
-       * e count shouldn't change
-       */
       expect(dClicked).toMatchInlineSnapshot(`
   "
   <div>
@@ -638,16 +634,12 @@ describe('recursion', () => {
     </div>
     <div>
       <button id='d'>Click d</button><b>1</b>
-      <div><button id='e'>Click e</button><b>1</b></div>
+      <div><button id='e'>Click e</button><b>0</b></div>
     </div>
     <div><button id='f'>Click f</button><b>0</b></div>
   </div>
   "
   `)
-      /**
-       * TODO wrong behavior!
-       * f count shouldn't change
-       */
       expect(aClicked).toMatchInlineSnapshot(`
   "
   <div>
@@ -658,9 +650,9 @@ describe('recursion', () => {
     </div>
     <div>
       <button id='d'>Click d</button><b>1</b>
-      <div><button id='e'>Click e</button><b>1</b></div>
+      <div><button id='e'>Click e</button><b>0</b></div>
     </div>
-    <div><button id='f'>Click f</button><b>1</b></div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
   "
   `)
@@ -767,10 +759,6 @@ describe('recursion', () => {
   </div>
   "
   `)
-      /**
-       * TODO wrong behavior!
-       * e count shouldn't change
-       */
       expect(dClicked).toMatchInlineSnapshot(`
   "
   <div>
@@ -781,16 +769,12 @@ describe('recursion', () => {
     </div>
     <div>
       <button id='d'>Click d</button><b>1</b>
-      <div><button id='e'>Click e</button><b>1</b></div>
+      <div><button id='e'>Click e</button><b>0</b></div>
     </div>
     <div><button id='f'>Click f</button><b>0</b></div>
   </div>
   "
   `)
-      /**
-       * TODO wrong behavior!
-       * f count shouldn't change
-       */
       expect(aClicked).toMatchInlineSnapshot(`
   "
   <div>
@@ -801,9 +785,9 @@ describe('recursion', () => {
     </div>
     <div>
       <button id='d'>Click d</button><b>1</b>
-      <div><button id='e'>Click e</button><b>1</b></div>
+      <div><button id='e'>Click e</button><b>0</b></div>
     </div>
-    <div><button id='f'>Click f</button><b>1</b></div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
   "
   `)
@@ -910,10 +894,6 @@ describe('recursion', () => {
   </div>
   "
   `)
-      /**
-       * TODO wrong behavior!
-       * e count shouldn't change
-       */
       expect(dClicked).toMatchInlineSnapshot(`
   "
   <div>
@@ -924,16 +904,12 @@ describe('recursion', () => {
     </div>
     <div>
       <button id='d'>Click d</button><b>1</b>
-      <div><button id='e'>Click e</button><b>1</b></div>
+      <div><button id='e'>Click e</button><b>0</b></div>
     </div>
     <div><button id='f'>Click f</button><b>0</b></div>
   </div>
   "
   `)
-      /**
-       * TODO wrong behavior!
-       * f count shouldn't change
-       */
       expect(aClicked).toMatchInlineSnapshot(`
   "
   <div>
@@ -944,9 +920,9 @@ describe('recursion', () => {
     </div>
     <div>
       <button id='d'>Click d</button><b>1</b>
-      <div><button id='e'>Click e</button><b>1</b></div>
+      <div><button id='e'>Click e</button><b>0</b></div>
     </div>
-    <div><button id='f'>Click f</button><b>1</b></div>
+    <div><button id='f'>Click f</button><b>0</b></div>
   </div>
   "
   `)

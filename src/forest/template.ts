@@ -138,15 +138,20 @@ export function createTemplate<Api extends {[method: string]: any}>({
           }
         }
         stack.node.next.forEach(node => {
-          const targetTemplate = node.meta.nativeTemplate
+          /**
+           * node.meta.nativeTemplate is used in units
+           * it represents template in which unit was created (belongs to)
+           */
+          const targetTemplate: Template | void = node.meta.nativeTemplate
           if (targetTemplate) {
             if (stackTemplates.includes(targetTemplate)) {
+              const page = stackPages[stackTemplates.indexOf(targetTemplate)]
               launch({
                 //@ts-expect-error
                 target: node,
                 params: upd,
                 defer: true,
-                page: stackPages[stackTemplates.indexOf(targetTemplate)],
+                page,
                 stack,
                 forkPage: stack.forkPage,
               })
@@ -183,9 +188,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
             }
 
             if (stack.page.root.childSpawns[stack.page.fullID][template.id]) {
-              stack.page.root.childSpawns[stack.page.fullID][
-                template.id
-              ].forEach(page => {
+              const fullID = stack.page!.fullID
+              stack.page.root.childSpawns[fullID][template.id].forEach(page => {
                 if (forkId) {
                   if (
                     !page.leaf.root.forkPage ||
@@ -203,51 +207,37 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 })
               })
             } else {
-              if (scope.targetTemplate) {
-                const stackPages = [stack.page]
-                {
-                  let currentStackPage = stack.page.parent
-                  while (currentStackPage) {
-                    stackPages.push(currentStackPage)
-                    currentStackPage = currentStackPage.parent
-                  }
-                }
-                const targetPageIndex = stackPages.findIndex(
-                  stackPage => scope.targetTemplate === stackPage.template,
-                )
-                if (targetPageIndex === -1) {
-                  launch({
-                    params: upd,
-                    //@ts-expect-error
-                    target: stack.node,
-                    page: stack.page,
-                    defer: true,
-                    forkPage: stack.forkPage,
-                  })
-                } else {
-                  launch({
-                    params: upd,
-                    //@ts-expect-error
-                    target: stack.node,
-                    page: stackPages[targetPageIndex],
-                    defer: true,
-                    forkPage: stack.forkPage,
-                  })
-                }
-              } else {
-                template.pages.forEach(page => {
-                  if (forkId) {
-                    if (
-                      !page.leaf.root.forkPage ||
-                      forkId !== page.leaf.root.forkPage.graphite.id
-                    )
-                      return
-                  }
-                  const fullID = stack.page!.fullID
+              const fullID = stack.page.fullID
+              const isRecTemplate = stack.page.template.name === 'rec'
+
+              template.pages.forEach(page => {
+                if (forkId) {
                   if (
-                    page.fullID === fullID ||
-                    page.fullID.startsWith(`${fullID}_`)
-                  ) {
+                    !page.leaf.root.forkPage ||
+                    forkId !== page.leaf.root.forkPage.graphite.id
+                  )
+                    return
+                }
+                if (
+                  page.fullID === fullID ||
+                  page.fullID.startsWith(`${fullID}_`)
+                ) {
+                  let validTarget = true
+                  if (isRecTemplate) {
+                    const recID = stack.page!.template.id
+                    let parentPage = page.parent
+                    while (parentPage) {
+                      if (parentPage === stack.page) {
+                        break
+                      }
+                      if (parentPage.template.id === recID) {
+                        validTarget = false
+                        break
+                      }
+                      parentPage = parentPage.parent
+                    }
+                  }
+                  if (validTarget) {
                     launch({
                       params: upd,
                       //@ts-expect-error
@@ -256,22 +246,22 @@ export function createTemplate<Api extends {[method: string]: any}>({
                       defer: true,
                       forkPage: stack.forkPage,
                     })
-                  } else {
-                    if (fullID.startsWith(`${page.fullID}_`)) {
-                      launch({
-                        params: upd,
-                        //@ts-expect-error
-                        target: stack.node,
-                        page: stack.page,
-                        defer: true,
-                        forkPage: stack.forkPage,
-                      })
-                    } else {
-                      // console.count('no page match')
-                    }
                   }
-                })
-              }
+                } else {
+                  if (fullID.startsWith(`${page.fullID}_`)) {
+                    launch({
+                      params: upd,
+                      //@ts-expect-error
+                      target: stack.node,
+                      page: stack.page,
+                      defer: true,
+                      forkPage: stack.forkPage,
+                    })
+                  } else {
+                    // console.count('no page match')
+                  }
+                }
+              })
             }
           } else {
             template.pages.forEach(page => {

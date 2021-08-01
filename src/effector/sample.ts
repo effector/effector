@@ -79,13 +79,14 @@ export function sample(...args: any): any {
       sampleTempl.initTarget(getGraph(target))
     }
   }
-  const targetTemplate =
-    isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
+  // const targetTemplate =
+  //   isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   if (is.store(source)) {
     const sourceRef = getStoreState(source)
     own(source, [
       createLinkNode(clock, target, {
-        scope: {fn, targetTemplate},
+        scope: {fn},
+        // scope: {fn, targetTemplate},
         node: [
           sampleTempl.sourceLoader(),
           //@ts-ignore
@@ -127,7 +128,7 @@ export function sample(...args: any): any {
       createLinkNode(clock, target, {
         scope: {
           fn,
-          targetTemplate,
+          // targetTemplate,
         },
         node: [
           sampleTempl.sourceLoader(),
