@@ -406,6 +406,11 @@ describe('update store from nested block', () => {
                     attr: {disabled, id: 'b'},
                     handler: {click: disable},
                   })
+                  h('button', {
+                    text: 'Disable',
+                    attr: {disabled, id: 'c'},
+                    handler: {click: disable},
+                  })
                 },
                 onComplete: rs,
               })
@@ -421,13 +426,15 @@ describe('update store from nested block', () => {
           expect(s1).toMatchInlineSnapshot(`
             "
             <button id='a'>Enable</button
-            ><button id='b' disabled='true'>Disable</button>
+            ><button id='b' disabled='true'>Disable</button
+            ><button id='c' disabled='true'>Disable</button>
             "
           `)
           expect(s2).toMatchInlineSnapshot(`
             "
             <button id='a' disabled='true'>Enable</button
-            ><button id='b'>Disable</button>
+            ><button id='b'>Disable</button
+            ><button id='c'>Disable</button>
             "
           `)
           /**
@@ -436,7 +443,8 @@ describe('update store from nested block', () => {
           expect(s3).toMatchInlineSnapshot(`
             "
             <button id='a' disabled='true'>Enable</button
-            ><button id='b' disabled='true'>Disable</button>
+            ><button id='b' disabled='true'>Disable</button
+            ><button id='c'>Disable</button>
             "
           `)
         })
@@ -615,29 +623,27 @@ describe('event from root, sample and nested store', () => {
                 key: 'id',
                 fields: ['id'],
                 fn({fields: [id]}) {
-                  h('li', {
-                    fn() {
-                      spec({text: id})
-                      sample({
-                        source: id,
-                        clock: openFile,
-                        target: selectItem,
-                      })
-                      const selected = combine(
-                        id,
-                        currentFile,
-                        (file, selectedFile) => file === selectedFile,
-                      )
-                      h('button', {
-                        handler: {click: openFile},
-                        attr: {disabled: selected, id},
-                        text: 'open',
-                      })
-                      h('span', {
-                        visible: selected,
-                        text: 'selected',
-                      })
-                    },
+                  h('li', () => {
+                    spec({text: id})
+                    sample({
+                      source: id,
+                      clock: openFile,
+                      target: selectItem,
+                    })
+                    const selected = combine(
+                      id,
+                      currentFile,
+                      (file, selectedFile) => file === selectedFile,
+                    )
+                    h('button', {
+                      handler: {click: openFile},
+                      attr: {disabled: selected, id},
+                      text: 'open',
+                    })
+                    h('span', {
+                      visible: selected,
+                      text: 'selected',
+                    })
                   })
                 },
               })
