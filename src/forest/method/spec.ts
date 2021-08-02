@@ -8,10 +8,9 @@ import type {
 } from '../index.h'
 
 import {escapeTag} from '../bindings'
-
 import {currentActor} from '../template'
-
 import {assertClosure} from '../assert'
+import {handler} from './handler'
 
 export function spec(config: {
   attr?: PropertyMap
