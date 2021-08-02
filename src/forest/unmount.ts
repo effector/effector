@@ -1,4 +1,4 @@
-import {Leaf, Spawn} from './index.h'
+import type {Leaf, Spawn} from './index.h'
 
 import {pushOpToQueue} from './plan'
 import {iterateChildLeafs} from './iterateChildLeafs'

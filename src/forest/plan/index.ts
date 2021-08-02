@@ -1,15 +1,14 @@
-import {TASK_DEADLINE} from './platform/env'
-import {now} from './platform/now'
-import {beginMark, endMark} from './platform/mark'
-import {raf} from './platform/raf'
-import {Op, OpPriorityQueue, OpGroup, AsyncValue} from './index.h'
-
-type Linkable = {
-  cursor: {
-    prev: Linkable | null
-    next: Linkable | null
-  }
-}
+import {TASK_DEADLINE} from '../platform/env'
+import {now} from '../platform/now'
+import {beginMark, endMark} from '../platform/mark'
+import {raf} from '../platform/raf'
+import type {
+  Op,
+  OpPriorityQueue,
+  OpGroup,
+  AsyncValue,
+  Linkable,
+} from './index.h'
 
 function addItemToQueue(
   queue: {first: Linkable | null; last: Linkable | null},

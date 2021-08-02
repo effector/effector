@@ -1,5 +1,4 @@
 import type {DOMElement} from './index.h'
-import {printTree} from './printTree'
 
 import type {
   ElementBlock,
@@ -7,7 +6,6 @@ import type {
   UsingBlock,
   Block,
   BlockBlock,
-  ChildBlock,
 } from './relation.h'
 
 export function findParentDOMElement(

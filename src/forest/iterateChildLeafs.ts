@@ -1,4 +1,5 @@
-import {Leaf} from './index.h'
+import type {Leaf} from './index.h'
+import {pushOpToQueue} from './plan'
 
 export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
   const {spawn: page} = leaf
@@ -10,4 +11,23 @@ export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
       cb(childSpawn.leaf)
     }
   }
+}
+
+export function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
+  const childLeafIterator = (child: Leaf) => {
+    const data = child.data
+    switch (data.type) {
+      case 'element':
+        pushOpToQueue(visible, data.ops.visible)
+        break
+      case 'route':
+      case 'list':
+      case 'list item':
+        iterateChildLeafs(child, childLeafIterator)
+        break
+      default:
+        console.log('unsupported type', data.type)
+    }
+  }
+  iterateChildLeafs(leaf, childLeafIterator)
 }

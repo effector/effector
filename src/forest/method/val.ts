@@ -1,5 +1,5 @@
 import {combine, is} from 'effector'
-import {Word, createWordsArray} from './wordsArray'
+import {Word, createWordsArray} from '../wordsArray'
 
 export function val(x: TemplateStringsArray, ...args: Array<Word>) {
   if (args.every(arg => !is.store(arg)))

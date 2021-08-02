@@ -1,4 +1,4 @@
-import {Store} from 'effector'
+import type {Store} from 'effector'
 
 export function remap<T extends {[field: string]: any}, S extends keyof T>(
   store: Store<T>,
@@ -6,7 +6,7 @@ export function remap<T extends {[field: string]: any}, S extends keyof T>(
 ): Store<T[S]>
 export function remap<
   T extends {[field: string]: any},
-  S extends {[field: number]: keyof T} | {[field: string]: keyof T}
+  S extends {[field: number]: keyof T} | {[field: string]: keyof T},
 >(
   store: Store<T>,
   shape: S,

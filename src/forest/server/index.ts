@@ -1,4 +1,4 @@
-import type {Scope} from '../effector/unit.h'
+import type {Scope} from '../../effector/unit.h'
 import {render, createEnv} from './customDocument'
 import {using} from 'forest'
 
@@ -16,6 +16,7 @@ export function renderStatic(fn: any) {
     fn = fn.fn
   }
   return new Promise<string>(rs => {
+    //@ts-expect-error
     using(root, {
       fn,
       env,

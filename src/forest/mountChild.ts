@@ -24,11 +24,33 @@ import type {
 
 import {createOpGroup, createOp} from './plan'
 
-import {spawn} from './template'
+import {spawn, currentActor} from './template'
 import {findParentDOMElement, findPreviousVisibleSibling} from './search'
 import {applyStaticOps} from './bindings'
-import {printTree} from './printTree'
 import {assert} from './assert'
+
+export function setInParentIndex(template: Actor<any>) {
+  if (!currentActor) return
+  const {draft} = template
+  if (draft.type === 'listItem') return
+  if (draft.type === 'rec') return
+  switch (currentActor.draft.type) {
+    case 'element':
+    case 'using':
+    case 'route':
+    case 'list':
+    case 'rec':
+    case 'recItem':
+    case 'block':
+    case 'blockItem':
+      draft.inParentIndex = currentActor.draft.childCount
+      currentActor.draft.childCount += 1
+      currentActor.draft.childTemplates.push(template)
+      break
+    default:
+      console.warn(`unexpected currentActor type ${currentActor.draft.type}`)
+  }
+}
 
 export function mountChildTemplates(
   draft: BindingsDraft,

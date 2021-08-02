@@ -1,4 +1,4 @@
-import {DOMElement, StaticOperationDef} from './index.h'
+import type {DOMElement, StaticOperationDef} from './index.h'
 
 const defMap = {
   attr: applyAttr,

@@ -1,5 +1,5 @@
-import {Env} from './index.h'
-import {escapeTag} from './bindings'
+import type {Env} from '../index.h'
+import {escapeTag} from '../bindings'
 const invalidValue = /[\\<>"]/g
 const dataValue = /[A-Z]/g
 const escaped = /[&<>'"]/g

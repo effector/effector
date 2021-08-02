@@ -11,18 +11,18 @@ import {
 import type {Scope} from '../effector/unit.h'
 import type {StateRef} from '../effector/index.h'
 import type {Stack} from '../effector/kernel'
-import {
+import type {
   Leaf,
   Actor,
   NSType,
   DOMElement,
   LeafData,
-  OpGroup,
   Template,
   Spawn,
   NodeDraft,
   Root,
 } from './index.h'
+import type {OpGroup} from './plan/index.h'
 
 let templateID = 0
 let spawnID = 0

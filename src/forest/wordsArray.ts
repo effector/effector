@@ -1,4 +1,4 @@
-import {StoreOrData, DOMProperty} from './index.h'
+import type {StoreOrData, DOMProperty} from './index.h'
 
 export type Word =
   | StoreOrData<DOMProperty>
