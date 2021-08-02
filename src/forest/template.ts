@@ -18,7 +18,6 @@ import type {
   DOMElement,
   LeafData,
   Template,
-  Spawn,
   NodeDraft,
   Root,
 } from './index.h'
@@ -192,8 +191,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               stack.page.root.childSpawns[fullID][template.id].forEach(page => {
                 if (forkId) {
                   if (
-                    !page.leaf.root.forkPage ||
-                    forkId !== page.leaf.root.forkPage.graphite.id
+                    !page.root.forkPage ||
+                    forkId !== page.root.forkPage.graphite.id
                   )
                     return
                 }
@@ -213,8 +212,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               template.pages.forEach(page => {
                 if (forkId) {
                   if (
-                    !page.leaf.root.forkPage ||
-                    forkId !== page.leaf.root.forkPage.graphite.id
+                    !page.root.forkPage ||
+                    forkId !== page.root.forkPage.graphite.id
                   )
                     return
                 }
@@ -267,8 +266,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
             template.pages.forEach(page => {
               if (forkId) {
                 if (
-                  !page.leaf.root.forkPage ||
-                  forkId !== page.leaf.root.forkPage.graphite.id
+                  !page.root.forkPage ||
+                  forkId !== page.root.forkPage.graphite.id
                 )
                   return
               }
@@ -365,8 +364,8 @@ function findRef(
   forkPage?: Scope,
 ): StateRef {
   let currentLeaf = targetLeaf
-  while (currentLeaf && !regRef(currentLeaf.spawn, ref)) {
-    currentLeaf = currentLeaf.parentLeaf
+  while (currentLeaf && !regRef(currentLeaf, ref)) {
+    currentLeaf = currentLeaf.parent
   }
   if (!currentLeaf) {
     if (forkPage) {
@@ -375,7 +374,7 @@ function findRef(
     }
     return ref
   }
-  return regRef(currentLeaf.spawn, ref)
+  return regRef(currentLeaf, ref)
 }
 function findRefValue(
   ref: StateRef,
@@ -385,8 +384,8 @@ function findRefValue(
   return findRef(ref, targetLeaf, forkPage).current
 }
 function ensureLeafHasRef(ref: StateRef, leaf: Leaf) {
-  if (!regRef(leaf.spawn, ref)) {
-    leaf.spawn.reg[ref.id] = findRef(ref, leaf.parentLeaf, leaf.root.forkPage)
+  if (!regRef(leaf, ref)) {
+    leaf.reg[ref.id] = findRef(ref, leaf.parent, leaf.root.forkPage)
   }
 }
 const regRef = (page: {reg: Record<string, StateRef>}, ref: StateRef) =>
@@ -425,47 +424,41 @@ export function spawn(
     root: Root
   },
 ): Leaf {
-  const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
   const page = {} as Record<string, StateRef>
-  const result: Spawn = {
+
+  const leaf: Leaf = {
+    actor,
+    draft: actor.draft,
+    svgRoot,
+    data: leafData,
+    parent: parentLeaf,
+    hydration,
+    mountNode,
+    root,
     id: ++spawnID,
     fullID: '',
     reg: page,
     template,
-    parent: parentSpawn,
-    leaf: null as unknown as Leaf,
-    root,
   }
-  template.pages.push(result)
-  const leaf: Leaf = {
-    actor,
-    spawn: result,
-    draft: actor.draft,
-    svgRoot,
-    data: leafData,
-    parentLeaf,
-    hydration,
-    mountNode,
-    root,
-  }
+  template.pages.push(leaf)
   const previousSpawn = currentLeaf
   currentLeaf = leaf
-  if (parentSpawn) {
-    addMapItems([result], template.id, root.childSpawns[parentSpawn.fullID])
+  if (parentLeaf) {
+    addMapItems([leaf], template.id, root.childSpawns[parentLeaf.fullID])
   }
-  if (parentSpawn) {
-    result.fullID = `${parentSpawn.fullID}_${result.id}`
+  if (parentLeaf) {
+    leaf.fullID = `${parentLeaf.fullID}_${leaf.id}`
   } else {
-    result.fullID = `${result.id}`
+    leaf.fullID = `${leaf.id}`
   }
-  root.childSpawns[result.fullID] = {}
-  root.activeSpawns.add(result.fullID)
-  root.leafOps[result.fullID] = {group: opGroup, domSubtree}
+  root.childSpawns[leaf.fullID] = {}
+  root.activeSpawns.add(leaf.fullID)
+  root.leafOps[leaf.fullID] = {group: opGroup, domSubtree}
   for (let i = 0; i < template.closure.length; i++) {
     const ref = template.closure[i]
     let closureRef = ref
-    let parent = result.parent
+    let parent = leaf.parent
     findClosure: while (parent) {
       if (regRef(parent, ref)) {
         closureRef = regRef(parent, ref)
@@ -541,7 +534,7 @@ export function spawn(
         val.fn(
           page[val.of.id]
             ? page[val.of.id].current
-            : findRefValue(val.of, leaf.parentLeaf, leaf.root.forkPage),
+            : findRefValue(val.of, leaf.parent, leaf.root.forkPage),
         )
       }
     } catch (err) {
@@ -553,22 +546,21 @@ export function spawn(
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
-  if (parentSpawn) {
-    for (const id in root.childSpawns[result.fullID]) {
+  if (parentLeaf) {
+    for (const id in root.childSpawns[leaf.fullID]) {
       addMapItems(
-        root.childSpawns[result.fullID][id],
+        root.childSpawns[leaf.fullID][id],
         id,
-        root.childSpawns[parentSpawn.fullID],
+        root.childSpawns[parentLeaf.fullID],
       )
     }
   }
-  leaf.spawn.leaf = leaf
   if (mountQueue) {
     mountQueue.steps.push({
       target: actor.trigger.mount,
       params: leaf,
       defer: true,
-      page: result,
+      page: leaf,
       forkPage: root.forkPage,
     })
   } else {
@@ -579,7 +571,7 @@ export function spawn(
           target: actor.trigger.mount,
           params: leaf,
           defer: true,
-          page: result,
+          page: leaf,
           forkPage: root.forkPage,
         },
       ],

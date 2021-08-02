@@ -2,13 +2,11 @@ import type {Leaf} from './index.h'
 import {pushOpToQueue} from './plan'
 
 export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
-  const {spawn: page} = leaf
-  const childSpawns = page.root.childSpawns[page.fullID]
+  const childSpawns = leaf.root.childSpawns[leaf.fullID]
   for (const key in childSpawns) {
     const childs = childSpawns[key]
     for (let i = 0; i < childs.length; i++) {
-      const childSpawn = childs[i]
-      cb(childSpawn.leaf)
+      cb(childs[i])
     }
   }
 }

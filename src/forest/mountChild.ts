@@ -121,9 +121,9 @@ export function mountChild({
   )
   let leafData: LeafData
   const {draft} = actor
-  const {queue} = leaf.root.leafOps[leaf.spawn.fullID].group
+  const {queue} = leaf.root.leafOps[leaf.fullID].group
   const opGroup = createOpGroup(queue)
-  const parentDomSubtree = leaf.root.leafOps[leaf.spawn.fullID].domSubtree
+  const parentDomSubtree = leaf.root.leafOps[leaf.fullID].domSubtree
   let domSubtree = parentDomSubtree
   switch (draft.type) {
     case 'route': {
@@ -162,7 +162,7 @@ export function mountChild({
               type = 'html'
             }
           }
-          currentLeaf = currentLeaf.parentLeaf!
+          currentLeaf = currentLeaf.parent!
         }
         if (!type) type = 'html'
         if (env) {
@@ -216,7 +216,7 @@ export function mountChild({
                       element: elementBlock.value,
                       fns: draft.node,
                     },
-                    page: childSpawn.spawn,
+                    page: childSpawn,
                     //@ts-expect-error
                     forkPage: leaf.root.forkPage,
                   })

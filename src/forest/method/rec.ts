@@ -81,7 +81,7 @@ export function rec<T>(
               target: child.actor.api.itemUpdater,
               params: state,
               defer: true,
-              page: leaf.spawn,
+              page: leaf,
               //@ts-expect-error
               forkPage: leaf.root.forkPage,
             })

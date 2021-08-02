@@ -2,7 +2,7 @@ import {Store, Event, is, launch, createEvent, sample, merge} from 'effector'
 
 import type {StateRef} from '../../effector/index.h'
 
-import {
+import type {
   DOMElement,
   ElementDraft,
   MergedBindings,
@@ -14,7 +14,6 @@ import {
   Leaf,
   LeafDataElement,
   Template,
-  Spawn,
 } from '../index.h'
 
 import type {ElementBlock, TextBlock} from '../relation.h'
@@ -379,7 +378,7 @@ export function h(tag: string, opts?: any) {
                   element: leafData.block.value,
                   fns: draft.node,
                 },
-                page: leaf.spawn,
+                page: leaf,
                 defer: true,
                 //@ts-expect-error
                 forkPage: leaf.root.forkPage,
@@ -390,7 +389,7 @@ export function h(tag: string, opts?: any) {
             target: domElementCreated,
             params: leaf,
             defer: true,
-            page: leaf.spawn,
+            page: leaf,
             //@ts-expect-error
             forkPage: leaf.root.forkPage,
           })
@@ -431,15 +430,15 @@ export function h(tag: string, opts?: any) {
                   runOp(value) {
                     applyAttr(element, field, value)
                   },
-                  group: leaf.root.leafOps[leaf.spawn.fullID].group,
+                  group: leaf.root.leafOps[leaf.fullID].group,
                 })
-                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
+                leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
                 applyAttr(element, field, value)
               })
               onState.watch(({value, leaf}) => {
                 pushOpToQueue(
                   value,
-                  leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+                  leaf.root.leafOps[leaf.fullID].group.ops[opID],
                 )
               })
             }
@@ -457,15 +456,15 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyDataAttr(element, field, value)
                 },
-                group: leaf.root.leafOps[leaf.spawn.fullID].group,
+                group: leaf.root.leafOps[leaf.fullID].group,
               })
-              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
+              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
               applyDataAttr(element, field, value)
             })
             onState.watch(({value, leaf}) => {
               pushOpToQueue(
                 value,
-                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+                leaf.root.leafOps[leaf.fullID].group.ops[opID],
               )
             })
             break
@@ -483,15 +482,15 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyStyle(element, field, value)
                 },
-                group: leaf.root.leafOps[leaf.spawn.fullID].group,
+                group: leaf.root.leafOps[leaf.fullID].group,
               })
-              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
+              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
               applyStyle(element, field, value)
             })
             onState.watch(({value, leaf}) => {
               pushOpToQueue(
                 value,
-                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+                leaf.root.leafOps[leaf.fullID].group.ops[opID],
               )
             })
             break
@@ -508,15 +507,15 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyStyleVar(element, field, value)
                 },
-                group: leaf.root.leafOps[leaf.spawn.fullID].group,
+                group: leaf.root.leafOps[leaf.fullID].group,
               })
-              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
+              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
               applyStyleVar(element, field, value)
             })
             onState.watch(({value, leaf}) => {
               pushOpToQueue(
                 value,
-                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+                leaf.root.leafOps[leaf.fullID].group.ops[opID],
               )
             })
             break
@@ -542,9 +541,9 @@ export function h(tag: string, opts?: any) {
                 runOp(value) {
                   applyText(textBlock.value, value)
                 },
-                group: leaf.root.leafOps[leaf.spawn.fullID].group,
+                group: leaf.root.leafOps[leaf.fullID].group,
               })
-              leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID] = op
+              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
               const textBlock = installTextNode(leaf, value, item.childIndex)
             })
             sample({
@@ -555,7 +554,7 @@ export function h(tag: string, opts?: any) {
             }).watch(({leaf, text}) => {
               pushOpToQueue(
                 text,
-                leaf.root.leafOps[leaf.spawn.fullID].group.ops[opID],
+                leaf.root.leafOps[leaf.fullID].group.ops[opID],
               )
             })
             break
@@ -565,10 +564,10 @@ export function h(tag: string, opts?: any) {
               //@ts-expect-error
               item.handler.graphite.meta.nativeTemplate || null
             domElementCreated.watch(leaf => {
-              let page: Spawn | null = null
+              let page: Leaf | null = null
               if (handlerTemplate) {
                 let handlerPageFound = false
-                let currentPage: Spawn | null = leaf.spawn
+                let currentPage: Leaf | null = leaf
                 while (!handlerPageFound && currentPage) {
                   if (currentPage.template === handlerTemplate) {
                     handlerPageFound = true
@@ -578,7 +577,7 @@ export function h(tag: string, opts?: any) {
                   }
                 }
               } else {
-                page = leaf.spawn
+                page = leaf
               }
               readElement(leaf).addEventListener(
                 item.for,
@@ -637,7 +636,7 @@ export function h(tag: string, opts?: any) {
             target: domElementCreated,
             params: leaf,
             defer: true,
-            page: leaf.spawn,
+            page: leaf,
             //@ts-expect-error
             forkPage: leaf.root.forkPage,
           })
@@ -650,7 +649,7 @@ export function h(tag: string, opts?: any) {
                   element: leafData.block.value,
                   fns: draft.node,
                 },
-                page: leaf.spawn,
+                page: leaf,
                 defer: true,
                 //@ts-expect-error
                 forkPage: leaf.root.forkPage,

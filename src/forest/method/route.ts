@@ -98,7 +98,7 @@ export function route<T>({
                 target: itemUpdater,
                 params: value,
                 defer: true,
-                page: leaf.spawn,
+                page: leaf,
                 //@ts-expect-error
                 forkPage: leaf.root.forkPage,
               })

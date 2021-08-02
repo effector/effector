@@ -1,40 +1,34 @@
-import type {Leaf, Spawn} from './index.h'
+import type {Leaf} from './index.h'
 
 import {pushOpToQueue} from './plan'
 import {iterateChildLeafs} from './iterateChildLeafs'
 
 function unmountChildLeafsNoEvent(leaf: Leaf) {
-  leaf.root.activeSpawns.delete(leaf.spawn.fullID)
+  leaf.root.activeSpawns.delete(leaf.fullID)
   iterateChildLeafs(leaf, unmountLeafTree)
 }
 
-function unmountOwnSpawn({spawn}: Leaf) {
-  removeItem(
-    spawn,
-    spawn.root.childSpawns[spawn.parent!.fullID][spawn.template.id],
-  )
-  removeItem(spawn, spawn.template.pages)
+function unmountOwnSpawn(leaf: Leaf) {
+  removeItem(leaf, leaf.root.childSpawns[leaf.parent!.fullID][leaf.template.id])
+  removeItem(leaf, leaf.template.pages)
 }
 
 export function unmountLeafTree(leaf: Leaf) {
-  const {spawn, data, root} = leaf
+  const {data, root} = leaf
   switch (data.type) {
     case 'element': {
-      removeItem(
-        spawn,
-        root.childSpawns[spawn.parent!.fullID][spawn.template.id],
-      )
-      function halt(spawn: Spawn) {
-        root.activeSpawns.delete(spawn.fullID)
-        const childSpawns = root.childSpawns[spawn.fullID]
-        delete root.childSpawns[spawn.fullID]
-        delete root.leafOps[spawn.fullID]
-        removeItem(spawn, spawn.template.pages)
+      removeItem(leaf, root.childSpawns[leaf.parent!.fullID][leaf.template.id])
+      function halt(leaf: Leaf) {
+        root.activeSpawns.delete(leaf.fullID)
+        const childSpawns = root.childSpawns[leaf.fullID]
+        delete root.childSpawns[leaf.fullID]
+        delete root.leafOps[leaf.fullID]
+        removeItem(leaf, leaf.template.pages)
         for (const id in childSpawns) {
           childSpawns[id].forEach(halt)
         }
       }
-      halt(spawn)
+      halt(leaf)
 
       const visibleOp = data.ops.visible
       pushOpToQueue(false, visibleOp)
@@ -50,7 +44,7 @@ export function unmountLeafTree(leaf: Leaf) {
         }
         item.active = false
       }
-      leaf.root.activeSpawns.delete(leaf.spawn.fullID)
+      leaf.root.activeSpawns.delete(leaf.fullID)
       unmountOwnSpawn(leaf)
       break
     }
@@ -98,8 +92,8 @@ export function unmountLeafTree(leaf: Leaf) {
       const _: never = data
     }
   }
-  delete root.childSpawns[spawn.fullID]
-  delete root.leafOps[spawn.fullID]
+  delete root.childSpawns[leaf.fullID]
+  delete root.leafOps[leaf.fullID]
 }
 
 function removeItem<T>(item: T, list?: T[]) {

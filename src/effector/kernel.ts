@@ -1,4 +1,4 @@
-import type {Spawn} from '../forest/index.h'
+import type {Leaf} from '../forest/index.h'
 
 import type {Cmd, Node, NodeUnit, StateRef} from './index.h'
 import {readRef} from './stateRef'
@@ -39,7 +39,7 @@ export type Stack = {
   b: any
   parent: Stack | null
   node: Node
-  page: Spawn | null
+  page: Leaf | null
   forkPage?: Scope | null | void
 }
 
@@ -130,7 +130,7 @@ const deleteMin = () => {
 }
 const pushFirstHeapItem = (
   type: PriorityTag,
-  page: Spawn | null,
+  page: Leaf | null,
   node: Node,
   parent: Stack | null,
   value: any,
@@ -205,16 +205,16 @@ const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isWatch = false
-export let currentPage: Spawn | null = null
+export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
 export const setForkPage = (newForkPage: Scope) => {
   forkPage = newForkPage
 }
-export const setCurrentPage = (newPage: Spawn | null) => {
+export const setCurrentPage = (newPage: Leaf | null) => {
   currentPage = newPage
 }
 
-const getPageForRef = (page: Spawn | null, id: string) => {
+const getPageForRef = (page: Leaf | null, id: string) => {
   if (page) {
     while (page && !page.reg[id]) {
       page = getParent(page)
@@ -224,7 +224,7 @@ const getPageForRef = (page: Spawn | null, id: string) => {
   return null
 }
 export const getPageRef = (
-  page: Spawn | null,
+  page: Leaf | null,
   forkPage: Scope | null | void,
   node: Node | null,
   ref: StateRef,
@@ -243,7 +243,7 @@ export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
-  page?: Spawn | void
+  page?: Leaf | void
   forkPage?: Scope | void
   stack?: Stack | void
 }): void
@@ -292,7 +292,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let skip: boolean
   let node: Node
   let value
-  let page: Spawn | null
+  let page: Leaf | null
   let reg: Record<string, StateRef> | void
   kernelLoop: while ((value = deleteMin())) {
     const {idx, stack, type} = value

@@ -334,7 +334,7 @@ function printLeaf(leaf: Leaf) {
   function parse(leaf: Leaf, {level}: {level: number}) {
     const {data} = leaf
     const tab = ' '.repeat(level * 2)
-    rows.push(`${tab}id: ${leaf.spawn.fullID}`)
+    rows.push(`${tab}id: ${leaf.fullID}`)
     rows.push(`${tab}type: ${data.type}`)
     switch (data.type) {
       case 'using': {
@@ -374,12 +374,10 @@ function printLeaf(leaf: Leaf) {
   }
   console.log(rows.join(`\n`))
   function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
-    const {spawn: page} = leaf
-    for (const key in page.root.childSpawns[page.fullID]) {
-      const childs = page.root.childSpawns[page.fullID][key]
+    for (const key in leaf.root.childSpawns[leaf.fullID]) {
+      const childs = leaf.root.childSpawns[leaf.fullID][key]
       for (let i = 0; i < childs.length; i++) {
-        const childSpawn = childs[i]
-        cb(childSpawn.leaf)
+        cb(childs[i])
       }
     }
   }
@@ -523,7 +521,7 @@ describe('recursion', () => {
     expect(cClicked).toMatchInlineSnapshot()
     expect(bClicked).toMatchInlineSnapshot()
     expect(dClicked).toMatchInlineSnapshot()
-    expect(aClicked).toMatchInlineSnapshot()
+     expect(aClicked).toMatchInlineSnapshot()
   })
   describe('store update #2', () => {
     //prettier-ignore

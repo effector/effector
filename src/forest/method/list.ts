@@ -175,7 +175,7 @@ export function list<T>(opts: any, maybeFn?: any) {
             const value = input[i]
             const id = keys[i]
             const group = createOpGroup(
-              leaf.root.leafOps[leaf.spawn.fullID].group.queue,
+              leaf.root.leafOps[leaf.fullID].group.queue,
             )
             const listItemBlock: LF = {
               type: 'LF',
@@ -205,7 +205,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                       target: item.instance.actor.api.itemUpdater,
                       params: value,
                       defer: true,
-                      page: item.instance.spawn,
+                      page: item.instance,
                       //@ts-expect-error
                       forkPage: item.instance.root.forkPage,
                     })
@@ -224,7 +224,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                     svgRoot: leaf.svgRoot,
                     leafData: item.leafData,
                     opGroup: group,
-                    domSubtree: leaf.root.leafOps[leaf.spawn.fullID].domSubtree,
+                    domSubtree: leaf.root.leafOps[leaf.fullID].domSubtree,
                     hydration,
                     root: leaf.root,
                   })
@@ -264,7 +264,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 svgRoot: leaf.svgRoot,
                 leafData: item.leafData,
                 opGroup: group,
-                domSubtree: leaf.root.leafOps[leaf.spawn.fullID].domSubtree,
+                domSubtree: leaf.root.leafOps[leaf.fullID].domSubtree,
                 hydration,
                 root: leaf.root,
               })

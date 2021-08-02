@@ -22,23 +22,11 @@ export type Template = {
   closure: StateRef[]
   watch: any[]
   nameMap: Record<string, any>
-  pages: Spawn[]
+  pages: Leaf[]
   childTemplates: Template[]
   loader: Filter
   upward: Filter
   parent: Template | null
-}
-
-export type Spawn = {
-  id: number
-  fullID: string
-  reg: {[id: string]: StateRef}
-  template: Template
-  parent: Spawn | null
-  // childSpawns: {[id: string]: Spawn[]}
-  // active: boolean
-  leaf: Leaf
-  root: Root
 }
 
 export type DOMProperty = string | number | null | boolean
@@ -227,21 +215,25 @@ export type LeafData =
 
 export type Leaf = {
   actor: Actor<any>
-  spawn: Spawn
-  parentLeaf: Leaf | null
+  parent: Leaf | null
   draft: NodeDraft
   data: LeafData
   svgRoot: SVGSVGElement | null
   hydration: boolean
   root: Root
   mountNode: DOMElement
+
+  id: number
+  fullID: string
+  reg: {[id: string]: StateRef}
+  template: Template
 }
 
 export type Root = {
   forkPage?: Scope
   env: Env
   activeSpawns: Set<string>
-  childSpawns: Record<string, {[id: string]: Spawn[]}>
+  childSpawns: Record<string, {[id: string]: Leaf[]}>
   leafOps: Record<
     string,
     {
