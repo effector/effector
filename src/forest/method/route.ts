@@ -2,7 +2,7 @@ import {Store, is, launch, createEvent, sample, merge, combine} from 'effector'
 
 import type {LeafDataRoute, RouteDraft} from '../index.h'
 
-import {createTemplate, currentActor} from '../template'
+import {createTemplate, currentTemplate} from '../template'
 import {mountChild, setInParentIndex} from '../mountChild'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
@@ -33,14 +33,14 @@ export function route<T>({
   visible: Store<boolean> | ((value: T) => boolean)
   fn: (config: {store: Store<T>}) => void
 }) {
-  assertClosure(currentActor, 'route')
+  assertClosure(currentTemplate, 'route')
   const draft: RouteDraft = {
     type: 'route',
     childTemplates: [],
     childCount: 0,
     inParentIndex: -1,
   }
-  const {env, namespace} = currentActor
+  const {env, namespace} = currentTemplate
   const routeTemplate = createTemplate({
     name: 'route',
     isSvgRoot: false,

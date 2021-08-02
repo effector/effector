@@ -2,12 +2,12 @@ import {launch, createEvent} from 'effector'
 
 import type {
   DOMElement,
-  Actor,
   Leaf,
   BindingsDraft,
   LeafData,
   Env,
   LeafDataElement,
+  Template,
 } from './index.h'
 
 import type {
@@ -24,17 +24,17 @@ import type {
 
 import {createOpGroup, createOp} from './plan'
 
-import {spawn, currentActor} from './template'
+import {spawn, currentTemplate} from './template'
 import {findParentDOMElement, findPreviousVisibleSibling} from './search'
 import {applyStaticOps} from './bindings'
 import {assert} from './assert'
 
-export function setInParentIndex(template: Actor<any>) {
-  if (!currentActor) return
+export function setInParentIndex(template: Template) {
+  if (!currentTemplate) return
   const {draft} = template
   if (draft.type === 'listItem') return
   if (draft.type === 'rec') return
-  switch (currentActor.draft.type) {
+  switch (currentTemplate.draft.type) {
     case 'element':
     case 'using':
     case 'route':
@@ -43,12 +43,14 @@ export function setInParentIndex(template: Actor<any>) {
     case 'recItem':
     case 'block':
     case 'blockItem':
-      draft.inParentIndex = currentActor.draft.childCount
-      currentActor.draft.childCount += 1
-      currentActor.draft.childTemplates.push(template)
+      draft.inParentIndex = currentTemplate.draft.childCount
+      currentTemplate.draft.childCount += 1
+      currentTemplate.draft.childTemplates.push(template)
       break
     default:
-      console.warn(`unexpected currentActor type ${currentActor.draft.type}`)
+      console.warn(
+        `unexpected currentTemplate type ${currentTemplate.draft.type}`,
+      )
   }
 }
 
@@ -111,7 +113,7 @@ export function mountChild({
   parentBlockFragment: FragmentParent
   leaf: Leaf
   node?: DOMElement
-  actor: Actor<any>
+  actor: Template
   svgRoot?: SVGSVGElement | null
   values?: {[name: string]: any}
 }) {
@@ -153,7 +155,7 @@ export function mountChild({
         let type: 'html' | 'svg' | void
         let currentLeaf = leaf
         while (currentLeaf && (!type || !env)) {
-          if (currentLeaf.actor.env) env = currentLeaf.actor.env
+          if (currentLeaf.template.env) env = currentLeaf.template.env
           const {draft} = currentLeaf
           if (draft.type === 'element') {
             if (draft.tag === 'svg') {

@@ -4,9 +4,9 @@ import type {
   DOMElement,
   NSType,
   UsingDraft,
-  Actor,
   Leaf,
   Root,
+  Template,
 } from '../index.h'
 
 import type {UsingBlock} from '../relation.h'
@@ -33,7 +33,7 @@ export function using(
       document: Document
     }
     onComplete?: () => void
-    onRoot?: (config: {template: Actor<{mount: any}>; leaf: Leaf}) => void
+    onRoot?: (config: {template: Template; leaf: Leaf}) => void
     scope?: Scope
   },
 ): void
@@ -44,9 +44,7 @@ export function using(node: DOMElement, opts: any): void {
     document: Document
   }
   let hydrate: boolean
-  let onRoot:
-    | ((config: {template: Actor<{mount: any}>; leaf: Leaf}) => void)
-    | undefined
+  let onRoot: ((config: {template: Template; leaf: Leaf}) => void) | undefined
   let scope: Scope
   if (typeof opts === 'function') {
     cb = opts

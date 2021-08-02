@@ -1,6 +1,6 @@
 import type {NSType, BlockDraft, BlockItemDraft} from '../index.h'
 
-import {createTemplate, currentActor} from '../template'
+import {createTemplate, currentTemplate} from '../template'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
 import {setInParentIndex} from '../mountChild'
@@ -33,7 +33,7 @@ export function block({
     },
   })
   return () => {
-    assertClosure(currentActor, '(block instance)')
+    assertClosure(currentTemplate, '(block instance)')
     const blockItemDraft: BlockItemDraft = {
       type: 'blockItem',
       childTemplates: [],
@@ -41,7 +41,7 @@ export function block({
       inParentIndex: -1,
       itemOf: blockTemplate,
     }
-    const {env, namespace} = currentActor
+    const {env, namespace} = currentTemplate
     const blockItemTemplate = createTemplate({
       name: 'block item',
       isSvgRoot: false,

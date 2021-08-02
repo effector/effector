@@ -13,7 +13,6 @@ import type {StateRef} from '../effector/index.h'
 import type {Stack} from '../effector/kernel'
 import type {
   Leaf,
-  Actor,
   NSType,
   DOMElement,
   LeafData,
@@ -27,7 +26,6 @@ let templateID = 0
 let spawnID = 0
 export let currentTemplate: Template | null = null
 export let currentLeaf: Leaf | null = null
-export let currentActor: Actor<any> | null = null
 
 export function createTemplate<Api extends {[method: string]: any}>(config: {
   fn: (
@@ -48,7 +46,7 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
     document: Document
   }
   isBlock?: boolean
-}): Actor<Api>
+}): Template
 //@ts-expect-error
 export function createTemplate(config: {
   fn: (
@@ -69,7 +67,7 @@ export function createTemplate(config: {
     document: Document
   }
   isBlock?: boolean
-}): Actor<any>
+}): Template
 export function createTemplate<Api extends {[method: string]: any}>({
   fn,
   state: values = {},
@@ -99,8 +97,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     document: Document
   }
   isBlock?: boolean
-}): Actor<Api> {
-  const parentActor = currentActor
+}): Template {
   const parent = currentTemplate
   const template: Template = {
     id: ++templateID,
@@ -287,19 +284,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
       },
     }),
     parent,
-  }
-  if (parent) {
-    parent.childTemplates.push(template)
-  }
-  const node = createNode({
-    meta: {
-      template,
-    },
-  })
-  currentTemplate = template
-  const actor: Actor<Api> = (currentActor = {
-    template,
-    node,
+    node: null as any,
     api: null as any,
     trigger: {
       //@ts-expect-error
@@ -309,40 +294,42 @@ export function createTemplate<Api extends {[method: string]: any}>({
     isSvgRoot,
     namespace,
     env,
-    isBlock: isBlock || !!(parentActor && parentActor.isBlock),
+    isBlock: isBlock || !!(parent && parent.isBlock),
+  }
+  if (parent) {
+    parent.childTemplates.push(template)
+  }
+  const node = createNode({
+    meta: {
+      template,
+    },
   })
+  template.node = node
+  currentTemplate = template
   if (!defer) {
     withRegion(node, () => {
       const state = restore(values)
-      //@ts-expect-error
-      actor.api = fn(state, actor.trigger)
+      template.api = fn(state, template.trigger)
       template.nameMap = state
     })
   } else {
-    actor.deferredInit = () => {
-      const prevActor = currentActor
+    template.deferredInit = () => {
       const prevTemplate = currentTemplate
-      currentActor = actor
       currentTemplate = template
-      actor.deferredInit = null
+      template.deferredInit = null
       try {
         withRegion(node, () => {
           const state = restore(values)
-          //@ts-expect-error
-          actor.api = fn(state, actor.trigger)
+          template.api = fn(state, template.trigger)
           template.nameMap = state
         })
       } finally {
-        currentActor = prevActor
         currentTemplate = prevTemplate
       }
     }
   }
-  currentActor = parentActor
   currentTemplate = parent
-  //@ts-expect-error
-  template.actor = actor
-  return actor
+  return template
 }
 
 function getCurrent(ref: StateRef, forkPage?: Scope) {
@@ -401,7 +388,7 @@ function addMapItems<T>(
   record[id].push(...values)
 }
 export function spawn(
-  actor: Actor<any>,
+  template: Template,
   {
     values = {},
     parentLeaf,
@@ -424,12 +411,10 @@ export function spawn(
     root: Root
   },
 ): Leaf {
-  const template = actor.template
   const page = {} as Record<string, StateRef>
 
   const leaf: Leaf = {
-    actor,
-    draft: actor.draft,
+    draft: template.draft,
     svgRoot,
     data: leafData,
     parent: parentLeaf,
@@ -557,7 +542,7 @@ export function spawn(
   }
   if (mountQueue) {
     mountQueue.steps.push({
-      target: actor.trigger.mount,
+      target: template.trigger.mount,
       params: leaf,
       defer: true,
       page: leaf,
@@ -568,7 +553,7 @@ export function spawn(
       parent: mountQueue,
       steps: [
         {
-          target: actor.trigger.mount,
+          target: template.trigger.mount,
           params: leaf,
           defer: true,
           page: leaf,

@@ -8,7 +8,7 @@ import type {
 } from '../index.h'
 
 import {escapeTag} from '../bindings'
-import {currentActor} from '../template'
+import {currentTemplate} from '../template'
 import {assertClosure} from '../assert'
 import {handler} from './handler'
 
@@ -34,8 +34,8 @@ export function spec(config: {
     | Partial<{[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}>
   ɔ?: any
 }) {
-  assertClosure(currentActor, 'spec')
-  const draft = currentActor.draft
+  assertClosure(currentTemplate, 'spec')
+  const draft = currentTemplate.draft
   switch (draft.type) {
     case 'list':
       if (config.visible) draft.itemVisible = config.visible

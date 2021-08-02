@@ -27,6 +27,19 @@ export type Template = {
   loader: Filter
   upward: Filter
   parent: Template | null
+
+  node: Step
+  // template: Template
+  draft: NodeDraft
+  api: Record<string, Event<any>>
+  trigger: {
+    mount: Event<Leaf>
+  }
+  isSvgRoot: boolean
+  namespace: NSType
+  env: Env
+  deferredInit?: (() => void) | null
+  isBlock: boolean
 }
 
 export type DOMProperty = string | number | null | boolean
@@ -129,21 +142,6 @@ export type Env = {
   document: Document
 }
 
-export type Actor<Api extends {[method: string]: (params: any) => any}> = {
-  node: Step
-  template: Template
-  draft: NodeDraft
-  api: Api
-  trigger: {
-    mount: Event<Leaf>
-  }
-  isSvgRoot: boolean
-  namespace: NSType
-  env: Env
-  deferredInit?: (() => void) | null
-  isBlock: boolean
-}
-
 export type LeafDataRoute = {
   type: 'route'
   block: RouteBlock
@@ -214,7 +212,6 @@ export type LeafData =
   | LeafDataBlockItem
 
 export type Leaf = {
-  actor: Actor<any>
   parent: Leaf | null
   draft: NodeDraft
   data: LeafData
@@ -244,26 +241,26 @@ export type Root = {
 }
 
 export type BindingsDraft = {
-  childTemplates: Actor<any>[]
+  childTemplates: Template[]
   childCount: number
   inParentIndex: number
 }
 
 export type BlockDraft = {
   type: 'block'
-  childTemplates: Actor<any>[]
+  childTemplates: Template[]
   childCount: number
   inParentIndex: 0
 }
 
 export type BlockItemDraft = BindingsDraft & {
   type: 'blockItem'
-  itemOf: Actor<any>
+  itemOf: Template
 }
 
 export type RecDraft = {
   type: 'rec'
-  childTemplates: Actor<any>[]
+  childTemplates: Template[]
   childCount: number
   inParentIndex: 0
 }

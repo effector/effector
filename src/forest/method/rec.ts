@@ -2,7 +2,7 @@ import {Store, launch, createEvent} from 'effector'
 
 import type {RecItemDraft, LeafDataRecItem, RecDraft} from '../index.h'
 
-import {createTemplate, currentActor} from '../template'
+import {createTemplate, currentTemplate} from '../template'
 import {mountChild, setInParentIndex} from '../mountChild'
 import {iterateChildLeafs} from '../iterateChildLeafs'
 import {assertClosure} from '../assert'
@@ -52,8 +52,8 @@ export function rec<T>(
     },
   })
   return ({store, state = store}) => {
-    assertClosure(currentActor, '(rec instance)')
-    const {env, namespace} = currentActor
+    assertClosure(currentTemplate, '(rec instance)')
+    const {env, namespace} = currentTemplate
     if (recTemplate.deferredInit) recTemplate.deferredInit()
 
     const recItemDraft: RecItemDraft = {
@@ -78,7 +78,7 @@ export function rec<T>(
         onState.watch(({state, leaf}) => {
           iterateChildLeafs(leaf, child => {
             launch({
-              target: child.actor.api.itemUpdater,
+              target: child.template.api.itemUpdater,
               params: state,
               defer: true,
               page: leaf,

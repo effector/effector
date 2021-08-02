@@ -1,12 +1,12 @@
 import type {DOMElement} from '../index.h'
 
-import {currentActor} from '../template'
+import {currentTemplate} from '../template'
 
 import {assertClosure} from '../assert'
 
 export function node(cb: (node: DOMElement) => (() => void) | void) {
-  assertClosure(currentActor, 'node')
-  const draft = currentActor.draft
+  assertClosure(currentTemplate, 'node')
+  const draft = currentTemplate.draft
   switch (draft.type) {
     case 'list':
     case 'listItem':

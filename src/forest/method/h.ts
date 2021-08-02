@@ -28,7 +28,7 @@ import {
   applyText,
   applyStaticOps,
 } from '../bindings'
-import {createTemplate, currentActor, currentTemplate} from '../template'
+import {createTemplate, currentTemplate} from '../template'
 import {
   findParentDOMElement,
   findPreviousVisibleSibling,
@@ -106,9 +106,9 @@ export function h(tag: string, opts?: any) {
       }
     }
   }
-  assertClosure(currentActor, 'h')
-  const env = currentActor.env
-  const parentNS = currentActor.namespace
+  assertClosure(currentTemplate, 'h')
+  const env = currentTemplate.env
+  const parentNS = currentTemplate.namespace
   let ns: NSType = parentNS
   let type = 'html'
   ns = type = parentNS === 'svg' ? 'svg' : 'html'
@@ -117,7 +117,7 @@ export function h(tag: string, opts?: any) {
     ns = 'svg'
   }
   let node: DOMElement
-  if (!currentActor.isBlock) {
+  if (!currentTemplate.isBlock) {
     node =
       type === 'svg'
         ? env.document.createElementNS('http://www.w3.org/2000/svg', tag)

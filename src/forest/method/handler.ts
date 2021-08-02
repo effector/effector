@@ -1,6 +1,6 @@
 import {Event, is} from 'effector'
 
-import {currentActor} from '../template'
+import {currentTemplate} from '../template'
 import {assert} from '../assert'
 
 export function handler(
@@ -20,8 +20,8 @@ export function handler(
   >,
 ): void
 export function handler(options: any, map?: any) {
-  if (!currentActor) return
-  const draft = currentActor.draft
+  if (!currentTemplate) return
+  const draft = currentTemplate.draft
   assert(
     draft.type === 'element',
     `"handler" extension can be used only with element nodes, got "${draft.type}"`,

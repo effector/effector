@@ -1,6 +1,6 @@
 import {Store, is} from 'effector'
 
-import {currentActor} from '../template'
+import {currentTemplate} from '../template'
 import {assert, assertClosure} from '../assert'
 
 import {route} from './route'
@@ -19,7 +19,7 @@ export function variant<T, K extends keyof T>({
         __: (config: {store: Store<T>}) => void
       }
 }) {
-  assertClosure(currentActor, 'variant')
+  assertClosure(currentTemplate, 'variant')
   assert(is.unit(source), 'variant({source}) should be unit')
   let keyReader: (value: any) => any
 

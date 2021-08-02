@@ -10,7 +10,7 @@ import {
   stopAsyncValue,
   updateAsyncValue,
 } from '../plan'
-import {createTemplate, spawn, currentActor} from '../template'
+import {createTemplate, spawn, currentTemplate} from '../template'
 import {mountChildTemplates, setInParentIndex} from '../mountChild'
 import {unmountLeafTree} from '../unmount'
 import {assertClosure} from '../assert'
@@ -33,7 +33,7 @@ export function list<T>(
   fn: (opts: {store: Store<T>; id: Store<number>}) => void,
 ): void
 export function list<T>(opts: any, maybeFn?: any) {
-  assertClosure(currentActor, 'list')
+  assertClosure(currentTemplate, 'list')
   if (typeof maybeFn === 'function') {
     if (is.unit(opts)) {
       opts = {source: opts, fn: maybeFn}
@@ -55,7 +55,7 @@ export function list<T>(opts: any, maybeFn?: any) {
     childCount: 0,
     inParentIndex: -1,
   }
-  const {env, namespace} = currentActor
+  const {env, namespace} = currentTemplate
 
   const listTemplate = createTemplate({
     name: 'list',
@@ -202,7 +202,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 onChange(value) {
                   if (item.instance) {
                     launch({
-                      target: item.instance.actor.api.itemUpdater,
+                      target: item.instance.template.api.itemUpdater,
                       params: value,
                       defer: true,
                       page: item.instance,
