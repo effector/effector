@@ -76,7 +76,7 @@ export function spec(config: {
       //@ts-expect-error
       escaped[escapeTag(field)] = config.style[field]
     }
-    draft.styleProp.push(escaped)
+    draft.style.push(escaped)
   }
   if (config.styleVar) draft.styleVar.push(config.styleVar)
   if (config.visible) draft.visible = config.visible

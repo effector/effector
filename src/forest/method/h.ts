@@ -5,7 +5,6 @@ import type {StateRef} from '../../effector/index.h'
 import type {
   DOMElement,
   ElementDraft,
-  MergedBindings,
   NSType,
   PropertyMap,
   StoreOrData,
@@ -14,6 +13,9 @@ import type {
   Leaf,
   LeafDataElement,
   Template,
+  HandlerRecord,
+  PropertyOperationDef,
+  PropertyOperationKind,
 } from '../index.h'
 
 import type {ElementBlock, TextBlock} from '../relation.h'
@@ -42,7 +44,140 @@ import {
 } from '../mountChild'
 import {assertClosure} from '../assert'
 import {mutualSample} from '../mutualSample'
+import {forIn} from '../forIn'
 import {spec} from './spec'
+
+function createPropsOp<T, S>(
+  draft: ElementDraft,
+  {
+    initCtx,
+    runOp,
+    hooks: {onMount, onState},
+  }: {
+    initCtx(value: T, leaf: Leaf): S
+    runOp(value: T, ctx: S): void
+    hooks: {
+      onMount: Event<{leaf: Leaf; value: T}>
+      onState: Event<{leaf: Leaf; value: T}>
+    }
+  },
+) {
+  const opID = draft.opsAmount++
+  onMount.watch(({value, leaf}) => {
+    const op = createOp({
+      value,
+      priority: 'props',
+      runOp(value) {
+        runOp(value, ctx)
+      },
+      group: leaf.root.leafOps[leaf.fullID].group,
+    })
+    leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
+    const ctx = initCtx(value, leaf)
+  })
+  onState.watch(({value, leaf}) => {
+    pushOpToQueue(value, leaf.root.leafOps[leaf.fullID].group.ops[opID])
+  })
+}
+
+const syncOperations: Array<{
+  field: string
+  type: PropertyOperationKind
+}> = [
+  {type: 'attr', field: 'value'},
+  {type: 'attr', field: 'checked'},
+  {type: 'attr', field: 'min'},
+  {type: 'attr', field: 'max'},
+]
+
+const propertyOperationBinding: Record<
+  PropertyOperationKind,
+  (
+    element: DOMElement,
+    field: string,
+    value: string | number | boolean | null,
+  ) => void
+> = {
+  attr: applyAttr,
+  data: applyDataAttr,
+  style: applyStyle,
+  styleVar: applyStyleVar,
+}
+
+const readElement = (leaf: Leaf) => (leaf.data as LeafDataElement).block.value
+
+/** operation family for things represented as <el "thing"="value" /> */
+function propertyMapToOpDef(
+  draft: ElementDraft,
+  type: PropertyOperationKind,
+  ops: {
+    attr: PropertyMap
+    data: PropertyMap
+    style: StylePropertyMap
+    styleVar: PropertyMap
+  },
+) {
+  draft[type].forEach(record => {
+    forIn(record as unknown as PropertyMap, (value, key) => {
+      switch (type) {
+        case 'data':
+        case 'styleVar':
+          ops[type][key] = value
+          break
+        case 'attr':
+          ops.attr[key === 'xlink:href' ? 'href' : key] = value
+          break
+        case 'style':
+          if (key.startsWith('--')) {
+            ops.styleVar[key.slice(2)] = value
+          } else {
+            //@ts-expect-error inconsistency in StylePropertyMap key type
+            ops.style[key] = value
+          }
+          break
+      }
+    })
+  })
+}
+
+function installTextNode(leaf: Leaf, value: string, childIndex: number) {
+  const parentBlock = leaf.data.block as ElementBlock
+  const textBlock: TextBlock = {
+    type: 'text',
+    parent: parentBlock,
+    visible: false,
+    index: childIndex,
+    //@ts-expect-error
+    value: null,
+  }
+  parentBlock.child[childIndex] = textBlock
+  if (leaf.hydration) {
+    const siblingBlock = findPreviousVisibleSiblingBlock(textBlock)
+    if (siblingBlock) {
+      switch (siblingBlock.type) {
+        case 'text': {
+          textBlock.value = leaf.root.env.document.createTextNode(value)
+          siblingBlock.value.after(textBlock.value)
+          break
+        }
+        case 'element': {
+          textBlock.value = siblingBlock.value.nextSibling! as Text
+          applyText(textBlock.value, value)
+          break
+        }
+      }
+    } else {
+      const parentElement = findParentDOMElement(textBlock)
+      textBlock.value = parentElement!.firstChild! as Text
+      applyText(textBlock.value, value)
+    }
+    textBlock.visible = true
+  } else {
+    textBlock.value = leaf.root.env.document.createTextNode(value)
+    appendChild(textBlock)
+  }
+  return textBlock
+}
 
 function processStoreRef(store: Store<any>) {
   //@ts-expect-error
@@ -130,7 +265,7 @@ export function h(tag: string, opts?: any) {
     attr: [],
     data: [],
     text: [],
-    styleProp: [],
+    style: [],
     styleVar: [],
     handler: [],
     stencil,
@@ -164,139 +299,44 @@ export function h(tag: string, opts?: any) {
     fn(_, {mount}) {
       //@ts-expect-error
       const domElementCreated = createEvent<Leaf>({named: 'domElementCreated'})
-      function valueElementMutualSample(value: Store<DOMProperty>) {
-        return mutualSample({
-          mount: domElementCreated,
-          state: value,
-          onMount: (value, leaf) => ({leaf, value}),
-          onState: (leaf, value) => ({leaf, value}),
-        })
-      }
+
       if (hasCb) {
         cb()
       }
       if (hasOpts) {
         spec(opts)
       }
-      const merged: MergedBindings = {
+      if (is.unit(draft.visible)) {
+        draft.seq.push({type: 'visible', value: draft.visible})
+        processStoreRef(draft.visible)
+      }
+      const ops: {
+        attr: PropertyMap
+        data: PropertyMap
+        style: StylePropertyMap
+        styleVar: PropertyMap
+      } = {
         attr: {},
         data: {},
-        text: draft.text,
-        styleProp: {},
+        style: {},
         styleVar: {},
-        visible: draft.visible || null,
-        handler: draft.handler,
       }
-      for (let i = 0; i < draft.attr.length; i++) {
-        const map = draft.attr[i]
-        for (const key in map) {
-          if (key === 'xlink:href') {
-            merged.attr.href = map[key]
+      propertyMapToOpDef(draft, 'attr', ops)
+      propertyMapToOpDef(draft, 'data', ops)
+      propertyMapToOpDef(draft, 'style', ops)
+      propertyMapToOpDef(draft, 'styleVar', ops)
+      forIn(ops, (opsMap, type) => {
+        forIn(opsMap as unknown as PropertyMap, (value, field) => {
+          if (is.unit(value)) {
+            draft.seq.push({type, field, value})
+            processStoreRef(value)
           } else {
-            merged.attr[key] = map[key]
+            draft.staticSeq.push({type, field, value})
           }
-        }
-      }
-      for (let i = 0; i < draft.data.length; i++) {
-        const map = draft.data[i]
-        for (const key in map) {
-          merged.data[key] = map[key]
-        }
-      }
-      for (let i = 0; i < draft.styleProp.length; i++) {
-        const map = draft.styleProp[i]
-        for (const key in map) {
-          if (key.startsWith('--')) {
-            merged.styleVar[key.slice(2)] = map[key]!
-          } else {
-            merged.styleProp[key] = map[key]
-          }
-        }
-      }
-      for (let i = 0; i < draft.styleVar.length; i++) {
-        const map = draft.styleVar[i]
-        for (const key in map) {
-          merged.styleVar[key] = map[key]
-        }
-      }
-      if (merged.visible) {
-        draft.seq.push({
-          type: 'visible',
-          value: merged.visible,
         })
-        processStoreRef(merged.visible)
-      }
-      for (const attr in merged.attr) {
-        const value = merged.attr[attr]
-        if (is.unit(value)) {
-          draft.seq.push({
-            type: 'attr',
-            field: attr,
-            value,
-          })
-          processStoreRef(value)
-        } else {
-          draft.staticSeq.push({
-            type: 'attr',
-            field: attr,
-            value,
-          })
-        }
-      }
-      for (const data in merged.data) {
-        const value = merged.data[data]
-        if (is.unit(value)) {
-          draft.seq.push({
-            type: 'data',
-            field: data,
-            value,
-          })
-          processStoreRef(value)
-        } else {
-          draft.staticSeq.push({
-            type: 'data',
-            field: data,
-            value,
-          })
-        }
-      }
-      for (const propName in merged.styleProp) {
-        const value = merged.styleProp[propName]
-        if (is.unit(value)) {
-          draft.seq.push({
-            type: 'style',
-            field: propName,
-            value,
-          })
-          processStoreRef(value)
-        } else {
-          draft.staticSeq.push({
-            type: 'style',
-            field: propName,
-            value: value!,
-          })
-        }
-      }
-      for (const field in merged.styleVar) {
-        const value = merged.styleVar[field]
-        if (is.unit(value)) {
-          draft.seq.push({
-            type: 'styleVar',
-            field,
-            value,
-          })
-          processStoreRef(value)
-        } else {
-          draft.staticSeq.push({
-            type: 'styleVar',
-            field,
-            value,
-          })
-        }
-      }
-      for (let i = 0; i < merged.text.length; i++) {
-        const item = merged.text[i]
-        if (item.value === null) continue
+      })
+      draft.text.forEach(item => {
+        if (item.value === null) return
         if (is.unit(item.value)) {
           draft.seq.push({
             type: 'dynamicText',
@@ -311,254 +351,154 @@ export function h(tag: string, opts?: any) {
             childIndex: item.index,
           })
         }
-      }
-      for (let i = 0; i < merged.handler.length; i++) {
-        const item = merged.handler[i]
-        for (const key in item.map) {
+      })
+      draft.handler.forEach(item => {
+        forIn(item.map, (handler, key) => {
           draft.seq.push({
             type: 'handler',
             for: key,
             //@ts-expect-error
-            handler: item.map[key],
+            handler,
             options: item.options,
             domConfig: item.domConfig,
           })
-        }
-      }
-      if (merged.visible) {
-        const {onMount, onState} = mutualSample({
-          mount,
-          state: merged.visible,
-          onMount: (value, leaf) => ({
-            leaf,
-            value,
-            hydration: leaf.hydration,
-          }),
-          onState: (leaf, value) => ({leaf, value, hydration: false}),
         })
-        onMount.watch(({leaf, value, hydration}) => {
-          const leafData = leaf.data as LeafDataElement
-          const visibleOp = leafData.ops.visible
-          const parentBlock = leafData.block
-          if (hydration) {
-            forceSetOpValue(value, visibleOp)
-            if (value) {
-              const visibleSibling = findPreviousVisibleSibling(parentBlock)
-              let foundElement: DOMElement
-              if (visibleSibling) {
-                foundElement = visibleSibling.nextSibling! as DOMElement
-              } else {
-                foundElement = findParentDOMElement(parentBlock)!
-                  .firstChild! as DOMElement
+      })
+      if (stencil) applyStaticOps(stencil, draft.staticSeq)
+      draft.seq.forEach(item => {
+        switch (item.type) {
+          case 'visible': {
+            const {onMount, onState} = mutualSample({
+              mount,
+              state: item.value,
+              onMount: (value, leaf) => ({
+                leaf,
+                value,
+                hydration: leaf.hydration,
+              }),
+              onState: (leaf, value) => ({leaf, value, hydration: false}),
+            })
+            onMount.watch(({leaf, value, hydration}) => {
+              const leafData = leaf.data as LeafDataElement
+              const visibleOp = leafData.ops.visible
+              const parentBlock = leafData.block
+              if (hydration) {
+                forceSetOpValue(value, visibleOp)
+                if (value) {
+                  const visibleSibling = findPreviousVisibleSibling(parentBlock)
+                  let foundElement: DOMElement
+                  if (visibleSibling) {
+                    foundElement = visibleSibling.nextSibling! as DOMElement
+                  } else {
+                    foundElement = findParentDOMElement(parentBlock)!
+                      .firstChild! as DOMElement
+                  }
+                  if (foundElement.nodeName === '#text') {
+                    const emptyText = foundElement
+                    foundElement = foundElement.nextSibling! as DOMElement
+                    emptyText.remove()
+                  }
+                  parentBlock.value = foundElement
+                  parentBlock.visible = true
+                }
               }
-              if (foundElement.nodeName === '#text') {
-                const emptyText = foundElement
-                foundElement = foundElement.nextSibling! as DOMElement
-                emptyText.remove()
+              const svgRoot = elementTemplate.isSvgRoot
+                ? (parentBlock.value as SVGSVGElement)
+                : null
+              mountChildTemplates(draft, {
+                parentBlockFragment: parentBlock,
+                leaf,
+                node: parentBlock.value,
+                svgRoot,
+              })
+              if (value) {
+                if (leafData.needToCallNode) {
+                  leafData.needToCallNode = false
+                  launch({
+                    target: onMountSync,
+                    params: {
+                      element: leafData.block.value,
+                      fns: draft.node,
+                    },
+                    page: leaf,
+                    defer: true,
+                    //@ts-expect-error
+                    forkPage: leaf.root.forkPage,
+                  })
+                }
               }
-              parentBlock.value = foundElement
-              parentBlock.visible = true
-            }
-          }
-          const svgRoot = elementTemplate.isSvgRoot
-            ? (parentBlock.value as SVGSVGElement)
-            : null
-          mountChildTemplates(draft, {
-            parentBlockFragment: parentBlock,
-            leaf,
-            node: parentBlock.value,
-            svgRoot,
-          })
-          if (value) {
-            if (leafData.needToCallNode) {
-              leafData.needToCallNode = false
               launch({
-                target: onMountSync,
-                params: {
-                  element: leafData.block.value,
-                  fns: draft.node,
-                },
-                page: leaf,
+                target: domElementCreated,
+                params: leaf,
                 defer: true,
+                page: leaf,
                 //@ts-expect-error
                 forkPage: leaf.root.forkPage,
               })
-            }
-          }
-          launch({
-            target: domElementCreated,
-            params: leaf,
-            defer: true,
-            page: leaf,
-            //@ts-expect-error
-            forkPage: leaf.root.forkPage,
-          })
-        })
-        merge([onState, onMount]).watch(({leaf, value, hydration}) => {
-          const leafData = leaf.data as LeafDataElement
-          const visibleOp = leafData.ops.visible
-          if (!hydration) {
-            pushOpToQueue(value, visibleOp)
-          }
-        })
-      }
-      if (stencil) applyStaticOps(stencil, draft.staticSeq)
-      for (let i = 0; i < draft.seq.length; i++) {
-        const item = draft.seq[i]
-        switch (item.type) {
-          case 'visible':
+            })
+            merge([onState, onMount]).watch(({leaf, value, hydration}) => {
+              const leafData = leaf.data as LeafDataElement
+              const visibleOp = leafData.ops.visible
+              if (!hydration) {
+                pushOpToQueue(value, visibleOp)
+              }
+            })
             break
-          case 'attr': {
-            const {field} = item
-            const immediate =
-              field === 'value' ||
-              field === 'checked' ||
-              field === 'min' ||
-              field === 'max'
-            const {onMount, onState} = valueElementMutualSample(item.value)
+          }
+          case 'attr':
+          case 'data':
+          case 'style':
+          case 'styleVar': {
+            const fn = propertyOperationBinding[item.type]
+            const immediate = syncOperations.some(
+              ({type, field}) => item.type === type && item.field === field,
+            )
+            const hooks = mutualSample({
+              mount: domElementCreated,
+              state: item.value,
+              onMount: (value, leaf) => ({leaf, value}),
+              onState: (leaf, value) => ({leaf, value}),
+            })
             if (immediate) {
-              merge([onState, onMount]).watch(({leaf, value}) => {
-                applyAttr(readElement(leaf), field, value)
+              merge([hooks.onState, hooks.onMount]).watch(({leaf, value}) => {
+                fn(readElement(leaf), item.field, value)
               })
             } else {
-              const opID = draft.opsAmount++
-              onMount.watch(({value, leaf}) => {
-                const element = readElement(leaf)
-                const op = createOp({
-                  value,
-                  priority: 'props',
-                  runOp(value) {
-                    applyAttr(element, field, value)
-                  },
-                  group: leaf.root.leafOps[leaf.fullID].group,
-                })
-                leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-                applyAttr(element, field, value)
-              })
-              onState.watch(({value, leaf}) => {
-                pushOpToQueue(
-                  value,
-                  leaf.root.leafOps[leaf.fullID].group.ops[opID],
-                )
+              createPropsOp(draft, {
+                initCtx(value: DOMProperty, leaf) {
+                  const element = readElement(leaf)
+                  fn(element, item.field, value)
+                  return element
+                },
+                runOp(value, element: DOMElement) {
+                  fn(element, item.field, value)
+                },
+                hooks,
               })
             }
             break
           }
-          case 'data': {
-            const {field} = item
-            const {onMount, onState} = valueElementMutualSample(item.value)
-            const opID = draft.opsAmount++
-            onMount.watch(({value, leaf}) => {
-              const element = readElement(leaf)
-              const op = createOp({
-                value,
-                priority: 'props',
-                runOp(value) {
-                  applyDataAttr(element, field, value)
-                },
-                group: leaf.root.leafOps[leaf.fullID].group,
-              })
-              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-              applyDataAttr(element, field, value)
-            })
-            onState.watch(({value, leaf}) => {
-              pushOpToQueue(
-                value,
-                leaf.root.leafOps[leaf.fullID].group.ops[opID],
-              )
+          case 'dynamicText':
+            createPropsOp(draft, {
+              initCtx(value: string, leaf) {
+                return installTextNode(leaf, value, item.childIndex)
+              },
+              runOp(value, ctx: TextBlock) {
+                applyText(ctx.value, value)
+              },
+              hooks: mutualSample({
+                mount: domElementCreated,
+                state: item.value,
+                onMount: (value, leaf) => ({leaf, value: String(value)}),
+                onState: (leaf, value) => ({leaf, value: String(value)}),
+              }),
             })
             break
-          }
-          case 'style': {
-            const opID = draft.opsAmount++
-            const {field} = item
-            const {onMount, onState} = valueElementMutualSample(item.value)
-
-            onMount.watch(({value, leaf}) => {
-              const element = readElement(leaf)
-              const op = createOp({
-                value,
-                priority: 'props',
-                runOp(value) {
-                  applyStyle(element, field, value)
-                },
-                group: leaf.root.leafOps[leaf.fullID].group,
-              })
-              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-              applyStyle(element, field, value)
-            })
-            onState.watch(({value, leaf}) => {
-              pushOpToQueue(
-                value,
-                leaf.root.leafOps[leaf.fullID].group.ops[opID],
-              )
-            })
-            break
-          }
-          case 'styleVar': {
-            const {field} = item
-            const {onMount, onState} = valueElementMutualSample(item.value)
-            const opID = draft.opsAmount++
-            onMount.watch(({value, leaf}) => {
-              const element = readElement(leaf)
-              const op = createOp({
-                value,
-                priority: 'props',
-                runOp(value) {
-                  applyStyleVar(element, field, value)
-                },
-                group: leaf.root.leafOps[leaf.fullID].group,
-              })
-              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-              applyStyleVar(element, field, value)
-            })
-            onState.watch(({value, leaf}) => {
-              pushOpToQueue(
-                value,
-                leaf.root.leafOps[leaf.fullID].group.ops[opID],
-              )
-            })
-            break
-          }
-          case 'staticText': {
+          case 'staticText':
             domElementCreated.watch(leaf => {
               installTextNode(leaf, item.value, item.childIndex)
             })
             break
-          }
-          case 'dynamicText': {
-            const opID = draft.opsAmount++
-            const textAndElement = sample({
-              source: item.value,
-              clock: domElementCreated,
-              fn: (text, leaf) => ({value: String(text), leaf}),
-              greedy: true,
-            })
-            textAndElement.watch(({value, leaf}) => {
-              const op = createOp({
-                value,
-                priority: 'props',
-                runOp(value) {
-                  applyText(textBlock.value, value)
-                },
-                group: leaf.root.leafOps[leaf.fullID].group,
-              })
-              leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-              const textBlock = installTextNode(leaf, value, item.childIndex)
-            })
-            sample({
-              source: domElementCreated,
-              clock: item.value,
-              fn: (leaf, text) => ({leaf, text}),
-              greedy: true,
-            }).watch(({leaf, text}) => {
-              pushOpToQueue(
-                text,
-                leaf.root.leafOps[leaf.fullID].group.ops[opID],
-              )
-            })
-            break
-          }
           case 'handler': {
             const handlerTemplate: Template | null =
               //@ts-expect-error
@@ -598,10 +538,9 @@ export function h(tag: string, opts?: any) {
             break
           }
         }
-      }
+      })
       mount.watch(leaf => {
         const leafData = leaf.data as LeafDataElement
-
         if (!draft.visible) {
           const visibleOp = leafData.ops.visible
           const parentBlock = leafData.block
@@ -664,45 +603,4 @@ export function h(tag: string, opts?: any) {
     env,
   })
   setInParentIndex(elementTemplate)
-  function readElement(leaf: Leaf) {
-    return (leaf.data as LeafDataElement).block.value
-  }
-  function installTextNode(leaf: Leaf, value: string, childIndex: number) {
-    const parentBlock = leaf.data.block as ElementBlock
-    const textBlock: TextBlock = {
-      type: 'text',
-      parent: parentBlock,
-      visible: false,
-      index: childIndex,
-      //@ts-expect-error
-      value: null,
-    }
-    parentBlock.child[childIndex] = textBlock
-    if (leaf.hydration) {
-      const siblingBlock = findPreviousVisibleSiblingBlock(textBlock)
-      if (siblingBlock) {
-        switch (siblingBlock.type) {
-          case 'text': {
-            textBlock.value = leaf.root.env.document.createTextNode(value)
-            siblingBlock.value.after(textBlock.value)
-            break
-          }
-          case 'element': {
-            textBlock.value = siblingBlock.value.nextSibling! as Text
-            applyText(textBlock.value, value)
-            break
-          }
-        }
-      } else {
-        const parentElement = findParentDOMElement(textBlock)
-        textBlock.value = parentElement!.firstChild! as Text
-        applyText(textBlock.value, value)
-      }
-      textBlock.visible = true
-    } else {
-      textBlock.value = leaf.root.env.document.createTextNode(value)
-      appendChild(textBlock)
-    }
-    return textBlock
-  }
 }

@@ -89,7 +89,8 @@ export type StaticOperationDef =
       field: string
       value: DOMProperty
     }
-type OperationDef =
+
+export type OperationDef =
   | {
       type: 'visible'
       value: Store<boolean>
@@ -137,6 +138,13 @@ type OperationDef =
         capture: boolean
       }
     }
+
+/** operation family for things represented as <el "thing"="value" /> */
+export type PropertyOperationDef = Extract<
+  OperationDef,
+  {type: PropertyOperationKind}
+>
+export type PropertyOperationKind = 'attr' | 'data' | 'style' | 'styleVar'
 
 export type Env = {
   document: Document
@@ -289,19 +297,6 @@ export type ListItemType = {
   instance?: Leaf
 }
 
-export type MergedBindings = {
-  attr: PropertyMap
-  data: PropertyMap
-  text: Array<{
-    index: number
-    value: StoreOrData<DOMProperty>
-  }>
-  styleProp: StylePropertyMap
-  styleVar: PropertyMap
-  visible: Store<boolean> | null
-  handler: HandlerRecord[]
-}
-
 export type ElementDraft = BindingsDraft & {
   type: 'element'
   tag: string
@@ -314,7 +309,7 @@ export type ElementDraft = BindingsDraft & {
     index: number
     value: StoreOrData<DOMProperty>
   }>
-  styleProp: StylePropertyMap[]
+  style: StylePropertyMap[]
   styleVar: PropertyMap[]
   visible?: Store<boolean>
   node: Array<(node: DOMElement) => (() => void) | void>
