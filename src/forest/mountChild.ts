@@ -91,17 +91,7 @@ const fragmentParentTypes: Array<FragmentParent['type']> = [
   'blockItem',
   'route',
 ]
-function assertNoRewriteChild(
-  parent: FragmentParent,
-  child: {inParentIndex: number},
-  active: boolean = false,
-) {
-  if (!active) return
-  assert(
-    !parent.child[child.inParentIndex],
-    `override current child at index ${child.inParentIndex}`,
-  )
-}
+
 export function mountChild({
   parentBlockFragment,
   leaf,
@@ -136,14 +126,11 @@ export function mountChild({
         visible: false,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = routeBlock
       leafData = {
         type: 'route',
         block: routeBlock,
-        ops: {
-          // visible:
-        },
+        ops: {},
         initialized: false,
       }
       break
@@ -188,14 +175,7 @@ export function mountChild({
         visible: false,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = elementBlock
-      // {
-      //   const tag = elementBlock.value.tagName.toLowerCase()
-      //   if (tag === 'h1') {
-      //     printTree(parentBlockFragment, false)
-      //   }
-      // }
       leafData = {
         type: 'element',
         block: elementBlock,
@@ -205,13 +185,12 @@ export function mountChild({
             priority: 'tree',
             runOp(value) {
               if (leaf.hydration) {
-                // console.count('hydration')
               }
-
               if (value) {
                 appendChild(elementBlock)
-                if ((leafData as LeafDataElement).needToCallNode) {
-                  ;(leafData as LeafDataElement).needToCallNode = false
+                const leafData_ = leafData as LeafDataElement
+                if (leafData_.needToCallNode) {
+                  leafData_.needToCallNode = false
                   launch({
                     target: onMount,
                     params: {
@@ -228,15 +207,6 @@ export function mountChild({
                 elementBlock.value.remove()
                 elementBlock.visible = false
               }
-              // console.log(
-              //   'mountChild runOp',
-              //   value,
-              //   elementBlock.visible,
-              //   elementBlock.value,
-              //   elementBlock.value.isConnected,
-              //   leaf.data,
-              //   JSON.stringify(elementBlock.value.innerHTML),
-              // )
             },
             group: parentDomSubtree,
           }),
@@ -255,7 +225,6 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = listBlock
       leafData = {
         type: 'list',
@@ -276,7 +245,6 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = recBlock
       leafData = {
         type: 'rec',
@@ -292,7 +260,6 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = recItemBlock
       leafData = {
         type: 'rec item',
@@ -308,7 +275,6 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'block',
@@ -324,7 +290,6 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
-      assertNoRewriteChild(parentBlockFragment, draft)
       parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'block item',
