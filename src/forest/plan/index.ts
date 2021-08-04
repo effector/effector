@@ -296,18 +296,9 @@ export function createAsyncValue({
   onInit: (value: any) => void
   onChange: (value: any) => void
 }): AsyncValue {
-  const change = createOp({
-    value,
-    group,
-    runOp(value) {
-      item.status = 'A'
-      onChange(value)
-    },
-    priority: 'data',
-  })
   const item: AsyncValue = {
     status: 'IA',
-    value: change.value,
+    value,
     ops: {
       init: createOp({
         value: false,
@@ -318,7 +309,15 @@ export function createAsyncValue({
         },
         priority: 'data',
       }),
-      change,
+      change: createOp({
+        value,
+        group,
+        runOp(value) {
+          item.status = 'A'
+          onChange(value)
+        },
+        priority: 'data',
+      }),
       terminate: createOp({
         value: false,
         group,
