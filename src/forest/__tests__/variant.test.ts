@@ -637,7 +637,7 @@ describe('dom node insertion', () => {
      * $secondLevel a case nodes should not appear
      */
     expect(s4).toMatchInlineSnapshot(`
-    "
+      "
       <div>
         <button id='btA'>A</button><button id='btB'>B</button>
         <div>
