@@ -360,7 +360,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                 // }
               }
               // value = getPageRef(page, forkPage, node, data.store.id).current
-              value = readRef(reg ? reg[data.store.id] : data.store)
+              value = readRef(reg ? reg[data.store.id] || data.store : data.store)
               break
           }
           //prettier-ignore
