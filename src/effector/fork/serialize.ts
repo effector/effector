@@ -1,5 +1,5 @@
-import {Scope, Store} from '../unit.h'
-import {forEach, forIn} from '../collection'
+import type {Scope, Store} from '../unit.h'
+import {forIn} from '../collection'
 
 /**
  serialize state on server
@@ -20,25 +20,5 @@ export function serialize(
       result[sid] = value
     }
   })
-  // const flat = flatGraph(scope.cloneOf)
-  // forEach(flat, ({meta, scope: nodeScope}) => {
-  //   if (meta.unit !== STORE) return
-  //   const {sid} = meta
-  //   if (!sid) return
-  //   if (ignoredStores.includes(sid)) return
-  //   const id = nodeScope.state.id
-  //   const explicitlyDefined = sid in scope.sidValuesMap
-  //   if (!scope.changedStores.has(id) && !explicitlyDefined) return
-  //   // initRefInScope(scope, nodeScope.state, true)
-  //   if (!scope.reg[id]) {
-  //     scope.reg[id] = {
-  //       id,
-  //       current: explicitlyDefined
-  //         ? scope.sidValuesMap[sid]
-  //         : nodeScope.state.current,
-  //     }
-  //   }
-  //   result[sid] = scope.reg[id].current
-  // })
   return result
 }

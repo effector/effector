@@ -1,12 +1,12 @@
-import {getForkPage, getGraph, getLinks, getOwners, getParent} from '../getter'
+import {getForkPage, getGraph, getParent} from '../getter'
 import {is} from '../is'
 import {throwError} from '../throw'
-import {setForkPage, initRefInScope, getPageRef, currentPage} from '../kernel'
+import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {step} from '../typedef'
-import {Domain, Scope, Store} from '../unit.h'
-import {Node, StateRef} from '../index.h'
-import {forEach, includes, forIn} from '../collection'
+import type {Scope, Store} from '../unit.h'
+import type {Node, StateRef} from '../index.h'
+import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, FORK_COUNTER, SCOPE} from '../tag'
 
 export function normalizeValues(
@@ -23,16 +23,6 @@ export function normalizeValues(
     return result
   }
   return values
-}
-
-export function flatGraph(unit: any) {
-  const list = [] as Node[]
-  ;(function traverse(node) {
-    if (includes(list, node)) return
-    list.push(node)
-    forEachRelatedNode(node, traverse)
-  })(getGraph(unit))
-  return list
 }
 
 /**
@@ -93,7 +83,6 @@ export function cloneGraph(unit: any): Scope {
               const forkPage: Scope = getForkPage(stack)
               const id = storeNode.scope.state.id
               const sid = storeNode.meta.sid
-              // forkPage.changedStores.add(id)
               forkPage.sidIdMap[sid] = id
               forkPage.sidValuesMap[sid] = value
             }
@@ -131,15 +120,4 @@ export function cloneGraph(unit: any): Scope {
 }
 function stateGetter(node: Node, scope: Scope) {
   return getPageRef(currentPage, scope, node, node.scope.state, true).current
-}
-
-function forEachRelatedNode(
-  node: Node,
-  cb: (node: Node, index: number, siblings: Node[]) => void,
-) {
-  const unit = node.meta.unit
-  if (unit === 'fork' || unit === FORK_COUNTER) return
-  forEach(node.next, cb)
-  forEach(getOwners(node), cb)
-  forEach(getLinks(node), cb)
 }

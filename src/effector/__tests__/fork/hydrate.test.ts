@@ -83,6 +83,10 @@ test('watch calls during hydration', async () => {
       "combined": Object {
         "updates.watch": Array [
           Object {
+            "a": 0,
+            "b": 0,
+          },
+          Object {
             "a": 1,
             "b": 1,
           },
@@ -105,6 +109,10 @@ test('watch calls during hydration', async () => {
       "combinedFn": Object {
         "updates.watch": Array [
           Object {
+            "a": 0,
+            "b": 0,
+          },
+          Object {
             "a": 1,
             "b": 1,
           },
@@ -125,10 +133,12 @@ test('watch calls during hydration', async () => {
         ],
       },
       "fxHandlerFn": Array [
+        0,
         1,
       ],
       "mapped": Object {
         "updates.watch": Array [
+          "'0'",
           "'1'",
         ],
         "watch": Array [
@@ -139,6 +149,7 @@ test('watch calls during hydration', async () => {
       },
       "store": Object {
         "updates.watch": Array [
+          0,
           1,
         ],
         "watch": Array [
@@ -209,13 +220,13 @@ describe('multiple hydrate calls', () => {
           "combined: {n:0}",
           "combfn: 0",
           "## first hydration, $n = 1",
-          "combined: {n:1}",
-          "combfn: 1",
           "$n: 1",
+          "$n.updates: 1",
+          "combined: {n:1}",
+          "combined.updates: {n:1}",
+          "combfn: 1",
+          "combfn.updates: 1",
           "## second hydration, $n = 1",
-          "combined: {n:1}",
-          "combfn: 1",
-          "$n: 1",
           "## setN(2)",
           "setN: 2",
           "$n: 2",
@@ -309,13 +320,19 @@ describe('multiple hydrate calls', () => {
           "combined: {n:0}",
           "combfn: 0",
           "## first hydration, $n = 1",
-          "combined: {n:1}",
-          "combfn: 1",
           "$n: 1",
+          "$n.updates: 1",
+          "combined: {n:1}",
+          "combined.updates: {n:1}",
+          "combfn: 1",
+          "combfn.updates: 1",
           "## second hydration, $n = -1",
-          "combined: {n:-1}",
-          "combfn: -1",
           "$n: -1",
+          "$n.updates: -1",
+          "combined: {n:-1}",
+          "combined.updates: {n:-1}",
+          "combfn: -1",
+          "combfn.updates: -1",
           "## setN(2)",
           "setN: 2",
           "$n: 2",
