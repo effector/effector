@@ -61,18 +61,22 @@ test('watch calls during hydration', async () => {
       watch: argumentHistory(storeWatchFn),
       'updates.watch': argumentHistory(eventWatchFn),
     },
+
     combined: {
       watch: argumentHistory(combineWatchFn),
       'updates.watch': argumentHistory(combineUpdatesWatchFn),
     },
+
     combinedFn: {
       watch: argumentHistory(combineFnWatchFn),
       'updates.watch': argumentHistory(combineFnUpdatesWatchFn),
     },
+
     mapped: {
       watch: argumentHistory(mapWatchFn),
       'updates.watch': argumentHistory(mapUpdatesWatchFn),
     },
+
     fxHandlerFn: argumentHistory(fxHandlerFn),
   }).toMatchInlineSnapshot(`
     Object {
@@ -125,7 +129,7 @@ test('watch calls during hydration', async () => {
       ],
       "mapped": Object {
         "updates.watch": Array [
-          "'1\'",
+          "'1'",
         ],
         "watch": Array [
           "'-1'",
