@@ -354,15 +354,12 @@ describe('update store from nested block', () => {
             <p><button id='d'>0</button></p>
             "
           `)
-          /**
-           * TODO wrong behavior!
-           */
           expect(s2).toMatchInlineSnapshot(`
             "
             <p><button id='a'>1</button></p>
-            <p><button id='b'>0</button></p>
-            <p><button id='c'>0</button></p>
-            <p><button id='d'>0</button></p>
+            <p><button id='b'>1</button></p>
+            <p><button id='c'>1</button></p>
+            <p><button id='d'>1</button></p>
             "
           `)
           expect(s3).toMatchInlineSnapshot(`
@@ -373,15 +370,12 @@ describe('update store from nested block', () => {
             <p><button id='d'>2</button></p>
             "
           `)
-          /**
-           * TODO wrong behavior!
-           */
           expect(s4).toMatchInlineSnapshot(`
             "
-            <p><button id='a'>2</button></p>
+            <p><button id='a'>3</button></p>
             <p><button id='b'>3</button></p>
-            <p><button id='c'>2</button></p>
-            <p><button id='d'>2</button></p>
+            <p><button id='c'>3</button></p>
+            <p><button id='d'>3</button></p>
             "
           `)
         })
@@ -539,14 +533,11 @@ describe('update store from nested block', () => {
             ><button id='c'>Disable</button>
             "
           `)
-          /**
-           * TODO wrong behavior!
-           */
           expect(s3).toMatchInlineSnapshot(`
             "
-            <button id='a' disabled='true'>Enable</button
+            <button id='a'>Enable</button
             ><button id='b' disabled='true'>Disable</button
-            ><button id='c'>Disable</button>
+            ><button id='c' disabled='true'>Disable</button>
             "
           `)
         })
@@ -571,6 +562,11 @@ describe('update store from nested block', () => {
                     attr: {disabled, id: 'b'},
                     handler: {click: disable},
                   })
+                  h('button', {
+                    text: 'Disable',
+                    attr: {disabled, id: 'c'},
+                    handler: {click: disable},
+                  })
                 },
                 onComplete: rs,
               })
@@ -586,19 +582,22 @@ describe('update store from nested block', () => {
           expect(s1).toMatchInlineSnapshot(`
             "
             <button id='a'>Enable</button
-            ><button id='b' disabled='true'>Disable</button>
+            ><button id='b' disabled='true'>Disable</button
+            ><button id='c' disabled='true'>Disable</button>
             "
           `)
           expect(s2).toMatchInlineSnapshot(`
             "
             <button id='a' disabled='true'>Enable</button
-            ><button id='b'>Disable</button>
+            ><button id='b'>Disable</button
+            ><button id='c'>Disable</button>
             "
           `)
           expect(s3).toMatchInlineSnapshot(`
             "
             <button id='a'>Enable</button
-            ><button id='b' disabled='true'>Disable</button>
+            ><button id='b' disabled='true'>Disable</button
+            ><button id='c' disabled='true'>Disable</button>
             "
           `)
         })
@@ -768,7 +767,9 @@ describe('event from root, sample and nested store', () => {
     })
     expect(itemUpdates).toMatchInlineSnapshot(`
       Array [
+        "foo",
         "baz",
+        "bar",
       ]
     `)
   })
@@ -842,9 +843,14 @@ describe('event from root, sample and nested store', () => {
     })
     expect(itemUpdates).toMatchInlineSnapshot(`
       Array [
+        "foo",
         "baz",
+        "bar",
       ]
     `)
+    /**
+     *  TODO improve meaningless html code
+     */
     expect(prettyHtml(htmlSnapshots[0])).toMatchInlineSnapshot(`
       "
       <ul>
@@ -852,7 +858,10 @@ describe('event from root, sample and nested store', () => {
           foo<button disabled='true'>open</button
           ><span>foo selected</span>
         </li>
-        <li>bar<button>open</button></li>
+        <li>
+          bar<button disabled='true'>open</button
+          ><span>bar selected</span>
+        </li>
         <li>
           baz<button disabled='true'>open</button
           ><span>baz selected</span>

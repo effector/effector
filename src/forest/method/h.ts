@@ -517,7 +517,7 @@ export function h(tag: string, opts?: any) {
                   }
                 }
               } else {
-                page = leaf
+                page = null //leaf
               }
               readElement(leaf).addEventListener(
                 item.for,

@@ -318,9 +318,6 @@ export function mountChild({
 
 export function appendChild(block: TextBlock | ElementBlock) {
   const visibleSibling = findPreviousVisibleSibling(block)
-  if (block.type === 'element' && block.value.nodeName.toLowerCase() === 'h1') {
-    debugger
-  }
   if (visibleSibling) {
     visibleSibling.after(block.value)
   } else {
