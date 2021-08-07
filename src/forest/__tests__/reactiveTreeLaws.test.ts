@@ -278,111 +278,213 @@ describe('update store from nested block', () => {
         })
         expect(updates).toEqual([0, 1])
       })
-      test('#2', async () => {
-        const [s1, s2, s3, s4] = await exec(async () => {
-          const inc = createEvent<any>()
-          const $counter = createStore(0)
-          $counter.on(inc, count => count + 1)
-          await new Promise((rs: any) => {
-            using(el, {
-              fn() {
-                /**
-                  model-bound component
-                  same external $counter
-                */
-                h('p', () => {
-                  h('button', {
-                    handler: {click: inc},
-                    text: $counter,
-                    attr: {id: 'a'},
+      describe('#2', () => {
+        test('units in root', async () => {
+          const [s1, s2, s3, s4] = await exec(async () => {
+            const inc = createEvent<any>()
+            const $counter = createStore(0)
+            $counter.on(inc, count => count + 1)
+            await new Promise((rs: any) => {
+              using(el, {
+                fn() {
+                  /**
+                    model-bound component
+                    same external $counter
+                  */
+                  h('p', () => {
+                    h('button', {
+                      handler: {click: inc},
+                      text: $counter,
+                      attr: {id: 'a'},
+                    })
                   })
-                })
-                h('p', () => {
-                  h('button', {
-                    handler: {click: inc},
-                    text: $counter,
-                    attr: {id: 'b'},
+                  h('p', () => {
+                    h('button', {
+                      handler: {click: inc},
+                      text: $counter,
+                      attr: {id: 'b'},
+                    })
                   })
-                })
-                /**
-                  With internal units bounded to external units
-                  $counter -> $myCount, inc <- u
-                */
-                h('p', () => {
-                  const up = createEvent<any>()
-                  const $myCount = createStore(0)
-                  forward({from: $counter, to: $myCount})
-                  forward({from: up, to: inc})
-                  h('button', {
-                    handler: {click: up},
-                    text: $myCount,
-                    attr: {id: 'c'},
+                  /**
+                    With internal units bounded to external units
+                    $counter -> $myCount, inc <- u
+                  */
+                  h('p', () => {
+                    const up = createEvent<any>()
+                    const $myCount = createStore(0)
+                    forward({from: $counter, to: $myCount})
+                    forward({from: up, to: inc})
+                    h('button', {
+                      handler: {click: up},
+                      text: $myCount,
+                      attr: {id: 'c'},
+                    })
                   })
-                })
-                h('p', () => {
-                  const up = createEvent<any>()
-                  const $myCount = createStore(0)
-                  forward({from: $counter, to: $myCount})
-                  forward({from: up, to: inc})
-                  h('button', {
-                    handler: {click: up},
-                    text: $myCount,
-                    attr: {id: 'd'},
+                  h('p', () => {
+                    const up = createEvent<any>()
+                    const $myCount = createStore(0)
+                    forward({from: $counter, to: $myCount})
+                    forward({from: up, to: inc})
+                    h('button', {
+                      handler: {click: up},
+                      text: $myCount,
+                      attr: {id: 'd'},
+                    })
                   })
-                })
-              },
-              onComplete: rs,
+                },
+                onComplete: rs,
+              })
+            })
+            await act()
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#a')!.click()
+            })
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#c')!.click()
+            })
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#b')!.click()
             })
           })
-          await act()
-          await act(async () => {
-            el.querySelector<HTMLButtonElement>('#a')!.click()
-          })
-          await act(async () => {
-            el.querySelector<HTMLButtonElement>('#c')!.click()
-          })
-          await act(async () => {
-            el.querySelector<HTMLButtonElement>('#b')!.click()
-          })
+          expect(s1).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>0</button></p>
+            <p><button id='b'>0</button></p>
+            <p><button id='c'>0</button></p>
+            <p><button id='d'>0</button></p>
+            "
+          `)
+          /**
+           * TODO wrong behavior!
+           */
+          expect(s2).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>1</button></p>
+            <p><button id='b'>0</button></p>
+            <p><button id='c'>0</button></p>
+            <p><button id='d'>0</button></p>
+            "
+          `)
+          expect(s3).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>2</button></p>
+            <p><button id='b'>2</button></p>
+            <p><button id='c'>2</button></p>
+            <p><button id='d'>2</button></p>
+            "
+          `)
+          /**
+           * TODO wrong behavior!
+           */
+          expect(s4).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>2</button></p>
+            <p><button id='b'>3</button></p>
+            <p><button id='c'>2</button></p>
+            <p><button id='d'>2</button></p>
+            "
+          `)
         })
-        expect(s1).toMatchInlineSnapshot(`
-          "
-          <p><button id='a'>0</button></p>
-          <p><button id='b'>0</button></p>
-          <p><button id='c'>0</button></p>
-          <p><button id='d'>0</button></p>
-          "
-        `)
-        /**
-         * TODO wrong behavior!
-         */
-        expect(s2).toMatchInlineSnapshot(`
-          "
-          <p><button id='a'>1</button></p>
-          <p><button id='b'>0</button></p>
-          <p><button id='c'>0</button></p>
-          <p><button id='d'>0</button></p>
-          "
-        `)
-        expect(s3).toMatchInlineSnapshot(`
-          "
-          <p><button id='a'>2</button></p>
-          <p><button id='b'>2</button></p>
-          <p><button id='c'>2</button></p>
-          <p><button id='d'>2</button></p>
-          "
-        `)
-        /**
-         * TODO wrong behavior!
-         */
-        expect(s4).toMatchInlineSnapshot(`
-          "
-          <p><button id='a'>2</button></p>
-          <p><button id='b'>3</button></p>
-          <p><button id='c'>2</button></p>
-          <p><button id='d'>2</button></p>
-          "
-        `)
+        test('units in using', async () => {
+          const [s1, s2, s3, s4] = await exec(async () => {
+            await new Promise((rs: any) => {
+              using(el, {
+                fn() {
+                  const inc = createEvent<any>()
+                  const $counter = createStore(0)
+                  $counter.on(inc, count => count + 1)
+                  /**
+                    model-bound component
+                    same external $counter
+                  */
+                  h('p', () => {
+                    h('button', {
+                      handler: {click: inc},
+                      text: $counter,
+                      attr: {id: 'a'},
+                    })
+                  })
+                  h('p', () => {
+                    h('button', {
+                      handler: {click: inc},
+                      text: $counter,
+                      attr: {id: 'b'},
+                    })
+                  })
+                  /**
+                    With internal units bounded to external units
+                    $counter -> $myCount, inc <- u
+                  */
+                  h('p', () => {
+                    const up = createEvent<any>()
+                    const $myCount = createStore(0)
+                    forward({from: $counter, to: $myCount})
+                    forward({from: up, to: inc})
+                    h('button', {
+                      handler: {click: up},
+                      text: $myCount,
+                      attr: {id: 'c'},
+                    })
+                  })
+                  h('p', () => {
+                    const up = createEvent<any>()
+                    const $myCount = createStore(0)
+                    forward({from: $counter, to: $myCount})
+                    forward({from: up, to: inc})
+                    h('button', {
+                      handler: {click: up},
+                      text: $myCount,
+                      attr: {id: 'd'},
+                    })
+                  })
+                },
+                onComplete: rs,
+              })
+            })
+            await act()
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#a')!.click()
+            })
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#c')!.click()
+            })
+            await act(async () => {
+              el.querySelector<HTMLButtonElement>('#b')!.click()
+            })
+          })
+          expect(s1).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>0</button></p>
+            <p><button id='b'>0</button></p>
+            <p><button id='c'>0</button></p>
+            <p><button id='d'>0</button></p>
+            "
+          `)
+          expect(s2).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>1</button></p>
+            <p><button id='b'>1</button></p>
+            <p><button id='c'>1</button></p>
+            <p><button id='d'>1</button></p>
+            "
+          `)
+          expect(s3).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>2</button></p>
+            <p><button id='b'>2</button></p>
+            <p><button id='c'>2</button></p>
+            <p><button id='d'>2</button></p>
+            "
+          `)
+          expect(s4).toMatchInlineSnapshot(`
+            "
+            <p><button id='a'>3</button></p>
+            <p><button id='b'>3</button></p>
+            <p><button id='c'>3</button></p>
+            <p><button id='d'>3</button></p>
+            "
+          `)
+        })
       })
       describe('#3', () => {
         test('external store and event', async () => {
