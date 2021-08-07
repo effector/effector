@@ -8,7 +8,9 @@ import {
   launch,
   createEffect,
   createStore,
+  sample,
 } from 'effector'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -710,4 +712,44 @@ test('fork should pass through attach', () => {
   expect(() => {
     fork(app)
   }).not.toThrow()
+})
+
+test('scope.find support', () => {
+  const fn = jest.fn()
+
+  const app = createDomain()
+
+  const target = app.createEvent<[number, string]>()
+  const clock = app.createEvent<number>()
+  const trigger = app.createEvent<number>()
+  const $tag = app.createStore('')
+
+  sample({
+    clock,
+    source: $tag,
+    fn: (tag, n) => [n, tag] as [number, string],
+    target,
+  })
+
+  target.watch(fn)
+
+  const scopeA = fork(app, {
+    values: new Map([[$tag, 'a']]),
+  })
+  const scopeB = fork(app, {
+    values: new Map([[$tag, 'b']]),
+  })
+  const scopeC = fork(app, {
+    values: new Map([[$tag, 'c']]),
+  })
+
+  forward({
+    from: scopeA.find(trigger),
+    to: scopeB.find(clock),
+  })
+
+  launch({target: trigger, params: 1, forkPage: scopeA})
+  launch({target: trigger, params: 2, forkPage: scopeC})
+
+  expect(argumentHistory(fn)).toEqual([[1, 'b']])
 })
