@@ -132,6 +132,7 @@ export function mountChild({
         block: routeBlock,
         ops: {},
         initialized: false,
+        pendingInit: null,
       }
       break
     }
@@ -231,6 +232,7 @@ export function mountChild({
         draft,
         block: listBlock,
         records: [],
+        pendingUpdate: null,
       }
       break
     }

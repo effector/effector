@@ -1,6 +1,14 @@
-import {Store, is, launch, createStore, createEvent, sample} from 'effector'
+import {
+  Store,
+  Event,
+  is,
+  launch,
+  createStore,
+  createEvent,
+  sample,
+} from 'effector'
 
-import type {ListItemType, ListType, LeafDataList} from '../index.h'
+import type {ListItemType, ListType, LeafDataList, Leaf} from '../index.h'
 import type {LF} from '../relation.h'
 
 import {beginMark, endMark} from '../platform/mark'
@@ -134,9 +142,10 @@ export function list<T>(opts: any, maybeFn?: any) {
         greedy: true,
       })
 
+      const pendingUpdate = createEvent<T[]>()
       const parentNodeUpdateSpawn = sample({
         source: mountData,
-        clock: mappedUpdates,
+        clock: [mappedUpdates, pendingUpdate] as [Store<T[]>, Event<T[]>],
         fn: ({leaf}, updates: T[]) => ({
           updates,
           leaf,
@@ -148,8 +157,20 @@ export function list<T>(opts: any, maybeFn?: any) {
         source: updates,
         clock: [mountData, parentNodeUpdateSpawn],
         greedy: true,
-        fn(records: ListItemType[], {updates: input, leaf, hydration}) {
+        fn(
+          records: ListItemType[],
+          {updates: input, leaf, hydration},
+        ): ListItemType[] {
           const listData = leaf.data as LeafDataList
+          let curLeaf: Leaf | null = leaf
+          while (curLeaf) {
+            if (curLeaf.data.type === 'route' && !curLeaf.data.block.visible) {
+              listData.pendingUpdate = input
+              //@ts-expect-error skip updates
+              return
+            }
+            curLeaf = curLeaf.parent
+          }
           const parentBlock = listData.block
           beginMark('list update [' + source.shortName + ']')
           const skipNode: boolean[] = Array(input.length).fill(false)
@@ -279,6 +300,7 @@ export function list<T>(opts: any, maybeFn?: any) {
         },
         target: updates,
       })
+      return {pendingUpdate}
     },
     env,
   })

@@ -1,6 +1,6 @@
 import {Store, is, launch, createEvent, sample, merge, combine} from 'effector'
 
-import type {LeafDataRoute, RouteDraft} from '../index.h'
+import type {Leaf, LeafDataRoute, RouteDraft} from '../index.h'
 
 import {createTemplate, currentTemplate} from '../template'
 import {mountChild, setInParentIndex} from '../mountChild'
@@ -103,6 +103,19 @@ export function route<T>({
                 forkPage: leaf.root.forkPage,
               })
             }
+            if (visible) {
+              let curLeaf: Leaf | null = leaf.parent
+              while (curLeaf) {
+                if (
+                  curLeaf.data.type === 'route' &&
+                  !curLeaf.data.block.visible
+                ) {
+                  // listData.pendingUpdate = input
+                  return
+                }
+                curLeaf = curLeaf.parent
+              }
+            }
             changeChildLeafsVisible(visible, leaf)
           })
         },
@@ -122,19 +135,47 @@ export function route<T>({
           value,
         }),
       })
-      merge([onMount, onVisibleChange]).watch(({leaf, visible, value}) => {
-        const data = leaf.data as LeafDataRoute
-        data.block.visible = visible
-        if (visible && !data.initialized) {
-          mountChild({
-            parentBlockFragment: data.block,
-            leaf,
-            actor: routeItemTemplate,
-            values: {store: value},
-          })
-          data.initialized = true
-        }
+      const pendingInit = createEvent<T>()
+      const pendingInitWithData = sample({
+        source: mount,
+        clock: pendingInit,
+        greedy: true,
+        fn: (leaf, value) => ({leaf, value, visible: true}),
       })
+      merge([onMount, onVisibleChange, pendingInitWithData]).watch(
+        ({leaf, visible, value}) => {
+          const data = leaf.data as LeafDataRoute
+          data.block.visible = visible
+          /** stop pending route initialization if route become invisible */
+          if (!visible && !data.initialized && data.pendingInit) {
+            data.pendingInit = null
+            return
+          }
+          if (visible && !data.initialized) {
+            let curLeaf: Leaf | null = leaf.parent
+            while (curLeaf) {
+              if (
+                curLeaf.data.type === 'route' &&
+                !curLeaf.data.block.visible
+              ) {
+                data.pendingInit = {value}
+                return
+              }
+              curLeaf = curLeaf.parent
+            }
+          }
+          if (visible && !data.initialized) {
+            mountChild({
+              parentBlockFragment: data.block,
+              leaf,
+              actor: routeItemTemplate,
+              values: {store: value},
+            })
+            data.initialized = true
+          }
+        },
+      )
+      return {pendingInit}
     },
   })
   setInParentIndex(routeTemplate)

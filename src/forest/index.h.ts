@@ -157,6 +157,7 @@ export type LeafDataRoute = {
     // visible: Op
   }
   initialized: boolean
+  pendingInit: {value: any} | null
 }
 
 export type LeafDataElement = {
@@ -199,6 +200,7 @@ export type LeafDataList = {
   draft: ListType
   block: ListBlock
   records: ListItemType[]
+  pendingUpdate: any[] | null
 }
 
 export type LeafDataUsing = {

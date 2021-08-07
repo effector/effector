@@ -1,3 +1,4 @@
+import {launch} from 'effector'
 import type {Leaf} from './index.h'
 import {pushOpToQueue} from './plan'
 
@@ -14,6 +15,32 @@ export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
 export function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
   const childLeafIterator = (child: Leaf) => {
     const data = child.data
+    if (visible && data.type === 'list' && data.pendingUpdate) {
+      const update = data.pendingUpdate
+      data.pendingUpdate = null
+      launch({
+        target: child.template.api.pendingUpdate,
+        params: update,
+        defer: true,
+        page: child,
+        //@ts-expect-error
+        forkPage: child.root.forkPage,
+      })
+    }
+    if (visible && data.type === 'route') {
+      if (data.pendingInit) {
+        const update = data.pendingInit.value
+        data.pendingInit = null
+        launch({
+          target: child.template.api.pendingInit,
+          params: update,
+          defer: true,
+          page: child,
+          //@ts-expect-error
+          forkPage: child.root.forkPage,
+        })
+      } else if (!data.block.visible) return
+    }
     switch (data.type) {
       case 'element':
         pushOpToQueue(visible, data.ops.visible)

@@ -497,18 +497,12 @@ describe('dom node insertion', () => {
       </div>
       "
     `)
-    /**
-     * TODO wrong behavior!
-     * $items items should not appear
-     */
     expect(s3).toMatchInlineSnapshot(`
       "
       <div>
         <button id='days'>Days</button
         ><button id='months'>Months</button>
         <div>
-          <div>1-0</div>
-          <div>2-0</div>
           <h1>Months</h1>
           <button id='change'>change</button>
         </div>
@@ -616,33 +610,23 @@ describe('dom node insertion', () => {
       </div>
       "
     `)
-    /**
-     * TODO wrong behavior!
-     * $secondLevel b case nodes should not appear
-     */
     expect(s3).toMatchInlineSnapshot(`
       "
       <div>
         <button id='btA'>A</button><button id='btB'>B</button>
         <div>
-          <div>b</div>
           <h1>B</h1>
           <button id='change'>change</button>
         </div>
       </div>
       "
     `)
-    /**
-     * TODO wrong behavior!
-     * $secondLevel a case nodes should not appear
-     */
     expect(s4).toMatchInlineSnapshot(`
       "
       <div>
         <button id='btA'>A</button><button id='btB'>B</button>
         <div>
           <h1>A</h1>
-          <div>a</div>
           <div>b</div>
         </div>
       </div>
