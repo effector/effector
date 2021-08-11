@@ -714,7 +714,7 @@ test('fork should pass through attach', () => {
   }).not.toThrow()
 })
 
-test('scope.find support', () => {
+test.skip('scope.find support', () => {
   const fn = jest.fn()
 
   const app = createDomain()
