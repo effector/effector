@@ -16,6 +16,87 @@ beforeEach(async () => {
   await initBrowser()
 }, 10e3)
 
+test('edge case with duplicated keys', async () => {
+  const [initial, s1, s2, s3] = await exec(async () => {
+    const $list = createStore<(string | number)[]>(['green', 'yellow', 'red'])
+    const add = createEvent<MouseEvent>()
+
+    $list.on(add, list => [1, ...list])
+
+    using(el, () => {
+      list({
+        source: $list,
+        //@ts-expect-error
+        key: item => item,
+        fn: ({store}) => {
+          store.watch(console.log)
+          h('div', {text: store})
+        },
+      })
+      h('button', {text: '+', handler: {click: add}, attr: {id: 'click'}})
+    })
+    await act()
+    await act(async () => {
+      document.getElementById('click')!.click()
+    })
+    await act(async () => {
+      document.getElementById('click')!.click()
+    })
+    await act(async () => {
+      document.getElementById('click')!.click()
+    })
+  })
+  expect(initial).toMatchInlineSnapshot(`
+    "
+    <div>green</div>
+    <div>yellow</div>
+    <div>red</div>
+    <button id='click'>+</button>
+    "
+  `)
+  /**
+   * TODO: Wrong behavior!
+   *
+   * 1 should be first item, not last
+   */
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div>green</div>
+    <div>yellow</div>
+    <div>red</div>
+    <div>1</div>
+    <button id='click'>+</button>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div>green</div>
+    <div>yellow</div>
+    <div>red</div>
+    <div>1</div>
+    <div>1</div>
+    <button id='click'>+</button>
+    "
+  `)
+  /**
+   * TODO: Wrong behavior!
+   *
+   * click should add one item, not two
+   */
+  expect(s3).toMatchInlineSnapshot(`
+    "
+    <div>green</div>
+    <div>yellow</div>
+    <div>red</div>
+    <div>1</div>
+    <div>1</div>
+    <div>1</div>
+    <div>1</div>
+    <button id='click'>+</button>
+    "
+  `)
+})
+
 it('support list sequences without keys', async () => {
   const [s1, s2, s3, s4] = await exec(async () => {
     const addTeamAMember = createEvent<string>()
