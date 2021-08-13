@@ -272,6 +272,10 @@ const users = [
     url: 'smartomato.svg',
     alt: 'смартомато',
   },
+  {
+    url: 'foxford.svg',
+    alt: 'Фоксфорд',
+  },
 ]
 
 function CompaniesUsingEffector() {
