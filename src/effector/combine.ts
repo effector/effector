@@ -55,6 +55,7 @@ export function combine(...args: any[]): Store<any> {
       shapeReady = true
     }
   }
+  let noArraySpread: boolean | void
   if (!shapeReady) {
     /*
     case combine(R,G,B, (R,G,B) => '~')
@@ -65,22 +66,24 @@ export function combine(...args: any[]): Store<any> {
     without edge case combine(Color)
     */
     if (handler) {
-      handler = spreadArgs(handler)
+      noArraySpread = true
+      const fn = handler
+      handler = (list: any[]) => fn(...list)
     }
   }
   if (!isObject(structStoreShape)) throwError('shape should be an object')
   return storeCombination(
     Array.isArray(structStoreShape),
+    !noArraySpread,
     structStoreShape,
     config,
     handler,
   )
 }
 
-const spreadArgs = (fn: Function) => (list: any[]) => fn(...list)
-
 const storeCombination = (
   isArray: boolean,
+  needSpread: boolean,
   obj: any,
   config?: string,
   fn?: (upd: any) => any,
@@ -115,8 +118,8 @@ const storeCombination = (
       to: 'b',
     }),
     step.compute({
-      fn(upd, {clone, key}, reg) {
-        if (reg.b) {
+      fn(upd, {clone, key, spread}, reg) {
+        if (spread && reg.b) {
           reg.a = clone(reg.a)
         }
         reg.a[key] = upd
@@ -151,7 +154,7 @@ const storeCombination = (
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
     const linkNode = createLinkNode(child, store, {
-      scope: {key, clone, fn},
+      scope: {key, clone, fn, spread: needSpread},
       node,
       meta: {op: 'combine'},
     })
