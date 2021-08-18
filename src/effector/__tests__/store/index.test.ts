@@ -8,6 +8,13 @@ test('createStore throw on undefined', () => {
 })
 
 describe('.map', () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
   it('supports basic mapping', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>()
@@ -74,6 +81,16 @@ describe('.map', () => {
     `)
   })
 
+  test('second argument is deprecated', () => {
+    const $a = createStore(10)
+    const $b = $a.map((x, y) => x + y, 2)
+    expect(warn.mock.calls.map(([msg]) => msg)).toMatchInlineSnapshot(`
+      Array [
+        "second argument of store.map is deprecated, use updateFilter instead",
+      ]
+    `)
+  })
+
   it('supports nested mapping with updates skipping', () => {
     const a = createStore(null)
     const f = jest.fn(a => {
@@ -96,7 +113,7 @@ describe('.watch', () => {
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
 
     sum.watch(fn)
 
@@ -117,7 +134,7 @@ describe('.watch', () => {
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
 
     const unsub = sum.watch(sum => {
       fn(sum)
@@ -141,7 +158,7 @@ describe('.watch', () => {
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
 
     sum.watch(spyEvent, (store, event) => fn({store, event}))
 
@@ -185,7 +202,7 @@ describe('.watch', () => {
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
 
     sum.watch(spyEvent, (store, event) => fn({store, event}))
 
@@ -230,7 +247,7 @@ describe('.off', () => {
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
 
     sum.watch(fn)
 

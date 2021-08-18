@@ -280,6 +280,11 @@ export function createStore<State>(
         firstState = fn.firstState
         fn = fn.fn
       }
+      if (firstState !== undefined) {
+        console.error(
+          'second argument of store.map is deprecated, use updateFilter instead',
+        )
+      }
       let lastResult
       const storeState = store.getState()
       const template = readTemplate()
