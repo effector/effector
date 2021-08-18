@@ -226,3 +226,28 @@ it('validate shape', () => {
     combine(0, () => {})
   }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
 })
+
+it('doesn`t leak internal variables to transform function', () => {
+  const fn = jest.fn()
+  const inc = createEvent()
+  const a = createStore(0).on(inc, x => x + 1)
+  const combined = combine({a}, (...args) => {
+    fn(args)
+    return 0
+  })
+  inc()
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        Object {
+          "a": 0,
+        },
+      ],
+      Array [
+        Object {
+          "a": 1,
+        },
+      ],
+    ]
+  `)
+})
