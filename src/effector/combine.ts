@@ -12,6 +12,7 @@ import {readTemplate} from './region'
 import {forIn, includes} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
 import {combineTempl} from './template'
+import {callStack} from './caller'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -137,7 +138,7 @@ const storeCombination = (
       target: isFresh,
     }),
     step.mov({store: rawShape}),
-    fn && step.compute({fn}),
+    fn && step.compute({fn: callStack}),
     step.check.changed({
       store: storeStateRef,
     }),
@@ -150,7 +151,7 @@ const storeCombination = (
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
     const linkNode = createLinkNode(child, store, {
-      scope: {key, clone},
+      scope: {key, clone, fn},
       node,
       meta: {op: 'combine'},
     })
