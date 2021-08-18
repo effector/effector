@@ -2,11 +2,6 @@ import {Store, Domain} from './unit.h'
 import {is} from './is'
 import {getParent} from './getter'
 
-export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
-
-export const mapName = (unit: any, name?: string) =>
-  name == null ? joinName(unit, ' → *') : name
-
 export function unitObjectName(objOrArr: any, method: string = 'combine') {
   let name = method + '('
   let comma = ''

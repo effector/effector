@@ -19,7 +19,7 @@ import {
 } from './kernel'
 
 import {Subscriber, Config} from './index.h'
-import {createName, mapName, joinName} from './naming'
+import {createName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
@@ -33,7 +33,7 @@ import {
   getParent,
 } from './getter'
 import {throwError} from './throw'
-import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A} from './tag'
+import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
 import {eventTempl, storeTempl} from './template'
 
 const normalizeConfig = (part: any, config: any) => {
@@ -118,20 +118,13 @@ export const initUnit = (
 }
 export const createNamedEvent = (named: string) => createEvent({named})
 
-const createComputation = (from: any, to: any, op: any, fn: Function) =>
-  createLinkNode(from, to, {
-    scope: {fn},
-    node: [step.compute({fn: callStack})],
-    meta: {op},
-  })
-
-const createEventFiltration = (event: any, op: string, fn: any, node: any) => {
+const deriveEvent = (event: any, op: string, fn: any, node: any) => {
   let config
   if (isObject(fn)) {
     config = fn
     fn = fn.fn
   }
-  const mapped = createEvent(joinName(event, ' →? *'), config)
+  const mapped = createEvent({name: `${event.shortName} → *`, [OPEN_O]: config})
   createLinkNode(event, mapped, {
     scope: {fn},
     node,
@@ -175,24 +168,14 @@ export function createEvent<Payload = any>(
     return params
   }
   event.watch = bind(watchUnit, event)
-  event.map = (fn: any) => {
-    let config
-    let name
-    if (isObject(fn)) {
-      config = fn
-      name = fn.name
-      fn = fn.fn
-    }
-    const mapped = createEvent(mapName(event, name), config)
-    createComputation(event, mapped, MAP, fn)
-    return mapped
-  }
+  event.map = (fn: any) =>
+    deriveEvent(event, MAP, fn, [step.compute({fn: callStack})])
   event.filter = (fn: any) =>
-    createEventFiltration(event, FILTER, fn.fn ? fn : fn.fn, [
+    deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
       step.filter({fn: callStack}),
     ])
   event.filterMap = (fn: any) =>
-    createEventFiltration(event, 'filterMap', fn, [
+    deriveEvent(event, 'filterMap', fn, [
       step.compute({fn: callStack}),
       step.check.defined(),
     ])
@@ -201,7 +184,11 @@ export function createEvent<Payload = any>(
       parent: getParent(event),
     })
     eventTempl.initPrepend(getGraph(contramapped))
-    createComputation(contramapped, event, 'prepend', fn)
+    createLinkNode(contramapped, event, {
+      scope: {fn},
+      node: [step.compute({fn: callStack})],
+      meta: {op: 'prepend'},
+    })
     applyParentHook(event, contramapped)
     return contramapped
   }
@@ -273,11 +260,8 @@ export function createStore<State>(
     },
     map(fn: any, firstState?: any) {
       let config
-      let name
       if (isObject(fn)) {
         config = fn
-        name = fn.name
-        firstState = fn.firstState
         fn = fn.fn
       }
       if (firstState !== undefined) {
@@ -295,8 +279,8 @@ export function createStore<State>(
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
-        name: mapName(store, name),
-        config,
+        name: `${store.shortName} → *`,
+        [OPEN_O]: config,
         strict: false,
       })
       const linkNode = updateStore(store, innerStore, MAP, false, fn)
