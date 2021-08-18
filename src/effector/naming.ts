@@ -1,40 +1,31 @@
-import {Store, Domain} from './unit.h'
+import type {Store, Domain} from './unit.h'
 import {is} from './is'
 import {getParent} from './getter'
+import {forIn} from './collection'
+
+const getCompostite = (unit: any): CompositeName => unit.compositeName
 
 export function unitObjectName(objOrArr: any, method: string = 'combine') {
   let name = method + '('
   let comma = ''
   let i = 0
-  //@ts-ignore
-  for (const key in objOrArr) {
-    //@ts-ignore
-    const unit = objOrArr[key]
-    if (unit != null) {
-      name += comma
-      //@ts-ignore
-      name += is.unit(unit) ? unit.compositeName.fullName : unit.toString()
-    }
-    i += 1
+  forIn(objOrArr, (unit: any) => {
     /* inlined max object names constant */
-    if (i === 25) break
-    comma = ', '
-  }
-  name += ')'
-  return name
+    if (i < 25) {
+      if (unit != null) {
+        name += comma
+        name += is.unit(unit) ? getCompostite(unit).fullName : unit.toString()
+      }
+      i += 1
+      comma = ', '
+    }
+  })
+  return name + ')'
 }
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
-  const compositeName = createName(rawName, getParent(store))
   store.shortName = rawName
-  if (!store.compositeName) {
-    store.compositeName = compositeName
-    return
-  }
-  const currentComposite = store.compositeName
-  currentComposite.path = compositeName.path
-  currentComposite.shortName = compositeName.shortName
-  currentComposite.fullName = compositeName.fullName
+  Object.assign(getCompostite(store), createName(rawName, getParent(store)))
 }
 
 export type CompositeName = {
@@ -46,27 +37,21 @@ export type CompositeName = {
 export function createName(name: string, parent?: Domain): CompositeName {
   let path: string[]
   let fullName
-  let composite
   const shortName = name
   if (!parent) {
-    if (name.length === 0) {
-      path = []
-    } else {
-      path = [name]
-    }
+    path = name.length === 0 ? [] : [name]
     fullName = name
   } else {
-    composite = parent.compositeName
+    const composite = getCompostite(parent)
     if (name.length === 0) {
       path = composite.path
       fullName = composite.fullName
     } else {
       path = composite.path.concat([name])
-      if (composite.fullName.length === 0) {
-        fullName = name
-      } else {
-        fullName = '' + composite.fullName + '/' + name
-      }
+      fullName =
+        composite.fullName.length === 0
+          ? name
+          : '' + composite.fullName + '/' + name
     }
   }
   return {shortName, fullName, path}
