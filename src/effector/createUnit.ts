@@ -34,7 +34,7 @@ import {
 } from './getter'
 import {throwError} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
-import {eventTempl, storeTempl} from './template'
+import {applyTemplate} from './template'
 
 const normalizeConfig = (part: any, config: any) => {
   if (isObject(part)) {
@@ -183,7 +183,7 @@ export function createEvent<Payload = any>(
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
       parent: getParent(event),
     })
-    eventTempl.initPrepend(getGraph(contramapped))
+    applyTemplate('eventPrepend', getGraph(contramapped))
     createLinkNode(contramapped, event, {
       scope: {fn},
       node: [step.compute({fn: callStack})],
@@ -203,7 +203,7 @@ export function createStore<State>(
   const plainState = createStateRef(defaultState)
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
-  storeTempl.initStore(plainState, oldState)
+  applyTemplate('storeBase', plainState, oldState)
   const plainStateId = plainState.id
   const store: any = {
     subscribers: new Map(),
@@ -290,13 +290,13 @@ export function createStore<State>(
         from: plainState,
       })
       getStoreState(innerStore).noInit = true
-      storeTempl.initMap(plainState, linkNode)
+      applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
-        if (!storeTempl.initWatch(plainState, eventOrFn)) {
+        if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
           eventOrFn(store.getState())
         }
         return subscription
@@ -371,7 +371,12 @@ const updateStore = (
       }),
     step.update({store: storeRef}),
   ]
-  storeTempl.initOnMap(storeRef, node, is.store(from) && getStoreState(from))
+  applyTemplate(
+    'storeOnMap',
+    storeRef,
+    node,
+    is.store(from) && getStoreState(from),
+  )
   return createLinkNode(from, store, {
     scope: {fn},
     node,

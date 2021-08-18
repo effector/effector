@@ -1,6 +1,6 @@
 import type {Store, Event, Step, Filter} from 'effector'
 import type {Scope} from '../effector/unit.h'
-import type {StateRef} from '../effector/index.h'
+import type {StateRef, Node, Cmd} from '../effector/index.h'
 
 import type {
   ElementBlock,
@@ -40,6 +40,7 @@ export type Template = {
   env: Env
   deferredInit?: (() => void) | null
   isBlock: boolean
+  handlers: TemplateHandlers
 }
 
 export type DOMProperty = string | number | null | boolean
@@ -333,3 +334,34 @@ export type NodeDraft =
   | RecItemDraft
   | BlockDraft
   | BlockItemDraft
+
+export type TemplateHandlers = {
+  storeBase(template: Template, plainState: StateRef, oldState: StateRef): void
+  storeOnMap(
+    template: Template,
+    plainState: StateRef,
+    seq: (Cmd | void)[],
+    fromRef: StateRef | false,
+  ): void
+  storeMap(template: Template, plainState: StateRef, linkNode: Node): void
+  storeWatch(
+    template: Template,
+    plainState: StateRef,
+    fn: (value: unknown) => unknown,
+  ): true
+  eventPrepend(template: Template, contramapped: Node): void
+  combineBase(template: Template, rawShape: StateRef, isFresh: StateRef): void
+  combineField(template: Template, childRef: StateRef, linkNode: Node): void
+  splitBase(template: Template, lastValues: StateRef): void
+  splitMatchStore(template: Template, storeRef: StateRef, linkNode: Node): void
+  sampleStoreSource(template: Template, sourceRef: StateRef): void
+  sampleNonStoreSource(
+    template: Template,
+    hasSource: StateRef,
+    sourceState: StateRef,
+    clockState: StateRef,
+  ): void
+  sampleTarget(template: Template, target: Node): void
+  sampleSourceLoader(template: Template): Filter
+  sampleSourceUpward(template: Template, isUpward: boolean): Filter | false
+}

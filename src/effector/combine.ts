@@ -9,9 +9,9 @@ import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {throwError} from './throw'
 import {readTemplate} from './region'
-import {forIn, includes} from './collection'
+import {forIn} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
-import {combineTempl} from './template'
+import {applyTemplate} from './template'
 import {callStack} from './caller'
 
 export function combine(...args: any[]): Store<any> {
@@ -96,7 +96,7 @@ const storeCombination = (
   const isFresh = createStateRef(true)
   rawShape.type = isArray ? 'list' : 'shape'
   rawShape.noInit = true
-  combineTempl.initBase(rawShape, isFresh)
+  applyTemplate('combineBase', rawShape, isFresh)
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
   })
@@ -164,7 +164,7 @@ const storeCombination = (
       field: key,
       from: childRef,
     })
-    combineTempl.initField(childRef, linkNode)
+    applyTemplate('combineField', childRef, linkNode)
   })
 
   store.defaultShape = obj

@@ -21,6 +21,7 @@ import type {
   Root,
 } from './index.h'
 import type {OpGroup} from './plan/index.h'
+import {handlers} from './templateHandlers'
 
 let templateID = 0
 let spawnID = 0
@@ -108,6 +109,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     pages: [],
     closure: [],
     childTemplates: [],
+    handlers,
     upward: step.filter({
       //@ts-expect-error
       fn(upd, scope, stack: Stack) {

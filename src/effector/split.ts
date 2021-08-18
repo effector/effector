@@ -3,7 +3,6 @@ import {NodeUnit, Cmd} from './index.h'
 import {is, isFunction, isObject} from './is'
 import {forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
-import {readTemplate} from './region'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
 import {step} from './typedef'
@@ -13,7 +12,7 @@ import {getStoreState} from './getter'
 import {REG_A} from './tag'
 import {throwError} from './throw'
 import {createEvent} from './createUnit'
-import {splitTempl} from './template'
+import {applyTemplate} from './template'
 
 const launchCase = (
   scopeTargets: Record<string, NodeUnit>,
@@ -114,12 +113,12 @@ export function split(...args: any[]): any {
             field: key,
             from: storeRef,
           })
-          splitTempl.initMatchStore(storeRef, updater)
+          applyTemplate('splitMatchStore', storeRef, updater)
         }
       }
     })
     if (needBarrier!) {
-      splitTempl.initBase(lastValues)
+      applyTemplate('splitBase', lastValues)
     }
     splitterSeq = [
       needBarrier! && step.barrier({priority: 'sampler'}),

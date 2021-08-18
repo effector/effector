@@ -10,12 +10,11 @@ import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
-import {readTemplate} from './region'
 import {throwError} from './throw'
-import {includes, forEach} from './collection'
+import {forEach} from './collection'
 import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
 import {merge} from './merge'
-import {sampleTempl} from './template'
+import {applyTemplate} from './template'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -76,7 +75,7 @@ export function sample(...args: any): any {
       target = createStore(initialState, {name, sid})
     } else {
       target = createEvent(name)
-      sampleTempl.initTarget(getGraph(target))
+      applyTemplate('sampleTarget', getGraph(target))
     }
   }
   // const targetTemplate =
@@ -88,7 +87,7 @@ export function sample(...args: any): any {
         scope: {fn},
         // scope: {fn, targetTemplate},
         node: [
-          sampleTempl.sourceLoader(),
+          applyTemplate('sampleSourceLoader'),
           //@ts-ignore
           !greedy && step.barrier({priority: SAMPLER}),
           step.mov({
@@ -96,17 +95,17 @@ export function sample(...args: any): any {
             to: fn ? REG_A : STACK,
           }),
           fn && step.compute({fn: callARegStack}),
-          sampleTempl.sourceUpward(isUpward),
+          applyTemplate('sampleSourceUpward', isUpward),
         ],
         meta: {op: SAMPLE, sample: STORE},
       }),
     ])
-    sampleTempl.initStoreSource(sourceRef)
+    applyTemplate('sampleStoreSource', sourceRef)
   } else {
     const hasSource = createStateRef(false)
     const sourceState = createStateRef()
     const clockState = createStateRef()
-    sampleTempl.initNonStoreSource(hasSource, sourceState, clockState)
+    applyTemplate('sampleNonStoreSource', hasSource, sourceState, clockState)
     createNode({
       parent: source,
       node: [
@@ -131,7 +130,7 @@ export function sample(...args: any): any {
           // targetTemplate,
         },
         node: [
-          sampleTempl.sourceLoader(),
+          applyTemplate('sampleSourceLoader'),
           step.update({store: clockState}),
           step.mov({store: hasSource}),
           step.filter({fn: hasSource => hasSource}),
@@ -143,7 +142,7 @@ export function sample(...args: any): any {
             to: REG_A,
           }),
           fn && step.compute({fn: callStackAReg}),
-          sampleTempl.sourceUpward(isUpward),
+          applyTemplate('sampleSourceUpward', isUpward),
         ],
         meta: {op: SAMPLE, sample: 'clock'},
       }),
