@@ -1,7 +1,14 @@
-import {combine, createStore, createEffect, sample, createEvent} from 'effector'
+import {
+  combine,
+  createStore,
+  createEffect,
+  sample,
+  createEvent,
+  EffectResult,
+} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-function rgbToHex(r, g, b) {
+function rgbToHex(r: number, g: number, b: number) {
   return (
     '#' +
     r.toString(16).padStart(2, '0') +
@@ -14,7 +21,6 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //@ts-ignore
     const store = combine({R, G, B})
     expect(store.getState()).toEqual({R: 233, G: 88, B: 1})
   })
@@ -22,19 +28,16 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //@ts-ignore
     const store = combine([R, G, B])
     expect(store.getState()).toEqual([233, 88, 1])
   })
   test('combine({Color})', () => {
     const Color = createStore('#e95801')
-    //@ts-ignore
     const store = combine({Color})
     expect(store.getState()).toEqual({Color: '#e95801'})
   })
   test('combine([Color])', () => {
     const Color = createStore('#e95801')
-    //@ts-ignore
     const store = combine([Color])
     expect(store.getState()).toEqual(['#e95801'])
   })
@@ -42,7 +45,6 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //@ts-ignore
     const store = combine({R, G, B}, ({R, G, B}) => rgbToHex(R, G, B))
     expect(store.getState()).toEqual('#e95801')
   })
@@ -50,19 +52,16 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //@ts-ignore
     const store = combine([R, G, B], ([R, G, B]) => rgbToHex(R, G, B))
     expect(store.getState()).toEqual('#e95801')
   })
   test(`combine({Color}, ({Color}) => '~')`, () => {
     const Color = createStore('#e95801')
-    //@ts-ignore
     const store = combine({Color}, ({Color}) => Color)
     expect(store.getState()).toEqual('#e95801')
   })
   test(`combine([Color], ([Color]) => '~')`, () => {
     const Color = createStore('#e95801')
-    //@ts-ignore
     const store = combine([Color], ([Color]) => Color)
     expect(store.getState()).toEqual('#e95801')
   })
@@ -82,13 +81,11 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //@ts-ignore
     const store = combine(R, G, B)
     expect(store.getState()).toEqual([233, 88, 1])
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
-    //@ts-ignore
     const store = combine(Color)
     expect(store.getState()).toEqual(['#e95801'])
   })
@@ -96,13 +93,14 @@ describe('combine cases', () => {
 
 it('deduplicate outputs', async () => {
   const fn = jest.fn()
-  const fetchApi = createEffect({
-    async handler() {
-      await new Promise(rs => setTimeout(rs, 300))
-      return [{name: 'physics', id: 1}]
-    },
+  const fetchApi = createEffect(async () => {
+    await new Promise(rs => setTimeout(rs, 10))
+    return [{name: 'physics', id: 1}]
   })
-  const data = createStore([]).on(fetchApi.done, (_, {result}) => result)
+  const data = createStore([] as EffectResult<typeof fetchApi>).on(
+    fetchApi.done,
+    (_, {result}) => result,
+  )
   const lessonIndex = createStore(0)
   const lesson = combine(
     data,
@@ -134,9 +132,9 @@ it('deduplicate outputs', async () => {
   `)
 })
 
-it('skip first duplicated update', async () => {
+it('skip first duplicated update', () => {
   const fn = jest.fn()
-  const changedToken = createEvent()
+  const changedToken = createEvent<string>()
 
   const $token = createStore('').on(changedToken, (_, token) => token)
   const $token2 = createStore('').on(changedToken, (_, token) => token)
@@ -151,15 +149,15 @@ it('skip first duplicated update', async () => {
   `)
 })
 
-it('updates consistently', async () => {
+it('updates consistently', () => {
   const fn = jest.fn()
-  const e = createEvent()
+  const e = createEvent<string>()
 
   const s1 = createStore('').on(e, (_, m) => m)
   const s2 = createStore('').on(e, (_, m) => m)
   let i = 0
   //prettier-ignore
-  const combined = combine(s1, s2, (_, m) => {
+  const combined = combine(s1, s2, (_, m): (string | null | void) => {
     i+=1
     switch (i) {
       case 1: return null
@@ -212,6 +210,7 @@ it('updates consistently', async () => {
 
 it('validate amount of arguments', () => {
   expect(() => {
+    //@ts-expect-error
     combine()
   }).toThrowErrorMatchingInlineSnapshot(`"expect first argument be an object"`)
 })
