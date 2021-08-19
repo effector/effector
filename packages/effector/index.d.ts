@@ -1529,7 +1529,8 @@ export function serialize(
 ): {[sid: string]: any}
 
 /** bind event to scope from .watch call */
-export function scopeBind<T>(unit: Unit<T>): (payload: T) => void
+export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T) => void
+export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope: Scope}): (params: P) => Promise<D>
 
 export function fork(
   domain: Domain,
