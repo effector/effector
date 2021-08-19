@@ -2,7 +2,7 @@ import type {Leaf} from '../forest/index.h'
 
 import type {Cmd, Node, NodeUnit, StateRef} from './index.h'
 import {readRef} from './stateRef'
-import {getForkPage, getGraph, getParent, getValue} from './getter'
+import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
 import {
   STORE,
   EFFECT,
@@ -399,7 +399,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             continue kernelLoop
           }
         case 'compute':
-          isWatch = node.meta.op === 'watch'
+          isWatch = getMeta(node, 'op') === 'watch'
           stack.value = tryRun(local, step.data, stack)
           isWatch = lastStartedState.isWatch
           break
@@ -419,10 +419,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       }
       const forkPage: Scope | null = getForkPage(stack)
       if (forkPage) {
-        const meta = node.meta
-        if (meta.needFxCounter)
+        if (getMeta(node, 'needFxCounter'))
           pushFirstHeapItem('child', page, forkPage.fxCount, stack, 0, forkPage)
-        if (meta.storeChange)
+        if (getMeta(node, 'storeChange'))
           pushFirstHeapItem(
             'child',
             page,

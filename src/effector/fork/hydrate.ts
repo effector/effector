@@ -6,16 +6,15 @@ import type {Node} from '../index.h'
 import {forEach, includes} from '../collection'
 import {STORE} from '../tag'
 import {normalizeValues} from './util'
-import {getGraph, getLinks, getOwners} from '../getter'
+import {getGraph, getLinks, getMeta, getOwners} from '../getter'
 
 function traverse(root: Node, fn: (node: Node, sid: string) => void) {
   const list = [] as Node[]
   ;(function visit(node) {
     if (includes(list, node)) return
     list.push(node)
-    const meta = node.meta
-    if (meta.unit === STORE && meta.sid) {
-      fn(node, meta.sid)
+    if (getMeta(node, 'unit') === STORE && getMeta(node, 'sid')) {
+      fn(node, getMeta(node, 'sid'))
     }
     forEach(node.next, visit)
     forEach(getOwners(node), visit)

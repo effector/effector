@@ -1,4 +1,4 @@
-import {getValue, getGraph, getParent} from './getter'
+import {getValue, getGraph, getParent, getMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import type {Template} from '../forest/index.h'
@@ -22,12 +22,11 @@ export const readSidRoot = (sid?: string | null) => {
 }
 
 export function withRegion(unit: any, cb: () => void) {
-  const unitMeta = getGraph(unit).meta
   regionStack = {
     parent: regionStack,
     value: unit,
-    template: unitMeta.template || readTemplate(),
-    sidRoot: unitMeta.sidRoot || (regionStack && regionStack.sidRoot),
+    template: getMeta(unit, 'template') || readTemplate(),
+    sidRoot: getMeta(unit, 'sidRoot') || (regionStack && regionStack.sidRoot),
   }
   try {
     return cb()

@@ -1,5 +1,5 @@
 import {step} from './typedef'
-import {getForkPage, getGraph, getParent} from './getter'
+import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage, isWatch} from './kernel'
@@ -18,7 +18,7 @@ export function createEffect<Payload, Done>(
     instance.defaultConfig.handler ||
     (() => throwError(`no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
-  node.meta.unit = instance.kind = EFFECT
+  setMeta(node, 'unit', (instance.kind = EFFECT))
   instance.use = (fn: Function) => {
     if (!isFunction(fn)) throwError('.use argument should be a function')
     handler = fn
@@ -50,7 +50,7 @@ export function createEffect<Payload, Done>(
     scope: {
       getHandler: (instance.use.getCurrent = () => handler),
       finally: anyway,
-      handlerId: node.meta.sid,
+      handlerId: getMeta(node, 'sid'),
     },
     node: [
       step.run({
@@ -148,8 +148,8 @@ export function createEffect<Payload, Done>(
   const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1))
-  getGraph(anyway).meta.needFxCounter = getGraph(instance).meta.needFxCounter =
-    true
+  setMeta(anyway, 'needFxCounter', true)
+  setMeta(instance, 'needFxCounter', true)
   const pending = (instance.pending = inFlight.map({
     //@ts-ignore
     fn: amount => amount > 0,

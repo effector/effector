@@ -1,5 +1,5 @@
 import {Node, NodeUnit} from './index.h'
-import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
+import {getGraph, getOwners, getLinks, getSubscribers, getMeta} from './getter'
 import {is} from './is'
 import {removeItem} from './collection'
 import {CROSSLINK} from './tag'
@@ -24,13 +24,13 @@ const clearNodeNormalized = (
     removeFromNode(currentNode, targetNode)
     if (
       deep ||
-      (isDomainUnit && !targetNode.meta.sample) ||
+      (isDomainUnit && !getMeta(targetNode, 'sample')) ||
       currentNode.family.type === CROSSLINK
     ) {
       clearNodeNormalized(
         currentNode,
         deep,
-        currentNode.meta.op !== 'on' && isDomainUnit,
+        getMeta(currentNode, 'op') !== 'on' && isDomainUnit,
       )
     }
   }
@@ -41,7 +41,7 @@ const clearNodeNormalized = (
       clearNodeNormalized(
         currentNode,
         deep,
-        currentNode.meta.op !== 'on' && isDomainUnit,
+        getMeta(currentNode, 'op') !== 'on' && isDomainUnit,
       )
     }
   }

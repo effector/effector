@@ -1,4 +1,4 @@
-import {getForkPage, getGraph, getParent} from '../getter'
+import {getForkPage, getGraph, getMeta, getParent} from '../getter'
 import {is} from '../is'
 import {throwError} from '../throw'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
@@ -39,11 +39,11 @@ export function cloneGraph(unit: any): Scope {
     node: [
       step.compute({
         fn(_, scope, stack) {
-          if (!stack.parent) {
+          if (!getParent(stack)) {
             scope.fxID += 1
             return
           }
-          if (stack.parent.node.meta.named === 'finally') {
+          if (getMeta(getParent(stack).node, 'named') === 'finally') {
             scope.inFlight -= 1
           } else {
             scope.inFlight += 1
@@ -77,12 +77,12 @@ export function cloneGraph(unit: any): Scope {
           if (storeStack && getParent(storeStack)) {
             const storeNode = storeStack.node
             if (
-              !storeNode.meta.isCombine ||
-              getParent(storeStack).node.meta.op !== 'combine'
+              !getMeta(storeNode, 'isCombine') ||
+              getMeta(getParent(storeStack).node, 'op') !== 'combine'
             ) {
               const forkPage: Scope = getForkPage(stack)
               const id = storeNode.scope.state.id
-              const sid = storeNode.meta.sid
+              const sid = getMeta(storeNode, 'sid')
               forkPage.sidIdMap[sid] = id
               forkPage.sidValuesMap[sid] = value
             }

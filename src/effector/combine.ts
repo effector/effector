@@ -3,7 +3,7 @@ import {createStore} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {step} from './typedef'
 import {onConfigNesting} from './config'
-import {getGraph, getStoreState} from './getter'
+import {getGraph, getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -102,7 +102,7 @@ const storeCombination = (
   })
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
-  getGraph(store).meta.isCombine = true
+  setMeta(store, 'isCombine', true)
   const node = [
     step.check.defined(),
     step.mov({
