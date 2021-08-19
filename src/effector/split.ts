@@ -147,10 +147,7 @@ export function split(...args: any[]): any {
     throwError('expect match to be unit, function or object')
   }
   createNode({
-    meta: {
-      onCopy: Object.keys(targets),
-      op: 'split',
-    },
+    meta: {op: 'split'},
     parent: source,
     scope: targets,
     node: splitterSeq!,

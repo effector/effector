@@ -18,7 +18,6 @@ export function createEffect<Payload, Done>(
     instance.defaultConfig.handler ||
     (() => throwError(`no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
-  node.meta.onCopy = ['runner']
   node.meta.unit = instance.kind = EFFECT
   instance.use = (fn: Function) => {
     if (!isFunction(fn)) throwError('.use argument should be a function')
@@ -94,7 +93,6 @@ export function createEffect<Payload, Done>(
     meta: {
       op: 'fx',
       fx: 'runner',
-      onCopy: ['finally'],
     },
   })
   node.scope.runner = effectRunner

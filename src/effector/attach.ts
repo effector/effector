@@ -87,7 +87,6 @@ export function attach(config: any) {
   }
   own(effect, [attached])
   runner.scope.effect = effect
-  runner.meta.onCopy.push(EFFECT)
   runner.seq.splice(0, 1, ...runnerSteps)
   applyParentHook(effect, attached, EFFECT)
   return attached
