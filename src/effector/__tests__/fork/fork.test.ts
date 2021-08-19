@@ -328,7 +328,10 @@ describe('fork handlers support', () => {
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
-  test('handlers validation', async () => {
+})
+
+describe('handlers validation', () => {
+  test('passing non-unit value to handlers should throw', async () => {
     const app = createDomain()
 
     expect(() => {
@@ -337,7 +340,7 @@ describe('fork handlers support', () => {
       })
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
   })
-  test('passed non effect to handler map should throw', () => {
+  test('passing non-effect unit to handlers should throw', () => {
     const app = createDomain()
     const unit = createEvent()
     expect(() => {
@@ -346,6 +349,22 @@ describe('fork handlers support', () => {
       })
     }).toThrowErrorMatchingInlineSnapshot(
       `"Handlers map can contain only effects as keys"`,
+    )
+  })
+  test('passing attached effect to handlers should throw', () => {
+    const app = createDomain()
+    const fx = app.createEffect((n: number) => {})
+    const source = app.createStore(0)
+    const attached = attach({
+      effect: fx,
+      source,
+    })
+    expect(() => {
+      fork(app, {
+        handlers: new Map().set(attached, () => {}),
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Handlers can\`t accept attached effects"`,
     )
   })
 })
