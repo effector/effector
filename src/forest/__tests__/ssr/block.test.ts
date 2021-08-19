@@ -1,5 +1,5 @@
 import {argumentHistory} from 'effector/fixtures'
-import {createDomain, forward, fork} from 'effector'
+import {createStore, createEvent, createEffect, forward, fork} from 'effector'
 import {h, using, list, spec, rec, variant, remap, block} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
@@ -7,20 +7,19 @@ import prettyHtml from 'effector/fixtures/prettyHtml'
 import {provideGlobals} from 'effector/fixtures/dom'
 
 test('block nesting', async () => {
-  const app = createDomain()
-  const scopeName = app.createStore('--')
-  const click = app.createEvent<MouseEvent>()
-  const fetchContent = app.createEffect({
-    async handler() {
-      return {title: 'dashboard'}
-    },
+  const scopeName = createStore('--')
+  const click = createEvent<MouseEvent>()
+  const fetchContent = createEffect(async () => {
+    return {title: 'dashboard'}
   })
-  const link = app
-    .createStore('#')
-    .on(fetchContent.doneData, (_, {title}) => `/${title}`)
-  const linkText = app
-    .createStore('-')
-    .on(fetchContent.doneData, (_, {title}) => title)
+  const link = createStore('#').on(
+    fetchContent.doneData,
+    (_, {title}) => `/${title}`,
+  )
+  const linkText = createStore('-').on(
+    fetchContent.doneData,
+    (_, {title}) => title,
+  )
   forward({
     from: click,
     to: fetchContent,
@@ -58,9 +57,12 @@ test('block nesting', async () => {
     },
   })
 
-  const scopeA = fork(app, {
-    values: new Map().set(link, '/').set(scopeName, 'A'),
-    handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
+  const scopeA = fork({
+    values: [
+      [link, '/'],
+      [scopeName, 'A'],
+    ],
+    handlers: [[fetchContent, async () => ({title: 'contacts'})]],
   })
 
   using(client.el, {
@@ -96,8 +98,7 @@ test('block with list', async () => {
     title: string
     child: NestedList[]
   }
-  const app = createDomain()
-  const rootItem = app.createStore<NestedList>({
+  const rootItem = createStore<NestedList>({
     id: 0,
     title: 'root',
     child: [
@@ -153,7 +154,7 @@ test('block with list', async () => {
     },
   })
 
-  const scope = fork(app)
+  const scope = fork()
 
   const result = await renderStatic({
     scope,
@@ -180,9 +181,7 @@ test('block with rec and list', async () => {
 
   const fn = jest.fn()
 
-  const app = createDomain()
-
-  const users = app.createStore<User[]>([{id: 0, login: 'alice'}])
+  const users = createStore<User[]>([{id: 0, login: 'alice'}])
 
   const App = block({
     fn() {
@@ -200,11 +199,16 @@ test('block with rec and list', async () => {
     },
   })
 
-  const scope = fork(app, {
-    values: new Map().set(users, [
-      {id: 0, login: 'alice'},
-      {id: 1, login: 'bob'},
-    ]),
+  const scope = fork({
+    values: [
+      [
+        users,
+        [
+          {id: 0, login: 'alice'},
+          {id: 1, login: 'bob'},
+        ],
+      ],
+    ],
   })
 
   const renderedRaw = await renderStatic({
@@ -264,10 +268,9 @@ test('block order', async () => {
       })
     },
   })
-  const app = createDomain()
 
   const result = await renderStatic({
-    scope: fork(app),
+    scope: fork(),
     fn: Head,
   })
   expect(prettyHtml(result)).toMatchInlineSnapshot(`

@@ -1,5 +1,7 @@
 import {
   createDomain,
+  createEffect,
+  createEvent,
   attach,
   fork,
   allSettled,
@@ -8,13 +10,9 @@ import {
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
-  const app = createDomain()
-
   await expect(
-    //@ts-ignore
-    allSettled(null, {
-      scope: fork(app),
-    }),
+    //@ts-expect-error
+    allSettled(null, {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"first argument should be unit"`,
   )
@@ -22,43 +20,38 @@ test('allSettled first argument validation', async () => {
 
 describe('allSettled return value', () => {
   test('in case of effect resolving', async () => {
-    const app = createDomain()
-    const fx = app.createEffect(async () => 'ok')
-    const scope = fork(app)
+    const fx = createEffect(async () => 'ok')
+    const scope = fork()
     const result = await allSettled(fx, {scope})
     expect(result).toEqual({status: 'done', value: 'ok'})
   })
   test('in case of effect rejecting', async () => {
-    const app = createDomain()
-    const fx = app.createEffect(async () => Promise.reject('err'))
-    const scope = fork(app)
+    const fx = createEffect(async () => Promise.reject('err'))
+    const scope = fork()
     const result = await allSettled(fx, {scope})
     expect(result).toEqual({status: 'fail', value: 'err'})
   })
   test('in case of event call', async () => {
-    const app = createDomain()
-    const event = app.createEvent()
-    const scope = fork(app)
+    const event = createEvent()
+    const scope = fork()
     const result = await allSettled(event, {scope})
     expect(result).toBe(undefined)
   })
   describe('attach support', () => {
     test('throw in original effect', async () => {
-      const app = createDomain()
-      const original = app.createEffect<void, any>(async () =>
+      const original = createEffect<void, any>(async () =>
         Promise.reject('err'),
       )
       const fx = attach({
         effect: original,
         mapParams: (_: void) => {},
       })
-      const scope = fork(app)
+      const scope = fork()
       const result = await allSettled(fx, {scope})
       expect(result).toEqual({status: 'fail', value: 'err'})
     })
     test('throw in mapParams', async () => {
-      const app = createDomain()
-      const original = app.createEffect<void, any>(async () =>
+      const original = createEffect<void, any>(async () =>
         Promise.reject('err'),
       )
       const fx = attach({
@@ -67,7 +60,7 @@ describe('allSettled return value', () => {
           throw 'mapParams error'
         },
       })
-      const scope = fork(app)
+      const scope = fork()
       const result = await allSettled(fx, {scope})
       expect(result).toEqual({status: 'fail', value: 'mapParams error'})
     })
@@ -76,19 +69,18 @@ describe('allSettled return value', () => {
 
 describe('transactions', () => {
   test('add unit to domain during watch', async () => {
-    const app = createDomain()
-    const trigger = app.createEvent()
-    const eff = app.createEffect(async () => {
+    const trigger = createEvent()
+    const eff = createEffect(async () => {
       await new Promise(rs => setTimeout(rs, 50))
     })
     eff.done.watch(() => {
-      const newEvent = app.createEvent()
+      const newEvent = createEvent()
     })
     sample({
       source: trigger,
       target: eff,
     })
-    const scope = fork(app)
+    const scope = fork()
     await allSettled(trigger, {scope})
   })
   test('', async () => {
@@ -170,22 +162,22 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-1jit4f": Array [
+        "w3iw57": Array [
           "a",
         ],
-        "-m426n2": "a",
+        "z6qtwf": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-1jit4f": Array [
+        "-44cjly": "b",
+        "qv6j32": Array [
           "b",
         ],
-        "-m426n2": "b",
-        "-ufmhgf": Array [
+        "w3iw57": Array [
           "b",
         ],
-        "9lyhtp": "b",
+        "z6qtwf": "b",
       }
     `)
   })

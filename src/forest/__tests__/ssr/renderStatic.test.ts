@@ -1,17 +1,7 @@
-import {
-  createDomain,
-  forward,
-  fork,
-  allSettled,
-  serialize,
-  hydrate,
-  createStore,
-} from 'effector'
-import {h, using, block, text, spec, variant, rec, list, remap} from 'forest'
+import {createStore} from 'effector'
+import {h, list, remap} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
-//@ts-expect-error
-import {provideGlobals} from 'effector/fixtures/dom'
 
 it('works', async () => {
   const store = createStore([{name: 'alice'}, {name: 'bob'}, {name: 'carol'}])

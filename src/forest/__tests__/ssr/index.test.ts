@@ -1,4 +1,7 @@
 import {
+  createEvent,
+  createStore,
+  createEffect,
   createDomain,
   forward,
   fork,
@@ -6,31 +9,27 @@ import {
   serialize,
   hydrate,
 } from 'effector'
-import {h, using, block, text, spec, variant, rec, list, remap} from 'forest'
+import {h, using, block, text, rec} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
 
 test('fork support', async () => {
-  const app = createDomain()
-  const fetchContent = app.createEffect({
-    async handler() {
-      return {title: 'dashboard'}
-    },
+  const fetchContent = createEffect(async () => {
+    return {title: 'dashboard'}
   })
-  const title = app
-    .createStore('-')
-    .on(fetchContent.doneData, (_, {title}) => title)
+  const title = createStore('-').on(
+    fetchContent.doneData,
+    (_, {title}) => title,
+  )
 
-  const scope = fork(app, {
-    values: new Map([[title, 'loading...']]),
-    handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
+  const scope = fork({
+    values: [[title, 'loading...']],
+    handlers: [[fetchContent, async () => ({title: 'contacts'})]],
   })
 
-  await allSettled(fetchContent, {
-    scope,
-  })
+  await allSettled(fetchContent, {scope})
 
   const htmlResult = await renderStatic({
     scope,
@@ -47,23 +46,19 @@ test('fork support', async () => {
 
 test('hydration support (without html hydration)', async () => {
   const app = createDomain()
-  const fetchContent = app.createEffect({
-    async handler() {
-      return {title: 'dashboard'}
-    },
+  const fetchContent = app.createEffect(async () => {
+    return {title: 'dashboard'}
   })
   const title = app
     .createStore('-')
     .on(fetchContent.doneData, (_, {title}) => title)
 
   const scope = fork(app, {
-    values: new Map([[title, 'loading...']]),
-    handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
+    values: [[title, 'loading...']],
+    handlers: [[fetchContent, async () => ({title: 'contacts'})]],
   })
 
-  await allSettled(fetchContent, {
-    scope,
-  })
+  await allSettled(fetchContent, {scope})
 
   hydrate(app, {
     values: serialize(scope),
@@ -151,8 +146,7 @@ test('hydration support (with html hydration)', async () => {
 })
 
 test('hydrate', async () => {
-  const app = createDomain()
-  const rootItem = app.createStore(null)
+  const rootItem = createStore(null)
   const Item = rec<any>({
     fn() {
       h('div', {
@@ -176,7 +170,7 @@ test('hydrate', async () => {
   })
 
   const htmlSource = await renderStatic({
-    scope: fork(app),
+    scope: fork(),
     fn: App,
   })
   const client = provideGlobals()
@@ -185,7 +179,7 @@ test('hydrate', async () => {
   await new Promise(rs => {
     //@ts-expect-error
     using(client.el, {
-      scope: fork(app),
+      scope: fork(),
       onComplete: rs,
       fn: App,
       env: {
@@ -205,8 +199,7 @@ test('hydrate', async () => {
 
 describe('text content escaping', () => {
   it('escape text content in common tags', async () => {
-    const app = createDomain()
-    const scriptText = app.createStore('{"foo": "bar"}')
+    const scriptText = createStore('{"foo": "bar"}')
     const result = await renderStatic(() => {
       h('span', () => {
         text`window.__INITIAL_STATE__ = ${scriptText}`
@@ -217,8 +210,7 @@ describe('text content escaping', () => {
     )
   })
   it('not escape text content in script tag', async () => {
-    const app = createDomain()
-    const scriptText = app.createStore('{"foo": "bar"}')
+    const scriptText = createStore('{"foo": "bar"}')
     const result = await renderStatic(() => {
       h('script', () => {
         text`window.__INITIAL_STATE__ = ${scriptText}`
@@ -229,8 +221,7 @@ describe('text content escaping', () => {
     )
   })
   it('still escape "</script>" in script tag', async () => {
-    const app = createDomain()
-    const scriptText = app.createStore(JSON.stringify({foo: `</\nscript>`}))
+    const scriptText = createStore(JSON.stringify({foo: `</\nscript>`}))
     const result = await renderStatic(() => {
       h('script', () => {
         text`window.__INITIAL_STATE__ = ${scriptText}; console.log('</script>')`
@@ -243,17 +234,15 @@ describe('text content escaping', () => {
 })
 
 test('fork isolation', async () => {
-  const app = createDomain()
-  const scopeName = app.createStore('--')
-  const click = app.createEvent<MouseEvent>()
-  const fetchContent = app.createEffect({
-    async handler() {
-      return {title: 'dashboard'}
-    },
+  const scopeName = createStore('--')
+  const click = createEvent<MouseEvent>()
+  const fetchContent = createEffect(async () => {
+    return {title: 'dashboard'}
   })
-  const title = app
-    .createStore('-')
-    .on(fetchContent.doneData, (_, {title}) => title)
+  const title = createStore('-').on(
+    fetchContent.doneData,
+    (_, {title}) => title,
+  )
 
   forward({
     from: click,
@@ -273,14 +262,20 @@ test('fork isolation', async () => {
     },
   })
 
-  const scopeA = fork(app, {
-    values: new Map().set(title, 'loading...').set(scopeName, 'A'),
-    handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
+  const scopeA = fork({
+    values: [
+      [title, 'loading...'],
+      [scopeName, 'A'],
+    ],
+    handlers: [[fetchContent, async () => ({title: 'contacts'})]],
   })
 
-  const scopeB = fork(app, {
-    values: new Map().set(title, 'loading...').set(scopeName, 'B'),
-    handlers: new Map([[fetchContent, async () => ({title: 'profile'})]]),
+  const scopeB = fork({
+    values: [
+      [title, 'loading...'],
+      [scopeName, 'B'],
+    ],
+    handlers: [[fetchContent, async () => ({title: 'profile'})]],
   })
 
   const elA = client.document.createElement('div')

@@ -1,10 +1,16 @@
-import {createDomain, scopeBind, fork, allSettled} from 'effector'
+import {
+  createEvent,
+  createStore,
+  createEffect,
+  scopeBind,
+  fork,
+  allSettled,
+} from 'effector'
 
 it('bind result to current promise when called from watch', async () => {
-  const app = createDomain()
-  const trigger = app.createEvent()
-  const inc = app.createEvent()
-  const $count = app.createStore(0).on(inc, x => x + 1)
+  const trigger = createEvent()
+  const inc = createEvent()
+  const $count = createStore(0).on(inc, x => x + 1)
 
   let fn: () => void
 
@@ -12,7 +18,7 @@ it('bind result to current promise when called from watch', async () => {
     fn = scopeBind(inc)
   })
 
-  const scope = fork(app)
+  const scope = fork()
   await allSettled(trigger, {scope})
   fn!()
   expect(scope.getState($count)).toBe(1)
@@ -20,8 +26,7 @@ it('bind result to current promise when called from watch', async () => {
 })
 
 it('will throw an error when used without watch nor explicit {scope}', () => {
-  const app = createDomain()
-  const trigger = app.createEvent()
+  const trigger = createEvent()
 
   expect(() => {
     scopeBind(trigger)
@@ -31,11 +36,10 @@ it('will throw an error when used without watch nor explicit {scope}', () => {
 })
 
 it('support explicit {scope}', async () => {
-  const app = createDomain()
-  const inc = app.createEvent()
-  const $count = app.createStore(0).on(inc, x => x + 1)
+  const inc = createEvent()
+  const $count = createStore(0).on(inc, x => x + 1)
 
-  const scope = fork(app)
+  const scope = fork()
 
   const scopeInc = scopeBind(inc, {scope})
 
@@ -46,10 +50,9 @@ it('support explicit {scope}', async () => {
 })
 
 it('returns promise when used with effect', async () => {
-  const app = createDomain()
-  const fx = app.createEffect(() => 'ok')
+  const fx = createEffect(() => 'ok')
 
-  const scope = fork(app)
+  const scope = fork()
   const scopeFx = scopeBind(fx, {scope})
 
   const req = scopeFx()

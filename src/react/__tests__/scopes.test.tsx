@@ -5,6 +5,9 @@ import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {
   createDomain,
+  createEvent,
+  createStore,
+  createEffect,
   forward,
   sample,
   attach,
@@ -28,26 +31,21 @@ import {
 it('works', async () => {
   const indirectCallFn = jest.fn()
 
-  const app = createDomain()
-  const start = app.createEvent<string>()
-  const indirectCall = app.createEvent()
-  const sendStats = app.createEffect({
-    async handler(user: any) {
-      await new Promise(resolve => {
-        // let bob loading longer
-        setTimeout(resolve, user === 'bob' ? 500 : 100)
-      })
-    },
+  const start = createEvent<string>()
+  const indirectCall = createEvent()
+  const sendStats = createEffect(async (user: any) => {
+    await new Promise(resolve => {
+      // let bob loading longer
+      setTimeout(resolve, user === 'bob' ? 500 : 100)
+    })
   })
 
-  const fetchUser = app.createEffect({
-    async handler(user: any) {
-      return (
-        await fetch('https://ssr.effector.dev/api/' + user, {
-          method: 'POST',
-        })
-      ).json()
-    },
+  const fetchUser = createEffect(async (user: any) => {
+    return (
+      await fetch('https://ssr.effector.dev/api/' + user, {
+        method: 'POST',
+      })
+    ).json()
   })
   //assume that calling start() will trigger some effects
   forward({
@@ -55,8 +53,8 @@ it('works', async () => {
     to: fetchUser,
   })
 
-  const user = app.createStore('guest')
-  const friends = app.createStore<string[]>([])
+  const user = createStore('guest')
+  const friends = createStore<string[]>([])
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)
@@ -76,9 +74,9 @@ it('works', async () => {
     indirectCall()
   })
 
-  const aliceScope = fork(app)
-  const bobScope = fork(app)
-  const carolScope = fork(app)
+  const aliceScope = fork()
+  const bobScope = fork()
+  const carolScope = fork()
   await Promise.all([
     allSettled(start, {
       scope: aliceScope,
@@ -117,8 +115,8 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-fmlkiq": "alice",
-      "mdvpk4": Array [
+      "-gkotb4": "alice",
+      "lfsgrq": Array [
         "bob",
         "carol",
       ],
@@ -126,8 +124,8 @@ it('works', async () => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-fmlkiq": "bob",
-      "mdvpk4": Array [
+      "-gkotb4": "bob",
+      "lfsgrq": Array [
         "alice",
       ],
     }
@@ -138,28 +136,23 @@ it('works', async () => {
 test('attach support', async () => {
   const indirectCallFn = jest.fn()
 
-  const app = createDomain()
-  const start = app.createEvent<string>()
-  const indirectCall = app.createEvent()
-  const sendStats = app.createEffect({
-    async handler(user: string) {
-      await new Promise(resolve => {
-        // let bob loading longer
-        setTimeout(resolve, user === 'bob' ? 500 : 100)
-      })
-    },
+  const start = createEvent<string>()
+  const indirectCall = createEvent()
+  const sendStats = createEffect(async (user: string) => {
+    await new Promise(resolve => {
+      // let bob loading longer
+      setTimeout(resolve, user === 'bob' ? 500 : 100)
+    })
   })
 
-  const baseUrl = app.createStore('https://ssr.effector.dev/api')
+  const baseUrl = createStore('https://ssr.effector.dev/api')
 
-  const fetchJson = app.createEffect<string, any>({
-    async handler(url) {
-      return (
-        await fetch(url, {
-          method: 'POST',
-        })
-      ).json()
-    },
+  const fetchJson = createEffect<string, any>(async url => {
+    return (
+      await fetch(url, {
+        method: 'POST',
+      })
+    ).json()
   })
 
   const fetchUser = attach({
@@ -174,8 +167,8 @@ test('attach support', async () => {
     to: fetchUser,
   })
 
-  const user = app.createStore('guest')
-  const friends = app.createStore([])
+  const user = createStore('guest')
+  const friends = createStore([])
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)
@@ -195,9 +188,9 @@ test('attach support', async () => {
     indirectCall()
   })
 
-  const aliceScope = fork(app)
-  const bobScope = fork(app)
-  const carolScope = fork(app)
+  const aliceScope = fork()
+  const bobScope = fork()
+  const carolScope = fork()
   await Promise.all([
     allSettled(start, {
       scope: aliceScope,
@@ -235,19 +228,19 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-d31x3q": Array [
+      "-ged9v3": Array [
         "bob",
         "carol",
       ],
-      "u8c20o": "alice",
+      "qx0p9b": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-d31x3q": Array [
+      "-ged9v3": Array [
         "alice",
       ],
-      "u8c20o": "bob",
+      "qx0p9b": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -257,13 +250,11 @@ test('computed values support', async () => {
   const app = createDomain()
 
   const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
-    {
-      async handler(user) {
-        const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
-          method: 'POST',
-        })
-        return req.json()
-      },
+    async user => {
+      const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
+        method: 'POST',
+      })
+      return req.json()
     },
   )
   const start = app.createEvent<string>()
@@ -319,11 +310,11 @@ test('computed values support', async () => {
 
 test('useGate support', async () => {
   const app = createDomain()
-  const getMessagesFx = app.createEffect<{chatId: string}, string[]>({
-    async handler({chatId}) {
+  const getMessagesFx = app.createEffect<{chatId: string}, string[]>(
+    async ({chatId}) => {
       return ['hi bob!', 'Hello, Alice']
     },
-  })
+  )
 
   const messagesAmount = app
     .createStore(0)
@@ -386,20 +377,17 @@ test('useGate support', async () => {
 
 test('allSettled effect calls', async () => {
   const fn = jest.fn()
-  const app = createDomain()
 
-  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
-    {
-      async handler(user) {
-        const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
-          method: 'POST',
-        })
-        return req.json()
-      },
+  const fetchUser = createEffect<string, {name: string; friends: string[]}>(
+    async user => {
+      const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
+        method: 'POST',
+      })
+      return req.json()
     },
   )
 
-  const serverScope = fork(app)
+  const serverScope = fork()
 
   await allSettled(fetchUser, {
     scope: serverScope,
@@ -413,13 +401,12 @@ test('allSettled effect calls', async () => {
 })
 describe('useEvent', () => {
   test('useEvent and effect calls', async () => {
-    const app = createDomain()
-    const inc = app.createEvent()
-    const count = app.createStore(0).on(inc, x => x + 1)
-    const fx = app.createEffect(async () => {
+    const inc = createEvent()
+    const count = createStore(0).on(inc, x => x + 1)
+    const fx = createEffect(async () => {
       inc()
     })
-    const scope = fork(app)
+    const scope = fork()
     const App = () => {
       const fxe = useEvent(fx)
       const x = useStore(count)
@@ -466,9 +453,8 @@ describe('useEvent', () => {
   })
   test('useEvent function return value', async () => {
     const fn = jest.fn()
-    const app = createDomain()
-    const fx = app.createEffect(() => 'ok')
-    const scope = fork(app)
+    const fx = createEffect(() => 'ok')
+    const scope = fork()
     const App = () => {
       const fxe = useEvent(fx)
       return (
@@ -491,16 +477,14 @@ describe('useEvent', () => {
   })
 
   test('object in useEvent', async () => {
-    const app = createDomain()
-    const inc = app.createEvent()
-    const dec = app.createEvent()
-    const fx = app.createEffect(async () => 100)
-    const count = app
-      .createStore(0)
+    const inc = createEvent()
+    const dec = createEvent()
+    const fx = createEffect(async () => 100)
+    const count = createStore(0)
       .on(inc, x => x + 1)
       .on(dec, x => x - 1)
       .on(fx.doneData, (x, v) => x + v)
-    const scope = fork(app)
+    const scope = fork()
     const App = () => {
       const hndl = useEvent({fx, inc, dec})
       const x = useStore(count)
@@ -587,16 +571,14 @@ describe('useEvent', () => {
   })
 
   test('array in useEvent', async () => {
-    const app = createDomain()
-    const inc = app.createEvent()
-    const dec = app.createEvent()
-    const fx = app.createEffect(async () => 100)
-    const count = app
-      .createStore(0)
+    const inc = createEvent()
+    const dec = createEvent()
+    const fx = createEffect(async () => 100)
+    const count = createStore(0)
       .on(inc, x => x + 1)
       .on(dec, x => x - 1)
       .on(fx.doneData, (x, v) => x + v)
-    const scope = fork(app)
+    const scope = fork()
     const App = () => {
       const [a, b, c] = useEvent([fx, inc, dec])
       const x = useStore(count)
@@ -684,17 +666,13 @@ describe('useEvent', () => {
 })
 describe('useStoreMap', () => {
   it('should render', async () => {
-    const app = createDomain()
-
-    const userRemove = app.createEvent<string>()
-    const userAgeChange = app.createEvent<{nickname: string; age: number}>()
-    const $users = app.createStore<Record<string, {age: number; name: string}>>(
-      {
-        alex: {age: 20, name: 'Alex'},
-        john: {age: 30, name: 'John'},
-      },
-    )
-    const $userNames = app.createStore(['alex', 'john'])
+    const userRemove = createEvent<string>()
+    const userAgeChange = createEvent<{nickname: string; age: number}>()
+    const $users = createStore<Record<string, {age: number; name: string}>>({
+      alex: {age: 20, name: 'Alex'},
+      john: {age: 30, name: 'John'},
+    })
+    const $userNames = createStore(['alex', 'john'])
 
     $userNames.on(userRemove, (list, username) =>
       list.filter(item => item !== username),
@@ -737,7 +715,7 @@ describe('useStoreMap', () => {
       </Provider>
     )
 
-    const scope = fork(app)
+    const scope = fork()
 
     await render(<App root={scope} />)
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -854,9 +832,8 @@ describe('useStoreMap', () => {
     `)
   })
   test('updateFilter support', async () => {
-    const app = createDomain()
-    const setValue = app.createEvent<number>()
-    const $store = app.createStore(0).on(setValue, (_, x) => x)
+    const setValue = createEvent<number>()
+    const $store = createStore(0).on(setValue, (_, x) => x)
 
     const View = () => {
       const x = useStoreMap({
@@ -872,7 +849,7 @@ describe('useStoreMap', () => {
         <View />
       </Provider>
     )
-    const scope = fork(app)
+    const scope = fork()
 
     await render(<App root={scope} />)
     expect(container.firstChild).toMatchInlineSnapshot(`

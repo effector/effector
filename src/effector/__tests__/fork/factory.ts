@@ -1,16 +1,13 @@
-import {Domain, Store, combine} from 'effector'
+import {Store, combine, createEvent, createStore} from 'effector'
 
-export function createField(root: Domain, field: string, initialValue: any) {
-  const trigger = root.createEvent<any>()
-  const value = root.createStore(initialValue).on(trigger, (_, e) => e)
+export function createField(field: string, initialValue: any) {
+  const trigger = createEvent<any>()
+  const value = createStore(initialValue).on(trigger, (_, e) => e)
   return {trigger, value, field}
 }
 
-export function createFieldset(
-  root: Domain,
-  fn: () => ReturnType<typeof createField>[],
-) {
-  const reset = root.createEvent()
+export function createFieldset(fn: () => ReturnType<typeof createField>[]) {
+  const reset = createEvent()
   const shape = {} as Record<string, Store<any>>
   const fieldList = fn()
   for (const item of fieldList) {

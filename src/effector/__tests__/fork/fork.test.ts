@@ -111,10 +111,8 @@ describe('fork values support', () => {
     expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
   })
   test('values validation', async () => {
-    const app = createDomain()
-
     expect(() => {
-      fork(app, {
+      fork({
         values: new Map().set(null, () => {}),
       })
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
@@ -132,15 +130,14 @@ describe('fork values support', () => {
   })
   describe('consistency simple', () => {
     test('consistency simple with getState', async () => {
-      const app = createDomain({sid: 'app'} as any)
-      const secondOne1 = app.createStore(1, {sid: `1.2`})
+      const secondOne1 = createStore(1, {sid: `1.2`})
       const both1 = combine(secondOne1, y => 2 * y)
 
       const finalStore = combine([secondOne1, both1], ([secondOne, both]) => ({
         secondOne,
         both,
       }))
-      const scope = fork(app, {
+      const scope = fork({
         values: [[secondOne1, 0]],
       })
       expect(scope.getState(secondOne1)).toEqual(0)
@@ -152,18 +149,17 @@ describe('fork values support', () => {
      * goal of this test is to create a lot of stores to pass to values
      * and ensure that combined stores will work as expected
      * */
-    const app = createDomain({sid: 'app'} as any)
-    let sumStore = app.createStore([0, []] as [number, any[]], {sid: 'sum'})
+    let sumStore = createStore([0, []] as [number, any[]], {sid: 'sum'})
     const stores: Store<number>[] = []
     const storesToShow: Store<number>[] = []
     function fab(n: number) {
-      const store = app.createStore(n, {sid: `${n}.1`})
+      const store = createStore(n, {sid: `${n}.1`})
       sumStore = combine(
         sumStore,
         store,
         (prevVal, x) => [x, prevVal] as [number, any[]],
       )
-      const secondOne = app.createStore(n, {sid: `${n}.2`})
+      const secondOne = createStore(n, {sid: `${n}.2`})
       const third = store.map(x => x + 1)
       const both = combine(third, secondOne, (x, y) => x * y)
       sumStore = combine(
@@ -192,7 +188,7 @@ describe('fork values support', () => {
       }
       return results
     })
-    const scope = fork(app, {
+    const scope = fork({
       values: stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
     })
     const basicCase = serialize(scope)
@@ -342,61 +338,48 @@ Array [
 
 describe('fork handlers support', () => {
   test('handlers as js Map', async () => {
-    const app = createDomain()
+    const fx = createEffect(() => 'not to call')
 
-    const fx = app.createEffect({handler: () => 'not to call'})
+    const acc = createStore<string[]>([]).on(fx.doneData, (list, val) => [
+      ...list,
+      val,
+    ])
 
-    const acc = app
-      .createStore<string[]>([])
-      .on(fx.doneData, (list, val) => [...list, val])
+    const scope = fork({handlers: [[fx, () => 'fn']]})
 
-    const scope = fork(app, {
-      handlers: [[fx, () => 'fn']],
-    })
-
-    await allSettled(fx, {
-      scope,
-    })
+    await allSettled(fx, {scope})
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
   test('handlers as tuple list', async () => {
-    const app = createDomain()
+    const fx = createEffect(() => 'not to call')
 
-    const fx = app.createEffect({handler: () => 'not to call'})
+    const acc = createStore<string[]>([]).on(fx.doneData, (list, val) => [
+      ...list,
+      val,
+    ])
 
-    const acc = app
-      .createStore<string[]>([])
-      .on(fx.doneData, (list, val) => [...list, val])
+    const scope = fork({handlers: [[fx, () => 'fn']]})
 
-    const scope = fork(app, {
-      handlers: [[fx, () => 'fn']],
-    })
-
-    await allSettled(fx, {
-      scope,
-    })
+    await allSettled(fx, {scope})
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
   test('handlers as sid map', async () => {
-    const app = createDomain()
+    const fx = createEffect(() => 'not to call')
 
-    const fx = app.createEffect({handler: () => 'not to call'})
+    const acc = createStore<string[]>([]).on(fx.doneData, (list, val) => [
+      ...list,
+      val,
+    ])
 
-    const acc = app
-      .createStore<string[]>([])
-      .on(fx.doneData, (list, val) => [...list, val])
-
-    const scope = fork(app, {
+    const scope = fork({
       handlers: {
         [fx.sid!]: () => 'fn',
       },
     })
 
-    await allSettled(fx, {
-      scope,
-    })
+    await allSettled(fx, {scope})
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
@@ -404,19 +387,16 @@ describe('fork handlers support', () => {
 
 describe('handlers validation', () => {
   test('passing non-unit value to handlers should throw', async () => {
-    const app = createDomain()
-
     expect(() => {
-      fork(app, {
+      fork({
         handlers: new Map().set(null, () => {}),
       })
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
   })
   test('passing non-effect unit to handlers should throw', () => {
-    const app = createDomain()
     const unit = createEvent()
     expect(() => {
-      fork(app, {
+      fork({
         handlers: new Map().set(unit, () => {}),
       })
     }).toThrowErrorMatchingInlineSnapshot(
@@ -424,15 +404,14 @@ describe('handlers validation', () => {
     )
   })
   test('passing attached effect to handlers should throw', () => {
-    const app = createDomain()
-    const fx = app.createEffect((n: number) => {})
-    const source = app.createStore(0)
+    const fx = createEffect((n: number) => {})
+    const source = createStore(0)
     const attached = attach({
       effect: fx,
       source,
     })
     expect(() => {
-      fork(app, {
+      fork({
         handlers: new Map().set(attached, () => {}),
       })
     }).toThrowErrorMatchingInlineSnapshot(
