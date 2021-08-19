@@ -35,7 +35,7 @@ test('perf', async () => {
     repeatTimes: 50,
     fn: () => {
       const scope = fork(app)
-      serialize(scope, {onlyChanges: true})
+      serialize(scope)
     },
   })
 

@@ -594,7 +594,7 @@ test('getState support', async () => {
   })
   await allSettled(start, {
     scope: fork(app, {
-      values: new Map([[store, 2]]),
+      values: [[store, 2]],
     }),
   })
   expect(fn).toHaveBeenLastCalledWith(2)
@@ -734,13 +734,13 @@ test.skip('scope.find support', () => {
   target.watch(fn)
 
   const scopeA = fork(app, {
-    values: new Map([[$tag, 'a']]),
+    values: [[$tag, 'a']],
   })
   const scopeB = fork(app, {
-    values: new Map([[$tag, 'b']]),
+    values: [[$tag, 'b']],
   })
   const scopeC = fork(app, {
-    values: new Map([[$tag, 'c']]),
+    values: [[$tag, 'c']],
   })
 
   forward({

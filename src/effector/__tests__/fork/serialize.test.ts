@@ -15,9 +15,14 @@ it('serialize stores to object of sid as keys', () => {
   const $d = app.createStore(false, {sid: 'd'})
 
   const scope = fork(app, {
-    values: new Map().set($a, 'value2').set($b, []).set($c, 0).set($d, true),
+    values: [
+      [$a, 'value2'],
+      [$b, []],
+      [$c, 0],
+      [$d, true],
+    ],
   })
-  const values = serialize(scope, {onlyChanges: true})
+  const values = serialize(scope)
 
   expect(values).toMatchInlineSnapshot(`
     Object {
@@ -37,9 +42,14 @@ it('serialize stores with ignore parameter', () => {
   const $d = app.createStore(false, {sid: 'd'})
 
   const scope = fork(app, {
-    values: new Map().set($a, 'value2').set($b, []).set($c, 0).set($d, true),
+    values: [
+      [$a, 'value2'],
+      [$b, []],
+      [$c, 0],
+      [$d, true],
+    ],
   })
-  const values = serialize(scope, {ignore: [$b, $d], onlyChanges: true})
+  const values = serialize(scope, {ignore: [$b, $d]})
 
   expect(values).toMatchInlineSnapshot(`
     Object {
@@ -60,9 +70,14 @@ it('serialize stores in nested domain', () => {
   const $d = app.createStore(false, {sid: 'd'})
 
   const scope = fork(app, {
-    values: new Map().set($a, 'value2').set($b, []).set($c, 0).set($d, true),
+    values: [
+      [$a, 'value2'],
+      [$b, []],
+      [$c, 0],
+      [$d, true],
+    ],
   })
-  const values = serialize(scope, {ignore: [$d, $a], onlyChanges: true})
+  const values = serialize(scope, {ignore: [$d, $a]})
 
   expect(values).toMatchInlineSnapshot(`
     Object {
@@ -81,11 +96,9 @@ describe('onlyChanges', () => {
       .on(newMessage, x => x + 1)
     const stats = combine({messages})
     const scope = fork(app)
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
-      `Object {}`,
-    )
+    expect(serialize(scope)).toMatchInlineSnapshot(`Object {}`)
     await allSettled(newMessage, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "-i1guvk": 1,
       }
@@ -98,11 +111,9 @@ describe('onlyChanges', () => {
       .createStore(0, {sid: '-isuad'})
       .on(newMessage, x => x + 1)
     const scope = fork(app)
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
-      `Object {}`,
-    )
+    expect(serialize(scope)).toMatchInlineSnapshot(`Object {}`)
     await allSettled(newMessage, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "-isuad": 1,
       }
@@ -120,7 +131,7 @@ describe('onlyChanges', () => {
     const scope = fork(app)
     await allSettled(newMessage, {scope})
     await allSettled(resetMessages, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "a0ikkx": 0,
       }
@@ -135,15 +146,15 @@ describe('onlyChanges', () => {
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork(app, {
-      values: new Map([[messages, 1]]),
+      values: [[messages, 1]],
     })
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "-x2xs4q": 1,
       }
     `)
     await allSettled(resetMessages, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "-x2xs4q": 0,
       }
@@ -159,15 +170,15 @@ describe('onlyChanges', () => {
       .reset(resetMessages)
     const scope = fork(app)
     hydrate(scope, {
-      values: new Map([[messages, 0]]),
+      values: [[messages, 0]],
     })
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "-2b0ci3": 0,
       }
     `)
     await allSettled(newMessage, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "-2b0ci3": 1,
       }
@@ -184,7 +195,7 @@ describe('serializing combine', () => {
     const combined = combine({foo, bar})
     const scope = fork(app)
     await allSettled(trigger, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
         "19cuby": 1,
         "q3ihek": 1,
@@ -202,9 +213,9 @@ describe('serializing combine', () => {
     }))
     const scope = fork(app)
     await allSettled(trigger, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
-        "77n872": Object {
+        "-em743m": Object {
           "bar": 1,
           "foo": 1,
         },

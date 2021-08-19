@@ -108,7 +108,7 @@ describe('fork values support', () => {
         both,
       }))
       const scope = fork(app, {
-        values: new Map([[secondOne1, 0]]),
+        values: [[secondOne1, 0]],
       })
       expect(scope.getState(secondOne1)).toEqual(0)
       expect(scope.getState(finalStore)).toEqual({secondOne: 0, both: 0})
@@ -160,9 +160,7 @@ describe('fork values support', () => {
       return results
     })
     const scope = fork(app, {
-      values: new Map(
-        stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
-      ),
+      values: stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
     })
     const basicCase = serialize(scope)
     expect(scope.getState(finalStore)).toMatchInlineSnapshot(`
@@ -320,7 +318,7 @@ describe('fork handlers support', () => {
       .on(fx.doneData, (list, val) => [...list, val])
 
     const scope = fork(app, {
-      handlers: new Map([[fx, () => 'fn']]),
+      handlers: [[fx, () => 'fn']],
     })
 
     await allSettled(fx, {

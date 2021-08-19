@@ -168,7 +168,7 @@ describe('transactions', () => {
       })
     }).not.toThrow()
     await promise2
-    expect(serialize(scope1, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
         "-1jit4f": Array [
           "a",
@@ -176,7 +176,7 @@ describe('transactions', () => {
         "-m426n2": "a",
       }
     `)
-    expect(serialize(scope2, {onlyChanges: true})).toMatchInlineSnapshot(`
+    expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
         "-1jit4f": Array [
           "b",

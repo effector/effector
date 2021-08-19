@@ -51,7 +51,7 @@ test('watch calls during hydration', async () => {
 
   hydrate(app, {
     values: {
-      ...serialize(fork(app), {onlyChanges: true}),
+      ...serialize(fork(app)),
       [store.sid!]: 0,
     },
   })
@@ -206,11 +206,11 @@ describe('multiple hydrate calls', () => {
       unitWatch('setN', setN, fn)
       fn(`## first hydration, $n = 1`)
       hydrate(app, {
-        values: new Map([[$n, 1]]),
+        values: [[$n, 1]],
       })
       fn(`## second hydration, $n = 1`)
       hydrate(app, {
-        values: new Map([[$n, 1]]),
+        values: [[$n, 1]],
       })
       fn(`## setN(2)`)
       setN(2)
@@ -251,15 +251,15 @@ describe('multiple hydrate calls', () => {
       unitWatch('setN', setN, fn)
       fn(`## forking, $n = -2`)
       const scope = fork(app, {
-        values: new Map([[$n, -2]]),
+        values: [[$n, -2]],
       })
       fn(`## first hydration, $n = 1`)
       hydrate(scope, {
-        values: new Map([[$n, 1]]),
+        values: [[$n, 1]],
       })
       fn(`## second hydration, $n = 1`)
       hydrate(scope, {
-        values: new Map([[$n, 1]]),
+        values: [[$n, 1]],
       })
       fn(`## setN(2)`)
       await allSettled(setN, {
@@ -306,11 +306,11 @@ describe('multiple hydrate calls', () => {
       unitWatch('setN', setN, fn)
       fn(`## first hydration, $n = 1`)
       hydrate(app, {
-        values: new Map([[$n, 1]]),
+        values: [[$n, 1]],
       })
       fn(`## second hydration, $n = -1`)
       hydrate(app, {
-        values: new Map([[$n, -1]]),
+        values: [[$n, -1]],
       })
       fn(`## setN(2)`)
       setN(2)
@@ -357,15 +357,15 @@ describe('multiple hydrate calls', () => {
       unitWatch('setN', setN, fn)
       fn(`## forking, $n = -2`)
       const scope = fork(app, {
-        values: new Map([[$n, -2]]),
+        values: [[$n, -2]],
       })
       fn(`## first hydration, $n = 1`)
       hydrate(scope, {
-        values: new Map([[$n, 1]]),
+        values: [[$n, 1]],
       })
       fn(`## second hydration, $n = -1`)
       hydrate(scope, {
-        values: new Map([[$n, -1]]),
+        values: [[$n, -1]],
       })
       fn(`## setN(2)`)
       await allSettled(setN, {
@@ -455,7 +455,7 @@ describe('hydrate edge cases', () => {
 
     hydrate(app, {
       values: {
-        ...serialize(fork(app), {onlyChanges: true}),
+        ...serialize(fork(app)),
         [listsContainer$.sid!]: {
           a: [0, 1, 2, 3],
           b: [1, 8, 5],
@@ -515,9 +515,9 @@ test('scope support', async () => {
   const name = app.createStore('guest')
   name.updates.watch(fn)
 
-  const scope = fork(app, {values: new Map([[name, 'alice']])})
+  const scope = fork(app, {values: [[name, 'alice']]})
 
-  hydrate(scope, {values: new Map([[name, 'bob']])})
+  hydrate(scope, {values: [[name, 'bob']]})
 
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [

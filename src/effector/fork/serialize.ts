@@ -6,7 +6,7 @@ import {forIn} from '../collection'
  */
 export function serialize(
   scope: Scope,
-  {ignore = []}: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
+  {ignore = []}: {ignore?: Array<Store<any>>} = {},
 ) {
   const ignoredStores = ignore.map(({sid}) => sid)
   const result = {} as Record<string, any>
