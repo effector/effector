@@ -44,6 +44,7 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   if (is.scope(domain)) {
     forkPage = domain
     Object.assign(forkPage.sidValuesMap, normalizedValues)
+    if (!forkPage.cloneOf) throwError('scope should be created from domain')
     traverseTarget = getGraph(forkPage.cloneOf)
   } else if (is.domain(domain)) {
     traverseTarget = getGraph(domain)

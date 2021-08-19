@@ -172,7 +172,7 @@ export interface Scope extends Unit {
   graphite: Node
   // changedStores: Set<string>
   reg: Record<string, StateRef>
-  cloneOf: Domain
+  cloneOf?: Domain
   getState<T>(store: Store<T>): T
   getState(ref: StateRef): any
   /** value could be set only for stores with sid (they can be created by createStore, restore and combine) */

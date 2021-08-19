@@ -527,3 +527,10 @@ test('scope support', async () => {
   expect(scope.getState(name)).toMatchInlineSnapshot(`"bob"`)
   expect(name.getState()).toMatchInlineSnapshot(`"guest"`)
 })
+
+test('scope without domain should throw an error', () => {
+  const scope = fork()
+  expect(() => {
+    hydrate(scope, {values: []})
+  }).toThrowErrorMatchingInlineSnapshot(`"scope should be created from domain"`)
+})

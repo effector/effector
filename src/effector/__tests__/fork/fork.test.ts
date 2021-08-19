@@ -3,6 +3,8 @@ import {
   forward,
   attach,
   createEvent,
+  createStore,
+  createEffect,
   fork,
   allSettled,
   serialize,
@@ -10,6 +12,37 @@ import {
   combine,
   Store,
 } from 'effector'
+
+test('usage with domain', async () => {
+  const app = createDomain()
+  const add = app.createEvent<number>()
+  const $count = app.createStore(0).on(add, (n, x) => n + x)
+  const addFx = app.createEffect(() => 0)
+  forward({from: addFx.doneData, to: add})
+
+  const scope = fork(app, {
+    values: [[$count, 10]],
+    handlers: [[addFx, () => 5]],
+  })
+  await allSettled(addFx, {scope})
+  expect(scope.getState($count)).toBe(15)
+  expect($count.getState()).toBe(0)
+})
+
+test('usage without domain', async () => {
+  const add = createEvent<number>()
+  const $count = createStore(0).on(add, (n, x) => n + x)
+  const addFx = createEffect(() => 0)
+  forward({from: addFx.doneData, to: add})
+
+  const scope = fork({
+    values: [[$count, 10]],
+    handlers: [[addFx, () => 5]],
+  })
+  await allSettled(addFx, {scope})
+  expect(scope.getState($count)).toBe(15)
+  expect($count.getState()).toBe(0)
+})
 
 describe('fork values support', () => {
   test('values as js Map', async () => {

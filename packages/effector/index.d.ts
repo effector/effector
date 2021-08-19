@@ -1539,6 +1539,12 @@ export function fork(
     handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any>, Function]> | {[sid: string]: Function}
   },
 ): Scope
+export function fork(
+  config?: {
+    values?: ValueMap
+    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any>, Function]> | {[sid: string]: Function}
+  },
+): Scope
 
 /** run effect or event in scope and wait for all triggered effects */
 export function allSettled<FX extends Effect<any, any, any>>(

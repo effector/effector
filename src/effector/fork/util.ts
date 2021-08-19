@@ -4,7 +4,7 @@ import {throwError} from '../throw'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {step} from '../typedef'
-import type {Scope, Store} from '../unit.h'
+import type {Domain, Scope, Store} from '../unit.h'
 import type {Node, StateRef} from '../index.h'
 import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, FORK_COUNTER, SCOPE} from '../tag'
@@ -30,7 +30,7 @@ export function normalizeValues(
  everything we need to clone graph section
  reachable from given unit
  */
-export function cloneGraph(unit: any): Scope {
+export function cloneGraph(unit?: Domain): Scope {
   const forkInFlightCounter = createNode({
     scope: {
       defers: [],
