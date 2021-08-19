@@ -2,12 +2,12 @@ import {combine} from './combine'
 import {createEffect, onSettled} from './createEffect'
 import {applyParentHook} from './createUnit'
 import {onConfigNesting} from './config'
-import {getGraph, getStoreState} from './getter'
+import {getGraph, getStoreState, setMeta} from './getter'
 import {own} from './own'
 import {is} from './is'
 import {step} from './typedef'
 import {launch} from './kernel'
-import {STORE, EFFECT, REG_A} from './tag'
+import {EFFECT, REG_A} from './tag'
 
 export function attach(config: any) {
   let injected
@@ -21,8 +21,8 @@ export function attach(config: any) {
       ? (_: any, source: any) => source
       : (params: any) => params
   const attached = createEffect(config, injected)
+  setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope
-
   let runnerSteps
   const runnerFn = (
     {params, req}: any,

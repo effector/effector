@@ -1,8 +1,8 @@
-import {forIn} from '../collection'
 import {is} from '../is'
 import {throwError} from '../throw'
 import {Domain} from '../unit.h'
 import {normalizeValues, cloneGraph} from './util'
+import {getMeta} from '../getter'
 
 export function fork(
   domain: Domain,
@@ -21,12 +21,12 @@ export function fork(
     Object.assign(forked.sidValuesMap, valuesSidMap)
   }
   if (handlers) {
-    forked.handlers = normalizeValues(
-      handlers,
-      unit =>
-        !is.effect(unit) &&
-        throwError(`Handlers map can contain only effects as keys`),
-    )
+    forked.handlers = normalizeValues(handlers, unit => {
+      if (!is.effect(unit))
+        throwError(`Handlers map can contain only effects as keys`)
+      if (getMeta(unit, 'attached'))
+        throwError('Handlers can`t accept attached effects')
+    })
   }
   return forked
 }
