@@ -1507,7 +1507,7 @@ export interface Scope {
 
 export {Scope as Fork}
 
-export type ValueMap = Map<Store<any>, any> | {[sid: string]: any}
+export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: string]: any}
 
 /**
 hydrate state on client
@@ -1536,7 +1536,7 @@ export function fork(
   domain: Domain,
   config?: {
     values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | {[sid: string]: Function}
+    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any>, Function]> | {[sid: string]: Function}
   },
 ): Scope
 

@@ -10,14 +10,15 @@ import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, FORK_COUNTER, SCOPE} from '../tag'
 
 export function normalizeValues(
-  values: Map<Store<any>, any> | Record<string, any>,
-  assertEach = (key: any, value: any) => {},
+  values: Map<Store<any>, any> | Array<[any, any]> | Record<string, any>,
+  assertEach?: (key: any, value: any) => void,
 ) {
+  if (Array.isArray(values)) values = new Map(values)
   if (values instanceof Map) {
     const result = {} as Record<string, any>
     for (const [key, value] of values) {
       if (!is.unit(key)) throwError('Map key should be a unit')
-      assertEach(key, value)
+      if (assertEach) assertEach(key, value)
       result[key.sid!] = value
     }
     return result

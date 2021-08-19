@@ -129,7 +129,6 @@ export function useEvent(eventObject: any) {
     }
     const shape = Array.isArray(eventObject) ? [] : ({} as any)
     for (const key in eventObject) {
-      //@ts-expect-error
       shape[key] = scopeBind(eventObject[key], {scope})
     }
     return shape

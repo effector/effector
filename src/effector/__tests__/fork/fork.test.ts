@@ -27,7 +27,29 @@ describe('fork values support', () => {
     })
 
     hydrate(app, {
-      values: serialize(scope, {onlyChanges: true}),
+      values: serialize(scope),
+    })
+
+    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+  })
+  test('values as tuple list', async () => {
+    const app = createDomain()
+
+    const logsCache = app.createStore<string[]>([])
+    const settings = app.createStore({
+      MAX_COUNT_CACHED_LOGS: 12,
+    })
+
+    const scope = fork(app, {
+      values: [
+        [settings, {MAX_COUNT_CACHED_LOGS: 2}],
+        [logsCache, ['LOG_MSG_MOCK']],
+      ],
+    })
+
+    hydrate(app, {
+      values: serialize(scope),
     })
 
     expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
@@ -49,7 +71,7 @@ describe('fork values support', () => {
     })
 
     hydrate(app, {
-      values: serialize(scope, {onlyChanges: true}),
+      values: serialize(scope),
     })
 
     expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
@@ -142,7 +164,7 @@ describe('fork values support', () => {
         stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
       ),
     })
-    const basicCase = serialize(scope, {onlyChanges: true})
+    const basicCase = serialize(scope)
     expect(scope.getState(finalStore)).toMatchInlineSnapshot(`
 Array [
   Object {
@@ -299,6 +321,25 @@ describe('fork handlers support', () => {
 
     const scope = fork(app, {
       handlers: new Map([[fx, () => 'fn']]),
+    })
+
+    await allSettled(fx, {
+      scope,
+    })
+
+    expect(scope.getState(acc)).toEqual(['fn'])
+  })
+  test('handlers as tuple list', async () => {
+    const app = createDomain()
+
+    const fx = app.createEffect({handler: () => 'not to call'})
+
+    const acc = app
+      .createStore<string[]>([])
+      .on(fx.doneData, (list, val) => [...list, val])
+
+    const scope = fork(app, {
+      handlers: [[fx, () => 'fn']],
     })
 
     await allSettled(fx, {
