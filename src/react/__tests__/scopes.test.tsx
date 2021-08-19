@@ -464,6 +464,31 @@ describe('useEvent', () => {
     expect(count.getState()).toBe(0)
     expect(scope.getState(count)).toBe(1)
   })
+  test('useEvent function return value', async () => {
+    const fn = jest.fn()
+    const app = createDomain()
+    const fx = app.createEffect(() => 'ok')
+    const scope = fork(app)
+    const App = () => {
+      const fxe = useEvent(fx)
+      return (
+        <div>
+          <button id="btn" onClick={() => fxe().then(fn)}>
+            click
+          </button>
+        </div>
+      )
+    }
+    await render(
+      <Provider value={scope}>
+        <App />
+      </Provider>,
+    )
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect(argumentHistory(fn)).toEqual(['ok'])
+  })
 
   test('object in useEvent', async () => {
     const app = createDomain()
