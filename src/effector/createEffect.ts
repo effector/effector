@@ -2,16 +2,17 @@ import {step} from './typedef'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, setForkPage, forkPage, isWatch} from './kernel'
+import {launch, setForkPage, forkPage, isWatch, Stack} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {throwError} from './throw'
 import {EFFECT} from './tag'
+import type {Unit} from './index.h'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
-  maybeConfig: any,
+  maybeConfig?: any,
 ) {
   const instance: any = createEvent(nameOrConfig, maybeConfig)
   let handler =
@@ -55,20 +56,8 @@ export function createEffect<Payload, Done>(
     node: [
       step.run({
         fn({params, req}, {finally: anyway, getHandler, handlerId}, stack) {
-          const onResolve = onSettled({
-            params,
-            req,
-            ok: true,
-            anyway,
-            stack,
-          })
-          const onReject = onSettled({
-            params,
-            req,
-            ok: false,
-            anyway,
-            stack,
-          })
+          const onResolve = onSettled(params, req, true, anyway, stack)
+          const onReject = onSettled(params, req, false, anyway, stack)
           let result
           try {
             let handler: (data: any) => any
@@ -170,22 +159,16 @@ export function createEffect<Payload, Done>(
 }
 
 export const onSettled =
-  ({
-    params,
-    req,
-    ok,
-    anyway,
-    stack,
-  }: {
-    params: any
+  (
+    params: any,
     req: {
       rs(_: any): any
       rj(_: any): any
-    }
-    ok: boolean
-    anyway: any
-    stack: any
-  }) =>
+    },
+    ok: boolean,
+    anyway: Unit,
+    stack: Stack,
+  ) =>
   (data: any) =>
     launch({
       target: [anyway, sidechain],

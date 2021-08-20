@@ -300,3 +300,35 @@ it('handle fatal errors in mapParams', async () => {
     `"Cannot read property 'length' of null"`,
   )
 })
+
+test('async effect', async () => {
+  const fn = jest.fn()
+  const $calls = createStore(0)
+  const fx = attach({
+    source: $calls,
+    async effect(params: string, calls: number) {
+      await new Promise(rs => setTimeout(rs, 30))
+      fn([params, calls])
+    },
+  })
+  $calls.on(fx.doneData, x => x + 1)
+  await fx('a')
+  await fx('b')
+  await fx('c')
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        "a",
+        0,
+      ],
+      Array [
+        "b",
+        1,
+      ],
+      Array [
+        "c",
+        2,
+      ],
+    ]
+  `)
+})

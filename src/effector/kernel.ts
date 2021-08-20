@@ -243,7 +243,7 @@ export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
-  page?: Leaf | void
+  page?: Leaf | void | null
   forkPage?: Scope | void
   stack?: Stack | void
 }): void
