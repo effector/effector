@@ -1,4 +1,4 @@
-import {createEvent, createStore, sample} from 'effector'
+import {createEvent, createStore, sample, step, createNode} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 it('should call watcher as many times, as many store updates occured', () => {
@@ -80,4 +80,37 @@ it('should not erase sibling branches', () => {
   foo.watch(fooFn)
   trigger(30)
   expect(argumentHistory(fooFn)).toEqual([0, 30])
+})
+
+test('watch behavior should be consistent', () => {
+  const fn = jest.fn()
+  const trigger = createEvent<number>()
+
+  createNode({
+    node: [step.run({fn: () => fn(`watch A`)})],
+    parent: [trigger],
+  })
+  createNode({
+    node: [step.compute({fn: n => n}), step.run({fn: () => fn(`watch B`)})],
+    parent: [trigger],
+  })
+  createNode({
+    node: [step.run({fn: () => fn(`watch C`)})],
+    parent: [trigger],
+  })
+  createNode({
+    node: [step.compute({fn: n => fn(`compute`)})],
+    parent: [trigger],
+  })
+
+  trigger(1)
+
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "compute",
+      "watch A",
+      "watch B",
+      "watch C",
+    ]
+  `)
 })
