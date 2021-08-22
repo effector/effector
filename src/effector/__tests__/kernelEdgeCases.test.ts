@@ -3,7 +3,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 it('should call watcher as many times, as many store updates occured', () => {
   const fn = jest.fn()
-  const e1 = createEvent()
+  const e1 = createEvent<string>()
   const e2 = e1.map(() => 'e2')
   const st1 = createStore('str')
     .on(e1, (_, x) => x)
@@ -24,7 +24,7 @@ it('should call watcher as many times, as many store updates occured', () => {
 })
 it('should call sampled watcher once during a walk', () => {
   const fn = jest.fn()
-  const e1 = createEvent()
+  const e1 = createEvent<string>()
   const e2 = e1.map(() => 'e2')
   const st1 = createStore('str')
     .on(e1, (_, x) => x)
@@ -43,9 +43,9 @@ it('should call sampled watcher once during a walk', () => {
 
 it('should avoid data races', () => {
   const fn = jest.fn()
-  const routePush = createEvent()
+  const routePush = createEvent<string>()
 
-  const history = createStore([]).on(routePush, (state, route) => [
+  const history = createStore<string[]>([]).on(routePush, (state, route) => [
     ...state,
     route,
   ])
@@ -64,7 +64,7 @@ it('should avoid data races', () => {
 
 it('should not erase sibling branches', () => {
   const fooFn = jest.fn()
-  const trigger = createEvent()
+  const trigger = createEvent<number>()
   const foo = createStore(0)
   foo.on(trigger, (state, payload) => payload)
   let skipped = false
@@ -73,6 +73,7 @@ it('should not erase sibling branches', () => {
       skipped = true
       return
     }
+    //@ts-expect-error
     foo.setState(val)
   })
 
