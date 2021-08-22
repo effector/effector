@@ -20,26 +20,20 @@ const showCmd = (_: any) => {
     return val
   }
   switch (_.type) {
-    case 'check':
-      switch (_.data.type) {
-        case 'defined':
-          return `check: defined`
-        case 'changed':
-          return `check: changed`
-      }
-      return `check: ?`
-
     case 'mov':
       return `mov: ${_.data.from} ${_.data.to}`
-    case 'filter':
-      switch (_.data.fn.toString()) {
-        default:
-          return `filter: ${printFn(_.data.fn)}`
+    case 'compute': {
+      let tag
+      let value
+      if (_.order) {
+        tag = _.data.fn ? 'run' : 'barrier'
+        value = _.order.priority
+      } else {
+        tag = _.data.filter ? 'filter' : 'compute'
+        value = printFn(_.data.fn)
       }
-    case 'compute':
-      return `compute: ${printFn(_.data.fn)}`
-    case 'run':
-      return `run: watcher`
+      return `${tag}: ${value}`
+    }
   }
   const view = JSON.stringify(_.data, replacer, 2).replace(/\"/gi, '')
   //.replace(/^ /gim, '') // move whole json print one space left
@@ -81,8 +75,5 @@ const map2 = (s, i, l) => {
 const move1 = e => splitJoin(e, map1)
 const move2 = e => splitJoin(e, map2)
 function splitJoin(e, pad) {
-  return e
-    .split(`\n`)
-    .map(pad)
-    .join(`\n`)
+  return e.split(`\n`).map(pad).join(`\n`)
 }

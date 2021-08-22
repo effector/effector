@@ -3,7 +3,7 @@ import {createStore} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {step} from './typedef'
 import {onConfigNesting} from './config'
-import {getGraph, getStoreState, setMeta} from './getter'
+import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -104,7 +104,6 @@ const storeCombination = (
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
   const node = [
-    step.check.defined(),
     step.mov({
       store: rawShape,
       to: REG_A,
@@ -118,8 +117,9 @@ const storeCombination = (
       to: 'b',
     }),
     step.compute({
-      fn(upd, {clone, key, spread}, reg) {
-        if (spread && reg.b) {
+      safe: !needSpread,
+      fn(upd, {key}, reg) {
+        if (needSpread && reg.b) {
           reg.a = clone(reg.a)
         }
         reg.a[key] = upd
@@ -134,17 +134,16 @@ const storeCombination = (
       store: false,
       target: isFresh,
     }),
-    step.barrier({priority: BARRIER}),
     step.mov({
       from: VALUE,
       store: true,
       target: isFresh,
+      priority: BARRIER,
+      batch: true,
     }),
     step.mov({store: rawShape}),
     fn && step.compute({fn: callStack}),
-    step.check.changed({
-      store: storeStateRef,
-    }),
+    step.changed({store: storeStateRef}),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
@@ -154,7 +153,7 @@ const storeCombination = (
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
     const linkNode = createLinkNode(child, store, {
-      scope: {key, clone, fn, spread: needSpread},
+      scope: {key, fn},
       node,
       meta: {op: 'combine'},
     })

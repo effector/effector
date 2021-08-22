@@ -51,10 +51,13 @@ export function guard(...args: any[]) {
       clock: source,
       target: createNode({
         node: [
-          step.filter({
+          step.compute({
+            filter: true,
+            safe: true,
             fn: ({guard}) => guard,
           }),
           step.compute({
+            safe: true,
             fn: ({data}) => data,
           }),
         ],
@@ -80,6 +83,7 @@ export function guard(...args: any[]) {
               fn: ({source, clock}, {fn}) => fn(source, clock),
             }),
             step.compute({
+              safe: true,
               fn: ({source}) => source,
             }),
           ]

@@ -1,24 +1,16 @@
 import type {Leaf} from '../forest/index.h'
 
-import type {Cmd, Node, NodeUnit, StateRef} from './index.h'
+import type {Node, NodeUnit, StateRef} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
-import {
-  STORE,
-  EFFECT,
-  SAMPLER,
-  STACK,
-  BARRIER,
-  VALUE,
-  FILTER,
-  REG_A,
-  MAP,
-} from './tag'
+import {STORE, EFFECT, SAMPLER, STACK, BARRIER, VALUE, REG_A, MAP} from './tag'
 import type {Scope} from './unit.h'
 import {forEach} from './collection'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
+
+export type BarrierPriorityTag = 'barrier' | 'sampler' | 'effect'
 
 /**
  * Position in the current branch,
@@ -291,7 +283,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let stop: boolean
   let skip: boolean
   let node: Node
-  let value
+  let value: Layer | undefined
   let page: Leaf | null
   let reg: Record<string, StateRef> | void
   kernelLoop: while ((value = deleteMin())) {
@@ -311,20 +303,27 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     stop = skip = false
     for (let stepn = idx; stepn < node.seq.length && !stop; stepn++) {
       const step = node.seq[stepn]
-      switch (step.type) {
-        case BARRIER: {
-          const {priority, barrierID} = step.data
-          const id = page ? `${page.fullID}_${barrierID}` : barrierID
-          if (stepn !== idx || type !== priority) {
+      if (step.order) {
+        const {priority, barrierID} = step.order
+        const id = barrierID
+          ? page
+            ? `${page.fullID}_${barrierID}`
+            : barrierID
+          : 0
+        if (stepn !== idx || type !== priority) {
+          if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
               pushHeap(stepn, stack, priority, barrierID)
             }
-            continue kernelLoop
+          } else {
+            pushHeap(stepn, stack, priority)
           }
-          barriers.delete(id)
-          break
+          continue kernelLoop
         }
+        barrierID && barriers.delete(id)
+      }
+      switch (step.type) {
         case 'mov': {
           const data = step.data
           let value
@@ -376,32 +375,25 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           }
           break
         }
-        case 'check': {
-          skip =
-            getValue(stack) ===
-            (step.data.type === 'defined'
-              ? undefined
-              : readRef(getPageRef(page, forkPage, node, step.data.store)))
-          break
-        }
-        case FILTER:
-          /**
-           * handled edge case: if step.fn will throw,
-           * tryRun will return null
-           * thereby forcing that branch to stop
-           */
-          skip = !tryRun(local, step.data, stack)
-          break
-        case 'run':
-          /** exec 'compute' step when stepn === idx */
-          if (stepn !== idx || type !== EFFECT) {
-            pushHeap(stepn, stack, EFFECT)
-            continue kernelLoop
-          }
         case 'compute':
-          isWatch = getMeta(node, 'op') === 'watch'
-          stack.value = tryRun(local, step.data, stack)
-          isWatch = lastStartedState.isWatch
+          const data = step.data
+          if (data.fn) {
+            isWatch = getMeta(node, 'op') === 'watch'
+            const computationResult = data.safe
+              ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
+              : tryRun(local, data.fn, stack)
+            if (data.filter) {
+              /**
+               * handled edge case: if step.fn will throw,
+               * tryRun will return null
+               * thereby forcing that branch to stop
+               */
+              skip = !computationResult
+            } else {
+              stack.value = computationResult
+            }
+            isWatch = lastStartedState.isWatch
+          }
           break
       }
       stop = local.fail || skip
@@ -508,11 +500,7 @@ export const initRefInScope = (
 }
 
 /** try catch for external functions */
-const tryRun = (
-  local: Local,
-  {fn}: Extract<Cmd, {data: {fn: Function}}>['data'],
-  stack: Stack,
-) => {
+const tryRun = (local: Local, fn: Function, stack: Stack) => {
   try {
     return fn(getValue(stack), local.scope, stack)
   } catch (err) {
@@ -520,3 +508,13 @@ const tryRun = (
     local.fail = true
   }
 }
+
+export const checkChanged = (
+  store: StateRef,
+  value: any,
+  scope: any,
+  stack: Stack,
+) =>
+  value !== undefined &&
+  value !==
+    readRef(getPageRef(stack.page, getForkPage(stack), stack.node, store))

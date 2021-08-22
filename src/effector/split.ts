@@ -1,5 +1,5 @@
-import {Event} from './unit.h'
-import {NodeUnit, Cmd} from './index.h'
+import type {Event} from './unit.h'
+import type {NodeUnit, Cmd} from './index.h'
 import {is, isFunction, isObject} from './is'
 import {forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
@@ -9,7 +9,7 @@ import {step} from './typedef'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
-import {REG_A} from './tag'
+import {REG_A, SAMPLER} from './tag'
 import {throwError} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
@@ -62,13 +62,16 @@ export function split(...args: any[]): any {
   if (matchIsUnit || matchIsFunction) {
     if (matchIsUnit) owners.add(match)
     splitterSeq = [
-      matchIsUnit && step.barrier({priority: 'sampler'}),
       matchIsUnit &&
         step.mov({
           store: getStoreState(match),
           to: 'a',
+          priority: SAMPLER,
+          batch: true,
         }),
-      step.filter({
+      step.compute({
+        safe: matchIsUnit,
+        filter: true,
         fn(data, scopeTargets, stack) {
           const value = String(matchIsUnit ? stack.a : match(data))
           launchCase(
@@ -89,6 +92,7 @@ export function split(...args: any[]): any {
         to: REG_A,
       }),
       step.compute({
+        safe: true,
         fn(upd, {key}, {a}) {
           a[key] = upd
         },
@@ -121,11 +125,12 @@ export function split(...args: any[]): any {
       applyTemplate('splitBase', lastValues)
     }
     splitterSeq = [
-      needBarrier! && step.barrier({priority: 'sampler'}),
       needBarrier! &&
         step.mov({
           store: lastValues,
           to: 'a',
+          priority: SAMPLER,
+          batch: true,
         }),
       step.filter({
         fn(data, scopeTargets, stack) {

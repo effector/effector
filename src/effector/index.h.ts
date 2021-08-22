@@ -1,4 +1,4 @@
-import type {Stack} from './kernel'
+import type {Stack, BarrierPriorityTag} from './kernel'
 
 export type ID = string
 
@@ -63,14 +63,7 @@ export type Subscription = {
   unsubscribe(): void
 }
 
-export type Cmd =
-  | CheckDefined
-  | CheckChanged
-  | Run
-  | Filter
-  | Compute
-  | Barrier
-  | Mov
+export type Cmd = Compute | Mov
 
 type FromValue<T = unknown> = {
   from: 'value'
@@ -103,6 +96,10 @@ type MoveCmd<Data> = {
   id: ID
   type: 'mov'
   data: Data
+  order?: {
+    priority: BarrierPriorityTag
+    barrierID?: number
+  }
 }
 
 export type Mov =
@@ -113,45 +110,16 @@ export type Mov =
   | MovRegisterToRegister
   | MovRegisterToStore
 
-export type CheckChanged = {
-  id: ID
-  type: 'check'
-  data: {type: 'changed'; store: StateRef}
-}
-export type CheckDefined = {
-  id: ID
-  type: 'check'
-  data: {type: 'defined'}
-}
-
-export type Barrier = {
-  id: ID
-  type: 'barrier'
-  data: {
-    barrierID: number
-    priority: 'barrier' | 'sampler'
-  }
-}
-
-export type Run = {
-  id: ID
-  type: 'run'
-  data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: Stack) => any
-  }
-}
-
-export type Filter = {
-  id: ID
-  type: 'filter'
-  data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: Stack) => boolean
-  }
-}
 export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: Stack) => any
+    fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
+    safe: boolean
+    filter: boolean
+  }
+  order?: {
+    priority: BarrierPriorityTag
+    barrierID?: number
   }
 }

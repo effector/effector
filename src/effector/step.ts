@@ -1,11 +1,6 @@
-import {
+import type {
   StateRef,
-  Run,
-  Filter,
   Compute,
-  Barrier,
-  CheckDefined,
-  CheckChanged,
   MovValueToRegister,
   MovValueToStore,
   MovStoreToRegister,
@@ -13,45 +8,74 @@ import {
   MovRegisterToStore,
 } from './index.h'
 import {nextStepID} from './id'
+import {BARRIER, EFFECT, STACK, STORE} from './tag'
+import {BarrierPriorityTag, checkChanged, Stack} from './kernel'
 import {bind} from './bind'
-import {BARRIER, FILTER, STACK, STORE} from './tag'
-import {Stack} from './kernel'
 
 const cmd = (
-  type: 'check' | 'compute' | 'filter' | 'mov' | 'barrier',
+  type: 'compute' | 'mov',
   data: any,
-): any => ({
-  id: nextStepID(),
-  type,
-  data,
-})
+  priority?: BarrierPriorityTag | false,
+  batch?: boolean,
+) => {
+  const result: any = {
+    id: nextStepID(),
+    type,
+    data,
+  }
+  if (priority) {
+    result.order = {priority}
+    if (batch) result.order.barrierID = ++nextBarrierID
+  }
+  return result
+}
 
 let nextBarrierID = 0
 
-export const barrier = ({
-  priority = BARRIER,
-}: {
-  priority?: 'barrier' | 'sampler'
-}): Barrier =>
-  cmd(BARRIER, {
-    barrierID: ++nextBarrierID,
-    priority,
-  })
 export const mov: {
-  <T>(data: {from: 'value'; store: T; target: StateRef}): MovValueToStore<T>
+  <T>(data: {
+    from: 'value'
+    store: T
+    target: StateRef
+    batch?: boolean
+    priority?: BarrierPriorityTag
+  }): MovValueToStore<T>
   <T>(data: {
     from: 'value'
     to: 'stack' | 'a' | 'b'
     store: T
+    batch?: boolean
+    priority?: BarrierPriorityTag
   }): MovValueToRegister<T>
-  (data: {from: 'a' | 'b' | 'stack'; target: StateRef}): MovRegisterToStore
+  (data: {
+    from: 'a' | 'b' | 'stack'
+    target: StateRef
+    batch?: boolean
+    priority?: BarrierPriorityTag
+  }): MovRegisterToStore
   (data: {
     from: 'a' | 'b' | 'stack'
     to: 'a' | 'b' | 'stack'
+    batch?: boolean
+    priority?: BarrierPriorityTag
   }): MovRegisterToStore
-  (data: {store: StateRef; target: StateRef}): MovStoreToStore
-  (data: {store: StateRef; to: 'stack' | 'a' | 'b'}): MovStoreToRegister
-  (data: {store: StateRef}): MovStoreToRegister
+  (data: {
+    store: StateRef
+    target: StateRef
+    batch?: boolean
+    priority?: BarrierPriorityTag
+  }): MovStoreToStore
+  (data: {
+    store: StateRef
+    to: 'stack' | 'a' | 'b'
+    batch?: boolean
+    priority?: BarrierPriorityTag | false
+  }): MovStoreToRegister
+  (data: {
+    store: StateRef
+    batch?: boolean
+    priority?: BarrierPriorityTag | false
+  }): MovStoreToRegister
   // (data: {
   //   from?: 'value' | 'store' | 'stack' | 'a' | 'b'
   //   to?: 'stack' | 'a' | 'b' | 'store'
@@ -63,25 +87,46 @@ export const mov: {
   store,
   target,
   to = target ? STORE : STACK,
+  batch,
+  priority,
 }: {
   from?: 'value' | 'store' | 'stack' | 'a' | 'b'
   to?: 'stack' | 'a' | 'b' | 'store'
   store?: StateRef
   target?: StateRef
-}) => cmd('mov', {from, store, to, target})
-export const check = {
-  defined: (): CheckDefined => cmd('check', {type: 'defined'}),
-  changed: ({store}: {store: StateRef}): CheckChanged =>
-    cmd('check', {type: 'changed', store}),
-}
-export const compute: (data: {
+  batch?: boolean
+  priority?: BarrierPriorityTag | false
+}) => cmd('mov', {from, store, to, target}, priority, batch)
+export const changed = ({store}: {store: StateRef}) =>
+  compute({
+    filter: true,
+    safe: true,
+    fn: bind(checkChanged, store),
+  })
+export const compute = ({
+  fn,
+  batch,
+  priority,
+  safe = false,
+  filter = false,
+}: {
+  fn?: (data: any, scope: {[key: string]: any}, stack: Stack) => any
+  batch?: boolean
+  priority?: BarrierPriorityTag
+  safe?: boolean
+  filter?: boolean
+}): Compute => cmd('compute', {fn, safe, filter}, priority, batch)
+
+export const filter = ({
+  fn,
+}: {
   fn(data: any, scope: {[key: string]: any}, stack: Stack): any
-}) => Compute = bind(cmd, 'compute')
-export const filter: (data: {
+}) => compute({fn, filter: true})
+
+export const run = ({
+  fn,
+}: {
   fn(data: any, scope: {[key: string]: any}, stack: Stack): any
-}) => Filter = bind(cmd, FILTER)
-export const run: (data: {
-  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
-}) => Run = bind(cmd, 'run')
+}) => compute({fn, priority: EFFECT})
 export const update = ({store}: {store: StateRef}) =>
   mov({from: STACK, target: store})

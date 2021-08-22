@@ -177,7 +177,11 @@ export function createEvent<Payload = any>(
   event.filterMap = (fn: any) =>
     deriveEvent(event, 'filterMap', fn, [
       step.compute({fn: callStack}),
-      step.check.defined(),
+      step.compute({
+        filter: true,
+        safe: true,
+        fn: value => value !== undefined,
+      }),
     ])
   event.prepend = (fn: any) => {
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
@@ -319,10 +323,7 @@ export function createStore<State>(
   store.graphite = createNode({
     scope: {state: plainState},
     node: [
-      step.check.defined(),
-      step.check.changed({
-        store: oldState,
-      }),
+      step.changed({store: oldState}),
       updateFilter && step.mov({store: oldState, to: REG_A}),
       updateFilter &&
         step.filter({
@@ -363,8 +364,7 @@ const updateStore = (
     step.compute({
       fn: stateFirst ? callARegStack : callStackAReg,
     }),
-    step.check.defined(),
-    step.check.changed({store: storeRef}),
+    step.changed({store: storeRef}),
     updateFilter &&
       step.filter({
         fn: (update, _, {a}) => updateFilter(update, a),

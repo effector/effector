@@ -6,7 +6,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: evenNum e
   next: [
     Node {
       seq: [
-        run: watcher
+        run: effect
       ],
       next: []
     }
@@ -21,7 +21,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
     Node {
       seq: [
         compute: callStack,
-        check: defined
+        filter: Function
       ],
       next: [
         Node {
@@ -29,7 +29,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
           next: [
             Node {
               seq: [
-                run: watcher
+                run: effect
               ],
               next: []
             }

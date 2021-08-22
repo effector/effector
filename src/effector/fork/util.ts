@@ -39,6 +39,7 @@ export function cloneGraph(unit?: Domain): Scope {
     },
     node: [
       step.compute({
+        safe: true,
         fn(_, scope, stack) {
           if (!getParent(stack)) {
             scope.fxID += 1
@@ -52,7 +53,7 @@ export function cloneGraph(unit?: Domain): Scope {
           }
         },
       }),
-      step.barrier({priority: SAMPLER}),
+      step.compute({priority: SAMPLER, batch: true}),
       step.run({
         fn(_, scope) {
           const {inFlight, defers, fxID} = scope
@@ -73,6 +74,7 @@ export function cloneGraph(unit?: Domain): Scope {
   const storeChange = createNode({
     node: [
       step.compute({
+        safe: true,
         fn(value, __, stack) {
           const storeStack = getParent(stack)
           if (storeStack && getParent(storeStack)) {

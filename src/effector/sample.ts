@@ -88,11 +88,11 @@ export function sample(...args: any): any {
         // scope: {fn, targetTemplate},
         node: [
           applyTemplate('sampleSourceLoader'),
-          //@ts-ignore
-          !greedy && step.barrier({priority: SAMPLER}),
           step.mov({
             store: sourceRef,
             to: fn ? REG_A : STACK,
+            priority: !greedy && SAMPLER,
+            batch: true,
           }),
           fn && step.compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
@@ -134,9 +134,11 @@ export function sample(...args: any): any {
           step.update({store: clockState}),
           step.mov({store: hasSource}),
           step.filter({fn: hasSource => hasSource}),
-          //@ts-ignore
-          !greedy && step.barrier({priority: SAMPLER}),
-          step.mov({store: sourceState}),
+          step.mov({
+            store: sourceState,
+            batch: true,
+            priority: !greedy && SAMPLER,
+          }),
           step.mov({
             store: clockState,
             to: REG_A,
