@@ -1,4 +1,3 @@
-import fetch from 'cross-fetch'
 import React from 'react'
 //@ts-ignore
 import {render, container, act} from 'effector/fixtures/react'
@@ -28,6 +27,31 @@ import {
   createGate,
 } from 'effector-react/ssr'
 
+async function request(url: string) {
+  const users: Record<string, {name: string; friends: string[]}> = {
+    alice: {
+      name: 'alice',
+      friends: ['bob', 'carol'],
+    },
+    bob: {
+      name: 'bob',
+      friends: ['alice'],
+    },
+    carol: {
+      name: 'carol',
+      friends: ['alice'],
+    },
+    charlie: {
+      name: 'charlie',
+      friends: [],
+    },
+  }
+  const user = url.replace('https://ssr.effector.dev/api/', '')
+  const result = users[user]
+  await new Promise(rs => setTimeout(rs, 30))
+  return result
+}
+
 it('works', async () => {
   const indirectCallFn = jest.fn()
 
@@ -41,11 +65,7 @@ it('works', async () => {
   })
 
   const fetchUser = createEffect(async (user: any) => {
-    return (
-      await fetch('https://ssr.effector.dev/api/' + user, {
-        method: 'POST',
-      })
-    ).json()
+    return request('https://ssr.effector.dev/api/' + user)
   })
   //assume that calling start() will trigger some effects
   forward({
@@ -115,19 +135,19 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-gkotb4": "alice",
-      "lfsgrq": Array [
+      "-k8j0rc": Array [
         "bob",
         "carol",
       ],
+      "cs3r4y": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-gkotb4": "bob",
-      "lfsgrq": Array [
+      "-k8j0rc": Array [
         "alice",
       ],
+      "cs3r4y": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -147,13 +167,7 @@ test('attach support', async () => {
 
   const baseUrl = createStore('https://ssr.effector.dev/api')
 
-  const fetchJson = createEffect<string, any>(async url => {
-    return (
-      await fetch(url, {
-        method: 'POST',
-      })
-    ).json()
-  })
+  const fetchJson = createEffect<string, any>(async url => await request(url))
 
   const fetchUser = attach({
     source: {baseUrl},
@@ -228,19 +242,19 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-ged9v3": Array [
+      "-rjikx0": "alice",
+      "67hxq": Array [
         "bob",
         "carol",
       ],
-      "qx0p9b": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-ged9v3": Array [
+      "-rjikx0": "bob",
+      "67hxq": Array [
         "alice",
       ],
-      "qx0p9b": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -250,12 +264,7 @@ test('computed values support', async () => {
   const app = createDomain()
 
   const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
-    async user => {
-      const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
-        method: 'POST',
-      })
-      return req.json()
-    },
+    async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
   const start = app.createEvent<string>()
   forward({from: start, to: fetchUser})
@@ -379,12 +388,7 @@ test('allSettled effect calls', async () => {
   const fn = jest.fn()
 
   const fetchUser = createEffect<string, {name: string; friends: string[]}>(
-    async user => {
-      const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
-        method: 'POST',
-      })
-      return req.json()
-    },
+    async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
 
   const serverScope = fork()
