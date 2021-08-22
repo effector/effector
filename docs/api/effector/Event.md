@@ -214,6 +214,12 @@ const second = first.filterMap(fn)
 import React from 'react'
 import {createEvent, createStore} from 'effector'
 
+css`
+  .dialog-example {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+`
+
 const openModal = createEvent()
 const closeModal = createEvent()
 
@@ -224,33 +230,79 @@ const closeModalUnboxed = closeModal.filterMap(ref => {
   if (ref.current) return ref.current
 })
 
-openModalUnboxed.watch(modal => modal.showModal())
-closeModalUnboxed.watch(modal => modal.close())
+openModalUnboxed.watch(modal => modal.classList.add('is-open'))
+closeModalUnboxed.watch(modal => modal.classList.remove('is-open'))
 
 const App = () => {
-  const modalRef = React.useRef(null)
+  const ref = React.useRef()
+
   return (
     <>
-      <dialog ref={modalRef}>
-        <form method="dialog">
-          <fieldset>
-            <legend>Modal</legend>
-            Tap to close
-            <button
-              type="submit"
-              onSubmit={() => closeModal(modalRef)}
-            >
-              ❌
-            </button>
-          </fieldset>
-        </form>
-      </dialog>
-
-      <button onClick={() => openModal(modalRef)}>
-        Open modal
+      <button
+        onClick={() => openModal(ref)}
+        class="spectrum-Button spectrum-Button--cta spectrum-Button--sizeS"
+      >
+        <span class="spectrum-Button-label">Open</span>
       </button>
+
+      <div
+        ref={ref}
+        class="spectrum-Dialog dialog-example"
+        role="dialog"
+        tabindex="-1"
+        aria-modal="true"
+      >
+        <div class="spectrum-Dialog-grid">
+          <h1 class="spectrum-Dialog-heading">Disclaimer</h1>
+          <hr class="spectrum-Divider spectrum-Divider--sizeM spectrum-Divider--horizontal spectrum-Dialog-divider" />
+          <section class="spectrum-Dialog-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Auctor
+            augue mauris augue neque gravida. Libero volutpat sed ornare arcu.
+            Quisque egestas diam in arcu cursus euismod quis viverra. Posuere ac
+            ut consequat semper viverra nam libero justo laoreet. Enim ut tellus
+            elementum sagittis vitae et leo duis ut. Neque laoreet suspendisse
+            interdum consectetur libero id faucibus nisl. Diam volutpat commodo
+            sed egestas egestas. Dolor magna eget est lorem ipsum dolor. Vitae
+            suscipit tellus mauris a diam maecenas sed. Turpis in eu mi bibendum
+            neque egestas congue. Rhoncus est pellentesque elit ullamcorper
+            dignissim cras lobortis.
+          </section>
+          <button
+            onClick={() => closeModal(ref)}
+            class="spectrum-Button spectrum-Button--cta spectrum-Button--sizeS"
+          >
+            <span class="spectrum-Button-label">Close</span>
+          </button>
+        </div>
+      </div>
     </>
   )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+function css(tags, ...attrs) {
+  const value = style(tags, ...attrs)
+  const node = document.createElement('style')
+  node.id = 'insertedStyle'
+  node.appendChild(document.createTextNode(value))
+  const sheet = document.getElementById('insertedStyle')
+  if (sheet) {
+    sheet.disabled = true
+    sheet.parentNode.removeChild(sheet)
+  }
+  document.head.appendChild(node)
+
+  function style(tags, ...attrs) {
+    if (tags.length === 0) return ''
+    let result = ' ' + tags[0]
+    for (let i = 0; i < attrs.length; i++) {
+      result += attrs[i]
+      result += tags[i + 1]
+    }
+    return result
+  }
 }
 ```
 
