@@ -39,7 +39,7 @@ To connect custom range input component with state
 - [Dynamic typing status](https://share.effector.dev/tAnzG5oJ)
 - [Forward data between effects](https://share.effector.dev/RYQ5z59Q)
 - [Range input component](https://share.effector.dev/oRB2iB8M)
-- [Modal dialog](https://share.effector.dev/B2ShiBzm)
+- [Modal dialog](https://share.effector.dev/DzljrdjR)
 - [Conditional filtering](https://share.effector.dev/1EsAGMyq)
 - [Request cancellation](https://share.effector.dev/W4I0ghLt)
 - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
