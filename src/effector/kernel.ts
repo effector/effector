@@ -407,16 +407,16 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       stop = local.fail || skip
     }
     if (!stop) {
-      for (let stepn = 0; stepn < node.next.length; stepn++) {
+      forEach(node.next, nextNode => {
         pushFirstHeapItem(
           'child',
           page,
-          node.next[stepn],
+          nextNode,
           stack,
           getValue(stack),
           getForkPage(stack),
         )
-      }
+      })
       const forkPage: Scope | null = getForkPage(stack)
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
@@ -432,16 +432,16 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           )
         const additionalLinks = forkPage.additionalLinks[node.id]
         if (additionalLinks) {
-          for (let stepn = 0; stepn < additionalLinks.length; stepn++) {
+          forEach(additionalLinks, nextNode => {
             pushFirstHeapItem(
               'child',
               page,
-              additionalLinks[stepn],
+              nextNode,
               stack,
               getValue(stack),
               forkPage,
             )
-          }
+          })
         }
       }
     }
