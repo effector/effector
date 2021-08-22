@@ -65,12 +65,15 @@ export function attach(config: any) {
       own(attached, [state])
     }
     runnerSteps = [
-      /* let another side-effects run first */
-      step.run({fn: _ => _}),
-      /* read state. assumed it already stable here because of previous step */
+      /**
+       * let another side-effects run first and then read state
+       * assumed that state is already stable here
+       * because of priority 'effect'
+       **/
       step.mov({
         store: getStoreState(state),
         to: REG_A,
+        priority: EFFECT,
       }),
       /* no need for step.run because of first step */
       step.compute({fn: runnerFn}),
