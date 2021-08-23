@@ -147,46 +147,46 @@ export function createEvent<Payload = any>(
     }
     return event.create(payload, args)
   }
-  event.graphite = createNode({
-    meta: initUnit(EVENT, event, maybeConfig, nameOrConfig),
-    regional: true,
-  })
-  //eslint-disable-next-line no-unused-vars
-  event.create = (params: any, _: any) => {
-    launch({target: event, params, forkPage: forkPage!})
-    return params
-  }
-  event.watch = bind(watchUnit, event)
-  event.map = (fn: any) =>
-    deriveEvent(event, MAP, fn, [step.compute({fn: callStack})])
-  event.filter = (fn: any) =>
-    deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
-      step.filter({fn: callStack}),
-    ])
-  event.filterMap = (fn: any) =>
-    deriveEvent(event, 'filterMap', fn, [
-      step.compute({fn: callStack}),
-      step.compute({
-        filter: true,
-        safe: true,
-        fn: value => value !== undefined,
-      }),
-    ])
-  event.prepend = (fn: any) => {
-    const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
-      parent: getParent(event),
-    })
-    applyTemplate('eventPrepend', getGraph(contramapped))
-    createLinkNode(contramapped, event, {
-      scope: {fn},
-      node: [step.compute({fn: callStack})],
-      meta: {op: 'prepend'},
-    })
-    applyParentHook(event, contramapped)
-    return contramapped
-  }
   const template = readTemplate()
-  return event
+  return Object.assign(event, {
+    graphite: createNode({
+      meta: initUnit(EVENT, event, maybeConfig, nameOrConfig),
+      regional: true,
+    }),
+    create(params: any, _: any) {
+      launch({target: event, params, forkPage: forkPage!})
+      return params
+    },
+    watch: bind(watchUnit, event),
+    map: (fn: any) =>
+      deriveEvent(event, MAP, fn, [step.compute({fn: callStack})]),
+    filter: (fn: any) =>
+      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
+        step.filter({fn: callStack}),
+      ]),
+    filterMap: (fn: any) =>
+      deriveEvent(event, 'filterMap', fn, [
+        step.compute({fn: callStack}),
+        step.compute({
+          filter: true,
+          safe: true,
+          fn: value => value !== undefined,
+        }),
+      ]),
+    prepend(fn: any) {
+      const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
+        parent: getParent(event),
+      })
+      applyTemplate('eventPrepend', getGraph(contramapped))
+      createLinkNode(contramapped, event, {
+        scope: {fn},
+        node: [step.compute({fn: callStack})],
+        meta: {op: 'prepend'},
+      })
+      applyParentHook(event, contramapped)
+      return contramapped
+    },
+  })
 }
 
 export function createStore<State>(
@@ -315,9 +315,7 @@ export function createStore<State>(
       step.changed({store: oldState}),
       updateFilter && step.mov({store: oldState, to: REG_A}),
       updateFilter &&
-        step.filter({
-          fn: (update, _, {a}) => updateFilter(update, a),
-        }),
+        step.filter({fn: (update, _, {a}) => updateFilter(update, a)}),
       step.update({store: plainState}),
       step.update({store: oldState}),
     ],
