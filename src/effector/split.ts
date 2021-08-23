@@ -157,7 +157,6 @@ export function split(...args: any[]): any {
     scope: targets,
     node: splitterSeq!,
     family: {
-      type: 'crosslink',
       owners: Array.from(owners),
     },
     regional: true,

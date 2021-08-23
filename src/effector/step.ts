@@ -8,7 +8,7 @@ import type {
   MovRegisterToStore,
 } from './index.h'
 import {nextStepID} from './id'
-import {BARRIER, EFFECT, STACK, STORE} from './tag'
+import {EFFECT, STACK, STORE} from './tag'
 import {BarrierPriorityTag, checkChanged, Stack} from './kernel'
 import {bind} from './bind'
 
