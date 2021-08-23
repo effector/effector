@@ -10,7 +10,7 @@ import {
 } from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
-import {forIn} from './collection'
+import {forEach, forIn} from './collection'
 import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
 import {launch} from './kernel'
@@ -37,6 +37,7 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
   })
   own(node, [trigger])
   return (hook: (data: any) => any) => {
+    forEach(acc, hook)
     acc.forEach(hook)
     return trigger.watch(hook)
   }
