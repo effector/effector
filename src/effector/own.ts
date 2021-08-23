@@ -1,13 +1,14 @@
-import {NodeUnit} from './index.h'
+import type {NodeUnit} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 import {DOMAIN, CROSSLINK} from './tag'
+import {forEach} from './collection'
 
 export const own = (ownerUnit: NodeUnit, links: NodeUnit[]) => {
   const owner = getGraph(ownerUnit)
-  for (let i = 0; i < links.length; i++) {
-    const link = getGraph(links[i])
+  forEach(links, _link => {
+    const link = getGraph(_link)
     if (owner.family.type !== DOMAIN) link.family.type = CROSSLINK
     getOwners(link).push(owner)
     getLinks(owner).push(link)
-  }
+  })
 }

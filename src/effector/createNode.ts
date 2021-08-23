@@ -1,9 +1,10 @@
-import {Node, NodeUnit, Cmd, StateRef} from './index.h'
+import type {Node, NodeUnit, Cmd} from './index.h'
 import {getGraph, getOwners, getLinks, getValue} from './getter'
 import {nextNodeID} from './id'
-import {CROSSLINK, STORE} from './tag'
+import {CROSSLINK} from './tag'
 import {regionStack} from './region'
 import {own} from './own'
+import {forEach} from './collection'
 
 const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
@@ -42,11 +43,7 @@ export function createNode({
   const links = arrifyNodes(familyRaw.links)
   const owners = arrifyNodes(familyRaw.owners)
   const seq: Cmd[] = []
-  for (let i = 0; i < node.length; i++) {
-    const item = node[i]
-    if (!item) continue
-    seq.push(item)
-  }
+  forEach(node, item => item && seq.push(item))
   const result: Node = {
     id: nextNodeID(),
     seq,
@@ -59,15 +56,9 @@ export function createNode({
       owners,
     },
   }
-  for (let i = 0; i < links.length; i++) {
-    getOwners(links[i]).push(result)
-  }
-  for (let i = 0; i < owners.length; i++) {
-    getLinks(owners[i]).push(result)
-  }
-  for (let i = 0; i < sources.length; i++) {
-    sources[i].next.push(result)
-  }
+  forEach(links, link => getOwners(link).push(result))
+  forEach(owners, owner => getLinks(owner).push(result))
+  forEach(sources, source => source.next.push(result))
   if (regional && regionStack) {
     own(getValue(regionStack), [result])
   }
