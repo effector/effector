@@ -5,18 +5,13 @@ export function createWatch<T>(
   fn: (value: T) => any,
   scope?: Scope,
 ) {
-  const nodeOpts = {
-    node: [
-      step.run({
-        fn: value => fn(value),
-      }),
-    ],
-  } as any
+  const seq = [step.run({fn: value => fn(value)})]
   if (scope) {
-    const node = createNode(nodeOpts)
+    const node = createNode({node: seq})
     const id = (store as any).graphite.id
-    const links: Node[] = ((scope as any).additionalLinks[id] =
-      (scope as any).additionalLinks[id] || [])
+    const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
+    const links = scopeLinks[id] || []
+    scopeLinks[id] = links
     links.push(node)
     return () => {
       const idx = links.indexOf(node)
@@ -24,9 +19,11 @@ export function createWatch<T>(
       clearNode(node)
     }
   } else {
-    nodeOpts.parent = store
-    nodeOpts.family = {type: 'crosslink', owners: store}
-    const node = createNode(nodeOpts)
+    const node = createNode({
+      node: seq,
+      parent: [store],
+      family: {owners: store},
+    })
     return () => {
       clearNode(node)
     }
