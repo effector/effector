@@ -17,9 +17,7 @@ export const watchUnit = (
       node: [step.run({fn: callStack})],
       parent: unit,
       meta: {op: 'watch'},
-      family: {
-        owners: unit,
-      },
+      family: {owners: unit},
       regional: true,
     }),
   )

@@ -23,10 +23,7 @@ export const createLinkNode = (
     child,
     scope,
     meta,
-    family: {
-      owners: [parent, child],
-      links: child,
-    },
+    family: {owners: [parent, child], links: child},
     regional: true,
   })
 export const forward = (opts: {

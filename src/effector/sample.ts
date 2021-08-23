@@ -110,16 +110,9 @@ export function sample(...args: any): any {
       parent: source,
       node: [
         step.update({store: sourceState}),
-        step.mov({
-          from: VALUE,
-          store: true,
-          target: hasSource,
-        }),
+        step.mov({from: VALUE, store: true, target: hasSource}),
       ],
-      family: {
-        owners: [source, target, clock],
-        links: target,
-      },
+      family: {owners: [source, target, clock], links: target},
       meta: {op: SAMPLE, sample: 'source'},
       regional: true,
     })
@@ -139,10 +132,7 @@ export function sample(...args: any): any {
             batch: true,
             priority: !greedy && SAMPLER,
           }),
-          step.mov({
-            store: clockState,
-            to: REG_A,
-          }),
+          step.mov({store: clockState, to: REG_A}),
           fn && step.compute({fn: callStackAReg}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],

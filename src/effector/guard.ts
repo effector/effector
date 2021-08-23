@@ -51,15 +51,8 @@ export function guard(...args: any[]) {
       clock: source,
       target: createNode({
         node: [
-          step.compute({
-            filter: true,
-            safe: true,
-            fn: ({guard}) => guard,
-          }),
-          step.compute({
-            safe: true,
-            fn: ({data}) => data,
-          }),
+          step.compute({fn: ({guard}) => guard, filter: true, safe: true}),
+          step.compute({fn: ({data}) => data, safe: true}),
         ],
         child: target,
         meta,
@@ -79,13 +72,8 @@ export function guard(...args: any[]) {
       scope: {fn: filter},
       node: clock
         ? [
-            step.filter({
-              fn: ({source, clock}, {fn}) => fn(source, clock),
-            }),
-            step.compute({
-              safe: true,
-              fn: ({source}) => source,
-            }),
+            step.filter({fn: ({source, clock}, {fn}) => fn(source, clock)}),
+            step.compute({fn: ({source}) => source, safe: true}),
           ]
         : [step.filter({fn: callStack})],
       meta,

@@ -18,7 +18,7 @@ import {
   initRefInScope,
 } from './kernel'
 
-import {Subscriber, Config} from './index.h'
+import type {Subscriber, Config} from './index.h'
 import {createName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
@@ -71,19 +71,12 @@ export const initUnit = (
   rawConfigA: any,
   rawConfigB?: any,
 ) => {
-  const config = normalizeConfig(
-    {
-      name: rawConfigB,
-      config: rawConfigA,
-    },
-    {},
-  )
+  const config = normalizeConfig({name: rawConfigB, config: rawConfigA}, {})
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
   let {parent = null, sid = null, strict = true, named = null} = config
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
-
   const meta: Record<string, any> = {
     unit: (unit.kind = kind),
     name: (unit.shortName = name),
@@ -125,11 +118,7 @@ const deriveEvent = (event: any, op: string, fn: any, node: any) => {
     fn = fn.fn
   }
   const mapped = createEvent({name: `${event.shortName} → *`, [OPEN_O]: config})
-  createLinkNode(event, mapped, {
-    scope: {fn},
-    node,
-    meta: {op},
-  })
+  createLinkNode(event, mapped, {scope: {fn}, node, meta: {op}})
   return mapped
 }
 
@@ -329,12 +318,8 @@ export function createStore<State>(
         step.filter({
           fn: (update, _, {a}) => updateFilter(update, a),
         }),
-      step.update({
-        store: plainState,
-      }),
-      step.update({
-        store: oldState,
-      }),
+      step.update({store: plainState}),
+      step.update({store: oldState}),
     ],
     child: updates,
     meta,
@@ -361,14 +346,10 @@ const updateStore = (
   const storeRef = getStoreState(store)
   const node = [
     step.mov({store: storeRef, to: REG_A}),
-    step.compute({
-      fn: stateFirst ? callARegStack : callStackAReg,
-    }),
+    step.compute({fn: stateFirst ? callARegStack : callStackAReg}),
     step.changed({store: storeRef}),
     updateFilter &&
-      step.filter({
-        fn: (update, _, {a}) => updateFilter(update, a),
-      }),
+      step.filter({fn: (update, _, {a}) => updateFilter(update, a)}),
     step.update({store: storeRef}),
   ]
   applyTemplate(
@@ -377,9 +358,5 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  return createLinkNode(from, store, {
-    scope: {fn},
-    node,
-    meta: {op},
-  })
+  return createLinkNode(from, store, {scope: {fn}, node, meta: {op}})
 }

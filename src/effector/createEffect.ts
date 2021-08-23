@@ -79,10 +79,7 @@ export function createEffect<Payload, Done>(
         },
       }),
     ],
-    meta: {
-      op: 'fx',
-      fx: 'runner',
-    },
+    meta: {op: 'fx', fx: 'runner'},
   })
   node.scope.runner = effectRunner
   node.seq.push(
@@ -90,13 +87,7 @@ export function createEffect<Payload, Done>(
       fn(params, scope, stack) {
         // empty stack means that this node was launched directly
         if (!getParent(stack)) return params
-        return {
-          params,
-          req: {
-            rs(data: any) {},
-            rj(data: any) {},
-          },
-        }
+        return {params, req: {rs(data: any) {}, rj(data: any) {}}}
       },
     }),
     step.run({
@@ -123,11 +114,7 @@ export function createEffect<Payload, Done>(
           })
           .catch(() => {})
       }
-      launch({
-        target: instance,
-        params: payload,
-        forkPage,
-      })
+      launch({target: instance, params: payload, forkPage})
     } else {
       launch(instance, payload)
     }
@@ -174,20 +161,9 @@ export const onSettled =
       target: [anyway, sidechain],
       params: [
         ok
-          ? {
-              status: 'done',
-              params,
-              result: data,
-            }
-          : {
-              status: 'fail',
-              params,
-              error: data,
-            },
-        {
-          fn: ok ? req.rs : req.rj,
-          value: data,
-        },
+          ? {status: 'done', params, result: data}
+          : {status: 'fail', params, error: data},
+        {value: data, fn: ok ? req.rs : req.rj},
       ],
       defer: true,
       page: stack.page,

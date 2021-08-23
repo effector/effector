@@ -10,10 +10,6 @@ export function merge<T>(
 ): Event<T> {
   const result = createEvent(config || unitObjectName(events, 'merge'))
   assertNodeSet(events, 'merge', 'first argument')
-  forward({
-    from: events,
-    to: result,
-    meta: {op: 'merge'},
-  })
+  forward({from: events, to: result, meta: {op: 'merge'}})
   return result
 }

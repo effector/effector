@@ -1,5 +1,4 @@
-import {getValue, getGraph, getParent, getMeta} from './getter'
-import {own} from './own'
+import {getParent, getMeta} from './getter'
 import {createNode} from './createNode'
 import type {Template} from '../forest/index.h'
 import {OPEN_O} from './tag'
@@ -49,12 +48,7 @@ export const withFactory = ({
   fn: () => any
 }) => {
   const sidNode = createNode({
-    meta: {
-      sidRoot: readSidRoot(sid),
-      name,
-      loc,
-      method,
-    },
+    meta: {sidRoot: readSidRoot(sid), name, loc, method},
   })
   return withRegion(sidNode, fn)
 }

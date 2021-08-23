@@ -87,15 +87,10 @@ export function split(...args: any[]): any {
     const lastValues = createStateRef({})
     lastValues.type = 'shape'
     const updaterSteps = [
-      step.mov({
-        store: lastValues,
-        to: REG_A,
-      }),
+      step.mov({store: lastValues, to: REG_A}),
       step.compute({
+        fn: (upd, {key}, {a}) => (a[key] = upd),
         safe: true,
-        fn(upd, {key}, {a}) {
-          a[key] = upd
-        },
       }),
     ]
     const units = [] as string[]
@@ -112,11 +107,7 @@ export function split(...args: any[]): any {
         if (is.store(storeOrFn)) {
           lastValues.current[key] = storeOrFn.getState()
           const storeRef = getStoreState(storeOrFn)
-          addRefOp(lastValues, {
-            type: 'field',
-            field: key,
-            from: storeRef,
-          })
+          addRefOp(lastValues, {from: storeRef, field: key, type: 'field'})
           applyTemplate('splitMatchStore', storeRef, updater)
         }
       }
@@ -126,12 +117,7 @@ export function split(...args: any[]): any {
     }
     splitterSeq = [
       needBarrier! &&
-        step.mov({
-          store: lastValues,
-          to: 'a',
-          priority: SAMPLER,
-          batch: true,
-        }),
+        step.mov({store: lastValues, to: 'a', priority: SAMPLER, batch: true}),
       step.filter({
         fn(data, scopeTargets, stack) {
           for (let i = 0; i < caseNames.length; i++) {
@@ -156,9 +142,7 @@ export function split(...args: any[]): any {
     parent: source,
     scope: targets,
     node: splitterSeq!,
-    family: {
-      owners: Array.from(owners),
-    },
+    family: {owners: Array.from(owners)},
     regional: true,
   })
   if (!knownCases) return targets

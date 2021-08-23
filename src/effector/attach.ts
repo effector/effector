@@ -46,10 +46,7 @@ export function attach(config: any) {
       target: effect,
       params: {
         params: isPlain ? [computedParams, stack.a] : computedParams,
-        req: {
-          rs: onSettled(params, req, true, anyway, stack),
-          rj,
-        },
+        req: {rs: onSettled(params, req, true, anyway, stack), rj},
       },
       page: stack.page,
       defer: true,

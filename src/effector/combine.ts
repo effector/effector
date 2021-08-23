@@ -104,18 +104,9 @@ const storeCombination = (
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
   const node = [
-    step.mov({
-      store: rawShape,
-      to: REG_A,
-    }),
-    //prettier-ignore
-    step.filter({
-      fn: (upd, {key}, {a}) => upd !== a[key],
-    }),
-    step.mov({
-      store: isFresh,
-      to: 'b',
-    }),
+    step.mov({store: rawShape, to: REG_A}),
+    step.filter({fn: (upd, {key}, {a}) => upd !== a[key]}),
+    step.mov({store: isFresh, to: 'b'}),
     step.compute({
       safe: !needSpread,
       fn(upd, {key}, reg) {
@@ -125,15 +116,8 @@ const storeCombination = (
         reg.a[key] = upd
       },
     }),
-    step.mov({
-      from: REG_A,
-      target: rawShape,
-    }),
-    step.mov({
-      from: VALUE,
-      store: false,
-      target: isFresh,
-    }),
+    step.mov({from: REG_A, target: rawShape}),
+    step.mov({from: VALUE, store: false, target: isFresh}),
     step.mov({
       from: VALUE,
       store: true,
@@ -158,11 +142,7 @@ const storeCombination = (
       meta: {op: 'combine'},
     })
     const childRef = getStoreState(child)
-    addRefOp(rawShape, {
-      type: 'field',
-      field: key,
-      from: childRef,
-    })
+    addRefOp(rawShape, {type: 'field', field: key, from: childRef})
     applyTemplate('combineField', childRef, linkNode)
   })
 

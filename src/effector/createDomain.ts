@@ -38,7 +38,6 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
   own(node, [trigger])
   return (hook: (data: any) => any) => {
     forEach(acc, hook)
-    acc.forEach(hook)
     return trigger.watch(hook)
   }
 }
@@ -49,18 +48,10 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
-  const node = createNode({
-    family: {type: DOMAIN},
-    regional: true,
-  })
+  const node = createNode({family: {type: DOMAIN}, regional: true})
 
   const result: any = {
-    history: {
-      domains,
-      stores,
-      effects,
-      events,
-    },
+    history: {domains, stores, effects, events},
     graphite: node,
   }
 
@@ -72,12 +63,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     'onDomain',
   ].map(createNamedEvent)
 
-  result.hooks = {
-    event,
-    effect,
-    store,
-    domain,
-  }
+  result.hooks = {event, effect, store, domain}
   result.onCreateEvent = createHook(event, events, result)
   result.onCreateEffect = createHook(effect, effects, result)
   result.onCreateStore = createHook(store, stores, result)
