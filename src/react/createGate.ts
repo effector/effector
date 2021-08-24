@@ -8,15 +8,21 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
 ) {
-  const propsRef = React.useRef<any>(null)
+  const propsRef = React.useRef<{value: any; count: number}>({
+    value: null,
+    count: 0,
+  })
   useIsomorphicLayoutEffect(() => {
-    GateComponent.open(propsRef.current)
-    return () => GateComponent.close(propsRef.current) as any
+    GateComponent.open(propsRef.current.value)
+    return () => GateComponent.close(propsRef.current.value) as any
   }, [GateComponent])
-  if (!shallowCompare(propsRef.current, props)) {
-    propsRef.current = props
-    GateComponent.set(props)
+  if (!shallowCompare(propsRef.current.value, props)) {
+    propsRef.current.value = props
+    propsRef.current.count += 1
   }
+  useIsomorphicLayoutEffect(() => {
+    GateComponent.set(propsRef.current.value)
+  }, [propsRef.current.count])
 }
 
 function shallowCompare(a: any, b: any) {
