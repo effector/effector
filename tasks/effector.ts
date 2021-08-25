@@ -72,7 +72,7 @@ export default {
         ],
         'README.md',
         'package.json',
-        'ssr.d.ts',
+        ['scope.d.ts', ['scope.d.ts', 'ssr.d.ts']],
         [
           'index.js.flow',
           [
@@ -85,6 +85,13 @@ export default {
         ],
       ]),
     rollupEffectorReact,
+    () =>
+      massCopy('npm/effector-react', 'npm/effector-react', [
+        ['scope.js', ['ssr.js']],
+        ['scope.js.map', ['ssr.js.map']],
+        ['scope.mjs', ['ssr.mjs']],
+        ['scope.mjs.map', ['ssr.mjs.map']],
+      ]),
     publishScript('effector-react'),
   ],
   'effector-vue': [

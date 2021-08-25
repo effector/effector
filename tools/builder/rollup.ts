@@ -199,8 +199,8 @@ export async function rollupEffectorReact() {
     }),
     createSSR({
       file: {
-        cjs: dir(`npm/${name}/ssr.js`),
-        es: dir(`npm/${name}/ssr.mjs`),
+        cjs: dir(`npm/${name}/scope.js`),
+        es: dir(`npm/${name}/scope.mjs`),
       },
     }),
     createUmd(name, {
@@ -235,7 +235,7 @@ export async function rollupEffectorReact() {
       ]
       const build = await rollup({
         onwarn,
-        input: dir(`packages/${name}/ssr.ts`),
+        input: dir(`packages/${name}/scope.ts`),
         external: externals,
         plugins: pluginList,
       })

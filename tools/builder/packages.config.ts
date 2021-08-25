@@ -138,6 +138,10 @@ export default {
         default: './effector-react.mjs',
       },
       './effector-react.mjs': './effector-react.mjs',
+      './scope': {
+        require: './scope.js',
+        default: './scope.mjs',
+      },
       './ssr': {
         require: './ssr.js',
         default: './ssr.mjs',
@@ -154,8 +158,11 @@ export default {
     },
     files: [
       ...getFiles('effector-react'),
+      ...compiledFile('scope'),
+      ...esmFile('scope'),
       ...compiledFile('ssr'),
       ...esmFile('ssr'),
+      'scope.d.ts',
       'ssr.d.ts',
     ],
     keywords: ['react', 'hooks', ...keywords],

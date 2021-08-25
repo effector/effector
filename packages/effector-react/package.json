@@ -10,6 +10,10 @@
       "default": "./effector-react.mjs"
     },
     "./effector-react.mjs": "./effector-react.mjs",
+    "./scope": {
+      "require": "./scope.js",
+      "default": "./scope.mjs"
+    },
     "./ssr": {
       "require": "./ssr.js",
       "default": "./ssr.mjs"
@@ -44,10 +48,15 @@
     "effector-react.mjs.d.ts",
     "effector-react.umd.d.ts",
     "compat.d.ts",
+    "scope.js",
+    "scope.js.map",
+    "scope.mjs",
+    "scope.mjs.map",
     "ssr.js",
     "ssr.js.map",
     "ssr.mjs",
     "ssr.mjs.map",
+    "scope.d.ts",
     "ssr.d.ts"
   ],
   "keywords": [
