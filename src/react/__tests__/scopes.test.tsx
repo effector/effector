@@ -25,7 +25,7 @@ import {
   useEvent,
   useStoreMap,
   createGate,
-} from 'effector-react/ssr'
+} from 'effector-react/scope'
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
