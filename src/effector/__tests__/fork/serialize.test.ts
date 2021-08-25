@@ -24,16 +24,12 @@ it('serialize stores to object of sid as keys', () => {
       [$d, true],
     ],
   })
-  const values = serialize(scope)
-
-  expect(values).toMatchInlineSnapshot(`
-    Object {
-      "a": "value2",
-      "b": Array [],
-      "c": 0,
-      "d": true,
-    }
-  `)
+  expect(serialize(scope)).toEqual({
+    a: 'value2',
+    b: [],
+    c: 0,
+    d: true,
+  })
 })
 
 it('serialize stores with ignore parameter', () => {
@@ -50,14 +46,10 @@ it('serialize stores with ignore parameter', () => {
       [$d, true],
     ],
   })
-  const values = serialize(scope, {ignore: [$b, $d]})
-
-  expect(values).toMatchInlineSnapshot(`
-    Object {
-      "a": "value2",
-      "c": 0,
-    }
-  `)
+  expect(serialize(scope, {ignore: [$b, $d]})).toEqual({
+    a: 'value2',
+    c: 0,
+  })
 })
 
 it('serialize stores in nested domain', () => {
@@ -78,119 +70,88 @@ it('serialize stores in nested domain', () => {
       [$d, true],
     ],
   })
-  const values = serialize(scope, {ignore: [$d, $a]})
-
-  expect(values).toMatchInlineSnapshot(`
-    Object {
-      "b": Array [],
-      "c": 0,
-    }
-`)
+  expect(serialize(scope, {ignore: [$d, $a]})).toEqual({
+    b: [],
+    c: 0,
+  })
 })
 
-describe('onlyChanges', () => {
+describe('onlyChanges: true', () => {
   it('avoid serializing combined stores when they are not changed', async () => {
     const newMessage = createEvent()
-    const messages = createStore(0, {sid: '-i1guvk'}).on(newMessage, x => x + 1)
+    const messages = createStore(0, {sid: 'messages'}).on(
+      newMessage,
+      x => x + 1,
+    )
     const stats = combine({messages})
     const scope = fork()
-    expect(serialize(scope)).toMatchInlineSnapshot(`Object {}`)
+    expect(serialize(scope)).toEqual({})
     await allSettled(newMessage, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "-i1guvk": 1,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 1})
   })
   it('skip unchanged objects', async () => {
     const newMessage = createEvent()
-    const messages = createStore(0, {sid: '-isuad'}).on(newMessage, x => x + 1)
+    const messages = createStore(0, {sid: 'messages'}).on(
+      newMessage,
+      x => x + 1,
+    )
     const scope = fork()
-    expect(serialize(scope)).toMatchInlineSnapshot(`Object {}`)
+    expect(serialize(scope)).toEqual({})
     await allSettled(newMessage, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "-isuad": 1,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 1})
   })
 
   it('keep store in serialization when it returns to default state', async () => {
     const newMessage = createEvent()
     const resetMessages = createEvent()
-    const messages = createStore(0, {sid: 'a0ikkx'})
+    const messages = createStore(0, {sid: 'messages'})
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork()
     await allSettled(newMessage, {scope})
     await allSettled(resetMessages, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "a0ikkx": 0,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 0})
   })
   it('keep store in serialization when it filled with fork values', async () => {
     const newMessage = createEvent()
     const resetMessages = createEvent()
-    const messages = createStore(0, {sid: '-x2xs4q'})
+    const messages = createStore(0, {sid: 'messages'})
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork({
       values: [[messages, 1]],
     })
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "-x2xs4q": 1,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 1})
     await allSettled(resetMessages, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "-x2xs4q": 0,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 0})
   })
   it('keep store in serialization when it filled with hydrate values', async () => {
     const app = createDomain()
     const newMessage = app.createEvent()
     const resetMessages = app.createEvent()
     const messages = app
-      .createStore(0, {sid: '-2b0ci3'})
+      .createStore(0, {sid: 'messages'})
       .on(newMessage, x => x + 1)
       .reset(resetMessages)
     const scope = fork(app)
     hydrate(scope, {
       values: [[messages, 0]],
     })
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "-2b0ci3": 0,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 0})
     await allSettled(newMessage, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "-2b0ci3": 1,
-      }
-    `)
+    expect(serialize(scope)).toEqual({messages: 1})
   })
 })
 
 describe('serializing combine', () => {
   it('should not serialize combine in default case', async () => {
     const trigger = createEvent()
-    const foo = createStore(0, {sid: '19cuby'}).on(trigger, x => x + 1)
-    const bar = createStore(0, {sid: 'q3ihek'}).on(trigger, x => x + 1)
+    const foo = createStore(0, {sid: 'foo'}).on(trigger, x => x + 1)
+    const bar = createStore(0, {sid: 'bar'}).on(trigger, x => x + 1)
     const combined = combine({foo, bar})
     const scope = fork()
     await allSettled(trigger, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "19cuby": 1,
-        "q3ihek": 1,
-      }
-    `)
+    expect(serialize(scope)).toEqual({foo: 1, bar: 1})
   })
   it('should serialize combine when it updated by on', async () => {
     const trigger = createEvent()
@@ -200,16 +161,12 @@ describe('serializing combine', () => {
       foo: foo + 1,
       bar: bar + 1,
     }))
+    const sid = String(combined.sid)
     const scope = fork()
     await allSettled(trigger, {scope})
-    expect(serialize(scope)).toMatchInlineSnapshot(`
-      Object {
-        "77n872": Object {
-          "bar": 1,
-          "foo": 1,
-        },
-      }
-    `)
+    expect(serialize(scope)).toEqual({
+      [sid]: {foo: 1, bar: 1},
+    })
   })
   describe('don`t reuse values from user', () => {
     test('with sample (more convenient)', async () => {
