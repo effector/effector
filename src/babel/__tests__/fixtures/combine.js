@@ -1,4 +1,3 @@
-//@flow
 import {createStore, combine} from 'effector'
 
 const foo = createStore('foo')

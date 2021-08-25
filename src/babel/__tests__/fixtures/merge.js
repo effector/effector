@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent, merge} from 'effector'
 
 const foo = createEvent()

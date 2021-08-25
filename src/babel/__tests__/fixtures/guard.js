@@ -1,4 +1,3 @@
-//@flow
 import {createStore, createEvent, guard} from 'effector'
 
 const foo = createStore(true)

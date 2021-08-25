@@ -2,16 +2,15 @@
 
 exports[`babel-plugin should attach 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/attach.js'
-//@flow
 import {attach, createEffect} from 'effector'
 const effect = createEffect({
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 3,
     column: 15,
   },
   name: 'effect',
-  sid: 'cqzl92',
+  sid: 'bswcgo',
 })
 const foo1 = attach({
   ɔ: {
@@ -21,11 +20,11 @@ const foo1 = attach({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 5,
       column: 13,
     },
     name: 'foo1',
-    sid: '-ko4avk',
+    sid: '-lm7jny',
   },
 })
 attach({
@@ -36,10 +35,10 @@ attach({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 12,
+      line: 10,
       column: 0,
     },
-    sid: 'tzqz4n',
+    sid: 'tyndxx',
   },
 })
 const config = {
@@ -51,11 +50,11 @@ const foo2 = attach({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 22,
+      line: 20,
       column: 13,
     },
     name: 'foo2',
-    sid: '-4t7i6y',
+    sid: '-5raqzc',
   },
 })
 
@@ -68,11 +67,11 @@ const f = () =>
     config: {
       loc: {
         file: _effectorFileName,
-        line: 25,
+        line: 23,
         column: 2,
       },
       name: 'f',
-      sid: 'hf8d25',
+      sid: 'he4rvf',
     },
   })
 "
@@ -80,25 +79,24 @@ const f = () =>
 
 exports[`babel-plugin should combine 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/combine.js'
-//@flow
 import {createStore, combine} from 'effector'
 const foo = createStore('foo', {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 12,
+  },
+  name: 'foo',
+  sid: 'v1pf4q',
+})
+const bar = createStore('h', {
   loc: {
     file: _effectorFileName,
     line: 4,
     column: 12,
   },
-  name: 'foo',
-  sid: 'vir1ix',
-})
-const bar = createStore('h', {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12,
-  },
   name: 'bar',
-  sid: '-92kryt',
+  sid: '-9jmed0',
 })
 const baz1 = combine({
   ɔ: [
@@ -110,11 +108,11 @@ const baz1 = combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 13,
     },
     name: 'baz1',
-    sid: 'ihqrp',
+    sid: '1g4di',
   },
 })
 const baz2 = combine({
@@ -122,11 +120,11 @@ const baz2 = combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 7,
       column: 13,
     },
     name: 'baz2',
-    sid: '-2zo8sd',
+    sid: '-3gpv6k',
   },
 })
 const baz3 = combine({
@@ -134,11 +132,11 @@ const baz3 = combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 8,
       column: 13,
     },
     name: 'baz3',
-    sid: '-6hu8cf',
+    sid: '-6yvuqm',
   },
 })
 const spread = [foo, bar]
@@ -147,11 +145,11 @@ const baz4 = combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 12,
+      line: 11,
       column: 13,
     },
     name: 'baz4',
-    sid: '-cwioto',
+    sid: '-ddkb7v',
   },
 })
 const shape = {
@@ -163,11 +161,11 @@ const baz5 = combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 15,
+      line: 14,
       column: 13,
     },
     name: 'baz5',
-    sid: '79adte',
+    sid: '6s8rf7',
   },
 })
 combine({
@@ -180,10 +178,10 @@ combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 16,
       column: 0,
     },
-    sid: '6d0wwi',
+    sid: '6ch4b5',
   },
 })
 combine({
@@ -191,10 +189,10 @@ combine({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 18,
+      line: 17,
       column: 0,
     },
-    sid: '6dkphv',
+    sid: '6d0wwi',
   },
 })
 
@@ -209,11 +207,11 @@ const f = a =>
     config: {
       loc: {
         file: _effectorFileName,
-        line: 20,
+        line: 19,
         column: 15,
       },
       name: 'f',
-      sid: '-arx9a6',
+      sid: '-l6wxyg',
     },
   })
 "
@@ -1609,25 +1607,24 @@ const f = () =>
 
 exports[`babel-plugin should guard 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/guard.js'
-//@flow
 import {createStore, createEvent, guard} from 'effector'
 const foo = createStore(true, {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 12,
+  },
+  name: 'foo',
+  sid: 'lecs4',
+})
+const bar = createEvent({
   loc: {
     file: _effectorFileName,
     line: 4,
     column: 12,
   },
-  name: 'foo',
-  sid: '12fz6b',
-})
-const bar = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12,
-  },
   name: 'bar',
-  sid: '-3ob7uj',
+  sid: '-45cu8q',
 })
 const baz1 = guard({
   ɔ: [
@@ -1639,11 +1636,11 @@ const baz1 = guard({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 13,
     },
     name: 'baz1',
-    sid: 'b10z6n',
+    sid: 'ajzcsg',
   },
 })
 const baz2 = guard({
@@ -1656,11 +1653,11 @@ const baz2 = guard({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 7,
       column: 13,
     },
     name: 'baz2',
-    sid: 'rjc331',
+    sid: 'r2agou',
   },
 })
 guard({
@@ -1673,10 +1670,10 @@ guard({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 13,
+      line: 12,
       column: 0,
     },
-    sid: '-ajecgo',
+    sid: '-ajy521',
   },
 })
 guard({
@@ -1689,10 +1686,10 @@ guard({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 14,
+      line: 13,
       column: 0,
     },
-    sid: '-aiujvb',
+    sid: '-ajecgo',
   },
 })
 const spread = [
@@ -1706,11 +1703,11 @@ const baz4 = guard({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 20,
+      line: 19,
       column: 13,
     },
     name: 'baz4',
-    sid: '-dxz69v',
+    sid: '-ocyuy5',
   },
 })
 const config = {
@@ -1722,11 +1719,11 @@ const baz5 = guard({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 27,
+      line: 26,
       column: 13,
     },
     name: 'baz5',
-    sid: '-ara4o9',
+    sid: '-b8br2g',
   },
 })
 
@@ -1741,11 +1738,11 @@ const f = () =>
     config: {
       loc: {
         file: _effectorFileName,
-        line: 30,
+        line: 29,
         column: 2,
       },
       name: 'f',
-      sid: '-7ro5ad',
+      sid: '-83rmcb',
     },
   })
 "
@@ -2233,61 +2230,60 @@ const q = allSettled(domainEvent, {
 
 exports[`babel-plugin should merge 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/merge.js'
-//@flow
 import {createEvent, merge} from 'effector'
 const foo = createEvent({
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 3,
     column: 12,
   },
   name: 'foo',
-  sid: 'xl5qm7',
+  sid: 'wn2htt',
 })
 const a = merge([foo], {
   loc: {
     file: _effectorFileName,
-    line: 7,
+    line: 5,
     column: 10,
   },
   name: 'a',
-  sid: 'gykm4k',
+  sid: 'g0hdc6',
 })
 const b = merge([foo], {
   ɔ: {},
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 6,
     column: 10,
   },
   name: 'b',
-  sid: 'xgvq0y',
+  sid: 'wish8k',
 })
 const {sid} = merge([foo], {
   loc: {
     file: _effectorFileName,
-    line: 9,
+    line: 7,
     column: 14,
   },
-  sid: '-f56bdd',
+  sid: '-g39k5r',
 })
 merge([foo], {
   loc: {
     file: _effectorFileName,
-    line: 11,
+    line: 9,
     column: 0,
   },
-  sid: 'lh67eb',
+  sid: '-1h8qvs',
 })
 const args = [[foo]]
 const c = merge(...args, {
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 13,
     column: 10,
   },
   name: 'c',
-  sid: 'fp5o1j',
+  sid: 'er2f95',
 })
 "
 `;
@@ -2743,25 +2739,24 @@ const f = () =>
 
 exports[`babel-plugin should split 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/split.js'
-//@flow
 import {createStore, createEvent, split} from 'effector'
 const foo = createStore([], {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 12,
+  },
+  name: 'foo',
+  sid: '-qfptup',
+})
+const bar = createEvent({
   loc: {
     file: _effectorFileName,
     line: 4,
     column: 12,
   },
-  name: 'foo',
-  sid: '-pyo7gi',
-})
-const bar = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12,
-  },
   name: 'bar',
-  sid: '-upfehc',
+  sid: '-v6h0vj',
 })
 const baz1 = split({
   ɔ: [
@@ -2773,10 +2768,10 @@ const baz1 = split({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 13,
     },
-    sid: '-yuao1s',
+    sid: '-zbcafz',
   },
 })
 split({
@@ -2789,10 +2784,10 @@ split({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 7,
       column: 0,
     },
-    sid: '-13wt2v',
+    sid: '-14glo8',
   },
 })
 const baz2 = split({
@@ -2810,10 +2805,10 @@ const baz2 = split({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 8,
       column: 13,
     },
-    sid: '-xw7f9e',
+    sid: '-yd91nl',
   },
 })
 split({
@@ -2831,10 +2826,10 @@ split({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 15,
+      line: 14,
       column: 0,
     },
-    sid: 'xhp42d',
+    sid: 'xh5bh0',
   },
 })
 const spread = [
@@ -2848,10 +2843,10 @@ const baz4 = split({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 22,
+      line: 21,
       column: 13,
     },
-    sid: '-dyswqx',
+    sid: '-efuj54',
   },
 })
 const config = {
@@ -2868,10 +2863,10 @@ const baz5 = split({
   config: {
     loc: {
       file: _effectorFileName,
-      line: 30,
+      line: 29,
       column: 13,
     },
-    sid: '-8hvba',
+    sid: '-anhjzk',
   },
 })
 
@@ -2886,10 +2881,10 @@ const f = () =>
     config: {
       loc: {
         file: _effectorFileName,
-        line: 32,
+        line: 31,
         column: 16,
       },
-      sid: 'pldjp',
+      sid: '8jr5i',
     },
   })
 "

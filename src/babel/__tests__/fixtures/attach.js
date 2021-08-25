@@ -1,5 +1,3 @@
-//@flow
-
 import {attach, createEffect} from 'effector'
 
 const effect = createEffect()

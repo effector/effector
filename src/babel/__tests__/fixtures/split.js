@@ -1,4 +1,3 @@
-//@flow
 import {createStore, createEvent, split} from 'effector'
 
 const foo = createStore([])
