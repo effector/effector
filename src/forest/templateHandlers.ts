@@ -9,8 +9,8 @@ const addRefOp = (ref: StateRef, op: StateRefOp) => {
 const includes = <T>(arr: T[], value: T) => arr.includes(value)
 
 export const handlers: TemplateHandlers = {
-  storeBase(template: Template, plainState: StateRef, oldState: StateRef) {
-    template.plain.push(plainState, oldState)
+  storeBase(template: Template, plainState: StateRef) {
+    template.plain.push(plainState)
   },
   storeOnMap(
     template: Template,

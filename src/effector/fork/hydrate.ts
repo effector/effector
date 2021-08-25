@@ -26,9 +26,10 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   const storeValues: any[] = []
   let forkPage: Scope
   let traverseTarget: Node
+  let needToAssign: true | void
   if (is.scope(domain)) {
     forkPage = domain
-    Object.assign(forkPage.sidValuesMap, normalizedValues)
+    needToAssign = true
     if (!forkPage.cloneOf) throwError('scope should be created from domain')
     traverseTarget = getGraph(forkPage.cloneOf)
   } else if (is.domain(domain)) {
@@ -48,4 +49,7 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
     params: storeValues,
     forkPage: forkPage!,
   })
+  if (needToAssign) {
+    Object.assign(forkPage!.sidValuesMap, normalizedValues)
+  }
 }

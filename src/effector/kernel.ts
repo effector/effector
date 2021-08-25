@@ -508,13 +508,3 @@ const tryRun = (local: Local, fn: Function, stack: Stack) => {
     local.fail = true
   }
 }
-
-export const checkChanged = (
-  store: StateRef,
-  value: any,
-  scope: any,
-  stack: Stack,
-) =>
-  value !== undefined &&
-  value !==
-    readRef(getPageRef(stack.page, getForkPage(stack), stack.node, store))

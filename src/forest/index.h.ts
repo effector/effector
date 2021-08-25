@@ -336,7 +336,7 @@ export type NodeDraft =
   | BlockItemDraft
 
 export type TemplateHandlers = {
-  storeBase(template: Template, plainState: StateRef, oldState: StateRef): void
+  storeBase(template: Template, plainState: StateRef): void
   storeOnMap(
     template: Template,
     plainState: StateRef,

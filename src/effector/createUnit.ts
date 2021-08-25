@@ -7,7 +7,6 @@ import {step} from './typedef'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
-import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
 import {
@@ -157,7 +156,7 @@ export function createEvent<Payload = any>(
       launch({target: event, params, forkPage: forkPage!})
       return params
     },
-    watch: bind(watchUnit, event),
+    watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
     map: (fn: any) =>
       deriveEvent(event, MAP, fn, [step.compute({fn: callStack})]),
     filter: (fn: any) =>
@@ -194,9 +193,8 @@ export function createStore<State>(
   props?: Config,
 ): Store<State> {
   const plainState = createStateRef(defaultState)
-  const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
-  applyTemplate('storeBase', plainState, oldState)
+  applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
   const store: any = {
     subscribers: new Map(),
@@ -276,7 +274,7 @@ export function createStore<State>(
         [OPEN_O]: config,
         strict: false,
       })
-      const linkNode = updateStore(store, innerStore, MAP, false, fn)
+      const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
@@ -302,9 +300,7 @@ export function createStore<State>(
     store.off(event)
     getSubscribers(store).set(
       event,
-      createSubscription(
-        updateStore(event, store, 'on', true, fn, updateFilter),
-      ),
+      createSubscription(updateStore(event, store, 'on', callARegStack, fn)),
     )
   }
   const meta = initUnit(STORE, store, props)
@@ -312,11 +308,14 @@ export function createStore<State>(
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
     node: [
-      step.changed({store: oldState}),
-      updateFilter && step.mov({store: oldState, to: REG_A}),
+      step.mov({store: plainState, to: REG_A}),
+      step.compute({
+        filter: true,
+        safe: true,
+        fn: (upd, _, {a}) => upd !== undefined && upd !== a,
+      }),
       updateFilter && step.filter({fn: callStackAReg}),
       step.update({store: plainState}),
-      step.update({store: oldState}),
     ],
     child: updates,
     meta,
@@ -336,18 +335,13 @@ const updateStore = (
   from: any,
   store: Store<any>,
   op: string,
-  stateFirst: boolean,
+  caller: typeof callStackAReg,
   fn: Function,
-  updateFilter?: Function,
 ) => {
   const storeRef = getStoreState(store)
   const node = [
     step.mov({store: storeRef, to: REG_A}),
-    step.compute({fn: stateFirst ? callARegStack : callStackAReg}),
-    step.changed({store: storeRef}),
-    updateFilter &&
-      step.filter({fn: (update, _, {a}) => updateFilter(update, a)}),
-    step.update({store: storeRef}),
+    step.compute({fn: caller}),
   ]
   applyTemplate(
     'storeOnMap',

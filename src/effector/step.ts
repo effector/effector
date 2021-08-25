@@ -9,8 +9,7 @@ import type {
 } from './index.h'
 import {nextStepID} from './id'
 import {EFFECT, STACK, STORE} from './tag'
-import {BarrierPriorityTag, checkChanged, Stack} from './kernel'
-import {bind} from './bind'
+import type {BarrierPriorityTag, Stack} from './kernel'
 
 const cmd = (
   type: 'compute' | 'mov',
@@ -97,12 +96,7 @@ export const mov: {
   batch?: boolean
   priority?: BarrierPriorityTag | false
 }) => cmd('mov', {from, store, to, target}, priority, batch)
-export const changed = ({store}: {store: StateRef}) =>
-  compute({
-    filter: true,
-    safe: true,
-    fn: bind(checkChanged, store),
-  })
+
 export const compute = ({
   fn,
   batch,

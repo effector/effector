@@ -130,7 +130,6 @@ const storeCombination = (
     }),
     step.mov({store: rawShape}),
     fn && step.compute({fn: callStack}),
-    step.changed({store: storeStateRef}),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {

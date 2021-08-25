@@ -7,15 +7,13 @@ exports[`graphite: show bar 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: callARegStack,
-        filter: bound checkChanged,
-        mov: stack store
+        compute: callARegStack
       ],
       next: [
         Node {
           seq: [
-            filter: bound checkChanged,
-            mov: stack store,
+            mov: store a,
+            filter: Function,
             mov: stack store
           ],
           next: [
@@ -23,15 +21,13 @@ exports[`graphite: show bar 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callStackAReg,
-                filter: bound checkChanged,
-                mov: stack store
+                compute: callStackAReg
               ],
               next: [
                 Node {
                   seq: [
-                    filter: bound checkChanged,
-                    mov: stack store,
+                    mov: store a,
+                    filter: Function,
                     mov: stack store
                   ],
                   next: [
@@ -61,15 +57,13 @@ exports[`graphite: show bar 2`] = `
     Node {
       seq: [
         mov: store a,
-        compute: callARegStack,
-        filter: bound checkChanged,
-        mov: stack store
+        compute: callARegStack
       ],
       next: [
         Node {
           seq: [
-            filter: bound checkChanged,
-            mov: stack store,
+            mov: store a,
+            filter: Function,
             mov: stack store
           ],
           next: [
@@ -77,15 +71,13 @@ exports[`graphite: show bar 2`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callStackAReg,
-                filter: bound checkChanged,
-                mov: stack store
+                compute: callStackAReg
               ],
               next: [
                 Node {
                   seq: [
-                    filter: bound checkChanged,
-                    mov: stack store,
+                    mov: store a,
+                    filter: Function,
                     mov: stack store
                   ],
                   next: [
@@ -117,15 +109,13 @@ exports[`graphite: show foo 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callARegStack,
-                filter: bound checkChanged,
-                mov: stack store
+                compute: callARegStack
               ],
               next: [
                 Node {
                   seq: [
-                    filter: bound checkChanged,
-                    mov: stack store,
+                    mov: store a,
+                    filter: Function,
                     mov: stack store
                   ],
                   next: [
@@ -133,15 +123,13 @@ exports[`graphite: show foo 1`] = `
                     Node {
                       seq: [
                         mov: store a,
-                        compute: callStackAReg,
-                        filter: bound checkChanged,
-                        mov: stack store
+                        compute: callStackAReg
                       ],
                       next: [
                         Node {
                           seq: [
-                            filter: bound checkChanged,
-                            mov: stack store,
+                            mov: store a,
+                            filter: Function,
                             mov: stack store
                           ],
                           next: [
@@ -165,8 +153,8 @@ exports[`graphite: show foo 1`] = `
 exports[`graphite: show store1 1`] = `
 "Node {
   seq: [
-    filter: bound checkChanged,
-    mov: stack store,
+    mov: store a,
+    filter: Function,
     mov: stack store
   ],
   next: [
@@ -174,15 +162,13 @@ exports[`graphite: show store1 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: callStackAReg,
-        filter: bound checkChanged,
-        mov: stack store
+        compute: callStackAReg
       ],
       next: [
         Node {
           seq: [
-            filter: bound checkChanged,
-            mov: stack store,
+            mov: store a,
+            filter: Function,
             mov: stack store
           ],
           next: [
@@ -198,8 +184,8 @@ exports[`graphite: show store1 1`] = `
 exports[`graphite: show store2 1`] = `
 "Node {
   seq: [
-    filter: bound checkChanged,
-    mov: stack store,
+    mov: store a,
+    filter: Function,
     mov: stack store
   ],
   next: [
@@ -215,15 +201,13 @@ exports[`showcase: event foo 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: callARegStack,
-        filter: bound checkChanged,
-        mov: stack store
+        compute: callARegStack
       ],
       next: [
         Node {
           seq: [
-            filter: bound checkChanged,
-            mov: stack store,
+            mov: store a,
+            filter: Function,
             mov: stack store
           ],
           next: [
@@ -236,14 +220,13 @@ exports[`showcase: event foo 1`] = `
                 mov: a store,
                 mov: value store,
                 mov: value store,
-                mov: store stack,
-                filter: bound checkChanged
+                mov: store stack
               ],
               next: [
                 Node {
                   seq: [
-                    filter: bound checkChanged,
-                    mov: stack store,
+                    mov: store a,
+                    filter: Function,
                     mov: stack store
                   ],
                   next: [
@@ -251,15 +234,13 @@ exports[`showcase: event foo 1`] = `
                     Node {
                       seq: [
                         mov: store a,
-                        compute: callStackAReg,
-                        filter: bound checkChanged,
-                        mov: stack store
+                        compute: callStackAReg
                       ],
                       next: [
                         Node {
                           seq: [
-                            filter: bound checkChanged,
-                            mov: stack store,
+                            mov: store a,
+                            filter: Function,
                             mov: stack store
                           ],
                           next: [
@@ -289,8 +270,8 @@ exports[`showcase: event foo 1`] = `
 exports[`showcase: mapped 1`] = `
 "Node {
   seq: [
-    filter: bound checkChanged,
-    mov: stack store,
+    mov: store a,
+    filter: Function,
     mov: stack store
   ],
   next: [
@@ -308,8 +289,8 @@ exports[`showcase: mapped 1`] = `
 exports[`showcase: store a 1`] = `
 "Node {
   seq: [
-    filter: bound checkChanged,
-    mov: stack store,
+    mov: store a,
+    filter: Function,
     mov: stack store
   ],
   next: [
@@ -322,14 +303,13 @@ exports[`showcase: store a 1`] = `
         mov: a store,
         mov: value store,
         mov: value store,
-        mov: store stack,
-        filter: bound checkChanged
+        mov: store stack
       ],
       next: [
         Node {
           seq: [
-            filter: bound checkChanged,
-            mov: stack store,
+            mov: store a,
+            filter: Function,
             mov: stack store
           ],
           next: [
@@ -337,15 +317,13 @@ exports[`showcase: store a 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callStackAReg,
-                filter: bound checkChanged,
-                mov: stack store
+                compute: callStackAReg
               ],
               next: [
                 Node {
                   seq: [
-                    filter: bound checkChanged,
-                    mov: stack store,
+                    mov: store a,
+                    filter: Function,
                     mov: stack store
                   ],
                   next: [
