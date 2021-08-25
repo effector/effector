@@ -879,3 +879,140 @@ describe('useStoreMap', () => {
     `)
   })
 })
+
+describe('behavior on scope changes', () => {
+  test('useStore should not stale', async () => {
+    const inc = createEvent()
+    const $store = createStore(0).on(inc, x => x + 1)
+    const Count = () => <p>{useStore($store)}</p>
+    const Inc = () => {
+      const boundInc = useEvent(inc)
+      return (
+        <button id="click" onClick={() => boundInc()}>
+          click
+        </button>
+      )
+    }
+    const App = ({scope}: {scope: Scope}) => (
+      <Provider value={scope}>
+        <div>
+          <Count />
+          <Inc />
+        </div>
+      </Provider>
+    )
+    const firstScope = fork()
+    const secondScope = fork({values: [[$store, 2]]})
+
+    await render(<App scope={firstScope} />)
+    await render(<App scope={secondScope} />)
+
+    await act(async () => {
+      container.firstChild.querySelector('#click').click()
+    })
+
+    expect(secondScope.getState($store)).toBe(3)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <p>
+          3
+        </p>
+        <button
+          id="click"
+        >
+          click
+        </button>
+      </div>
+    `)
+  })
+  test('useStoreMap should not stale', async () => {
+    const inc = createEvent()
+    const $store = createStore(0).on(inc, x => x + 1)
+    const Count = () => {
+      const value = useStoreMap($store, n => n)
+      return <p>{value}</p>
+    }
+    const Inc = () => {
+      const boundInc = useEvent(inc)
+      return (
+        <button id="click" onClick={() => boundInc()}>
+          click
+        </button>
+      )
+    }
+    const App = ({scope}: {scope: Scope}) => (
+      <Provider value={scope}>
+        <div>
+          <Count />
+          <Inc />
+        </div>
+      </Provider>
+    )
+    const firstScope = fork()
+    const secondScope = fork({values: [[$store, 2]]})
+
+    await render(<App scope={firstScope} />)
+    await render(<App scope={secondScope} />)
+
+    await act(async () => {
+      container.firstChild.querySelector('#click').click()
+    })
+
+    expect(secondScope.getState($store)).toBe(3)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <p>
+          3
+        </p>
+        <button
+          id="click"
+        >
+          click
+        </button>
+      </div>
+    `)
+  })
+  test('useList should not stale', async () => {
+    const inc = createEvent()
+    const $store = createStore([0]).on(inc, ([x]) => [x + 1])
+    const Count = () => useList($store, value => <p>{value}</p>)
+    const Inc = () => {
+      const boundInc = useEvent(inc)
+      return (
+        <button id="click" onClick={() => boundInc()}>
+          click
+        </button>
+      )
+    }
+    const App = ({scope}: {scope: Scope}) => (
+      <Provider value={scope}>
+        <div>
+          <Count />
+          <Inc />
+        </div>
+      </Provider>
+    )
+    const firstScope = fork()
+    const secondScope = fork({values: [[$store, [2]]]})
+
+    await render(<App scope={firstScope} />)
+    await render(<App scope={secondScope} />)
+
+    await act(async () => {
+      container.firstChild.querySelector('#click').click()
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <p>
+          3
+        </p>
+        <button
+          id="click"
+        >
+          click
+        </button>
+      </div>
+    `)
+  })
+})
