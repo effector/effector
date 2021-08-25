@@ -31,7 +31,7 @@ import {
   getGraph,
   getParent,
 } from './getter'
-import {throwError} from './throw'
+import {assert} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
 import {applyTemplate} from './template'
 
@@ -292,7 +292,7 @@ export function createStore<State>(
         }
         return subscription
       }
-      if (!isFunction(fn)) throwError('second argument should be a function')
+      assert(isFunction(fn), 'second argument should be a function')
       return eventOrFn.watch((payload: any) => fn(store.getState(), payload))
     },
   }
@@ -325,8 +325,10 @@ export function createStore<State>(
     meta.storeChange = true
     plainState.sid = meta.sid
   }
-  if (isStrict && defaultState === undefined)
-    throwError("current state can't be undefined, use null instead")
+  assert(
+    !isStrict || defaultState !== undefined,
+    "current state can't be undefined, use null instead",
+  )
   own(store, [updates])
   return store
 }

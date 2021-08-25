@@ -10,7 +10,7 @@ import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
 import {REG_A, SAMPLER} from './tag'
-import {throwError} from './throw'
+import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
 
@@ -45,7 +45,7 @@ export function split(...args: any[]): any {
   const matchIsShape = !matchIsUnit && !matchIsFunction && isObject(match)
   if (!targets!) targets = {}
   if (!knownCases) {
-    if (!matchIsShape) throwError('match should be an object')
+    assert(matchIsShape, 'match should be an object')
     forIn(match, (_, key) => (targets[key] = createEvent(metadata)))
     targets.__ = createEvent(metadata)
   }
@@ -130,7 +130,7 @@ export function split(...args: any[]): any {
       }),
     ]
   } else {
-    throwError('expect match to be unit, function or object')
+    assert(false, 'expect match to be unit, function or object')
   }
   createNode({
     meta: {op: 'split'},

@@ -7,7 +7,7 @@ import {
   getLinks,
 } from '../getter'
 import {is} from '../is'
-import {throwError} from '../throw'
+import {assert} from '../throw'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {step} from '../typedef'
@@ -41,7 +41,7 @@ export function normalizeValues(
   if (values instanceof Map) {
     const result = {} as Record<string, any>
     for (const [key, value] of values) {
-      if (!is.unit(key)) throwError('Map key should be a unit')
+      assert(is.unit(key), 'Map key should be a unit')
       if (assertEach) assertEach(key, value)
       result[key.sid!] = value
     }

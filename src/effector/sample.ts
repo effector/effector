@@ -10,7 +10,7 @@ import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
-import {throwError} from './throw'
+import {assert} from './throw'
 import {forEach} from './collection'
 import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
 import {merge} from './merge'
@@ -22,9 +22,7 @@ function validateSampleConfig(config: any) {
   let atLeastOneFieldExists = false
   forEach(sampleConfigFields, field => {
     if (field in config) {
-      if (config[field] == null) {
-        throwError(`sample: ${field} should be defined`)
-      }
+      assert(config[field] != null, `sample: ${field} should be defined`)
       atLeastOneFieldExists = true
     }
   })

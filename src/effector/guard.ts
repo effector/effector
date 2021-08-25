@@ -7,7 +7,7 @@ import {step} from './typedef'
 import {callStack} from './caller'
 import {assertNodeSet, is, isFunction} from './is'
 import {createNode} from './createNode'
-import {throwError} from './throw'
+import {assert} from './throw'
 import {merge} from './merge'
 
 export function guard(...args: any[]) {
@@ -64,7 +64,7 @@ export function guard(...args: any[]) {
       name,
     })
   } else {
-    if (!isFunction(filter)) throwError('`filter` should be function or unit')
+    assert(isFunction(filter), '`filter` should be function or unit')
     createLinkNode(source, target, {
       scope: {fn: filter},
       node: clock

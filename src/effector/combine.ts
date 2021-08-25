@@ -7,7 +7,7 @@ import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
-import {throwError} from './throw'
+import {assert} from './throw'
 import {readTemplate} from './region'
 import {forIn} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
@@ -68,7 +68,7 @@ export function combine(...args: any[]): Store<any> {
       handler = (list: any[]) => fn(...list)
     }
   }
-  if (!isObject(structStoreShape)) throwError('shape should be an object')
+  assert(isObject(structStoreShape), 'shape should be an object')
   return storeCombination(
     Array.isArray(structStoreShape),
     !noArraySpread,

@@ -1,6 +1,6 @@
 import type {Scope, Store} from '../unit.h'
 import {forIn, includes} from '../collection'
-import {throwError} from '../throw'
+import {assert} from '../throw'
 import {traverseStores} from './util'
 import {getGraph, getMeta} from '../getter'
 
@@ -24,7 +24,7 @@ export function serialize(
     }
   })
   if ('onlyChanges' in config && !config.onlyChanges) {
-    if (!scope.cloneOf) throwError('scope should be created from domain')
+    assert(scope.cloneOf, 'scope should be created from domain')
     traverseStores(getGraph(scope.cloneOf), (node, sid) => {
       if (
         sid in result ||

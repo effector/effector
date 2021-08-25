@@ -1,5 +1,5 @@
 import {is, isObject} from '../is'
-import {throwError} from '../throw'
+import {assert} from '../throw'
 import {launch} from '../kernel'
 import type {Domain, Scope} from '../unit.h'
 import type {Node} from '../index.h'
@@ -17,9 +17,7 @@ import {getGraph} from '../getter'
 
  */
 export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
-  if (!isObject(values)) {
-    throwError('values property should be an object')
-  }
+  assert(isObject(values), 'values property should be an object')
   const normalizedValues = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(normalizedValues)
   const storeNodes: Node[] = []
@@ -30,12 +28,12 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   if (is.scope(domain)) {
     forkPage = domain
     needToAssign = true
-    if (!forkPage.cloneOf) throwError('scope should be created from domain')
+    assert(forkPage.cloneOf, 'scope should be created from domain')
     traverseTarget = getGraph(forkPage.cloneOf)
   } else if (is.domain(domain)) {
     traverseTarget = getGraph(domain)
   } else {
-    throwError('first argument of hydrate should be domain or scope')
+    assert(false, 'first argument of hydrate should be domain or scope')
   }
   traverseStores(traverseTarget!, (node, sid) => {
     // forkPage.sidIdMap[sid] = node.scope.state.id

@@ -6,7 +6,7 @@ import {launch, setForkPage, forkPage, isWatch, Stack} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
-import {throwError} from './throw'
+import {assert} from './throw'
 import {EFFECT} from './tag'
 import type {Unit} from './index.h'
 
@@ -17,11 +17,11 @@ export function createEffect<Payload, Done>(
   const instance: any = createEvent(nameOrConfig, maybeConfig)
   let currentHandler =
     instance.defaultConfig.handler ||
-    (() => throwError(`no handler used in ${instance.getType()}`))
+    (() => assert(false, `no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
   setMeta(node, 'unit', (instance.kind = EFFECT))
   instance.use = (fn: Function) => {
-    if (!isFunction(fn)) throwError('.use argument should be a function')
+    assert(isFunction(fn), '.use argument should be a function')
     currentHandler = fn
     return instance
   }
