@@ -1,4 +1,11 @@
-import {getForkPage, getGraph, getMeta, getParent} from '../getter'
+import {
+  getForkPage,
+  getGraph,
+  getMeta,
+  getParent,
+  getOwners,
+  getLinks,
+} from '../getter'
 import {is} from '../is'
 import {throwError} from '../throw'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
@@ -6,8 +13,25 @@ import {createNode} from '../createNode'
 import {step} from '../typedef'
 import type {Domain, Scope, Store} from '../unit.h'
 import type {Node, StateRef} from '../index.h'
-import {forEach} from '../collection'
-import {DOMAIN, SAMPLER, FORK_COUNTER, SCOPE} from '../tag'
+import {forEach, includes} from '../collection'
+import {DOMAIN, SAMPLER, FORK_COUNTER, SCOPE, STORE} from '../tag'
+
+export function traverseStores(
+  root: Node,
+  fn: (node: Node, sid: string) => void,
+) {
+  const list = [] as Node[]
+  ;(function visit(node) {
+    if (includes(list, node)) return
+    list.push(node)
+    if (getMeta(node, 'unit') === STORE && getMeta(node, 'sid')) {
+      fn(node, getMeta(node, 'sid'))
+    }
+    forEach(node.next, visit)
+    forEach(getOwners(node), visit)
+    forEach(getLinks(node), visit)
+  })(root)
+}
 
 export function normalizeValues(
   values: Map<Store<any>, any> | Array<[any, any]> | Record<string, any>,

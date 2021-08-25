@@ -3,24 +3,9 @@ import {throwError} from '../throw'
 import {launch} from '../kernel'
 import type {Domain, Scope} from '../unit.h'
 import type {Node} from '../index.h'
-import {forEach, includes} from '../collection'
-import {STORE} from '../tag'
-import {normalizeValues} from './util'
-import {getGraph, getLinks, getMeta, getOwners} from '../getter'
-
-function traverse(root: Node, fn: (node: Node, sid: string) => void) {
-  const list = [] as Node[]
-  ;(function visit(node) {
-    if (includes(list, node)) return
-    list.push(node)
-    if (getMeta(node, 'unit') === STORE && getMeta(node, 'sid')) {
-      fn(node, getMeta(node, 'sid'))
-    }
-    forEach(node.next, visit)
-    forEach(getOwners(node), visit)
-    forEach(getLinks(node), visit)
-  })(root)
-}
+import {includes} from '../collection'
+import {normalizeValues, traverseStores} from './util'
+import {getGraph} from '../getter'
 
 /**
  hydrate state on client
@@ -51,7 +36,7 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   } else {
     throwError('first argument of hydrate should be domain or scope')
   }
-  traverse(traverseTarget!, (node, sid) => {
+  traverseStores(traverseTarget!, (node, sid) => {
     // forkPage.sidIdMap[sid] = node.scope.state.id
     if (includes(valuesSidList, sid)) {
       storeNodes.push(node)
