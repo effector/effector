@@ -228,7 +228,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                       defer: true,
                       page: item.instance,
                       //@ts-expect-error
-                      forkPage: item.instance.root.forkPage,
+                      scope: item.instance.root.scope,
                     })
                   }
                 },

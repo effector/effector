@@ -200,7 +200,7 @@ export function mountChild({
                     },
                     page: childSpawn,
                     //@ts-expect-error
-                    forkPage: leaf.root.forkPage,
+                    scope: leaf.root.scope,
                   })
                 }
                 elementBlock.visible = true

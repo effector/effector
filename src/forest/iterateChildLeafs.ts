@@ -24,7 +24,7 @@ export function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
         defer: true,
         page: child,
         //@ts-expect-error
-        forkPage: child.root.forkPage,
+        scope: child.root.scope,
       })
     }
     if (visible && data.type === 'route') {
@@ -37,7 +37,7 @@ export function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
           defer: true,
           page: child,
           //@ts-expect-error
-          forkPage: child.root.forkPage,
+          scope: child.root.scope,
         })
       } else if (!data.block.visible) return
     }

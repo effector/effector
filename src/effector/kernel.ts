@@ -32,7 +32,7 @@ export type Stack = {
   parent: Stack | null
   node: Node
   page: Leaf | null
-  forkPage?: Scope | null | void
+  scope?: Scope | null | void
 }
 
 /** Queue as linked list or skew heap */
@@ -126,7 +126,7 @@ const pushFirstHeapItem = (
   node: Node,
   parent: Stack | null,
   value: any,
-  forkPage?: Scope | null | void,
+  scope?: Scope | null | void,
 ) =>
   pushHeap(
     0,
@@ -137,7 +137,7 @@ const pushFirstHeapItem = (
       parent,
       value,
       page,
-      forkPage,
+      scope,
     },
     type,
   )
@@ -236,7 +236,7 @@ export function launch(config: {
   params?: any
   defer?: boolean
   page?: Leaf | void | null
-  forkPage?: Scope | void
+  scope?: Scope | void
   stack?: Stack | void
 }): void
 export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
@@ -278,7 +278,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   }
   if (upsert && !isRoot) return
   /** main execution code */
-  const lastStartedState = {isRoot, currentPage, forkPage, isWatch}
+  const lastStartedState = {isRoot, currentPage, scope: forkPage, isWatch}
   isRoot = false
   let stop: boolean
   let skip: boolean
@@ -409,7 +409,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           getForkPage(stack),
         )
       })
-      const forkPage: Scope | null = getForkPage(stack)
+      const forkPage = getForkPage(stack)
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
           pushFirstHeapItem('child', page, forkPage.fxCount, stack, 0, forkPage)

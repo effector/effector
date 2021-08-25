@@ -454,6 +454,7 @@ export function launch<T>(config: {
   params: T
   defer?: boolean
   page?: any
+  scope?: Scope
 }): void
 export function fromObservable<T>(observable: unknown): Event<T>
 

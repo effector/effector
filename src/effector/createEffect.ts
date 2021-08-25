@@ -57,7 +57,7 @@ export function createEffect<Payload, Done>(
           const onReject = onSettled(params, req, false, anyway, stack)
           let handler: (data: any) => any = currentHandler
           if (getForkPage(stack)) {
-            const handler_ = getForkPage(stack).handlers[handlerId]
+            const handler_ = getForkPage(stack)!.handlers[handlerId]
             if (handler_) handler = handler_
           }
           let result
@@ -87,7 +87,7 @@ export function createEffect<Payload, Done>(
           target: runner,
           params: upd,
           defer: true,
-          forkPage: getForkPage(stack),
+          scope: getForkPage(stack),
         })
         return upd.params
       },
@@ -107,7 +107,7 @@ export function createEffect<Payload, Done>(
           })
           .catch(() => {})
       }
-      launch({target: instance, params: payload, forkPage})
+      launch({target: instance, params: payload, scope: forkPage})
     } else {
       launch(instance, payload)
     }
@@ -151,7 +151,7 @@ export const onSettled =
       ],
       defer: true,
       page: stack.page,
-      forkPage: getForkPage(stack),
+      scope: getForkPage(stack),
     })
 
 export const sidechain = createNode({

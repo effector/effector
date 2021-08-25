@@ -150,7 +150,7 @@ export function createEvent<Payload = any>(
       regional: true,
     }),
     create(params: any, _: any) {
-      launch({target: event, params, forkPage: forkPage!})
+      launch({target: event, params, scope: forkPage!})
       return params
     },
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
@@ -220,7 +220,7 @@ export function createStore<State>(
         target: store,
         params: state,
         defer: true,
-        forkPage: forkPage!,
+        scope: forkPage!,
       }),
     reset(...units: any[]) {
       forEach(units, unit => store.on(unit, () => store.defaultState))

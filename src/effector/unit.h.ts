@@ -179,7 +179,7 @@ export interface Scope extends Unit {
   sidValuesMap: Record<string, any>
   sidIdMap: Record<string, string>
   additionalLinks: Record<string, Node[]>
-  handlers: Record<string, Function>
+  handlers: Record<string, (params: any) => any>
   fxCount: Node
   storeChange: Node
 }

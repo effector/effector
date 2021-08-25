@@ -107,7 +107,7 @@ export function cloneGraph(unit?: Domain): Scope {
               !getMeta(storeNode, 'isCombine') ||
               getMeta(getParent(storeStack).node, 'op') !== 'combine'
             ) {
-              const forkPage: Scope = getForkPage(stack)
+              const forkPage = getForkPage(stack)!
               const id = storeNode.scope.state.id
               const sid = getMeta(storeNode, 'sid')
               forkPage.sidIdMap[sid] = id

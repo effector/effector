@@ -24,7 +24,7 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
   getGraph(trigger).seq.push(
     step.compute({
       fn(upd, _, stack) {
-        stack.forkPage = null
+        stack.scope = null
         return upd
       },
     }),

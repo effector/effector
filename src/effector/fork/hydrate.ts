@@ -45,7 +45,7 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   launch({
     target: storeNodes,
     params: storeValues,
-    forkPage: forkPage!,
+    scope: forkPage!,
   })
   if (needToAssign) {
     Object.assign(forkPage!.sidValuesMap, normalizedValues)

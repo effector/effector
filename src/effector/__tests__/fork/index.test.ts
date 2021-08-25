@@ -600,8 +600,8 @@ test('forked scope update itself on new domain units access', async () => {
   })
   launch({
     target: newEvent,
-    //@ts-expect-error
-    forkPage: scope,
+    params: undefined,
+    scope,
   })
   expect(fn).toBeCalledTimes(1)
 })

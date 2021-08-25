@@ -83,7 +83,7 @@ export function rec<T>(
               defer: true,
               page: leaf,
               //@ts-expect-error
-              forkPage: leaf.root.forkPage,
+              scope: leaf.root.scope,
             })
           })
         })

@@ -60,7 +60,7 @@ export function using(node: DOMElement, opts: any): void {
   } else throw Error('using() second argument is missing')
   assert(node, 'using() first argument is missing')
   const root: Root = {
-    forkPage: scope!,
+    scope: scope!,
     env,
     activeSpawns: new Set(),
     childSpawns: {},

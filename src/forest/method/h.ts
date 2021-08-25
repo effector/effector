@@ -423,7 +423,7 @@ export function h(tag: string, opts?: any) {
                     page: leaf,
                     defer: true,
                     //@ts-expect-error
-                    forkPage: leaf.root.forkPage,
+                    scope: leaf.root.scope,
                   })
                 }
               }
@@ -433,7 +433,7 @@ export function h(tag: string, opts?: any) {
                 defer: true,
                 page: leaf,
                 //@ts-expect-error
-                forkPage: leaf.root.forkPage,
+                scope: leaf.root.scope,
               })
             })
             merge([onState, onMount]).watch(({leaf, value, hydration}) => {
@@ -529,7 +529,7 @@ export function h(tag: string, opts?: any) {
                     params: value,
                     page,
                     //@ts-expect-error
-                    forkPage: leaf.root.forkPage,
+                    scope: leaf.root.scope,
                   })
                 },
                 item.domConfig,
@@ -577,7 +577,7 @@ export function h(tag: string, opts?: any) {
             defer: true,
             page: leaf,
             //@ts-expect-error
-            forkPage: leaf.root.forkPage,
+            scope: leaf.root.scope,
           })
           if (leaf.hydration) {
             if (leafData.needToCallNode) {
@@ -591,7 +591,7 @@ export function h(tag: string, opts?: any) {
                 page: leaf,
                 defer: true,
                 //@ts-expect-error
-                forkPage: leaf.root.forkPage,
+                scope: leaf.root.scope,
               })
             }
           } else {

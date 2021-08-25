@@ -151,7 +151,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 defer: true,
                 page,
                 stack,
-                forkPage: stack.forkPage,
+                //@ts-expect-error
+                scope: stack.scope,
               })
             } else {
               console.error('context drift', {stack, node})
@@ -164,7 +165,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               defer: true,
               page: stack.page,
               stack,
-              forkPage: stack.forkPage,
+              //@ts-expect-error
+              scope: stack.scope,
             })
           }
         })
@@ -175,7 +177,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
       //@ts-expect-error
       fn(upd, scope, stack: Stack) {
         if (stack.parent) {
-          const forkId = stack.forkPage ? stack.forkPage.graphite.id : null
+          const forkId = stack.scope ? stack.scope.graphite.id : null
           if (stack.page) {
             if (!stack.page.root.activeSpawns.has(stack.page.fullID)) {
               console.count('inactive page loader')
@@ -190,8 +192,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               stack.page.root.childSpawns[fullID][template.id].forEach(page => {
                 if (forkId) {
                   if (
-                    !page.root.forkPage ||
-                    forkId !== page.root.forkPage.graphite.id
+                    !page.root.scope ||
+                    forkId !== page.root.scope.graphite.id
                   )
                     return
                 }
@@ -201,7 +203,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   target: stack.node,
                   page,
                   defer: true,
-                  forkPage: stack.forkPage,
+                  //@ts-expect-error
+                  scope: stack.scope,
                 })
               })
             } else {
@@ -211,8 +214,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               template.pages.forEach(page => {
                 if (forkId) {
                   if (
-                    !page.root.forkPage ||
-                    forkId !== page.root.forkPage.graphite.id
+                    !page.root.scope ||
+                    forkId !== page.root.scope.graphite.id
                   )
                     return
                 }
@@ -242,7 +245,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                       target: stack.node,
                       page,
                       defer: true,
-                      forkPage: stack.forkPage,
+                      //@ts-expect-error
+                      scope: stack.scope,
                     })
                   }
                 } else {
@@ -253,7 +257,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                       target: stack.node,
                       page: stack.page,
                       defer: true,
-                      forkPage: stack.forkPage,
+                      //@ts-expect-error
+                      scope: stack.scope,
                     })
                   } else {
                     // console.count('no page match')
@@ -264,10 +269,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
           } else {
             template.pages.forEach(page => {
               if (forkId) {
-                if (
-                  !page.root.forkPage ||
-                  forkId !== page.root.forkPage.graphite.id
-                )
+                if (!page.root.scope || forkId !== page.root.scope.graphite.id)
                   return
               }
               launch({
@@ -276,7 +278,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 target: stack.node,
                 page,
                 defer: true,
-                forkPage: stack.forkPage,
+                //@ts-expect-error
+                scope: stack.scope,
               })
             })
           }
@@ -374,7 +377,7 @@ function findRefValue(
 }
 function ensureLeafHasRef(ref: StateRef, leaf: Leaf) {
   if (!regRef(leaf, ref)) {
-    leaf.reg[ref.id] = findRef(ref, leaf.parent, leaf.root.forkPage)
+    leaf.reg[ref.id] = findRef(ref, leaf.parent, leaf.root.scope)
   }
 }
 const regRef = (page: {reg: Record<string, StateRef>}, ref: StateRef) =>
@@ -453,9 +456,9 @@ export function spawn(
       }
       parent = parent.parent
     }
-    if (!parent && root.forkPage) {
-      root.forkPage.getState(ref)
-      closureRef = root.forkPage.reg[ref.id]
+    if (!parent && root.scope) {
+      root.scope.getState(ref)
+      closureRef = root.scope.reg[ref.id]
     }
     page[ref.id] = closureRef
   }
@@ -464,7 +467,7 @@ export function spawn(
     const ref = template.plain[i]
     const next: StateRef = {
       id: ref.id,
-      current: getCurrent(ref, root.forkPage),
+      current: getCurrent(ref, root.scope),
     }
     page[ref.id] = next
   }
@@ -521,7 +524,7 @@ export function spawn(
         val.fn(
           page[val.of.id]
             ? page[val.of.id].current
-            : findRefValue(val.of, leaf.parent, leaf.root.forkPage),
+            : findRefValue(val.of, leaf.parent, leaf.root.scope),
         )
       }
     } catch (err) {
@@ -548,7 +551,7 @@ export function spawn(
       params: leaf,
       defer: true,
       page: leaf,
-      forkPage: root.forkPage,
+      scope: root.scope,
     })
   } else {
     mountQueue = {
@@ -559,7 +562,7 @@ export function spawn(
           params: leaf,
           defer: true,
           page: leaf,
-          forkPage: root.forkPage,
+          scope: root.scope,
         },
       ],
     }

@@ -238,7 +238,7 @@ export type Leaf = {
 }
 
 export type Root = {
-  forkPage?: Scope
+  scope?: Scope
   env: Env
   activeSpawns: Set<string>
   childSpawns: Record<string, {[id: string]: Leaf[]}>

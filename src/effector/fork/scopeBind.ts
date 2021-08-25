@@ -20,12 +20,12 @@ export function scopeBind(unit: any, {scope}: {scope?: Scope} = {}) {
             params,
             req,
           },
-          forkPage: savedForkPage,
+          scope: savedForkPage,
         })
         return req.req
       }
     : (params: any) => {
-        launch({target: unit, params, forkPage: savedForkPage})
+        launch({target: unit, params, scope: savedForkPage})
         return params
       }
 }
