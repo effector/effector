@@ -106,7 +106,7 @@ export const compute = ({
 }: {
   fn?: (data: any, scope: {[key: string]: any}, stack: Stack) => any
   batch?: boolean
-  priority?: BarrierPriorityTag
+  priority?: BarrierPriorityTag | false
   safe?: boolean
   filter?: boolean
 }): Compute => cmd('compute', {fn, safe, filter}, priority, batch)

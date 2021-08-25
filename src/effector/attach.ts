@@ -30,28 +30,29 @@ export function attach(config: any) {
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope
   let runnerSteps
-  const runnerFn = (
-    {params, req}: any,
-    {finally: anyway, effect, isPlain}: any,
-    stack: Stack,
-  ) => {
-    const rj = onSettled(params, req, false, anyway, stack)
-    let computedParams
-    try {
-      computedParams = mapParams(params, stack.a)
-    } catch (err) {
-      return rj(err)
-    }
-    launch({
-      target: effect,
-      params: {
-        params: isPlain ? [computedParams, stack.a] : computedParams,
-        req: {rs: onSettled(params, req, true, anyway, stack), rj},
-      },
-      page: stack.page,
-      defer: true,
-    })
-  }
+  const runnerFnStep = step.compute({
+    fn: ({params, req}: any, _: any, stack: Stack) => {
+      const anyway = attached.finally
+      const rj = onSettled(params, req, false, anyway, stack)
+      let computedParams
+      try {
+        computedParams = mapParams(params, stack.a)
+      } catch (err) {
+        return rj(err)
+      }
+      launch({
+        target: effect,
+        params: {
+          params: isPlainFunction ? [computedParams, stack.a] : computedParams,
+          req: {rs: onSettled(params, req, true, anyway, stack), rj},
+        },
+        page: stack.page,
+        defer: true,
+      })
+    },
+    safe: true,
+    priority: !source && EFFECT,
+  })
   if (source) {
     let state
     if (is.store(source)) {
@@ -73,14 +74,11 @@ export function attach(config: any) {
         priority: EFFECT,
       }),
       /* no need for step.run because of first step */
-      step.compute({fn: runnerFn}),
+      runnerFnStep,
     ]
   } else {
-    runnerSteps = [step.run({fn: runnerFn})]
+    runnerSteps = [runnerFnStep]
   }
-  own(effect, [attached])
-  runner.scope.effect = effect
-  runner.scope.isPlain = isPlainFunction
   runner.seq.splice(0, 1, ...runnerSteps)
   applyParentHook(effect, attached, EFFECT)
   return attached

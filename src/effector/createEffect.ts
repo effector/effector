@@ -15,16 +15,17 @@ export function createEffect<Payload, Done>(
   maybeConfig?: any,
 ) {
   const instance: any = createEvent(nameOrConfig, maybeConfig)
-  let handler =
+  let currentHandler =
     instance.defaultConfig.handler ||
     (() => throwError(`no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
   setMeta(node, 'unit', (instance.kind = EFFECT))
   instance.use = (fn: Function) => {
     if (!isFunction(fn)) throwError('.use argument should be a function')
-    handler = fn
+    currentHandler = fn
     return instance
   }
+  instance.use.getCurrent = () => currentHandler
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
@@ -47,26 +48,20 @@ export function createEffect<Payload, Done>(
     fn: ({error}: any) => error,
   }))
 
-  const effectRunner = createNode({
-    scope: {
-      getHandler: (instance.use.getCurrent = () => handler),
-      finally: anyway,
-      handlerId: getMeta(node, 'sid'),
-    },
+  node.scope.runner = createNode({
+    scope: {handlerId: getMeta(node, 'sid')},
     node: [
       step.run({
-        fn({params, req}, {finally: anyway, getHandler, handlerId}, stack) {
+        fn({params, req}, {handlerId}, stack) {
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
+          let handler: (data: any) => any = currentHandler
+          if (getForkPage(stack)) {
+            const handler_ = getForkPage(stack).handlers[handlerId]
+            if (handler_) handler = handler_
+          }
           let result
           try {
-            let handler: (data: any) => any
-            if (getForkPage(stack)) {
-              const handler_ = getForkPage(stack).handlers[handlerId]
-              handler = handler_ ? handler_ : getHandler()
-            } else {
-              handler = getHandler()
-            }
             result = handler(params)
           } catch (err) {
             return void onReject(err)
@@ -81,17 +76,13 @@ export function createEffect<Payload, Done>(
     ],
     meta: {op: 'fx', fx: 'runner'},
   })
-  node.scope.runner = effectRunner
   node.seq.push(
     step.compute({
-      fn(params, scope, stack) {
-        // empty stack means that this node was launched directly
-        if (!getParent(stack)) return params
-        return {params, req: {rs(data: any) {}, rj(data: any) {}}}
-      },
-    }),
-    step.run({
-      fn(upd, {runner}, stack) {
+      fn(params, {runner}, stack) {
+        const upd = getParent(stack)
+          ? {params, req: {rs(data: any) {}, rj(data: any) {}}}
+          : /** empty stack means that this node was launched directly */
+            params
         launch({
           target: runner,
           params: upd,
@@ -100,6 +91,8 @@ export function createEffect<Payload, Done>(
         })
         return upd.params
       },
+      safe: true,
+      priority: EFFECT,
     }),
   )
   instance.create = (params: Payload) => {
@@ -127,21 +120,12 @@ export function createEffect<Payload, Done>(
   setMeta(anyway, 'needFxCounter', true)
   setMeta(instance, 'needFxCounter', true)
   const pending = (instance.pending = inFlight.map({
-    //@ts-ignore
+    //@ts-expect-error
     fn: amount => amount > 0,
     named: 'pending',
   }))
 
-  own(instance, [
-    anyway,
-    done,
-    fail,
-    doneData,
-    failData,
-    pending,
-    inFlight,
-    effectRunner,
-  ])
+  own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   return instance
 }
 
