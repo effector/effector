@@ -105,15 +105,18 @@ const storeCombination = (
   setMeta(store, 'isCombine', true)
   const node = [
     step.mov({store: rawShape, to: REG_A}),
-    step.filter({fn: (upd, {key}, {a}) => upd !== a[key]}),
     step.mov({store: isFresh, to: 'b'}),
     step.compute({
-      safe: !needSpread,
+      safe: true,
+      filter: true,
       fn(upd, {key}, reg) {
-        if (needSpread && reg.b) {
-          reg.a = clone(reg.a)
+        if (upd !== reg.a[key]) {
+          if (needSpread && reg.b) {
+            reg.a = clone(reg.a)
+          }
+          reg.a[key] = upd
+          return true
         }
-        reg.a[key] = upd
       },
     }),
     step.mov({from: REG_A, target: rawShape}),

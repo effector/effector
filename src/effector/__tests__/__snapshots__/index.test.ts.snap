@@ -231,9 +231,8 @@ exports[`showcase: event foo 1`] = `
             Node {
               seq: [
                 mov: store a,
-                filter: Function,
                 mov: store b,
-                compute: Function,
+                filter: Function,
                 mov: a store,
                 mov: value store,
                 mov: value store,
@@ -318,9 +317,8 @@ exports[`showcase: store a 1`] = `
     Node {
       seq: [
         mov: store a,
-        filter: Function,
         mov: store b,
-        compute: Function,
+        filter: Function,
         mov: a store,
         mov: value store,
         mov: value store,
