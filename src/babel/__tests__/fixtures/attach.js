@@ -24,3 +24,9 @@ const f = () =>
     effect,
     mapParams: _ => _,
   })
+
+{
+  const incorrect = attach(config)
+
+  function attach() {}
+}

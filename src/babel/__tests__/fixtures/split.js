@@ -29,3 +29,13 @@ const config = {
 const baz5 = split(config)
 
 const f = () => split(foo, {nonEmpty: list => list.length === 0})
+
+{
+  const incorrect = split({
+    source: foo,
+    match: {nonEmpty: list => list.length === 0},
+    cases: {nonEmpty: bar},
+  })
+
+  function split() {}
+}

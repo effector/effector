@@ -30,3 +30,9 @@ const f = () =>
     source: bar,
     filter: foo,
   })
+
+{
+  const incorrect = guard(bar, {filter: foo})
+
+  function guard() {}
+}

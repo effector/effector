@@ -17,3 +17,9 @@ combine({foo, bar})
 combine(...spread)
 
 const f = a => combine({foo, bar})
+
+{
+  const incorrect = combine({foo})
+
+  function combine() {}
+}

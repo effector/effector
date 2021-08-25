@@ -74,6 +74,23 @@ const f = () =>
       sid: 'he4rvf',
     },
   })
+
+{
+  const incorrect = attach({
+    ɔ: config,
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 29,
+        column: 20,
+      },
+      name: 'incorrect',
+      sid: '-6fwy2e',
+    },
+  })
+
+  function attach() {}
+}
 "
 `;
 
@@ -214,6 +231,27 @@ const f = a =>
       sid: '-l6wxyg',
     },
   })
+
+{
+  const incorrect = combine({
+    ɔ: [
+      {
+        foo,
+      },
+    ],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 22,
+        column: 20,
+      },
+      name: 'incorrect',
+      sid: '-zh33ob',
+    },
+  })
+
+  function combine() {}
+}
 "
 `;
 
@@ -1745,6 +1783,28 @@ const f = () =>
       sid: '-83rmcb',
     },
   })
+
+{
+  const incorrect = guard({
+    ɔ: [
+      bar,
+      {
+        filter: foo,
+      },
+    ],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 35,
+        column: 20,
+      },
+      name: 'incorrect',
+      sid: 'it0ort',
+    },
+  })
+
+  function guard() {}
+}
 "
 `;
 
@@ -2285,6 +2345,19 @@ const c = merge(...args, {
   name: 'c',
   sid: 'er2f95',
 })
+{
+  const incorrect = merge([foo], {
+    loc: {
+      file: _effectorFileName,
+      line: 16,
+      column: 20,
+    },
+    name: 'incorrect',
+    sid: '-b2ioh3',
+  })
+
+  function merge() {}
+}
 "
 `;
 
@@ -2887,6 +2960,32 @@ const f = () =>
       sid: '8jr5i',
     },
   })
+
+{
+  const incorrect = split({
+    ɔ: [
+      {
+        source: foo,
+        match: {
+          nonEmpty: list => list.length === 0,
+        },
+        cases: {
+          nonEmpty: bar,
+        },
+      },
+    ],
+    config: {
+      loc: {
+        file: _effectorFileName,
+        line: 34,
+        column: 20,
+      },
+      sid: '1nomxm',
+    },
+  })
+
+  function split() {}
+}
 "
 `;
 

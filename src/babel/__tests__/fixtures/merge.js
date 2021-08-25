@@ -11,3 +11,9 @@ merge([foo])
 const args = [[foo]]
 
 const c = merge(...args)
+
+{
+  const incorrect = merge([foo])
+
+  function merge() {}
+}
