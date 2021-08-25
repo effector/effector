@@ -34,7 +34,7 @@ import {
 import {assert} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
 import {applyTemplate} from './template'
-import forEach from 'core-js/fn/array/for-each'
+import {forEach} from './collection'
 
 const normalizeConfig = (part: any, config: any) => {
   if (isObject(part)) {
