@@ -24,7 +24,7 @@ export function traverseStores(
   ;(function visit(node) {
     if (includes(list, node)) return
     list.push(node)
-    if (getMeta(node, 'unit') === STORE && getMeta(node, 'sid')) {
+    if (getMeta(node, 'op') === STORE && getMeta(node, 'sid')) {
       fn(node, getMeta(node, 'sid'))
     }
     forEach(node.next, visit)

@@ -19,7 +19,7 @@ export function createEffect<Payload, Done>(
     instance.defaultConfig.handler ||
     (() => assert(false, `no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
-  setMeta(node, 'unit', (instance.kind = EFFECT))
+  setMeta(node, 'op', (instance.kind = EFFECT))
   instance.use = (fn: Function) => {
     assert(isFunction(fn), '.use argument should be a function')
     currentHandler = fn

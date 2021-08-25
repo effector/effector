@@ -78,7 +78,7 @@ export const initUnit = (
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
   const meta: Record<string, any> = {
-    unit: (unit.kind = kind),
+    op: (unit.kind = kind),
     name: (unit.shortName = name),
     sid: (unit.sid = readSidRoot(sid)),
     named,
@@ -95,11 +95,7 @@ export const initUnit = (
       return unit.watch(
         isFunction(observer)
           ? observer
-          : (upd: any) => {
-              if (observer.next) {
-                observer.next(upd)
-              }
-            },
+          : (upd: any) => observer.next && observer.next(upd),
       )
     }
     unit[observableSymbol] = () => unit
