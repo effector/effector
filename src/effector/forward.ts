@@ -1,11 +1,11 @@
 import {onConfigNesting} from './config'
 import {createNode} from './createNode'
-import {Subscription, NodeUnit, Cmd} from './index.h'
+import type {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {assertNodeSet} from './is'
 
 export const createLinkNode = (
-  parent: NodeUnit,
+  parent: NodeUnit | NodeUnit[],
   child: NodeUnit | NodeUnit[],
   {
     node,
@@ -15,7 +15,7 @@ export const createLinkNode = (
     node?: Array<Cmd | false | void | null>
     scope?: {[name: string]: any}
     meta?: {[name: string]: any}
-  },
+  } = {},
 ) =>
   createNode({
     node,
@@ -36,15 +36,14 @@ export const forward = (opts: {
     config = injectedData
     opts = userConfig
   })
-  const {from, to, meta = {op: 'forward'}} = opts
+  const {from, to} = opts
   assertNodeSet(from, 'forward', '"from"')
   assertNodeSet(to, 'forward', '"to"')
-  if (config) meta.config = config
   return createSubscription(
     createNode({
       parent: from,
       child: to,
-      meta,
+      meta: {op: 'forward', config},
       family: {},
       regional: true,
     }),

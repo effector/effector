@@ -1,7 +1,7 @@
-import {Store, Event, Effect, Domain} from './unit.h'
+import type {Store, Event, Effect, Domain} from './unit.h'
 import {own} from './own'
 import {createNode} from './createNode'
-import {Config, NodeUnit} from './index.h'
+import type {Config, NodeUnit} from './index.h'
 import {
   createEvent,
   createStore,
@@ -9,7 +9,7 @@ import {
   initUnit,
 } from './createUnit'
 import {createEffect} from './createEffect'
-import {forward} from './forward'
+import {createLinkNode} from './forward'
 import {forEach, forIn} from './collection'
 import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
@@ -98,9 +98,9 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     )
   const parent = getParent(result)
   if (parent) {
-    forIn(result.hooks, (from: NodeUnit, key) => {
-      forward({from, to: parent.hooks[key]})
-    })
+    forIn(result.hooks, (from: NodeUnit, key) =>
+      createLinkNode(from, parent.hooks[key]),
+    )
     parent.hooks.domain(result)
   }
   return result

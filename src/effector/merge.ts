@@ -1,6 +1,6 @@
 import {Store, Event, Effect} from './unit.h'
 import {createEvent} from './createUnit'
-import {forward} from './forward'
+import {createLinkNode} from './forward'
 import {unitObjectName} from './naming'
 import {assertNodeSet} from './is'
 
@@ -10,6 +10,6 @@ export function merge<T>(
 ): Event<T> {
   const result = createEvent(config || unitObjectName(events, 'merge'))
   assertNodeSet(events, 'merge', 'first argument')
-  forward({from: events, to: result, meta: {op: 'merge'}})
+  createLinkNode(events, result, {meta: {op: 'merge'}})
   return result
 }

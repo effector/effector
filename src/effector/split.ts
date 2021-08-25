@@ -46,10 +46,7 @@ export function split(...args: any[]): any {
   if (!targets!) targets = {}
   if (!knownCases) {
     if (!matchIsShape) throwError('match should be an object')
-    forIn(match, (_, key) => {
-      //@ts-ignore
-      targets[key] = createEvent(metadata)
-    })
+    forIn(match, (_, key) => (targets[key] = createEvent(metadata)))
     targets.__ = createEvent(metadata)
   }
   const owners = new Set(
@@ -86,13 +83,6 @@ export function split(...args: any[]): any {
   } else if (matchIsShape) {
     const lastValues = createStateRef({})
     lastValues.type = 'shape'
-    const updaterSteps = [
-      step.mov({store: lastValues, to: REG_A}),
-      step.compute({
-        fn: (upd, {key}, {a}) => (a[key] = upd),
-        safe: true,
-      }),
-    ]
     const units = [] as string[]
     let needBarrier: boolean
     forIn(match, (storeOrFn: any, key) => {
@@ -101,7 +91,13 @@ export function split(...args: any[]): any {
         units.push(key)
         owners.add(storeOrFn)
         const updater = createLinkNode(storeOrFn, [], {
-          node: updaterSteps,
+          node: [
+            step.mov({store: lastValues, to: REG_A}),
+            step.compute({
+              fn: (upd, {key}, {a}) => (a[key] = upd),
+              safe: true,
+            }),
+          ],
           scope: {key},
         })
         if (is.store(storeOrFn)) {
