@@ -141,84 +141,280 @@ describe('onlyChanges: true', () => {
     await allSettled(newMessage, {scope})
     expect(serialize(scope)).toEqual({messages: 1})
   })
-})
 
-describe('serializing combine', () => {
-  it('should not serialize combine in default case', async () => {
-    const trigger = createEvent()
-    const foo = createStore(0, {sid: 'foo'}).on(trigger, x => x + 1)
-    const bar = createStore(0, {sid: 'bar'}).on(trigger, x => x + 1)
-    const combined = combine({foo, bar})
-    const scope = fork()
-    await allSettled(trigger, {scope})
-    expect(serialize(scope)).toEqual({foo: 1, bar: 1})
-  })
-  it('should serialize combine when it updated by on', async () => {
-    const trigger = createEvent()
-    const foo = createStore(0, {sid: '-rvz6dk'})
-    const bar = createStore(0, {sid: 'iaz8iy'})
-    const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
-      foo: foo + 1,
-      bar: bar + 1,
-    }))
-    const sid = String(combined.sid)
-    const scope = fork()
-    await allSettled(trigger, {scope})
-    expect(serialize(scope)).toEqual({
-      [sid]: {foo: 1, bar: 1},
-    })
-  })
-  describe('don`t reuse values from user', () => {
-    test('with sample (more convenient)', async () => {
-      const triggerA = createEvent()
-      const triggerB = createEvent()
-      const foo = createStore(0, {sid: 'foo'})
-      const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+  describe('serializing combine', () => {
+    it('should not serialize combine in default case', async () => {
+      const trigger = createEvent()
+      const foo = createStore(0, {sid: 'foo'}).on(trigger, x => x + 1)
+      const bar = createStore(0, {sid: 'bar'}).on(trigger, x => x + 1)
       const combined = combine({foo, bar})
-      sample({
-        clock: triggerA,
-        source: combined,
-        target: combined,
-        fn: ({foo, bar}) => ({
-          foo: foo + 1,
-          bar: bar + 1,
-        }),
-      })
-
-      const sid = String(combined.sid)
-
       const scope = fork()
-      await allSettled(triggerA, {scope})
-      expect(serialize(scope)).toEqual({[sid]: {foo: 1, bar: 1}})
-      await allSettled(triggerB, {scope})
-      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 0, bar: 10}})
-      await allSettled(triggerA, {scope})
-      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 1, bar: 11}})
-      await allSettled(triggerB, {scope})
-      expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
+      await allSettled(trigger, {scope})
+      expect(serialize(scope)).toEqual({foo: 1, bar: 1})
     })
-    test('with on (less convenient)', async () => {
-      const triggerA = createEvent()
-      const triggerB = createEvent()
+    it('should serialize combine when it updated by on', async () => {
+      const trigger = createEvent()
       const foo = createStore(0, {sid: 'foo'})
-      const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-      const combined = combine({foo, bar})
-      combined.on(triggerA, ({foo, bar}) => ({
+      const bar = createStore(0, {sid: 'bar'})
+      const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
         foo: foo + 1,
         bar: bar + 1,
       }))
-
       const sid = String(combined.sid)
-
       const scope = fork()
-      await allSettled(triggerA, {scope})
-      expect(serialize(scope)).toEqual({[sid]: {foo: 1, bar: 1}})
-      await allSettled(triggerB, {scope})
-      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 0, bar: 10}})
-      await allSettled(triggerA, {scope})
-      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 1, bar: 11}})
-      await allSettled(triggerB, {scope})
-      expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
+      await allSettled(trigger, {scope})
+      expect(serialize(scope)).toEqual({
+        [sid]: {foo: 1, bar: 1},
+      })
+    })
+    describe('don`t reuse values from user', () => {
+      test('with sample (more convenient)', async () => {
+        const triggerA = createEvent()
+        const triggerB = createEvent()
+        const foo = createStore(0, {sid: 'foo'})
+        const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+        const combined = combine({foo, bar})
+        sample({
+          clock: triggerA,
+          source: combined,
+          target: combined,
+          fn: ({foo, bar}) => ({
+            foo: foo + 1,
+            bar: bar + 1,
+          }),
+        })
+
+        const sid = String(combined.sid)
+
+        const scope = fork()
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope)).toEqual({[sid]: {foo: 1, bar: 1}})
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 0, bar: 10}})
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 1, bar: 11}})
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
+      })
+      test('with on (less convenient)', async () => {
+        const triggerA = createEvent()
+        const triggerB = createEvent()
+        const foo = createStore(0, {sid: 'foo'})
+        const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+        const combined = combine({foo, bar})
+        combined.on(triggerA, ({foo, bar}) => ({
+          foo: foo + 1,
+          bar: bar + 1,
+        }))
+
+        const sid = String(combined.sid)
+
+        const scope = fork()
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope)).toEqual({[sid]: {foo: 1, bar: 1}})
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 0, bar: 10}})
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 1, bar: 11}})
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
+      })
     })
   })
+})
+
+describe('onlyChanges: false', () => {
+  it('avoid serializing combined stores when they are not changed', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const messages = app
+      .createStore(0, {sid: 'messages'})
+      .on(newMessage, x => x + 1)
+    const stats = combine({messages})
+    const scope = fork(app)
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
+    await allSettled(newMessage, {scope})
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 1})
+  })
+  it('keep unchanged objects', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const messages = app
+      .createStore(0, {sid: 'messages'})
+      .on(newMessage, x => x + 1)
+    const scope = fork(app)
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
+    await allSettled(newMessage, {scope})
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 1})
+  })
+
+  it('keep store in serialization when it returns to default state', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const resetMessages = app.createEvent()
+    const messages = app
+      .createStore(0, {sid: 'messages'})
+      .on(newMessage, x => x + 1)
+      .reset(resetMessages)
+    const scope = fork(app)
+    await allSettled(newMessage, {scope})
+    await allSettled(resetMessages, {scope})
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
+  })
+  it('keep store in serialization when it filled with fork values', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const resetMessages = app.createEvent()
+    const messages = app
+      .createStore(0, {sid: 'messages'})
+      .on(newMessage, x => x + 1)
+      .reset(resetMessages)
+    const scope = fork(app, {
+      values: [[messages, 1]],
+    })
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 1})
+    await allSettled(resetMessages, {scope})
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
+  })
+  it('keep store in serialization when it filled with hydrate values', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const resetMessages = app.createEvent()
+    const messages = app
+      .createStore(0, {sid: 'messages'})
+      .on(newMessage, x => x + 1)
+      .reset(resetMessages)
+    const scope = fork(app)
+    hydrate(scope, {
+      values: [[messages, 0]],
+    })
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
+    await allSettled(newMessage, {scope})
+    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 1})
+  })
+
+  describe('serializing combine', () => {
+    it('should not serialize combine in default case', async () => {
+      const app = createDomain()
+      const trigger = app.createEvent()
+      const foo = app.createStore(0, {sid: 'foo'}).on(trigger, x => x + 1)
+      const bar = app.createStore(0, {sid: 'bar'}).on(trigger, x => x + 1)
+      const combined = combine({foo, bar})
+      const scope = fork(app)
+      await allSettled(trigger, {scope})
+      expect(serialize(scope, {onlyChanges: false})).toEqual({foo: 1, bar: 1})
+    })
+    it('should serialize combine when it updated by on', async () => {
+      const app = createDomain()
+      const trigger = app.createEvent()
+      const foo = app.createStore(0, {sid: 'foo'})
+      const bar = app.createStore(0, {sid: 'bar'})
+      const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
+        foo: foo + 1,
+        bar: bar + 1,
+      }))
+      const sid = String(combined.sid)
+      const scope = fork(app)
+      await allSettled(trigger, {scope})
+      expect(serialize(scope, {onlyChanges: false})).toEqual({
+        foo: 0,
+        bar: 0,
+        [sid]: {foo: 1, bar: 1},
+      })
+    })
+    describe('don`t reuse values from user', () => {
+      test('with sample (more convenient)', async () => {
+        const app = createDomain()
+        const triggerA = app.createEvent()
+        const triggerB = app.createEvent()
+        const foo = app.createStore(0, {sid: 'foo'})
+        const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+        const combined = combine({foo, bar})
+        sample({
+          clock: triggerA,
+          source: combined,
+          target: combined,
+          fn: ({foo, bar}) => ({
+            foo: foo + 1,
+            bar: bar + 1,
+          }),
+        })
+
+        const sid = String(combined.sid)
+
+        const scope = fork(app)
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 0,
+          [sid]: {foo: 1, bar: 1},
+        })
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 10,
+          [sid]: {foo: 0, bar: 10},
+        })
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 10,
+          [sid]: {foo: 1, bar: 11},
+        })
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 20,
+          [sid]: {foo: 0, bar: 20},
+        })
+      })
+      test('with on (less convenient)', async () => {
+        const app = createDomain()
+        const triggerA = app.createEvent()
+        const triggerB = app.createEvent()
+        const foo = app.createStore(0, {sid: 'foo'})
+        const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+        const combined = combine({foo, bar})
+        combined.on(triggerA, ({foo, bar}) => ({
+          foo: foo + 1,
+          bar: bar + 1,
+        }))
+
+        const sid = String(combined.sid)
+
+        const scope = fork(app)
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 0,
+          [sid]: {foo: 1, bar: 1},
+        })
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 10,
+          [sid]: {foo: 0, bar: 10},
+        })
+        await allSettled(triggerA, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 10,
+          [sid]: {foo: 1, bar: 11},
+        })
+        await allSettled(triggerB, {scope})
+        expect(serialize(scope, {onlyChanges: false})).toEqual({
+          foo: 0,
+          bar: 20,
+          [sid]: {foo: 0, bar: 20},
+        })
+      })
+    })
+  })
+})
+
+test('onlyChanges: false supported only in domain-based scopes', () => {
+  const scope = fork()
+  expect(() => {
+    serialize(scope, {onlyChanges: false})
+  }).toThrowErrorMatchingInlineSnapshot(`"scope should be created from domain"`)
 })
