@@ -310,12 +310,11 @@ export function createStore<State>(
   const meta = initUnit(STORE, store, props)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
-    scope: {state: plainState},
+    scope: {state: plainState, fn: updateFilter},
     node: [
       step.changed({store: oldState}),
       updateFilter && step.mov({store: oldState, to: REG_A}),
-      updateFilter &&
-        step.filter({fn: (update, _, {a}) => updateFilter(update, a)}),
+      updateFilter && step.filter({fn: callStackAReg}),
       step.update({store: plainState}),
       step.update({store: oldState}),
     ],
