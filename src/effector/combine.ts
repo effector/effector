@@ -2,7 +2,7 @@ import type {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {step} from './typedef'
-import {onConfigNesting} from './config'
+import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
@@ -18,10 +18,7 @@ export function combine(...args: any[]): Store<any> {
   let handler
   let stores
   let config
-  onConfigNesting(args[0], (injectedData, userConfig) => {
-    config = injectedData
-    args = userConfig
-  })
+  ;[args, config] = processArgsToConfig(args)
   const rawHandler = args[args.length - 1]
   if (isFunction(rawHandler)) {
     stores = args.slice(0, -1)

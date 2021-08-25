@@ -11,13 +11,10 @@ import {throwError} from './throw'
 import {merge} from './merge'
 
 export function guard(...args: any[]) {
-  const meta: Record<string, any> = {op: 'guard'}
   let rawName = 'guard'
   let [[source, config], metadata] = processArgsToConfig(args)
-  if (metadata) {
-    meta.config = metadata
-    if (metadata.name) rawName = metadata.name
-  }
+  const meta: Record<string, any> = {op: 'guard', config: metadata}
+  if (metadata && metadata.name) rawName = metadata.name
   if (!config) {
     config = source
     source = config.source

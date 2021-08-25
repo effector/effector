@@ -94,11 +94,10 @@ export function split(...args: any[]): any {
           node: [
             step.mov({store: lastValues, to: REG_A}),
             step.compute({
-              fn: (upd, {key}, {a}) => (a[key] = upd),
+              fn: (upd, _, {a}) => (a[key] = upd),
               safe: true,
             }),
           ],
-          scope: {key},
         })
         if (is.store(storeOrFn)) {
           lastValues.current[key] = storeOrFn.getState()

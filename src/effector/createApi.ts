@@ -1,4 +1,4 @@
-import {Store, Event} from './unit.h'
+import type {Store, Event} from './unit.h'
 import {createEvent, applyParentHook} from './createUnit'
 import {forIn} from './collection'
 import {getParent} from './getter'

@@ -1,4 +1,4 @@
-import {onConfigNesting} from './config'
+import {processArgsToConfig} from './config'
 import {createNode} from './createNode'
 import type {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
@@ -31,12 +31,7 @@ export const forward = (opts: {
   to: NodeUnit | NodeUnit[]
   meta?: Record<string, any>
 }): Subscription => {
-  let config
-  onConfigNesting(opts, (injectedData, userConfig) => {
-    config = injectedData
-    opts = userConfig
-  })
-  const {from, to} = opts
+  const [{from, to}, config] = processArgsToConfig(opts, true)
   assertNodeSet(from, 'forward', '"from"')
   assertNodeSet(to, 'forward', '"to"')
   return createSubscription(

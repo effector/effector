@@ -1,7 +1,7 @@
 import {combine} from './combine'
 import {createEffect, onSettled} from './createEffect'
 import {applyParentHook} from './createUnit'
-import {onConfigNesting} from './config'
+import {processArgsToConfig} from './config'
 import {getGraph, getStoreState, setMeta} from './getter'
 import {own} from './own'
 import {is, isFunction} from './is'
@@ -11,10 +11,7 @@ import {EFFECT, REG_A} from './tag'
 
 export function attach(config: any) {
   let injected
-  onConfigNesting(config, (injectedData, userConfig) => {
-    injected = injectedData
-    config = userConfig
-  })
+  ;[config, injected] = processArgsToConfig(config, true)
   let {source, effect, mapParams} = config
   const isPlainFunction = !is.effect(effect) && isFunction(effect)
   if (!mapParams)
