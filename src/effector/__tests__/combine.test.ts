@@ -251,3 +251,51 @@ it('doesn`t leak internal variables to transform function', () => {
     ]
   `)
 })
+
+describe('don`t reuse values from user', () => {
+  test('with sample (more convenient)', () => {
+    const triggerA = createEvent()
+    const triggerB = createEvent()
+    const foo = createStore(0)
+    const bar = createStore(0).on(triggerB, x => x + 10)
+    const combined = combine({foo, bar})
+    sample({
+      clock: triggerA,
+      source: combined,
+      target: combined,
+      fn: ({foo, bar}) => ({
+        foo: foo + 1,
+        bar: bar + 1,
+      }),
+    })
+
+    triggerA()
+    expect(combined.getState()).toEqual({foo: 1, bar: 1})
+    triggerB()
+    expect(combined.getState()).toEqual({foo: 0, bar: 10})
+    triggerA()
+    expect(combined.getState()).toEqual({foo: 1, bar: 11})
+    triggerB()
+    expect(combined.getState()).toEqual({foo: 0, bar: 20})
+  })
+  test('with on (less convenient)', () => {
+    const triggerA = createEvent()
+    const triggerB = createEvent()
+    const foo = createStore(0)
+    const bar = createStore(0).on(triggerB, x => x + 10)
+    const combined = combine({foo, bar})
+    combined.on(triggerA, ({foo, bar}) => ({
+      foo: foo + 1,
+      bar: bar + 1,
+    }))
+
+    triggerA()
+    expect(combined.getState()).toEqual({foo: 1, bar: 1})
+    triggerB()
+    expect(combined.getState()).toEqual({foo: 0, bar: 10})
+    triggerA()
+    expect(combined.getState()).toEqual({foo: 1, bar: 11})
+    triggerB()
+    expect(combined.getState()).toEqual({foo: 0, bar: 20})
+  })
+})

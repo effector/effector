@@ -7,6 +7,7 @@ import {
   fork,
   hydrate,
   serialize,
+  sample,
 } from 'effector'
 
 it('serialize stores to object of sid as keys', () => {
@@ -203,11 +204,64 @@ describe('serializing combine', () => {
     await allSettled(trigger, {scope})
     expect(serialize(scope)).toMatchInlineSnapshot(`
       Object {
-        "6qllsv": Object {
+        "77n872": Object {
           "bar": 1,
           "foo": 1,
         },
       }
     `)
+  })
+  describe('don`t reuse values from user', () => {
+    test('with sample (more convenient)', async () => {
+      const triggerA = createEvent()
+      const triggerB = createEvent()
+      const foo = createStore(0, {sid: 'foo'})
+      const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+      const combined = combine({foo, bar})
+      sample({
+        clock: triggerA,
+        source: combined,
+        target: combined,
+        fn: ({foo, bar}) => ({
+          foo: foo + 1,
+          bar: bar + 1,
+        }),
+      })
+
+      const sid = String(combined.sid)
+
+      const scope = fork()
+      await allSettled(triggerA, {scope})
+      expect(serialize(scope)).toEqual({[sid]: {foo: 1, bar: 1}})
+      await allSettled(triggerB, {scope})
+      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 0, bar: 10}})
+      await allSettled(triggerA, {scope})
+      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 1, bar: 11}})
+      await allSettled(triggerB, {scope})
+      expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
+    })
+    test('with on (less convenient)', async () => {
+      const triggerA = createEvent()
+      const triggerB = createEvent()
+      const foo = createStore(0, {sid: 'foo'})
+      const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
+      const combined = combine({foo, bar})
+      combined.on(triggerA, ({foo, bar}) => ({
+        foo: foo + 1,
+        bar: bar + 1,
+      }))
+
+      const sid = String(combined.sid)
+
+      const scope = fork()
+      await allSettled(triggerA, {scope})
+      expect(serialize(scope)).toEqual({[sid]: {foo: 1, bar: 1}})
+      await allSettled(triggerB, {scope})
+      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 0, bar: 10}})
+      await allSettled(triggerA, {scope})
+      expect(serialize(scope)).toEqual({bar: 10, [sid]: {foo: 1, bar: 11}})
+      await allSettled(triggerB, {scope})
+      expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
+    })
   })
 })
