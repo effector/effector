@@ -76,18 +76,7 @@ const f = () =>
   })
 
 {
-  const incorrect = attach({
-    ɔ: config,
-    config: {
-      loc: {
-        file: _effectorFileName,
-        line: 29,
-        column: 20,
-      },
-      name: 'incorrect',
-      sid: '-6fwy2e',
-    },
-  })
+  const incorrect = attach(config)
 
   function attach() {}
 }
@@ -234,20 +223,7 @@ const f = a =>
 
 {
   const incorrect = combine({
-    ɔ: [
-      {
-        foo,
-      },
-    ],
-    config: {
-      loc: {
-        file: _effectorFileName,
-        line: 22,
-        column: 20,
-      },
-      name: 'incorrect',
-      sid: '-zh33ob',
-    },
+    foo,
   })
 
   function combine() {}
@@ -1785,22 +1761,8 @@ const f = () =>
   })
 
 {
-  const incorrect = guard({
-    ɔ: [
-      bar,
-      {
-        filter: foo,
-      },
-    ],
-    config: {
-      loc: {
-        file: _effectorFileName,
-        line: 35,
-        column: 20,
-      },
-      name: 'incorrect',
-      sid: 'it0ort',
-    },
+  const incorrect = guard(bar, {
+    filter: foo,
   })
 
   function guard() {}
@@ -2346,15 +2308,7 @@ const c = merge(...args, {
   sid: 'er2f95',
 })
 {
-  const incorrect = merge([foo], {
-    loc: {
-      file: _effectorFileName,
-      line: 16,
-      column: 20,
-    },
-    name: 'incorrect',
-    sid: '-b2ioh3',
-  })
+  const incorrect = merge([foo])
 
   function merge() {}
 }
@@ -2963,24 +2917,12 @@ const f = () =>
 
 {
   const incorrect = split({
-    ɔ: [
-      {
-        source: foo,
-        match: {
-          nonEmpty: list => list.length === 0,
-        },
-        cases: {
-          nonEmpty: bar,
-        },
-      },
-    ],
-    config: {
-      loc: {
-        file: _effectorFileName,
-        line: 34,
-        column: 20,
-      },
-      sid: '1nomxm',
+    source: foo,
+    match: {
+      nonEmpty: list => list.length === 0,
+    },
+    cases: {
+      nonEmpty: bar,
     },
   })
 

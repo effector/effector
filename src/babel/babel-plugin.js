@@ -1,4 +1,4 @@
-module.exports = function(babel, options = {}) {
+module.exports = function (babel, options = {}) {
   const {
     compressor,
     addNames,
@@ -80,16 +80,16 @@ module.exports = function(babel, options = {}) {
         t.stringLiteral('effector'),
       ),
     )
-    let found;
+    let found
 
-    newPath.get('specifiers').forEach((specifier) => {
+    newPath.get('specifiers').forEach(specifier => {
       if (specifier.node.imported.name === method) {
-        found = specifier;
+        found = specifier
       }
-    });
+    })
 
-    programPath.scope.registerBinding('module', found);
-    return found.node.local.name;
+    programPath.scope.registerBinding('module', found)
+    return found.node.local.name
   }
   const importVisitor = {
     ImportDeclaration(path, state) {
@@ -206,13 +206,13 @@ module.exports = function(babel, options = {}) {
     name: 'effector/babel-plugin',
     pre() {
       this.effector_ignoredImports = new Set()
-      this.effector_withFactoryName = null;
+      this.effector_withFactoryName = null
     },
     post() {
       this.effector_ignoredImports.clear()
       this.effector_needFactoryImport = false
       this.effector_factoryImportAdded = false
-      this.effector_withFactoryName = null;
+      this.effector_withFactoryName = null
       if (this.effector_factoryMap) {
         this.effector_factoryMap.clear()
         delete this.effector_factoryMap
@@ -291,6 +291,7 @@ module.exports = function(babel, options = {}) {
                 babel.types,
                 smallConfig,
                 false,
+                name,
               )
               if (exportMetadata && id) {
                 state.stores.add(id.name)
@@ -314,6 +315,7 @@ module.exports = function(babel, options = {}) {
                 babel.types,
                 smallConfig,
                 false,
+                name,
               )
             }
             if (forwards && forwardCreators.has(name)) {
@@ -334,6 +336,7 @@ module.exports = function(babel, options = {}) {
                 babel.types,
                 smallConfig,
                 true,
+                name,
               )
             }
             if (splits && splitCreators.has(name)) {
@@ -344,6 +347,7 @@ module.exports = function(babel, options = {}) {
                 babel.types,
                 smallConfig,
                 false,
+                name,
               )
             }
             if (apis && apiCreators.has(name)) {
@@ -364,6 +368,7 @@ module.exports = function(babel, options = {}) {
                 babel.types,
                 smallConfig,
                 false,
+                name,
               )
             }
           }
@@ -377,11 +382,8 @@ module.exports = function(babel, options = {}) {
               this.effector_factoryImportAdded = true
               this.effector_withFactoryName = addImport(path, 'withFactory')
             }
-            const {
-              source,
-              importedName,
-              localName,
-            } = this.effector_factoryMap.get(name)
+            const {source, importedName, localName} =
+              this.effector_factoryMap.get(name)
             path.node.effector_isFactory = true
             const idNode = findCandidateNameForExpression(path)
             const resultName = idNode ? idNode.name : ''
@@ -455,9 +457,8 @@ function addFileNameIdentifier(addLoc, enableFileName, t, path, state) {
       ? stripRoot(state.file.opts.root || '', state.filename || '', false)
       : ''
 
-    const fileNameIdentifier = path.scope.generateUidIdentifier(
-      '_effectorFileName',
-    )
+    const fileNameIdentifier =
+      path.scope.generateUidIdentifier('_effectorFileName')
     // babel bug https://github.com/babel/babel/issues/9496
     if (path.hub) {
       const scope = path.hub.getScope()
@@ -522,8 +523,8 @@ const normalizeOptions = options => {
     if (typeof options.exportMetadata === 'function') {
       exportMetadata = options.exportMetadata
     } else if (options.exportMetadata == true /* == for truthy values */) {
-      exportMetadata = require('./plugin/defaultMetaVisitor.js')
-        .defaultMetaVisitor
+      exportMetadata =
+        require('./plugin/defaultMetaVisitor.js').defaultMetaVisitor
     } else {
       exportMetadata = null
     }
@@ -724,8 +725,10 @@ function setStoreNameAfter(
   t,
   {addLoc, compressor, addNames},
   fillFirstArg,
+  checkBindingName,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
+  if (isLocalVariable(path, checkBindingName)) return
   let args
   let loc
   path.find(path => {
@@ -774,6 +777,15 @@ function setStoreNameAfter(
     configExpr.properties.push(stableID)
   }
 }
+function isLocalVariable(path, checkBindingName) {
+  if (!checkBindingName) return false
+  const binding = path.scope.getOwnBinding(checkBindingName)
+  if (binding) {
+    const module = binding.path.find(path => path.isImportDeclaration())
+    return !module
+  }
+  return false
+}
 function setConfigForConfigurableMethod(
   path,
   state,
@@ -781,8 +793,10 @@ function setConfigForConfigurableMethod(
   t,
   {addLoc, compressor, addNames},
   singleArgument,
+  checkBindingName,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
+  if (isLocalVariable(path, checkBindingName)) return
   let args
   let loc
   path.find(path => {
