@@ -45,7 +45,7 @@ export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
     }
     ref.store = store
     return stop
-  }, [store])
+  }, [store, scope])
   return currentValue
 }
 
@@ -94,6 +94,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   refState.init = refState.store === store
   refState.store = store
   const inc = createNotifier()
+  const deps = [scope, ...keys]
   const stop = React.useMemo(() => {
     updateRef(stateReader(store, scope), keys, result.current)
     return createWatch(
@@ -101,8 +102,8 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
       val => updateRef(val, keys, result.current, inc),
       scope,
     )
-  }, keys)
-  useIsomorphicLayoutEffect(() => () => stop(), keys)
+  }, deps)
+  useIsomorphicLayoutEffect(() => () => stop(), deps)
   return refState.val
 }
 function updateRef<State, Keys, Result>(
@@ -183,7 +184,7 @@ export function useListBase<T>(
       },
     )
     return React.memo(Item)
-  }, [list, !!getKey!])
+  }, [list, scope, !!getKey!])
   const fnRef = React.useRef([fn, getKey!] as const)
   fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
