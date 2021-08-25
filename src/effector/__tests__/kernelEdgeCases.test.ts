@@ -59,7 +59,7 @@ it('should avoid data races', () => {
 
   routePush('v 1')
   routePush('v 2')
-  expect(argumentHistory(fn)).toEqual([-2, 0, 1])
+  expect(argumentHistory(fn)).toEqual([-2, -1, 0])
 })
 
 it('should not erase sibling branches', () => {
