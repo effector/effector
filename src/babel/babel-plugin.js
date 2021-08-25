@@ -143,7 +143,7 @@ module.exports = function(babel, options = {}) {
       }
       if (reactSsr) {
         if (source === 'effector-react' || source === 'effector-react/compat') {
-          path.node.source.value = 'effector-react/ssr'
+          path.node.source.value = 'effector-react/scope'
         }
       }
       if (factoriesUsed) {
