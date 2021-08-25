@@ -34,6 +34,7 @@ import {
 import {assert} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
 import {applyTemplate} from './template'
+import forEach from 'core-js/fn/array/for-each'
 
 const normalizeConfig = (part: any, config: any) => {
   if (isObject(part)) {
@@ -218,24 +219,21 @@ export function createStore<State>(
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
       return readRef(targetRef)
     },
-    setState(state: any) {
+    setState: (state: any) =>
       launch({
         target: store,
         params: state,
         defer: true,
         forkPage: forkPage!,
-      })
-    },
+      }),
     reset(...units: any[]) {
-      for (const unit of units) store.on(unit, () => store.defaultState)
+      forEach(units, unit => store.on(unit, () => store.defaultState))
       return store
     },
     on(nodeSet: any, fn: Function) {
       assertNodeSet(nodeSet, '.on', 'first argument')
       if (Array.isArray(nodeSet)) {
-        for (const event of nodeSet) {
-          onEvent(event, fn)
-        }
+        forEach(nodeSet, trigger => onEvent(trigger, fn))
       } else {
         onEvent(nodeSet, fn)
       }

@@ -1,5 +1,6 @@
 //eslint-disable-next-line
 export * as is from './validate'
+import {forEach} from './collection'
 import {assert} from './throw'
 
 export const isObject = (value: any) =>
@@ -26,12 +27,15 @@ const assertNodeSetItem = (
     `${method}: expect ${valueName} to be a unit (store, event or effect)${reason}`,
   )
 
-export function assertNodeSet(value: any, method: string, valueName: string) {
+export const assertNodeSet = (
+  value: any,
+  method: string,
+  valueName: string,
+) => {
   if (Array.isArray(value)) {
-    for (let i = 0; i < value.length; i++) {
-      const item = value[i]
-      assertNodeSetItem(item, method, `${i} item of ${valueName}`, '')
-    }
+    forEach(value, (item, i) =>
+      assertNodeSetItem(item, method, `${i} item of ${valueName}`, ''),
+    )
   } else {
     assertNodeSetItem(value, method, valueName, ' or array of units')
   }

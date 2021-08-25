@@ -20,6 +20,10 @@ export function forEach<T>(
   list: T[],
   fn: (item: T, index: number, list: T[]) => void,
 ): void
+export function forEach<K, T>(
+  list: Map<K, T>,
+  fn: (item: T, key: K) => void,
+): void
 export function forEach<T>(list: Set<T>, fn: (item: T) => void): void
 export function forEach(list: any, fn: Function) {
   list.forEach(fn)

@@ -40,11 +40,11 @@ export function normalizeValues(
   if (Array.isArray(values)) values = new Map(values)
   if (values instanceof Map) {
     const result = {} as Record<string, any>
-    for (const [key, value] of values) {
+    forEach(values, (value, key) => {
       assert(is.unit(key), 'Map key should be a unit')
       if (assertEach) assertEach(key, value)
       result[key.sid!] = value
-    }
+    })
     return result
   }
   return values
