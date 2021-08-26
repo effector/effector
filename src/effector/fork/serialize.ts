@@ -27,12 +27,12 @@ export function serialize(
     assert(scope.cloneOf, 'scope should be created from domain')
     traverseStores(getGraph(scope.cloneOf), (node, sid) => {
       if (
-        sid in result ||
-        includes(ignoredStores, sid) ||
-        getMeta(node, 'isCombine')
+        !(sid in result) &&
+        !includes(ignoredStores, sid) &&
+        !getMeta(node, 'isCombine') &&
+        getMeta(node, 'serialize') !== 'ignore'
       )
-        return
-      result[sid] = scope.getState(node as any)
+        result[sid] = scope.getState(node as any)
     })
   }
   return result

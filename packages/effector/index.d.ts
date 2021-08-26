@@ -292,7 +292,12 @@ export class Domain implements Unit<any> {
   createDomain(name?: string): Domain
   store<State>(
     defaultState: State,
-    config?: {name?: string; sid?: string},
+    config?: {
+      name?: string
+      sid?: string
+      updateFilter?: (update: State, current: State) => boolean
+      serialize?: 'ignore'
+    },
   ): Store<State>
   createStore<State>(
     defaultState: State,
@@ -300,6 +305,7 @@ export class Domain implements Unit<any> {
       name?: string
       sid?: string
       updateFilter?: (update: State, current: State) => boolean
+      serialize?: 'ignore'
     },
   ): Store<State>
   sid: string | null
@@ -497,6 +503,7 @@ export function createStore<State>(
     name?: string;
     sid?: string
     updateFilter?: (update: State, current: State) => boolean
+    serialize?: 'ignore'
   },
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void

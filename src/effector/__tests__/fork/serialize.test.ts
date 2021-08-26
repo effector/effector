@@ -52,6 +52,20 @@ it('serialize stores with ignore parameter', () => {
   })
 })
 
+test('serialize: ignore', async () => {
+  const inc = createEvent()
+  const $a = createStore(0, {sid: 'a', serialize: 'ignore'})
+  const $b = createStore(0, {sid: 'b'})
+  $a.on(inc, x => x + 1)
+  $b.on(inc, x => x + 1)
+
+  const scope = fork()
+
+  await allSettled(inc, {scope})
+
+  expect(serialize(scope)).toEqual({b: 1})
+})
+
 it('serialize stores in nested domain', () => {
   const app = createDomain()
   const first = app.createDomain()
@@ -220,6 +234,21 @@ describe('onlyChanges: true', () => {
         expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
       })
     })
+  })
+
+  test('serialize: ignore', async () => {
+    const app = createDomain()
+    const inc = app.createEvent()
+    const $a = app.createStore(0, {sid: 'a', serialize: 'ignore'})
+    const $b = app.createStore(0, {sid: 'b'})
+    $a.on(inc, x => x + 1)
+    $b.on(inc, x => x + 1)
+
+    const scope = fork(app)
+
+    await allSettled(inc, {scope})
+
+    expect(serialize(scope, {onlyChanges: false})).toEqual({b: 1})
   })
 })
 

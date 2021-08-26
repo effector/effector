@@ -30,6 +30,8 @@ import {
   getStoreState,
   getGraph,
   getParent,
+  setMeta,
+  getMeta,
 } from './getter'
 import {assert} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
@@ -50,6 +52,7 @@ const normalizeConfig = (part: any, config: any) => {
     if (part.updateFilter) config.updateFilter = part.updateFilter
     if (getParent(part)) config.parent = getParent(part)
     if ('strict' in part) config.strict = part.strict
+    if (part.serialize) config.serialize = part.serialize
     if (part.named) config.named = part.named
     normalizeConfig(getNestedConfig(part), config)
   }
@@ -83,6 +86,7 @@ export const initUnit = (
     sid: (unit.sid = readSidRoot(sid)),
     named,
     unitId: (unit.id = id),
+    serialize: config.serialize,
   }
   unit.parent = parent
   unit.compositeName = compositeName
@@ -315,9 +319,11 @@ export function createStore<State>(
     meta,
     regional: true,
   })
-  if (meta.sid) {
-    meta.storeChange = true
-    plainState.sid = meta.sid
+  const sid: string | null = getMeta(store, 'sid')
+  if (sid) {
+    if (getMeta(store, 'serialize') !== 'ignore')
+      setMeta(store, 'storeChange', true)
+    plainState.sid = sid
   }
   assert(
     !isStrict || defaultState !== undefined,
