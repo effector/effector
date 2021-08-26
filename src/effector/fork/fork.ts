@@ -1,7 +1,8 @@
 import {is} from '../is'
 import {assert} from '../throw'
 import type {Domain} from '../unit.h'
-import {normalizeValues, cloneGraph} from './util'
+import {normalizeValues} from './util'
+import {createScope} from './createScope'
 import {getMeta} from '../getter'
 
 export function fork(
@@ -15,17 +16,17 @@ export function fork(
     config = optiionalConfig
   }
 
-  const forked = cloneGraph(domain!)
+  const scope = createScope(domain!)
 
   if (config) {
     if (config.values) {
       const valuesSidMap = normalizeValues(config.values, unit =>
         assert(is.store(unit), 'Values map can contain only stores as keys'),
       )
-      Object.assign(forked.sidValuesMap, valuesSidMap)
+      Object.assign(scope.sidValuesMap, valuesSidMap)
     }
     if (config.handlers) {
-      forked.handlers = normalizeValues(config.handlers, unit => {
+      scope.handlers = normalizeValues(config.handlers, unit => {
         assert(is.effect(unit), `Handlers map can contain only effects as keys`)
         assert(
           !getMeta(unit, 'attached'),
@@ -34,5 +35,5 @@ export function fork(
       })
     }
   }
-  return forked
+  return scope
 }
