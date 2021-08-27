@@ -30,7 +30,6 @@ export type Config = {
   ɔ?: Config
   config?: Config
   parent?: any
-  strict?: boolean
   handler?: Function
   derived?: boolean
 }

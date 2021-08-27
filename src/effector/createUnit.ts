@@ -53,12 +53,11 @@ const normalizeConfig = (part: any, config: any) => {
       else if (isFunction(part.name)) config.handler = part.name
       else config.name = part.name
     }
-    if (part.loc) config.loc = part.loc
     if (part.sid || part.sid === null) config.sid = part.sid
+    if (part.loc) config.loc = part.loc
     if (part.handler) config.handler = part.handler
     if (part.updateFilter) config.updateFilter = part.updateFilter
     if (getParent(part)) config.parent = getParent(part)
-    if ('strict' in part) config.strict = part.strict
     if (part.serialize) config.serialize = part.serialize
     if (part.named) config.named = part.named
     if (part.derived) config.derived = part.derived
@@ -75,7 +74,6 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-let isStrict: boolean
 export const initUnit = (
   kind: any,
   unit: any,
@@ -85,7 +83,7 @@ export const initUnit = (
   const config = normalizeConfig({name: rawConfigB, config: rawConfigA}, {})
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
-  let {parent = null, sid = null, strict = true, named = null} = config
+  let {parent = null, sid = null, named = null} = config
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
   const meta: Record<string, any> = {
@@ -115,7 +113,6 @@ export const initUnit = (
     const template = readTemplate()
     if (template) meta.nativeTemplate = template
   }
-  isStrict = strict
   return meta
 }
 export const createNamedEvent = (named: string) => createEvent({named})
@@ -289,7 +286,6 @@ export function createStore<State>(
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
         [OPEN_O]: config,
-        strict: false,
         derived: true,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
@@ -346,7 +342,7 @@ export function createStore<State>(
     plainState.sid = sid
   }
   assert(
-    !isStrict || !isVoid(defaultState),
+    getMeta(store, 'derived') || !isVoid(defaultState),
     "current state can't be undefined, use null instead",
   )
   own(store, [updates])
