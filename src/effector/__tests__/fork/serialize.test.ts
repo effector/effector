@@ -167,6 +167,7 @@ describe('onlyChanges: true', () => {
       expect(serialize(scope)).toEqual({foo: 1, bar: 1})
     })
     it('should serialize combine when it updated by on', async () => {
+      const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
       const trigger = createEvent()
       const foo = createStore(0, {sid: 'foo'})
       const bar = createStore(0, {sid: 'bar'})
@@ -174,6 +175,7 @@ describe('onlyChanges: true', () => {
         foo: foo + 1,
         bar: bar + 1,
       }))
+      warn.mockRestore()
       const sid = String(combined.sid)
       const scope = fork()
       await allSettled(trigger, {scope})
@@ -211,6 +213,7 @@ describe('onlyChanges: true', () => {
         expect(serialize(scope)).toEqual({bar: 20, [sid]: {foo: 0, bar: 20}})
       })
       test('with on (less convenient)', async () => {
+        const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
         const triggerA = createEvent()
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
@@ -220,6 +223,7 @@ describe('onlyChanges: true', () => {
           foo: foo + 1,
           bar: bar + 1,
         }))
+        warn.mockRestore()
 
         const sid = String(combined.sid)
 
@@ -334,6 +338,7 @@ describe('onlyChanges: false', () => {
       expect(serialize(scope, {onlyChanges: false})).toEqual({foo: 1, bar: 1})
     })
     it('should serialize combine when it updated by on', async () => {
+      const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
       const app = createDomain()
       const trigger = app.createEvent()
       const foo = app.createStore(0, {sid: 'foo'})
@@ -342,6 +347,7 @@ describe('onlyChanges: false', () => {
         foo: foo + 1,
         bar: bar + 1,
       }))
+      warn.mockRestore()
       const sid = String(combined.sid)
       const scope = fork(app)
       await allSettled(trigger, {scope})
@@ -398,6 +404,7 @@ describe('onlyChanges: false', () => {
         })
       })
       test('with on (less convenient)', async () => {
+        const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
         const app = createDomain()
         const triggerA = app.createEvent()
         const triggerB = app.createEvent()
@@ -408,6 +415,7 @@ describe('onlyChanges: false', () => {
           foo: foo + 1,
           bar: bar + 1,
         }))
+        warn.mockRestore()
 
         const sid = String(combined.sid)
 

@@ -279,6 +279,7 @@ describe('don`t reuse values from user', () => {
     expect(combined.getState()).toEqual({foo: 0, bar: 20})
   })
   test('with on (less convenient)', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
     const triggerA = createEvent()
     const triggerB = createEvent()
     const foo = createStore(0)
@@ -288,6 +289,7 @@ describe('don`t reuse values from user', () => {
       foo: foo + 1,
       bar: bar + 1,
     }))
+    warn.mockRestore()
 
     triggerA()
     expect(combined.getState()).toEqual({foo: 1, bar: 1})

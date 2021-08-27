@@ -184,6 +184,7 @@ test('createStore', () => {
 
 describe('store.on', () => {
   test('store.on(event)', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
     const counter = createStore(0)
     const text = createStore('')
     const store = combine({counter, text, foo: 'bar'})
@@ -193,26 +194,30 @@ describe('store.on', () => {
       ...state,
       foo: payload,
     }))
+    warn.mockRestore()
 
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
     e1('baz')
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
   })
   test('store.on(effect)', async () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
     const counter = createStore(0)
     const text = createStore('')
     const store = combine({counter, text, foo: 0})
-    const e1 = createEffect<number, number>()
+    const e1 = createEffect<number, number>(
+      n => new Promise(_ => setTimeout(_, n, n)),
+    )
     store.on(e1.done, (state, {result}) => ({
       ...state,
       foo: result,
     }))
-    e1.use(n => new Promise(_ => setTimeout(_, n, n)))
+    warn.mockRestore()
 
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
-    const result = await e1(500)
-    expect(result).toBe(500)
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 500})
+    const result = await e1(50)
+    expect(result).toBe(50)
+    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 50})
   })
 })
 

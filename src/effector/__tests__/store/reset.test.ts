@@ -186,6 +186,7 @@ test('late forwarding', () => {
 
 describe('dependencies of resettable stores', () => {
   test('dependencies of resettable stores', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
     const fnA = jest.fn()
     const fnB = jest.fn()
     const run = createEvent<string>()
@@ -195,6 +196,7 @@ describe('dependencies of resettable stores', () => {
 
     A.on(run, (state, d) => `${d}(${state})`).reset(reset)
     B.on(run, (state, d) => `${d}(${state})`).reset(reset)
+    warn.mockRestore()
 
     A.watch(e => {
       fnA(e)
