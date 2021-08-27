@@ -4,7 +4,7 @@ import {createStateRef, addRefOp} from './stateRef'
 import {step} from './typedef'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
-import {is, isFunction, isObject} from './is'
+import {is, isFunction, isObject, isVoid} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {assert, deprecate} from './throw'
@@ -131,6 +131,10 @@ const storeCombination = (
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
+      assert(
+        !is.unit(child) && !isVoid(child),
+        `combine expects a store in a field ${key}`,
+      )
       stateNew[key] = defaultState[key] = child
       return
     }
