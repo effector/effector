@@ -60,7 +60,7 @@ it('supports stores', () => {
 })
 it('supports events', () => {
   const fn = jest.fn()
-  const trigger = createEvent()
+  const trigger = createEvent<string>()
 
   const b = createStore(0)
 
@@ -113,6 +113,7 @@ it('replace old links', () => {
 
   store.off(event)
 
+  //@ts-expect-error
   store.setState('x')
 
   event()
@@ -122,8 +123,8 @@ it('replace old links', () => {
 
 it('supports array of events', () => {
   const fn = jest.fn()
-  const triggerA = createEvent()
-  const triggerB = createEvent()
+  const triggerA = createEvent<string>()
+  const triggerB = createEvent<string>()
 
   const b = createStore(0)
 

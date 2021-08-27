@@ -9,8 +9,8 @@ describe('symbol-observable support', () => {
     expect(() => {
       from(createEvent())
     }).not.toThrow()
-    const ev1 = createEvent()
-    const ev2 = createEvent()
+    const ev1 = createEvent<number>()
+    const ev2 = createEvent<string>()
     const ev1$ = from(ev1)
     ev1$.observe(fn)
     ev1(0)
@@ -31,7 +31,7 @@ describe('symbol-observable support', () => {
 
 test('event.watch(fn)', () => {
   const fn = jest.fn()
-  const click = createEvent()
+  const click = createEvent<number | void>()
   click.watch(fn)
   click()
   click(1)
@@ -48,8 +48,8 @@ test('event.watch(fn)', () => {
 
 test('event.prepend(fn)', () => {
   const fn = jest.fn()
-  const click = createEvent()
-  const preclick = click.prepend(([n]) => n)
+  const click = createEvent<number>()
+  const preclick = click.prepend(([n]: number[]) => n)
   click.watch(fn)
   preclick([])
   preclick([1])
@@ -67,7 +67,7 @@ test('event.prepend(fn)', () => {
 
 test('event.map(fn)', () => {
   const fn = jest.fn()
-  const click = createEvent()
+  const click = createEvent<number | void>()
   const postclick = click.map(n => [n])
   postclick.watch(fn)
   click()
@@ -98,6 +98,7 @@ test('event.thru(fn)', () => {
 test('watch validation', () => {
   const trigger = createEvent()
   expect(() => {
+    //@ts-expect-error
     trigger.watch(NaN)
   }).toThrowErrorMatchingInlineSnapshot(
     `".watch argument should be a function"`,

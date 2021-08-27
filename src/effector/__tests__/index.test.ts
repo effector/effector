@@ -8,6 +8,7 @@ import {
   createEffect,
   Event,
 } from 'effector'
+//@ts-expect-error
 import {show} from 'effector/fixtures/showstep'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -25,21 +26,21 @@ test('graphite', () => {
   foo(10)
   expect(fn).toHaveBeenCalledTimes(2)
   expect(store1.getState()).toBe('foo | 1 | 11')
-  //@ts-ignore
+  //@ts-expect-error
   const showBar = show(bar.graphite)
 
   expect(showBar).toMatchSnapshot('show bar')
   unsub1()
-  //@ts-ignore
+  //@ts-expect-error
   const showBar2 = show(bar.graphite)
   expect(showBar2).toMatchSnapshot('show bar')
   foo(100)
   expect(fn1).toHaveBeenCalledTimes(2)
-  //@ts-ignore
+  //@ts-expect-error
   const showFoo = show(foo.graphite)
-  //@ts-ignore
+  //@ts-expect-error
   const showStore = show(store1.graphite)
-  //@ts-ignore
+  //@ts-expect-error
   const showStore2 = show(store2.graphite)
   expect(showFoo).toMatchSnapshot('show foo')
   expect(showStore).toMatchSnapshot('show store1')
@@ -69,11 +70,11 @@ test('showcase', () => {
   bar()
   bar()
 
-  //@ts-ignore
+  //@ts-expect-error
   expect(show(a.graphite)).toMatchSnapshot('store a')
-  //@ts-ignore
+  //@ts-expect-error
   expect(show(foo.graphite)).toMatchSnapshot('event foo')
-  //@ts-ignore
+  //@ts-expect-error
   expect(show(mapped.graphite)).toMatchSnapshot('mapped')
   expect(fn).toHaveBeenCalledTimes(3)
   const first = createStore('s')
@@ -87,13 +88,11 @@ describe('symbol-observable support', () => {
   test('from(store)', async () => {
     const fn = jest.fn()
     expect(() => {
-      //@ts-ignore
       from(createStore(0))
     }).not.toThrow()
     const store1 = createStore(-1)
-    const ev1 = createEvent()
-    const ev2 = createEvent()
-    //@ts-ignore
+    const ev1 = createEvent<string>()
+    const ev2 = createEvent<string>()
     const store1$ = from(store1)
     store1$.observe(fn)
     store1.on(ev1, state => state + 1)
@@ -112,8 +111,8 @@ describe('symbol-observable support', () => {
       expect(() => {
         from(createEffect())
       }).not.toThrow()
-      const ev1 = createEffect({handler() {}})
-      const ev2 = createEffect({handler() {}})
+      const ev1 = createEffect((_: number) => {})
+      const ev2 = createEffect((_: string) => {})
       const ev1$ = from(ev1)
       ev1$.observe(fn)
       ev1(0)
@@ -133,8 +132,8 @@ describe('symbol-observable support', () => {
         eff1.use(impl)
         from(eff1)
       }).not.toThrow()
-      const ev1 = createEffect({handler() {}})
-      const ev2 = createEffect({handler() {}})
+      const ev1 = createEffect((_: number) => {})
+      const ev2 = createEffect((_: string) => {})
       async function impl() {}
       ev1.use(impl)
       const ev1$ = from(ev1)
@@ -155,7 +154,7 @@ test('attt', () => {
     foo: 1,
     bar: [0],
   })
-  const e1 = createEvent()
+  const e1 = createEvent<string>()
   expect(state.getState()).toMatchObject({
     foo: 1,
     bar: [0],
@@ -189,7 +188,7 @@ describe('store.on', () => {
     const text = createStore('')
     const store = combine({counter, text, foo: 'bar'})
 
-    const e1 = createEvent()
+    const e1 = createEvent<string>()
     store.on(e1, (state, payload) => ({
       ...state,
       foo: payload,
@@ -203,7 +202,7 @@ describe('store.on', () => {
     const counter = createStore(0)
     const text = createStore('')
     const store = combine({counter, text, foo: 0})
-    const e1 = createEffect()
+    const e1 = createEffect<number, number>()
     store.on(e1.done, (state, {result}) => ({
       ...state,
       foo: result,
@@ -218,7 +217,7 @@ describe('store.on', () => {
 })
 
 test('store.watch', () => {
-  const click = createEvent()
+  const click = createEvent<string | void>()
   const store1 = createStore(-1)
   const fn1 = jest.fn()
   const fn2 = jest.fn()

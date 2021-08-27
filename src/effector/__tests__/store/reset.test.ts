@@ -3,7 +3,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 it('support spread of units', () => {
   const fn = jest.fn()
-  const set = createEvent()
+  const set = createEvent<number>()
   const a = createEvent()
   const b = createEvent()
   const store = createStore(0)
@@ -28,7 +28,7 @@ it('support spread of units', () => {
 
 it('support array of units', () => {
   const fn = jest.fn()
-  const set = createEvent()
+  const set = createEvent<number>()
   const a = createEvent()
   const b = createEvent()
   const store = createStore(0)
@@ -54,7 +54,7 @@ it('support array of units', () => {
 describe('reset before computation', () => {
   test('reset before computation', () => {
     const fn = jest.fn()
-    const A = createEvent()
+    const A = createEvent<string>()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -81,7 +81,7 @@ describe('reset before computation', () => {
 
   it("doesnt depend on methods' ordering", () => {
     const fn = jest.fn()
-    const A = createEvent()
+    const A = createEvent<string>()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -110,7 +110,7 @@ describe('reset before computation', () => {
 describe('computation before reset', () => {
   test('computation before reset', () => {
     const fn = jest.fn()
-    const A = createEvent()
+    const A = createEvent<string>()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -136,7 +136,7 @@ describe('computation before reset', () => {
 
   it("doesnt depend on methods' ordering", () => {
     const fn = jest.fn()
-    const A = createEvent()
+    const A = createEvent<string>()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -171,6 +171,7 @@ test('late forwarding', () => {
 
   forward({from: A, to: B})
 
+  //@ts-expect-error
   A.setState('C')
   reset() // reset
 
@@ -187,7 +188,7 @@ describe('dependencies of resettable stores', () => {
   test('dependencies of resettable stores', () => {
     const fnA = jest.fn()
     const fnB = jest.fn()
-    const run = createEvent()
+    const run = createEvent<string>()
     const reset = run.map(d => `${d}->reset`)
     const A = createStore('A')
     const B = A.map(d => `B(${d})`)
@@ -205,27 +206,27 @@ describe('dependencies of resettable stores', () => {
     run('run')
 
     expect(argumentHistory(fnA)).toMatchInlineSnapshot(`
-            Array [
-              "A",
-              "run(A)",
-              "A",
-              "run(A)",
-              "A",
-            ]
-        `)
+      Array [
+        "A",
+        "run(A)",
+        "A",
+        "run(A)",
+        "A",
+      ]
+    `)
 
     expect(argumentHistory(fnB)).toMatchInlineSnapshot(`
-            Array [
-              "B(A)",
-              "run(B(A))",
-              "B(A)",
-              "B(run(A))",
-              "B(A)",
-              "run(B(A))",
-              "B(A)",
-              "B(run(A))",
-              "B(A)",
-            ]
-        `)
+      Array [
+        "B(A)",
+        "run(B(A))",
+        "B(A)",
+        "B(run(A))",
+        "B(A)",
+        "run(B(A))",
+        "B(A)",
+        "B(run(A))",
+        "B(A)",
+      ]
+    `)
   })
 })
