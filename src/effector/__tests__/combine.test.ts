@@ -5,6 +5,7 @@ import {
   sample,
   createEvent,
   EffectResult,
+  createDomain,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -208,23 +209,52 @@ it('updates consistently', () => {
   `)
 })
 
-it('validate amount of arguments', () => {
-  expect(() => {
-    //@ts-expect-error
-    combine()
-  }).toThrowErrorMatchingInlineSnapshot(`"expect first argument be an object"`)
-})
+describe('validations', () => {
+  it('validate amount of arguments', () => {
+    expect(() => {
+      //@ts-expect-error
+      combine()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"expect first argument be an object"`,
+    )
+  })
 
-it('validate shape', () => {
-  expect(() => {
-    combine(null)
-  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
-  expect(() => {
-    combine('text')
-  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
-  expect(() => {
-    combine(0, () => {})
-  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+  it('validate shape', () => {
+    expect(() => {
+      combine(null)
+    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+    expect(() => {
+      combine('text')
+    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+    expect(() => {
+      combine(0, () => {})
+    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+  })
+
+  it('doesn`t allow events or other units in shape', () => {
+    expect(() => {
+      combine({a: createEvent()})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"combine expects a store in a field a"`,
+    )
+    expect(() => {
+      combine({a: createEffect()})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"combine expects a store in a field a"`,
+    )
+    expect(() => {
+      combine({a: createDomain()})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"combine expects a store in a field a"`,
+    )
+  })
+  it('doesn`t allow undefined in shape', () => {
+    expect(() => {
+      combine({a: undefined})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"combine expects a store in a field a"`,
+    )
+  })
 })
 
 it('doesn`t leak internal variables to transform function', () => {
