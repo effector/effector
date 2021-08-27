@@ -7,6 +7,8 @@ export const isObject = (value: any) =>
   typeof value === 'object' && value !== null
 export const isFunction = (value: any) => typeof value === 'function'
 
+export const isVoid = (value: any) => value === undefined
+
 export const assertObject = (value: any) =>
   assert(
     isObject(value) || isFunction(value),

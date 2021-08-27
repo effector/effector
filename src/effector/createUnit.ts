@@ -1,6 +1,13 @@
 import {observableSymbol} from './observable'
 
-import {is, isObject, isFunction, assertObject, assertNodeSet} from './is'
+import {
+  is,
+  isObject,
+  isFunction,
+  assertObject,
+  assertNodeSet,
+  isVoid,
+} from './is'
 import type {Store, Event} from './unit.h'
 
 import {step} from './typedef'
@@ -178,11 +185,7 @@ export function createEvent<Payload = any>(
     filterMap: (fn: any) =>
       deriveEvent(event, 'filterMap', fn, [
         step.compute({fn: callStack}),
-        step.compute({
-          filter: true,
-          safe: true,
-          fn: value => value !== undefined,
-        }),
+        step.compute({fn: value => !isVoid(value), filter: true, safe: true}),
       ]),
     prepend(fn: any) {
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
@@ -270,7 +273,7 @@ export function createStore<State>(
         fn = fn.fn
       }
       deprecate(
-        firstState === undefined,
+        isVoid(firstState),
         'second argument of store.map',
         'updateFilter',
       )
@@ -279,7 +282,7 @@ export function createStore<State>(
       const template = readTemplate()
       if (template) {
         lastResult = null
-      } else if (storeState !== undefined) {
+      } else if (!isVoid(storeState)) {
         lastResult = fn(storeState, firstState)
       }
 
@@ -327,7 +330,7 @@ export function createStore<State>(
       step.compute({
         filter: true,
         safe: true,
-        fn: (upd, _, {a}) => upd !== undefined && upd !== a,
+        fn: (upd, _, {a}) => !isVoid(upd) && upd !== a,
       }),
       updateFilter && step.filter({fn: callStackAReg}),
       step.update({store: plainState}),
@@ -343,7 +346,7 @@ export function createStore<State>(
     plainState.sid = sid
   }
   assert(
-    !isStrict || defaultState !== undefined,
+    !isStrict || !isVoid(defaultState),
     "current state can't be undefined, use null instead",
   )
   own(store, [updates])

@@ -5,7 +5,7 @@ import {createEvent} from './createUnit'
 import {combine} from './combine'
 import {step} from './typedef'
 import {callStack} from './caller'
-import {assertNodeSet, is, isFunction} from './is'
+import {assertNodeSet, is, isFunction, isVoid} from './is'
 import {createNode} from './createNode'
 import {assert} from './throw'
 import {merge} from './merge'
@@ -23,7 +23,7 @@ export function guard(...args: any[]) {
   const target = config.target || createEvent(name, meta.config)
   const filterIsUnit = is.unit(filter)
   let needToCombine = true
-  if (source === undefined) {
+  if (isVoid(source)) {
     assertNodeSet(clock, 'guard', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)

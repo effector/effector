@@ -5,7 +5,7 @@ import {callStackAReg, callARegStack} from './caller'
 import {processArgsToConfig} from './config'
 import {getStoreState, getGraph} from './getter'
 import {own} from './own'
-import {assertNodeSet, is, isObject} from './is'
+import {assertNodeSet, is, isObject, isVoid} from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
@@ -35,19 +35,19 @@ export function sample(...args: any): any {
   let [[source, clock, fn], metadata] = processArgsToConfig(args)
   let sid
   let greedy
-  //config case
-  if (clock === undefined && isObject(source) && validateSampleConfig(source)) {
+  /** config case */
+  if (isVoid(clock) && isObject(source) && validateSampleConfig(source)) {
     clock = source.clock
     fn = source.fn
     greedy = source.greedy
-    //optional target & name accepted only from config
+    /** optional target & name accepted only from config */
     target = source.target
     name = source.name
     sid = source.sid
     source = source.source
   }
   let needToCombine = true
-  if (source === undefined) {
+  if (isVoid(source)) {
     assertNodeSet(clock, 'sample', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)
@@ -58,8 +58,8 @@ export function sample(...args: any): any {
   if (needToCombine && !is.unit(source)) {
     source = combine(source)
   }
-  if (clock === undefined) {
-    //still undefined!
+  if (isVoid(clock)) {
+    /** still undefined! */
     clock = source
   }
   assertNodeSet(clock, 'sample', 'clock')
