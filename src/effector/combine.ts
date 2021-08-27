@@ -96,6 +96,7 @@ const storeCombination = (
   applyTemplate('combineBase', rawShape, isFresh)
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
+    derived: true,
   })
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true

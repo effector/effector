@@ -32,6 +32,7 @@ export type Config = {
   parent?: any
   strict?: boolean
   handler?: Function
+  derived?: boolean
 }
 
 export type Node = {

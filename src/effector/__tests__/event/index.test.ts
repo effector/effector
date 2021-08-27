@@ -104,3 +104,38 @@ test('watch validation', () => {
     `".watch argument should be a function"`,
   )
 })
+
+describe('call of derived events', () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  test('usage with .map is deprecated', () => {
+    const a = createEvent()
+    const b = a.map(() => {})
+    b()
+    expect(warn.mock.calls.map(([msg]) => msg)[0]).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
+  })
+  test('usage with .filterMap is deprecated', () => {
+    const a = createEvent()
+    const b = a.filterMap(() => {})
+    b()
+    expect(warn.mock.calls.map(([msg]) => msg)[0]).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
+  })
+  test('usage with .filter is deprecated', () => {
+    const a = createEvent()
+    const b = a.filter({fn: () => false})
+    b()
+    expect(warn.mock.calls.map(([msg]) => msg)[0]).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
+  })
+})

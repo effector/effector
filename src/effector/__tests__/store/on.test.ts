@@ -1,5 +1,5 @@
 import {argumentHistory} from 'effector/fixtures'
-import {createEvent, createStore} from 'effector'
+import {combine, createEvent, createStore} from 'effector'
 
 it('supports stores', () => {
   const fn = jest.fn()
@@ -290,6 +290,34 @@ describe('validation', () => {
       foo.on(x => x + 1)
     }).toThrowErrorMatchingInlineSnapshot(
       `".on: expect first argument to be a unit (store, event or effect) or array of units"`,
+    )
+  })
+})
+
+describe('.on with derived stores', () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+  test('usage with .map is deprecated', () => {
+    const trigger = createEvent()
+    const $a = createStore(0)
+    const $b = $a.map(x => x)
+    $b.on(trigger, x => x)
+    expect(warn.mock.calls.map(([msg]) => msg)[0]).toMatchInlineSnapshot(
+      `".on in derived store is deprecated, use createStore instead"`,
+    )
+  })
+  test('usage with combine is deprecated', () => {
+    const trigger = createEvent()
+    const $a = createStore(0)
+    const $b = combine({a: $a})
+    $b.on(trigger, x => x)
+    expect(warn.mock.calls.map(([msg]) => msg)[0]).toMatchInlineSnapshot(
+      `".on in derived store is deprecated, use createStore instead"`,
     )
   })
 })

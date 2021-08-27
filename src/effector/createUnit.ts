@@ -54,6 +54,7 @@ const normalizeConfig = (part: any, config: any) => {
     if ('strict' in part) config.strict = part.strict
     if (part.serialize) config.serialize = part.serialize
     if (part.named) config.named = part.named
+    if (part.derived) config.derived = part.derived
     normalizeConfig(getNestedConfig(part), config)
   }
   return config
@@ -87,6 +88,7 @@ export const initUnit = (
     named,
     unitId: (unit.id = id),
     serialize: config.serialize,
+    derived: config.derived,
   }
   unit.parent = parent
   unit.compositeName = compositeName
@@ -117,7 +119,11 @@ const deriveEvent = (event: any, op: string, fn: any, node: any) => {
     config = fn
     fn = fn.fn
   }
-  const mapped = createEvent({name: `${event.shortName} → *`, [OPEN_O]: config})
+  const mapped = createEvent({
+    name: `${event.shortName} → *`,
+    [OPEN_O]: config,
+    derived: true,
+  })
   createLinkNode(event, mapped, {scope: {fn}, node, meta: {op}})
   return mapped
 }
@@ -142,6 +148,11 @@ export function createEvent<Payload = any>(
   maybeConfig?: any,
 ): Event<Payload> {
   const event: any = (payload: Payload, ...args: any[]) => {
+    deprecate(
+      !getMeta(event, 'derived'),
+      'call of derived event',
+      'createEvent',
+    )
     if (currentPage) {
       return callCreate(event, template, payload, args)
     }
@@ -232,6 +243,11 @@ export function createStore<State>(
     },
     on(nodeSet: any, fn: Function) {
       assertNodeSet(nodeSet, '.on', 'first argument')
+      deprecate(
+        !getMeta(store, 'derived'),
+        '.on in derived store',
+        'createStore',
+      )
       if (Array.isArray(nodeSet)) {
         forEach(nodeSet, trigger => onEvent(trigger, fn))
       } else {
@@ -271,6 +287,7 @@ export function createStore<State>(
         name: `${store.shortName} → *`,
         [OPEN_O]: config,
         strict: false,
+        derived: true,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
       addRefOp(getStoreState(innerStore), {
