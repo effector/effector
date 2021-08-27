@@ -7,7 +7,7 @@ import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
-import {assert} from './throw'
+import {assert, deprecate} from './throw'
 import {readTemplate} from './region'
 import {forIn} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
@@ -160,6 +160,6 @@ const storeCombination = (
 }
 
 export function createStoreObject(...args: any[]) {
-  console.error('createStoreObject is deprecated, use combine instead')
+  deprecate(false, 'createStoreObject', 'combine')
   return combine(...args)
 }

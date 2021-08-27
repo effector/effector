@@ -33,7 +33,7 @@ import {
   setMeta,
   getMeta,
 } from './getter'
-import {assert} from './throw'
+import {assert, deprecate} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
@@ -253,11 +253,11 @@ export function createStore<State>(
         config = fn
         fn = fn.fn
       }
-      if (firstState !== undefined) {
-        console.error(
-          'second argument of store.map is deprecated, use updateFilter instead',
-        )
-      }
+      deprecate(
+        firstState === undefined,
+        'second argument of store.map',
+        'updateFilter',
+      )
       let lastResult
       const storeState = store.getState()
       const template = readTemplate()
