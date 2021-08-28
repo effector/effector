@@ -702,7 +702,7 @@ function setRestoreNameAfter(
     )
 
     if (oldConfig) {
-      configExpr.properties.push(property(t, 'ɔ', oldConfig))
+      configExpr.properties.push(property(t, 'and', oldConfig))
     }
     if (addLoc) {
       const locProp = property(
@@ -761,7 +761,7 @@ function setStoreNameAfter(
     )
 
     if (oldConfig) {
-      configExpr.properties.push(property(t, 'ɔ', oldConfig))
+      configExpr.properties.push(property(t, 'and', oldConfig))
     }
     if (addLoc) {
       const locProp = property(
@@ -841,8 +841,8 @@ function setConfigForConfigurableMethod(
     }
     configExpr.properties.push(stableID)
     args[0] = t.objectExpression([
-      property(t, 'ɔ', commonArgs),
-      property(t, 'config', configExpr),
+      property(t, 'and', commonArgs),
+      property(t, 'or', configExpr),
     ])
   }
 }
@@ -890,7 +890,7 @@ function setEventNameAfter(
     )
 
     if (oldConfig) {
-      configExpr.properties.push(property(t, 'ɔ', oldConfig))
+      configExpr.properties.push(property(t, 'and', oldConfig))
     }
     if (addLoc) {
       const locProp = property(

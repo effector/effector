@@ -1,5 +1,5 @@
-import {getConfig, getNestedConfig} from './getter'
-import {assertObject} from './is'
+import {forIn} from './collection'
+import {assertObject, isObject, isVoid} from './is'
 
 export function processArgsToConfig(
   arg: any,
@@ -12,10 +12,35 @@ export function processArgsToConfig(
 ): [any[], any | void] {
   const rawConfig = singleArgument ? args : args[0]
   assertObject(rawConfig)
-  let metadata
-  if (getNestedConfig(rawConfig)) {
-    metadata = getConfig(rawConfig)
-    args = getNestedConfig(rawConfig)
+  let metadata = rawConfig.or
+  if (rawConfig.and) {
+    args = rawConfig.and
   }
   return [args, metadata]
+}
+
+/**
+processed fields:
+
+'name',
+'sid',
+'loc',
+'handler',
+'updateFilter',
+'parent',
+'serialize',
+'named',
+'derived',
+*/
+export const flattenConfig = (part: any, config: any = {}) => {
+  if (isObject(part)) {
+    flattenConfig(part.or, config)
+    forIn(part, (value, field) => {
+      if (!isVoid(value) && field !== 'or' && field !== 'and') {
+        config[field] = value
+      }
+    })
+    flattenConfig(part.and, config)
+  }
+  return config
 }

@@ -13,6 +13,7 @@ import {forIn} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import {callStack} from './caller'
+import type {Config} from './index.h'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -82,7 +83,7 @@ const storeCombination = (
   isArray: boolean,
   needSpread: boolean,
   obj: any,
-  config?: string,
+  config?: Config,
   fn?: (upd: any) => any,
 ) => {
   const clone = isArray ? (list: any) => list.slice() : (obj: any) => ({...obj})
@@ -95,8 +96,9 @@ const storeCombination = (
   rawShape.noInit = true
   applyTemplate('combineBase', rawShape, isFresh)
   const store = createStore(stateNew, {
-    name: config ? config : unitObjectName(obj),
+    name: unitObjectName(obj),
     derived: true,
+    and: config,
   })
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true

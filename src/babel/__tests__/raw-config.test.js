@@ -1,8 +1,5 @@
-//@flow
-
 import {combine, createDomain, createStore} from 'effector'
 
-//$todo
 const readFullName = unit => unit.compositeName?.fullName
 
 describe('raw config', () => {

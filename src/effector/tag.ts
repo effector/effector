@@ -13,4 +13,3 @@ export const FORK_COUNTER = 'forkInFlightCounter'
 export const SAMPLE = 'sample'
 export const FILTER = 'filter'
 export const REG_A = 'a'
-export const OPEN_O = `\u0254`

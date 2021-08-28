@@ -26,9 +26,9 @@ export type Config = {
   }
   sid?: string
   named?: string
-  name?: string | Config
-  ɔ?: Config
-  config?: Config
+  name?: string
+  and?: Config
+  or?: Config
   parent?: any
   handler?: Function
   derived?: boolean

@@ -13,11 +13,11 @@ const effect = createEffect({
   sid: 'bswcgo',
 })
 const foo1 = attach({
-  ɔ: {
+  and: {
     effect,
     mapParams: _ => _,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 5,
@@ -28,11 +28,11 @@ const foo1 = attach({
   },
 })
 attach({
-  ɔ: {
+  and: {
     effect,
     mapParams: _ => _,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 10,
@@ -46,8 +46,8 @@ const config = {
   mapParams: _ => _,
 }
 const foo2 = attach({
-  ɔ: config,
-  config: {
+  and: config,
+  or: {
     loc: {
       file: _effectorFileName,
       line: 20,
@@ -60,11 +60,11 @@ const foo2 = attach({
 
 const f = () =>
   attach({
-    ɔ: {
+    and: {
       effect,
       mapParams: _ => _,
     },
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 23,
@@ -105,13 +105,13 @@ const bar = createStore('h', {
   sid: '-9jmed0',
 })
 const baz1 = combine({
-  ɔ: [
+  and: [
     {
       foo,
       bar,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 6,
@@ -122,8 +122,8 @@ const baz1 = combine({
   },
 })
 const baz2 = combine({
-  ɔ: [[foo, bar]],
-  config: {
+  and: [[foo, bar]],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 7,
@@ -134,8 +134,8 @@ const baz2 = combine({
   },
 })
 const baz3 = combine({
-  ɔ: [foo, bar, (a, b) => [a, b]],
-  config: {
+  and: [foo, bar, (a, b) => [a, b]],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 8,
@@ -147,8 +147,8 @@ const baz3 = combine({
 })
 const spread = [foo, bar]
 const baz4 = combine({
-  ɔ: [...spread],
-  config: {
+  and: [...spread],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 11,
@@ -163,8 +163,8 @@ const shape = {
   bar,
 }
 const baz5 = combine({
-  ɔ: [shape],
-  config: {
+  and: [shape],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 14,
@@ -175,13 +175,13 @@ const baz5 = combine({
   },
 })
 combine({
-  ɔ: [
+  and: [
     {
       foo,
       bar,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 16,
@@ -191,8 +191,8 @@ combine({
   },
 })
 combine({
-  ɔ: [...spread],
-  config: {
+  and: [...spread],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 17,
@@ -204,13 +204,13 @@ combine({
 
 const f = a =>
   combine({
-    ɔ: [
+    and: [
       {
         foo,
         bar,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 19,
@@ -719,7 +719,7 @@ const a = domain.store('bar', {
   sid: 'z1hqlw',
 })
 const b = domain.store('h', {
-  ɔ: {
+  and: {
     option: 'test',
     ['na' + 'me']: 'LOL',
   },
@@ -732,7 +732,7 @@ const b = domain.store('h', {
   sid: '5m6wxe',
 })
 const c = domain.store('h', {
-  ɔ: {
+  and: {
     name: 'test',
   },
   loc: {
@@ -745,7 +745,7 @@ const c = domain.store('h', {
 }) //$off
 
 const d = domain.store('h', {
-  ɔ: null,
+  and: null,
   loc: {
     file: _effectorFileName,
     line: 10,
@@ -756,7 +756,7 @@ const d = domain.store('h', {
 }) //$off
 
 const e = domain.store('h', {
-  ɔ: 4234,
+  and: 4234,
   loc: {
     file: _effectorFileName,
     line: 12,
@@ -766,7 +766,7 @@ const e = domain.store('h', {
   sid: '7o9lyl',
 })
 const f = domain.store('h', {
-  ɔ: {},
+  and: {},
   loc: {
     file: _effectorFileName,
     line: 13,
@@ -785,7 +785,7 @@ const aAlias = domain.createStore('bar', {
   sid: '6bga5r',
 })
 const bAlias = domain.createStore('h', {
-  ɔ: {
+  and: {
     option: 'test',
     ['na' + 'me']: 'LOL',
   },
@@ -798,7 +798,7 @@ const bAlias = domain.createStore('h', {
   sid: '-ku2zyr',
 })
 const cAlias = domain.createStore('h', {
-  ɔ: {
+  and: {
     name: 'testAlias',
   },
   loc: {
@@ -811,7 +811,7 @@ const cAlias = domain.createStore('h', {
 }) //$off
 
 const dAlias = domain.createStore('h', {
-  ɔ: null,
+  and: null,
   loc: {
     file: _effectorFileName,
     line: 19,
@@ -822,7 +822,7 @@ const dAlias = domain.createStore('h', {
 }) //$off
 
 const eAlias = domain.createStore('h', {
-  ɔ: 4234,
+  and: 4234,
   loc: {
     file: _effectorFileName,
     line: 21,
@@ -832,7 +832,7 @@ const eAlias = domain.createStore('h', {
   sid: '-kdjhao',
 })
 const fAlias = domain.createStore('h', {
-  ɔ: {},
+  and: {},
   loc: {
     file: _effectorFileName,
     line: 22,
@@ -850,7 +850,7 @@ const {sid} = domain.createStore(null, {
   sid: '-f8txo',
 })
 const {shortName} = domain.createStore(null, {
-  ɔ: {
+  and: {
     name: 'foo',
   },
   loc: {
@@ -918,7 +918,7 @@ const baz = createEffect(
   },
 )
 const quux = createEffect('nice', {
-  ɔ: {
+  and: {
     handler() {
       return 0
     },
@@ -1110,7 +1110,7 @@ const a = createStore('h', {
   sid: 'osbuqo',
 })
 const b = createStore('h', {
-  ɔ: {},
+  and: {},
   loc: {
     file: _effectorFileName,
     line: 6,
@@ -1121,7 +1121,7 @@ const b = createStore('h', {
 }) //$off
 
 const c = createStore('h', {
-  ɔ: 23020,
+  and: 23020,
   loc: {
     file: _effectorFileName,
     line: 8,
@@ -1134,7 +1134,7 @@ const config = {
   option: 0,
 }
 const dod = createStore(null, {
-  ɔ: config,
+  and: config,
   loc: {
     file: _effectorFileName,
     line: 10,
@@ -1164,7 +1164,7 @@ const {sid} = createStore(null, {
   sid: '-u0iw5z',
 })
 const {shortName} = createStore(null, {
-  ɔ: {
+  and: {
     name: 'foo',
   },
   loc: {
@@ -1216,13 +1216,13 @@ const bar = createEvent({
   sid: 'bo1nrg',
 })
 const baz1 = createApi({
-  ɔ: [
+  and: [
     foo,
     {
       reset: () => [],
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 7,
@@ -1232,13 +1232,13 @@ const baz1 = createApi({
   },
 })
 createApi({
-  ɔ: [
+  and: [
     foo,
     {
       reset: () => [],
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 8,
@@ -1254,8 +1254,8 @@ const spread = [
   },
 ]
 const baz4 = createApi({
-  ɔ: [...spread],
-  config: {
+  and: [...spread],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 11,
@@ -1267,13 +1267,13 @@ const baz4 = createApi({
 
 const f = () =>
   createApi({
-    ɔ: [
+    and: [
       foo,
       {
         reset: () => [],
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 13,
@@ -1526,11 +1526,11 @@ const bar = createEvent({
   sid: '-skx5bw',
 })
 const baz1 = forward({
-  ɔ: {
+  and: {
     from: foo,
     to: bar,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 8,
@@ -1541,11 +1541,11 @@ const baz1 = forward({
   },
 })
 const baz2 = forward({
-  ɔ: {
+  and: {
     from: foo,
     to: bar,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 9,
@@ -1556,11 +1556,11 @@ const baz2 = forward({
   },
 })
 forward({
-  ɔ: {
+  and: {
     from: foo,
     to: bar,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 14,
@@ -1570,11 +1570,11 @@ forward({
   },
 })
 forward({
-  ɔ: {
+  and: {
     from: foo,
     to: bar,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 15,
@@ -1588,8 +1588,8 @@ const config = {
   to: bar,
 }
 const baz5 = forward({
-  ɔ: config,
-  config: {
+  and: config,
+  or: {
     loc: {
       file: _effectorFileName,
       line: 25,
@@ -1602,11 +1602,11 @@ const baz5 = forward({
 
 const f = () =>
   forward({
-    ɔ: {
+    and: {
       from: foo,
       to: bar,
     },
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 28,
@@ -1641,13 +1641,13 @@ const bar = createEvent({
   sid: '-45cu8q',
 })
 const baz1 = guard({
-  ɔ: [
+  and: [
     bar,
     {
       filter: foo,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 6,
@@ -1658,13 +1658,13 @@ const baz1 = guard({
   },
 })
 const baz2 = guard({
-  ɔ: [
+  and: [
     {
       source: bar,
       filter: foo,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 7,
@@ -1675,13 +1675,13 @@ const baz2 = guard({
   },
 })
 guard({
-  ɔ: [
+  and: [
     bar,
     {
       filter: foo,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 12,
@@ -1691,13 +1691,13 @@ guard({
   },
 })
 guard({
-  ɔ: [
+  and: [
     {
       source: bar,
       filter: foo,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 13,
@@ -1713,8 +1713,8 @@ const spread = [
   },
 ]
 const baz4 = guard({
-  ɔ: [...spread],
-  config: {
+  and: [...spread],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 19,
@@ -1729,8 +1729,8 @@ const config = {
   filter: foo,
 }
 const baz5 = guard({
-  ɔ: [config],
-  config: {
+  and: [config],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 26,
@@ -1743,13 +1743,13 @@ const baz5 = guard({
 
 const f = () =>
   guard({
-    ɔ: [
+    and: [
       {
         source: bar,
         filter: foo,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 29,
@@ -1858,10 +1858,10 @@ import {createStore} from 'redux'
   const scope = forkEffector(domain)
   const node = createNodeEffector()
   const a = attachEffector({
-    ɔ: {
+    and: {
       effect,
     },
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 39,
@@ -1873,12 +1873,12 @@ import {createStore} from 'redux'
   })
   const b = clearNodeEffector(node)
   const c = combineEffector({
-    ɔ: [
+    and: [
       {
         store,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 41,
@@ -1889,8 +1889,8 @@ import {createStore} from 'redux'
     },
   })
   const d = createApiEffector({
-    ɔ: [store, {}],
-    config: {
+    and: [store, {}],
+    or: {
       loc: {
         file: _effectorFileName,
         line: 42,
@@ -1900,11 +1900,11 @@ import {createStore} from 'redux'
     },
   })
   const j = forwardEffector({
-    ɔ: {
+    and: {
       from: event,
       to: store,
     },
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 43,
@@ -1915,13 +1915,13 @@ import {createStore} from 'redux'
     },
   })
   const l = guardEffector({
-    ɔ: [
+    and: [
       {
         source: event,
         filter: Boolean,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 44,
@@ -1951,13 +1951,13 @@ import {createStore} from 'redux'
     sid: '-9oc11k',
   })
   const p = sampleEffector({
-    ɔ: [
+    and: [
       {
         source: store,
         clock: event,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 48,
@@ -1968,8 +1968,8 @@ import {createStore} from 'redux'
     },
   })
   const q = splitEffector({
-    ɔ: [event, {}],
-    config: {
+    and: [event, {}],
+    or: {
       loc: {
         file: _effectorFileName,
         line: 49,
@@ -2118,10 +2118,10 @@ const domainEvent = domain.createEvent({
 const scope = fork(domain)
 const node = createNode()
 const a = attach({
-  ɔ: {
+  and: {
     effect,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 9,
@@ -2133,12 +2133,12 @@ const a = attach({
 })
 const b = clearNode(node)
 const c = combine({
-  ɔ: [
+  and: [
     {
       store,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 11,
@@ -2149,8 +2149,8 @@ const c = combine({
   },
 })
 const d = createApi({
-  ɔ: [store, {}],
-  config: {
+  and: [store, {}],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 12,
@@ -2160,11 +2160,11 @@ const d = createApi({
   },
 })
 const e = forward({
-  ɔ: {
+  and: {
     from: event,
     to: store,
   },
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 13,
@@ -2175,13 +2175,13 @@ const e = forward({
   },
 })
 const f = guard({
-  ɔ: [
+  and: [
     {
       source: event,
       filter: Boolean,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 14,
@@ -2211,13 +2211,13 @@ const i = restore(event, null, {
   sid: '-15niss',
 })
 const j = sample({
-  ɔ: [
+  and: [
     {
       source: store,
       clock: event,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 18,
@@ -2228,8 +2228,8 @@ const j = sample({
   },
 })
 const k = split({
-  ɔ: [event, {}],
-  config: {
+  and: [event, {}],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 19,
@@ -2272,7 +2272,7 @@ const a = merge([foo], {
   sid: 'g0hdc6',
 })
 const b = merge([foo], {
-  ɔ: {},
+  and: {},
   loc: {
     file: _effectorFileName,
     line: 6,
@@ -2391,10 +2391,10 @@ function outerScope() {
     const scope = fork(domain)
     const node = createNode()
     const a = attach({
-      ɔ: {
+      and: {
         effect,
       },
-      config: {
+      or: {
         loc: {
           file: _effectorFileName,
           line: 33,
@@ -2406,12 +2406,12 @@ function outerScope() {
     })
     const b = clearNode(node)
     const c = combine({
-      ɔ: [
+      and: [
         {
           store,
         },
       ],
-      config: {
+      or: {
         loc: {
           file: _effectorFileName,
           line: 35,
@@ -2422,8 +2422,8 @@ function outerScope() {
       },
     })
     const d = createApi({
-      ɔ: [store, {}],
-      config: {
+      and: [store, {}],
+      or: {
         loc: {
           file: _effectorFileName,
           line: 36,
@@ -2433,11 +2433,11 @@ function outerScope() {
       },
     })
     const e = forward({
-      ɔ: {
+      and: {
         from: event,
         to: store,
       },
-      config: {
+      or: {
         loc: {
           file: _effectorFileName,
           line: 37,
@@ -2448,13 +2448,13 @@ function outerScope() {
       },
     })
     const f = guard({
-      ɔ: [
+      and: [
         {
           source: event,
           filter: Boolean,
         },
       ],
-      config: {
+      or: {
         loc: {
           file: _effectorFileName,
           line: 38,
@@ -2484,13 +2484,13 @@ function outerScope() {
       sid: '-npjxgy',
     })
     const j = sample({
-      ɔ: [
+      and: [
         {
           source: store,
           clock: event,
         },
       ],
-      config: {
+      or: {
         loc: {
           file: _effectorFileName,
           line: 42,
@@ -2501,8 +2501,8 @@ function outerScope() {
       },
     })
     const k = split({
-      ɔ: [event, {}],
-      config: {
+      and: [event, {}],
+      or: {
         loc: {
           file: _effectorFileName,
           line: 43,
@@ -2552,7 +2552,7 @@ const a = restore(foo, null, {
   sid: '-n6x72o',
 })
 const b = restore(foo, null, {
-  ɔ: {},
+  and: {},
   loc: {
     file: _effectorFileName,
     line: 6,
@@ -2563,7 +2563,7 @@ const b = restore(foo, null, {
 }) //$off
 
 const c = restore(foo, null, {
-  ɔ: 23020,
+  and: 23020,
   loc: {
     file: _effectorFileName,
     line: 8,
@@ -2576,7 +2576,7 @@ const config = {
   option: 0,
 }
 const dod = restore(foo, null, {
-  ɔ: config,
+  and: config,
   loc: {
     file: _effectorFileName,
     line: 10,
@@ -2606,7 +2606,7 @@ const {sid} = restore(foo, null, {
   sid: 'duje3b',
 })
 const {shortName} = restore(foo, null, {
-  ɔ: {
+  and: {
     name: 'bar',
   },
   loc: {
@@ -2658,8 +2658,8 @@ const bar = createEvent({
   sid: '-nktibu',
 })
 const baz1 = sample({
-  ɔ: [foo, bar],
-  config: {
+  and: [foo, bar],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 7,
@@ -2670,13 +2670,13 @@ const baz1 = sample({
   },
 })
 const baz2 = sample({
-  ɔ: [
+  and: [
     {
       source: foo,
       clock: bar,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 8,
@@ -2687,8 +2687,8 @@ const baz2 = sample({
   },
 })
 sample({
-  ɔ: [foo, bar],
-  config: {
+  and: [foo, bar],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 13,
@@ -2698,13 +2698,13 @@ sample({
   },
 })
 sample({
-  ɔ: [
+  and: [
     {
       source: foo,
       clock: bar,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 14,
@@ -2715,8 +2715,8 @@ sample({
 })
 const spread = [foo, bar]
 const baz4 = sample({
-  ɔ: [...spread],
-  config: {
+  and: [...spread],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 20,
@@ -2731,8 +2731,8 @@ const config = {
   clock: bar,
 }
 const baz5 = sample({
-  ɔ: [config],
-  config: {
+  and: [config],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 27,
@@ -2745,13 +2745,13 @@ const baz5 = sample({
 
 const f = () =>
   sample({
-    ɔ: [
+    and: [
       {
         source: foo,
         clock: bar,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 30,
@@ -2786,13 +2786,13 @@ const bar = createEvent({
   sid: '-v6h0vj',
 })
 const baz1 = split({
-  ɔ: [
+  and: [
     foo,
     {
       nonEmpty: list => list.length === 0,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 6,
@@ -2802,13 +2802,13 @@ const baz1 = split({
   },
 })
 split({
-  ɔ: [
+  and: [
     foo,
     {
       nonEmpty: list => list.length === 0,
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 7,
@@ -2818,7 +2818,7 @@ split({
   },
 })
 const baz2 = split({
-  ɔ: [
+  and: [
     {
       source: foo,
       match: {
@@ -2829,7 +2829,7 @@ const baz2 = split({
       },
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 8,
@@ -2839,7 +2839,7 @@ const baz2 = split({
   },
 })
 split({
-  ɔ: [
+  and: [
     {
       source: foo,
       match: {
@@ -2850,7 +2850,7 @@ split({
       },
     },
   ],
-  config: {
+  or: {
     loc: {
       file: _effectorFileName,
       line: 14,
@@ -2866,8 +2866,8 @@ const spread = [
   },
 ]
 const baz4 = split({
-  ɔ: [...spread],
-  config: {
+  and: [...spread],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 21,
@@ -2886,8 +2886,8 @@ const config = {
   },
 }
 const baz5 = split({
-  ɔ: [config],
-  config: {
+  and: [config],
+  or: {
     loc: {
       file: _effectorFileName,
       line: 29,
@@ -2899,13 +2899,13 @@ const baz5 = split({
 
 const f = () =>
   split({
-    ɔ: [
+    and: [
       foo,
       {
         nonEmpty: list => list.length === 0,
       },
     ],
-    config: {
+    or: {
       loc: {
         file: _effectorFileName,
         line: 31,
@@ -2947,67 +2947,67 @@ exports[`babel-plugin should units without name with options 1`] = `
     sid: '-r4da5h',
   })
   const b = domain.store('h', {
-    ɔ: {
+    and: {
       option: 'test',
       ['na' + 'me']: 'LOL',
     },
     sid: 'ehfy55',
   })
   const c = domain.store('h', {
-    ɔ: {
+    and: {
       name: 'test',
     },
     sid: '-exuvjd',
   }) //$off
 
   const d = domain.store('h', {
-    ɔ: null,
+    and: null,
     sid: 'r4zz5g',
   }) //$off
 
   const e = domain.store('h', {
-    ɔ: 4234,
+    and: 4234,
     sid: '-1t984v',
   })
   const f = domain.store('h', {
-    ɔ: {},
+    and: {},
     sid: '-v8k1td',
   })
   const aAlias = domain.createStore('bar', {
     sid: 'rsi1ca',
   })
   const bAlias = domain.createStore('h', {
-    ɔ: {
+    and: {
       option: 'test',
       ['na' + 'me']: 'LOL',
     },
     sid: 'i7igmi',
   })
   const cAlias = domain.createStore('h', {
-    ɔ: {
+    and: {
       name: 'testAlias',
     },
     sid: '8mivwq',
   }) //$off
 
   const dAlias = domain.createStore('h', {
-    ɔ: null,
+    and: null,
     sid: '-hf2ev',
   }) //$off
 
   const eAlias = domain.createStore('h', {
-    ɔ: 4234,
+    and: 4234,
     sid: '-9ld0qg',
   })
   const fAlias = domain.createStore('h', {
-    ɔ: {},
+    and: {},
     sid: '-j6clg8',
   })
   const {sid} = domain.createStore(null, {
     sid: '-ls4ila',
   })
   const {shortName} = domain.createStore(null, {
-    ɔ: {
+    and: {
       name: 'foo',
     },
     sid: '-lb2vju',
@@ -3037,7 +3037,7 @@ exports[`babel-plugin should units without name with options 1`] = `
     },
   )
   const quux = createEffect('nice', {
-    ɔ: {
+    and: {
       handler() {
         return 0
       },
@@ -3079,19 +3079,19 @@ exports[`babel-plugin should units without name with options 1`] = `
     sid: '-oagam9',
   })
   const b = createStore('h', {
-    ɔ: {},
+    and: {},
     sid: 'hbcxod',
   }) //$off
 
   const c = createStore('h', {
-    ɔ: 23020,
+    and: 23020,
     sid: '-bmw9ly',
   })
   const config = {
     option: 0,
   }
   const dod = createStore(null, {
-    ɔ: config,
+    and: config,
     sid: 'sja6dc',
   })
 
@@ -3104,7 +3104,7 @@ exports[`babel-plugin should units without name with options 1`] = `
     sid: '-mqki7m',
   })
   const {shortName} = createStore(null, {
-    ɔ: {
+    and: {
       name: 'foo',
     },
     sid: '-m9iv66',
@@ -3166,19 +3166,19 @@ exports[`babel-plugin should units without name with options 1`] = `
     sid: 'lmx1mm',
   })
   const b = restore(foo, null, {
-    ɔ: {},
+    and: {},
     sid: '-7sds1w',
   }) //$off
 
   const c = restore(foo, null, {
-    ɔ: 23020,
+    and: 23020,
     sid: 'yah2mx',
   })
   const config = {
     option: 0,
   }
   const dod = restore(foo, null, {
-    ɔ: config,
+    and: config,
     sid: '10dc0p',
   })
 
@@ -3191,7 +3191,7 @@ exports[`babel-plugin should units without name with options 1`] = `
     sid: 'zcd1uy',
   })
   const {shortName} = restore(foo, null, {
-    ɔ: {
+    and: {
       name: 'bar',
     },
     sid: '-z7pd2q',

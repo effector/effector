@@ -2,7 +2,6 @@ import {createStore} from './createUnit'
 import {is} from './is'
 import {forIn} from './collection'
 import {getParent} from './getter'
-import {OPEN_O} from './tag'
 import {createLinkNode} from './forward'
 
 export function restore(obj: any, defaultState: any, config?: any): any {
@@ -12,7 +11,7 @@ export function restore(obj: any, defaultState: any, config?: any): any {
     const result = createStore(defaultState, {
       parent: domain,
       name: obj.shortName,
-      [OPEN_O]: config,
+      and: config,
     })
     createLinkNode(is.effect(obj) ? obj.doneData : obj, result)
     if (domain) domain.hooks.store(result)

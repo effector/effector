@@ -14,7 +14,10 @@ export function createEffect<Payload, Done>(
   nameOrConfig: any,
   maybeConfig?: any,
 ) {
-  const instance: any = createEvent(nameOrConfig, maybeConfig)
+  const instance: any = createEvent(
+    isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
+    maybeConfig,
+  )
   let currentHandler =
     instance.defaultConfig.handler ||
     (() => assert(false, `no handler used in ${instance.getType()}`))

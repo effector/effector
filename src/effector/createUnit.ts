@@ -32,8 +32,6 @@ import {createSubscription} from './subscription'
 import {readTemplate, readSidRoot} from './region'
 import {
   getSubscribers,
-  getConfig,
-  getNestedConfig,
   getStoreState,
   getGraph,
   getParent,
@@ -41,30 +39,10 @@ import {
   getMeta,
 } from './getter'
 import {assert, deprecate} from './throw'
-import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A, OPEN_O} from './tag'
+import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
-
-const normalizeConfig = (part: any, config: any) => {
-  if (isObject(part)) {
-    normalizeConfig(getConfig(part), config)
-    if (part.name != null) {
-      if (isObject(part.name)) normalizeConfig(part.name, config)
-      else if (isFunction(part.name)) config.handler = part.name
-      else config.name = part.name
-    }
-    if (part.sid || part.sid === null) config.sid = part.sid
-    if (part.loc) config.loc = part.loc
-    if (part.handler) config.handler = part.handler
-    if (part.updateFilter) config.updateFilter = part.updateFilter
-    if (getParent(part)) config.parent = getParent(part)
-    if (part.serialize) config.serialize = part.serialize
-    if (part.named) config.named = part.named
-    if (part.derived) config.derived = part.derived
-    normalizeConfig(getNestedConfig(part), config)
-  }
-  return config
-}
+import {flattenConfig} from './config'
 
 export const applyParentHook = (
   source: any,
@@ -74,16 +52,14 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (
-  kind: any,
-  unit: any,
-  rawConfigA: any,
-  rawConfigB?: any,
-) => {
-  const config = normalizeConfig({name: rawConfigB, config: rawConfigA}, {})
+export const initUnit = (kind: any, unit: any, configA: any, configB?: any) => {
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
-  let {parent = null, sid = null, named = null} = config
+  const config = flattenConfig({
+    or: configB,
+    and: typeof configA === 'string' ? {name: configA} : configA,
+  })
+  const {parent = null, sid = null, named = null} = config
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
   const meta: Record<string, any> = {
@@ -125,8 +101,8 @@ const deriveEvent = (event: any, op: string, fn: any, node: any) => {
   }
   const mapped = createEvent({
     name: `${event.shortName} → *`,
-    [OPEN_O]: config,
     derived: true,
+    and: config,
   })
   createLinkNode(event, mapped, {scope: {fn}, node, meta: {op}})
   return mapped
@@ -165,7 +141,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   return Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(EVENT, event, maybeConfig, nameOrConfig),
+      meta: initUnit(EVENT, event, nameOrConfig, maybeConfig),
       regional: true,
     }),
     create(params: any, _: any) {
@@ -285,8 +261,8 @@ export function createStore<State>(
 
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
-        [OPEN_O]: config,
         derived: true,
+        and: config,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
       addRefOp(getStoreState(innerStore), {
