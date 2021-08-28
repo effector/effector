@@ -11,16 +11,19 @@ import {assert} from './throw'
 import {merge} from './merge'
 
 export function guard(...args: any[]) {
-  let rawName = 'guard'
   let [[source, config], metadata] = processArgsToConfig(args)
   const meta: Record<string, any> = {op: 'guard', config: metadata}
-  if (metadata && metadata.name) rawName = metadata.name
   if (!config) {
     config = source
     source = config.source
   }
-  let {filter, greedy, clock, name = rawName} = config
-  const target = config.target || createEvent(name, meta.config)
+  let {
+    filter,
+    greedy,
+    clock,
+    name = metadata && metadata.name ? metadata.name : 'guard',
+  } = config
+  const target = config.target || createEvent(name, metadata)
   const filterIsUnit = is.unit(filter)
   let needToCombine = true
   if (isVoid(source)) {

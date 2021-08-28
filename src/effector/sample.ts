@@ -46,16 +46,13 @@ export function sample(...args: any): any {
     sid = source.sid
     source = source.source
   }
-  let needToCombine = true
   if (isVoid(source)) {
     assertNodeSet(clock, 'sample', 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock)
     }
     source = clock
-    needToCombine = false
-  }
-  if (needToCombine && !is.unit(source)) {
+  } else if (!is.unit(source)) {
     source = combine(source)
   }
   if (isVoid(clock)) {
@@ -63,16 +60,16 @@ export function sample(...args: any): any {
     clock = source
   }
   assertNodeSet(clock, 'sample', 'clock')
-  name = metadata || name || source.shortName
+  if (!metadata && !name) name = source.shortName
   const isUpward = !!target
   if (!target) {
     if (is.store(source) && is.store(clock)) {
       const initialState = fn
         ? fn(readRef(getStoreState(source)), readRef(getStoreState(clock)))
         : readRef(getStoreState(source))
-      target = createStore(initialState, {name, sid})
+      target = createStore(initialState, {name, sid, or: metadata})
     } else {
-      target = createEvent(name)
+      target = createEvent(name, metadata)
       applyTemplate('sampleTarget', getGraph(target))
     }
   }
