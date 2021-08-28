@@ -28,6 +28,7 @@ describe('raw nodes support', () => {
     const from = createNode()
     const to = createNode()
     expect(() => {
+      //@ts-expect-error
       forward({from, to})
     }).not.toThrow()
   })
@@ -35,6 +36,7 @@ describe('raw nodes support', () => {
     const from = createNode()
     const to = createNode()
     expect(() => {
+      //@ts-expect-error
       forward({from: [from], to: [to]})
     }).not.toThrow()
   })
@@ -70,10 +72,10 @@ it('should stop forwarding after unsubscribe', () => {
 })
 
 it('should unsubscribe only from relevant watchers', async () => {
-  const dispatch = createEvent()
-  const store = createStore([])
+  const dispatch = createEvent<string>()
+  const store = createStore<string[]>([])
   store.on(dispatch, (state, text) => [...state, text])
-  function subscribe(fn) {
+  function subscribe(fn: Function) {
     let first = true
     return store.watch(data => {
       if (first) {
@@ -88,7 +90,7 @@ it('should unsubscribe only from relevant watchers', async () => {
   const listenerC = jest.fn()
 
   subscribe(listenerA)
-  const unSubB = subscribe(data => {
+  const unSubB = subscribe((data: any) => {
     listenerB(data)
     unSubB()
   })
@@ -154,16 +156,19 @@ describe('array forwarding support', () => {
 })
 it('should validate arguments', () => {
   expect(() => {
+    //@ts-expect-error
     forward({})
   }).toThrowErrorMatchingInlineSnapshot(
     `"forward: expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
   )
   expect(() => {
+    //@ts-expect-error
     forward({from: createStore(null)})
   }).toThrowErrorMatchingInlineSnapshot(
     `"forward: expect \\"to\\" to be a unit (store, event or effect) or array of units"`,
   )
   expect(() => {
+    //@ts-expect-error
     forward({to: createStore(null)})
   }).toThrowErrorMatchingInlineSnapshot(
     `"forward: expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
