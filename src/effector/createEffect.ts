@@ -22,10 +22,10 @@ export function createEffect<Payload, Done>(
   setMeta(node, 'op', (instance.kind = EFFECT))
   instance.use = (fn: Function) => {
     assert(isFunction(fn), '.use argument should be a function')
-    node.scope.runner.scope.handler = fn
+    runner.scope.handler = fn
     return instance
   }
-  instance.use.getCurrent = () => node.scope.runner.scope.handler
+  instance.use.getCurrent = () => runner.scope.handler
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
@@ -48,7 +48,7 @@ export function createEffect<Payload, Done>(
     fn: ({error}: any) => error,
   }))
 
-  node.scope.runner = createNode({
+  const runner = createNode({
     scope: {
       handlerId: getMeta(node, 'sid'),
       handler:
@@ -86,6 +86,7 @@ export function createEffect<Payload, Done>(
     ],
     meta: {op: 'fx', fx: 'runner'},
   })
+  node.scope.runner = runner
   node.seq.push(
     step.compute({
       fn(params, {runner}, stack) {
