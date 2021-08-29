@@ -3,7 +3,6 @@ import {assert} from '../throw'
 import type {Domain} from '../unit.h'
 import {normalizeValues} from './util'
 import {createScope} from './createScope'
-import {getMeta} from '../getter'
 
 export function fork(
   domainOrConfig?: Domain | {values?: any; handlers?: any},
@@ -26,13 +25,12 @@ export function fork(
       Object.assign(scope.sidValuesMap, valuesSidMap)
     }
     if (config.handlers) {
-      scope.handlers = normalizeValues(config.handlers, unit => {
-        assert(is.effect(unit), `Handlers map can contain only effects as keys`)
+      scope.handlers = normalizeValues(config.handlers, unit =>
         assert(
-          !getMeta(unit, 'attached'),
-          'Handlers can`t accept attached effects',
-        )
-      })
+          is.effect(unit),
+          `Handlers map can contain only effects as keys`,
+        ),
+      )
     }
   }
   return scope

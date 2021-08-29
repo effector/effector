@@ -18,17 +18,14 @@ export function createEffect<Payload, Done>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
   )
-  let currentHandler =
-    instance.defaultConfig.handler ||
-    (() => assert(false, `no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
   instance.use = (fn: Function) => {
     assert(isFunction(fn), '.use argument should be a function')
-    currentHandler = fn
+    node.scope.runner.scope.handler = fn
     return instance
   }
-  instance.use.getCurrent = () => currentHandler
+  instance.use.getCurrent = () => node.scope.runner.scope.handler
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
@@ -52,27 +49,25 @@ export function createEffect<Payload, Done>(
   }))
 
   node.scope.runner = createNode({
-    scope: {handlerId: getMeta(node, 'sid')},
+    scope: {
+      handlerId: getMeta(node, 'sid'),
+      handler:
+        instance.defaultConfig.handler ||
+        (() => assert(false, `no handler used in ${instance.getType()}`)),
+    },
     node: [
       step.run({
-        fn({params, req}, {handlerId}, stack) {
+        fn({params, req, args = [params]}, scope, stack) {
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
-          let handler: (data: any) => any = currentHandler
-          if (getForkPage(stack)) {
-            const handler_ = getForkPage(stack)!.handlers[handlerId]
-            if (handler_) handler = handler_
-          }
-          let result
-          try {
-            result = handler(params)
-          } catch (err) {
-            return void onReject(err)
-          }
-          if (isObject(result) && isFunction(result.then)) {
-            result.then(onResolve, onReject)
-          } else {
-            onResolve(result)
+          const handler = getHandler(scope, stack)
+          const [ok, result] = runFn(handler, onReject, args)
+          if (ok) {
+            if (isObject(result) && isFunction(result.then)) {
+              result.then(onResolve, onReject)
+            } else {
+              onResolve(result)
+            }
           }
         },
       }),
@@ -130,6 +125,27 @@ export function createEffect<Payload, Done>(
 
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   return instance
+}
+export const getHandler = (scope_: Record<string, any>, stack: Stack) => {
+  const scope: {handlerId: string; handler: Function} = scope_ as any
+  let handler = scope.handler
+  if (getForkPage(stack)) {
+    const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
+    if (handler_) handler = handler_
+  }
+  return handler
+}
+export const runFn = (
+  fn: Function,
+  onReject: (data: any) => void,
+  args: any[],
+): [boolean, any] => {
+  try {
+    return [true, fn(...args)]
+  } catch (err) {
+    onReject(err)
+    return [false, null]
+  }
 }
 
 export const onSettled =

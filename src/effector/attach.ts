@@ -1,5 +1,5 @@
 import {combine} from './combine'
-import {createEffect, onSettled} from './createEffect'
+import {createEffect, getHandler, onSettled, runFn} from './createEffect'
 import {applyParentHook} from './createUnit'
 import {processArgsToConfig} from './config'
 import {getGraph, getStoreState, setMeta} from './getter'
@@ -13,40 +13,43 @@ export function attach(config: any) {
   let injected
   ;[config, injected] = processArgsToConfig(config, true)
   let {source, effect, mapParams} = config
-  const isPlainFunction = !is.effect(effect) && isFunction(effect)
-  if (!mapParams)
-    mapParams =
-      source && !isPlainFunction
-        ? (_: any, source: any) => source
-        : (params: any) => params
-  if (isPlainFunction) {
-    const fn = effect
-    effect = createEffect(([params, state]: [any, any]) => fn(params, state))
-  }
   const attached = createEffect(config, injected)
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope
   let runnerSteps
   const runnerFnStep = step.compute({
-    fn: ({params, req}: any, _: any, stack: Stack) => {
+    fn(upd, scope, stack) {
+      const {params, req} = upd
       const anyway = attached.finally
       const rj = onSettled(params, req, false, anyway, stack)
-      let computedParams
-      try {
-        computedParams = mapParams(params, stack.a)
-      } catch (err) {
-        return rj(err)
+      const handler = getHandler(scope, stack)
+      const sourceData = stack.a
+      const isEffectHandler = is.effect(handler)
+      let ok = true
+      let computedParams: any
+      if (mapParams) {
+        ;[ok, computedParams] = runFn(mapParams, rj, [params, sourceData])
+      } else {
+        computedParams = source && isEffectHandler ? sourceData : params
       }
-      launch({
-        target: effect,
-        params: {
-          params: isPlainFunction ? [computedParams, stack.a] : computedParams,
-          req: {rs: onSettled(params, req, true, anyway, stack), rj},
-        },
-        page: stack.page,
-        defer: true,
-      })
+      if (ok) {
+        if (isEffectHandler) {
+          launch({
+            target: handler as any,
+            params: {
+              params: computedParams,
+              req: {rs: onSettled(params, req, true, anyway, stack), rj},
+            },
+            page: stack.page,
+            defer: true,
+          })
+        } else {
+          upd.args = [sourceData, computedParams]
+          return true
+        }
+      }
     },
+    filter: true,
     safe: true,
     priority: !source && EFFECT,
   })
@@ -54,7 +57,7 @@ export function attach(config: any) {
     let state
     if (is.store(source)) {
       state = source
-      own(source, [attached])
+      own(state, [attached])
     } else {
       state = combine(source)
       own(attached, [state])
@@ -76,7 +79,8 @@ export function attach(config: any) {
   } else {
     runnerSteps = [runnerFnStep]
   }
-  runner.seq.splice(0, 1, ...runnerSteps)
+  runner.seq.splice(0, 0, ...runnerSteps)
+  attached.use(effect)
   applyParentHook(effect, attached, EFFECT)
   return attached
 }
