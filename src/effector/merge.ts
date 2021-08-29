@@ -1,4 +1,4 @@
-import {Store, Event, Effect} from './unit.h'
+import type {Store, Event, Effect} from './unit.h'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {unitObjectName} from './naming'

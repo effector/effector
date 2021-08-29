@@ -1,4 +1,3 @@
-//eslint-disable-next-line
 export * as is from './validate'
 import {forEach} from './collection'
 import {assert} from './throw'

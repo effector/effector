@@ -1,4 +1,4 @@
-import {Subscription, NodeUnit} from './index.h'
+import type {Subscription, NodeUnit} from './index.h'
 import {clearNode} from './clearNode'
 
 export const createSubscription = (node: NodeUnit): Subscription => {

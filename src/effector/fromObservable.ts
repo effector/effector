@@ -1,5 +1,5 @@
 import {observableSymbol} from './observable'
-import {Event} from './unit.h'
+import type {Event} from './unit.h'
 import {createEvent} from './createUnit'
 import {assertObject} from './is'
 import {assert} from './throw'
