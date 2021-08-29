@@ -56,11 +56,23 @@ export function createEffect<Payload, Done>(
         (() => assert(false, `no handler used in ${instance.getType()}`)),
     },
     node: [
+      step.compute({
+        safe: true,
+        fn(upd, scope_, stack) {
+          const scope: {handlerId: string; handler: Function} = scope_ as any
+          let handler = scope.handler
+          if (getForkPage(stack)) {
+            const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
+            if (handler_) handler = handler_
+          }
+          upd.handler = handler
+          return upd
+        },
+      }),
       step.run({
-        fn({params, req, args = [params]}, scope, stack) {
+        fn({params, req, handler, args = [params]}, scope, stack) {
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
-          const handler = getHandler(scope, stack)
           const [ok, result] = runFn(handler, onReject, args)
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
@@ -125,15 +137,6 @@ export function createEffect<Payload, Done>(
 
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   return instance
-}
-export const getHandler = (scope_: Record<string, any>, stack: Stack) => {
-  const scope: {handlerId: string; handler: Function} = scope_ as any
-  let handler = scope.handler
-  if (getForkPage(stack)) {
-    const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
-    if (handler_) handler = handler_
-  }
-  return handler
 }
 export const runFn = (
   fn: Function,

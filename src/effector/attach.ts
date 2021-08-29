@@ -1,12 +1,12 @@
 import {combine} from './combine'
-import {createEffect, getHandler, onSettled, runFn} from './createEffect'
+import {createEffect, onSettled, runFn} from './createEffect'
 import {applyParentHook} from './createUnit'
 import {processArgsToConfig} from './config'
 import {getGraph, getStoreState, setMeta} from './getter'
 import {own} from './own'
-import {is, isFunction} from './is'
+import {is} from './is'
 import {step} from './typedef'
-import {launch, Stack} from './kernel'
+import {launch} from './kernel'
 import {EFFECT, REG_A} from './tag'
 
 export function attach(config: any) {
@@ -18,11 +18,10 @@ export function attach(config: any) {
   const {runner} = getGraph(attached).scope
   let runnerSteps
   const runnerFnStep = step.compute({
-    fn(upd, scope, stack) {
-      const {params, req} = upd
+    fn(upd, _, stack) {
+      const {params, req, handler} = upd
       const anyway = attached.finally
       const rj = onSettled(params, req, false, anyway, stack)
-      const handler = getHandler(scope, stack)
       const sourceData = stack.a
       const isEffectHandler = is.effect(handler)
       let ok = true
@@ -79,7 +78,7 @@ export function attach(config: any) {
   } else {
     runnerSteps = [runnerFnStep]
   }
-  runner.seq.splice(0, 0, ...runnerSteps)
+  runner.seq.splice(1, 0, ...runnerSteps)
   attached.use(effect)
   applyParentHook(effect, attached, EFFECT)
   return attached
