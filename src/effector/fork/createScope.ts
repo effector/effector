@@ -1,7 +1,7 @@
 import {getForkPage, getGraph, getMeta, getParent} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
-import {step} from '../typedef'
+import {compute, run} from '../step'
 import type {Domain, Scope} from '../unit.h'
 import type {StateRef} from '../index.h'
 import {forEach} from '../collection'
@@ -15,7 +15,7 @@ export function createScope(unit?: Domain): Scope {
       fxID: 0,
     },
     node: [
-      step.compute({
+      compute({
         safe: true,
         fn(_, scope, stack) {
           if (!getParent(stack)) {
@@ -30,8 +30,8 @@ export function createScope(unit?: Domain): Scope {
           }
         },
       }),
-      step.compute({priority: SAMPLER, batch: true}),
-      step.run({
+      compute({priority: SAMPLER, batch: true}),
+      run({
         fn(_, scope) {
           const {inFlight, defers, fxID} = scope
           if (inFlight > 0 || defers.length === 0) return
@@ -50,7 +50,7 @@ export function createScope(unit?: Domain): Scope {
   const page = {} as Record<string, StateRef>
   const storeChange = createNode({
     node: [
-      step.compute({
+      compute({
         safe: true,
         fn(value, __, stack) {
           const storeStack = getParent(stack)

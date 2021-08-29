@@ -1,5 +1,5 @@
 import {combine} from './combine'
-import {step} from './typedef'
+import {mov, compute, filter, update} from './step'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg, callARegStack} from './caller'
 import {processArgsToConfig} from './config'
@@ -86,13 +86,13 @@ export function sample(...args: any): any {
         // scope: {fn, targetTemplate},
         node: [
           applyTemplate('sampleSourceLoader'),
-          step.mov({
+          mov({
             store: sourceRef,
             to: fn ? REG_A : STACK,
             priority: !greedy && SAMPLER,
             batch: true,
           }),
-          fn && step.compute({fn: callARegStack}),
+          fn && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
         meta: {op: SAMPLE, sample: STORE},
@@ -107,8 +107,8 @@ export function sample(...args: any): any {
     createNode({
       parent: source,
       node: [
-        step.update({store: sourceState}),
-        step.mov({from: VALUE, store: true, target: hasSource}),
+        update({store: sourceState}),
+        mov({from: VALUE, store: true, target: hasSource}),
       ],
       family: {owners: [source, target, clock], links: target},
       meta: {op: SAMPLE, sample: 'source'},
@@ -122,16 +122,16 @@ export function sample(...args: any): any {
         },
         node: [
           applyTemplate('sampleSourceLoader'),
-          step.update({store: clockState}),
-          step.mov({store: hasSource}),
-          step.filter({fn: hasSource => hasSource}),
-          step.mov({
+          update({store: clockState}),
+          mov({store: hasSource}),
+          filter({fn: hasSource => hasSource}),
+          mov({
             store: sourceState,
             batch: true,
             priority: !greedy && SAMPLER,
           }),
-          step.mov({store: clockState, to: REG_A}),
-          fn && step.compute({fn: callStackAReg}),
+          mov({store: clockState, to: REG_A}),
+          fn && compute({fn: callStackAReg}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
         meta: {op: SAMPLE, sample: 'clock'},

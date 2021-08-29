@@ -124,3 +124,5 @@ export const run = ({
 }) => compute({fn, priority: EFFECT})
 export const update = ({store}: {store: StateRef}) =>
   mov({from: STACK, target: store})
+
+export const step = {mov, compute, filter, run, update}

@@ -1,4 +1,4 @@
-import {step} from './typedef'
+import {run} from './step'
 import {callStack} from './caller'
 import {createNode} from './createNode'
 import {Subscription, NodeUnit} from './index.h'
@@ -14,7 +14,7 @@ export const watchUnit = (
   return createSubscription(
     createNode({
       scope: {fn: handler},
-      node: [step.run({fn: callStack})],
+      node: [run({fn: callStack})],
       parent: unit,
       meta: {op: 'watch'},
       family: {owners: unit},

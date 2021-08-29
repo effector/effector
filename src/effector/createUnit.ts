@@ -10,7 +10,7 @@ import {
 } from './is'
 import type {Store, Event} from './unit.h'
 
-import {step} from './typedef'
+import {compute, filter, mov, update} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
@@ -149,16 +149,13 @@ export function createEvent<Payload = any>(
       return params
     },
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
-    map: (fn: any) =>
-      deriveEvent(event, MAP, fn, [step.compute({fn: callStack})]),
+    map: (fn: any) => deriveEvent(event, MAP, fn, [compute({fn: callStack})]),
     filter: (fn: any) =>
-      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
-        step.filter({fn: callStack}),
-      ]),
+      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [filter({fn: callStack})]),
     filterMap: (fn: any) =>
       deriveEvent(event, 'filterMap', fn, [
-        step.compute({fn: callStack}),
-        step.compute({fn: value => !isVoid(value), filter: true, safe: true}),
+        compute({fn: callStack}),
+        compute({fn: value => !isVoid(value), filter: true, safe: true}),
       ]),
     prepend(fn: any) {
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
@@ -167,7 +164,7 @@ export function createEvent<Payload = any>(
       applyTemplate('eventPrepend', getGraph(contramapped))
       createLinkNode(contramapped, event, {
         scope: {fn},
-        node: [step.compute({fn: callStack})],
+        node: [compute({fn: callStack})],
         meta: {op: 'prepend'},
       })
       applyParentHook(event, contramapped)
@@ -295,14 +292,14 @@ export function createStore<State>(
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
     node: [
-      step.mov({store: plainState, to: REG_A}),
-      step.compute({
+      mov({store: plainState, to: REG_A}),
+      compute({
         filter: true,
         safe: true,
         fn: (upd, _, {a}) => !isVoid(upd) && upd !== a,
       }),
-      updateFilter && step.filter({fn: callStackAReg}),
-      step.update({store: plainState}),
+      updateFilter && filter({fn: callStackAReg}),
+      update({store: plainState}),
     ],
     child: updates,
     meta,
@@ -330,10 +327,7 @@ const updateStore = (
   fn: Function,
 ) => {
   const storeRef = getStoreState(store)
-  const node = [
-    step.mov({store: storeRef, to: REG_A}),
-    step.compute({fn: caller}),
-  ]
+  const node = [mov({store: storeRef, to: REG_A}), compute({fn: caller})]
   applyTemplate(
     'storeOnMap',
     storeRef,

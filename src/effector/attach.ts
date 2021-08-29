@@ -5,7 +5,7 @@ import {processArgsToConfig} from './config'
 import {getGraph, getStoreState, setMeta} from './getter'
 import {own} from './own'
 import {is} from './is'
-import {step} from './typedef'
+import {compute, mov} from './step'
 import {launch} from './kernel'
 import {EFFECT, REG_A} from './tag'
 
@@ -17,7 +17,7 @@ export function attach(config: any) {
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope
   let runnerSteps
-  const runnerFnStep = step.compute({
+  const runnerFnStep = compute({
     fn(upd, _, stack) {
       const {params, req, handler} = upd
       const anyway = attached.finally
@@ -67,7 +67,7 @@ export function attach(config: any) {
        * assumed that state is already stable here
        * because of priority 'effect'
        **/
-      step.mov({
+      mov({
         store: getStoreState(state),
         to: REG_A,
         priority: EFFECT,

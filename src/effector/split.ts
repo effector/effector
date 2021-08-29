@@ -5,7 +5,7 @@ import {forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
-import {step} from './typedef'
+import {compute, mov, filter} from './step'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
@@ -60,13 +60,13 @@ export function split(...args: any[]): any {
     if (matchIsUnit) owners.add(match)
     splitterSeq = [
       matchIsUnit &&
-        step.mov({
+        mov({
           store: getStoreState(match),
           to: 'a',
           priority: SAMPLER,
           batch: true,
         }),
-      step.compute({
+      compute({
         safe: matchIsUnit,
         filter: true,
         fn(data, scopeTargets, stack) {
@@ -92,8 +92,8 @@ export function split(...args: any[]): any {
         owners.add(storeOrFn)
         const updater = createLinkNode(storeOrFn, [], {
           node: [
-            step.mov({store: lastValues, to: REG_A}),
-            step.compute({
+            mov({store: lastValues, to: REG_A}),
+            compute({
               fn: (upd, _, {a}) => (a[key] = upd),
               safe: true,
             }),
@@ -112,13 +112,13 @@ export function split(...args: any[]): any {
     }
     splitterSeq = [
       needBarrier! &&
-        step.mov({
+        mov({
           store: lastValues,
           to: REG_A,
           priority: SAMPLER,
           batch: true,
         }),
-      step.filter({
+      filter({
         fn(data, scopeTargets, stack) {
           for (let i = 0; i < caseNames.length; i++) {
             const caseName = caseNames[i]

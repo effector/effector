@@ -1,7 +1,7 @@
 import type {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
-import {step} from './typedef'
+import {mov, compute, run} from './step'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject, isVoid} from './is'
@@ -104,9 +104,9 @@ const storeCombination = (
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
   const node = [
-    step.mov({store: rawShape, to: REG_A}),
-    step.mov({store: isFresh, to: 'b'}),
-    step.compute({
+    mov({store: rawShape, to: REG_A}),
+    mov({store: isFresh, to: 'b'}),
+    compute({
       safe: true,
       filter: true,
       fn(upd, {key}, reg) {
@@ -119,17 +119,17 @@ const storeCombination = (
         }
       },
     }),
-    step.mov({from: REG_A, target: rawShape}),
-    step.mov({from: VALUE, store: false, target: isFresh}),
-    step.mov({
+    mov({from: REG_A, target: rawShape}),
+    mov({from: VALUE, store: false, target: isFresh}),
+    mov({
       from: VALUE,
       store: true,
       target: isFresh,
       priority: BARRIER,
       batch: true,
     }),
-    step.mov({store: rawShape}),
-    fn && step.compute({fn: callStack}),
+    mov({store: rawShape}),
+    fn && compute({fn: callStack}),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {

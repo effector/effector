@@ -1,4 +1,4 @@
-import {step} from './typedef'
+import {compute, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
@@ -56,7 +56,7 @@ export function createEffect<Payload, Done>(
         (() => assert(false, `no handler used in ${instance.getType()}`)),
     },
     node: [
-      step.compute({
+      compute({
         safe: true,
         fn(upd, scope_, stack) {
           const scope: {handlerId: string; handler: Function} = scope_ as any
@@ -69,7 +69,7 @@ export function createEffect<Payload, Done>(
           return upd
         },
       }),
-      step.run({
+      run({
         fn({params, req, handler, args = [params]}, scope, stack) {
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
@@ -88,7 +88,7 @@ export function createEffect<Payload, Done>(
   })
   node.scope.runner = runner
   node.seq.push(
-    step.compute({
+    compute({
       fn(params, {runner}, stack) {
         const upd = getParent(stack)
           ? {params, req: {rs(data: any) {}, rj(data: any) {}}}
@@ -178,12 +178,6 @@ export const onSettled =
     })
 
 export const sidechain = createNode({
-  node: [
-    step.run({
-      fn({fn, value}) {
-        fn(value)
-      },
-    }),
-  ],
+  node: [run({fn: ({fn, value}) => fn(value)})],
   meta: {op: 'fx', fx: 'sidechain'},
 })

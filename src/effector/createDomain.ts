@@ -14,7 +14,7 @@ import {forEach, forIn} from './collection'
 import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
 import {launch} from './kernel'
-import {step} from './typedef'
+import {compute} from './step'
 
 export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const node = createNode({family: {type: DOMAIN}, regional: true})
@@ -48,7 +48,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
         return res
       }
       getGraph(trigger).seq.push(
-        step.compute({
+        compute({
           fn(upd, _, stack) {
             stack.scope = null
             return upd

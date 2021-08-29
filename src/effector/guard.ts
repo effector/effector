@@ -2,13 +2,11 @@ import {processArgsToConfig} from './config'
 import {createLinkNode} from './forward'
 import {groupInputs, sample} from './sample'
 import {createEvent} from './createUnit'
-import {combine} from './combine'
-import {step} from './typedef'
+import {compute, filter} from './step'
 import {callStack} from './caller'
-import {assertNodeSet, is, isFunction, isVoid} from './is'
+import {assertNodeSet, is, isFunction} from './is'
 import {createNode} from './createNode'
 import {assert} from './throw'
-import {merge} from './merge'
 
 export function guard(...args: any[]) {
   const METHOD = 'guard'
@@ -19,13 +17,13 @@ export function guard(...args: any[]) {
     source = config.source
   }
   let {
-    filter,
+    filter: filterFn,
     greedy,
     clock,
     name = metadata && metadata.name ? metadata.name : METHOD,
   } = config
   const target = config.target || createEvent(name, metadata)
-  const filterIsUnit = is.unit(filter)
+  const filterIsUnit = is.unit(filterFn)
   ;[source, clock] = groupInputs(source, clock, METHOD)
   if (clock) {
     assertNodeSet(clock, METHOD, 'clock')
@@ -39,17 +37,17 @@ export function guard(...args: any[]) {
   assertNodeSet(target, METHOD, 'target')
   if (filterIsUnit) {
     sample({
-      source: filter,
+      source: filterFn,
       clock: source,
       target: createNode({
         node: [
-          step.compute({fn: ({guard}) => guard, filter: true, safe: true}),
-          step.compute({fn: ({data}) => data, safe: true}),
+          compute({fn: ({guard}) => guard, filter: true, safe: true}),
+          compute({fn: ({data}) => data, safe: true}),
         ],
         child: target,
         meta,
         family: {
-          owners: [source, filter, target, ...[].concat(clock ? clock : [])],
+          owners: [source, filterFn, target, ...[].concat(clock ? clock : [])],
           links: target,
         },
         regional: true,
@@ -59,15 +57,15 @@ export function guard(...args: any[]) {
       name,
     })
   } else {
-    assert(isFunction(filter), '`filter` should be function or unit')
+    assert(isFunction(filterFn), '`filter` should be function or unit')
     createLinkNode(source, target, {
-      scope: {fn: filter},
+      scope: {fn: filterFn},
       node: clock
         ? [
-            step.filter({fn: ({source, clock}, {fn}) => fn(source, clock)}),
-            step.compute({fn: ({source}) => source, safe: true}),
+            filter({fn: ({source, clock}, {fn}) => fn(source, clock)}),
+            compute({fn: ({source}) => source, safe: true}),
           ]
-        : [step.filter({fn: callStack})],
+        : [filter({fn: callStack})],
       meta,
     })
   }
