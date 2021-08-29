@@ -28,7 +28,18 @@ function validateSampleConfig(config: any) {
   })
   return atLeastOneFieldExists
 }
-
+export const groupInputs = (source: any, clock: any, method: string) => {
+  if (isVoid(source)) {
+    assertNodeSet(clock, method, 'clock')
+    if (Array.isArray(clock)) {
+      clock = merge(clock)
+    }
+    source = clock
+  } else if (!is.unit(source)) {
+    source = combine(source)
+  }
+  return [source, clock] as const
+}
 export function sample(...args: any): any {
   let target
   let name
@@ -46,15 +57,7 @@ export function sample(...args: any): any {
     sid = source.sid
     source = source.source
   }
-  if (isVoid(source)) {
-    assertNodeSet(clock, 'sample', 'clock')
-    if (Array.isArray(clock)) {
-      clock = merge(clock)
-    }
-    source = clock
-  } else if (!is.unit(source)) {
-    source = combine(source)
-  }
+  ;[source, clock] = groupInputs(source, clock, 'sample')
   if (isVoid(clock)) {
     /** still undefined! */
     clock = source

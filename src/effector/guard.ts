@@ -1,6 +1,6 @@
 import {processArgsToConfig} from './config'
 import {createLinkNode} from './forward'
-import {sample} from './sample'
+import {groupInputs, sample} from './sample'
 import {createEvent} from './createUnit'
 import {combine} from './combine'
 import {step} from './typedef'
@@ -11,8 +11,9 @@ import {assert} from './throw'
 import {merge} from './merge'
 
 export function guard(...args: any[]) {
+  const METHOD = 'guard'
   let [[source, config], metadata] = processArgsToConfig(args)
-  const meta: Record<string, any> = {op: 'guard', config: metadata}
+  const meta: Record<string, any> = {op: METHOD, config: metadata}
   if (!config) {
     config = source
     source = config.source
@@ -21,22 +22,13 @@ export function guard(...args: any[]) {
     filter,
     greedy,
     clock,
-    name = metadata && metadata.name ? metadata.name : 'guard',
+    name = metadata && metadata.name ? metadata.name : METHOD,
   } = config
   const target = config.target || createEvent(name, metadata)
   const filterIsUnit = is.unit(filter)
-  let needToCombine = true
-  if (isVoid(source)) {
-    assertNodeSet(clock, 'guard', 'clock')
-    if (Array.isArray(clock)) {
-      clock = merge(clock)
-    }
-    source = clock
-    needToCombine = false
-  }
-  if (needToCombine && !is.unit(source)) source = combine(source)
+  ;[source, clock] = groupInputs(source, clock, METHOD)
   if (clock) {
-    assertNodeSet(clock, 'guard', 'clock')
+    assertNodeSet(clock, METHOD, 'clock')
     source = sample({
       source,
       clock,
@@ -44,7 +36,7 @@ export function guard(...args: any[]) {
       fn: filterIsUnit ? null : (source: any, clock: any) => ({source, clock}),
     })
   }
-  assertNodeSet(target, 'guard', 'target')
+  assertNodeSet(target, METHOD, 'target')
   if (filterIsUnit) {
     sample({
       source: filter,

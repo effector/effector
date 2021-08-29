@@ -224,11 +224,15 @@ export function createStore<State>(
         '.on in derived store',
         'createStore',
       )
-      if (Array.isArray(nodeSet)) {
-        forEach(nodeSet, trigger => onEvent(trigger, fn))
-      } else {
-        onEvent(nodeSet, fn)
-      }
+      forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
+        store.off(trigger)
+        getSubscribers(store).set(
+          trigger,
+          createSubscription(
+            updateStore(trigger, store, 'on', callARegStack, fn),
+          ),
+        )
+      })
       return store
     },
     off(unit: any) {
@@ -285,13 +289,6 @@ export function createStore<State>(
       assert(isFunction(fn), 'second argument should be a function')
       return eventOrFn.watch((payload: any) => fn(store.getState(), payload))
     },
-  }
-  function onEvent(event: any, fn: Function) {
-    store.off(event)
-    getSubscribers(store).set(
-      event,
-      createSubscription(updateStore(event, store, 'on', callARegStack, fn)),
-    )
   }
   const meta = initUnit(STORE, store, props)
   const updateFilter = store.defaultConfig.updateFilter

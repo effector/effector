@@ -112,7 +112,12 @@ export function split(...args: any[]): any {
     }
     splitterSeq = [
       needBarrier! &&
-        step.mov({store: lastValues, to: 'a', priority: SAMPLER, batch: true}),
+        step.mov({
+          store: lastValues,
+          to: REG_A,
+          priority: SAMPLER,
+          batch: true,
+        }),
       step.filter({
         fn(data, scopeTargets, stack) {
           for (let i = 0; i < caseNames.length; i++) {
