@@ -306,7 +306,7 @@ test('async effect', async () => {
   const $calls = createStore(0)
   const fx = attach({
     source: $calls,
-    async effect(params: string, calls: number) {
+    async effect(calls: number, params: string) {
       await new Promise(rs => setTimeout(rs, 30))
       fn([params, calls])
     },
