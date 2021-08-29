@@ -11,7 +11,9 @@ import {
   hydrate,
   combine,
   Store,
+  Scope,
 } from 'effector'
+import {argumentHistory} from 'effector/fixtures'
 
 test('usage with domain', async () => {
   const app = createDomain()
@@ -414,8 +416,116 @@ describe('handlers validation', () => {
       fork({
         handlers: new Map().set(attached, () => {}),
       })
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"Handlers can\`t accept attached effects"`,
-    )
+    }).not.toThrow()
+  })
+})
+
+describe('passing attach async effect to handlers should work', () => {
+  test('function in effect, function in handlers', async () => {
+    const fn = jest.fn()
+    const $user = createStore('guest')
+    const sendMessageFx = attach({
+      source: $user,
+      async effect(user, message: {text: string}) {},
+    })
+
+    let scope: Scope
+    expect(() => {
+      scope = fork({
+        values: [[$user, 'alice']],
+        handlers: [
+          [
+            sendMessageFx,
+            (user: string, message: {text: string}) => {
+              fn({user, message})
+            },
+          ],
+        ],
+      })
+    }).not.toThrow()
+    await allSettled(sendMessageFx, {
+      scope: scope!,
+      params: {text: 'hello'},
+    })
+    expect(argumentHistory(fn)[0]).toEqual({
+      user: 'alice',
+      message: {text: 'hello'},
+    })
+  })
+  test('function in effect, effect in handlers', async () => {
+    const fn = jest.fn()
+    const $user = createStore('guest')
+    const fx = createEffect((user: string) => {
+      fn({user})
+    })
+    const sendMessageFx = attach({
+      source: $user,
+      async effect(user, message: {text: string}) {},
+    })
+
+    let scope: Scope
+    expect(() => {
+      scope = fork({
+        values: [[$user, 'alice']],
+        handlers: [[sendMessageFx, fx]],
+      })
+    }).not.toThrow()
+    await allSettled(sendMessageFx, {
+      scope: scope!,
+      params: {text: 'hello'},
+    })
+    expect(argumentHistory(fn)[0]).toEqual({user: 'alice'})
+  })
+  test('effect in effect, function in handlers', async () => {
+    const fn = jest.fn()
+    const $user = createStore('guest')
+    const fx = createEffect((user: string) => {})
+    const sendMessageFx = attach({
+      source: $user,
+      effect: fx,
+    })
+
+    let scope: Scope
+    expect(() => {
+      scope = fork({
+        values: [[$user, 'alice']],
+        handlers: [
+          [
+            sendMessageFx,
+            (user: string) => {
+              fn({user})
+            },
+          ],
+        ],
+      })
+    }).not.toThrow()
+    await allSettled(sendMessageFx, {
+      scope: scope!,
+    })
+    expect(argumentHistory(fn)[0]).toEqual({user: 'alice'})
+  })
+  test('effect in effect, effect in handlers', async () => {
+    const fn = jest.fn()
+    const $user = createStore('guest')
+    const fx1 = createEffect((user: string) => {})
+    const fx2 = createEffect((user: string) => {
+      fn({user})
+    })
+    const sendMessageFx = attach({
+      source: $user,
+      effect: fx1,
+    })
+
+    let scope: Scope
+    expect(() => {
+      scope = fork({
+        values: [[$user, 'alice']],
+        handlers: [[sendMessageFx, fx2]],
+      })
+    }).not.toThrow()
+    await allSettled(sendMessageFx, {
+      scope: scope!,
+    })
+    expect(argumentHistory(fn)[0]).toEqual({user: 'alice'})
   })
 })
