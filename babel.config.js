@@ -40,6 +40,7 @@ const jsdomTestPlugin = resolvePath(
 const aliases = {
   'effector/fixtures': resolveFromSources('fixtures'),
   '@effector/forms': resolveFromSources('forms'),
+  'effector-react/scope': 'effector-react/scope',
   'effector-react': {
     esm: 'effector-react/effector-react.mjs',
     compat: 'effector-react/compat',

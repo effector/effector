@@ -41,6 +41,7 @@ const externals = [
   'effector/compat',
   'effector-react',
   'effector-react/effector-react.mjs',
+  'effector-react/scope',
   'effector-react/compat',
   'effector-vue',
   'effector-vue/effector-vue.mjs',
@@ -155,7 +156,7 @@ export async function rollupEffector() {
     createCompat(name, 'ts'),
   ])
 }
-export async function rollupEffectorDom({name}) {
+export async function rollupEffectorDom({name}: {name: string}) {
   await Promise.all([
     createEsCjs(name, {
       file: {
@@ -221,8 +222,19 @@ export async function rollupEffectorReact() {
   }: {
     file: {cjs: string; es: string}
   }) {
-    await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
-    async function runBuild(file: string, format) {
+    await Promise.all([
+      runBuild(cjs, 'cjs'),
+      runBuild(es, 'es'),
+      createEsCjs(name, {
+        file: {
+          cjs: dir(`npm/${name}/ssr.js`),
+          es: dir(`npm/${name}/ssr.mjs`),
+        },
+        input: 'ssr',
+        inputExtension: 'ts',
+      }),
+    ])
+    async function runBuild(file: string, format: 'cjs' | 'es') {
       const plugins = getPlugins(name, {isEsm: format === 'es'})
       const pluginList = [
         plugins.resolve,
