@@ -10,7 +10,7 @@ import {
 } from './is'
 import type {Store, Event} from './unit.h'
 
-import {compute, filter, mov, update} from './step'
+import {calc, compute, filter, mov, read} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
@@ -39,7 +39,7 @@ import {
   getMeta,
 } from './getter'
 import {assert, deprecate} from './throw'
-import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A} from './tag'
+import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
@@ -155,7 +155,7 @@ export function createEvent<Payload = any>(
     filterMap: (fn: any) =>
       deriveEvent(event, 'filterMap', fn, [
         compute({fn: callStack}),
-        compute({fn: value => !isVoid(value), filter: true, safe: true}),
+        calc(value => !isVoid(value), true),
       ]),
     prepend(fn: any) {
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
@@ -292,14 +292,10 @@ export function createStore<State>(
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
     node: [
-      mov({store: plainState, to: REG_A}),
-      compute({
-        filter: true,
-        safe: true,
-        fn: (upd, _, {a}) => !isVoid(upd) && upd !== a,
-      }),
+      read(plainState),
+      calc((upd, _, {a}) => !isVoid(upd) && upd !== a, true),
       updateFilter && filter({fn: callStackAReg}),
-      update({store: plainState}),
+      mov({from: STACK, target: plainState}),
     ],
     child: updates,
     meta,
@@ -327,7 +323,7 @@ const updateStore = (
   fn: Function,
 ) => {
   const storeRef = getStoreState(store)
-  const node = [mov({store: storeRef, to: REG_A}), compute({fn: caller})]
+  const node = [read(storeRef), compute({fn: caller})]
   applyTemplate(
     'storeOnMap',
     storeRef,

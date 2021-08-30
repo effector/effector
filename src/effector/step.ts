@@ -8,7 +8,7 @@ import type {
   MovRegisterToStore,
 } from './index.h'
 import {nextStepID} from './id'
-import {EFFECT, STACK, STORE} from './tag'
+import {EFFECT, REG_A, SAMPLER, STACK, STORE} from './tag'
 import type {BarrierPriorityTag, Stack} from './kernel'
 
 const cmd = (
@@ -122,7 +122,33 @@ export const run = ({
 }: {
   fn(data: any, scope: {[key: string]: any}, stack: Stack): any
 }) => compute({fn, priority: EFFECT})
-export const update = ({store}: {store: StateRef}) =>
-  mov({from: STACK, target: store})
 
-export const step = {mov, compute, filter, run, update}
+export const calc = (
+  fn: (data: any, scope: {[key: string]: any}, stack: Stack) => any,
+  filter?: boolean,
+  isEffect?: boolean,
+) => compute({fn, safe: true, filter, priority: isEffect && EFFECT})
+
+/**
+ * `read(ref, true, true)`: **reg.stack** with **sampler** batch
+ *
+ * `read(ref, true, false)`: **reg.stack** without batch
+ *
+ * `read(ref, false, true)`: **reg.a** with **sampler** batch
+ *
+ * `read(ref, false, false)`: **reg.a** without batch
+ *
+ */
+export const read = (
+  store: StateRef,
+  toStack?: boolean,
+  samplerPriority?: boolean,
+) =>
+  mov({
+    store,
+    to: toStack ? STACK : REG_A,
+    priority: samplerPriority && SAMPLER,
+    batch: true,
+  })
+
+export const step = {mov, compute, filter, run}

@@ -1,4 +1,4 @@
-import {compute, run} from './step'
+import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
@@ -56,21 +56,18 @@ export function createEffect<Payload, Done>(
         (() => assert(false, `no handler used in ${instance.getType()}`)),
     },
     node: [
-      compute({
-        safe: true,
-        fn(upd, scope_, stack) {
-          const scope: {handlerId: string; handler: Function} = scope_ as any
-          let handler = scope.handler
-          if (getForkPage(stack)) {
-            const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
-            if (handler_) handler = handler_
-          }
-          upd.handler = handler
-          return upd
-        },
+      calc((upd, scope_, stack) => {
+        const scope: {handlerId: string; handler: Function} = scope_ as any
+        let handler = scope.handler
+        if (getForkPage(stack)) {
+          const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
+          if (handler_) handler = handler_
+        }
+        upd.handler = handler
+        return upd
       }),
-      run({
-        fn({params, req, handler, args = [params]}, scope, stack) {
+      calc(
+        ({params, req, handler, args = [params]}, _, stack) => {
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
           const [ok, result] = runFn(handler, onReject, args)
@@ -82,14 +79,16 @@ export function createEffect<Payload, Done>(
             }
           }
         },
-      }),
+        false,
+        true,
+      ),
     ],
     meta: {op: 'fx', fx: 'runner'},
   })
   node.scope.runner = runner
   node.seq.push(
-    compute({
-      fn(params, {runner}, stack) {
+    calc(
+      (params, {runner}, stack) => {
         const upd = getParent(stack)
           ? {params, req: {rs(data: any) {}, rj(data: any) {}}}
           : /** empty stack means that this node was launched directly */
@@ -102,9 +101,9 @@ export function createEffect<Payload, Done>(
         })
         return upd.params
       },
-      safe: true,
-      priority: EFFECT,
-    }),
+      false,
+      true,
+    ),
   )
   instance.create = (params: Payload) => {
     const req = createDefer()

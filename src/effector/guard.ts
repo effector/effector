@@ -2,7 +2,7 @@ import {processArgsToConfig} from './config'
 import {createLinkNode} from './forward'
 import {groupInputs, sample} from './sample'
 import {createEvent} from './createUnit'
-import {compute, filter} from './step'
+import {calc, filter} from './step'
 import {callStack} from './caller'
 import {assertNodeSet, is, isFunction} from './is'
 import {createNode} from './createNode'
@@ -40,10 +40,7 @@ export function guard(...args: any[]) {
       source: filterFn,
       clock: source,
       target: createNode({
-        node: [
-          compute({fn: ({guard}) => guard, filter: true, safe: true}),
-          compute({fn: ({data}) => data, safe: true}),
-        ],
+        node: [calc(({guard}) => guard, true), calc(({data}) => data)],
         child: target,
         meta,
         family: {
@@ -63,7 +60,7 @@ export function guard(...args: any[]) {
       node: clock
         ? [
             filter({fn: ({source, clock}, {fn}) => fn(source, clock)}),
-            compute({fn: ({source}) => source, safe: true}),
+            calc(({source}) => source),
           ]
         : [filter({fn: callStack})],
       meta,

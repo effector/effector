@@ -5,11 +5,10 @@ import {forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
-import {compute, mov, filter} from './step'
+import {compute, filter, calc, read} from './step'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
-import {REG_A, SAMPLER} from './tag'
 import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
@@ -59,13 +58,7 @@ export function split(...args: any[]): any {
   if (matchIsUnit || matchIsFunction) {
     if (matchIsUnit) owners.add(match)
     splitterSeq = [
-      matchIsUnit &&
-        mov({
-          store: getStoreState(match),
-          to: 'a',
-          priority: SAMPLER,
-          batch: true,
-        }),
+      matchIsUnit && read(getStoreState(match), false, true),
       compute({
         safe: matchIsUnit,
         filter: true,
@@ -91,13 +84,7 @@ export function split(...args: any[]): any {
         units.push(key)
         owners.add(storeOrFn)
         const updater = createLinkNode(storeOrFn, [], {
-          node: [
-            mov({store: lastValues, to: REG_A}),
-            compute({
-              fn: (upd, _, {a}) => (a[key] = upd),
-              safe: true,
-            }),
-          ],
+          node: [read(lastValues), calc((upd, _, {a}) => (a[key] = upd))],
         })
         if (is.store(storeOrFn)) {
           lastValues.current[key] = storeOrFn.getState()
@@ -111,13 +98,7 @@ export function split(...args: any[]): any {
       applyTemplate('splitBase', lastValues)
     }
     splitterSeq = [
-      needBarrier! &&
-        mov({
-          store: lastValues,
-          to: REG_A,
-          priority: SAMPLER,
-          batch: true,
-        }),
+      needBarrier! && read(lastValues, false, true),
       filter({
         fn(data, scopeTargets, stack) {
           for (let i = 0; i < caseNames.length; i++) {

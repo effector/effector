@@ -1,5 +1,5 @@
 import {combine} from './combine'
-import {mov, compute, filter, update} from './step'
+import {mov, compute, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg, callARegStack} from './caller'
 import {processArgsToConfig} from './config'
@@ -12,7 +12,7 @@ import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {assert} from './throw'
 import {forEach} from './collection'
-import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
+import {SAMPLE, STACK, STORE, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
 
@@ -86,12 +86,7 @@ export function sample(...args: any): any {
         // scope: {fn, targetTemplate},
         node: [
           applyTemplate('sampleSourceLoader'),
-          mov({
-            store: sourceRef,
-            to: fn ? REG_A : STACK,
-            priority: !greedy && SAMPLER,
-            batch: true,
-          }),
+          read(sourceRef, !fn, !greedy),
           fn && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
@@ -107,7 +102,7 @@ export function sample(...args: any): any {
     createNode({
       parent: source,
       node: [
-        update({store: sourceState}),
+        mov({from: STACK, target: sourceState}),
         mov({from: VALUE, store: true, target: hasSource}),
       ],
       family: {owners: [source, target, clock], links: target},
@@ -122,15 +117,11 @@ export function sample(...args: any): any {
         },
         node: [
           applyTemplate('sampleSourceLoader'),
-          update({store: clockState}),
-          mov({store: hasSource}),
-          filter({fn: hasSource => hasSource}),
-          mov({
-            store: sourceState,
-            batch: true,
-            priority: !greedy && SAMPLER,
-          }),
-          mov({store: clockState, to: REG_A}),
+          mov({from: STACK, target: clockState}),
+          read(hasSource, true),
+          calc(hasSource => hasSource, true),
+          read(sourceState, true, !greedy),
+          read(clockState),
           fn && compute({fn: callStackAReg}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],

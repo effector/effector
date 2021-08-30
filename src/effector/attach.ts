@@ -5,7 +5,7 @@ import {processArgsToConfig} from './config'
 import {getGraph, getStoreState, setMeta} from './getter'
 import {own} from './own'
 import {is} from './is'
-import {compute, mov} from './step'
+import {read, calc, mov} from './step'
 import {launch} from './kernel'
 import {EFFECT, REG_A} from './tag'
 
@@ -17,8 +17,8 @@ export function attach(config: any) {
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope
   let runnerSteps
-  const runnerFnStep = compute({
-    fn(upd, _, stack) {
+  const runnerFnStep = calc(
+    (upd, _, stack) => {
       const {params, req, handler} = upd
       const anyway = attached.finally
       const rj = onSettled(params, req, false, anyway, stack)
@@ -48,10 +48,9 @@ export function attach(config: any) {
         }
       }
     },
-    filter: true,
-    safe: true,
-    priority: !source && EFFECT,
-  })
+    true,
+    true,
+  )
   if (source) {
     let state
     if (is.store(source)) {
@@ -61,20 +60,7 @@ export function attach(config: any) {
       state = combine(source)
       own(attached, [state])
     }
-    runnerSteps = [
-      /**
-       * let another side-effects run first and then read state
-       * assumed that state is already stable here
-       * because of priority 'effect'
-       **/
-      mov({
-        store: getStoreState(state),
-        to: REG_A,
-        priority: EFFECT,
-      }),
-      /* no need for step.run because of first step */
-      runnerFnStep,
-    ]
+    runnerSteps = [read(getStoreState(state)), runnerFnStep]
   } else {
     runnerSteps = [runnerFnStep]
   }

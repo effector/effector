@@ -1,11 +1,11 @@
 import {getForkPage, getGraph, getMeta, getParent} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
-import {compute, run} from '../step'
+import {calc, compute} from '../step'
 import type {Domain, Scope} from '../unit.h'
 import type {StateRef} from '../index.h'
 import {forEach} from '../collection'
-import {DOMAIN, SAMPLER, FORK_COUNTER, SCOPE} from '../tag'
+import {DOMAIN, SAMPLER, SCOPE} from '../tag'
 
 export function createScope(unit?: Domain): Scope {
   const forkInFlightCounter = createNode({
@@ -15,26 +15,23 @@ export function createScope(unit?: Domain): Scope {
       fxID: 0,
     },
     node: [
-      compute({
-        safe: true,
-        fn(_, scope, stack) {
-          if (!getParent(stack)) {
-            scope.fxID += 1
-            return
-          }
-          if (getMeta(getParent(stack).node, 'named') === 'finally') {
-            scope.inFlight -= 1
-          } else {
-            scope.inFlight += 1
-            scope.fxID += 1
-          }
-        },
+      calc((_, scope, stack) => {
+        if (!getParent(stack)) {
+          scope.fxID += 1
+          return
+        }
+        if (getMeta(getParent(stack).node, 'named') === 'finally') {
+          scope.inFlight -= 1
+        } else {
+          scope.inFlight += 1
+          scope.fxID += 1
+        }
       }),
       compute({priority: SAMPLER, batch: true}),
-      run({
-        fn(_, scope) {
-          const {inFlight, defers, fxID} = scope
-          if (inFlight > 0 || defers.length === 0) return
+      calc(
+        (_, scope) => {
+          const {defers, fxID} = scope
+          if (scope.inFlight > 0 || defers.length === 0) return
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
             forEach(defers.splice(0, defers.length), (defer: any) => {
@@ -43,31 +40,29 @@ export function createScope(unit?: Domain): Scope {
             })
           })
         },
-      }),
+        false,
+        true,
+      ),
     ],
-    meta: {unit: FORK_COUNTER},
   })
   const page = {} as Record<string, StateRef>
   const storeChange = createNode({
     node: [
-      compute({
-        safe: true,
-        fn(value, __, stack) {
-          const storeStack = getParent(stack)
-          if (storeStack && getParent(storeStack)) {
-            const storeNode = storeStack.node
-            if (
-              !getMeta(storeNode, 'isCombine') ||
-              getMeta(getParent(storeStack).node, 'op') !== 'combine'
-            ) {
-              const forkPage = getForkPage(stack)!
-              const id = storeNode.scope.state.id
-              const sid = getMeta(storeNode, 'sid')
-              forkPage.sidIdMap[sid] = id
-              forkPage.sidValuesMap[sid] = value
-            }
+      calc((value, __, stack) => {
+        const storeStack = getParent(stack)
+        if (storeStack && getParent(storeStack)) {
+          const storeNode = storeStack.node
+          if (
+            !getMeta(storeNode, 'isCombine') ||
+            getMeta(getParent(storeStack).node, 'op') !== 'combine'
+          ) {
+            const forkPage = getForkPage(stack)!
+            const id = storeNode.scope.state.id
+            const sid = getMeta(storeNode, 'sid')
+            forkPage.sidIdMap[sid] = id
+            forkPage.sidValuesMap[sid] = value
           }
-        },
+        }
       }),
     ],
   })
