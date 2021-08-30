@@ -1,6 +1,5 @@
 module.exports = function (babel, options = {}) {
   const {
-    compressor,
     addNames,
     addLoc,
     filename: enableFileName,
@@ -32,7 +31,6 @@ module.exports = function (babel, options = {}) {
     mergeCreators,
     domainMethods,
     factories,
-    exportMetadata,
     importName,
     reactSsr,
   } = normalizeOptions(options)
@@ -40,17 +38,9 @@ module.exports = function (babel, options = {}) {
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
   )
-  const smallConfig = {compressor, addLoc, addNames}
+  const smallConfig = {addLoc, addNames}
   const {types: t, template} = babel
   let factoryTemplate
-  const isPropertyNameInRange = (range, path) =>
-    range.has(path.node.callee.property.name)
-  const isDomainMethod = {
-    store: isPropertyNameInRange.bind(null, domainMethods.store),
-    event: isPropertyNameInRange.bind(null, domainMethods.event),
-    effect: isPropertyNameInRange.bind(null, domainMethods.effect),
-    domain: isPropertyNameInRange.bind(null, domainMethods.domain),
-  }
   const creatorsList = [
     storeCreators,
     eventCreators,
@@ -65,6 +55,112 @@ module.exports = function (babel, options = {}) {
     splitCreators,
     apiCreators,
     mergeCreators,
+  ]
+  const methodParsers = [
+    {
+      flag: stores,
+      set: storeCreators,
+      fn: (path, state, name, id) =>
+        setStoreNameAfter(path, state, id, t, smallConfig, false),
+    },
+    {
+      flag: events,
+      set: eventCreators,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
+    {
+      flag: effects,
+      set: effectCreators,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
+    {
+      flag: domains,
+      set: domainCreators,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
+    {
+      flag: restores,
+      set: restoreCreators,
+      fn: (path, state, name, id) =>
+        setRestoreNameAfter(path, state, id, t, smallConfig),
+    },
+    {
+      flag: combines,
+      set: combineCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+    },
+    {
+      flag: samples,
+      set: sampleCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, id, t, smallConfig, false),
+    },
+    {
+      flag: forwards,
+      set: forwardCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, id, t, smallConfig, true),
+    },
+    {
+      flag: guards,
+      set: guardCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+    },
+    {
+      flag: attaches,
+      set: attachCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+    },
+    {
+      flag: splits,
+      set: splitCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+    },
+    {
+      flag: apis,
+      set: apiCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, null, t, smallConfig, false),
+    },
+    {
+      flag: merges,
+      set: mergeCreators,
+      fn: (path, state, name, id) =>
+        setStoreNameAfter(path, state, id, t, smallConfig, false, name),
+    },
+  ]
+  const domainMethodParsers = [
+    {
+      flag: stores,
+      set: domainMethods.store,
+      fn: (path, state, name, id) =>
+        setStoreNameAfter(path, state, id, t, smallConfig, false),
+    },
+    {
+      flag: events,
+      set: domainMethods.event,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
+    {
+      flag: effects,
+      set: domainMethods.effect,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
+    {
+      flag: domains,
+      set: domainMethods.domain,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
   ]
   function addImport(path, method) {
     const programPath = path.find(path => path.isProgram())
@@ -202,6 +298,14 @@ module.exports = function (babel, options = {}) {
       }
     },
   }
+  function applyMethodParsers(methodParsers, path, state, name) {
+    for (let i = 0; i < methodParsers.length; i++) {
+      const {flag, set, fn} = methodParsers[i]
+      if (flag && set.has(name)) {
+        fn(path, state, name, findCandidateNameForExpression(path))
+      }
+    }
+  }
   const plugin = {
     name: 'effector/babel-plugin',
     pre() {
@@ -230,147 +334,11 @@ module.exports = function (babel, options = {}) {
 
       CallExpression(path, state) {
         addFileNameIdentifier(addLoc, enableFileName, t, path, state)
-        if (exportMetadata) {
-          if (!state.stores) state.stores = new Set()
-          if (!state.events) state.events = new Set()
-          if (!state.effects) state.effects = new Set()
-          if (!state.domains) state.domains = new Set()
-        }
 
         if (t.isIdentifier(path.node.callee)) {
           const name = path.node.callee.name
           if (!this.effector_ignoredImports.has(name)) {
-            if (stores && storeCreators.has(name)) {
-              const id = findCandidateNameForExpression(path)
-              setStoreNameAfter(
-                path,
-                state,
-                id,
-                babel.types,
-                smallConfig,
-                false,
-              )
-              if (exportMetadata && id) {
-                state.stores.add(id.name)
-              }
-            }
-            if (events && eventCreators.has(name)) {
-              const id = findCandidateNameForExpression(path)
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-              if (exportMetadata && id) {
-                state.events.add(id.name)
-              }
-            }
-            if (effects && effectCreators.has(name)) {
-              const id = findCandidateNameForExpression(path)
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-              if (exportMetadata && id) {
-                state.effects.add(id.name)
-              }
-            }
-            if (domains && domainCreators.has(name)) {
-              const id = findCandidateNameForExpression(path)
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-              if (exportMetadata && id) {
-                state.domains.add(id.name)
-              }
-            }
-            if (restores && restoreCreators.has(name)) {
-              const id = findCandidateNameForExpression(path)
-              setRestoreNameAfter(path, state, id, babel.types, smallConfig)
-              if (exportMetadata && id) {
-                state.stores.add(id.name)
-              }
-            }
-            if (combines && combineCreators.has(name)) {
-              const id = findCandidateNameForExpression(path)
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                id,
-                babel.types,
-                smallConfig,
-                false,
-                name,
-              )
-              if (exportMetadata && id) {
-                state.stores.add(id.name)
-              }
-            }
-            if (samples && sampleCreators.has(name)) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                findCandidateNameForExpression(path),
-                babel.types,
-                smallConfig,
-                false,
-              )
-            }
-            if (guards && guardCreators.has(name)) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                findCandidateNameForExpression(path),
-                babel.types,
-                smallConfig,
-                false,
-                name,
-              )
-            }
-            if (forwards && forwardCreators.has(name)) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                findCandidateNameForExpression(path),
-                babel.types,
-                smallConfig,
-                true,
-              )
-            }
-            if (attaches && attachCreators.has(name)) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                findCandidateNameForExpression(path),
-                babel.types,
-                smallConfig,
-                true,
-                name,
-              )
-            }
-            if (splits && splitCreators.has(name)) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                null,
-                babel.types,
-                smallConfig,
-                false,
-                name,
-              )
-            }
-            if (apis && apiCreators.has(name)) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                null,
-                babel.types,
-                smallConfig,
-                false,
-              )
-            }
-            if (merges && mergeCreators.has(name)) {
-              setStoreNameAfter(
-                path,
-                state,
-                findCandidateNameForExpression(path),
-                babel.types,
-                smallConfig,
-                false,
-                name,
-              )
-            }
+            applyMethodParsers(methodParsers, path, state, name)
           }
           if (
             factoriesUsed &&
@@ -400,7 +368,6 @@ module.exports = function (babel, options = {}) {
               resultName,
               loc.line,
               loc.column,
-              compressor,
             )
             const factoryConfig = {
               SID: JSON.stringify(sid),
@@ -426,28 +393,15 @@ module.exports = function (babel, options = {}) {
         }
 
         if (t.isMemberExpression(path.node.callee)) {
-          if (stores && isDomainMethod.store(path)) {
-            const id = findCandidateNameForExpression(path)
-            setStoreNameAfter(path, state, id, babel.types, smallConfig, false)
-          }
-          if (events && isDomainMethod.event(path)) {
-            const id = findCandidateNameForExpression(path)
-            setEventNameAfter(path, state, id, babel.types, smallConfig)
-          }
-          if (effects && isDomainMethod.effect(path)) {
-            const id = findCandidateNameForExpression(path)
-            setEventNameAfter(path, state, id, babel.types, smallConfig)
-          }
-          if (domains && isDomainMethod.domain(path)) {
-            const id = findCandidateNameForExpression(path)
-            setEventNameAfter(path, state, id, babel.types, smallConfig)
-          }
+          applyMethodParsers(
+            domainMethodParsers,
+            path,
+            state,
+            path.node.callee.property.name,
+          )
         }
       },
     },
-  }
-  if (exportMetadata) {
-    createMetadataVisitor(plugin, exportMetadata)
   }
   return plugin
 }
@@ -518,19 +472,6 @@ const normalizeOptions = options => {
         },
         factories: [],
       }
-  let exportMetadata
-  if ('exportMetadata' in options) {
-    if (typeof options.exportMetadata === 'function') {
-      exportMetadata = options.exportMetadata
-    } else if (options.exportMetadata == true /* == for truthy values */) {
-      exportMetadata =
-        require('./plugin/defaultMetaVisitor.js').defaultMetaVisitor
-    } else {
-      exportMetadata = null
-    }
-  } else {
-    exportMetadata = null
-  }
   return readConfigFlags({
     options,
     properties: {
@@ -563,11 +504,9 @@ const normalizeOptions = options => {
               'effector-root/compat',
               'effector-logger',
               'trail/runtime',
-              '@zerobias/effector',
               '@effector/effector',
             ],
       ),
-      exportMetadata,
       storeCreators: new Set(options.storeCreators || defaults.store),
       eventCreators: new Set(options.eventCreators || defaults.event),
       effectCreators: new Set(options.effectCreators || defaults.effect),
@@ -591,7 +530,6 @@ const normalizeOptions = options => {
         typeof options.addNames !== 'undefined'
           ? Boolean(options.addNames)
           : true,
-      compressor: options.compressSid === false ? str => str : hashCode,
     },
   })
 
@@ -614,22 +552,6 @@ const normalizeOptions = options => {
   }
   function readConfigArray(array, defaults) {
     return new Set(array || defaults)
-  }
-}
-function createMetadataVisitor(plugin, exportMetadata) {
-  const {join, relative} = require('path')
-  plugin.visitor.Program.exit = function exit(_, state) {
-    const metadata = join(
-      state.file.opts.root,
-      '.effector',
-      relative(state.file.opts.root, state.filename) + '.json',
-    )
-    exportMetadata(metadata, {
-      stores: Array.from(state.stores),
-      effects: Array.from(state.effects),
-      domains: Array.from(state.domains),
-      events: Array.from(state.events),
-    })
   }
 }
 
@@ -664,13 +586,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
-function setRestoreNameAfter(
-  path,
-  state,
-  nameNodeId,
-  t,
-  {addLoc, compressor, addNames},
-) {
+function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, addNames}) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
@@ -697,7 +613,6 @@ function setRestoreNameAfter(
         displayName,
         loc.line,
         loc.column,
-        compressor,
       ),
     )
 
@@ -723,7 +638,7 @@ function setStoreNameAfter(
   state,
   nameNodeId,
   t,
-  {addLoc, compressor, addNames},
+  {addLoc, addNames},
   fillFirstArg,
   checkBindingName,
 ) {
@@ -756,7 +671,6 @@ function setStoreNameAfter(
         displayName,
         loc.line,
         loc.column,
-        compressor,
       ),
     )
 
@@ -786,12 +700,12 @@ function isLocalVariable(path, checkBindingName) {
   }
   return false
 }
-function setConfigForConfigurableMethod(
+function setConfigForConfMethod(
   path,
   state,
   nameNodeId,
   t,
-  {addLoc, compressor, addNames},
+  {addLoc, addNames},
   singleArgument,
   checkBindingName,
 ) {
@@ -824,7 +738,6 @@ function setConfigForConfigurableMethod(
         displayName,
         loc.line,
         loc.column,
-        compressor,
       ),
     )
 
@@ -847,13 +760,7 @@ function setConfigForConfigurableMethod(
   }
 }
 
-function setEventNameAfter(
-  path,
-  state,
-  nameNodeId,
-  t,
-  {addLoc, compressor, addNames},
-) {
+function setEventNameAfter(path, state, nameNodeId, t, {addLoc, addNames}) {
   const displayName = nameNodeId ? nameNodeId.name : ''
 
   let args
@@ -885,7 +792,6 @@ function setEventNameAfter(
         displayName,
         loc.line,
         loc.column,
-        compressor,
       ),
     )
 
@@ -927,16 +833,9 @@ function stripRoot(babelRoot, fileName, omitFirstSlash) {
 /**
  * "foo src/index.js [12,30]"
  */
-function generateStableID(
-  babelRoot,
-  fileName,
-  varName,
-  line,
-  column,
-  compressor,
-) {
+function generateStableID(babelRoot, fileName, varName, line, column) {
   const normalizedPath = stripRoot(babelRoot, fileName, false)
-  return compressor(`${varName} ${normalizedPath} [${line}, ${column}]`)
+  return hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`)
 }
 function hashCode(s) {
   let h = 0

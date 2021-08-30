@@ -52,13 +52,8 @@
     "fork.mjs.map",
     "fork.d.ts",
     "babel-plugin.js",
-    "babel-plugin-react.js",
-    "plugin/defaultMetaVisitor.js",
-    "plugin/noopMetaVisitor.js"
+    "babel-plugin-react.js"
   ],
-  "browser": {
-    "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
-  },
   "keywords": [
     "state management",
     "state manager",

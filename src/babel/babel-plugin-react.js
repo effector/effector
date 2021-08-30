@@ -156,7 +156,7 @@ function setComponentNameAfter(path, state, nameNodeId, t) {
     if (!args[0]) return
     args[2] = configExpr
     if (oldConfig) {
-      args[2].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      args[2].properties.push(t.objectProperty(t.identifier('and'), oldConfig))
     }
     args[2].properties.push(locProp)
     args[2].properties.push(nameProp)
@@ -205,7 +205,7 @@ function setUseStoreNameAfter(path, state, nameNodeId, t) {
     if (!args[0]) return
     args[1] = configExpr
     if (oldConfig) {
-      args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      args[1].properties.push(t.objectProperty(t.identifier('and'), oldConfig))
     }
     args[1].properties.push(locProp)
     args[1].properties.push(nameProp)

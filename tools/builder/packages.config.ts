@@ -117,12 +117,7 @@ export default {
       'fork.d.ts',
       'babel-plugin.js',
       'babel-plugin-react.js',
-      'plugin/defaultMetaVisitor.js',
-      'plugin/noopMetaVisitor.js',
     ],
-    browser: {
-      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
-    },
     keywords,
     ...common,
   },
