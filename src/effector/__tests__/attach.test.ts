@@ -1,4 +1,4 @@
-import {attach, createEffect, createStore} from 'effector'
+import {attach, createEffect, createEvent, createStore, forward} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 it('map params and results by provided functions', async () => {
@@ -331,4 +331,43 @@ test('async effect', async () => {
       ],
     ]
   `)
+})
+
+test('interaction with watch and parallel updates', async () => {
+  const fn = jest.fn()
+
+  const trigger = createEvent<string>()
+  const inc = createEvent()
+  const source = createStore(0)
+  const fxTarget = createEffect((params: {n: number; tag: string}) => {
+    fn(params)
+  })
+
+  source.on(inc, n => n + 10)
+  source.on(fxTarget, n => n + 1)
+
+  const fx = attach({
+    source,
+    effect: fxTarget,
+    mapParams: (tag: string, n) => ({tag, n}),
+  })
+
+  forward({
+    from: trigger,
+    to: [fx, fx],
+  })
+
+  trigger.watch(() => {
+    inc()
+  })
+
+  trigger('a')
+  trigger('b')
+
+  expect(argumentHistory(fn)).toEqual([
+    {n: 10, tag: 'a'},
+    {n: 10, tag: 'a'},
+    {n: 22, tag: 'b'},
+    {n: 22, tag: 'b'},
+  ])
 })
