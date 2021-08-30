@@ -6,11 +6,13 @@
   "module": "forest.mjs",
   "exports": {
     ".": {
+      "import": "./forest.mjs",
       "require": "./forest.cjs.js",
       "default": "./forest.mjs"
     },
     "./forest.mjs": "./forest.mjs",
     "./server": {
+      "import": "./server.mjs",
       "require": "./server.js",
       "default": "./server.mjs"
     },
@@ -50,7 +52,7 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/effector/effector",
-  "bugs": "https://github.com/effector/effector/issues",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:forest",
   "homepage": "https://effector.dev",
   "engines": {
     "node": ">=6.0.0"

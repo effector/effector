@@ -6,15 +6,18 @@
   "module": "effector-react.mjs",
   "exports": {
     ".": {
+      "import": "./effector-react.mjs",
       "require": "./effector-react.cjs.js",
       "default": "./effector-react.mjs"
     },
     "./effector-react.mjs": "./effector-react.mjs",
     "./scope": {
+      "import": "./scope.mjs",
       "require": "./scope.js",
       "default": "./scope.mjs"
     },
     "./ssr": {
+      "import": "./ssr.mjs",
       "require": "./ssr.js",
       "default": "./ssr.mjs"
     },
@@ -25,7 +28,7 @@
   "jsnext:main": "effector-react.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "react": ">=16.8.0 <18.0.0",
+    "react": "^17.0.0",
     "effector": "^21.8.0"
   },
   "files": [
@@ -86,7 +89,7 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/effector/effector",
-  "bugs": "https://github.com/effector/effector/issues",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-react,effector-react%2Fscope",
   "homepage": "https://effector.dev",
   "engines": {
     "node": ">=6.0.0"

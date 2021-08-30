@@ -10,11 +10,13 @@
   "dependencies": {},
   "exports": {
     ".": {
+      "import": "./effector.mjs",
       "require": "./effector.cjs.js",
       "default": "./effector.mjs"
     },
     "./effector.mjs": "./effector.mjs",
     "./fork": {
+      "import": "./fork.mjs",
       "require": "./fork.js",
       "default": "./fork.mjs"
     },
@@ -22,8 +24,6 @@
     "./effector.umd": "./effector.umd.js",
     "./babel-plugin": "./babel-plugin.js",
     "./babel-plugin-react": "./babel-plugin-react.js",
-    "./plugin/defaultMetaVisitor": "./plugin/defaultMetaVisitor.js",
-    "./plugin/noopMetaVisitor": "./plugin/noopMetaVisitor.js",
     "./package.json": "./package.json"
   },
   "files": [

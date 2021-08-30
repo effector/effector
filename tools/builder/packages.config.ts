@@ -97,11 +97,13 @@ export default {
     dependencies: {},
     exports: {
       '.': {
+        import: './effector.mjs',
         require: './effector.cjs.js',
         default: './effector.mjs',
       },
       './effector.mjs': './effector.mjs',
       './fork': {
+        import: './fork.mjs',
         require: './fork.js',
         default: './fork.mjs',
       },
@@ -109,8 +111,6 @@ export default {
       './effector.umd': './effector.umd.js',
       './babel-plugin': './babel-plugin.js',
       './babel-plugin-react': './babel-plugin-react.js',
-      './plugin/defaultMetaVisitor': './plugin/defaultMetaVisitor.js',
-      './plugin/noopMetaVisitor': './plugin/noopMetaVisitor.js',
       './package.json': './package.json',
     },
     files: [
@@ -132,15 +132,18 @@ export default {
     module: 'effector-react.mjs',
     exports: {
       '.': {
+        import: './effector-react.mjs',
         require: './effector-react.cjs.js',
         default: './effector-react.mjs',
       },
       './effector-react.mjs': './effector-react.mjs',
       './scope': {
+        import: './scope.mjs',
         require: './scope.js',
         default: './scope.mjs',
       },
       './ssr': {
+        import: './ssr.mjs',
         require: './ssr.js',
         default: './ssr.mjs',
       },
@@ -175,10 +178,12 @@ export default {
     module: 'effector-vue.mjs',
     exports: {
       '.': {
+        import: './effector-vue.mjs',
         require: './effector-vue.cjs.js',
         default: './effector-vue.mjs',
       },
       './composition': {
+        import: './composition.mjs',
         require: './composition.cjs.js',
         default: './composition.mjs',
       },
@@ -216,11 +221,13 @@ export default {
     module: 'forest.mjs',
     exports: {
       '.': {
+        import: './forest.mjs',
         require: './forest.cjs.js',
         default: './forest.mjs',
       },
       './forest.mjs': './forest.mjs',
       './server': {
+        import: './server.mjs',
         require: './server.js',
         default: './server.mjs',
       },

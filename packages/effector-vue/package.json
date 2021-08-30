@@ -6,10 +6,12 @@
   "module": "effector-vue.mjs",
   "exports": {
     ".": {
+      "import": "./effector-vue.mjs",
       "require": "./effector-vue.cjs.js",
       "default": "./effector-vue.mjs"
     },
     "./composition": {
+      "import": "./composition.mjs",
       "require": "./composition.cjs.js",
       "default": "./composition.mjs"
     },
@@ -82,7 +84,7 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/effector/effector",
-  "bugs": "https://github.com/effector/effector/issues",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-vue",
   "homepage": "https://effector.dev",
   "engines": {
     "node": ">=6.0.0"
