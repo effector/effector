@@ -52,6 +52,9 @@ const version = {
   forest: '0.19.6',
 }
 
+const issueUrl = (tag: string) =>
+  `https://github.com/effector/effector/issues?q=is:issue+label:${tag}`
+
 const compiledFile = (name: string) => [`${name}.js`, `${name}.js.map`]
 const esmFile = (name: string) => [`${name}.mjs`, `${name}.mjs.map`]
 
@@ -162,6 +165,7 @@ export default {
     ],
     keywords: ['react', 'hooks', ...keywords],
     ...common,
+    bugs: issueUrl('effector-react,effector-react%2Fscope'),
   },
   'effector-vue': {
     name: 'effector-vue',
@@ -202,6 +206,7 @@ export default {
     ],
     keywords: ['vue', 'composition api', ...keywords],
     ...common,
+    bugs: issueUrl('effector-vue'),
   },
   forest: {
     name: 'forest',
@@ -228,5 +233,6 @@ export default {
     peerDependencies: dependsOnEffector,
     keywords: [...keywords, 'dom', 'view'],
     ...common,
+    bugs: issueUrl('forest'),
   },
 }
