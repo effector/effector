@@ -507,7 +507,7 @@ export function createStore<State>(
 export function setStoreName<State>(store: Store<State>, name: string): void
 
 /**
- * @deprecated use combine() instead of
+ * @deprecated use combine() instead
  */
 export function createStoreObject<State>(
   defaultState: State,
@@ -1520,8 +1520,6 @@ export function combine<T extends Tuple<Store<any>>>(
 export interface Scope {
   getState<T>(store: Store<T>): T
 }
-
-export {Scope as Fork}
 
 export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: string]: any}
 
