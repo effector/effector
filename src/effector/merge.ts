@@ -10,6 +10,6 @@ export function merge<T>(
 ): Event<T> {
   const result = createEvent(config || unitObjectName(events, 'merge'))
   assertNodeSet(events, 'merge', 'first argument')
-  createLinkNode(events, result, {meta: {op: 'merge'}})
+  createLinkNode(events, result, [], 'merge')
   return result
 }

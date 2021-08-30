@@ -5,9 +5,9 @@ import {processArgsToConfig} from './config'
 import {getGraph, getStoreState, setMeta} from './getter'
 import {own} from './own'
 import {is} from './is'
-import {read, calc, mov} from './step'
+import {read, calc} from './step'
 import {launch} from './kernel'
-import {EFFECT, REG_A} from './tag'
+import {EFFECT} from './tag'
 
 export function attach(config: any) {
   let injected

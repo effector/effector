@@ -12,7 +12,7 @@ import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {assert} from './throw'
 import {forEach} from './collection'
-import {SAMPLE, STACK, STORE, VALUE} from './tag'
+import {SAMPLE, STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
 
@@ -45,12 +45,12 @@ export function sample(...args: any): any {
   let name
   let [[source, clock, fn], metadata] = processArgsToConfig(args)
   let sid
-  let greedy
+  let batched = true
   /** config case */
   if (isVoid(clock) && isObject(source) && validateSampleConfig(source)) {
     clock = source.clock
     fn = source.fn
-    greedy = source.greedy
+    batched = !source.greedy
     /** optional target & name accepted only from config */
     target = source.target
     name = source.name
@@ -81,52 +81,54 @@ export function sample(...args: any): any {
   if (is.store(source)) {
     const sourceRef = getStoreState(source)
     own(source, [
-      createLinkNode(clock, target, {
-        scope: {fn},
-        // scope: {fn, targetTemplate},
-        node: [
+      createLinkNode(
+        clock,
+        target,
+        [
           applyTemplate('sampleSourceLoader'),
-          read(sourceRef, !fn, !greedy),
+          read(sourceRef, !fn, batched),
           fn && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
-        meta: {op: SAMPLE, sample: STORE},
-      }),
+        SAMPLE,
+        fn,
+        // scope: {fn, targetTemplate}
+      ),
     ])
     applyTemplate('sampleStoreSource', sourceRef)
   } else {
     const hasSource = createStateRef(false)
-    const sourceState = createStateRef()
+    const sourceRef = createStateRef()
     const clockState = createStateRef()
-    applyTemplate('sampleNonStoreSource', hasSource, sourceState, clockState)
+    applyTemplate('sampleNonStoreSource', hasSource, sourceRef, clockState)
     createNode({
       parent: source,
       node: [
-        mov({from: STACK, target: sourceState}),
+        mov({from: STACK, target: sourceRef}),
         mov({from: VALUE, store: true, target: hasSource}),
       ],
       family: {owners: [source, target, clock], links: target},
-      meta: {op: SAMPLE, sample: 'source'},
+      meta: {op: SAMPLE},
       regional: true,
     })
     own(source, [
-      createLinkNode(clock, target, {
-        scope: {
-          fn,
-          // targetTemplate,
-        },
-        node: [
+      createLinkNode(
+        clock,
+        target,
+        [
           applyTemplate('sampleSourceLoader'),
           mov({from: STACK, target: clockState}),
           read(hasSource, true),
           calc(hasSource => hasSource, true),
-          read(sourceState, true, !greedy),
+          read(sourceRef, true, batched),
           read(clockState),
           fn && compute({fn: callStackAReg}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
-        meta: {op: SAMPLE, sample: 'clock'},
-      }),
+        SAMPLE,
+        fn,
+        // scope: {fn, targetTemplate}
+      ),
     ])
   }
   return target

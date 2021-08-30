@@ -85,10 +85,10 @@ export const handlers: TemplateHandlers = {
   sampleNonStoreSource(
     template: Template,
     hasSource: StateRef,
-    sourceState: StateRef,
+    sourceRef: StateRef,
     clockState: StateRef,
   ) {
-    template.plain.push(hasSource, sourceState, clockState)
+    template.plain.push(hasSource, sourceRef, clockState)
   },
   sampleTarget(template: Template, target: Node) {
     target.seq.push(template.loader)

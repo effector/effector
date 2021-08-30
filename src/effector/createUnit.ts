@@ -104,7 +104,7 @@ const deriveEvent = (event: any, op: string, fn: any, node: any) => {
     derived: true,
     and: config,
   })
-  createLinkNode(event, mapped, {scope: {fn}, node, meta: {op}})
+  createLinkNode(event, mapped, node, op, fn)
   return mapped
 }
 
@@ -162,11 +162,13 @@ export function createEvent<Payload = any>(
         parent: getParent(event),
       })
       applyTemplate('eventPrepend', getGraph(contramapped))
-      createLinkNode(contramapped, event, {
-        scope: {fn},
-        node: [compute({fn: callStack})],
-        meta: {op: 'prepend'},
-      })
+      createLinkNode(
+        contramapped,
+        event,
+        [compute({fn: callStack})],
+        'prepend',
+        fn,
+      )
       applyParentHook(event, contramapped)
       return contramapped
     },
@@ -330,5 +332,5 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  return createLinkNode(from, store, {scope: {fn}, node, meta: {op}})
+  return createLinkNode(from, store, node, op, fn)
 }

@@ -7,22 +7,16 @@ import {assertNodeSet} from './is'
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
   child: NodeUnit | NodeUnit[],
-  {
-    node,
-    scope,
-    meta,
-  }: {
-    node?: Array<Cmd | false | void | null>
-    scope?: {[name: string]: any}
-    meta?: {[name: string]: any}
-  } = {},
+  node?: Array<Cmd | false | void | null>,
+  op?: string,
+  scopeFn?: Function,
 ) =>
   createNode({
     node,
     parent,
     child,
-    scope,
-    meta,
+    scope: {fn: scopeFn},
+    meta: {op},
     family: {owners: [parent, child], links: child},
     regional: true,
   })

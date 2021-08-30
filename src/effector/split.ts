@@ -83,9 +83,11 @@ export function split(...args: any[]): any {
         needBarrier = true
         units.push(key)
         owners.add(storeOrFn)
-        const updater = createLinkNode(storeOrFn, [], {
-          node: [read(lastValues), calc((upd, _, {a}) => (a[key] = upd))],
-        })
+        const updater = createLinkNode(
+          storeOrFn,
+          [],
+          [read(lastValues), calc((upd, _, {a}) => (a[key] = upd))],
+        )
         if (is.store(storeOrFn)) {
           lastValues.current[key] = storeOrFn.getState()
           const storeRef = getStoreState(storeOrFn)

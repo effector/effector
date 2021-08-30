@@ -11,7 +11,6 @@ import {assert} from './throw'
 export function guard(...args: any[]) {
   const METHOD = 'guard'
   let [[source, config], metadata] = processArgsToConfig(args)
-  const meta: Record<string, any> = {op: METHOD, config: metadata}
   if (!config) {
     config = source
     source = config.source
@@ -42,7 +41,7 @@ export function guard(...args: any[]) {
       target: createNode({
         node: [calc(({guard}) => guard, true), calc(({data}) => data)],
         child: target,
-        meta,
+        meta: {op: METHOD},
         family: {
           owners: [source, filterFn, target, ...[].concat(clock ? clock : [])],
           links: target,
@@ -55,16 +54,18 @@ export function guard(...args: any[]) {
     })
   } else {
     assert(isFunction(filterFn), '`filter` should be function or unit')
-    createLinkNode(source, target, {
-      scope: {fn: filterFn},
-      node: clock
+    createLinkNode(
+      source,
+      target,
+      clock
         ? [
             filter({fn: ({source, clock}, {fn}) => fn(source, clock)}),
             calc(({source}) => source),
           ]
         : [filter({fn: callStack})],
-      meta,
-    })
+      METHOD,
+      filterFn,
+    )
   }
   return target
 }

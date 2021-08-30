@@ -138,11 +138,8 @@ const storeCombination = (
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    const linkNode = createLinkNode(child, store, {
-      scope: {key, fn},
-      node,
-      meta: {op: 'combine'},
-    })
+    const linkNode = createLinkNode(child, store, node, 'combine', fn)
+    linkNode.scope.key = key
     const childRef = getStoreState(child)
     addRefOp(rawShape, {type: 'field', field: key, from: childRef})
     applyTemplate('combineField', childRef, linkNode)

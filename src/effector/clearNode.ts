@@ -24,7 +24,7 @@ const clearNodeNormalized = (
     removeFromNode(currentNode, targetNode)
     if (
       deep ||
-      (isDomainUnit && !getMeta(targetNode, 'sample')) ||
+      (isDomainUnit && getMeta(targetNode, 'op') !== 'sample') ||
       currentNode.family.type === CROSSLINK
     ) {
       clearNodeNormalized(
