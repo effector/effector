@@ -77,6 +77,9 @@ export function createComponent<Props, Shape extends object>(
   Props
 >
 
+/**
+ * @deprecated use useStore hook instead
+ */
 export function createContextComponent<Props, State, Context>(
   store: Store<State>,
   context: React.Context<Context>,
@@ -96,6 +99,9 @@ export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
 
+/**
+ * @deprecated use useStore hook instead
+ */
 export function createReactState<
   State extends object,
   Com extends React.ComponentType<any>

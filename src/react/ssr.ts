@@ -3,8 +3,9 @@ import {Domain, is, Scope, Store, scopeBind} from 'effector'
 import {useStoreBase, useStoreMapBase, useListBase} from './apiBase'
 import {withDisplayName} from './withDisplayName'
 import {useGate as commonUseGate, createGateImplementation} from './createGate'
-import {Gate} from './index.h'
+import type {Gate} from './index.h'
 import {throwError} from './throw'
+import {deprecate} from './deprecate'
 
 const ScopeContext = React.createContext(null as Scope | null)
 export const {Provider} = ScopeContext
@@ -59,11 +60,12 @@ export function createStoreConsumer(store: any) {
   }
 }
 
-export function createContextComponent(
+export const createContextComponent = (
   store: any,
   context: any,
   renderProp: any,
-) {
+) => {
+  deprecate('createContextComponent')
   return (props: any) => {
     const ctx = React.useContext(context)
     const state = useStore(store)
@@ -71,20 +73,23 @@ export function createContextComponent(
   }
 }
 
-export function createComponent(shape: any) {
-  throwError('not implemented')
+export const createComponent = (shape: any) => throwError('not implemented')
+
+export const createReactState = (store: any, Component: any) => {
+  deprecate('createReactState')
+  return connect(Component)(store)
 }
 
-export function createReactState(store: any, Component: any) {
-  const wrappedComponentName =
-    Component.displayName || Component.name || 'Unknown'
+export const connect = (Component: any) => (store: any) => {
+  let View: any = Component
+  if (typeof Component !== 'function') {
+    View = store
+    store = Component as any
+  }
+  const wrappedComponentName = View.displayName || View.name || 'Unknown'
   return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
-    React.createElement(Component, {...props, ...(useStore(store) as any)}),
+    React.createElement(View, {...props, ...(useStore(store) as any)}),
   )
-}
-
-export function connect(Component: any) {
-  return (store: any) => createReactState(store, Component)
 }
 
 /** useStore wrapper for scopes */

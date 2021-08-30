@@ -1,14 +1,16 @@
 import React from 'react'
-import {Store} from 'effector'
+import type {Store} from 'effector'
 import {useStore} from './nossr'
 import {withDisplayName} from './withDisplayName'
+import {deprecate} from './deprecate'
 
 export const createContextComponent = <Props, State, Context>(
   store: Store<State>,
   context: React.Context<Context>,
   renderProp: (props: Props, state: State, context: Context) => React.ReactNode,
-): React.ComponentType<Props> =>
-  withDisplayName(
+): React.ComponentType<Props> => {
+  deprecate('createContextComponent')
+  return withDisplayName(
     `${store.shortName || 'Unknown'}.ContextComponent`,
     (props: any) => {
       const ctx = React.useContext(context)
@@ -16,3 +18,4 @@ export const createContextComponent = <Props, State, Context>(
       return renderProp(props, state, ctx)
     },
   )
+}

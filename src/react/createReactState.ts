@@ -1,16 +1,13 @@
-import React from 'react'
-import {Store} from 'effector'
+import type {ComponentType} from 'react'
+import type {Store} from 'effector'
 
-import {useStore} from './nossr'
-import {withDisplayName} from './withDisplayName'
+import {connect} from './connect'
+import {deprecate} from './deprecate'
 
-export function createReactState<State>(
-  store: Store<State>,
-  Component: React.ComponentType<any>,
-) {
-  const wrappedComponentName =
-    Component.displayName || Component.name || 'Unknown'
-  return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
-    React.createElement(Component, {...props, ...(useStore(store) as any)}),
-  )
+export const createReactState = (
+  store: Store<any>,
+  View: ComponentType<any>,
+) => {
+  deprecate('createReactState')
+  return connect(View)(store)
 }
