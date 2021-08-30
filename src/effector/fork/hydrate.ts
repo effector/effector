@@ -3,7 +3,7 @@ import {assert} from '../throw'
 import {launch} from '../kernel'
 import type {Domain, Scope} from '../unit.h'
 import type {Node} from '../index.h'
-import {includes} from '../collection'
+import {add, includes} from '../collection'
 import {normalizeValues, traverseStores} from './util'
 import {getGraph} from '../getter'
 
@@ -38,8 +38,8 @@ export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
   traverseStores(traverseTarget!, (node, sid) => {
     // forkPage.sidIdMap[sid] = node.scope.state.id
     if (includes(valuesSidList, sid)) {
-      storeNodes.push(node)
-      storeValues.push(normalizedValues[sid])
+      add(storeNodes, node)
+      add(storeValues, normalizedValues[sid])
     }
   })
   launch({

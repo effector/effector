@@ -9,6 +9,7 @@ import {isObject, isFunction} from './is'
 import {assert} from './throw'
 import {EFFECT} from './tag'
 import type {Unit} from './index.h'
+import {add} from './collection'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
@@ -86,7 +87,8 @@ export function createEffect<Payload, Done>(
     meta: {op: 'fx', fx: 'runner'},
   })
   node.scope.runner = runner
-  node.seq.push(
+  add(
+    node.seq,
     calc(
       (params, {runner}, stack) => {
         const upd = getParent(stack)

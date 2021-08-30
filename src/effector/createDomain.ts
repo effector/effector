@@ -10,11 +10,11 @@ import {
 } from './createUnit'
 import {createEffect} from './createEffect'
 import {createLinkNode} from './forward'
-import {forEach, forIn} from './collection'
+import {add, forEach, forIn} from './collection'
 import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
 import {launch} from './kernel'
-import {compute} from './step'
+import {calc} from './step'
 
 export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const node = createNode({family: {type: DOMAIN}, regional: true})
@@ -47,12 +47,11 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
         launch(trigger, res)
         return res
       }
-      getGraph(trigger).seq.push(
-        compute({
-          fn(upd, _, stack) {
-            stack.scope = null
-            return upd
-          },
+      add(
+        getGraph(trigger).seq,
+        calc((upd, _, stack) => {
+          stack.scope = null
+          return upd
         }),
       )
       trigger.watch(data => {

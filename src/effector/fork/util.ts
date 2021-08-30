@@ -3,7 +3,7 @@ import {is} from '../is'
 import {assert} from '../throw'
 import type {Store} from '../unit.h'
 import type {Node} from '../index.h'
-import {forEach, includes} from '../collection'
+import {add, forEach, includes} from '../collection'
 import {STORE} from '../tag'
 
 export function traverseStores(
@@ -13,7 +13,7 @@ export function traverseStores(
   const list = [] as Node[]
   ;(function visit(node) {
     if (includes(list, node)) return
-    list.push(node)
+    add(list, node)
     if (getMeta(node, 'op') === STORE && getMeta(node, 'sid')) {
       fn(node, getMeta(node, 'sid'))
     }

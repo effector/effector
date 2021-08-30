@@ -4,7 +4,7 @@ import {nextNodeID} from './id'
 import {CROSSLINK} from './tag'
 import {regionStack} from './region'
 import {own} from './own'
-import {forEach} from './collection'
+import {add, forEach} from './collection'
 
 const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
@@ -43,7 +43,7 @@ export function createNode({
   const links = arrifyNodes(familyRaw.links)
   const owners = arrifyNodes(familyRaw.owners)
   const seq: Cmd[] = []
-  forEach(node, item => item && seq.push(item))
+  forEach(node, item => item && add(seq, item))
   const result: Node = {
     id: nextNodeID(),
     seq,
@@ -56,9 +56,9 @@ export function createNode({
       owners,
     },
   }
-  forEach(links, link => getOwners(link).push(result))
-  forEach(owners, owner => getLinks(owner).push(result))
-  forEach(sources, source => source.next.push(result))
+  forEach(links, link => add(getOwners(link), result))
+  forEach(owners, owner => add(getLinks(owner), result))
+  forEach(sources, source => add(source.next, result))
   if (regional && regionStack) {
     own(getValue(regionStack), [result])
   }

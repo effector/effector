@@ -5,7 +5,7 @@ import {readRef} from './stateRef'
 import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
 import {STORE, EFFECT, SAMPLER, STACK, BARRIER, VALUE, REG_A, MAP} from './tag'
 import type {Scope} from './unit.h'
-import {forEach} from './collection'
+import {add, forEach} from './collection'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -92,7 +92,7 @@ while (ix < 5) {
    * although "sampler" and "barrier" are using heap instead of linked list,
    * their buckets are still useful: they maintains size of heap queue
    */
-  queue.push({first: null, last: null, size: 0})
+  add(queue, {first: null, last: null, size: 0})
   ix += 1
 }
 
@@ -490,8 +490,8 @@ export const initRefInScope = (
             ref.current[cmd.field] = refsMap[from.id].current
             break
           }
-          case 'closure':
-            break
+          // case 'closure':
+          //   break
         }
       })
     }

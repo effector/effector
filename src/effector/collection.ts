@@ -16,6 +16,8 @@ export const removeItem = (list: any[], item: any) => {
   }
 }
 
+export const add = <T>(list: T[], item: T) => list.push(item)
+
 export function forEach<T>(
   list: T[],
   fn: (item: T, index: number, list: T[]) => void,

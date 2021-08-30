@@ -1,7 +1,7 @@
 import type {Event} from './unit.h'
 import type {NodeUnit, Cmd} from './index.h'
 import {is, isFunction, isObject} from './is'
-import {forIn, includes} from './collection'
+import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
@@ -81,7 +81,7 @@ export function split(...args: any[]): any {
     forIn(match, (storeOrFn: any, key) => {
       if (is.unit(storeOrFn)) {
         needBarrier = true
-        units.push(key)
+        add(units, key)
         owners.add(storeOrFn)
         const updater = createLinkNode(
           storeOrFn,

@@ -1,7 +1,8 @@
+import {add} from '../collection'
 import {createDefer} from '../defer'
 import {is} from '../is'
 import {launch, forkPage} from '../kernel'
-import {Scope} from '../unit.h'
+import type {Scope} from '../unit.h'
 
 export function allSettled(
   start: any,
@@ -10,32 +11,33 @@ export function allSettled(
   if (!is.unit(start))
     return Promise.reject(Error('first argument should be unit'))
   const defer = createDefer()
-  //@ts-ignore
+  //@ts-expect-error
   defer.parentFork = forkPage
   const {fxCount} = scope
-  fxCount.scope.defers.push(defer)
+  add(fxCount.scope.defers, defer)
 
   const launchUnits = [start]
-  const launchParams = []
-  if (is.effect(start)) {
-    launchParams.push({
-      params: ctx,
-      req: {
-        rs(value: any) {
-          //@ts-ignore
-          defer.value = {status: 'done', value}
-        },
-        rj(value: any) {
-          //@ts-ignore
-          defer.value = {status: 'fail', value}
-        },
-      },
-    })
-  } else {
-    launchParams.push(ctx)
-  }
-  launchUnits.push(fxCount)
-  launchParams.push(null)
+  const launchParams = [] as Array<{params: any; req: any} | null>
+  add(
+    launchParams,
+    is.effect(start)
+      ? {
+          params: ctx,
+          req: {
+            rs(value: any) {
+              //@ts-ignore
+              defer.value = {status: 'done', value}
+            },
+            rj(value: any) {
+              //@ts-ignore
+              defer.value = {status: 'fail', value}
+            },
+          },
+        }
+      : ctx,
+  )
+  add(launchUnits, fxCount)
+  add(launchParams, null)
   launch({
     target: launchUnits,
     params: launchParams,
