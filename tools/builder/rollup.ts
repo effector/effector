@@ -42,6 +42,7 @@ const externals = [
   'effector-react',
   'effector-react/effector-react.mjs',
   'effector-react/scope',
+  'effector-react/scope.mjs',
   'effector-react/compat',
   'effector-vue',
   'effector-vue/effector-vue.mjs',

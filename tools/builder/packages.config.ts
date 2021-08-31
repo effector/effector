@@ -137,6 +137,7 @@ export default {
         default: './effector-react.mjs',
       },
       './effector-react.mjs': './effector-react.mjs',
+      './scope.mjs': './scope.mjs',
       './scope': {
         import: './scope.mjs',
         require: './scope.js',
