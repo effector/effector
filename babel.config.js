@@ -41,7 +41,7 @@ const aliases = {
   'effector/fixtures': resolveFromSources('fixtures'),
   'effector-react/scope': 'effector-react/scope',
   'effector-react': {
-    esm: null,
+    esm: 'effector-react/effector-react.mjs',
     compat: 'effector-react/compat',
     build: null,
     test: null,
@@ -50,7 +50,7 @@ const aliases = {
   'effector-vue': resolveFromSources('vue'),
   Builder: resolveFromSources('../tools/builder'),
   effector: {
-    esm: null,
+    esm: 'effector/effector.mjs',
     compat: 'effector/compat',
     build: null,
     test: null,
