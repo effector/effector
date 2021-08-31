@@ -129,7 +129,7 @@ export function createEffect<Payload, Done>(
   const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1))
-  setMeta(anyway, 'needFxCounter', true)
+  setMeta(anyway, 'needFxCounter', 'dec')
   setMeta(instance, 'needFxCounter', true)
   const pending = (instance.pending = inFlight.map({
     //@ts-expect-error
