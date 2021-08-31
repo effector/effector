@@ -36,6 +36,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Add module `effector-react/scope` and make `effector-react/ssr` an alias for it
 - Fix `Cannot update a component` warning in `useGate`
 - Allow to return `undefined` in `useStoreMap`
+- Make `domain` field in `createGate` optional
 - Deprecate `createContextComponent` and `createReactState`
 - Improve es modules support
 
