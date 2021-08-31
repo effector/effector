@@ -71,15 +71,7 @@ type EffectByHandler<FN extends Function, Fail> = FN extends (...args: infer Arg
 
 export const version: string
 
-export type kind = 'store' | 'event' | 'effect' | 'domain'
-
-export type mixed_non_void =
-  | null
-  | string
-  | number
-  | boolean
-  | {}
-  | ReadonlyArray<unknown>
+export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
 export type Observer<A> = {
   readonly next?: (value: A) => void
@@ -223,6 +215,7 @@ export const is: {
   event(obj: unknown): obj is Event<any>
   effect(obj: unknown): obj is Effect<any, any, any>
   domain(obj: unknown): obj is Domain
+  scope(obj: unknown): obj is Scope
 }
 
 interface InternalStore<State> extends Store<State> {
@@ -237,7 +230,7 @@ export class Domain implements Unit<any> {
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
   ): Subscription
   onCreateStore(
-    hook: (newStore: InternalStore<mixed_non_void>) => any,
+    hook: (newStore: InternalStore<unknown>) => any,
   ): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
@@ -319,78 +312,126 @@ export class Domain implements Unit<any> {
 }
 
 export type ID = string
+export type StateRefOp =
+  | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
+  | {type: 'field'; from: StateRef; field: string}
+  | {type: 'closure'; of: StateRef}
 export type StateRef = {
+  id: ID
   current: any
-  id: ID
+  type?: 'list' | 'shape'
+  before?: StateRefOp[]
+  noInit?: boolean
+  sid?: string
 }
-//prettier-ignore
+
+export type Stack = {
+  value: any
+  a: any
+  b: any
+  parent?: Stack
+  node: Node
+  page?: any
+  scope?: Scope
+}
+
+type BarrierPriorityTag = 'barrier' | 'sampler' | 'effect'
+
+type FromValue = {
+  from: 'value'
+  store: any
+}
+type FromStore = {
+  from: 'store'
+  store: StateRef
+}
+type FromRegister = {
+  from: 'a' | 'b' | 'stack'
+}
+
+type ToRegister = {
+  to: 'a' | 'b' | 'stack'
+}
+type ToStore = {
+  to: 'store'
+  target: StateRef
+}
+
+type MoveCmd<Data> = {
+  id: ID
+  type: 'mov'
+  data: Data
+  order?: {
+    priority: BarrierPriorityTag
+    barrierID?: number
+  }
+}
+
 export type Cmd =
-  | Update
-  | Run
-  | Filter
   | Compute
-  | Barrier
+  | Mov
 
-export type Barrier = {
-  id: ID
-  type: 'barrier'
-  data: {
-    barrierID: ID
-  }
-}
+type MovValReg = MoveCmd<FromValue & ToRegister>
+type MovValStore = MoveCmd<FromValue & ToStore>
+type MovStoreReg = MoveCmd<FromStore & ToRegister>
+type MovStoreStore = MoveCmd<FromStore & ToStore>
+type MovRegReg = MoveCmd<FromRegister & ToRegister>
+type MovRegStore = MoveCmd<FromRegister & ToStore>
 
-export type Update = {
-  id: ID
-  type: 'update'
-  data: {
-    store: StateRef
-  }
-}
-export type Run = {
-  id: ID
-  type: 'run'
-  data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
-  }
-}
-
-export type Filter = {
-  id: ID
-  type: 'filter'
-  data: {
-    fn: (data: any, scope: {[field: string]: any}) => boolean
-  }
-}
+export type Mov =
+  | MovValReg
+  | MovValStore
+  | MovStoreReg
+  | MovStoreStore
+  | MovRegReg
+  | MovRegStore
 
 export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
+    fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
+    safe: boolean
+    filter: boolean
+  }
+  order?: {
+    priority: BarrierPriorityTag
+    barrierID?: number
   }
 }
 export type Node = {
+  id: ID
   next: Array<Node>
   seq: Array<Cmd>
   scope: {[field: string]: any}
   meta: {[field: string]: any}
   family: {
-    type: 'regular' | 'crosslink'
+    type: 'regular' | 'crosslink' | 'domain'
     links: Node[]
     owners: Node[]
   }
 }
-export type Step = Node
 
 export const step: {
   compute(data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
+    fn?: (data: any, scope: {[key: string]: any}, stack: Stack) => any
+    batch?: boolean
+    priority?: BarrierPriorityTag | false
+    safe?: boolean
+    filter?: boolean
   }): Compute
   filter(data: {
     fn: (data: any, scope: {[field: string]: any}) => boolean
-  }): Filter
-  update(data: {store: StateRef}): Update
-  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
+  }): Compute
+  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Compute
+  mov(data: {
+    from?: 'value' | 'store' | 'stack' | 'a' | 'b'
+    to?: 'stack' | 'a' | 'b' | 'store'
+    store?: StateRef
+    target?: StateRef
+    batch?: boolean
+    priority?: BarrierPriorityTag | false
+  }): Mov
 }
 
 export function forward<T>(opts: {
@@ -439,18 +480,19 @@ export function merge<T>(events: ReadonlyArray<Unit<T>>): EventAsReturnType<T>
 export function merge<T extends ReadonlyArray<Unit<any>>>(
   events: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
-export function clearNode(unit: Unit<any> | Node | Scope, opts?: {deep?: boolean}): void
+export function clearNode(unit: Unit<any> | Node, opts?: {deep?: boolean}): void
 export function createNode(opts?: {
-  node?: Array<Cmd>
+  node?: Array<Cmd | false | void | null>
   parent?: Array<Unit<any> | Node>
   child?: Array<Unit<any> | Node>
   scope?: {[field: string]: any}
   meta?: {[field: string]: any}
   family?: {
-    type?: 'regular' | 'crosslink'
+    type?: 'regular' | 'crosslink' | 'domain'
     owners?: Unit<any> | Node | Array<Unit<any> | Node>
     links?: Unit<any> | Node | Array<Unit<any> | Node>
   }
+  regional?: boolean
 }): Node
 export function launch<T>(unit: Unit<T> | Node, payload: T): void
 export function launch<T>(config: {
@@ -460,6 +502,14 @@ export function launch<T>(config: {
   page?: any
   scope?: Scope
 }): void
+export function launch(config: {
+  target: Array<Unit<any> | Node>
+  params: any[]
+  defer?: boolean
+  page?: any
+  scope?: Scope
+}): void
+
 export function fromObservable<T>(observable: unknown): Event<T>
 
 export function createEvent<E = void>(eventName?: string): Event<E>
@@ -1517,7 +1567,7 @@ export function combine<T extends Tuple<Store<any>>>(
   ...stores: T
 ): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
 
-export interface Scope {
+export interface Scope extends Unit<any> {
   getState<T>(store: Store<T>): T
 }
 

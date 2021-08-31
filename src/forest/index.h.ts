@@ -1,4 +1,4 @@
-import type {Store, Event, Step, Filter} from 'effector'
+import type {Store, Event, Filter} from 'effector'
 import type {Scope} from '../effector/unit.h'
 import type {StateRef, Node, Cmd} from '../effector/index.h'
 
@@ -28,7 +28,7 @@ export type Template = {
   upward: Filter
   parent: Template | null
 
-  node: Step
+  node: Node
   // template: Template
   draft: NodeDraft
   api: Record<string, Event<any>>
