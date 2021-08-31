@@ -20,7 +20,7 @@ export function createScope(unit?: Domain): Scope {
           scope.fxID += 1
           return
         }
-        if (getMeta(getParent(stack).node, 'named') === 'finally') {
+        if (getMeta(getParent(stack).node, 'needFxCounter') === 'dec') {
           scope.inFlight -= 1
         } else {
           scope.inFlight += 1
