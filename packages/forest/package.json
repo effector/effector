@@ -55,7 +55,7 @@
   "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:forest",
   "homepage": "https://effector.dev",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=11.0.0"
   },
   "publishConfig": {
     "access": "public"

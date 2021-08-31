@@ -14,7 +14,7 @@ const common = {
   bugs: 'https://github.com/effector/effector/issues',
   homepage: 'https://effector.dev',
   engines: {
-    node: '>=6.0.0',
+    node: '>=11.0.0',
   },
   publishConfig: {
     access: 'public',
