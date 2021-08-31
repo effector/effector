@@ -147,13 +147,15 @@ module.exports = {
           // Equivalent to `enableUpdateTime`.
           showLastUpdateTime: true,
           editUrl:
-            'https://github.com/effector/effector/edit/master/fix/relative-bug/',
+            'https://github.com/effector/effector/tree/master/website/client/',
           remarkPlugins: [],
+          editLocalizedFiles: true,
         },
         blog: {
           showReadingTime: true,
           editUrl:
             'https://github.com/effector/effector/edit/master/website/client/',
+          editLocalizedFiles: true,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
