@@ -318,18 +318,18 @@ test('computed values support', async () => {
 })
 
 test('useGate support', async () => {
-  const app = createDomain()
-  const getMessagesFx = app.createEffect<{chatId: string}, string[]>(
+  const getMessagesFx = createEffect<{chatId: string}, string[]>(
     async ({chatId}) => {
       return ['hi bob!', 'Hello, Alice']
     },
   )
 
-  const messagesAmount = app
-    .createStore(0)
-    .on(getMessagesFx.doneData, (_, messages) => messages.length)
+  const messagesAmount = createStore(0).on(
+    getMessagesFx.doneData,
+    (_, messages) => messages.length,
+  )
 
-  const activeChatGate = createGate<{chatId: string}>({domain: app})
+  const activeChatGate = createGate<{chatId: string}>({})
 
   forward({from: activeChatGate.open, to: getMessagesFx})
 
@@ -348,7 +348,7 @@ test('useGate support', async () => {
     </Provider>
   )
 
-  const serverScope = fork(app)
+  const serverScope = fork()
   await render(<App root={serverScope} />)
 
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -364,7 +364,7 @@ test('useGate support', async () => {
     </div>
   `)
 
-  const clientScope = fork(app, {
+  const clientScope = fork({
     values: serialize(serverScope),
   })
 

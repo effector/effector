@@ -27,7 +27,7 @@ export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
     : never
 }
 export function useEvent<
-  Shape extends Record<string, Event<any> | Effect<any, any, any>>
+  Shape extends Record<string, Event<any> | Effect<any, any, any>>,
 >(
   shape: Shape,
 ): {
@@ -39,7 +39,7 @@ export function useEvent<
 }
 
 export function createGate<State>(config: {
-  domain: Domain
+  domain?: Domain
   defaultState?: State
   name?: string
 }): Gate<State>

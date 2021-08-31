@@ -16,14 +16,13 @@ function getScope() {
   return scope as Scope
 }
 
-export function createGate<Props>(config: {
-  domain: Domain
-  defaultState: Props
-  name?: string
-}) {
-  if (!config || !is.domain(config.domain))
-    throwError('config.domain should exists')
-
+export function createGate<Props>(
+  config: {
+    domain?: Domain
+    defaultState?: Props
+    name?: string
+  } = {},
+) {
   return createGateImplementation({
     domain: config.domain,
     name: config.name,
