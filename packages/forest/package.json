@@ -1,6 +1,6 @@
 {
   "name": "forest",
-  "version": "0.19.6",
+  "version": "0.20.0",
   "description": "UI engine for web",
   "main": "forest.cjs.js",
   "module": "forest.mjs",
@@ -23,7 +23,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^21.8.12"
+    "effector": "^22.0.0"
   },
   "keywords": [
     "state management",

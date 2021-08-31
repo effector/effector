@@ -2,6 +2,51 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.0.0
+
+- Add support for plain functions to attach: `attach({source, async effect(source, params) {}})`
+- Allow to use fork without domains: `const scope = fork()`
+  - `Unit not found in scope` error is no longer exists, any unit could be used in any scope
+  - Increase performance of `fork` and `serialize` a hundredfold
+- Add support for attached effects to fork handlers
+- Add support for tuples to fork values and handlers: `fork({values: [[$user, 'alice'], [$age, 22]]})`
+- Add `serialize: 'ignore'` option to `createStore` to declare store as ignored by `serialize` calls
+- Make `onlyChanges: true` a default `serialize` option
+- Fix babel plugin issue with parsing method calls (e.g. in react native)
+- Validate `combine` arguments and throw an error in case of `undefined` and non-store units ([issue #509](https://github.com/effector/effector/issues/509))
+- Deprecate `createStoreObject` alias for `combine`
+- Deprecate `effector/fork` module
+- Deprecate `.thru`
+- Deprecate second argument in `store.map`
+- Deprecate direct manipulations with derived units:
+  - Deprecate `.on` in derived stores created by `store.map` and `combine`
+  - Deprecate calls of derived events created by `event.map`, `event.filterMap` and `event.filter`
+  - Deprecate calls of `fx.done`, `fx.doneData` and other events belongs to effects
+- Remove `ɔ` (latin small letter open o) symbol to prevent incorrect unicode parsing
+- Remove undocumented `scope.find` which is a wrong abstraction for a new fork
+- Make `Scope` a unit:
+  - Add support for `Scope` to `is.unit`
+  - Add `is.scope` method
+- Allow to pass a scope to scopeBind: `scopeBind(unit, {scope})`, which is also can be used outside from `.watch`
+- Improve es modules support
+- Make package size 10% smaller
+
+## effector-react 22.0.0
+
+- Add module `effector-react/scope` and make `effector-react/ssr` an alias for it
+- Fix `Cannot update a component` warning in `useGate`
+- Allow to return `undefined` in `useStoreMap`
+- Deprecate `createContextComponent` and `createReactState`
+- Improve es modules support
+
+## effector-vue 22.0.0
+
+- Improve es modules support
+
+## forest 0.20.0
+
+- Improve es modules support
+
 ## effector-react 21.3.1
 
 - Fixed TypeError in `useStoreMap` with scope ([PR #474](https://github.com/effector/effector/pull/474))
@@ -3065,9 +3110,7 @@ type B = 'bar'
 declare var reducerA: Reducer<A>
 declare var reducerB: Reducer<B>
 
-const tuple: MillType<A, B> = mill()
-  .and(reducerA)
-  .and(reducerB)
+const tuple: MillType<A, B> = mill().and(reducerA).and(reducerB)
 
 const union: Reducer<{
   a: A,

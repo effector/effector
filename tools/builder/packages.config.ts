@@ -46,10 +46,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '21.8.12',
-  'effector-react': '21.3.3',
-  'effector-vue': '21.1.1',
-  forest: '0.19.6',
+  effector: '22.0.0',
+  'effector-react': '22.0.0',
+  'effector-vue': '22.0.0',
+  forest: '0.20.0',
 }
 
 const issueUrl = (tag: string) =>
@@ -155,7 +155,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       react: '^17.0.0',
-      effector: '^21.8.0',
+      effector: '^22.0.0',
     },
     files: [
       ...getFiles('effector-react'),
@@ -197,7 +197,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       vue: '*',
-      effector: '^21.0.2',
+      effector: '^22.0.0',
       '@vue/reactivity': '^3.0.2',
       '@vue/runtime-core': '^3.0.2',
     },
