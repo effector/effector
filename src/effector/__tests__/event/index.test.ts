@@ -90,8 +90,13 @@ test('event.map(fn)', () => {
 })
 
 test('event.thru(fn)', () => {
+  const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
   const click = createEvent()
   const postclick = click.thru(event => event)
+  expect(warn.mock.calls.map(([msg]) => msg)[0]).toMatchInlineSnapshot(
+    `"thru is deprecated, use js pipe instead"`,
+  )
+  warn.mockRestore()
   expect(postclick).toBe(click)
 })
 

@@ -74,7 +74,10 @@ export const initUnit = (kind: any, unit: any, configA: any, configB?: any) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = (fn: Function) => fn(unit)
+  unit.thru = (fn: Function) => {
+    deprecate(false, 'thru', 'js pipe')
+    return fn(unit)
+  }
   unit.getType = () => compositeName.fullName
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
