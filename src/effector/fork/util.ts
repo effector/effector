@@ -33,6 +33,8 @@ export function normalizeValues(
     forEach(values, (value, key) => {
       assert(is.unit(key), 'Map key should be a unit')
       if (assertEach) assertEach(key, value)
+      assert(key.sid, 'unit should have a sid')
+      assert(!(key.sid! in result), 'duplicate sid found')
       result[key.sid!] = value
     })
     return result

@@ -621,24 +621,55 @@ test('fork should pass through attach', () => {
   }).not.toThrow()
 })
 
-test('getState with same sids', async () => {
-  const touchedDirect = createEvent()
-  const $directValue = createStore(false, {sid: 'sameSid'}).on(
-    touchedDirect,
-    v => !v,
-  )
+describe('getState with same sids', () => {
+  test('reading values from stores with same sid is correct', async () => {
+    const touchedDirect = createEvent()
+    const $directValue = createStore(false, {sid: 'sameSid'}).on(
+      touchedDirect,
+      v => !v,
+    )
 
-  const convenientTouched = createEvent()
+    const convenientTouched = createEvent()
 
-  const $convenientValue = createStore(false, {sid: 'sameSid'})
-    .on($directValue, (value, directValue) => (directValue ? false : value))
-    .on(convenientTouched, v => !v)
+    const $convenientValue = createStore(false, {sid: 'sameSid'})
+      .on($directValue, (value, directValue) => (directValue ? false : value))
+      .on(convenientTouched, v => !v)
 
-  const scope = fork()
+    const scope = fork()
 
-  await allSettled(convenientTouched, {scope})
+    await allSettled(convenientTouched, {scope})
 
-  await allSettled(touchedDirect, {scope})
+    await allSettled(touchedDirect, {scope})
 
-  expect(scope.getState($convenientValue)).toEqual(false)
+    expect(scope.getState($convenientValue)).toEqual(false)
+  })
+  test('sending values to stores with same sid is an error', async () => {
+    const a = createStore(0, {sid: 'sameSid'})
+    const b = createStore(0, {sid: 'sameSid'})
+
+    expect(() => {
+      fork({
+        values: [
+          [a, 1],
+          [b, 1],
+        ],
+      })
+    }).toThrowErrorMatchingInlineSnapshot(`"duplicate sid found"`)
+  })
+})
+
+test('stores without sid should throw an error', () => {
+  const a = createStore(0, {sid: null as any})
+
+  expect(() => {
+    fork({values: [[a, 1]]})
+  }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
+})
+
+test('handlers without sid should throw an error', () => {
+  const a = createEffect({sid: null as any})
+
+  expect(() => {
+    fork({handlers: [[a, () => {}]]})
+  }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
 })
