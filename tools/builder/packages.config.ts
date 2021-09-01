@@ -155,7 +155,7 @@ export default {
     'jsnext:main': 'effector-react.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
-      react: '^17.0.0',
+      react: '>=16.8.0 <19.0.0',
       effector: '^22.0.2',
     },
     files: [
