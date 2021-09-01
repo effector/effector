@@ -49,117 +49,51 @@ test('watch calls during hydration', async () => {
   mapped.watch(mapWatchFn)
   mapped.updates.watch(mapUpdatesWatchFn)
 
-  hydrate(app, {
-    values: {
-      ...serialize(fork(app)),
-      [store.sid!]: 0,
-    },
-  })
+  hydrate(app, {values: [[store, 0]]})
   await allSettled(start, {scope: fork(app)})
+  /** store */
   expect({
-    store: {
-      watch: argumentHistory(storeWatchFn),
-      'updates.watch': argumentHistory(eventWatchFn),
-    },
-
-    combined: {
-      watch: argumentHistory(combineWatchFn),
-      'updates.watch': argumentHistory(combineUpdatesWatchFn),
-    },
-
-    combinedFn: {
-      watch: argumentHistory(combineFnWatchFn),
-      'updates.watch': argumentHistory(combineFnUpdatesWatchFn),
-    },
-
-    mapped: {
-      watch: argumentHistory(mapWatchFn),
-      'updates.watch': argumentHistory(mapUpdatesWatchFn),
-    },
-
+    watch: argumentHistory(storeWatchFn),
+    updates: argumentHistory(eventWatchFn),
+  }).toEqual({watch: [-1, 0, 1], updates: [0, 1]})
+  /** mapped */
+  expect({
+    watch: argumentHistory(mapWatchFn),
+    updates: argumentHistory(mapUpdatesWatchFn),
+  }).toEqual({watch: ["'-1'", "'0'", "'1'"], updates: ["'0'", "'1'"]})
+  expect({
     fxHandlerFn: argumentHistory(fxHandlerFn),
-  }).toMatchInlineSnapshot(`
-    Object {
-      "combined": Object {
-        "updates.watch": Array [
-          Object {
-            "a": 0,
-            "b": 0,
-          },
-          Object {
-            "a": 1,
-            "b": 1,
-          },
-        ],
-        "watch": Array [
-          Object {
-            "a": -1,
-            "b": -1,
-          },
-          Object {
-            "a": 0,
-            "b": 0,
-          },
-          Object {
-            "a": 1,
-            "b": 1,
-          },
-        ],
-      },
-      "combinedFn": Object {
-        "updates.watch": Array [
-          Object {
-            "a": 0,
-            "b": 0,
-          },
-          Object {
-            "a": 1,
-            "b": 1,
-          },
-        ],
-        "watch": Array [
-          Object {
-            "a": -1,
-            "b": -1,
-          },
-          Object {
-            "a": 0,
-            "b": 0,
-          },
-          Object {
-            "a": 1,
-            "b": 1,
-          },
-        ],
-      },
-      "fxHandlerFn": Array [
-        0,
-        1,
-      ],
-      "mapped": Object {
-        "updates.watch": Array [
-          "'0'",
-          "'1'",
-        ],
-        "watch": Array [
-          "'-1'",
-          "'0'",
-          "'1'",
-        ],
-      },
-      "store": Object {
-        "updates.watch": Array [
-          0,
-          1,
-        ],
-        "watch": Array [
-          -1,
-          0,
-          1,
-        ],
-      },
-    }
-  `)
+  }).toEqual({fxHandlerFn: [0, 1]})
+  /** combined */
+  expect({
+    watch: argumentHistory(combineWatchFn),
+    updates: argumentHistory(combineUpdatesWatchFn),
+  }).toEqual({
+    watch: [
+      {a: -1, b: -1},
+      {a: 0, b: 0},
+      {a: 1, b: 1},
+    ],
+    updates: [
+      {a: 0, b: 0},
+      {a: 1, b: 1},
+    ],
+  })
+  /** combined with fn */
+  expect({
+    watch: argumentHistory(combineFnWatchFn),
+    updates: argumentHistory(combineFnUpdatesWatchFn),
+  }).toEqual({
+    watch: [
+      {a: -1, b: -1},
+      {a: 0, b: 0},
+      {a: 1, b: 1},
+    ],
+    updates: [
+      {a: 0, b: 0},
+      {a: 1, b: 1},
+    ],
+  })
 })
 
 describe('multiple hydrate calls', () => {
