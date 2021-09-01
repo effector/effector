@@ -470,8 +470,8 @@ export const initRefInScope = (
     id: sourceRef.id,
     current: sourceRef.current,
   }
-  if (sid) scope.sidIdMap[sid] = sourceRef.id
-  if (sid && sid in scope.sidValuesMap) {
+
+  if (sid && sid in scope.sidValuesMap && !(sid in scope.sidIdMap)) {
     ref.current = scope.sidValuesMap[sid]
   } else {
     if (sourceRef.before && !softRead) {
@@ -512,6 +512,7 @@ export const initRefInScope = (
       })
     }
   }
+  if (sid) scope.sidIdMap[sid] = sourceRef.id
   refsMap[sourceRef.id] = ref
 }
 
