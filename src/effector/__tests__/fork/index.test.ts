@@ -620,3 +620,25 @@ test('fork should pass through attach', () => {
     fork()
   }).not.toThrow()
 })
+
+test('getState with same sids', async () => {
+  const touchedDirect = createEvent()
+  const $directValue = createStore(false, {sid: 'sameSid'}).on(
+    touchedDirect,
+    v => !v,
+  )
+
+  const convenientTouched = createEvent()
+
+  const $convenientValue = createStore(false, {sid: 'sameSid'})
+    .on($directValue, (value, directValue) => (directValue ? false : value))
+    .on(convenientTouched, v => !v)
+
+  const scope = fork()
+
+  await allSettled(convenientTouched, {scope})
+
+  await allSettled(touchedDirect, {scope})
+
+  expect(scope.getState($convenientValue)).toEqual(false)
+})
