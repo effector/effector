@@ -1,6 +1,6 @@
 import {processArgsToConfig} from './config'
 import {createLinkNode} from './forward'
-import {groupInputs, sample} from './sample'
+import {groupInputs, validateSampleConfig, sample} from './sample'
 import {createEvent} from './createUnit'
 import {calc, filter} from './step'
 import {callStack} from './caller'
@@ -15,6 +15,7 @@ export function guard(...args: any[]) {
     config = source
     source = config.source
   }
+  validateSampleConfig(config, METHOD)
   let {
     filter: filterFn,
     greedy,

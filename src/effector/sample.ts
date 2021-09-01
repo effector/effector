@@ -18,17 +18,24 @@ import {applyTemplate} from './template'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
-function validateSampleConfig(config: any) {
+const fieldErrorMessage = (method: string, field: string) =>
+  method + `: ${field} should be defined`
+
+export function validateSampleConfig(config: any, method: string) {
   let atLeastOneFieldExists = false
   forEach(sampleConfigFields, field => {
     if (field in config) {
-      assert(config[field] != null, `sample: ${field} should be defined`)
+      assert(config[field] != null, fieldErrorMessage(method, field))
       atLeastOneFieldExists = true
     }
   })
   return atLeastOneFieldExists
 }
 export const groupInputs = (source: any, clock: any, method: string) => {
+  assert(
+    !isVoid(source) || !isVoid(clock),
+    fieldErrorMessage(method, 'either source or clock'),
+  )
   if (isVoid(source)) {
     assertNodeSet(clock, method, 'clock')
     if (Array.isArray(clock)) {
@@ -47,7 +54,11 @@ export function sample(...args: any): any {
   let sid
   let batched = true
   /** config case */
-  if (isVoid(clock) && isObject(source) && validateSampleConfig(source)) {
+  if (
+    isVoid(clock) &&
+    isObject(source) &&
+    validateSampleConfig(source, 'sample')
+  ) {
     clock = source.clock
     fn = source.fn
     batched = !source.greedy

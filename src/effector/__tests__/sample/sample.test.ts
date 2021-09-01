@@ -629,3 +629,44 @@ describe('it works without source', () => {
     `)
   })
 })
+
+describe('validation', () => {
+  test('valid case without clock', () => {
+    const source = createEvent<any>()
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      sample({source, target})
+    }).not.toThrow()
+  })
+  test('valid case without source', () => {
+    const clock = createEvent<any>()
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      sample({clock, target})
+    }).not.toThrow()
+  })
+  test('source validation', () => {
+    const target = createEffect((_: any) => {})
+    expect(() => {
+      sample({source: undefined, target})
+    }).toThrowErrorMatchingInlineSnapshot(`"sample: source should be defined"`)
+  })
+  test('clock validation', () => {
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      sample({clock: undefined, target})
+    }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
+  })
+  test('no source no clock', () => {
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      sample({target})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"sample: either source or clock should be defined"`,
+    )
+  })
+})

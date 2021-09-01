@@ -308,3 +308,49 @@ describe('support clock without source', () => {
     `)
   })
 })
+
+describe('validation', () => {
+  test('valid case without clock', () => {
+    const source = createEvent<any>()
+    const filter = createStore(true)
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      guard({source, filter, target})
+    }).not.toThrow()
+  })
+  test('valid case without source', () => {
+    const clock = createEvent<any>()
+    const filter = createStore(true)
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      guard({clock, filter, target})
+    }).not.toThrow()
+  })
+  test('source validation', () => {
+    const filter = createStore(true)
+    const target = createEffect((_: any) => {})
+    expect(() => {
+      guard({source: undefined, filter, target})
+    }).toThrowErrorMatchingInlineSnapshot(`"guard: source should be defined"`)
+  })
+  test('clock validation', () => {
+    const filter = createStore(true)
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      guard({clock: undefined, filter, target})
+    }).toThrowErrorMatchingInlineSnapshot(`"guard: clock should be defined"`)
+  })
+  test('no source no clock', () => {
+    const target = createEffect((_: any) => {})
+
+    expect(() => {
+      //@ts-expect-error
+      guard({target})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"guard: either source or clock should be defined"`,
+    )
+  })
+})
