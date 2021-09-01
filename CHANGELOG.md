@@ -14,6 +14,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Make `onlyChanges: true` a default `serialize` option
 - Fix babel plugin issue with parsing method calls (e.g. in react native)
 - Validate `combine` arguments and throw an error in case of `undefined` and non-store units ([issue #509](https://github.com/effector/effector/issues/509))
+- Throw an error when fork handlers or values got units without sid or with duplicate sid
 - Deprecate `createStoreObject` alias for `combine`
 - Deprecate `effector/fork` module
 - Deprecate `.thru`
