@@ -529,3 +529,229 @@ describe('passing attach async effect to handlers should work', () => {
     expect(argumentHistory(fn)[0]).toEqual({user: 'alice'})
   })
 })
+
+test('edge case', async () => {
+  const enableFeature = createEvent()
+
+  const $isCountryPage = createStore(false, {sid: 'country'})
+  const $isFeatureEnabled = createStore(false, {sid: 'feature'}).on(
+    enableFeature,
+    () => true,
+  )
+
+  const $isWidgetEnabled = combine([$isCountryPage, $isFeatureEnabled], s =>
+    s.every(Boolean),
+  )
+
+  const scope = fork({values: [[$isCountryPage, true]]})
+  await allSettled(enableFeature, {scope})
+
+  expect(scope.getState($isWidgetEnabled)).toBe(true)
+})
+
+describe('scope watch calls', () => {
+  test('without values', async () => {
+    const aWatchFn = jest.fn()
+    const aUpdWatchFn = jest.fn()
+    const mappedWatchFn = jest.fn()
+    const mappedUpdWatchFn = jest.fn()
+    const combinedWatchFn = jest.fn()
+    const combinedUpdWatchFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const src = createStore(0).on(trigger, n => n + 1)
+    const tag = createStore('a')
+    const mapped = src.map(n => n + 1)
+    const combined = combine([src, tag])
+
+    addWatch(src, aWatchFn, aUpdWatchFn)
+    addWatch(mapped, mappedWatchFn, mappedUpdWatchFn)
+    addWatch(combined, combinedWatchFn, combinedUpdWatchFn)
+
+    const scope = fork()
+
+    await allSettled(trigger, {scope})
+    await allSettled(trigger, {scope})
+
+    expect({
+      watch: argumentHistory(aWatchFn),
+      updates: argumentHistory(aUpdWatchFn),
+    }).toEqual({watch: [1, 2], updates: [1, 2]})
+    expect({
+      watch: argumentHistory(mappedWatchFn),
+      updates: argumentHistory(mappedUpdWatchFn),
+    }).toEqual({watch: [2, 3], updates: [2, 3]})
+    expect({
+      watch: argumentHistory(combinedWatchFn),
+      updates: argumentHistory(combinedUpdWatchFn),
+    }).toEqual({
+      watch: [
+        [1, 'a'],
+        [2, 'a'],
+      ],
+      updates: [
+        [1, 'a'],
+        [2, 'a'],
+      ],
+    })
+  })
+  test('with updated values', async () => {
+    const aWatchFn = jest.fn()
+    const aUpdWatchFn = jest.fn()
+    const mappedWatchFn = jest.fn()
+    const mappedUpdWatchFn = jest.fn()
+    const combinedWatchFn = jest.fn()
+    const combinedUpdWatchFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const src = createStore(0).on(trigger, n => n + 1)
+    const tag = createStore('a')
+    const mapped = src.map(n => n + 1)
+    const combined = combine([src, tag])
+
+    addWatch(src, aWatchFn, aUpdWatchFn)
+    addWatch(mapped, mappedWatchFn, mappedUpdWatchFn)
+    addWatch(combined, combinedWatchFn, combinedUpdWatchFn)
+
+    const scope = fork({values: [[src, 1]]})
+
+    await allSettled(trigger, {scope})
+    await allSettled(trigger, {scope})
+
+    expect({
+      watch: argumentHistory(aWatchFn),
+      updates: argumentHistory(aUpdWatchFn),
+    }).toEqual({watch: [2, 3], updates: [2, 3]})
+    expect({
+      watch: argumentHistory(mappedWatchFn),
+      updates: argumentHistory(mappedUpdWatchFn),
+    }).toEqual({watch: [3, 4], updates: [3, 4]})
+    expect({
+      watch: argumentHistory(combinedWatchFn),
+      updates: argumentHistory(combinedUpdWatchFn),
+    }).toEqual({
+      watch: [
+        [2, 'a'],
+        [3, 'a'],
+      ],
+      updates: [
+        [2, 'a'],
+        [3, 'a'],
+      ],
+    })
+  })
+
+  test('with sibling values', async () => {
+    const aWatchFn = jest.fn()
+    const aUpdWatchFn = jest.fn()
+    const mappedWatchFn = jest.fn()
+    const mappedUpdWatchFn = jest.fn()
+    const combinedWatchFn = jest.fn()
+    const combinedUpdWatchFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const src = createStore(0).on(trigger, n => n + 1)
+    const tag = createStore('a')
+    const mapped = src.map(n => n + 1)
+    const combined = combine([src, tag])
+
+    addWatch(src, aWatchFn, aUpdWatchFn)
+    addWatch(mapped, mappedWatchFn, mappedUpdWatchFn)
+    addWatch(combined, combinedWatchFn, combinedUpdWatchFn)
+
+    const scope = fork({values: [[tag, 'b']]})
+
+    await allSettled(trigger, {scope})
+    await allSettled(trigger, {scope})
+
+    expect({
+      watch: argumentHistory(aWatchFn),
+      updates: argumentHistory(aUpdWatchFn),
+    }).toEqual({watch: [1, 2], updates: [1, 2]})
+    expect({
+      watch: argumentHistory(mappedWatchFn),
+      updates: argumentHistory(mappedUpdWatchFn),
+    }).toEqual({watch: [2, 3], updates: [2, 3]})
+    expect({
+      watch: argumentHistory(combinedWatchFn),
+      updates: argumentHistory(combinedUpdWatchFn),
+    }).toEqual({
+      watch: [
+        [1, 'b'],
+        [2, 'b'],
+      ],
+      updates: [
+        [1, 'b'],
+        [2, 'b'],
+      ],
+    })
+  })
+
+  test('with sibling values & nested combine', async () => {
+    const aWatchFn = jest.fn()
+    const aUpdWatchFn = jest.fn()
+    const mappedWatchFn = jest.fn()
+    const mappedUpdWatchFn = jest.fn()
+    const combinedWatchFn = jest.fn()
+    const combinedUpdWatchFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const src = createStore(0).on(trigger, n => n + 1)
+    const tag = createStore('a')
+    const mapped = src.map(n => n + 1)
+    const combinedA = combine([src, tag])
+    const combinedB = combine([tag])
+    const combined = combine(combinedA, combinedB, ([src], [tag]) => [src, tag])
+
+    addWatch(src, aWatchFn, aUpdWatchFn)
+    addWatch(mapped, mappedWatchFn, mappedUpdWatchFn)
+    addWatch(combined, combinedWatchFn, combinedUpdWatchFn)
+
+    const scope = fork({values: [[tag, 'b']]})
+
+    await allSettled(trigger, {scope})
+    await allSettled(trigger, {scope})
+
+    expect({
+      watch: argumentHistory(aWatchFn),
+      updates: argumentHistory(aUpdWatchFn),
+    }).toEqual({watch: [1, 2], updates: [1, 2]})
+    expect({
+      watch: argumentHistory(mappedWatchFn),
+      updates: argumentHistory(mappedUpdWatchFn),
+    }).toEqual({watch: [2, 3], updates: [2, 3]})
+    expect({
+      watch: argumentHistory(combinedWatchFn),
+      updates: argumentHistory(combinedUpdWatchFn),
+    }).toEqual({
+      watch: [
+        [1, 'b'],
+        [2, 'b'],
+      ],
+      updates: [
+        [1, 'b'],
+        [2, 'b'],
+      ],
+    })
+  })
+
+  function addWatch(
+    store: Store<any>,
+    fnA: (value: any) => any,
+    fnB: (value: any) => any,
+  ) {
+    let inited = false
+    store.watch(upd => {
+      if (!inited) {
+        inited = true
+        return
+      }
+      fnA(upd)
+    })
+    store.updates.watch(upd => fnB(upd))
+  }
+})
