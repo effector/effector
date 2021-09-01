@@ -297,8 +297,14 @@ export function createStore<State>(
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
     node: [
+      calc((upd, _, stack) => {
+        if (stack.scope && !stack.scope.reg[plainState.id]) {
+          stack.b = true
+        }
+        return upd
+      }),
       read(plainState),
-      calc((upd, _, {a}) => !isVoid(upd) && upd !== a, true),
+      calc((upd, _, {a, b}) => !isVoid(upd) && (upd !== a || b), true),
       updateFilter && filter({fn: callStackAReg}),
       mov({from: STACK, target: plainState}),
     ],
@@ -328,7 +334,9 @@ const updateStore = (
   fn: Function,
 ) => {
   const storeRef = getStoreState(store)
-  const node = [read(storeRef), compute({fn: caller})]
+  const reader = read(storeRef)
+  if (op === MAP) reader.data.softRead = true
+  const node = [reader, compute({fn: caller})]
   applyTemplate(
     'storeOnMap',
     storeRef,

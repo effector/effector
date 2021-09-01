@@ -95,7 +95,7 @@ export type MovRegisterToStore = MoveCmd<FromRegister & ToStore>
 type MoveCmd<Data> = {
   id: ID
   type: 'mov'
-  data: Data
+  data: Data & {softRead?: boolean}
   order?: {
     priority: BarrierPriorityTag
     barrierID?: number

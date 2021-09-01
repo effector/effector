@@ -104,10 +104,16 @@ const storeCombination = (
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
   const node = [
+    calc((upd, _, stack) => {
+      if (stack.scope && !stack.scope.reg[rawShape.id]) {
+        stack.c = true
+      }
+      return upd
+    }),
     read(rawShape),
     mov({store: isFresh, to: 'b'}),
     calc((upd, {key}, reg) => {
-      if (upd !== reg.a[key]) {
+      if (reg.c || upd !== reg.a[key]) {
         if (needSpread && reg.b) {
           reg.a = clone(reg.a)
         }

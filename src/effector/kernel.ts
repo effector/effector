@@ -29,6 +29,7 @@ export type Stack = {
   value: any
   a: any
   b: any
+  c?: any
   parent: Stack | null
   node: Node
   page: Leaf | null
@@ -344,14 +345,14 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                   if (pageForRef) {
                     reg = pageForRef.reg
                   } else if (hasScopeReg) {
-                    initRefInScope(forkPage!, data.store)
+                    initRefInScope(forkPage!, data.store, false, true, data.softRead)
                     reg = forkPage!.reg
                   } else {
                     reg = undefined //node.reg
                   }
                 } else if (hasScopeReg) {
                   /** StateRef in Scope.reg created only when needed */
-                  initRefInScope(forkPage!, data.store)
+                  initRefInScope(forkPage!, data.store, false, true, data.softRead)
                 } else {
                   // console.error('should not happen')
                   /** StateRef should exists at least in Node itself, but it is not found */
@@ -399,27 +400,35 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       stop = local.fail || skip
     }
     if (!stop) {
+      const finalValue = getValue(stack)
       forEach(node.next, nextNode => {
         pushFirstHeapItem(
           'child',
           page,
           nextNode,
           stack,
-          getValue(stack),
+          finalValue,
           getForkPage(stack),
         )
       })
       const forkPage = getForkPage(stack)
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
-          pushFirstHeapItem('child', page, forkPage.fxCount, stack, 0, forkPage)
+          pushFirstHeapItem(
+            'child',
+            page,
+            forkPage.fxCount,
+            stack,
+            finalValue,
+            forkPage,
+          )
         if (getMeta(node, 'storeChange'))
           pushFirstHeapItem(
             'child',
             page,
             forkPage.storeChange,
             stack,
-            0,
+            finalValue,
             forkPage,
           )
         const additionalLinks = forkPage.additionalLinks[node.id]
@@ -430,7 +439,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               page,
               nextNode,
               stack,
-              getValue(stack),
+              finalValue,
               forkPage,
             )
           })
@@ -451,34 +460,37 @@ export const initRefInScope = (
   },
   sourceRef: StateRef,
   isGetState?: boolean,
+  isKernelCall?: boolean,
+  softRead?: boolean,
 ) => {
   const refsMap = scope.reg
+  const sid = sourceRef.sid
   if (refsMap[sourceRef.id]) return
   const ref: StateRef = {
     id: sourceRef.id,
     current: sourceRef.current,
   }
-  if (sourceRef.sid) scope.sidIdMap[sourceRef.sid] = sourceRef.id
-  if (sourceRef.sid && sourceRef.sid in scope.sidValuesMap) {
-    ref.current = scope.sidValuesMap[sourceRef.sid]
+  if (sid) scope.sidIdMap[sid] = sourceRef.id
+  if (sid && sid in scope.sidValuesMap) {
+    ref.current = scope.sidValuesMap[sid]
   } else {
-    const noInit = !isGetState && sourceRef.noInit
-    if (!noInit && sourceRef.before) {
+    if (sourceRef.before && !softRead) {
       let isFresh = false
+      const needToAssign = isGetState || !sourceRef.noInit || isKernelCall
       forEach(sourceRef.before, cmd => {
         switch (cmd.type) {
           case MAP: {
             const from = cmd.from
             if (from || cmd.fn) {
-              if (from) initRefInScope(scope, from, isGetState)
+              if (from) initRefInScope(scope, from, isGetState, isKernelCall)
               const value = from && refsMap[from.id].current
-              ref.current = cmd.fn ? cmd.fn(value) : value
+              if (needToAssign) {
+                ref.current = cmd.fn ? cmd.fn(value) : value
+              }
             }
             break
           }
           case 'field': {
-            initRefInScope(scope, cmd.from, isGetState)
-            const from = refsMap[cmd.from.id]
             if (!isFresh) {
               isFresh = true
               if (Array.isArray(ref.current)) {
@@ -487,7 +499,11 @@ export const initRefInScope = (
                 ref.current = {...ref.current}
               }
             }
-            ref.current[cmd.field] = refsMap[from.id].current
+            initRefInScope(scope, cmd.from, isGetState, isKernelCall)
+            if (needToAssign) {
+              const from = refsMap[cmd.from.id]
+              ref.current[cmd.field] = refsMap[from.id].current
+            }
             break
           }
           // case 'closure':

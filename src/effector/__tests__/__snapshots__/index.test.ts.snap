@@ -12,6 +12,7 @@ exports[`graphite: show bar 1`] = `
       next: [
         Node {
           seq: [
+            compute: Function,
             mov: store a,
             filter: Function,
             mov: stack store
@@ -26,6 +27,7 @@ exports[`graphite: show bar 1`] = `
               next: [
                 Node {
                   seq: [
+                    compute: Function,
                     mov: store a,
                     filter: Function,
                     mov: stack store
@@ -62,6 +64,7 @@ exports[`graphite: show bar 2`] = `
       next: [
         Node {
           seq: [
+            compute: Function,
             mov: store a,
             filter: Function,
             mov: stack store
@@ -76,6 +79,7 @@ exports[`graphite: show bar 2`] = `
               next: [
                 Node {
                   seq: [
+                    compute: Function,
                     mov: store a,
                     filter: Function,
                     mov: stack store
@@ -114,6 +118,7 @@ exports[`graphite: show foo 1`] = `
               next: [
                 Node {
                   seq: [
+                    compute: Function,
                     mov: store a,
                     filter: Function,
                     mov: stack store
@@ -128,6 +133,7 @@ exports[`graphite: show foo 1`] = `
                       next: [
                         Node {
                           seq: [
+                            compute: Function,
                             mov: store a,
                             filter: Function,
                             mov: stack store
@@ -153,6 +159,7 @@ exports[`graphite: show foo 1`] = `
 exports[`graphite: show store1 1`] = `
 "Node {
   seq: [
+    compute: Function,
     mov: store a,
     filter: Function,
     mov: stack store
@@ -167,6 +174,7 @@ exports[`graphite: show store1 1`] = `
       next: [
         Node {
           seq: [
+            compute: Function,
             mov: store a,
             filter: Function,
             mov: stack store
@@ -184,6 +192,7 @@ exports[`graphite: show store1 1`] = `
 exports[`graphite: show store2 1`] = `
 "Node {
   seq: [
+    compute: Function,
     mov: store a,
     filter: Function,
     mov: stack store
@@ -206,6 +215,7 @@ exports[`showcase: event foo 1`] = `
       next: [
         Node {
           seq: [
+            compute: Function,
             mov: store a,
             filter: Function,
             mov: stack store
@@ -214,6 +224,7 @@ exports[`showcase: event foo 1`] = `
             Node {seq: [], next: []},
             Node {
               seq: [
+                compute: Function,
                 mov: store a,
                 mov: store b,
                 filter: Function,
@@ -225,6 +236,7 @@ exports[`showcase: event foo 1`] = `
               next: [
                 Node {
                   seq: [
+                    compute: Function,
                     mov: store a,
                     filter: Function,
                     mov: stack store
@@ -239,6 +251,7 @@ exports[`showcase: event foo 1`] = `
                       next: [
                         Node {
                           seq: [
+                            compute: Function,
                             mov: store a,
                             filter: Function,
                             mov: stack store
@@ -270,6 +283,7 @@ exports[`showcase: event foo 1`] = `
 exports[`showcase: mapped 1`] = `
 "Node {
   seq: [
+    compute: Function,
     mov: store a,
     filter: Function,
     mov: stack store
@@ -289,6 +303,7 @@ exports[`showcase: mapped 1`] = `
 exports[`showcase: store a 1`] = `
 "Node {
   seq: [
+    compute: Function,
     mov: store a,
     filter: Function,
     mov: stack store
@@ -297,6 +312,7 @@ exports[`showcase: store a 1`] = `
     Node {seq: [], next: []},
     Node {
       seq: [
+        compute: Function,
         mov: store a,
         mov: store b,
         filter: Function,
@@ -308,6 +324,7 @@ exports[`showcase: store a 1`] = `
       next: [
         Node {
           seq: [
+            compute: Function,
             mov: store a,
             filter: Function,
             mov: stack store
@@ -322,6 +339,7 @@ exports[`showcase: store a 1`] = `
               next: [
                 Node {
                   seq: [
+                    compute: Function,
                     mov: store a,
                     filter: Function,
                     mov: stack store
