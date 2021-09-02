@@ -230,6 +230,19 @@ const eventB = eventA.filterMap(
 
 #### Примеры {#filterMap-examples}
 
+##### Использование с методами JavaScript возвращающими undefined
+
+```jsx
+const listReceived = createEvent<string[]>()
+const effectorFound = listReceived.filterMap(list => list.find(name => name === 'effector'))
+
+effectorFound.watch(name => console.info("found", name))
+listReceived(["redux", "effector", "mobx"]) // found effector
+listReceived(["redux", "mobx"])
+```
+
+[Запустить пример](https://share.effector.dev/ARDanMAM)
+
 ##### Использование nullable react ref с filterMap {#filterMap-nullable-ref-example}
 
 :::note
