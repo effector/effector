@@ -155,6 +155,8 @@ export function createEvent<Payload = any>(
     map: (fn: any) => deriveEvent(event, MAP, fn, [compute({fn: callStack})]),
     filter: (fn: any) =>
       deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [filter({fn: callStack})]),
+    except: (fn: any) => 
+      deriveEvent(event, FILTER, fn, [filter({fn: callStack})]),
     filterMap: (fn: any) =>
       deriveEvent(event, 'filterMap', fn, [
         compute({fn: callStack}),

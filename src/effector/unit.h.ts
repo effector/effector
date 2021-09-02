@@ -20,6 +20,7 @@ export interface Event<E> extends Unit {
   map<T>(fn: (_: E) => T): Event<T>
   filter(config: {fn(_: E): boolean}): Event<E>
   filter<T>(fn: (_: E) => T | void): Event<T>
+  except<T>(fn: (_: E) => boolean): Event<T>
   filterMap<T>(fn: (_: E) => T | void): Event<T>
   prepend<Before>(fn: (_: Before) => E): Event<Before>
   subscribe(subscriber: Subscriber<E>): Subscription

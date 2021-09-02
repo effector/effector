@@ -114,11 +114,15 @@ export interface Event<Payload> extends Unit<Payload> {
   (this: Payload extends void ? void : `Error: Expected 1 argument, but got 0`, payload?: Payload): void
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
+  /**
+   * @deprecated use except instead
+   */
   filter<T extends Payload>(config: {
     fn(payload: Payload): payload is T
   }): EventAsReturnType<T>
   filter(config: {fn(payload: Payload): boolean}): EventAsReturnType<Payload>
   filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
+  except(fn: (payload: Payload) => boolean): EventAsReturnType<Payload>
   prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
   /**
