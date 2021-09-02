@@ -12,6 +12,7 @@ description: Пакеты и шаблоны экосистемы эффекто�
 
 - [patronum](https://github.com/effector/patronum) - effector utility library delivering modularity and convenience.
 - [effector-logger](https://github.com/effector/logger) - Simple logger with stores inspector.
+- [eslint-plugin-effector](https://github.com/effector/eslint-plugin-effector) - Помогает придерживаться лучших практик в проекте.
 - [effector-reeffect](https://github.com/yumauri/effector-reeffect) - Concurrent effects for effector.
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) - Module for effector that sync stores with localStorage.
 - [effector-storage](https://github.com/yumauri/effector-storage) - Another module for effector to sync stores with localStorage/sessionStorage.
