@@ -189,6 +189,7 @@ And you repeat this until you complete the task. Now think about it in the effec
 5. Pack - store
 
 You may see that we united `filter()` and `map()` methods, the reason for creating was an impossibility to event filtering.
+The method is useful with JavaScript APIs those returns `undefined`.
 
 #### Formulae
 
