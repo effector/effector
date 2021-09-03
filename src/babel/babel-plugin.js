@@ -2,6 +2,7 @@ module.exports = function (babel, options = {}) {
   const {
     addNames,
     addLoc,
+    debugSids,
     filename: enableFileName,
     stores,
     events,
@@ -38,7 +39,7 @@ module.exports = function (babel, options = {}) {
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
   )
-  const smallConfig = {addLoc, addNames}
+  const smallConfig = {addLoc, addNames, debugSids}
   const {types: t, template} = babel
   let factoryTemplate
   const creatorsList = [
@@ -368,6 +369,7 @@ module.exports = function (babel, options = {}) {
               resultName,
               loc.line,
               loc.column,
+              debugSids,
             )
             const factoryConfig = {
               SID: JSON.stringify(sid),
@@ -526,6 +528,7 @@ const normalizeOptions = options => {
       ),
       factories: (options.factories || defaults.factories).map(stripExtension),
       addLoc: Boolean(options.addLoc),
+      debugSids: Boolean(options.debugSids),
       addNames:
         typeof options.addNames !== 'undefined'
           ? Boolean(options.addNames)
@@ -586,7 +589,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
-function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, addNames}) {
+function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, addNames, debugSids}) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
@@ -613,6 +616,7 @@ function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, addNames}) {
         displayName,
         loc.line,
         loc.column,
+        debugSids,
       ),
     )
 
@@ -638,7 +642,7 @@ function setStoreNameAfter(
   state,
   nameNodeId,
   t,
-  {addLoc, addNames},
+  {addLoc, addNames, debugSids},
   fillFirstArg,
   checkBindingName,
 ) {
@@ -671,6 +675,7 @@ function setStoreNameAfter(
         displayName,
         loc.line,
         loc.column,
+        debugSids,
       ),
     )
 
@@ -705,7 +710,7 @@ function setConfigForConfMethod(
   state,
   nameNodeId,
   t,
-  {addLoc, addNames},
+  {addLoc, addNames, debugSids},
   singleArgument,
   checkBindingName,
 ) {
@@ -738,6 +743,7 @@ function setConfigForConfMethod(
         displayName,
         loc.line,
         loc.column,
+        debugSids,
       ),
     )
 
@@ -760,7 +766,7 @@ function setConfigForConfMethod(
   }
 }
 
-function setEventNameAfter(path, state, nameNodeId, t, {addLoc, addNames}) {
+function setEventNameAfter(path, state, nameNodeId, t, {addLoc, addNames, debugSids}) {
   const displayName = nameNodeId ? nameNodeId.name : ''
 
   let args
@@ -792,6 +798,7 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, addNames}) {
         displayName,
         loc.line,
         loc.column,
+        debugSids,
       ),
     )
 
@@ -833,9 +840,10 @@ function stripRoot(babelRoot, fileName, omitFirstSlash) {
 /**
  * "foo src/index.js [12,30]"
  */
-function generateStableID(babelRoot, fileName, varName, line, column) {
+function generateStableID(babelRoot, fileName, varName, line, column, debugSids) {
   const normalizedPath = stripRoot(babelRoot, fileName, false)
-  return hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`)
+  const appendix = debugSids ? `:${normalizedPath}:${varName}` : ''
+  return hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`) + appendix
 }
 function hashCode(s) {
   let h = 0

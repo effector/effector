@@ -99,6 +99,12 @@ getUsers.use(
 
 Добавляет местоположение к вызовам методов. Используется инструментами для разработчиков, например, [effector-logger](https://github.com/effector/logger)
 
+### debugSids
+
+> `debugSids: boolean`
+
+Добавляет в sid путь к файлу и имя переменной где объявлен unit. Очень полезно при отладке SSR.
+
 ### reactSsr
 
 > `reactSsr: boolean`

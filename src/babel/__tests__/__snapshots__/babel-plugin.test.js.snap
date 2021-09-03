@@ -1285,6 +1285,315 @@ const f = () =>
 "
 `;
 
+exports[`babel-plugin should debug sids with options 1`] = `
+"import {
+  createDomain,
+  createEffect,
+  createEvent,
+  createStore,
+  restore,
+} from 'effector'
+{
+  const domain = createDomain({
+    name: 'domain',
+    sid: '-umn61j:/src/babel/__tests__/fixtures/debug-sids.js:domain',
+  })
+  const a = domain.store('bar', {
+    name: 'a',
+    sid: '-p40n10:/src/babel/__tests__/fixtures/debug-sids.js:a',
+  })
+  const b = domain.store('h', {
+    and: {
+      option: 'test',
+      ['na' + 'me']: 'LOL',
+    },
+    name: 'b',
+    sid: '-he6yc6:/src/babel/__tests__/fixtures/debug-sids.js:b',
+  })
+  const c = domain.store('h', {
+    and: {
+      name: 'test',
+    },
+    name: 'c',
+    sid: '-9od9nc:/src/babel/__tests__/fixtures/debug-sids.js:c',
+  }) //$off
+
+  const d = domain.store('h', {
+    and: null,
+    name: 'd',
+    sid: '-1hhykb:/src/babel/__tests__/fixtures/debug-sids.js:d',
+  }) //$off
+
+  const e = domain.store('h', {
+    and: 4234,
+    name: 'e',
+    sid: '6pdciq:/src/babel/__tests__/fixtures/debug-sids.js:e',
+  })
+  const f = domain.store('h', {
+    and: {},
+    name: 'f',
+    sid: 'ef717k:/src/babel/__tests__/fixtures/debug-sids.js:f',
+  })
+  const aAlias = domain.createStore('bar', {
+    name: 'aAlias',
+    sid: '-dri1et:/src/babel/__tests__/fixtures/debug-sids.js:aAlias',
+  })
+  const bAlias = domain.createStore('h', {
+    and: {
+      option: 'test',
+      ['na' + 'me']: 'LOL',
+    },
+    name: 'bAlias',
+    sid: '-8njjnp:/src/babel/__tests__/fixtures/debug-sids.js:bAlias',
+  })
+  const cAlias = domain.createStore('h', {
+    and: {
+      name: 'testAlias',
+    },
+    name: 'cAlias',
+    sid: '-3jl1wl:/src/babel/__tests__/fixtures/debug-sids.js:cAlias',
+  }) //$off
+
+  const dAlias = domain.createStore('h', {
+    and: null,
+    name: 'dAlias',
+    sid: '21f28q:/src/babel/__tests__/fixtures/debug-sids.js:dAlias',
+  }) //$off
+
+  const eAlias = domain.createStore('h', {
+    and: 4234,
+    name: 'eAlias',
+    sid: '7mf6e1:/src/babel/__tests__/fixtures/debug-sids.js:eAlias',
+  })
+  const fAlias = domain.createStore('h', {
+    and: {},
+    name: 'fAlias',
+    sid: 'cqdo55:/src/babel/__tests__/fixtures/debug-sids.js:fAlias',
+  })
+  const {sid} = domain.createStore(null, {
+    sid: 't2a2nn:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {shortName} = domain.createStore(null, {
+    and: {
+      name: 'foo',
+    },
+    sid: 'tjbpp3:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  domain.createStore(null, {
+    sid: '-r418i0:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+  domain.createStore(null, {
+    sid: '-r2xnba:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+}
+{
+  const foo = createEffect({
+    name: 'foo',
+    sid: '-4xbjof:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+  })
+  const bar = createEffect('hello', {
+    name: 'bar',
+    sid: '-2jqlf1:/src/babel/__tests__/fixtures/debug-sids.js:bar',
+  })
+  const baz = createEffect(
+    {
+      handler() {
+        return 0
+      },
+    },
+    {
+      name: 'baz',
+      sid: '-f5kimu:/src/babel/__tests__/fixtures/debug-sids.js:baz',
+    },
+  )
+  const quux = createEffect('nice', {
+    and: {
+      handler() {
+        return 0
+      },
+    },
+    name: 'quux',
+    sid: '-o01o3h:/src/babel/__tests__/fixtures/debug-sids.js:quux',
+  })
+
+  const fa = () =>
+    createEffect({
+      name: 'fa',
+      sid: '-f4wwm2:/src/babel/__tests__/fixtures/debug-sids.js:fa',
+    })
+
+  const {sid} = createEffect({
+    sid: '-18yher:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {name} = createEffect('foo', {
+    sid: '-rwuzp:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {shortName} = createEffect(
+    {
+      name: 'foo',
+    },
+    {
+      sid: '-av7z4:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    },
+  )
+  createEffect({
+    sid: '-q3qtc6:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+  createEffect({
+    sid: '-q2n85g:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+}
+{
+  const foo = createStore('foo', {
+    name: 'foo',
+    sid: '-yrihcm:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+  })
+  const a = createStore('h', {
+    name: 'a',
+    sid: '-ma3nhs:/src/babel/__tests__/fixtures/debug-sids.js:a',
+  })
+  const b = createStore('h', {
+    and: {},
+    name: 'b',
+    sid: '-ek9ysy:/src/babel/__tests__/fixtures/debug-sids.js:b',
+  }) //$off
+
+  const c = createStore('h', {
+    and: 23020,
+    name: 'c',
+    sid: '-6denpx:/src/babel/__tests__/fixtures/debug-sids.js:c',
+  })
+  const config = {
+    option: 0,
+  }
+  const dod = createStore(null, {
+    and: config,
+    name: 'dod',
+    sid: 'ts6uvl:/src/babel/__tests__/fixtures/debug-sids.js:dod',
+  })
+
+  const f = a =>
+    createStore(a, {
+      name: 'f',
+      sid: 'h940v3:/src/babel/__tests__/fixtures/debug-sids.js:f',
+    })
+
+  const {sid} = createStore(null, {
+    sid: 's3u31b:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {shortName} = createStore(null, {
+    and: {
+      name: 'foo',
+    },
+    sid: 'skvq2r:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  createStore(null, {
+    sid: '-p67d55:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+  createStore(null, {
+    sid: '-p53ryf:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+}
+{
+  const foo = createEvent({
+    name: 'foo',
+    sid: '-5vrjar:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+  })
+  const bar = createEvent('hello', {
+    name: 'bar',
+    sid: '-3i6l1d:/src/babel/__tests__/fixtures/debug-sids.js:bar',
+  })
+  const baz = createEvent(
+    {
+      name: 'nice',
+    },
+    {
+      name: 'baz',
+      sid: '-g40i96:/src/babel/__tests__/fixtures/debug-sids.js:baz',
+    },
+  )
+
+  const f = () =>
+    createEvent({
+      name: 'f',
+      sid: '-r9h70a:/src/babel/__tests__/fixtures/debug-sids.js:f',
+    })
+
+  const {sid} = createEvent({
+    sid: '-qcp750:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {name} = createEvent('foo', {
+    sid: '-pvnkpy:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {shortName} = createEvent(
+    {
+      name: 'foo',
+    },
+    {
+      sid: '-pelxpd:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    },
+  )
+  createEvent({
+    sid: '-omers5:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+  createEvent({
+    sid: '-o9ri4u:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+}
+{
+  const foo = createEvent({
+    name: 'foo',
+    sid: 'b5uuw9:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+  })
+  const a = restore(foo, null, {
+    name: 'a',
+    sid: 'nn9or3:/src/babel/__tests__/fixtures/debug-sids.js:a',
+  })
+  const b = restore(foo, null, {
+    and: {},
+    name: 'b',
+    sid: 'vd3dfx:/src/babel/__tests__/fixtures/debug-sids.js:b',
+  }) //$off
+
+  const c = restore(foo, null, {
+    and: 23020,
+    name: 'c',
+    sid: '-vh5dg6:/src/babel/__tests__/fixtures/debug-sids.js:c',
+  })
+  const config = {
+    option: 0,
+  }
+  const dod = restore(foo, null, {
+    and: config,
+    name: 'dod',
+    sid: '-vclm8o:/src/babel/__tests__/fixtures/debug-sids.js:dod',
+  })
+
+  const f = a =>
+    restore(foo, null, {
+      name: 'f',
+      sid: '-m02imo:/src/babel/__tests__/fixtures/debug-sids.js:f',
+    })
+
+  const {sid} = restore(foo, null, {
+    sid: '-m6nww7:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  const {shortName} = restore(foo, null, {
+    and: {
+      name: 'bar',
+    },
+    sid: '-lpm9ur:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+  })
+  restore(foo, null, {
+    sid: '-hqr1z7:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+  restore(foo, null, {
+    sid: '-he3sbw:/src/babel/__tests__/fixtures/debug-sids.js:',
+  })
+}
+"
+`;
+
 exports[`babel-plugin should factories 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/factories.js'
 import {withFactory as _withFactory2} from 'effector'

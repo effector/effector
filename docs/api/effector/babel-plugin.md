@@ -162,6 +162,12 @@ Add names to units factories calls. By default has value `true`. Useful for mini
 
 Add location to methods' calls. Used by devtools, for example [effector-logger](https://github.com/effector/logger)
 
+### debugSids
+
+> `debugSids: boolean`
+
+Add path of a file and a variable name whether a unit was defined to a sid. Useful for debugging SSR.
+
 ### reactSsr
 
 > `reactSsr: boolean`
