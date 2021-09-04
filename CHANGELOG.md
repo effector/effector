@@ -2,6 +2,13 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.1.0
+
+- Added option `debugSids` to `effector/babel-plugin`
+
+The option allows adding file path and variable name to a sid for each unit definition.
+It allows to easily debug serialized scope using SSR.
+
 ## effector 22.0.0
 
 - Add support for plain functions to attach: `attach({source, async effect(source, params) {}})`
