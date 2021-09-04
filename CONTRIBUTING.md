@@ -74,7 +74,7 @@ Before opening a feature request, please read the [exists ideas discussions](htt
 
 ### Publishing
 
-Change version in [packages.config.js](https://github.com/effector/effector/blob/master/tools/builder/packages.config.js#L50), run `yarn build` and commit changes to `master` branch
+Change version in [packages.config.js](https://github.com/effector/effector/blob/master/tools/builder/packages.config.ts#L48), run `yarn build` and commit changes to `master` branch
 
 ## Submitting Changes
 

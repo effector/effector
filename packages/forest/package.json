@@ -23,7 +23,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^22.0.2"
+    "effector": "^22.1.0"
   },
   "keywords": [
     "state management",
