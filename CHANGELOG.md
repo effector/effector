@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.1.1
+
+- Fix data races that cause obsolete states to appear in the `.on` and `.reset` methods
+
 ## effector 22.1.0
 
 - Added option `debugSids` to `effector/babel-plugin`
