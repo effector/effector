@@ -39,7 +39,7 @@ import {
   getMeta,
 } from './getter'
 import {assert, deprecate} from './throw'
-import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK} from './tag'
+import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
@@ -334,7 +334,11 @@ const updateStore = (
   fn: Function,
 ) => {
   const storeRef = getStoreState(store)
-  const reader = read(storeRef)
+  const reader = mov({
+    store: storeRef,
+    to: REG_A,
+    priority: 'read',
+  })
   if (op === MAP) reader.data.softRead = true
   const node = [reader, compute({fn: caller})]
   applyTemplate(

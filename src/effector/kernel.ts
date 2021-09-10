@@ -8,9 +8,9 @@ import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
 
 /** Names of priority groups */
-type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
+type PriorityTag = 'child' | 'pure' | 'read' | 'barrier' | 'sampler' | 'effect'
 
-export type BarrierPriorityTag = 'barrier' | 'sampler' | 'effect'
+export type BarrierPriorityTag = 'read' | 'barrier' | 'sampler' | 'effect'
 
 /**
  * Position in the current branch,
@@ -90,7 +90,7 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
 /** queue buckets for each PriorityType */
 const queue: QueueBucket[] = []
 let ix = 0
-while (ix < 5) {
+while (ix < 6) {
   /**
    * although "sampler" and "barrier" are using heap instead of linked list,
    * their buckets are still useful: they maintains size of heap queue
@@ -100,14 +100,14 @@ while (ix < 5) {
 }
 
 const deleteMin = () => {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const list = queue[i]
     if (list.size > 0) {
       /**
-       * second bucket is for "barrier" PriorityType (used in combine)
-       * and third bucket is for "sampler" PriorityType (used in sample and guard)
+       * bucket 3 is for "barrier" PriorityType (used in combine)
+       * bucket 4 is for "sampler" PriorityType (used in sample and guard)
        */
-      if (i === 2 || i === 3) {
+      if (i === 3 || i === 4) {
         list.size -= 1
         const value = heap!.v
         heap = merge(heap!.l, heap!.r)
@@ -163,10 +163,10 @@ const pushHeap = (
     r: null,
   }
   /**
-   * second bucket is for "barrier" PriorityType (used in combine)
-   * and third bucket is for "sampler" PriorityType (used in sample and guard)
+   * bucket 3 is for "barrier" PriorityType (used in combine)
+   * bucket 4 is for "sampler" PriorityType (used in sample and guard)
    */
-  if (priority === 2 || priority === 3) {
+  if (priority === 3 || priority === 4) {
     heap = merge(heap, item)
   } else {
     if (bucket.size === 0) {
@@ -185,12 +185,14 @@ const getPriority = (t: PriorityTag) => {
       return 0
     case 'pure':
       return 1
-    case BARRIER:
+    case 'read':
       return 2
-    case SAMPLER:
+    case BARRIER:
       return 3
-    case EFFECT:
+    case SAMPLER:
       return 4
+    case EFFECT:
+      return 5
     default:
       return -1
   }

@@ -57,16 +57,20 @@ export function createEffect<Payload, Done>(
         (() => assert(false, `no handler used in ${instance.getType()}`)),
     },
     node: [
-      calc((upd, scope_, stack) => {
-        const scope: {handlerId: string; handler: Function} = scope_ as any
-        let handler = scope.handler
-        if (getForkPage(stack)) {
-          const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
-          if (handler_) handler = handler_
-        }
-        upd.handler = handler
-        return upd
-      }),
+      calc(
+        (upd, scope_, stack) => {
+          const scope: {handlerId: string; handler: Function} = scope_ as any
+          let handler = scope.handler
+          if (getForkPage(stack)) {
+            const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
+            if (handler_) handler = handler_
+          }
+          upd.handler = handler
+          return upd
+        },
+        false,
+        true,
+      ),
       calc(
         ({params, req, handler, args = [params]}, _, stack) => {
           const onResolve = onSettled(params, req, true, anyway, stack)
