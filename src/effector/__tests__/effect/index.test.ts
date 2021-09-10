@@ -285,8 +285,51 @@ describe('execution order', () => {
         "handler",
         "finally",
         "done",
-        "inFlight 0",
         "doneData",
+        "inFlight 0",
+        "pending false",
+        "promise resolver",
+      ]
+    `)
+  })
+  it('should run watchers and promise resolvers in order (async)', async () => {
+    const fn = jest.fn()
+    const fx = createEffect({
+      async handler() {
+        fn('handler')
+      },
+    })
+    fx.watch(() => {
+      fn('start')
+    })
+    fx.done.watch(() => {
+      fn('done')
+    })
+    fx.doneData.watch(() => {
+      fn('doneData')
+    })
+    fx.finally.watch(() => {
+      fn('finally')
+    })
+    fx.inFlight.updates.watch(n => {
+      fn(`inFlight ${n}`)
+    })
+    fx.pending.updates.watch(pending => {
+      fn(`pending ${pending}`)
+    })
+    await fx().then(() => {
+      fn('promise resolver')
+    })
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "start",
+        "inFlight 1",
+        "pending true",
+        "handler",
+        "finally",
+        "done",
+        "doneData",
+        "inFlight 0",
         "pending false",
         "promise resolver",
       ]

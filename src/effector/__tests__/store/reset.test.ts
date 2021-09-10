@@ -176,7 +176,7 @@ test('late forwarding', () => {
   reset() // reset
 
   expect(A.getState()).toMatchInlineSnapshot(`"A"`)
-  expect(B.getState()).toMatchInlineSnapshot(`"A"`) // should be B
+  expect(B.getState()).toMatchInlineSnapshot(`"B"`)
 
   reset() // reset again
 

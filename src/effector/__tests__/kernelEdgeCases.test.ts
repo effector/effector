@@ -1,4 +1,11 @@
-import {createEvent, createStore, sample, step, createNode} from 'effector'
+import {
+  createEvent,
+  createStore,
+  sample,
+  step,
+  createNode,
+  createEffect,
+} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 it('should call watcher as many times, as many store updates occured', () => {
@@ -59,7 +66,7 @@ it('should avoid data races', () => {
 
   routePush('v 1')
   routePush('v 2')
-  expect(argumentHistory(fn)).toEqual([-2, -1, 0])
+  expect(argumentHistory(fn)).toEqual([-2, 0, 1])
 })
 
 it('should not erase sibling branches', () => {
@@ -111,6 +118,33 @@ test('watch behavior should be consistent', () => {
       "watch A",
       "watch B",
       "watch C",
+    ]
+  `)
+})
+
+test('stale reads', async () => {
+  const fn = jest.fn()
+  const fx = createEffect((tag: string) => `${tag}/end`)
+  const x = createStore([] as (string | boolean)[])
+    .on(fx, (words, x) => [...words, x])
+    .on(fx.pending, (words, x) => [...words, x])
+    .on(fx.doneData, (words, x) => [...words, x])
+
+  x.watch(upd => fn(upd.join(', ')))
+
+  await fx('a')
+  await fx('b')
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "",
+      "a",
+      "a, true",
+      "a, true, a/end",
+      "a, true, a/end, false",
+      "a, true, a/end, false, b",
+      "a, true, a/end, false, b, true",
+      "a, true, a/end, false, b, true, b/end",
+      "a, true, a/end, false, b, true, b/end, false",
     ]
   `)
 })
