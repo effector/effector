@@ -64,15 +64,17 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
   if (!b) return a
 
   let ret
-  const isSameType = a.v.type === b.v.type
   if (
     /**
      * if both nodes has the same PriorityType
      * and first node is created after second one
      */
-    (isSameType && a.v.id > b.v.id) ||
-    /** if first node is "sampler" and second node is "barrier" */
-    (!isSameType && a.v.type === SAMPLER)
+    (a.v.type === b.v.type && a.v.id > b.v.id) ||
+    /**
+     * greater priority mean bucket of first node is executed later
+     * e.g  a: "sampler", b: "barrier"
+     */
+    getPriority(a.v.type) > getPriority(b.v.type)
   ) {
     ret = a
     a = b
