@@ -103,7 +103,7 @@ effector 21.6.0
 
 - Type: `string[]`
 
-Accepts an array of module names which exports treat as custom factories therefore each function call provides unique prefix for [sids](./babel-plugin.md#sid) of units inside them. Used to SSR([Server Side Rendering](https://developers.google.com/web/updates/2019/02/rendering-on-the-web)) and it's not required for client-only application.
+Accepts an array of module names which exports treat as custom factories therefore each function call provides unique prefix for [sids](./babel-plugin.md#sid) of units inside them. Used to SSR([Server Side Rendering](./Scope.md)) and it's not required for client-only application.
 
 - Factories can have any amount of arguments.
 - Factories can create any amount of units.
@@ -157,7 +157,7 @@ effector 21.5.0
 - Type: `boolean`
 - Default: `false`
 
-Replace imports from `effector-react` to `effector-react/ssr`. Useful for building both server-side and client-side builds from the same codebase.
+Replace imports from `effector-react` to `effector-react/scope`. Useful for building both server-side and client-side builds from the same codebase.
 
 ### addNames
 
