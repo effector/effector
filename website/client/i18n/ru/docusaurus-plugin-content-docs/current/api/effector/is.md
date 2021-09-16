@@ -9,7 +9,7 @@ title: is
 
 ## `is.store(value)`
 
-Проверяет, является ли переданное значение [_стором_](Store.md)
+Проверяет, является ли переданное значение [_стором_](./Store.md)
 
 **Возвращает**
 
@@ -57,7 +57,7 @@ is.store(null)
 
 ## `is.event(value)`
 
-Проверяет, является ли переданное значение [_событием_](Event.md)
+Проверяет, является ли переданное значение [_событием_](./Event.md)
 
 **Возвращает**
 
@@ -105,7 +105,7 @@ is.event(null)
 
 ## `is.effect(value)`
 
-Проверяет, является ли переданное значение [_эффектом_](Effect.md)
+Проверяет, является ли переданное значение [_эффектом_](./Effect.md)
 
 **Возвращает**
 
@@ -144,7 +144,7 @@ is.effect(null)
 
 ## `is.domain(value)`
 
-Проверяет, является ли переданное значение [_доменом_](Domain.md)
+Проверяет, является ли переданное значение [_доменом_](./Domain.md)
 
 **Возвращает**
 
@@ -181,9 +181,50 @@ is.domain(null)
 
 [Запустить пример](https://share.effector.dev/Iea0gmfD)
 
+## `is.scope(value)`
+
+:::note
+Добавлен в effector 22.0.0
+:::
+
+Проверяет, является ли переданное значение [_скоупом_](./Scope.md)
+
+**Возвращает**
+
+boolean
+
+```js
+import {fork} from 'effector'
+
+const store = createStore(null)
+const event = createEvent()
+const fx = createEffect()
+const scope = fork()
+
+is.scope(scope)
+// => true
+
+is.scope(store)
+// => false
+
+is.scope(event)
+// => false
+
+is.scope(fx)
+// => false
+
+is.scope(createDomain())
+// => false
+
+is.scope(null)
+// => false
+```
+
+[Запустить пример](https://share.effector.dev/hF0krFUK)
+
 ## `is.unit(value)`
 
-Проверяет, является ли переданное значение [юнитом](../../glossary.md#unit): [стором](./Store.md), [эвентом](./Event.md), [эффектом](./Effect.md) или [доменом](./Domain.md)
+Проверяет, является ли переданное значение [юнитом](../../glossary.md#unit): [стором](./Store.md), [эвентом](./Event.md), [эффектом](./Effect.md), [доменом](./Domain.md) или [скоупом](./Scope.md)
 
 **Возвращает**
 
@@ -196,11 +237,16 @@ import {
   createEvent,
   createEffect,
   createDomain,
+  fork,
 } from 'effector'
 
 const store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+const scope = fork()
+
+is.unit(scope)
+// => true
 
 is.unit(store)
 // => true
@@ -227,4 +273,4 @@ is.unit(null)
 // => false
 ```
 
-[Запустить пример](https://share.effector.dev/1A3dObyT)
+[Запустить пример](https://share.effector.dev/iOpDvweB)

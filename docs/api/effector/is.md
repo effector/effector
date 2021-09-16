@@ -10,7 +10,7 @@ Namespace for unit validators
 
 ## `is.store(value)`
 
-Checks if given value is [_store_](Store.md)
+Checks if given value is [_store_](./Store.md)
 
 **Returns**
 
@@ -58,7 +58,7 @@ is.store(null)
 
 ## `is.event(value)`
 
-Checks if given value is [_event_](Event.md)
+Checks if given value is [_event_](./Event.md)
 
 **Returns**
 
@@ -106,7 +106,7 @@ is.event(null)
 
 ## `is.effect(value)`
 
-Checks if given value is [_effect_](Effect.md)
+Checks if given value is [_effect_](./Effect.md)
 
 **Returns**
 
@@ -145,7 +145,7 @@ is.effect(null)
 
 ## `is.domain(value)`
 
-Checks if given value is [_domain_](Domain.md)
+Checks if given value is [_domain_](./Domain.md)
 
 **Returns**
 
@@ -182,9 +182,50 @@ is.domain(null)
 
 [Try it](https://share.effector.dev/Iea0gmfD)
 
+## `is.scope(value)`
+
+:::note since
+effector 22.0.0
+:::
+
+Checks if given value is [_scope_](./Scope.md)
+
+**Returns**
+
+boolean
+
+```js
+import {fork} from 'effector'
+
+const store = createStore(null)
+const event = createEvent()
+const fx = createEffect()
+const scope = fork()
+
+is.scope(scope)
+// => true
+
+is.scope(store)
+// => false
+
+is.scope(event)
+// => false
+
+is.scope(fx)
+// => false
+
+is.scope(createDomain())
+// => false
+
+is.scope(null)
+// => false
+```
+
+[Try it](https://share.effector.dev/hF0krFUK)
+
 ## `is.unit(value)`
 
-Checks if given value is [unit](../../glossary.md#unit): [store](./Store.md), [event](./Event.md), [effect](./Effect.md) or [domain](./Domain.md)
+Checks if given value is [unit](../../glossary.md#unit): [store](./Store.md), [event](./Event.md), [effect](./Effect.md), [domain](./Domain.md) or [scope](./Scope.md)
 
 **Returns**
 
@@ -197,11 +238,16 @@ import {
   createEvent,
   createEffect,
   createDomain,
+  fork,
 } from 'effector'
 
 const store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+const scope = fork()
+
+is.unit(scope)
+// => true
 
 is.unit(store)
 // => true
@@ -228,4 +274,4 @@ is.unit(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/1A3dObyT)
+[Try it](https://share.effector.dev/iOpDvweB)
