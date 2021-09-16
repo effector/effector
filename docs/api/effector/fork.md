@@ -52,7 +52,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       ```
 
       :::note
-      That kind of objects are created by [serialize](./serialize.md), in application code **array of tuples is preferred**
+      Such objects are created by [serialize](./serialize.md), in application code **array of tuples is preferred**
       :::
 
 3. `handlers`: Option to provide handlers for effects
