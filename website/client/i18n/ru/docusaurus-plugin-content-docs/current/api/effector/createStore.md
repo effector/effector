@@ -13,6 +13,7 @@ createStore<T>(defaultState: T): Store<T>
 createStore<T>(defaultState: T, config: {
   name?: string
   updateFilter?: (update: T, current: T) => boolean
+  serialize?: 'ignore'
 }): Store<T>
 ```
 
@@ -35,12 +36,19 @@ createStore<T>(defaultState: T, config: {
 
      Если возвращается _false_, то обновления не будет
 
+   - **`serialize`**: `'ignore'`
+
+     Опция, запрещающая сериализацию стора при вызовах [serialize](./serialize.md)
+
 ### Возвращает {#createStore-return}
 
 Новый [стор](./Store.md)
 
 :::note
-Опция `updateFilter` добавлена в effector 21.8.0
+
+- Опция `updateFilter` добавлена в effector 21.8.0
+- Опция `serialize` добавлена в effector 22.0.0
+
 :::
 
 ## Пример
@@ -55,11 +63,11 @@ const $todos = createStore([])
   .on(addTodo, (state, todo) => [...state, todo])
   .reset(clearTodos)
 
-const $selectedTodos = $todos.map(todos => {
-  return todos.filter(todo => !!todo.selected)
+const $selectedTodos = $todos.map((todos) => {
+  return todos.filter((todo) => !!todo.selected)
 })
 
-$todos.watch(state => {
+$todos.watch((state) => {
   console.log('todos', state)
 })
 ```
