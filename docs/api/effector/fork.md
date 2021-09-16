@@ -3,51 +3,114 @@ id: fork
 title: fork
 ---
 
-:::note since
-effector 21.0.0
-:::
+Creates an isolated instance of application.
+Primary purposes of this method are SSR and testing.
+
+## Formulae {#fork-formulae}
 
 ```ts
-fork(domain: Domain, { values?, handlers? }?): Scope
+fork(): Scope
+fork(options: { values?, handlers? }): Scope
+fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
-Creates a fully isolated instance of application.
-The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completely independents copy of all logic defined within domain.
+### Arguments {#fork-args}
 
-**Arguments**
+1. `domain` ([_Domain_](Domain.md)): Optional domain to fork
+2. `values`: Option to provide initial states for stores
 
-1. `domain` ([_Domain_](Domain.md)): Original domain to clone, required
-2. `values` Optional object with either a mapping from store sids ([_babel-plugin_](babel-plugin.md) is required to allow `sid` generation) to store values or a Map where keys are [_Store_](Store.md) objects and values contains initial store value
-3. `handlers` Optional object with either a mapping from effect sids ([_babel-plugin_](babel-plugin.md) is required to allow `sid` generation) to effect handlers or a Map where keys are [_Effect_](Effect.md) objects and values contains handlers
+   Can be used in three ways:
 
-**Returns**
+   1. Array of tuples with stores and values:
 
-[_Scope_](./Scope.md) object containing information about cloned domain
+      ```ts
+      fork({
+        values: [
+          [$user, 'alice'],
+          [$age, 21],
+        ],
+      })
+      ```
 
-### Example
+   2. Map with stores and values:
 
-Create two instances with independent counter state
+      ```ts
+      fork({
+        values: new Map().set($user, 'alice').set($age, 21),
+      })
+      ```
+
+   3. Plain object: `{[sid: string]: value}`
+
+      ```ts
+      fork({
+        values: {
+          [$user.sid]: 'alice',
+          [$age.sid]: 21,
+        },
+      })
+      ```
+
+      :::note
+      That kind of objects are created by [serialize](./serialize.md), in application code **array of tuples is preferred**
+      :::
+
+3. `handlers`: Option to provide handlers for effects
+
+   Can be used in two ways:
+
+   1. Array of tuples with effects and handlers:
+
+      ```ts
+      fork({
+        handlers: [
+          [getMessageFx, params => ({id: 0, text: 'message'})],
+          [getUserFx, async params => ({name: 'alice', age: 21})],
+        ],
+      })
+      ```
+
+   2. Map with effects and handlers:
+
+      ```ts
+      fork({
+        handlers: new Map()
+          .set(getMessageFx, params => ({id: 0, text: 'message'}))
+          .set(getUserFx, async params => ({name: 'alice', age: 21})),
+      })
+      ```
+
+### Returns {#fork-return}
+
+[_Scope_](./Scope.md)
+
+:::note
+[_babel-plugin_](./babel-plugin.md) is required for using this method
+:::
+
+:::note
+
+- `fork()` introduced in `effector 22.0.0`
+- `fork(domain)` introduced in `effector 21.0.0`
+- support for array of tuples in `values` and `handlers` introduced in `effector 22.0.0`
+
+:::
+
+## Examples {#fork-examples}
+
+### Create two instances with independent counter state
 
 ```js
-import {
-  createStore,
-  createEvent,
-  createDomain,
-  forward,
-  fork,
-  allSettled,
-} from 'effector'
+import {createStore, createEvent, forward, fork, allSettled} from 'effector'
 
-const domain = createDomain()
-const inc = domain.createEvent()
-const dec = domain.createEvent()
-const $counter = domain
-  .createStore(0)
+const inc = createEvent()
+const dec = createEvent()
+const $counter = createStore(0)
   .on(inc, value => value + 1)
   .on(dec, value => value - 1)
 
-const scopeA = fork(domain)
-const scopeB = fork(domain)
+const scopeA = fork()
+const scopeB = fork()
 
 await allSettled(inc, {scope: scopeA})
 await allSettled(dec, {scope: scopeB})
@@ -57,59 +120,41 @@ console.log(scopeA.getState($counter)) // => 1
 console.log(scopeB.getState($counter)) // => -1
 ```
 
-[Try it](https://share.effector.dev/0grlV3bA)
+[Try it](https://share.effector.dev/dBSC59h8)
 
-### Support Map in values
+### Set initial state for sttore and change handler for effect
 
-:::note since
-effector 20.11.0
-:::
+This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled
 
 ```ts
-fork(domain: Domain, { values?: Map<Store, any> , handlers? }?): Scope
-```
+import {createEffect, createStore, fork, allSettled} from 'effector'
 
-### Support change effects
-
-:::note since
-effector 20.16.0
-:::
-Support for handlers to fork to change effect handlers for forked scope `(useful for testing)`
-
-```js
-//app
-const app = createDomain()
-const fetchFriends = app.createEffect<{limit: number}, string[]>({
-  async handler({limit}) {
+const fetchFriendsFx = createEffect<{limit: number}, string[]>(
+  async ({limit}) => {
     /* some client-side data fetching */
     return []
   },
-})
-const user = app.createStore('guest')
-const friends = app
-  .createStore([])
-  .on(fetchFriends.doneData, (_, result) => result)
+)
+const $user = createStore('guest')
+const $friends = createStore([]).on(
+  fetchFriendsFx.doneData,
+  (_, result) => result,
+)
 
-/*
-  test to ensure that friends value is populated
-  after fetchFriends call
-*/
-const testScope = fork(app, {
-  values: {
-    [user.sid]: 'alice',
-  },
-  handlers: {
-    [fetchFriends.sid]: () => ['bob', 'carol'],
-  },
+const testScope = fork({
+  values: [[$user, 'alice']],
+  handlers: [[fetchFriendsFx, () => ['bob', 'carol']]],
 })
 
 /* trigger computations in scope and await all called effects */
-await allSettled(fetchFriends, {
+await allSettled(fetchFriendsFx, {
   scope: testScope,
   params: {limit: 10},
 })
 
 /* check value of store in scope */
-console.log(testScope.getState(friends))
+console.log(testScope.getState($friends))
 // => ['bob', 'carol']
 ```
+
+[Try it](https://share.effector.dev/gnNbGZuu)
