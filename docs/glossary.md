@@ -47,7 +47,7 @@ It is useful for logging or other side effects.
 ## Unit
 
 Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
-There are four units types: [store], [event], [effect] and [domain]
+There are five units types: [store], [event], [effect], [domain] and [scope]
 
 ## Common unit
 
@@ -151,3 +151,4 @@ Effector provides a wide range of features to minimize the need to remove subscr
 [store]: ./api/effector/Store.md
 [event]: ./api/effector/Event.md
 [domain]: ./api/effector/Domain.md
+[scope]: ./api/effector/Scope.md

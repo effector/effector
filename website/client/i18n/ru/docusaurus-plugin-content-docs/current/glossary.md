@@ -37,7 +37,7 @@ _Domain_ это способ группировки и применения ма
 ## Unit {#unit}
 
 Тип данных, используемый для описания бизнес-логики приложений. Большинство методов эффектора имеют дело с обработкой юнитов.
-Существует четыре типа юнитов: [store], [event], [effect] и [domain]
+Существует пять типов юнитов: [store], [event], [effect], [domain] и [scope]
 
 ## Common unit {#common-unit}
 
@@ -54,11 +54,11 @@ import {createStore, createEvent} from 'effector'
 
 const login = createStore('guest')
 
-const loginSize = login.map(login => login.length)
+const loginSize = login.map((login) => login.length)
 
 const submitLoginSize = createEvent()
 
-loginSize.watch(size => {
+loginSize.watch((size) => {
   submitLoginSize(size)
 })
 ```
@@ -76,7 +76,7 @@ import {createStore, createEvent, forward} from 'effector'
 
 const login = createStore('guest')
 
-const loginSize = login.map(login => login.length)
+const loginSize = login.map((login) => login.length)
 
 const submitLoginSize = createEvent()
 
@@ -98,7 +98,7 @@ import {createStore, createEvent, forward} from 'effector'
 const submitLoginSize = createEvent()
 
 const login = createStore('guest')
-const loginSize = login.map(login => {
+const loginSize = login.map((login) => {
   // лучше переместить этот вызов в watch или эффект
   submitLoginSize(login.length)
   return login.length
@@ -141,3 +141,4 @@ type Subscription = {
 [store]: ./api/effector/Store.md
 [event]: ./api/effector/Event.md
 [domain]: ./api/effector/Domain.md
+[scope]: ./api/effector/Scope.md
