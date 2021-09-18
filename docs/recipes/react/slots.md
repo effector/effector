@@ -79,7 +79,7 @@ export const createSlotFactory = <Id>({
 
 const SLOTS = {
   FOO: 'foo',
-};
+} as const;
 
 const {api, createSlot} = createSlotFactory({slots: SLOTS});
 
