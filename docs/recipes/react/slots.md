@@ -65,6 +65,16 @@ export const createSlotFactory = <Id>({
       fn: ({component}) => component,
       target: slotApi.set,
     })
+    
+    const Slot = (props: P = {} as P) => {
+      const Component = useStoreMap({
+        store: $slot,
+        fn: ({ component }) => component,
+        keys: [],
+      });
+
+      return <Component {...props} />;
+    }
 
     return {
       $slot,
@@ -83,17 +93,7 @@ const SLOTS = {
 
 const {api, createSlot} = createSlotFactory({slots: SLOTS});
 
-const {$slot} = createSlot({id: SLOTS.FOO});
-
-const FooSlot = () => {
-  const Component = useStoreMap({
-    store: $slot,
-    fn: ({ component }) => component,
-    keys: [],
-  });
-
-  return <Component />;
-};
+const {Slot: FooSlot} = createSlot({id: SLOTS.FOO});
 
 const ComponentWithSlot = () => (
   <>
