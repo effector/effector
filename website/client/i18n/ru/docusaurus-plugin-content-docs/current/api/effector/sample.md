@@ -22,7 +22,7 @@ sample({source?, clock?, fn?, target?}): target
 
 ## Иллюстрация принципа работы
 
-![Иллюстрация принципа работы](https://s7.gifyu.com/images/ezgif.com-video-to-gif855ab4c69b9b103c.gif)
+![Иллюстрация принципа работы](https://s9.gifyu.com/images/sample-visualization.gif)
 
 ## `sample({clock?, source?, fn?, target?, greedy?})`
 
