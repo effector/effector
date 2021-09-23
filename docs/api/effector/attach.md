@@ -146,6 +146,31 @@ Create effect which will trigger given one with values from `source` stores
 
 [_Effect_](Effect.md): New effect
 
+## attach with plain function
+
+:::note since
+effector 22.0.0
+:::
+
+Create effect which will call async function with values from `source` stores
+
+```ts
+let result: Effect<Params, Result>
+result = attach({
+  source: Store<Source>,
+  async effect(source: Source, params: Params): Result
+})
+```
+
+**Arguments**
+
+- `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+
+**Returns**
+
+[_Effect_](Effect.md): New effect
+
 ## `attach({effect, mapParams})`
 
 Create effect which will trigger given one by transforming params by `mapParams` function
