@@ -84,6 +84,7 @@ For additional information, guides and api reference visit [our documentation si
 - [Powerful and fast state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b)
 - [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 - [Effector's beginner guide](https://dev.to/yanlobat/effector-s-beginner-guide-3jl4)
+- [The best part of Effector](https://dev.to/effector/the-best-part-of-effector-4c27)
 
 ## Community
 
