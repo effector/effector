@@ -276,6 +276,18 @@ const users = [
     url: 'foxford.svg',
     alt: 'Фоксфорд',
   },
+  {
+    url: 'codengage.png',
+    alt: 'Codengage',
+  },
+  {
+    url: 'lunatask.png',
+    alt: 'Lunatask',
+  },
+  {
+    url: 'semrush.png',
+    alt: 'Semrush',
+  },
 ]
 
 function CompaniesUsingEffector() {
