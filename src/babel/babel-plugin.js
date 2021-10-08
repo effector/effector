@@ -185,7 +185,6 @@ module.exports = function (babel, options = {}) {
       }
     })
 
-    programPath.scope.registerBinding('module', found)
     return found.node.local.name
   }
   const importVisitor = {
