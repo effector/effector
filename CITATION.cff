@@ -1,10 +1,11 @@
 authors: 
-  - family-names: Bias
-    given-names: Zero
+  - given-names: Zero Bias
 cff-version: "1.2.0"
 date-released: 2018-01-21
 license: MIT
+abstract: "Effector is an effective multi-store state manager for Javascript apps, that allows you to manage data in complex applications"
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/effector/effector/"
 title: effector
 version: "22.1.2"
+url: "https://effector.dev"
