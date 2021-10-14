@@ -1,0 +1,10 @@
+authors: 
+  - family-names: Bias
+    given-names: Zero
+cff-version: "1.2.0"
+date-released: 2018-01-21
+license: MIT
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/effector/effector/"
+title: effector
+version: "22.1.2"
