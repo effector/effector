@@ -461,3 +461,17 @@ test('support plain values as well as stores', () => {
     "
   `)
 })
+
+test("#531 large unions doesn't brake combine", () => {
+  type Currency = 'usd' | 'eur' | 'cny' | 'uah' | 'byn' | 'thb' | 'rub' | 'azn' | 'kzt' | 'kgs' | 'uzs' | 'tzs' | 'kes' | 'zar' | 'ron' | 'mdl' | 'ils' | 'inr' | 'pln' | 'chf' | 'gbp'
+  const initial = 'usd' as Currency
+  const $currency = createStore(initial)
+  const $result = combine({
+    currency: $currency,
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
