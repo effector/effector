@@ -46,9 +46,9 @@ In such case, we need to tell react about our dependencies and pass keys explici
 3. `fn` (_Function_): Render function which will be called for every item in list
 4. `getKey` (_(value) => React.Key_): Optional function to compute key for every item of list
 
-::note
+:::note
 `getKey` option introduced in `effector-react@21.3.0`
-::
+:::
 
 ## Examples
 
