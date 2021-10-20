@@ -1351,7 +1351,7 @@ export function guard<
           GetGuardClock<C, F>,
           GetGuardSource<S, F>
         >
-      >,
+    >,
   name?: string,
   greedy?: boolean
 }): T
@@ -1445,9 +1445,6 @@ type CombineState<State> = State[keyof State] extends Store<any>
       | (undefined extends State[K]
         ? Store<Exclude<State[K], undefined>>
         : Store<State[K]>)
-      // probably not needed
-      // as CombineState isn't dealing with implicit generics anymore
-      | UnionToStoresUnion<Exclude<State[K], undefined>>
 }
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
