@@ -462,16 +462,78 @@ test('support plain values as well as stores', () => {
   `)
 })
 
-test("#531 large unions doesn't brake combine", () => {
-  type Currency = 'usd' | 'eur' | 'cny' | 'uah' | 'byn' | 'thb' | 'rub' | 'azn' | 'kzt' | 'kgs' | 'uzs' | 'tzs' | 'kes' | 'zar' | 'ron' | 'mdl' | 'ils' | 'inr' | 'pln' | 'chf' | 'gbp'
-  const initial = 'usd' as Currency
-  const $currency = createStore(initial)
-  const $result = combine({
-    currency: $currency,
+describe("#531 large unions doesn't brake combine", () => {
+  test('infinite type', () => {
+    type Currency =
+      | 'usd'
+      | 'eur'
+      | 'cny'
+      | 'uah'
+      | 'byn'
+      | 'thb'
+      | 'rub'
+      | 'azn'
+      | 'kzt'
+      | 'kgs'
+      | 'uzs'
+      | 'tzs'
+      | 'kes'
+      | 'zar'
+      | 'ron'
+      | 'mdl'
+      | 'ils'
+      | 'inr'
+      | 'pln'
+      | 'chf'
+      | 'gbp'
+    const initial = 'usd' as Currency
+    const $currency = createStore(initial)
+    const $result = combine({
+      currency: $currency,
+    })
+    const $_: Store<{currency: Currency}> = $result
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
   })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
+  test('no any', () => {
+    type Currency =
+      | 'usd'
+      | 'eur'
+      | 'cny'
+      | 'uah'
+      | 'byn'
+      | 'thb'
+      | 'rub'
+      | 'azn'
+      | 'kzt'
+      | 'kgs'
+      | 'uzs'
+      | 'tzs'
+      | 'kes'
+      | 'zar'
+      | 'ron'
+      | 'mdl'
+      | 'ils'
+      | 'inr'
+      | 'pln'
+      | 'chf'
+      | 'gbp'
+    const initial = 'usd' as Currency
+    const $currency = createStore(initial)
+    const $result = combine({
+      currency: $currency,
+    })
+    //@ts-expect-error
+    const $_: Store<{currency: number}> = $result
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'Store<{ currency: Currency; }>' is not assignable to type 'Store<{ currency: number; }>'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '{ currency: Currency; }' is not assignable to type '{ currency: number; }'.
+      "
+    `)
+  })
 })
