@@ -184,3 +184,598 @@ test('edge case with target (should pass)', () => {
     "
   `)
 })
+
+describe('array cases', () => {
+  describe('matcher store', () => {
+    /** type: source == cases, arrays only */
+
+    test('case name: match == cases, type: source == cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source == cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\">'.
+          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\">' is not assignable to type '(p: { foo: 1; }) => \\"a\\" | \\"b\\"'.
+              Type 'Store<\\"a\\">' provides no match for the signature '(p: { foo: 1; }): \\"a\\" | \\"b\\"'.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
+              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
+        "
+      `)
+    })
+
+    /** type: source == cases, array case + unit case */
+
+    test('case name: match == cases, type: source == cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        "
+      `)
+    })
+    test('case name: match > cases, type: source == cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b' | 'c'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\" | \\"c\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        "
+      `)
+    })
+    test('case name: match < cases, type: source == cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      const c = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        "
+      `)
+    })
+
+    /** type: source > cases, arrays only */
+
+    test('case name: match == cases, type: source > cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source > cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source > cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const $case = createStore<'a'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { ...; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\">'.
+          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\">' is not assignable to type '(p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"'.
+              Type 'Store<\\"a\\">' provides no match for the signature '(p: { foo: 1; bar: number; }): \\"a\\" | \\"b\\"'.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
+              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
+        "
+      `)
+    })
+
+    /** type: source > cases, array case + unit case */
+
+    test('case name: match == cases, type: source > cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        "
+      `)
+    })
+    test('case name: match > cases, type: source > cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const $case = createStore<'a' | 'b' | 'c'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\" | \\"c\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        "
+      `)
+    })
+    test('case name: match < cases, type: source > cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      const c = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        "
+      `)
+    })
+
+    /** type: source < cases, arrays only */
+
+    test('case name: match == cases, type: source < cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+    test('case name: match > cases, type: source < cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1; bar: number}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; b: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; bar: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        "
+      `)
+    })
+    test('case name: match < cases, type: source < cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a'>('a')
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 1; bar: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        "
+      `)
+    })
+
+    /** type: source < cases, array case + unit case */
+
+    test('case name: match == cases, type: source < cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+    test('case name: match > cases, type: source < cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b' | 'c'>('a')
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\" | \\"c\\">'.
+        "
+      `)
+    })
+    test('case name: match < cases, type: source < cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      const c = createEvent<{foo: 1}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+
+    /** type: source != cases, arrays only */
+
+    test('case name: match == cases, type: source != cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+    test('case name: match > cases, type: source != cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; b: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        "
+      `)
+    })
+    test('case name: match < cases, type: source != cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a'>('a')
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
+            Type 'Event<{ foo: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        "
+      `)
+    })
+
+    /** type: source != cases, array case + unit case */
+
+    test('case name: match == cases, type: source != cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+    test('case name: match > cases, type: source != cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b' | 'c'>('a')
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\" | \\"c\\">'.
+        "
+      `)
+    })
+    test('case name: match < cases, type: source != cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      const c = createEvent<{foo: 2}>()
+      split({
+        source,
+        //@ts-expect-error
+        match: $case,
+        cases: {
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
+              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+  })
+  test('matcher store case mismatch (should fail)', () => {
+    const source: Event<number> = createEvent()
+    const caseStore = createStore<'a' | 'c'>('a')
+    const firstTarget: Event<number> = createEvent()
+    const secondTarget: Event<number> = createEvent()
+    const defaultarget: Event<number> = createEvent()
+    //@ts-expect-error
+    split({
+      source,
+      match: caseStore,
+      cases: {
+        a: [firstTarget],
+        b: [secondTarget],
+        __: [defaultarget],
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
+          Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
+        Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
+          Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
+        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"c\\">; cases: Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
+          Type '{ a: [Event<number>]; b: Event<number>[]; __: [Event<number>]; }' is not assignable to type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
+            Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
+      "
+    `)
+  })
+})
