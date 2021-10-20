@@ -84,7 +84,7 @@ test('matcher store case mismatch (should fail)', () => {
     No overload matches this call.
       Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
         Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
-          Index signature is missing in type 'Store<\\"a\\" | \\"c\\">'.
+          Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"c\\">'.
       Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: Event<number>; b: Event<number>; __: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
         Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
           Type 'Store<\\"a\\" | \\"c\\">' provides no match for the signature '(p: number): \\"a\\" | \\"b\\" | \\"__\\"'.
@@ -136,7 +136,7 @@ test('matcher function case mismatch (should fail)', () => {
     No overload matches this call.
       Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
         Type '(x: number) => \\"a\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
-          Index signature is missing in type '(x: number) => \\"a\\" | \\"c\\"'.
+          Index signature for type 'string' is missing in type '(x: number) => \\"a\\" | \\"c\\"'.
       Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"c\\"; cases: Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
         Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
           Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
