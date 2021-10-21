@@ -266,7 +266,6 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b,
         },
@@ -288,7 +287,6 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b,
         },
@@ -405,7 +403,6 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b,
         },
@@ -427,7 +424,6 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b,
         },
