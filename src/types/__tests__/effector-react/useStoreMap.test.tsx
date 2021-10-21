@@ -96,8 +96,9 @@ describe('useStoreMap', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type '[number, keyof User]' is not assignable to type '[number, number]'.
-          Type 'string' is not assignable to type 'number'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
             Type 'string' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         Type 'unknown' is not assignable to type 'ReactNode'.
           Type 'unknown' is not assignable to type 'ReactPortal'.
         "
