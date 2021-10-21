@@ -230,7 +230,17 @@ test('call event without params (should fail)', () => {
     "
   `)
 })
-test('call event without params (never)', () => {
+test('call event without params (unknown) (should pass)', () => {
+  const event = createEvent<unknown>()
+  event()
+  event(3)
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+test('call event without params (never) (should fail)', () => {
   // Should never be called
   const event = createEvent<never>()
   //@ts-expect-error
