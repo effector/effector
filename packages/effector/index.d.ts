@@ -111,7 +111,7 @@ type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
 
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
-  (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
+   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
   filter<T extends Payload>(config: {
@@ -649,6 +649,26 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 }
 
 export function createDomain(domainName?: string): Domain
+
+type WhichTypeKind =
+  | 'never'
+  | 'any'
+  | 'unknown'
+  | 'void'
+  | 'undefined'
+  | 'value'
+type NotType<T extends WhichTypeKind> = Exclude<WhichTypeKind, T>
+type WhichType<T> = [T] extends [never]
+  ? 'never'
+  : [unknown] extends [T]
+  ? [0] extends [1 & T]
+    ? 'any'
+    : 'unknown'
+  : [T] extends [void]
+  ? [void] extends [T]
+    ? 'void'
+    : 'undefined'
+  : 'value'
 
 type AnyClock = Unit<any> | Tuple<Unit<any>>
 
