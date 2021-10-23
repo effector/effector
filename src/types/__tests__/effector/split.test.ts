@@ -1293,6 +1293,579 @@ describe('array cases', () => {
       `)
     })
   })
+  describe('matcher function', () => {
+    /** type: source == cases, arrays only */
+
+    test('case name: match == cases, type: source == cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source == cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: {
+          a: src => true,
+        },
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
+          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type '{ a: (src: { foo: 1; }) => true; }' is not assignable to type '(p: { foo: 1; }) => \\"a\\" | \\"b\\"'.
+              Object literal may only specify known properties, and 'a' does not exist in type '(p: { foo: 1; }) => \\"a\\" | \\"b\\"'.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type '{ a: (src: { foo: 1; }) => true; }' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+
+    /** type: source == cases, array case + unit case */
+
+    test('case name: match == cases, type: source == cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source == cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+          c: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source == cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      const c = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        "
+      `)
+    })
+
+    /** type: source > cases, arrays only */
+
+    test('case name: match == cases, type: source > cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source > cases, arrays only (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const a = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source > cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: {
+          a: src => true,
+        },
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
+          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type '{ a: (src: { foo: 1; bar: number; }) => true; }' is not assignable to type '(p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"'.
+              Object literal may only specify known properties, and 'a' does not exist in type '(p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"'.
+          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
+            Type '{ a: (src: { foo: 1; bar: number; }) => true; }' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
+              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<\\"a\\" | \\"b\\">'.
+        "
+      `)
+    })
+
+    /** type: source > cases, array case + unit case */
+
+    test('case name: match == cases, type: source > cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source > cases, array case + unit case (should pass)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+          c: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source > cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1; bar: number}>()
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      const c = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        "
+      `)
+    })
+
+    /** type: source < cases, arrays only */
+
+    test('case name: match == cases, type: source < cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source < cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1; bar: number}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source < cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+        },
+        cases: {
+          a: [a],
+          //@ts-expect-error
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; bar: number; }>]; b: Event<{ foo: 1; bar: string; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
+        "
+      `)
+    })
+
+    /** type: source < cases, array case + unit case */
+
+    test('case name: match == cases, type: source < cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source < cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+          c: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source < cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 1; bar: number}>()
+      const b = createEvent<{foo: 1; bar: string}>()
+      const c = createEvent<{foo: 1}>()
+      //@ts-expect-error
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 1; bar: number; }>]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        "
+      `)
+    })
+
+    /** type: source != cases, arrays only */
+
+    test('case name: match == cases, type: source != cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source != cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source != cases, arrays only (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+        },
+        cases: {
+          a: [a],
+          //@ts-expect-error
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 2; }>]; b: Event<{ foo: 2; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
+        "
+      `)
+    })
+
+    /** type: source != cases, array case + unit case */
+
+    test('case name: match == cases, type: source != cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match > cases, type: source != cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+          c: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('case name: match < cases, type: source != cases, array case + unit case (should fail)', () => {
+      const source = createEvent<{foo: 1}>()
+      const a = createEvent<{foo: 2}>()
+      const b = createEvent<{foo: 2}>()
+      const c = createEvent<{foo: 2}>()
+      split({
+        source,
+        match: {
+          a: src => true,
+          b: src => true,
+        },
+        cases: {
+          a: [a],
+          b,
+          //@ts-expect-error
+          c,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
+            Type '{ a: [Event<{ foo: 2; }>]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        "
+      `)
+    })
+  })
   test('case store case mismatch (should fail)', () => {
     const source: Event<number> = createEvent()
     const caseStore = createStore<'a' | 'c'>('a')
@@ -1348,6 +1921,39 @@ describe('array cases', () => {
             Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
         Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\" | \\"__\\">; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
           Type '(src: number) => \\"a\\" | \\"c\\"' is missing the following properties from type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">': kind, __
+      "
+    `)
+  })
+  test('matcher function case mismatch (should fail)', () => {
+    const source: Event<number> = createEvent()
+    const firstTarget: Event<number> = createEvent()
+    const secondTarget: Event<number> = createEvent()
+    const defaultarget: Event<number> = createEvent()
+    //@ts-expect-error
+    split({
+      source,
+      match: {
+        a: src => true,
+        c: src => true,
+      },
+      cases: {
+        a: [firstTarget],
+        b: [secondTarget],
+        __: [defaultarget],
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        Overload 1 of 4, '(config: { source: Unit<number>; match: { a: (src: number) => true; c: (src: number) => true; }; cases: Partial<{ a: Target; c: Target; } & { __: Target; }>; }): void', gave the following error.
+          Type '{ a: [Event<number>]; b: Event<number>[]; __: [Event<number>]; }' is not assignable to type 'Partial<{ a: Target; c: Target; } & { __: Target; }>'.
+            Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; c: Target; } & { __: Target; }>'.
+        Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
+          Type '{ a: (src: number) => true; c: (src: number) => true; }' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
+            Object literal may only specify known properties, and 'a' does not exist in type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
+        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\" | \\"__\\">; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
+          Type '{ a: (src: number) => true; c: (src: number) => true; }' is not assignable to type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">'.
+            Object literal may only specify known properties, and 'a' does not exist in type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">'.
       "
     `)
   })
