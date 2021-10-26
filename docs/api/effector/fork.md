@@ -122,7 +122,7 @@ console.log(scopeB.getState($counter)) // => -1
 
 [Try it](https://share.effector.dev/dBSC59h8)
 
-### Set initial state for sttore and change handler for effect
+### Set initial state for store and change handler for effect
 
 This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled
 
