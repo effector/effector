@@ -236,3 +236,33 @@ const foo = createInputField('-', {
 
 */
 ```
+
+## Bundlers
+
+### Vite + React (SSR)
+
+To use with `effector/plugin-babel`, you have to following next steps:
+
+1. Install `effector/babel-plugin` package.
+2. Install `@vitejs/plugin-react` package.
+3. `vite.js.config` should be follows:
+
+```js
+// vite.config.js
+import {defineConfig} from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: ['effector/babel-plugin'],
+        // Use .babelrc files
+        babelrc: true,
+        // Use babel.config.js files
+        configFile: true,
+      },
+    }),
+  ],
+})
+```

@@ -44,7 +44,7 @@ const sidebar = {
         'api/effector/fromObservable',
         {
           type: 'category',
-          label: 'Fork api',
+          label: 'Fork',
           items: [
             'api/effector/scope',
             'api/effector/fork',
@@ -82,12 +82,17 @@ const sidebar = {
         },
         {
           type: 'category',
-          label: 'Gate API',
+          label: 'Gate',
           items: [
             'api/effector-react/gate',
             'api/effector-react/createGate',
             'api/effector-react/useGate',
           ],
+        },
+        {
+          type: 'category',
+          label: 'SSR',
+          items: ['api/effector-react/useEvent'],
         },
         {
           type: 'category',
@@ -97,11 +102,6 @@ const sidebar = {
             'api/effector-react/createStoreConsumer',
             'api/effector-react/connect',
           ],
-        },
-        {
-          type: 'category',
-          label: 'effector-react/ssr api',
-          items: ['api/effector-react/useEvent'],
         },
       ],
     },
@@ -114,7 +114,7 @@ const sidebar = {
         'api/effector-vue/component-options',
         {
           type: 'category',
-          label: 'Gate API',
+          label: 'Gate',
           items: [
             'api/effector-vue/gate',
             'api/effector-vue/createGate',
