@@ -16,7 +16,7 @@ it('infer type by given predicate (should pass)', () => {
   `)
 })
 
-test('case stores / case functions (should pass)', () => {
+test('matcher stores / matcher functions (should pass)', () => {
   const source: Event<number | string> = createEvent()
   const firstBool = createStore(true)
   const firstTarget: Event<number | string> = createEvent()
@@ -41,7 +41,7 @@ test('case stores / case functions (should pass)', () => {
   `)
 })
 
-test('matcher store (should pass)', () => {
+test('case store (should pass)', () => {
   const source: Event<number> = createEvent()
   const caseStore = createStore<'a' | 'b'>('a')
   const firstTarget: Event<number> = createEvent()
@@ -63,14 +63,14 @@ test('matcher store (should pass)', () => {
   `)
 })
 
-test('matcher store case mismatch (should fail)', () => {
+test('case store case mismatch (should fail)', () => {
   const source: Event<number> = createEvent()
   const caseStore = createStore<'a' | 'c'>('a')
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
-  //@ts-expect-error
   split({
+    //@ts-expect-error
     source,
     match: caseStore,
     cases: {
@@ -95,7 +95,7 @@ test('matcher store case mismatch (should fail)', () => {
   `)
 })
 
-test('matcher function (should pass)', () => {
+test('case function (should pass)', () => {
   const source: Event<number> = createEvent()
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
@@ -116,13 +116,13 @@ test('matcher function (should pass)', () => {
   `)
 })
 
-test('matcher function case mismatch (should fail)', () => {
+test('case function case mismatch (should fail)', () => {
   const source: Event<number> = createEvent()
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
-  //@ts-expect-error
   split({
+    //@ts-expect-error
     source,
     match: x => (x > 0 ? 'a' : 'c'),
     cases: {
@@ -185,6 +185,214 @@ test('edge case with target (should pass)', () => {
   `)
 })
 
+describe('any to void', () => {
+  test('void only (should pass)', () => {
+    const source = createEvent<number>()
+    const $case = createStore<'a' | 'b'>('a')
+    const aVoid = createEvent()
+    split({
+      source,
+      match: $case,
+      cases: {
+        a: [aVoid],
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('non-void in same case (should pass)', () => {
+    const source = createEvent<number>()
+    const $case = createStore<'a' | 'b'>('a')
+    const aVoid = createEvent()
+    const aNonVoid = createEvent<number>()
+    split({
+      source,
+      match: $case,
+      cases: {
+        a: [aNonVoid, aVoid],
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('incorrect non-void in same case (should fail)', () => {
+    const source = createEvent<number>()
+    const $case = createStore<'a' | 'b'>('a')
+    const aVoid = createEvent()
+    const aNonVoid = createEvent<string>()
+    split({
+      //@ts-expect-error
+      source,
+      match: $case,
+      cases: {
+        a: [aNonVoid, aVoid],
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [\\"incompatible unit in target\\", Event<void>]; b: [\\"incompatible unit in target\\", Event<void>]; } & { ...; }>; }): void', gave the following error.
+          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+      "
+    `)
+  })
+  test('non-void in another case (should pass)', () => {
+    const source = createEvent<number>()
+    const $case = createStore<'a' | 'b'>('a')
+    const aVoid = createEvent()
+    const bNonVoid = createEvent<number>()
+    split({
+      source,
+      match: $case,
+      cases: {
+        a: [aVoid],
+        b: bNonVoid,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<number>; b: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
+          Type 'Event<void>[]' is not assignable to type 'Event<number>'.
+      "
+    `)
+  })
+})
+
+describe('union type in source', () => {
+  test('case store (should pass)', () => {
+    const source: Event<number | string> = createEvent()
+    const $case = createStore<'a' | 'b'>('a')
+    const firstTarget: Event<number | string> = createEvent()
+    const secondTarget: Event<number | string> = createEvent()
+    const defaultarget: Event<number | string> = createEvent()
+    split({
+      source,
+      match: $case,
+      cases: {
+        a: firstTarget,
+        b: secondTarget,
+        __: defaultarget,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('case function (should pass)', () => {
+    const source: Event<number | string> = createEvent()
+    const firstTarget: Event<number | string> = createEvent()
+    const secondTarget: Event<number | string> = createEvent()
+    const defaultarget: Event<number | string> = createEvent()
+    split({
+      source,
+      match: (src): 'a' | 'b' => 'a',
+      cases: {
+        a: firstTarget,
+        b: secondTarget,
+        __: defaultarget,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('matcher object (should pass)', () => {
+    const source: Event<number | string> = createEvent()
+    const firstBool = createStore(true)
+    const firstTarget: Event<number | string> = createEvent()
+    const secondTarget: Event<number | string> = createEvent()
+    const defaultarget: Event<number | string> = createEvent()
+    split({
+      source,
+      match: {
+        a: firstBool,
+        b: e => true,
+      },
+      cases: {
+        a: firstTarget,
+        b: secondTarget,
+        __: defaultarget,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
+
+describe('matcher function with inference', () => {
+  test('basic case (should pass)', () => {
+    type A = {tag: 'a'; value: 0}
+    type B = {tag: 'b'; value: 'b'}
+    const source = createEvent<A | B>()
+    const aFull = createEvent<A>()
+    const aPart = createEvent<{value: 0}>()
+    const b = createEvent<{tag: 'b'}>()
+    const c = createEvent<A | B>()
+    const defTrigger = createEvent<{tag: 'a'} | B>()
+    const $cFlag = createStore(false)
+    split({
+      source,
+      match: {
+        a: (src): src is A => src.tag === 'a',
+        b: (src): src is B => src.tag === 'b',
+        c: $cFlag,
+      },
+      cases: {
+        a: [aFull, aPart],
+        b,
+        c,
+        __: defTrigger,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('wrong inference (should fail)', () => {
+    type A = {tag: 'a'; value: 0}
+    type B = {tag: 'b'; value: 'b'}
+    const source = createEvent<A | B>()
+    const aFull = createEvent<A>()
+    const aPart = createEvent<{value: 0}>()
+    const c = createEvent<A | B>()
+    const defTrigger = createEvent<{tag: 'a'} | B>()
+    const $cFlag = createStore(false)
+    split({
+      //@ts-expect-error
+      source,
+      match: {
+        a: (src): src is B => src.tag === 'b',
+        c: $cFlag,
+      },
+      cases: {
+        a: [aFull, aPart],
+        c,
+        __: defTrigger,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
 describe('array cases', () => {
   describe('case store', () => {
     /** type: source == cases, arrays only */
@@ -230,8 +438,8 @@ describe('array cases', () => {
       const $case = createStore<'a'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
@@ -306,10 +514,10 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b,
           c,
@@ -367,8 +575,8 @@ describe('array cases', () => {
       const $case = createStore<'a'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
@@ -443,10 +651,10 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b,
           c,
@@ -469,8 +677,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -491,10 +699,10 @@ describe('array cases', () => {
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
         },
       })
@@ -512,10 +720,10 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b: [b],
         },
@@ -537,8 +745,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -560,8 +768,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -584,8 +792,8 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -611,8 +819,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -633,10 +841,10 @@ describe('array cases', () => {
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
         },
       })
@@ -654,10 +862,10 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: $case,
         cases: {
-          //@ts-expect-error
           a: [a],
           b: [b],
         },
@@ -679,8 +887,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -702,8 +910,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -726,8 +934,8 @@ describe('array cases', () => {
       const b = createEvent<{foo: 2}>()
       const c = createEvent<{foo: 2}>()
       split({
-        source,
         //@ts-expect-error
+        source,
         match: $case,
         cases: {
           a: [a],
@@ -787,6 +995,7 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: (src): 'a' => 'a',
         cases: {
@@ -860,6 +1069,7 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: (src): 'a' | 'b' => 'a',
         cases: {
@@ -886,7 +1096,7 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       split({
         source,
-        match: (src): 'a' | 'b' => 'a',
+        match: (src): 'a' | 'b' => (src.bar > 0 ? 'a' : 'b'),
         cases: {
           a: [a],
           b: [b],
@@ -919,6 +1129,7 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: (src): 'a' => 'a',
         cases: {
@@ -992,6 +1203,7 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: (src): 'a' | 'b' => 'a',
         cases: {
@@ -1019,6 +1231,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1039,7 +1252,9 @@ describe('array cases', () => {
       const source = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1; bar: number}>()
       split({
+        //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1062,6 +1277,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
@@ -1088,6 +1304,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1109,7 +1326,9 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
+        //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' | 'c' => 'a',
         cases: {
           a: [a],
@@ -1132,6 +1351,7 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
       split({
+        //@ts-expect-error
         source,
         match: (src): 'a' | 'b' => 'a',
         cases: {
@@ -1160,6 +1380,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1180,7 +1401,9 @@ describe('array cases', () => {
       const source = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1203,6 +1426,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
@@ -1229,6 +1453,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1250,7 +1475,9 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' | 'c' => 'a',
         cases: {
           a: [a],
@@ -1275,6 +1502,7 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
+        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1340,8 +1568,8 @@ describe('array cases', () => {
       const source = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: {
           a: src => true,
@@ -1417,8 +1645,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: {
           a: src => true,
@@ -1486,8 +1714,8 @@ describe('array cases', () => {
       const source = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: {
           a: src => true,
@@ -1563,8 +1791,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: {
           a: src => true,
@@ -1593,9 +1821,12 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1613,9 +1844,12 @@ describe('array cases', () => {
       const source = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1; bar: number}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1633,13 +1867,14 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
         },
         cases: {
           a: [a],
-          //@ts-expect-error
           b: [b],
         },
       })
@@ -1660,9 +1895,12 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1681,10 +1919,14 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
+          //@ts-expect-error src is any
           c: src => true,
         },
         cases: {
@@ -1703,8 +1945,8 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
-      //@ts-expect-error
       split({
+        //@ts-expect-error
         source,
         match: {
           a: src => true,
@@ -1733,9 +1975,12 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1753,9 +1998,12 @@ describe('array cases', () => {
       const source = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1773,13 +2021,14 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
         },
         cases: {
           a: [a],
-          //@ts-expect-error
           b: [b],
         },
       })
@@ -1800,9 +2049,12 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1821,10 +2073,14 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
+          //@ts-expect-error src is any
           c: src => true,
         },
         cases: {
@@ -1844,15 +2100,17 @@ describe('array cases', () => {
       const b = createEvent<{foo: 2}>()
       const c = createEvent<{foo: 2}>()
       split({
+        //@ts-expect-error
         source,
         match: {
+          //@ts-expect-error src is any
           a: src => true,
+          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
           a: [a],
           b,
-          //@ts-expect-error
           c,
         },
       })
@@ -1872,8 +2130,8 @@ describe('array cases', () => {
     const firstTarget: Event<number> = createEvent()
     const secondTarget: Event<number> = createEvent()
     const defaultarget: Event<number> = createEvent()
-    //@ts-expect-error
     split({
+      //@ts-expect-error
       source,
       match: caseStore,
       cases: {
@@ -1900,8 +2158,8 @@ describe('array cases', () => {
     const firstTarget: Event<number> = createEvent()
     const secondTarget: Event<number> = createEvent()
     const defaultarget: Event<number> = createEvent()
-    //@ts-expect-error
     split({
+      //@ts-expect-error
       source,
       match: (src): 'a' | 'c' => 'a',
       cases: {
@@ -1929,8 +2187,8 @@ describe('array cases', () => {
     const firstTarget: Event<number> = createEvent()
     const secondTarget: Event<number> = createEvent()
     const defaultarget: Event<number> = createEvent()
-    //@ts-expect-error
     split({
+      //@ts-expect-error
       source,
       match: {
         a: src => true,
