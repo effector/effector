@@ -81,16 +81,8 @@ test('case store case mismatch (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-        Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
-          Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"c\\">'.
-      Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: Event<number>; b: Event<number>; __: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
-        Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
-          Type 'Store<\\"a\\" | \\"c\\">' provides no match for the signature '(p: number): \\"a\\" | \\"b\\" | \\"__\\"'.
-      Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"c\\">; cases: Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
-        Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
-          Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
+    Argument of type '{ source: Event<number>; match: Store<\\"a\\" | \\"c\\">; cases: { a: Event<number>; b: Event<number>; __: Event<number>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
     "
   `)
 })
@@ -133,15 +125,8 @@ test('case function case mismatch (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-        Type '(x: number) => \\"a\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
-          Index signature for type 'string' is missing in type '(x: number) => \\"a\\" | \\"c\\"'.
-      Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"c\\"; cases: Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
-        Type '{ a: Event<number>; b: Event<number>; __: Event<number>; }' is not assignable to type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
-          Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Event<number>; c: Event<number>; } & { __: Event<number>; }>'.
-      Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\" | \\"__\\">; cases: Partial<{ a: Event<number>; b: Event<number>; __: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
-        Type '(x: number) => \\"a\\" | \\"c\\"' is missing the following properties from type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">': kind, __
+    Argument of type '{ source: Event<number>; match: (x: number) => \\"a\\" | \\"c\\"; cases: { a: Event<number>; b: Event<number>; __: Event<number>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
     "
   `)
 })
@@ -236,9 +221,8 @@ describe('any to void', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [\\"incompatible unit in target\\", Event<void>]; b: [\\"incompatible unit in target\\", Event<void>]; } & { ...; }>; }): void', gave the following error.
-          Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Argument of type '{ source: Event<number>; match: Store<\\"a\\" | \\"b\\">; cases: { a: (Event<void> | Event<string>)[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
       "
     `)
   })
@@ -257,9 +241,7 @@ describe('any to void', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<number>; b: Event<number>; } & { __: Event<number>; }>; }): void', gave the following error.
-          Type 'Event<void>[]' is not assignable to type 'Event<number>'.
+      no errors
       "
     `)
   })
@@ -388,7 +370,8 @@ describe('matcher function with inference', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ source: Event<A | B>; match: { a: (src: A | B) => src is B; c: Store<boolean>; }; cases: { a: (Event<A> | Event<{ value: 0; }>)[]; c: Event<A | B>; __: Event<...>; }; }' is not assignable to parameter of type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
       "
     `)
   })
@@ -449,16 +432,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\">'.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\">' is not assignable to type '(p: { foo: 1; }) => \\"a\\" | \\"b\\"'.
-              Type 'Store<\\"a\\">' provides no match for the signature '(p: { foo: 1; }): \\"a\\" | \\"b\\"'.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -480,9 +455,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        no errors
         "
       `)
     })
@@ -501,9 +474,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\" | \\"c\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        no errors
         "
       `)
     })
@@ -525,9 +496,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -586,16 +556,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { ...; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\">'.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\">' is not assignable to type '(p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"'.
-              Type 'Store<\\"a\\">' provides no match for the signature '(p: { foo: 1; bar: number; }): \\"a\\" | \\"b\\"'.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
+        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -617,9 +579,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        no errors
         "
       `)
     })
@@ -638,9 +598,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\" | \\"c\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        no errors
         "
       `)
     })
@@ -662,9 +620,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is not assignable to type 'Event<{ foo: 1; }>'.
+        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -687,10 +644,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -708,9 +663,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; b: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; bar: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
         "
       `)
     })
@@ -730,9 +684,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; bar: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -755,10 +708,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -778,10 +729,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\" | \\"c\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\" | \\"c\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -803,10 +752,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -829,10 +776,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -850,9 +795,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; b: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
         "
       `)
     })
@@ -872,9 +816,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\">; cases: Partial<{ a: [\\"incompatible unit in target\\"]; } & { __: [\\"incompatible unit in target\\"]; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -897,10 +840,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -920,10 +861,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\" | \\"c\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\" | \\"c\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -945,10 +884,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type 'Store<\\"a\\" | \\"b\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type 'Store<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -1005,15 +942,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: { foo: 1; }) => \\"a\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: { foo: 1; }) => \\"a\\"'.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '(src: { foo: 1; }) => \\"a\\"' is missing the following properties from type 'Unit<\\"a\\" | \\"b\\">': kind, __
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1034,10 +964,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Parameter 'src' implicitly has an 'any' type.
-        No overload matches this call.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is missing the following properties from type 'Event<{ foo: 1; }>': watch, filterMap, prepend, subscribe, and 7 more.
+        no errors
         "
       `)
     })
@@ -1055,11 +982,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"'.
-        Parameter 'src' implicitly has an 'any' type.
+        no errors
         "
       `)
     })
@@ -1080,10 +1003,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Parameter 'src' implicitly has an 'any' type.
-        No overload matches this call.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\" | \\"b\\" | \\"c\\"; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is missing the following properties from type 'Event<{ foo: 1; }>': watch, filterMap, prepend, subscribe, and 7 more.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1139,15 +1060,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { ...; }>; }): void', gave the following error.
-            Type '(src: { foo: 1; bar: number; }) => \\"a\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: { foo: 1; bar: number; }) => \\"a\\"'.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>'.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '(src: { foo: 1; bar: number; }) => \\"a\\"' is missing the following properties from type 'Unit<\\"a\\" | \\"b\\">': kind, __
+        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1168,10 +1082,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Parameter 'src' implicitly has an 'any' type.
-        No overload matches this call.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; } & { __: Event<{ foo: 1; }>; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is missing the following properties from type 'Event<{ foo: 1; }>': watch, filterMap, prepend, subscribe, and 7 more.
+        no errors
         "
       `)
     })
@@ -1189,11 +1100,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { ...; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; bar: number; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"'.
-        Parameter 'src' implicitly has an 'any' type.
+        no errors
         "
       `)
     })
@@ -1214,10 +1121,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Parameter 'src' implicitly has an 'any' type.
-        No overload matches this call.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\" | \\"c\\"; cases: Partial<{ a: Event<{ foo: 1; }>; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; } & { ...; }>; }): void', gave the following error.
-            Type 'Event<{ foo: 1; }>[]' is missing the following properties from type 'Event<{ foo: 1; }>': watch, filterMap, prepend, subscribe, and 7 more.
+        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1240,10 +1145,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1262,10 +1165,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1286,10 +1187,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1313,10 +1212,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1337,10 +1234,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\" | \\"c\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1362,11 +1257,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
-        Parameter 'src' implicitly has an 'any' type.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1389,10 +1281,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1411,10 +1301,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1435,10 +1323,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\"; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1462,10 +1348,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1486,10 +1370,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\" | \\"c\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\" | \\"c\\"; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1512,10 +1394,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '(src: any) => \\"a\\" | \\"b\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: { foo: 1; }) => boolean); }'.
-              Index signature for type 'string' is missing in type '(src: any) => \\"a\\" | \\"b\\"'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1581,16 +1461,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; }>; match: (p: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: (src: { foo: 1; }) => true; }' is not assignable to type '(p: { foo: 1; }) => \\"a\\" | \\"b\\"'.
-              Object literal may only specify known properties, and 'a' does not exist in type '(p: { foo: 1; }) => \\"a\\" | \\"b\\"'.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: (src: { foo: 1; }) => true; }' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1660,10 +1532,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1727,16 +1597,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
-          Overload 2 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: (p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: (src: { foo: 1; bar: number; }) => true; }' is not assignable to type '(p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"'.
-              Object literal may only specify known properties, and 'a' does not exist in type '(p: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"'.
-          Overload 3 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: Unit<\\"a\\" | \\"b\\">; cases: Partial<{ a: [Event<{ foo: 1; }>]; b: [Event<{ foo: 1; }>]; } & { __: [Event<{ foo: 1; }>]; }>; }): void', gave the following error.
-            Type '{ a: (src: { foo: 1; bar: number; }) => true; }' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
-              Object literal may only specify known properties, and 'a' does not exist in type 'Unit<\\"a\\" | \\"b\\">'.
+        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; }; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1806,10 +1668,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; }>]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; }; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<...>; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1836,7 +1696,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -1858,7 +1721,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -1880,10 +1746,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; bar: number; }>]; b: Event<{ foo: 1; bar: string; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; }; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -1910,7 +1775,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -1936,7 +1804,11 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; c: (src: any) => boolean; }; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -1960,10 +1832,8 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 1; bar: number; }>]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1990,7 +1860,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -2012,7 +1885,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -2034,10 +1910,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 2; }>]; b: Event<{ foo: 2; }>[]; }' is not assignable to type 'Partial<{ a: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; } & { __: Target; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; }; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -2064,7 +1939,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -2090,7 +1968,11 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; c: (src: any) => boolean; }; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -2116,10 +1998,10 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 4, '(config: { source: Unit<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: Partial<{ a: Target; b: Target; } & { __: Target; }>; }): void', gave the following error.
-            Type '{ a: [Event<{ foo: 2; }>]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }' is not assignable to type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
-              Object literal may only specify known properties, and 'c' does not exist in type 'Partial<{ a: Target; b: Target; } & { __: Target; }>'.
+        Argument of type '{ source: Event<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
@@ -2142,14 +2024,8 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-          Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
-        Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
-          Type 'Store<\\"a\\" | \\"c\\">' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
-        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"c\\">; cases: Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
-          Type '{ a: [Event<number>]; b: Event<number>[]; __: [Event<number>]; }' is not assignable to type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
-            Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
+      Argument of type '{ source: Event<number>; match: Store<\\"a\\" | \\"c\\">; cases: { a: Event<number>[]; b: Event<number>[]; __: Event<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
@@ -2170,15 +2046,8 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        Overload 1 of 4, '(config: { source: Unit<number>; match: { [name: string]: Store<boolean> | ((payload: number) => boolean); }; cases: Partial<{ [x: string]: Target; } & { __: Target; }>; }): void', gave the following error.
-          Type '(src: number) => \\"a\\" | \\"c\\"' is not assignable to type '{ [name: string]: Store<boolean> | ((payload: number) => boolean); }'.
-            Index signature for type 'string' is missing in type '(src: number) => \\"a\\" | \\"c\\"'.
-        Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"c\\"; cases: Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
-          Type '{ a: [Event<number>]; b: Event<number>[]; __: [Event<number>]; }' is not assignable to type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
-            Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: [Event<number>]; c: [Event<number>]; } & { __: [Event<number>]; }>'.
-        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\" | \\"__\\">; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
-          Type '(src: number) => \\"a\\" | \\"c\\"' is missing the following properties from type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">': kind, __
+      Argument of type '{ source: Event<number>; match: (src: number) => \\"a\\" | \\"c\\"; cases: { a: Event<number>[]; b: Event<number>[]; __: Event<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
@@ -2202,16 +2071,8 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        Overload 1 of 4, '(config: { source: Unit<number>; match: { a: (src: number) => true; c: (src: number) => true; }; cases: Partial<{ a: Target; c: Target; } & { __: Target; }>; }): void', gave the following error.
-          Type '{ a: [Event<number>]; b: Event<number>[]; __: [Event<number>]; }' is not assignable to type 'Partial<{ a: Target; c: Target; } & { __: Target; }>'.
-            Object literal may only specify known properties, and 'b' does not exist in type 'Partial<{ a: Target; c: Target; } & { __: Target; }>'.
-        Overload 2 of 4, '(config: { source: Unit<number>; match: (p: number) => \\"a\\" | \\"b\\" | \\"__\\"; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
-          Type '{ a: (src: number) => true; c: (src: number) => true; }' is not assignable to type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
-            Object literal may only specify known properties, and 'a' does not exist in type '(p: number) => \\"a\\" | \\"b\\" | \\"__\\"'.
-        Overload 3 of 4, '(config: { source: Unit<number>; match: Unit<\\"a\\" | \\"b\\" | \\"__\\">; cases: Partial<{ a: [Event<number>]; b: [Event<number>]; __: [Event<number>]; } & { __: [Event<number>]; }>; }): void', gave the following error.
-          Type '{ a: (src: number) => true; c: (src: number) => true; }' is not assignable to type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">'.
-            Object literal may only specify known properties, and 'a' does not exist in type 'Unit<\\"a\\" | \\"b\\" | \\"__\\">'.
+      Argument of type '{ source: Event<number>; match: { a: (src: number) => true; c: (src: number) => true; }; cases: { a: Event<number>[]; b: Event<number>[]; __: Event<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })

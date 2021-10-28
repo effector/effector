@@ -571,21 +571,6 @@ export function createStoreObject<State>(
 
 export function split<
   S,
-  Match extends {[name: string]: ((payload: S) => boolean) | Store<boolean>},
-  T extends Target = Target
->(config: {
-  source: Unit<S>
-  match: Match
-  cases: Partial<
-    {
-      [K in keyof Match]: Match[K] extends (p: any) => p is infer R
-      ? MultiTarget<T, R>
-      : MultiTarget<T, S>
-    } & {__: MultiTarget<T, S>}
-  >
-}): void
-export function split<
-  S,
   Match extends {[name: string]: (payload: S) => boolean}
 >(
   source: Unit<S>,
@@ -595,24 +580,115 @@ export function split<
     ? Event<R>
     : Event<S>
 } & {__: Event<S>}>
+
+type SplitType<
+  Cases extends Record<string, Unit<any> | Array<Unit<any>>>,
+  Match,
+  Config,
+  Source extends Unit<any>,
+> =
+  UnitValue<Source> extends CaseTypeReader<Cases, keyof Cases>
+    ?
+      Match extends Unit<any>
+      ? Exclude<keyof Cases, '__'> extends UnitValue<Match>
+        ? Config
+        : {
+          error: 'match unit should contain case names'
+          need: Exclude<keyof Cases, '__'>
+          got: UnitValue<Match>
+        }
+        
+      : Match extends (p: UnitValue<Source>) => void
+        ? Exclude<keyof Cases, '__'> extends ReturnType<Match>
+          ? Config
+          : {
+            error: 'match function should return case names'
+            need: Exclude<keyof Cases, '__'>
+            got: ReturnType<Match>
+          }
+
+      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+        ? Exclude<keyof Cases, '__'> extends keyof Match
+          ? MatcherInferenceValidator<Cases, Match> extends Match
+            ? Config
+            : {
+              error: 'case should extends type inferred by matcher function'
+              incorrectCases: Show<MatcherInferenceIncorrectCases<Cases, Match>>
+            }
+          : {
+            error: 'match object should contain case names'
+            need: Exclude<keyof Cases, '__'>
+            got: keyof Match
+          }
+
+      : {error: 'not implemented'}
+
+  : {
+    error: 'source type should extends cases'
+    sourceType: UnitValue<Source>
+    caseType: CaseTypeReader<Cases, keyof Cases>
+  }
+
 export function split<
-  S,
-  K extends keyof any,
-  T extends Target = Target
->(config: {
-  source: Unit<S>
-  match: (p: S) => K
-  cases: Partial<{[X in K]: MultiTarget<T, S>} & {__: MultiTarget<T, S>}>
-}): void
-export function split<
-  S,
-  K extends keyof any,
-  T extends Target = Target
->(config: {
-  source: Unit<S>
-  match: Unit<K>
-  cases: Partial<{[X in K]: MultiTarget<T, S>} & {__: MultiTarget<T, S>}>
-}): void
+  Cases,
+  Source, 
+  Match extends (
+    | Unit<any>
+    | ((p: UnitValue<Source>) => void)
+    | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+  )
+>(
+  config:
+    {source: Source; match: Match; cases: Cases} extends infer Config
+    ? Config extends {cases: Record<string, Unit<any> | Array<Unit<any>>>; match: any; source: Unit<any>}
+      ? Source extends Unit<any>
+        ? Cases extends Record<string, Unit<any> | Array<Unit<any>>>
+          ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases}, Source>
+          : {error: 'cases should be an object with units or arrays of units'; got: Cases}
+        : {error: 'source should be a unit'; got: Source}
+      : {error: 'config should be object with fields "source", "match" and "cases"'; got: Config}
+    : {error: 'cannot infer config object'}
+): void
+
+type MatcherInferenceIncorrectCases<Cases, Match> = {
+  [K in Exclude<keyof Match, keyof MatcherInferenceValidator<Cases, Match>>]: {
+    caseType: CaseValue<Cases, Match, K>
+    inferredType: Match[K] extends (p: any) => p is infer R ? R : never
+  }
+}
+
+type MatcherInferenceValidator<Cases, Match> = {
+  [
+    K in keyof Match as
+      Match[K] extends (p: any) => p is infer R
+      ? R extends CaseValue<Cases, Match, K>
+        ? K
+        : never
+      : K
+  ]: Match[K]
+}
+
+type CaseTypeReader<Cases, K extends keyof Cases> =
+  Cases[K] extends infer S
+  ? WhichType<
+    UnitValue<
+      S extends Array<any>
+      ? S[number]
+      : S
+    >
+  > extends 'void'
+    ? unknown
+    : UnitValue<
+      S extends Array<any>
+      ? S[number]
+      : S
+    >
+  : never
+
+type CaseValue<Cases, Match, K extends keyof Match> =
+  K extends keyof Cases
+  ? CaseTypeReader<Cases, K>
+  : never
 
 export function createApi<
   S,
