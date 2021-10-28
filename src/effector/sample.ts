@@ -50,7 +50,7 @@ export const groupInputs = (source: any, clock: any, method: string) => {
 export function sample(...args: any): any {
   let target
   let name
-  let [[source, clock, fn], metadata] = processArgsToConfig(args)
+  let [[source, clock, fn, filter], metadata] = processArgsToConfig(args)
   let sid
   let batched = true
   /** config case */
@@ -61,6 +61,7 @@ export function sample(...args: any): any {
   ) {
     clock = source.clock
     fn = source.fn
+    filterFn = source.filter
     batched = !source.greedy
     /** optional target & name accepted only from config */
     target = source.target
@@ -99,11 +100,12 @@ export function sample(...args: any): any {
           applyTemplate('sampleSourceLoader'),
           read(sourceRef, !fn, batched),
           fn && compute({fn: callARegStack}),
+          filter && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
         SAMPLE,
-        fn,
-        // scope: {fn, targetTemplate}
+        [fn, filter],
+        // scope: {fn: [fn, filter], targetTemplate}
       ),
     ])
     applyTemplate('sampleStoreSource', sourceRef)
@@ -134,11 +136,12 @@ export function sample(...args: any): any {
           read(sourceRef, true, batched),
           read(clockState),
           fn && compute({fn: callStackAReg}),
+          filter && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
         SAMPLE,
-        fn,
-        // scope: {fn, targetTemplate}
+        [fn, filter],
+        // scope: {fn: [fn, filter], targetTemplate}
       ),
     ])
   }
