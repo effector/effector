@@ -117,7 +117,7 @@ export function split(...args: any[]): any {
           launchCase(scopeTargets, '__', data, stack)
         },
       }),
-      applyTemplate('sampleSourceUpward', isUpward),
+      applyTemplate('sampleSourceUpward', true),
     ]
   } else {
     assert(false, 'expect match to be unit, function or object')
