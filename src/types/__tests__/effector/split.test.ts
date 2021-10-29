@@ -17,13 +17,13 @@ it('infer type by given predicate (should pass)', () => {
 })
 
 test('matcher stores / matcher functions (should pass)', () => {
-  const source: Event<number | string> = createEvent()
+  const clock: Event<number | string> = createEvent()
   const firstBool = createStore(true)
   const firstTarget: Event<number | string> = createEvent()
   const secondTarget: Event<number | string> = createEvent()
   const defaultarget: Event<number | string> = createEvent()
   split({
-    source,
+    clock,
     match: {
       a: firstBool,
       b: e => true,
@@ -42,13 +42,13 @@ test('matcher stores / matcher functions (should pass)', () => {
 })
 
 test('case store (should pass)', () => {
-  const source: Event<number> = createEvent()
+  const clock: Event<number> = createEvent()
   const caseStore = createStore<'a' | 'b'>('a')
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
   split({
-    source,
+    clock,
     match: caseStore,
     cases: {
       a: firstTarget,
@@ -64,14 +64,14 @@ test('case store (should pass)', () => {
 })
 
 test('case store case mismatch (should fail)', () => {
-  const source: Event<number> = createEvent()
+  const clock: Event<number> = createEvent()
   const caseStore = createStore<'a' | 'c'>('a')
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
   split({
     //@ts-expect-error
-    source,
+    clock,
     match: caseStore,
     cases: {
       a: firstTarget,
@@ -88,12 +88,12 @@ test('case store case mismatch (should fail)', () => {
 })
 
 test('case function (should pass)', () => {
-  const source: Event<number> = createEvent()
+  const clock: Event<number> = createEvent()
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
   split({
-    source,
+    clock,
     match: x => (x > 0 ? 'a' : 'b'),
     cases: {
       a: firstTarget,
@@ -109,13 +109,13 @@ test('case function (should pass)', () => {
 })
 
 test('case function case mismatch (should fail)', () => {
-  const source: Event<number> = createEvent()
+  const clock: Event<number> = createEvent()
   const firstTarget: Event<number> = createEvent()
   const secondTarget: Event<number> = createEvent()
   const defaultarget: Event<number> = createEvent()
   split({
     //@ts-expect-error
-    source,
+    clock,
     match: x => (x > 0 ? 'a' : 'c'),
     cases: {
       a: firstTarget,
@@ -132,11 +132,11 @@ test('case function case mismatch (should fail)', () => {
 })
 
 test('event with unknown payload in target (should pass)', () => {
-  const source = createEvent<string>()
+  const clock = createEvent<string>()
   const target = createEvent<unknown>()
 
   split({
-    source,
+    clock,
     match: {
       test: value => value === 'ok',
     },
@@ -157,11 +157,11 @@ test('edge case with target (should pass)', () => {
   const filter = createStore(true)
   const enumType = 3
   const typeStore = createStore(enumType)
-  const source = guard({source: intervalStore, filter})
+  const clock = guard({source: intervalStore, filter})
   const caseA = createEvent()
   const caseB = createEvent()
 
-  split({source, match: typeStore, cases: {[enumType]: caseA, __: caseB}})
+  split({clock, match: typeStore, cases: {[enumType]: caseA, __: caseB}})
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -172,11 +172,11 @@ test('edge case with target (should pass)', () => {
 
 describe('any to void', () => {
   test('void only (should pass)', () => {
-    const source = createEvent<number>()
+    const clock = createEvent<number>()
     const $case = createStore<'a' | 'b'>('a')
     const aVoid = createEvent()
     split({
-      source,
+      clock,
       match: $case,
       cases: {
         a: [aVoid],
@@ -189,12 +189,12 @@ describe('any to void', () => {
     `)
   })
   test('non-void in same case (should pass)', () => {
-    const source = createEvent<number>()
+    const clock = createEvent<number>()
     const $case = createStore<'a' | 'b'>('a')
     const aVoid = createEvent()
     const aNonVoid = createEvent<number>()
     split({
-      source,
+      clock,
       match: $case,
       cases: {
         a: [aNonVoid, aVoid],
@@ -207,13 +207,13 @@ describe('any to void', () => {
     `)
   })
   test('incorrect non-void in same case (should fail)', () => {
-    const source = createEvent<number>()
+    const clock = createEvent<number>()
     const $case = createStore<'a' | 'b'>('a')
     const aVoid = createEvent()
     const aNonVoid = createEvent<string>()
     split({
       //@ts-expect-error
-      source,
+      clock,
       match: $case,
       cases: {
         a: [aNonVoid, aVoid],
@@ -221,18 +221,18 @@ describe('any to void', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; match: Store<\\"a\\" | \\"b\\">; cases: { a: (Event<void> | Event<string>)[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
+      Argument of type '{ clock: Event<number>; match: Store<\\"a\\" | \\"b\\">; cases: { a: (Event<void> | Event<string>)[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
       "
     `)
   })
   test('non-void in another case (should pass)', () => {
-    const source = createEvent<number>()
+    const clock = createEvent<number>()
     const $case = createStore<'a' | 'b'>('a')
     const aVoid = createEvent()
     const bNonVoid = createEvent<number>()
     split({
-      source,
+      clock,
       match: $case,
       cases: {
         a: [aVoid],
@@ -249,13 +249,13 @@ describe('any to void', () => {
 
 describe('union type in source', () => {
   test('case store (should pass)', () => {
-    const source: Event<number | string> = createEvent()
+    const clock: Event<number | string> = createEvent()
     const $case = createStore<'a' | 'b'>('a')
     const firstTarget: Event<number | string> = createEvent()
     const secondTarget: Event<number | string> = createEvent()
     const defaultarget: Event<number | string> = createEvent()
     split({
-      source,
+      clock,
       match: $case,
       cases: {
         a: firstTarget,
@@ -270,12 +270,12 @@ describe('union type in source', () => {
     `)
   })
   test('case function (should pass)', () => {
-    const source: Event<number | string> = createEvent()
+    const clock: Event<number | string> = createEvent()
     const firstTarget: Event<number | string> = createEvent()
     const secondTarget: Event<number | string> = createEvent()
     const defaultarget: Event<number | string> = createEvent()
     split({
-      source,
+      clock,
       match: (src): 'a' | 'b' => 'a',
       cases: {
         a: firstTarget,
@@ -290,13 +290,13 @@ describe('union type in source', () => {
     `)
   })
   test('matcher object (should pass)', () => {
-    const source: Event<number | string> = createEvent()
+    const clock: Event<number | string> = createEvent()
     const firstBool = createStore(true)
     const firstTarget: Event<number | string> = createEvent()
     const secondTarget: Event<number | string> = createEvent()
     const defaultarget: Event<number | string> = createEvent()
     split({
-      source,
+      clock,
       match: {
         a: firstBool,
         b: e => true,
@@ -319,7 +319,7 @@ describe('matcher function with inference', () => {
   test('basic case (should pass)', () => {
     type A = {tag: 'a'; value: 0}
     type B = {tag: 'b'; value: 'b'}
-    const source = createEvent<A | B>()
+    const clock = createEvent<A | B>()
     const aFull = createEvent<A>()
     const aPart = createEvent<{value: 0}>()
     const b = createEvent<{tag: 'b'}>()
@@ -327,7 +327,7 @@ describe('matcher function with inference', () => {
     const defTrigger = createEvent<{tag: 'a'} | B>()
     const $cFlag = createStore(false)
     split({
-      source,
+      clock,
       match: {
         a: (src): src is A => src.tag === 'a',
         b: (src): src is B => src.tag === 'b',
@@ -349,7 +349,7 @@ describe('matcher function with inference', () => {
   test('wrong inference (should fail)', () => {
     type A = {tag: 'a'; value: 0}
     type B = {tag: 'b'; value: 'b'}
-    const source = createEvent<A | B>()
+    const clock = createEvent<A | B>()
     const aFull = createEvent<A>()
     const aPart = createEvent<{value: 0}>()
     const c = createEvent<A | B>()
@@ -357,7 +357,7 @@ describe('matcher function with inference', () => {
     const $cFlag = createStore(false)
     split({
       //@ts-expect-error
-      source,
+      clock,
       match: {
         a: (src): src is B => src.tag === 'b',
         c: $cFlag,
@@ -370,7 +370,7 @@ describe('matcher function with inference', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<A | B>; match: { a: (src: A | B) => src is B; c: Store<boolean>; }; cases: { a: (Event<A> | Event<{ value: 0; }>)[]; c: Event<A | B>; __: Event<...>; }; }' is not assignable to parameter of type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
+      Argument of type '{ clock: Event<A | B>; match: { a: (src: A | B) => src is B; c: Store<boolean>; }; cases: { a: (Event<A> | Event<{ value: 0; }>)[]; c: Event<A | B>; __: Event<...>; }; }' is not assignable to parameter of type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
       "
     `)
@@ -428,12 +428,12 @@ describe('array cases', () => {
     /** type: source == cases, arrays only */
 
     test('case name: match == cases, type: source == cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -447,11 +447,11 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source == cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -464,13 +464,13 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -479,7 +479,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
@@ -488,12 +488,12 @@ describe('array cases', () => {
     /** type: source == cases, array case + unit case */
 
     test('case name: match == cases, type: source == cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -507,12 +507,12 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source == cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b' | 'c'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -526,14 +526,14 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source == cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -552,12 +552,12 @@ describe('array cases', () => {
     /** type: source > cases, arrays only */
 
     test('case name: match == cases, type: source > cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -571,11 +571,11 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source > cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -588,13 +588,13 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source > cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const $case = createStore<'a'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -603,7 +603,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; bar: number; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
@@ -612,12 +612,12 @@ describe('array cases', () => {
     /** type: source > cases, array case + unit case */
 
     test('case name: match == cases, type: source > cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -631,12 +631,12 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source > cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const $case = createStore<'a' | 'b' | 'c'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -650,14 +650,14 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source > cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -667,7 +667,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; bar: number; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
@@ -676,13 +676,13 @@ describe('array cases', () => {
     /** type: source < cases, arrays only */
 
     test('case name: match == cases, type: source < cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -697,12 +697,12 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source < cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -710,19 +710,19 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
         "
       `)
     })
     test('case name: match < cases, type: source < cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -731,7 +731,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
@@ -740,13 +740,13 @@ describe('array cases', () => {
     /** type: source < cases, array case + unit case */
 
     test('case name: match == cases, type: source < cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -761,13 +761,13 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source < cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b' | 'c'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -782,14 +782,14 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source < cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -799,7 +799,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
@@ -808,13 +808,13 @@ describe('array cases', () => {
     /** type: source != cases, arrays only */
 
     test('case name: match == cases, type: source != cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -823,18 +823,18 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
     test('case name: match > cases, type: source != cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 2}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -842,19 +842,19 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
         "
       `)
     })
     test('case name: match < cases, type: source != cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a'>('a')
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -863,7 +863,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
@@ -872,13 +872,13 @@ describe('array cases', () => {
     /** type: source != cases, array case + unit case */
 
     test('case name: match == cases, type: source != cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -887,19 +887,19 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
     test('case name: match > cases, type: source != cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b' | 'c'>('a')
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -908,20 +908,20 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\" | \\"c\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\" | \\"c\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
     test('case name: match < cases, type: source != cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const $case = createStore<'a' | 'b'>('a')
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       const c = createEvent<{foo: 2}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: $case,
         cases: {
           a: [a],
@@ -931,7 +931,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: Store<\\"a\\" | \\"b\\">; cases: { a: Event<{ foo: 2; }>[]; b: Event<{ foo: 2; }>; c: Event<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
         "
       `)
@@ -941,11 +941,11 @@ describe('array cases', () => {
     /** type: source == cases, arrays only */
 
     test('case name: match == cases, type: source == cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -959,10 +959,10 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source == cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -975,12 +975,12 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
@@ -989,7 +989,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
@@ -998,11 +998,11 @@ describe('array cases', () => {
     /** type: source == cases, array case + unit case */
 
     test('case name: match == cases, type: source == cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1016,11 +1016,11 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source == cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' | 'c' => 'a',
         cases: {
           a: [a],
@@ -1034,13 +1034,13 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source == cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1050,7 +1050,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
@@ -1059,11 +1059,11 @@ describe('array cases', () => {
     /** type: source > cases, arrays only */
 
     test('case name: match == cases, type: source > cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' => (src.bar > 0 ? 'a' : 'b'),
         cases: {
           a: [a],
@@ -1077,10 +1077,10 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source > cases, arrays only (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1093,12 +1093,12 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source > cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
@@ -1107,7 +1107,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
@@ -1116,11 +1116,11 @@ describe('array cases', () => {
     /** type: source > cases, array case + unit case */
 
     test('case name: match == cases, type: source > cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1134,11 +1134,11 @@ describe('array cases', () => {
       `)
     })
     test('case name: match > cases, type: source > cases, array case + unit case (should pass)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        source,
+        clock,
         match: (src): 'a' | 'b' | 'c' => 'a',
         cases: {
           a: [a],
@@ -1152,13 +1152,13 @@ describe('array cases', () => {
       `)
     })
     test('case name: match < cases, type: source > cases, array case + unit case (should fail)', () => {
-      const source = createEvent<{foo: 1; bar: number}>()
+      const clock = createEvent<{foo: 1; bar: number}>()
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
         //@ts-expect-error
-        source,
+        clock,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1168,7 +1168,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Argument of type '{ clock: Event<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: { a: Event<{ foo: 1; }>[]; b: Event<{ foo: 1; }>; c: Event<{ foo: 1; }>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
@@ -1177,7 +1177,7 @@ describe('array cases', () => {
     /** type: source < cases, arrays only */
 
     test('case name: match == cases, type: source < cases, arrays only (should fail)', () => {
-      const source = createEvent<{foo: 1}>()
+      const clock = createEvent<{foo: 1}>()
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
