@@ -582,7 +582,7 @@ export function split<
 } & {__: Event<S>}>
 
 type SplitType<
-  Cases extends Record<string, Unit<any> | Array<Unit<any>>>,
+  Cases extends CaseRecord,
   Match,
   Config,
   Source extends Unit<any>,
@@ -636,19 +636,34 @@ export function split<
     | Unit<any>
     | ((p: UnitValue<Source>) => void)
     | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-  )
+  ),
+  Clock,
 >(
   config:
-    {source: Source; match: Match; cases: Cases} extends infer Config
-    ? Config extends {cases: Record<string, Unit<any> | Array<Unit<any>>>; match: any; source: Unit<any>}
-      ? Source extends Unit<any>
-        ? Cases extends Record<string, Unit<any> | Array<Unit<any>>>
-          ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases}, Source>
-          : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-        : {error: 'source should be a unit'; got: Source}
+    {source: Source; match: Match; cases: Cases; clock: Clock} extends infer Config
+    ?
+      Config extends {cases: CaseRecord; match: any; source: Unit<any>; clock: Unit<any> | Array<Unit<any>>}
+        ? Source extends Unit<any>
+          ? Cases extends CaseRecord
+            ? Clock extends Unit<any> | Array<Unit<any>>
+              ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases; clock: Clock}, Source>
+              : {error: 'clock should be a unit or array of units'; got: Clock}
+            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
+          : {error: 'source should be a unit'; got: Source}
+
+      : Config extends {cases: CaseRecord; match: any; source: Unit<any>}
+        ? Source extends Unit<any>
+          ? Cases extends CaseRecord
+            ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases}, Source>
+            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
+          : {error: 'source should be a unit'; got: Source}
+
       : {error: 'config should be object with fields "source", "match" and "cases"'; got: Config}
+      
     : {error: 'cannot infer config object'}
 ): void
+
+type CaseRecord = Record<string,  Unit<any> | Array<Unit<any>>>
 
 type MatcherInferenceIncorrectCases<Cases, Match> = {
   [K in Exclude<keyof Match, keyof MatcherInferenceValidator<Cases, Match>>]: {
