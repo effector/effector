@@ -377,7 +377,7 @@ describe('matcher function with inference', () => {
   })
 })
 describe('clock cases', () => {
-  test('source + clock', () => {
+  describe('source + clock', () => {
     test('unit clock (should pass)', () => {
       const clock = createEvent<number>()
       const source = createEvent<{foo: 1}>()
