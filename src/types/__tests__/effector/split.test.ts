@@ -376,6 +376,53 @@ describe('matcher function with inference', () => {
     `)
   })
 })
+describe('clock cases', () => {
+  test('source + clock', () => {
+    test('unit clock (should pass)', () => {
+      const clock = createEvent<number>()
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        clock,
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('array clock (should pass)', () => {
+      const clockA = createEvent<number>()
+      const clockB = createEvent<string>()
+      const source = createEvent<{foo: 1}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<{foo: 1}>()
+      const b = createEvent<{foo: 1}>()
+      split({
+        clock: [clockA, clockB],
+        source,
+        match: $case,
+        cases: {
+          a: [a],
+          b: [b],
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+  })
+})
 describe('array cases', () => {
   describe('case store', () => {
     /** type: source == cases, arrays only */
