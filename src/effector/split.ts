@@ -32,7 +32,7 @@ const launchCase = (
 
 export function split(...args: any[]): any {
   let targets: Record<string, Event<any> | NodeUnit>
-  let [[source, match], metadata] = processArgsToConfig(args)
+  let [[source, clock, match], metadata] = processArgsToConfig(args)
   const knownCases = !match
   if (knownCases) {
     targets = source.cases
@@ -49,7 +49,7 @@ export function split(...args: any[]): any {
     targets.__ = createEvent(metadata)
   }
   const owners = new Set(
-    ([] as NodeUnit[]).concat(source, Object.values(targets)),
+    ([] as NodeUnit[]).concat(clock, Object.values(targets)),
   )
   const caseNames = Object.keys(
     matchIsUnit || matchIsFunction ? targets : match,
@@ -100,6 +100,7 @@ export function split(...args: any[]): any {
       applyTemplate('splitBase', lastValues)
     }
     splitterSeq = [
+      applyTemplate('sampleSourceLoader'),
       needBarrier! && read(lastValues, false, true),
       filter({
         fn(data, scopeTargets, stack) {
@@ -116,17 +117,34 @@ export function split(...args: any[]): any {
           launchCase(scopeTargets, '__', data, stack)
         },
       }),
+      applyTemplate('sampleSourceUpward', isUpward),
     ]
   } else {
     assert(false, 'expect match to be unit, function or object')
   }
-  createNode({
-    meta: {op: 'split'},
-    parent: source,
-    scope: targets,
-    node: splitterSeq!,
-    family: {owners: Array.from(owners)},
-    regional: true,
-  })
+  if (is.store(source)) {
+    const sourceRef = getStoreState(source)
+    own(source, [
+      createNode({
+        meta: {op: 'split'},
+        parent: clock,
+        scope: targets,
+        node: splitterSeq!,
+        family: {owners: Array.from(owners), links: targets},
+        regional: true,
+      }),
+    ])
+    applyTemplate('sampleStoreSource', sourceRef)
+  } else {
+    createNode({
+      meta: {op: 'split'},
+      parent: source,
+      scope: targets,
+      node: splitterSeq!,
+      family: {owners: Array.from(owners), links: targets},
+      regional: true,
+    })
+  }
+
   if (!knownCases) return targets
 }

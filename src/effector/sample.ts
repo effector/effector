@@ -92,19 +92,20 @@ export function sample(...args: any): any {
   if (is.store(source)) {
     const sourceRef = getStoreState(source)
     own(source, [
-      createLinkNode(
-        clock,
-        target,
-        [
+      createNode({
+        node: [
           applyTemplate('sampleSourceLoader'),
           read(sourceRef, !fn, batched),
           fn && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
-        SAMPLE,
-        fn,
-        // scope: {fn, targetTemplate}
-      ),
+        parent: clock,
+        child: target,
+        scope: {fn},
+        meta: {op: SAMPLE},
+        family: {owners: [clock, target], links: target},
+        regional: true,
+      }),
     ])
     applyTemplate('sampleStoreSource', sourceRef)
   } else {
@@ -123,10 +124,8 @@ export function sample(...args: any): any {
       regional: true,
     })
     own(source, [
-      createLinkNode(
-        clock,
-        target,
-        [
+      createNode({
+        node: [
           applyTemplate('sampleSourceLoader'),
           mov({from: STACK, target: clockState}),
           read(hasSource, true),
@@ -136,10 +135,13 @@ export function sample(...args: any): any {
           fn && compute({fn: callStackAReg}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
-        SAMPLE,
-        fn,
-        // scope: {fn, targetTemplate}
-      ),
+        parent: clock,
+        child: target,
+        scope: {fn},
+        meta: {op: SAMPLE},
+        family: {owners: [clock, target], links: target},
+        regional: true,
+      }),
     ])
   }
   return target
