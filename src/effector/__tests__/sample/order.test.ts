@@ -170,7 +170,7 @@ describe('clock should use the last update', () => {
           "$requestData: {city:[msk,spb],filter:null}",
           "$filterValues: result",
           "$requestData: {city:[msk,spb],filter:result}",
-          "bugHere: {city:[msk,spb],filter:null}",
+          "bugHere: {city:[msk,spb],filter:result}",
           "noBugHere: {city:[msk,spb],filter:result}",
         ]
       `)
@@ -306,9 +306,9 @@ describe('clock should use the last update', () => {
           "$combine: {$selected:true,$result:null}",
           "$result: result",
           "$combine: {$selected:true,$result:result}",
-          "withBug: {$selected:true,$result:null}",
+          "withBug: {$selected:true,$result:result}",
           "noBug: {$selected:true,$result:result}",
-          "bugAgain: {$selected:true,$result:null}",
+          "bugAgain: {$selected:true,$result:result}",
         ]
       `)
     })

@@ -89,6 +89,7 @@ export function sample(...args: any): any {
   }
   // const targetTemplate =
   //   isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
+  const clockState = createStateRef()
   if (is.store(source)) {
     const sourceRef = getStoreState(source)
     own(source, [
@@ -97,7 +98,9 @@ export function sample(...args: any): any {
         target,
         [
           applyTemplate('sampleSourceLoader'),
+          mov({from: STACK, target: clockState}),
           read(sourceRef, !fn, batched),
+          read(clockState, !!fn),
           fn && compute({fn: callARegStack}),
           applyTemplate('sampleSourceUpward', isUpward),
         ],
@@ -110,7 +113,6 @@ export function sample(...args: any): any {
   } else {
     const hasSource = createStateRef(false)
     const sourceRef = createStateRef()
-    const clockState = createStateRef()
     applyTemplate('sampleNonStoreSource', hasSource, sourceRef, clockState)
     createNode({
       parent: source,
