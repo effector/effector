@@ -109,7 +109,7 @@ export function sample(...args: any): any {
         // scope: {fn, targetTemplate}
       ),
     ])
-    applyTemplate('sampleStoreSource', sourceRef)
+    applyTemplate('sampleStoreSource', sourceRef, clockState)
   } else {
     const hasSource = createStateRef(false)
     const sourceRef = createStateRef()

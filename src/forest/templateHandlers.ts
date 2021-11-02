@@ -74,13 +74,18 @@ export const handlers: TemplateHandlers = {
       linkNode.seq.unshift(template.loader)
     }
   },
-  sampleStoreSource(template: Template, sourceRef: StateRef) {
+  sampleStoreSource(
+    template: Template,
+    sourceRef: StateRef,
+    clockState: StateRef,
+  ) {
     if (
       !includes(template.plain, sourceRef) &&
       !includes(template.closure, sourceRef)
     ) {
       template.closure.push(sourceRef)
     }
+    template.plain.push(clockState)
   },
   sampleNonStoreSource(
     template: Template,
