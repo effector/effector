@@ -21,7 +21,7 @@ const getCommentsFx = createEffect(async postId => {
 })
 
 const $postComments = createStore([])
-  .on(getCommentsFx.doneData, (_, posts) => posts)
+  .on(getCommentsFx.doneData, (_, comments) => comments)
 
 const $currentPost = createStore(1)
   .on(getCommentsFx.done, (_, {params: postId}) => postId)
