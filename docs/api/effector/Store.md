@@ -157,7 +157,7 @@ const changedB = createEvent()
 
 const $store = createStore(0)
 
-$store.on([changedA, changedB], (state, params) => state + params)
+$store.on([changedA, changedB], (value, incrementor) => value + incrementor)
 
 $store.watch(value => {
   console.log('updated', value)
