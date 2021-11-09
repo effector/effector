@@ -123,6 +123,8 @@ Use [effector-logger](https://github.com/effector/logger) for printing updates t
 More articles about effector at patreon
 <a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
 
+[![Rate on Openbase](https://badges.openbase.com/js/rating/effector.svg)](https://openbase.com/js/effector?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge)
+
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
