@@ -19,7 +19,7 @@ const getTodoFx = createEffect(async ({id}) => {
 
 // Our main store
 const $todo = createStore(null)
-  .on(getTodoFx.doneData, (_, result) => result)
+  .on(getTodoFx.doneData, (_, todo) => todo)
 
 const TodoGate = createGate()
 
