@@ -58,7 +58,8 @@ Effector can reacts on media queries changes and provide current query state as 
 import {createEvent, createStore} from 'effector'
 
 const orientationChange = createEvent()
-const isPortrait = createStore(false).on(
+
+const $isPortrait = createStore(false).on(
   orientationChange,
   (state, e) => e.matches,
 )
@@ -84,11 +85,13 @@ export function mediaMatcher(query) {
   const queryChange = createEvent('query change')
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
     (state, e) => e.matches,
   )
-  return isQueryMatches
+
+  return $isQueryMatches
 }
 
 /* declaring queries */
@@ -123,11 +126,13 @@ export function mediaMatcher(query) {
   const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
     (state, e) => e.matches,
   )
-  return isQueryMatches
+
+  return $isQueryMatches
 }
 ```
 
@@ -180,11 +185,13 @@ export function mediaMatcher(query) {
   const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
     (state, e) => e.matches,
   )
-  return isQueryMatches
+
+  return $isQueryMatches
 }
 ```
 

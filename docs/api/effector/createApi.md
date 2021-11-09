@@ -25,15 +25,15 @@ createApi(store, api): objectWithEvents
 ```js
 import {createStore, createApi} from 'effector'
 
-const playerPosition = createStore(0)
+const $playerPosition = createStore(0)
 
 // create events and attach them to store
-const api = createApi(playerPosition, {
+const api = createApi($playerPosition, {
   moveLeft: (pos, n) => pos - n,
   moveRight: (pos, n) => pos + n,
 })
 
-playerPosition.watch(pos => {
+$playerPosition.watch(pos => {
   console.log('position', pos)
 })
 // => position 0

@@ -50,21 +50,21 @@ const fetchRequest = createEffect(
   n => new Promise(rs => setTimeout(rs, 2500, n)),
 )
 
-const clicks = createStore(0).on(clickRequest, x => x + 1)
-const requests = createStore(0).on(fetchRequest, x => x + 1)
+const $clicks = createStore(0).on(clickRequest, x => x + 1)
+const $requestsCount = createStore(0).on(fetchRequest, x => x + 1)
 
-const isIdle = fetchRequest.pending.map(pending => !pending)
+const $isIdle = fetchRequest.pending.map(pending => !pending)
 
 /*
 1. on clickRequest
-2. if isIdle is true
-3. take current clicks value
+2. if $isIdle is true
+3. take current $clicks value
 4. and call fetchRequest with it
 */
 guard({
   clock: clickRequest, /* 1 */
-  filter: isIdle, /* 2 */
-  source: clicks, /* 3 */
+  filter: $isIdle, /* 2 */
+  source: $clicks, /* 3 */
   target: fetchRequest, /* 4 */
 })
 ```
@@ -78,8 +78,8 @@ Also, guard accepts a common function predicate as filter, to drop events before
 ```js
 import {createEffect, createEvent, guard} from 'effector'
 
-const searchUser = createEffect()
 const submitForm = createEvent()
+const searchUser = createEffect()
 
 guard({
   source: submitForm,
@@ -107,6 +107,7 @@ import {createEvent, createStore, createApi, guard} from 'effector'
 
 const trigger = createEvent()
 const $unlocked = createStore(true)
+
 const {lock, unlock} = createApi($unlocked, {
   lock: () => false,
   unlock: () => true,

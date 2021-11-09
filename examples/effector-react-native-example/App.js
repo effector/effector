@@ -35,19 +35,20 @@ fetchCountFromAsyncStorage.done.watch(({result}) => {
   init(result)
 })
 
-const counter = createStore(0)
+const $counter = createStore(0)
   .on(increment, state => state + 1)
   .on(decrement, state => state - 1)
   .on(init, (state, value) => value)
   .reset(reset)
 
-counter.watch(state => {
+$counter.watch(state => {
   updateCountInAsyncStorage(state)
 })
 
 
 export default () => {
-  const count = useStore(counter)
+  const count = useStore($counter)
+  
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>{count}</Text>

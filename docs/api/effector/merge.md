@@ -50,7 +50,6 @@ const setFoo = createEvent()
 const setBar = createEvent()
 
 const $foo = createStore(0).on(setFoo, (_, v) => v)
-
 const $bar = createStore(100).on(setBar, (_, v) => v)
 
 const anyUpdated = merge([$foo, $bar])
@@ -71,7 +70,6 @@ const setFoo = createEvent()
 const otherEvent = createEvent()
 
 const $foo = createStore(0).on(setFoo, (_, v) => v)
-
 const merged = merge([$foo, otherEvent])
 
 merged.watch(v => console.log(`merged event payload: ${v}`))

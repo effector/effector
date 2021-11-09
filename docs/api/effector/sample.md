@@ -85,11 +85,12 @@ Array of units in target are supported since effector 21.8.0
 #### Example
 
 ```js
-const $userName = createStore('john')
+const submitForm = createEvent()
 const signIn = createEffect(params => {
   console.log(params)
 })
-const submitForm = createEvent()
+
+const $userName = createStore('john')
 
 sample({
   clock: submitForm /* 1 */,
@@ -129,11 +130,14 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Example
 
 ```js
-const $userName = createStore('john')
+
+const submitForm = createEvent()
+
 const signIn = createEffect(params => {
   console.log(params)
 })
-const submitForm = createEvent()
+
+const $userName = createStore('john')
 
 const sampleUnit = sample(
   $userName /* 2 */,
@@ -168,11 +172,11 @@ You now can name sampled entities in the same manner as basic ones.
 ```js
 import {createStore, sample} from 'effector'
 
-const foo = createStore(null)
+const $store = createStore(null)
 
 const sampled = sample({
-  source: foo,
-  name: 'sampled foo',
+  source: $store,
+  name: 'sampled $store',
 })
 
 console.log(sampled.shortName) // 'sampled foo'
@@ -189,15 +193,16 @@ effector 20.8.0
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
+
 const trigger = createEvent()
 
-const a = createStore('A')
-const b = createStore(1)
+const $a = createStore('A')
+const $b = createStore(1)
 
 // Target has type `Event<{ a: string, b: number }>`
 const target = sample({
   clock: trigger,
-  source: {a, b},
+  source: {a: $a, b: $b},
 })
 
 target.watch(obj => {
@@ -219,15 +224,16 @@ effector 20.8.0
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
+
 const trigger = createEvent()
 
-const a = createStore('A')
-const b = createStore(1)
+const $a = createStore('A')
+const $b = createStore(1)
 
 // Target has type `Event<[string, number]>`
 const target = sample({
   clock: trigger,
-  source: [a, b],
+  source: [$a, $b],
 })
 
 target.watch(obj => {
@@ -260,19 +266,19 @@ import {createStore, createEvent, createEffect, sample, merge} from 'effector'
 const showNotification = createEvent<string>()
 const trigger = createEvent()
 const fx = createEffect()
-const store = createStore('')
+const $store = createStore('')
 
 // array of units in clock
 sample({
   clock: [trigger, fx.doneData],
-  source: store,
+  source: $store,
   target: showNotification,
 })
 
 // merged unit in clock
 sample({
   clock: merge([trigger, fx.doneData]),
-  source: store,
+  source: $store,
   target: showNotification,
 })
 ```

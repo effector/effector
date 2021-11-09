@@ -14,14 +14,19 @@ const submitted = createEvent()
 const completed = createEvent()
 const changed = createEvent()
 const removed = createEvent()
+
 const validate = createEffect(([todo, todos]) => {
   if (todos.some(item => item.text === todo))
     throw 'This todo is already on the list'
+
   if (!todo.trim().length) throw 'Required field'
+  
   return null
 })
+
 const $todo = restore(changed, '').reset(submitted)
 const $error = restore(validate.failData, '').reset(changed)
+
 const $todos = createStore([])
   .on(submitted, (prev, next) => [...prev, {text: next, completed: false}])
   .on(completed, (state, index) => state.map((item, i) => ({
@@ -48,6 +53,7 @@ const App = () => {
   const tasks = useStore($todos)
   const todo = useStore($todo)
   const error = useStore($error)
+
   const list = useList($todos, (item, index) => (
     <li style={{textDecoration: item.completed ? 'line-through' : ''}}>
       <input
@@ -61,6 +67,7 @@ const App = () => {
       </button>
     </li>
   ))
+
   return (
     <div>
       <h1>Todos</h1>

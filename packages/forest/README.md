@@ -53,16 +53,18 @@ using(document.body, () => {
 })
 
 function formModel() {
-  const state = createStore({})
   const changed = createEvent()
   const submit = createEvent()
 
-  state.on(changed, (data, {name, value}) => ({...data, [name]: value}))
+  const $state = createStore({})
+    .on(changed, (data, {name, value}) => ({
+      ...data, [name]: value
+    }))
 
   const change = name => changed.prepend(e => ({name, value: e.target.value}))
 
   sample({
-    source: state,
+    source: $state,
     clock: submit,
     fn: stringify,
   }).watch(alert)
@@ -260,10 +262,10 @@ function text(words: TemplateStringsArray, ...values: Property[]): void
 **Example**
 
 ```typescript
-const username = createStore('guest')
+const $username = createStore('guest')
 
 h('h1', () => {
-  text`Hello ${username}!`
+  text`Hello ${$username}!`
 })
 ```
 
@@ -316,11 +318,12 @@ function val(words: TemplateStringsArray, ...values: PlainProperty[]): string
 **Example**
 
 ```typescript
-const x = createStore(10)
-const y = 20
+const $store = createStore(10)
+const a = 20
+
 h('g', {
   attr: {
-    transform: val`translate(${x} ${y})`,
+    transform: val`translate(${$store} ${a})`,
   },
 })
 ```

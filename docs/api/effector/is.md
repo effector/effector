@@ -25,11 +25,11 @@ import {
   createDomain,
 } from 'effector'
 
-const store = createStore(null)
+const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
 
-is.store(store)
+is.store($store)
 // => true
 
 is.store(event)
@@ -47,7 +47,7 @@ is.store(fx.pending)
 is.store(fx.done)
 // => false
 
-is.store(store.updates)
+is.store($store.updates)
 // => false
 
 is.store(null)
@@ -73,11 +73,11 @@ import {
   createDomain,
 } from 'effector'
 
-const store = createStore(null)
+const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
 
-is.event(store)
+is.event($store)
 // => false
 
 is.event(event)
@@ -95,7 +95,7 @@ is.event(fx.pending)
 is.event(fx.done)
 // => true
 
-is.event(store.updates)
+is.event($store.updates)
 // => true
 
 is.event(null)
@@ -121,11 +121,11 @@ import {
   createDomain,
 } from 'effector'
 
-const store = createStore(null)
+const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
 
-is.effect(store)
+is.effect($store)
 // => false
 
 is.effect(event)
@@ -160,11 +160,11 @@ import {
   createDomain,
 } from 'effector'
 
-const store = createStore(null)
+const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
 
-is.domain(store)
+is.domain($store)
 // => false
 
 is.domain(event)
@@ -197,7 +197,7 @@ boolean
 ```js
 import {fork} from 'effector'
 
-const store = createStore(null)
+const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
 const scope = fork()
@@ -205,7 +205,7 @@ const scope = fork()
 is.scope(scope)
 // => true
 
-is.scope(store)
+is.scope($store)
 // => false
 
 is.scope(event)
@@ -241,7 +241,7 @@ import {
   fork,
 } from 'effector'
 
-const store = createStore(null)
+const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
 const scope = fork()
@@ -249,7 +249,7 @@ const scope = fork()
 is.unit(scope)
 // => true
 
-is.unit(store)
+is.unit($store)
 // => true
 
 is.unit(event)
@@ -267,7 +267,7 @@ is.unit(fx.pending)
 is.unit(fx.done)
 // => true
 
-is.unit(store.updates)
+is.unit($store.updates)
 // => true
 
 is.unit(null)

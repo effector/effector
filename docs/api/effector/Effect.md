@@ -26,9 +26,9 @@ const fetchUserFx = createEffect(async ({id}) => {
   return res.json()
 })
 
-const users = createStore([]) // Default state
+const $users = createStore([]) // Default state
   // add reducer for fetchUserFx.doneData event (triggered when handler resolved)
-  .on(fetchUserFx.doneData, (users, user) => [...users, user])
+  .on(fetchUserFx.doneData, (store, user) => [...store, user])
 
 // subscribe to handler resolve
 fetchUserFx.done.watch(({result, params}) => {
@@ -522,7 +522,7 @@ import {createEffect, createStore} from 'effector'
 const fetchApiFx = createEffect()
 
 //now you can use fetchApiFx.pending instead
-const isLoading = createStore(false)
+const $isLoading = createStore(false)
   .on(fetchApiFx, () => true)
   .on(fetchApiFx.done, () => false)
   .on(fetchApiFx.fail, () => false)

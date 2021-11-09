@@ -210,9 +210,9 @@ You can match directly to store api as well:
 ```js
 import {split, createStore, createEvent, createApi} from 'effector'
 
-const textContent = createStore([])
-
 const messageReceived = createEvent()
+
+const $textContent = createStore([])
 
 split({
   source: messageReceived,
@@ -220,14 +220,14 @@ split({
     text: msg => msg.type === 'text',
     audio: msg => msg.type === 'audio',
   },
-  cases: createApi(textContent, {
+  cases: createApi($textContent, {
     text: (list, {value}) => [...list, value],
     audio: (list, {duration}) => [...list, `audio ${duration} ms`],
     __: list => [...list, 'unknown message'],
   }),
 })
 
-textContent.watch(messages => {
+$textContent.watch(messages => {
   console.log(messages)
 })
 

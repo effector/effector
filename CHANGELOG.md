@@ -94,7 +94,8 @@ sample({
 ```typescript
 const source = createEvent()
 const even = createEvent()
-const odd = createStore(0)
+
+const $odd = createStore(0)
 
 split({
   source,
@@ -105,7 +106,7 @@ split({
   },
   cases: {
     even,
-    odd,
+    odd: $odd,
   },
 })
 
@@ -323,6 +324,7 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 
 ```js
 import {createDomain, fork, allSettled} from 'effector'
+
 const app = createDomain()
 const fx = app.createEffect(() => 'ok')
 const result = await allSettled(fx, {scope: fork(app)})
@@ -374,20 +376,23 @@ await fetchUserReposFx({name: 'zerobias'})
 
 ```js
 import {createStore, createEffect, attach} from 'effector'
+
 const request = createEffect()
-const token = createStore('')
-const secureRequest = attach({effect: request, source: token})
+const $token = createStore('')
+const secureRequest = attach({effect: request, source: $token})
 ```
 
 it's a shorthand for common use case:
 
 ```js
 import {createStore, createEffect, attach} from 'effector'
-const request = createEffect()
-const token = createStore('')
+
+const $request = createEffect()
+const $token = createStore('')
+
 const secureRequest = attach({
-  effect: request,
-  source: token,
+  effect: $request,
+  source: $token,
   mapParams: (_, source) => source,
 })
 ```
@@ -411,18 +416,19 @@ import {createStore, createEvent, createEffect, sample, merge} from 'effector'
 const showNotification = createEvent<string>()
 const trigger = createEvent()
 const fx = createEffect()
-const store = createStore('')
+
+const $store = createStore('')
 
 // array of units in clock
 sample({
-  source: store,
+  source: $store,
   clock: [trigger, fx.doneData],
   target: showNotification,
 })
 
 // merged unit in clock
 sample({
-  source: store,
+  source: $store,
   clock: merge([trigger, fx.doneData]),
   target: showNotification,
 })
@@ -446,12 +452,12 @@ import {
   EffectResult,
 } from 'effector'
 
-const username = createStore('guest')
-
 const getUserFX = createEffect<number, {name: string}>()
 
+const $username = createStore('guest')
+
 // string
-type Username = StoreValue<typeof username>
+type Username = StoreValue<typeof $username>
 
 // number
 type GetUserParams = EffectParams<typeof getUserFX>
@@ -504,6 +510,7 @@ await allSettled(voidFx, {scope})
 
 ```js
 import {split, createEffect, createEvent} from 'effector'
+
 const messageReceived = createEvent()
 const showTextPopup = createEvent()
 const playAudio = createEvent()
@@ -549,9 +556,8 @@ You can match directly to store api as well:
 ```js
 import {split, createStore, createEvent, createApi} from 'effector'
 
-const textContent = createStore([])
-
 const messageReceived = createEvent()
+const $textContent = createStore([])
 
 split({
   source: messageReceived,
@@ -559,14 +565,14 @@ split({
     text: msg => msg.type === 'text',
     audio: msg => msg.type === 'audio',
   },
-  cases: createApi(textContent, {
+  cases: createApi($textContent, {
     text: (list, {value}) => [...list, value],
     audio: (list, {duration}) => [...list, `audio ${duration} ms`],
     __: list => [...list, 'unknown message'],
   }),
 })
 
-textContent.watch(messages => {
+$textContent.watch(messages => {
   console.log(messages)
 })
 
@@ -625,6 +631,7 @@ const getMessagesFx = app.createEffect({
     return ['hi bob!', 'Hello, Alice']
   },
 })
+
 const messagesAmount = app
   .createStore(0)
   .on(getMessagesFx.doneData, (_, messages) => messages.length)
@@ -671,10 +678,10 @@ import {createDomain, attach} from 'effector'
 import {fork, allSettled} from 'effector/fork'
 
 const app = createDomain()
-
 const add = app.createEffect({handler: _ => _})
 
-const count = app.createStore(2).on(add.doneData, (x, y) => x + y)
+const count = app.createStore(2)
+  .on(add.doneData, (x, y) => x + y)
 
 const addWithCurrent = attach({
   source: count,
@@ -727,8 +734,8 @@ import {createDomain, forward} from 'effector'
 import {fork, allSettled} from 'effector/fork'
 
 const app = createDomain()
-
 const addWord = app.createEffect({handler: async word => word})
+
 const words = app
   .createStore([])
   .on(addWord.doneData, (list, word) => [...list, word])
@@ -838,6 +845,7 @@ guard({
 
 ```js
 const fx = createEffect({...});
+
 export default Vue.extend({
   effector: {
     isCompleted: fx.done
@@ -857,6 +865,7 @@ export default Vue.extend({
 
 ```js
 const $msg = createStore()
+
 export default Vue.extend({
   effector: {
     $msg,
@@ -887,12 +896,12 @@ const fetchFriends = app.createEffect<{limit: number}, string[]>({
   },
 })
 const user = app.createStore('guest')
-const friends = app
+const $friends = app
   .createStore([])
   .on(fetchFriends.doneData, (_, result) => result)
 
 /*
-  test to ensure that friends value is populated
+  test to ensure that $friends value is populated
   after fetchFriends call
 */
 const testScope = fork(app, {
@@ -971,13 +980,13 @@ hydrate(app, {
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
 const changedA = createEvent()
 const changedB = createEvent()
 
-store.on([changedA, changedB], (state, params) => state + params)
+const $store = createStore(0)
+  .on([changedA, changedB], (state, params) => state + params)
 
-store.watch(value => {
+$store.watch(value => {
   console.log('updated', value)
 })
 
@@ -988,7 +997,7 @@ changedB(2)
 // => updated 4
 
 // You can unsubscribe from any trigger
-store.off(changedA)
+$store.off(changedA)
 ```
 
 [Try it](https://share.effector.dev/iP0oM3NF)
@@ -1000,13 +1009,14 @@ store.off(changedA)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
 
-store.on(increment, state => state + 1).reset([reset])
+const $store = createStore(0)
+  .on(increment, state => state + 1)
+  .reset([reset])
 
-store.watch(state => console.log('changed', state))
+$store.watch(state => console.log('changed', state))
 // changed 0
 // watch method calls its function immediately
 
@@ -1031,7 +1041,7 @@ This code now works without type errors:
 import {createStore} from 'effector'
 import {useList} from 'effector-react'
 
-const users = createStore<User[]>([
+const $users = createStore<User[]>([
   {
     username: 'alice',
     email: 'alice@example.com',
@@ -1048,7 +1058,8 @@ const users = createStore<User[]>([
     bio: '- - -',
   },
 ])
-const UserList = () => useList(users, ({username}) => <p>{username}</p>)
+const UserList = () => useList($users, ({username}) => <p>{username}</p>)
+
 const App = () => (
   <div>
     <UserList />
@@ -1127,17 +1138,17 @@ const backendRequest = createEffect({
   },
 })
 
-const requestsSend = createStore(0).on(backendRequest, total => total + 1)
+const $requestsSend = createStore(0).on(backendRequest, total => total + 1)
 
-requestsSend.watch(total => {
+$requestsSend.watch(total => {
   console.log(`client analytics: sent ${total} requests`)
 })
 
-const token = createStore('guest_token')
+const $token = createStore('guest_token')
 
 const authorizedRequest = attach({
   effect: backendRequest,
-  source: token,
+  source: $token,
   mapParams: ({data, resource}, token) => ({data, resource, token}),
 })
 
@@ -1226,12 +1237,12 @@ const foo = createInputField('-', {
 ```typescript
 import {createStore, sample} from 'effector'
 
-const source = createStore([{foo: 0}])
-const target = createStore(0)
+const $a = createStore([{foo: 0}])
+const $b = createStore(0)
 
 sample({
-  source,
-  target,
+  source: $a,
+  target: $b,
   fn: list => list.length,
 })
 ```
@@ -1341,9 +1352,8 @@ await Promise.all([req1, req2])
 ```js
 import {createEvent, createDomain, withRegion} from 'effector'
 
-const trigger = createEvent()
-
 const domain = createDomain()
+const trigger = createEvent()
 
 withRegion(domain, () => {
   trigger.watch(n => {
@@ -1383,8 +1393,8 @@ export const app = createDomain()
 const requestUsername = app.createEffect<{login: string}, string>()
 const requestFriends = app.createEffect<string, string[]>()
 
-const username = restore(requestUsername, 'guest')
-const friends = restore(requestFriends, [])
+const $username = restore(requestUsername, 'guest')
+const $friends = restore(requestFriends, [])
 
 forward({
   from: requestUserName.done.map(({result: username}) => username),
@@ -1393,13 +1403,13 @@ forward({
 
 const Friends = () => (
   <ul>
-    {useList(friends, friend => (
+    {useList($friends, friend => (
       <li>{name}</li>
     ))}
   </ul>
 )
 
-const Title = () => <header>Hello {useStore(username)}</header>
+const Title = () => <header>Hello {useStore($username)}</header>
 
 export const View = ({root}) => (
   <Provider value={root}>
@@ -1473,17 +1483,19 @@ This solution requires `effector/babel-plugin` in babel configuration:
 
 ```js
 import {createDomain, createApi, restore} from 'effector'
+
 const domain = createDomain()
 domain.onCreateStore(store => {
   console.log('store created')
 })
+
 domain.onCreateEvent(event => {
   console.log('event created')
 })
 
-const position = domain.createStore({x: 0})
+const $position = domain.createStore({x: 0})
 // => store created
-const {move} = createApi(position, {
+const {move} = createApi($position, {
   move: ({x}, payload) => ({x: x + payload}),
 })
 // => event created
@@ -1501,10 +1513,10 @@ const lastMove = restore(move, 0)
 import {createEvent, createStore, combine} from 'effector'
 
 const event = createEvent()
-const store = createStore(0).on(event, s => s + 1)
+const $store = createStore(0).on(event, s => s + 1)
 
-const combined = combine([store, combine([store.map(d => d + 1)])])
-combined.watch(e => fn(e))
+const $combined = combine([$store, combine([$store.map(d => d + 1)])])
+$combined.watch(e => fn(e))
 // => [0, [1]]
 event()
 // => [1, [2]]
@@ -1534,7 +1546,7 @@ type User = {
   bio: string
 }
 
-const users = createStore<User[]>([
+const $users = createStore<User[]>([
   {
     username: 'alice',
     email: 'alice@example.com',
@@ -1554,7 +1566,7 @@ const users = createStore<User[]>([
 
 export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
   const value = useStoreMap({
-    store: users,
+    store: $users,
     keys: [id, field],
     fn: (users, [id, field]) => users[id][field] || null,
   })
@@ -1573,17 +1585,17 @@ const trigger = createEvent()
 const objectTarget = createEvent()
 const arrayTarget = createEvent()
 
-const a = createStore('A')
-const b = createStore('B')
+const $a = createStore('A')
+const $b = createStore('B')
 
 sample({
-  source: {a, b},
+  source: {a: $a, b: $b},
   clock: trigger,
   target: objectTarget,
 })
 
 sample({
-  source: [a, b],
+  source: [$a, $b],
   clock: trigger,
   target: arrayTarget,
 })
@@ -1602,13 +1614,13 @@ trigger()
 /* old way to do this: */
 
 sample({
-  source: combine({a, b}),
+  source: combine({a: $a, b: $b}),
   clock: trigger,
   target: objectTarget,
 })
 
 sample({
-  source: combine([a, b]),
+  source: combine([$a, $b]),
   clock: trigger,
   target: arrayTarget,
 })
@@ -1622,6 +1634,7 @@ sample({
 
 ```js
 import {createGate} from 'effector-react'
+
 const PageMeta = createGate()
 
 PageMeta.open.watch(props => {
@@ -1722,16 +1735,16 @@ export default createComponent(
 ```js
 import {createStore, combine, createStoreObject} from 'effector'
 
-const r = createStore(255)
-const g = createStore(0)
-const b = createStore(255)
+const $r = createStore(255)
+const $g = createStore(0)
+const $b = createStore(255)
 
-const color = combine({r, g, b})
-color.watch(console.log)
+const $color = combine({r: $r, g: $g, b: $b})
+$color.watch(console.log)
 // => {r: 255, b: 0, b: 255}
 
-const colorOld = createStoreObject({r, g, b})
-colorOld.watch(console.log)
+const $colorOld = createStoreObject({r, g, b})
+$colorOld.watch(console.log)
 // => {r: 255, b: 0, b: 255}
 ```
 
@@ -1742,12 +1755,12 @@ colorOld.watch(console.log)
 ```js
 import {createStore, combine} from 'effector'
 
-const r = createStore(255)
-const g = createStore(0)
-const b = createStore(255)
+const $r = createStore(255)
+const $g = createStore(0)
+const $b = createStore(255)
 
-const color = combine([r, g, b])
-color.watch(console.log)
+const $color = combine([$r, $g, $b])
+$color.watch(console.log)
 // => [255, 0, 255]
 ```
 
@@ -1763,6 +1776,7 @@ color.watch(console.log)
 
 ```js
 import {createStore, sample} from 'effector'
+
 sample({
   source: createStore(null),
   clock: undefined,
@@ -1802,18 +1816,18 @@ const fetchRequest = createEffect({
   handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
 })
 
-const clicks = createStore(0).on(clickRequest, x => x + 1)
-const requests = createStore(0).on(fetchRequest, x => x + 1)
+const $clicks = createStore(0).on(clickRequest, x => x + 1)
+const $requests = createStore(0).on(fetchRequest, x => x + 1)
 
 const isIdle = fetchRequest.pending.map(pending => !pending)
 
 /*
-on clickRequest, take current clicks value,
+on clickRequest, take current $clicks value,
 and call fetchRequest with it
 if isIdle value is true
 */
 guard({
-  source: sample(clicks, clickRequest),
+  source: sample($clicks, clickRequest),
   filter: isIdle,
   target: fetchRequest,
 })
@@ -1850,11 +1864,11 @@ manner as basic ones.
 ```js
 import {createStore, sample} from 'effector'
 
-const foo = createStore(null)
+const $store = createStore(null)
 
 const sampled = sample({
-  source: foo,
-  name: 'sampled foo',
+  source: $store,
+  name: 'sampled $store',
 })
 
 console.log(sampled.shortName) // 'sampled foo'
@@ -1872,13 +1886,9 @@ import ReactDOM from 'react-dom'
 import {createStore, createEvent, createEffect, sample} from 'effector'
 import {useList} from 'effector-react'
 
-const items$ = createStore([
-  {id: 0, status: 'NEW'},
-  {id: 1, status: 'NEW'},
-])
-
 const updateItem = createEvent()
 const resetItems = createEvent()
+const processClicked = createEvent()
 
 const processItems = createEffect({
   async handler(items) {
@@ -1893,17 +1903,17 @@ const processItems = createEffect({
   },
 })
 
-items$
-  .on(updateItem, (items, {id, status}) =>
+const $items = createStore([
+  {id: 0, status: 'NEW'},
+  {id: 1, status: 'NEW'},
+]).on(updateItem, (items, {id, status}) =>
     items.map(item => (item.id === id ? {...item, status} : item)),
   )
   .on(processItems, items => items.map(({id}) => ({id, status: 'WAIT'})))
   .reset(resetItems)
 
-const processClicked = createEvent()
-
 sample({
-  source: items$,
+  source: $items,
   clock: processClicked,
   target: processItems,
 })
@@ -1916,7 +1926,7 @@ const App = () => (
     <button onClick={processClicked}>run tasks</button>
     <button onClick={resetItems}>reset</button>
     <ol>
-      {useList(items$, ({status}) => (
+      {useList($items, ({status}) => (
         <li>{status}</li>
       ))}
     </ol>
@@ -1941,16 +1951,18 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-
 import {createEvent, createStore, restore} from 'effector'
 import {useStore, useList} from 'effector-react'
 
 const renameUser = createEvent()
-const user = restore(renameUser, 'alice')
-const friends = createStore(['bob'])
+
+const $user = restore(renameUser, 'alice')
+const $friends = createStore(['bob'])
+
 const List = () => {
-  const userName = useStore(user)
-  return useList(friends, {
+  const userName = useStore($user)
+
+  return useList($friends, {
     keys: [userName],
     fn: friend => (
       <div>
@@ -1975,7 +1987,9 @@ setTimeout(() => {
 
 ```js
 import {createDomain} from 'effector'
+
 const domain = createDomain('feature')
+
 console.log(domain.shortName)
 // => feature
 ```
@@ -1988,9 +2002,10 @@ console.log(domain.shortName)
 import {createDomain} from 'effector'
 const domain = createDomain()
 const eventA = domain.event()
-const storeB = domain.store(0)
+const $storeB = domain.store(0)
+
 console.log(domain.history)
-// => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
+// => {stores: Set{$storeB}, events: Set{eventA}, domains: Set, effects: Set}
 ```
 
 [Try it](https://share.effector.dev/HAG9a8nk)
@@ -2015,8 +2030,10 @@ new Vue({
 
 ```js
 import {createDomain, clearNode} from 'effector'
+
 const root = createDomain()
 const child = root.domain()
+
 clearNode(child)
 ```
 
@@ -2028,6 +2045,7 @@ clearNode(child)
 import {createEffect} from 'effector'
 
 export const getUser = createEffect({sid: 'GET /user'})
+
 console.log(getUsers.sid)
 // => GET /user
 
@@ -2161,7 +2179,7 @@ import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
 import {useList} from 'effector-react'
 
-const list = createStore([
+const $list = createStore([
   {name: 'alice', age: 21},
   {name: 'bob', age: 20},
   {name: 'carol', age: 22},
@@ -2169,7 +2187,7 @@ const list = createStore([
 
 const List = () => {
   // note that we don't need keys here any more
-  const users = useList(list, ({name}, i) => (
+  const users = useList($list, ({name}, i) => (
     <div>
       {i}) {name}
     </div>
@@ -2205,7 +2223,7 @@ type User = {
   bio: string
 }
 
-const users = createStore<User[]>([
+const $users = createStore<User[]>([
   {
     username: 'alice',
     email: 'alice@example.com',
@@ -2225,10 +2243,11 @@ const users = createStore<User[]>([
 
 export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
   const value = useStoreMap({
-    store: users,
+    store: $users,
     keys: [id, field] as const,
     fn: (users, [id, field]) => users[id][field] || null,
   })
+
   return <div>{value}</div>
 }
 ```
@@ -2246,7 +2265,7 @@ type User = {
   bio: string
 }
 
-const users = createStore<User[]>([
+const $users = createStore<User[]>([
   {
     username: 'alice',
     email: 'alice@example.com',
@@ -2266,10 +2285,11 @@ const users = createStore<User[]>([
 
 export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
   const value = useStoreMap({
-    store: users,
+    store: $users,
     keys: [id, field] as [number, keyof User],
     fn: (users, [id, field]) => users[id][field] || null,
   })
+
   return <div>{value}</div>
 }
 ```
@@ -2290,9 +2310,11 @@ export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
 
 ```js
 import {createEvent, merge} from 'effector'
+
 const foo = createEvent()
 const bar = createEvent()
 const baz = merge([foo, bar])
+
 baz.watch(v => console.log('merged event triggered: ', v))
 
 foo(1)
@@ -2307,6 +2329,7 @@ bar(2)
 
 ```js
 import {createEvent, split} from 'effector'
+
 const message = createEvent()
 
 const messageByAuthor = split(message, {
@@ -2340,11 +2363,14 @@ message({user: 'unregistered', text: 'hi'})
 
 ```js
 import {createEvent, clearNode} from 'effector'
+
 const source = createEvent()
 const target = source.map(x => {
   console.log('intermediate step')
+
   return x
 })
+
 target.watch(x => console.log('target watcher'))
 source()
 // => intermediate step
@@ -2361,12 +2387,14 @@ source() // ~ no reaction ~
 
 ```js
 import {createEffect} from 'effector'
+
 const fetchApi = createEffect({
   handler: n =>
     new Promise(resolve => {
       setTimeout(resolve, n, `${n} ms`)
     }),
 })
+
 fetchApi.finally.watch(response => {
   console.log(response)
 })
@@ -2406,10 +2434,11 @@ import ReactDOM from 'react-dom'
 
 const User = ({id}) => {
   const user = useStoreMap({
-    store: user$,
+    store: $users,
     keys: [id],
     fn: (users, [id]) => users[id],
   })
+  
   return (
     <div>
       {user.name} ({user.age})
@@ -2419,12 +2448,12 @@ const User = ({id}) => {
 
 const UserList = () => useStore(userID$).map(id => <User id={id} key={id} />)
 
-const user$ = createStore({
+const $user = createStore({
   alex: {age: 20, name: 'Alex'},
   john: {age: 30, name: 'John'},
 })
 
-const userID$ = user$.map(users => Object.keys(users))
+const $userID = $user.map(users => Object.keys(users))
 
 ReactDOM.render(<UserList />, document.getElementById('root'))
 ```
@@ -2467,14 +2496,14 @@ To indicate the stability of the project, we adopting semantic versioning and ha
 ```js
 import {createStore, is} from 'effector'
 
-const clicksAmount = createStore(0)
-is.event(clicksAmount.updates) // => true
+const $clicksAmount = createStore(0)
+is.event($clicksAmount.updates) // => true
 
-clicksAmount.watch(amount => {
+$clicksAmount.watch(amount => {
   console.log('will be triggered with current state, immediately, sync', amount)
 })
 
-clicksAmount.updates.watch(amount => {
+$clicksAmount.updates.watch(amount => {
   console.log('will not be triggered unless store value is changed', amount)
 })
 ```
@@ -2496,7 +2525,7 @@ import {createStore, createEvent} from 'effector'
 const firstTrigger = createEvent()
 const secondTrigger = createEvent()
 
-const target = createStore(0).reset(firstTrigger, secondTrigger)
+const $target = createStore(0).reset(firstTrigger, secondTrigger)
 ```
 
 - Add support for `createEvent` and `createEffect` with config (see next code example)
@@ -2504,9 +2533,10 @@ const target = createStore(0).reset(firstTrigger, secondTrigger)
 - Add `.pending` property for effects
 
 ```js
+import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
-import React from 'react'
+
 const fetchApi = createEffect({
   handler: n => new Promise(resolve => setTimeout(resolve, n)),
 })
@@ -2529,7 +2559,7 @@ import {createEffect, createStore} from 'effector'
 const fetchApi = createEffect()
 
 //now you can use fetchApi.pending instead
-const isLoading = createStore(false)
+const $isLoading = createStore(false)
   .on(fetchApi, () => true)
   .on(fetchApi.done, () => false)
   .on(fetchApi.fail, () => false)
@@ -2540,19 +2570,20 @@ const isLoading = createStore(false)
 - Introduce `sample`. Sample allows to integrate rapidly changed values with common ui states
 
 ```js
+import React from 'react'
 import {createStore, createEvent, sample} from 'effector'
 import {createComponent} from 'effector-react'
-import React from 'react'
+
 
 const tickEvent = createEvent()
-const tick = createStore(0).on(tickEvent, n => n + 1)
+const $tick = createStore(0).on(tickEvent, n => n + 1)
 
 setInterval(tickEvent, 1000 / 60)
 
 const mouseClick = createEvent()
-const clicks = createStore(0).on(mouseClick, n => n + 1)
+const $clicks = createStore(0).on(mouseClick, n => n + 1)
 
-const sampled = sample(tick, clicks, (tick, clicks) => ({
+const sampled = sample($tick, $clicks, (tick, clicks) => ({
   tick,
   clicks,
 }))
@@ -2583,13 +2614,14 @@ const App = () => (
 - Add babel plugin for automatic displayName for react components
 
 ```js
+import React from 'react'
 import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
-import React from 'react'
 
-const title = createStore('welcome')
 
-console.log('store.shortName', title.shortName)
+const $title = createStore('welcome')
+
+console.log('store.shortName', $title.shortName)
 // store.shortName title
 
 const clickTitle = createEvent()
@@ -2597,7 +2629,7 @@ const clickTitle = createEvent()
 console.log('event.shortName', clickTitle.shortName)
 // store.shortName clickTitle
 
-const Title = createComponent(title, (props, title) => <h1>{title}</h1>)
+const Title = createComponent({title: $title}, (props, title) => <h1>{title}</h1>)
 
 console.log('Component.displayName', Title.displayName)
 // Component.displayName Title
@@ -2621,8 +2653,9 @@ Plugins are available out from a box
 import {createStore, createEvent} from 'effector'
 
 const updates = createEvent()
-const state = createStore(0)
-state.watch(updates)
+const $state = createStore(0)
+
+$state.watch(updates)
 ```
 
 - Improve execution order for sync effects
@@ -2651,11 +2684,11 @@ const UserList = createComponent(users, (_, users) => {
 
 ```js
 const deposit = createEvent()
-const username = createStore('zerobias')
-const balance = createStore(0)
+const $username = createStore('zerobias')
+const $balance = createStore(0)
 
 const Profile = createComponent(
-  {username, balance},
+  {username: $username, balance: $balance},
   (_, {username, balance}) => {
     return (
       <div>
@@ -2703,24 +2736,24 @@ Counter.unmounted.watch(({props, state}) => {
 ```js
 import {createStore, createEvent, createStoreObject, combine} from 'effector'
 
-const field = createStore('')
-const isEmpty = field.map(value => value.length === 0)
-const isTooLong = field.map(value => value.length > 12)
-const isValid = combine(
-  isEmpty,
-  isTooLong,
+const updateField = createEvent('update $field value')
+
+const $field = createStore('')
+  .on(updateField, (state, upd) => upd.trim())
+
+const $isEmpty = $field.map(value => value.length === 0)
+const $isTooLong = $field.map(value => value.length > 12)
+const $isValid = combine(
+  $isEmpty,
+  $isTooLong,
   (isEmpty, isTooLong) => !isEmpty && !isTooLong,
 )
 
-const updateField = createEvent('update field value')
-
-field.on(updateField, (state, upd) => upd.trim())
-
 createStoreObject({
-  field,
-  isEmpty,
-  isTooLong,
-  isValid,
+  field: $field,
+  isEmpty: $isEmpty,
+  isTooLong: $isTooLong,
+  isValid: $isValid,
 }).watch(data => {
   console.log(data)
 })
@@ -2738,12 +2771,13 @@ updateField('bobby')
 
 ```js
 import {createStore, createEvent, is} from 'effector'
-const store = createStore('value')
+
+const $store = createStore('value')
 const event = createEvent('some event')
 
-is.store(store) // => true
-is.event(store) // => false
-is.unit(store) // => true
+is.store($store) // => true
+is.event($store) // => false
+is.unit($store) // => true
 
 is.store(event) // => false
 is.event(event) // => true
@@ -2761,13 +2795,13 @@ is.unit(null) // => false
 ```js
 import {createNode, launch, step, createStore} from 'effector'
 
-const target = createStore(0)
-target.watch(n => console.log('current n = ', n))
+const $target = createStore(0)
+$target.watch(n => console.log('current n = ', n))
 // => current n = 0
 
 const customNode = createNode({
   scope: {max: 100, lastValue: -1, add: 10},
-  child: [target], // you can forward later as well
+  child: [$target], // you can forward later as well
   node: [
     step.compute({
       fn: (arg, {add}) => arg + add,
@@ -2823,6 +2857,7 @@ reduxStore.dispatch({type: INCREMENT_STATE})
 
 ```js
 import {version} from 'effector'
+
 console.log(version)
 // => 0.18.6
 ```
@@ -2857,6 +2892,7 @@ trigger('payload')
 
 ```js
 import {version} from 'effector'
+
 console.log(version)
 ```
 
@@ -2868,12 +2904,13 @@ console.log(version)
 
 ```js
 import {createStore, createEvent, isStore, isEvent, isUnit} from 'effector'
-const store = createStore('value')
-const event = createEvent('some event')
 
-isStore(store) // => true
-isEvent(store) // => false
-isUnit(store) // => true
+const event = createEvent('some event')
+const $store = createStore('value')
+
+isStore($store) // => true
+isEvent($store) // => false
+isUnit($store) // => true
 
 isStore(event) // => false
 isEvent(event) // => true
@@ -2888,7 +2925,8 @@ isUnit(null) // => false
 
 ```js
 import {createStore} from 'effector'
-const store = createStore('value', {
+
+const $store = createStore('value', {
   name: 'value store',
 })
 ```
@@ -2910,9 +2948,9 @@ const store = createStore('value', {
 ```js
 import {createStore, createApi} from 'effector'
 
-const text = createStore('')
+const $text = createStore('')
 
-const {addMessage, cut} = createApi(text, {
+const {addMessage, cut} = createApi($text, {
   addMessage: (text, message) => text + `\n` + message
   cut: (text, {fromIndex, size}) => text.slice(fromIndex, fromIndex + size),
 })
@@ -2931,8 +2969,8 @@ const {addMessage, cut} = createApi(text, {
     <script>
       const header = document.createElement('h1')
       document.body.appendChild(header)
-      const text = effector.createStore('hello')
-      text.watch(str => (header.innerHTML = str))
+      const $text = effector.createStore('hello')
+      $text.watch(str => (header.innerHTML = str))
     </script>
   </body>
 </html>
@@ -2944,6 +2982,7 @@ const {addMessage, cut} = createApi(text, {
 
 ```js
 import {forward} from 'effector'
+
 const unsubscribe = forward({
   from: Event | Store,
   to: Event | Store | Effect,
@@ -2954,14 +2993,16 @@ const unsubscribe = forward({
 
 ```js
 import {createStore} from 'effector'
-const name = createStore('name')
-const counter = createStore(0).on(name, (count, name) => count++)
+
+const $name = createStore('name')
+const $counter = createStore(0).on(name, (count, name) => count++)
 ```
 
 - Allow to pass `{handler: Function}` as second argument to `createEffect`
 
 ```js
 import {createEffect} from 'effector'
+
 const callApi = createEffect('call api', {
   async handler(url) {
     const res = await fetch(url)
@@ -2974,6 +3015,7 @@ const callApi = createEffect('call api', {
 
 ```js
 import {createEffect} from 'effector'
+
 const callApi = createEffect('call api').use(url => fetch(url))
 ```
 
@@ -2992,6 +3034,7 @@ const callApi = createEffect('call api').use(url => fetch(url))
 
 ```js
 import {type Gate, createGate} from 'effector-react'
+
 const AppGate = createGate('app')
 const MainPageGate = AppGate.childGate('main page')
 
@@ -3020,6 +3063,7 @@ AppGate.state.watch(({isLoading}) => isLoading)
 
 ```js
 import {createDomain} from 'effector'
+
 const mainPage = createDomain('main page')
 mainPage.onCreateEvent(event => {
   console.log('new event: ', event.getType())
