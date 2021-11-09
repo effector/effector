@@ -23,6 +23,7 @@ const url =
 const App = () => {
   const user = useStore($user)
   const pending = useStore(fetchUserFx.pending)
+  
   return (
     <div>
       {user ? <div>current user: {user}</div> : <div>no current user</div>}

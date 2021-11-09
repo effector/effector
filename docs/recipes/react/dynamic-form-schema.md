@@ -189,11 +189,13 @@ function useFormField(name) {
     },
   })
   mainFormApi.upsertField(name)
+
   return [value, type]
 }
 
 function Form() {
   const pending = useStore(saveFormFx.pending)
+
   return (
     <form onSubmit={submitForm} data-form autocomplete="off">
       <header>
@@ -313,6 +315,7 @@ const Tooltip = () => {
 
   return <span data-tooltip={text} data-visible={visible} />
 }
+
 const App = () => (
   <>
     <Tooltip />

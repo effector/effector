@@ -34,8 +34,8 @@ import {
 
 const first = createEvent()
 const second = createEvent()
-const store = restore(first, '')
-store.watch(console.log)
+const $store = restore(first, '')
+$store.watch(console.log)
 
 const domain = createDomain()
 

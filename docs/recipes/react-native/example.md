@@ -57,6 +57,7 @@ fetchCountFromAsyncStorageFx()
 
 export default () => {
   const count = useStore(counter)
+  
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>{count}</Text>

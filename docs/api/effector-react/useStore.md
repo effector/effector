@@ -32,6 +32,7 @@ const {increment, decrement} = createApi($counter, {
 
 const App = () => {
   const counter = useStore($counter)
+  
   return (
     <div>
       {counter}

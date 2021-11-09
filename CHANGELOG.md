@@ -280,6 +280,7 @@ export function createEffectStatus(fx) {
   const $status = rootDomain
     .createStore('init')
     .on(fx.finally, (_, {status}) => status)
+
   return $status
 }
 ```
@@ -632,7 +633,7 @@ const getMessagesFx = app.createEffect({
   },
 })
 
-const messagesAmount = app
+const $messagesAmount = app
   .createStore(0)
   .on(getMessagesFx.doneData, (_, messages) => messages.length)
 
@@ -643,10 +644,11 @@ forward({
 
 const ChatPage = ({chatId}) => {
   useGate(activeChatGate, {chatId})
+
   return (
     <div>
       <header>Chat {chatId}</header>
-      <p>Messages total: {useStore(messagesAmount)}</p>
+      <p>Messages total: {useStore($messagesAmount)}</p>
     </div>
   )
 }
@@ -680,11 +682,11 @@ import {fork, allSettled} from 'effector/fork'
 const app = createDomain()
 const add = app.createEffect({handler: _ => _})
 
-const count = app.createStore(2)
+const $count = app.createStore(2)
   .on(add.doneData, (x, y) => x + y)
 
 const addWithCurrent = attach({
-  source: count,
+  source: $count,
   effect: add,
   mapParams: (params, current) => params + current,
 })
@@ -895,7 +897,7 @@ const fetchFriends = app.createEffect<{limit: number}, string[]>({
     return []
   },
 })
-const user = app.createStore('guest')
+const $user = app.createStore('guest')
 const $friends = app
   .createStore([])
   .on(fetchFriends.doneData, (_, result) => result)
@@ -906,7 +908,7 @@ const $friends = app
 */
 const testScope = fork(app, {
   values: {
-    [user.sid]: 'alice',
+    [$user.sid]: 'alice',
   },
   handlers: {
     [fetchFriends.sid]: () => ['bob', 'carol'],
@@ -946,26 +948,27 @@ import {createDomain, forward} from 'effector'
 import {hydrate} from 'effector/fork'
 
 const app = createDomain()
-
-const username = app.createStore('guest')
 const saveUser = app.createEffect({
   handler(value) {
     console.log('saveUser now called only after store update', value)
   },
 })
 
+const $username = app.createStore('guest')
+
+
 forward({
-  from: username,
+  from: $username,
   to: saveUser,
 })
 
-username.updates.watch(value => {
+$username.updates.watch(value => {
   console.log('event watches now called only after store update', value)
 })
 
 hydrate(app, {
   values: {
-    [username.sid]: 'alice',
+    [$username.sid]: 'alice',
   },
 })
 // no event watches triggered yet and no effects called as we just hydrating app state
@@ -1499,7 +1502,7 @@ const {move} = createApi($position, {
   move: ({x}, payload) => ({x: x + payload}),
 })
 // => event created
-const lastMove = restore(move, 0)
+const $lastMove = restore(move, 0)
 // => store created
 ```
 

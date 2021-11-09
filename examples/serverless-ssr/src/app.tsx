@@ -15,7 +15,7 @@ import {app} from './domain'
 export const startServer = app.createEvent<string>()
 export const startClient = app.createEvent()
 
-const isServer = app
+const $isServer = app
   .createStore(true)
   .on(startClient, () => false)
   .reset(startServer)
@@ -56,49 +56,58 @@ forward({
   to: fetchUser,
 })
 
-const user = app.createStore('guest')
-const friends = app.createStore<string[]>([])
-const friendsTotal = friends.map(list => list.length)
-const userList = app
+const $user = app.createStore('guest')
+  .on(fetchUser.done, (_, { result }) => result.name)
+    
+const $friends = app.createStore<string[]>([])
+  .on(fetchUser.done, (_, { result }) => result.$)
+
+const friendsTotal = $friends.map(list => list.length)
+
+const $userList = app
   .createStore([])
   .on(fetchAllUsers.done, (_, {result}) => result)
 
-export const location$ = user.map(user =>
+export const $location = user.map(user =>
   user === 'guest' ? '/' : `/user/${user}`,
 )
 
-user.on(fetchUser.done, (_, {result}) => result.name)
-friends.on(fetchUser.done, (_, {result}) => result.friends)
-
 sample({
-  source: user,
+  source: $user,
   clock: fetchUser.done,
   target: log,
 })
+
 const Meta = () => (
   <p>
-    This page is rendered on <b>{useStore(isServer) ? 'server' : 'client'}</b>
+    This page is rendered on <b>{useStore($isServer) ? 'server' : 'client'}</b>
   </p>
 )
-const User = () => <h2>{useStore(user)}</h2>
-const Friends = () => useList(friends, friend => <li>{friend}</li>)
+
+const User = () => <h2>{useStore($user)}</h2>
+const Friends = () => useList($friends, friend => <li>{friend}</li>)
 const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+
 const FetchingStatus = () => {
   const pending = useStore(fetchUser.pending)
+  
   return (
     <p>
       <small>Status: {pending ? 'fetching...' : 'ready'}</small>
     </p>
   )
 }
+
 const UserList = () => {
   const selectUser = useEvent(selectUserEvent)
-  return useList(userList, userName => {
+
+  return useList($userList, userName => {
     const isSelected = useStoreMap({
-      store: user,
+      store: $user,
       keys: [userName],
       fn: (selected, [current]) => selected === current,
     })
+
     return (
       <>
         <br />
@@ -109,6 +118,7 @@ const UserList = () => {
     )
   })
 }
+
 export const App = ({root}) => (
   <Provider value={root}>
     <User />
@@ -131,7 +141,7 @@ const changeLocation = app.createEvent<string>()
 // and new location is valid user ID
 const onValidLocation = guard(changeLocation, {
   filter: sample({
-    source: combine({loc: location$, users: userList}),
+    source: combine({loc: $location, users: $userList}),
     clock: changeLocation,
     fn: ({loc, users}, path) =>
       loc !== path && users.includes(path.replace('/user/', '')),

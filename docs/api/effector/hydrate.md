@@ -26,15 +26,15 @@ Populate store with a predefined value
 import {createStore, createDomain, fork, serialize, hydrate} from 'effector'
 
 const domain = createDomain()
-const store = domain.createStore(0)
+const $store = domain.createStore(0)
 
 hydrate(domain, {
   values: {
-    [store.sid]: 42,
+    [$store.sid]: 42,
   },
 })
 
-console.log(store.getState()) // 42
+console.log($store.getState()) // 42
 ```
 
 [Try it](https://share.effector.dev/zZoQ5Ewm)

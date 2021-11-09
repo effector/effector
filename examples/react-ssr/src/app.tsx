@@ -16,7 +16,7 @@ export const app = createDomain()
 export const startServer = app.createEvent<string>()
 export const startClient = app.createEvent()
 
-const isServer = app
+const $isServer = app
   .createStore(true)
   .on(startClient, () => false)
   .reset(startServer)
@@ -45,31 +45,36 @@ forward({
   to: fetchUser,
 })
 
-const user = app.createStore('guest')
-const friends = app.createStore<string[]>([])
-const friendsTotal = friends.map(list => list.length)
-const userList = app.createStore(Object.keys(users))
+const $user = app.createStore('guest')
+  .on(fetchUser.done, (_, { result }) => result.name)
 
-export const location$ = user.map(user => (user === 'guest' ? '/' : `/${user}`))
+const $friends = app.createStore<string[]>([])
+  .on(fetchUser.done, (_, { result }) => result.friends)
 
-user.on(fetchUser.done, (_, {result}) => result.name)
-friends.on(fetchUser.done, (_, {result}) => result.friends)
+const friendsTotal = $friends.map(list => list.length)
+const $userList = app.createStore(Object.keys(users))
+
+export const $location = $user.map(user => (user === 'guest' ? '/' : `/${user}`))
 
 sample({
-  source: user,
+  source: $user,
   clock: fetchUser.done,
   target: log,
 })
+
 const Meta = () => (
   <p>
-    This page is rendered on <b>{useStore(isServer) ? 'server' : 'client'}</b>
+    This page is rendered on <b>{useStore($isServer) ? 'server' : 'client'}</b>
   </p>
 )
-const User = () => <h2>{useStore(user)}</h2>
-const Friends = () => useList(friends, friend => <li>{friend}</li>)
+
+const User = () => <h2>{useStore($user)}</h2>
+const Friends = () => useList($friends, friend => <li>{friend}</li>)
 const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+
 const FetchingStatus = () => {
   const pending = useStore(fetchUser.pending)
+  
   return (
     <p>
       <small>Status: {pending ? 'fetching...' : 'ready'}</small>
@@ -78,12 +83,14 @@ const FetchingStatus = () => {
 }
 const UserList = () => {
   const selectUser = useEvent(selectUserEvent)
-  return useList(userList, userName => {
+
+  return useList($userList, userName => {
     const isSelected = useStoreMap({
-      store: user,
+      store: $user,
       keys: [userName],
       fn: (selected, [current]) => selected === current,
     })
+
     return (
       <>
         <br />
@@ -118,7 +125,7 @@ const changeLocation = app.createEvent<string>()
 // and new location is valid user ID
 const onValidLocation = guard(changeLocation, {
   filter: sample({
-    source: location$,
+    source: $location,
     clock: changeLocation,
     fn: (loc, path) => loc !== path && path.slice(1) in users,
   }),

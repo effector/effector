@@ -134,6 +134,7 @@ export function createEffectStatus(fx) {
   const $status = rootDomain
     .createStore('init')
     .on(fx.finally, (_, {status}) => status)
+    
   return $status
 }
 ```

@@ -504,6 +504,7 @@ fetchApiFx.pending.watch(console.log)
 
 const Loading = () => {
   const loading = useStore(fetchApiFx.pending)
+  
   return <div>{loading ? 'Loading...' : 'Load complete'}</div>
 }
 

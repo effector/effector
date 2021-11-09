@@ -224,7 +224,6 @@ forward({
 
 const ChatInterface: React.FC = () => {
   const {userName} = useStore($systemStore)
-
   const [message, updateMessage] = useState('')
 
   const keyPress = (e: React.KeyboardEvent<any>) => {

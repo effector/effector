@@ -7,8 +7,8 @@
     <script>
       const header = document.createElement('h1')
       document.body.appendChild(header)
-      const text = effector.createStore('hello')
-      text.watch(str => (header.innerHTML = str))
+      const $text = effector.createStore('hello')
+      $text.watch(str => (header.innerHTML = str))
     </script>
   </body>
 </html>
