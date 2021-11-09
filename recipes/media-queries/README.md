@@ -48,7 +48,7 @@ mediaQueryList.addListener(e => {
 
 But how this could been used in react components? (actually, we’ll make more universal thing, which can be used in various ways)
 
-Effector can reacts on media queries changes and provide current query state as store
+Effector can reacts on media queries changes and provide current query _ as store
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -61,7 +61,7 @@ const orientationChange = createEvent()
 
 const $isPortrait = createStore(false).on(
   orientationChange,
-  (state, e) => e.matches,
+  (_, event) => event.matches,
 )
 
 const orientationMediaQuery = window.matchMedia('(orientation: portrait)')
@@ -88,7 +88,7 @@ export function mediaMatcher(query) {
 
   const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
 
   return $isQueryMatches
@@ -129,7 +129,7 @@ export function mediaMatcher(query) {
 
   const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
 
   return $isQueryMatches
@@ -188,7 +188,7 @@ export function mediaMatcher(query) {
 
   const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
 
   return $isQueryMatches

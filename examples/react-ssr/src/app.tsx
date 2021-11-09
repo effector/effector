@@ -46,10 +46,10 @@ forward({
 })
 
 const $user = app.createStore('guest')
-  .on(fetchUser.done, (_, { result }) => result.name)
+  .on(fetchUser.doneData, (_, user) => user.name)
 
 const $friends = app.createStore<string[]>([])
-  .on(fetchUser.done, (_, { result }) => result.friends)
+  .on(fetchUser.doneData, (_, friends) => friends)
 
 const friendsTotal = $friends.map(list => list.length)
 const $userList = app.createStore(Object.keys(users))

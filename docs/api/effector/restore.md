@@ -85,7 +85,7 @@ Creates an object with stores from object with values
 ```js
 import {restore} from 'effector'
 
-const {$foo, $bar} = restore({
+const {foo: $foo, bar: $bar} = restore({
   foo: 'foo',
   bar: 0,
 })

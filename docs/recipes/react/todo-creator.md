@@ -18,14 +18,14 @@ function createTodoListApi(initial: string[] = []) {
   const reset = createEvent<void>()
 
   const $input = createStore<string>('')
-    .on(change, (state, value) => value).reset(reset, insert)
+    .on(change, (_, value) => value).reset(reset, insert)
 
   const $todos = createStore<string[]>(initial)
-    .on(insert, (state, value) => [...state, value])
-    .on(remove, (state, index) => state.filter((_, i) => i !== index))
+    .on(insert, (todos, newTodo) => [...todos, newTodo])
+    .on(remove, (todos, index) => todos.filter((_, i) => i !== index))
 
   const submit = createEvent()
-  submit.watch(e => e.preventDefault())
+  submit.watch(event => event.preventDefault())
 
   sample({
     clock: submit,

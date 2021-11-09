@@ -57,18 +57,18 @@ forward({
 })
 
 const $user = app.createStore('guest')
-  .on(fetchUser.done, (_, { result }) => result.name)
+  .on(fetchUser.doneData, (_, user) => user.name)
     
 const $friends = app.createStore<string[]>([])
-  .on(fetchUser.done, (_, { result }) => result.$)
+  .on(fetchUser.doneData, (_, friends) => friends)
 
-const friendsTotal = $friends.map(list => list.length)
+const friendsTotal = $friends.map(friends => friends.length)
 
 const $userList = app
   .createStore([])
-  .on(fetchAllUsers.done, (_, {result}) => result)
+  .on(fetchAllUsers.doneData, (_, users) => users)
 
-export const $location = user.map(user =>
+export const $location = $user.map(user =>
   user === 'guest' ? '/' : `/user/${user}`,
 )
 

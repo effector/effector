@@ -29,8 +29,8 @@ const $playerPosition = createStore(0)
 
 // create events and attach them to store
 const api = createApi($playerPosition, {
-  moveLeft: (pos, n) => pos - n,
-  moveRight: (pos, n) => pos + n,
+  moveLeft: (pos, offset) => pos - offset,
+  moveRight: (pos, offset) => pos + offset,
 })
 
 $playerPosition.watch(pos => {

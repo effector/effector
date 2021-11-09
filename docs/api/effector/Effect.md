@@ -28,7 +28,7 @@ const fetchUserFx = createEffect(async ({id}) => {
 
 const $users = createStore([]) // Default state
   // add reducer for fetchUserFx.doneData event (triggered when handler resolved)
-  .on(fetchUserFx.doneData, (store, user) => [...store, user])
+  .on(fetchUserFx.doneData, (users, user) => [...users, user])
 
 // subscribe to handler resolve
 fetchUserFx.done.watch(({result, params}) => {

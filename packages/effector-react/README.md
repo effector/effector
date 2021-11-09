@@ -24,10 +24,10 @@ import {useStore} from 'effector-react'
 const inputText = createEvent()
 
 const $text = createStore('')
-  .on(inputText, (state, payload) => payload)
+  .on(inputText, (_, text) => text)
   
 const $size = createStore(0)
-  .on(inputText, (state, payload) => payload.length)
+  .on(inputText, (_, text) => text.length)
 
 const $form = combine({
   text: $text,

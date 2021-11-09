@@ -100,7 +100,7 @@ import {createEvent, createStore} from 'effector'
 const $store = createStore(0)
 const changed = createEvent()
 
-$store.on(changed, (state, params) => state + params)
+$store.on(changed, (value, incrementor) => value + incrementor)
 
 $store.watch(value => {
   console.log('updated', value)
