@@ -15,7 +15,7 @@ const completed = createEvent()
 const changed = createEvent()
 const removed = createEvent()
 
-const validate = createEffect(([todo, todos]) => {
+const validateFx = createEffect(([todo, todos]) => {
   if (todos.some(item => item.text === todo))
     throw 'This todo is already on the list'
 
@@ -25,7 +25,7 @@ const validate = createEffect(([todo, todos]) => {
 })
 
 const $todo = restore(changed, '').reset(submitted)
-const $error = restore(validate.failData, '').reset(changed)
+const $error = restore(validateFx.failData, '').reset(changed)
 
 const $todos = createStore([])
   .on(submitted, (prev, next) => [...prev, {text: next, completed: false}])
@@ -38,11 +38,11 @@ const $todos = createStore([])
 sample({
   clock: submit,
   source: [$todo, $todos],
-  target: validate,
+  target: validateFx,
 })
 
 sample({
-  clock: validate.done,
+  clock: validateFx.done,
   source: $todo,
   target: submitted,
 })

@@ -33,19 +33,19 @@ Let's consider prioritize in the example below.
 
 ```js
 let count = 0
-const sideEffect = createEffect(() => {
+const fx = createEffect(() => {
   // side effect 1
   count += 1
 })
 
-sideEffect.done.watch(() => {
+fx.done.watch(() => {
   // side effect 1 already executed
   console.log('expect count to be 1', count === 1)
   // side effect 2
   count += 1
 })
 
-sideEffect()
+fx()
 // side effect 1 already executed
 // side effect 2 already executed as well
 // that's what we expected to happen

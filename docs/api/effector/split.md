@@ -168,7 +168,7 @@ import {split, createEffect, createEvent} from 'effector'
 const messageReceived = createEvent()
 const showTextPopup = createEvent()
 const playAudio = createEvent()
-const reportUnknownMessageType = createEffect(({type}) => {
+const reportUnknownMessageTypeFx = createEffect(({type}) => {
   console.log('unknown message:', type)
 })
 
@@ -181,7 +181,7 @@ split({
   cases: {
     text: showTextPopup,
     audio: playAudio,
-    __: reportUnknownMessageType,
+    __: reportUnknownMessageTypeFx,
   },
 })
 

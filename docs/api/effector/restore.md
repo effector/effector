@@ -56,13 +56,13 @@ It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {res
 ```js
 import {createEffect, restore} from 'effector'
 
-const effect = createEffect(() => 'foo')
-const $store = restore(effect, 'default')
+const fx = createEffect(() => 'foo')
+const $store = restore(fx, 'default')
 
 $store.watch(state => console.log('state: ', state))
 // => state: default
 
-await effect()
+await fx()
 // => state: foo
 ```
 

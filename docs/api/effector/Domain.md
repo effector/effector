@@ -212,10 +212,10 @@ domain.onCreateEffect(effect => {
   console.log('new effect created')
 })
 
-const a = domain.createEffect()
+const fooFx = domain.createEffect()
 // => new effect created
 
-const b = domain.createEffect()
+const barFx = domain.createEffect()
 // => new effect created
 ```
 

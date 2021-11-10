@@ -28,19 +28,19 @@ When `newEffect` is called, call `mapParams` with params of the `newEffect` and 
 ```js
 import {createEffect, attach} from 'effector'
 
-const original = createEffect(params => {
+const originalFx = createEffect(params => {
   console.log('Original effect called with', params)
 })
 
-const created = attach({
-  effect: original,
+const createdFx = attach({
+  effect: originalFx,
   mapParams: params => {
     console.log('Created effect called with', params)
     return {wrapped: params}
   },
 })
 
-await created('HELLO')
+await createdFx('HELLO')
 
 // => Created effect called with "HELLO"
 // => Original effect called with { wrapped: "HELLO" }
@@ -53,14 +53,14 @@ await created('HELLO')
 ```js
 import {createEffect, attach} from 'effector'
 
-const original = createEffect(params => {
+const originalFx = createEffect(params => {
   console.log('Original effect called with', params)
 })
 
 const $store = createStore(8900)
 
-const created = attach({
-  effect: original,
+const createdFx = attach({
+  effect: originalFx,
   source: $store,
   mapParams: (params, data) => {
     console.log('Created effect called with', params, 'and data', data)
@@ -68,7 +68,7 @@ const created = attach({
   },
 })
 
-await created('HELLO')
+await createdFx('HELLO')
 
 // => Created effect called with "HELLO" and data 8900
 // => Original effect called with {wrapped: "HELLO", data: 8900}
@@ -81,7 +81,7 @@ await created('HELLO')
 ```js
 import {createEffect, attach, createStore} from 'effector'
 
-const backendRequest = createEffect(async ({token, data, resource}) => {
+const backendRequestFx = createEffect(async ({token, data, resource}) => {
   return fetch(`https://example.com/api${resource}`, {
     method: 'POST',
     headers: {
@@ -92,7 +92,7 @@ const backendRequest = createEffect(async ({token, data, resource}) => {
 })
 
 const $requestsSent = createStore(0)
-  .on(backendRequest, total => total + 1)
+  .on(backendRequestFx, total => total + 1)
 
 $requestsSent.watch(total => {
   console.log(`client analytics: sent ${total} requests`)
@@ -100,22 +100,22 @@ $requestsSent.watch(total => {
 
 const $token = createStore('guest_token')
 
-const authorizedRequest = attach({
-  effect: backendRequest,
+const authorizedRequestFx = attach({
+  effect: backendRequestFx,
   source: $token,
   mapParams: ({data, resource}, token) => ({data, resource, token}),
 })
 
-const createRequest = resource =>
+const createRequestFx = resource =>
   attach({
-    effect: authorizedRequest,
+    effect: authorizedRequestFx,
     mapParams: data => ({data, resource}),
   })
 
-const getUser = createRequest('/user')
-const getPosts = createRequest('/posts')
+const getUserFx = createRequestFx('/user')
+const getPostsFx = createRequestFx('/posts')
 
-const user = await getUser({name: 'alice'})
+const user = await getUserFx({name: 'alice'})
 /*
 POST https://example.com/api/user
 {"name": "alice"}
@@ -124,7 +124,7 @@ Authorization: Bearer guest_token
 
 // => client analytics: sent 1 requests
 
-const posts = await getPosts({user: user.id})
+const posts = await getPostsFx({user: user.id})
 /*
 POST https://example.com/api/posts
 {"user": 18329}
@@ -156,8 +156,8 @@ effector 22.0.0
 Create effect which will call async function with values from `source` stores
 
 ```ts
-let result: Effect<Params, Result>
-result = attach({
+let resultFx: Effect<Params, Result>
+resultFx = attach({
   source: Store<Source>,
   async effect(source: Source, params: Params): Result
 })

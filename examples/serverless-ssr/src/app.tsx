@@ -31,7 +31,7 @@ const fetchUser = app.createEffect<string, {name: string; friends: string[]}>({
   },
 })
 
-const fetchAllUsers = app.createEffect({
+const fetchAllUsersFx = app.createEffect({
   async handler() {
     const req = await fetch(`https://${domainConfig.domainName}/api`, {
       method: 'POST',
@@ -40,7 +40,7 @@ const fetchAllUsers = app.createEffect({
   },
 })
 
-const log = app.createEffect({
+const logFx = app.createEffect({
   async handler(data) {
     console.log('data', data)
   },
@@ -48,7 +48,7 @@ const log = app.createEffect({
 
 forward({
   from: startServer,
-  to: [fetchUser, fetchAllUsers],
+  to: [fetchUser, fetchAllUsersFx],
 })
 
 forward({
@@ -66,7 +66,7 @@ const friendsTotal = $friends.map(friends => friends.length)
 
 const $userList = app
   .createStore([])
-  .on(fetchAllUsers.doneData, (_, users) => users)
+  .on(fetchAllUsersFx.doneData, (_, users) => users)
 
 export const $location = $user.map(user =>
   user === 'guest' ? '/' : `/user/${user}`,
@@ -75,7 +75,7 @@ export const $location = $user.map(user =>
 sample({
   source: $user,
   clock: fetchUser.done,
-  target: log,
+  target: logFx,
 })
 
 const Meta = () => (
