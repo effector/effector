@@ -22,17 +22,21 @@ import {createStore, combine, createEvent} from 'effector'
 import {useStore} from 'effector-react'
 
 const inputText = createEvent()
-const text = createStore('').on(inputText, (state, payload) => payload)
 
-const size = createStore(0).on(inputText, (state, payload) => payload.length)
+const $text = createStore('')
+  .on(inputText, (_, text) => text)
+  
+const $size = createStore(0)
+  .on(inputText, (_, text) => text.length)
 
-const form = combine({
-  text,
-  size,
+const $form = combine({
+  text: $text,
+  size: $size,
 })
 
 const Form = () => {
-  const {text, size} = useStore(form)
+  const {text, size} = useStore($form)
+
   return (
     <form>
       <input

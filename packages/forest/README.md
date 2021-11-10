@@ -9,7 +9,7 @@ import {createStore, createEvent, sample} from 'effector'
 import {using, spec, h} from 'forest'
 
 using(document.body, () => {
-  const {change, submit, state} = formModel()
+  const {change, submit, $fields} = formModel()
 
   h('section', () => {
     spec({style: {width: '15em'}})
@@ -39,7 +39,7 @@ using(document.body, () => {
       h('button', {
         text: 'Submit',
         attr: {
-          disabled: state.map(values => !(values.username && values.password)),
+          disabled: $fields.map(fields => !(fields.username && fields.password)),
         },
       })
     })
@@ -47,27 +47,29 @@ using(document.body, () => {
     h('section', () => {
       spec({style: {marginTop: '1em'}})
       h('div', {text: 'Reactive form debug:'})
-      h('pre', {text: state.map(stringify)})
+      h('pre', {text: $fields.map(stringify)})
     })
   })
 })
 
 function formModel() {
-  const state = createStore({})
   const changed = createEvent()
   const submit = createEvent()
 
-  state.on(changed, (data, {name, value}) => ({...data, [name]: value}))
+  const $fields = createStore({})
+    .on(changed, (fields, {name, value}) => ({
+      ...fields, [name]: value
+    }))
 
   const change = name => changed.prepend(e => ({name, value: e.target.value}))
 
   sample({
-    source: state,
+    source: $fields,
     clock: submit,
     fn: stringify,
   }).watch(alert)
 
-  return {change, submit, state}
+  return {change, submit, $fields}
 }
 
 function stringify(values) {
@@ -260,10 +262,10 @@ function text(words: TemplateStringsArray, ...values: Property[]): void
 **Example**
 
 ```typescript
-const username = createStore('guest')
+const $username = createStore('guest')
 
 h('h1', () => {
-  text`Hello ${username}!`
+  text`Hello ${$username}!`
 })
 ```
 
@@ -316,11 +318,12 @@ function val(words: TemplateStringsArray, ...values: PlainProperty[]): string
 **Example**
 
 ```typescript
-const x = createStore(10)
-const y = 20
+const $store = createStore(10)
+const a = 20
+
 h('g', {
   attr: {
-    transform: val`translate(${x} ${y})`,
+    transform: val`translate(${$store} ${a})`,
   },
 })
 ```

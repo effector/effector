@@ -261,14 +261,13 @@ Object form is used because `event.filter(fn)` was an alias for [event.filterMap
 import {createEvent, createStore} from 'effector'
 
 const numbers = createEvent()
-
 const positiveNumbers = numbers.filter({
   fn: ({x}) => x > 0,
 })
 
-const lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
+const $lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
 
-lastPositive.watch(x => {
+$lastPositive.watch(x => {
   console.log('last positive:', x)
 })
 

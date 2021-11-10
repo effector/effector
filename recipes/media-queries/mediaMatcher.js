@@ -6,9 +6,11 @@ export function mediaMatcher(query: string): Store<boolean> {
   const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+  
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
-  return isQueryMatches
+  
+  return $isQueryMatches
 }

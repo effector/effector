@@ -25,16 +25,16 @@ data.watch(console.log)
 [_Store_] is an object that holds state value. There can be multiple stores.
 
 ```js
-const users = createStore([]) // <-- Default state
+const $users = createStore([]) // <-- Default state
   // add reducer for getUser.doneData event (fires when promise resolved)
   .on(getUserFx.doneData, (state, user) => [...state, user])
 
-const messages = createStore([])
+const $messages = createStore([])
   // from WebSocket
   .on(data, (state, message) => [...state, message])
 
-users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
-messages.watch(console.log)
+$users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
+$messages.watch(console.log)
 ```
 
 ## Effect
@@ -44,6 +44,7 @@ messages.watch(console.log)
 ```js
 const getUserFx = createEffect(async params => {
   const req = await fetch(`https://example.com/get-user/${params.id}`)
+  
   return req.json()
 })
 

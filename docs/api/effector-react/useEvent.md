@@ -30,6 +30,7 @@ const $count = app.createStore(0).on(inc, x => x + 1)
 const App = () => {
   const count = useStore($count)
   const incFn = useEvent(inc)
+
   return (
     <>
       <p>Count: {count}</p>
@@ -70,6 +71,7 @@ const app = createDomain()
 
 const inc = app.createEvent()
 const dec = app.createEvent()
+
 const $count = app
   .createStore(0)
   .on(inc, x => x + 1)
@@ -80,6 +82,7 @@ const App = () => {
   const handler = useEvent({inc, dec})
   // or
   const [a, b] = useEvent([inc, dec])
+  
   return (
     <>
       <p>Count: {count}</p>

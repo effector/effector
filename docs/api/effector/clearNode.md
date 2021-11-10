@@ -28,9 +28,10 @@ Method for destroying stores, events, effects, subscriptions and domains
 import {createStore, createEvent, clearNode} from 'effector'
 
 const inc = createEvent()
-const store = createStore(0).on(inc, x => x + 1)
+const $store = createStore(0).on(inc, x => x + 1)
+
 inc.watch(() => console.log('inc called'))
-store.watch(x => console.log('store state: ', x))
+$store.watch(x => console.log('store state: ', x))
 // => store state: 0
 inc()
 // => inc called
@@ -49,10 +50,11 @@ import {createStore, createEvent, clearNode} from 'effector'
 
 const inc = createEvent()
 const trigger = inc.prepend(() => {})
-const store = createStore(0).on(inc, x => x + 1)
+const $store = createStore(0).on(inc, x => x + 1)
+
 trigger.watch(() => console.log('trigger called'))
 inc.watch(() => console.log('inc called'))
-store.watch(x => console.log('store state: ', x))
+$store.watch(x => console.log('store state: ', x))
 // => store state: 0
 trigger()
 // => trigger called

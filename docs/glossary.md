@@ -62,13 +62,12 @@ Most of functions in api must not call other events or effects: it's easier to r
 ```js
 import {createStore, createEvent} from 'effector'
 
-const login = createStore('guest')
-
-const loginSize = login.map(login => login.length)
-
 const submitLoginSize = createEvent()
 
-loginSize.watch(size => {
+const $login = createStore('guest')
+const $loginSize = $login.map(login => login.length)
+
+$loginSize.watch(size => {
   submitLoginSize(size)
 })
 ```
@@ -84,14 +83,13 @@ loginSize.watch(size => {
 ```js
 import {createStore, createEvent, forward} from 'effector'
 
-const login = createStore('guest')
-
-const loginSize = login.map(login => login.length)
-
 const submitLoginSize = createEvent()
 
+const $login = createStore('guest')
+const $loginSize = $login.map(login => login.length)
+
 forward({
-  from: loginSize,
+  from: $loginSize,
   to: submitLoginSize,
 })
 ```
@@ -107,8 +105,8 @@ import {createStore, createEvent, forward} from 'effector'
 
 const submitLoginSize = createEvent()
 
-const login = createStore('guest')
-const loginSize = login.map(login => {
+const $login = createStore('guest')
+const $loginSize = $login.map(login => {
   // no! use forward or watch instead
   submitLoginSize(login.length)
   return login.length

@@ -8,9 +8,11 @@ export const Screen = props => {
   const queries = useStore(screenQueries)
   const orientationAllowed = orientationCheck(props, queries)
   const screenSizeAllowed = screenSizeCheck(props, queries)
+
   if (orientationAllowed && screenSizeAllowed) {
     return props.children
   }
+  
   return null
 }
 

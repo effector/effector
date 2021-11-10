@@ -11,11 +11,13 @@ import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 
+const submitted = createEvent()
+const setField = createEvent()
+
 const sendFormFx = createEffect(params => {
   console.log(params)
 })
-const submitted = createEvent()
-const setField = createEvent()
+
 const $form = createStore({}).on(setField, (s, {key, value}) => ({
   ...s,
   [key]: value,
@@ -170,6 +172,7 @@ sendFormFx.doneData.watch(result => {
 const Loader = () => {
   //approach #1: explicit store usage, with hook `useStore`
   const loading = useStore(sendFormFx.pending) //typeof loading === "boolean"
+  
   return loading ? <div>Loading...</div> : null
 }
 

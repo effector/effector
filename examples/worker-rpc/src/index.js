@@ -8,7 +8,7 @@ import {createClient} from './remoteFX/client'
 
 createClient(domain, new Worker('./worker.js'))
 
-const pingTimeout = createStore(-1)
+const $pingTimeout = createStore(-1)
   .on(ping.done, (_, {result}) => result.ping)
   .reset(ping.fail)
 
@@ -20,7 +20,7 @@ ping.finally.watch(() => {
 
 const WorkerPing = () => (
   <>
-    <strong>worker ping</strong>: {useStore(pingTimeout).toString()}
+    <strong>worker ping</strong>: {useStore($pingTimeout).toString()}
   </>
 )
 
@@ -36,7 +36,8 @@ setTimeout(async() => {
   console.log('req start')
   const result = await workerMessage('foo bar  baz bam')
   console.log('req result: ', result)
-  await ping({now: Date.now()})
+  await ping({ now: Date.now() })
+  
   try {
     await failure()
   } catch (error) {

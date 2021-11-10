@@ -30,10 +30,10 @@ You can use hooks in `createComponent` since effector-react@20.3.0.
 import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
 
-const $counter = createStore(0)
 const increment = createEvent()
 
-$counter.on(increment, n => n + 1)
+const $counter = createStore(0)
+  .on(increment, n => n + 1)
 
 const MyCounter = createComponent($counter, (props, state) => (
   <div>

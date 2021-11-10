@@ -42,10 +42,13 @@ If the function returns an old state or if it returns `undefined`, the new store
 import {createEvent, createStore} from 'effector'
 
 const changed = createEvent()
-const title = createStore('').on(changed, (_, newTitle) => newTitle)
-const length = title.map(title => title.length)
 
-length.watch(length => {
+const $title = createStore('')
+  .on(changed, (_, newTitle) => newTitle)
+
+const $length = $title.map(title => title.length)
+
+$length.watch(length => {
   console.log('new length', length)
 })
 // => new length 0
@@ -94,12 +97,12 @@ $store.on(trigger, reducer)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
+const $store = createStore(0)
 const changed = createEvent()
 
-store.on(changed, (state, params) => state + params)
+$store.on(changed, (value, incrementor) => value + incrementor)
 
-store.watch(value => {
+$store.watch(value => {
   console.log('updated', value)
 })
 // => updated 0
@@ -149,13 +152,14 @@ $store.on([triggerA, triggerB, ...], reducer)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
 const changedA = createEvent()
 const changedB = createEvent()
 
-store.on([changedA, changedB], (state, params) => state + params)
+const $store = createStore(0)
 
-store.watch(value => {
+$store.on([changedA, changedB], (value, incrementor) => value + incrementor)
+
+$store.watch(value => {
   console.log('updated', value)
 })
 
@@ -166,7 +170,7 @@ changedB(2)
 // => updated 4
 
 // You can unsubscribe from any trigger
-store.off(changedA)
+$store.off(changedA)
 ```
 
 [Try it](https://share.effector.dev/iP0oM3NF)
@@ -198,9 +202,9 @@ const unwatch = $store.watch(watcher)
 
 ```js
 const add = createEvent()
-const store = createStore(0).on(add, (state, payload) => state + payload)
+const $store = createStore(0).on(add, (state, payload) => state + payload)
 
-store.watch(value => console.log(`current value: ${value}`))
+$store.watch(value => console.log(`current value: ${value}`))
 // => current value: 0
 add(4)
 // => current value: 4
@@ -243,9 +247,9 @@ import {createEvent, createStore} from 'effector'
 const foo = createEvent()
 const bar = createEvent()
 
-const store = createStore(0)
+const $store = createStore(0)
 
-store.watch(foo, (storeValue, eventValue) => {
+$store.watch(foo, (storeValue, eventValue) => {
   console.log(`triggered ${storeValue}, ${eventValue}`)
 })
 
@@ -289,13 +293,14 @@ $store.reset(...triggers)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
 
-store.on(increment, state => state + 1).reset(reset)
+const $store = createStore(0)
+  .on(increment, state => state + 1)
+  .reset(reset)
 
-store.watch(state => console.log('changed', state))
+$store.watch(state => console.log('changed', state))
 // changed 0
 // watch method calls its function immediately
 
@@ -338,13 +343,14 @@ $store.reset([triggerA, triggerB, ...])
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
 
-store.on(increment, state => state + 1).reset([reset])
+const $store = createStore(0)
+  .on(increment, state => state + 1)
+  .reset([reset])
 
-store.watch(state => console.log('changed', state))
+$store.watch(state => console.log('changed', state))
 // changed 0
 // watch method calls its function immediately
 
@@ -379,16 +385,18 @@ $store.off(trigger)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const store = createStore(0)
 const changedA = createEvent()
 const changedB = createEvent()
+
+const $store = createStore(0)
+
 
 // If you want to unsubscribe from all triggers simultaneously, better to manually merge
 const changed = merge([changedA, changedB])
 
-store.on(changed, (state, params) => state + params)
+$store.on(changed, (state, params) => state + params)
 
-store.off(changed)
+$store.off(changed)
 ```
 
 [Try it](https://share.effector.dev/bzdoyLHm)
@@ -473,14 +481,14 @@ Use case: watchers, which will not trigger immediately after creation (unlike [_
 ```js
 import {createStore, is} from 'effector'
 
-const clicksAmount = createStore(0)
-is.event(clicksAmount.updates) // => true
+const $clicksAmount = createStore(0)
+is.event($clicksAmount.updates) // => true
 
-clicksAmount.watch(amount => {
+$clicksAmount.watch(amount => {
   console.log('will be triggered with current state, immediately, sync', amount)
 })
 
-clicksAmount.updates.watch(amount => {
+$clicksAmount.updates.watch(amount => {
   console.log('will not be triggered unless store value is changed', amount)
 })
 ```
@@ -535,8 +543,7 @@ import {createEvent, createStore} from 'effector'
 const add = createEvent()
 
 const $number = createStore(0)
-
-$number.on(add, (state, data) => state + data)
+  .on(add, (state, data) => state + data)
 
 $number.watch(n => {
   console.log(n)

@@ -18,7 +18,8 @@ const getTodoFx = createEffect(async ({id}) => {
 })
 
 // Our main store
-const $todo = createStore(null).on(getTodoFx.doneData, (_, result) => result)
+const $todo = createStore(null)
+  .on(getTodoFx.doneData, (_, todo) => todo)
 
 const TodoGate = createGate()
 
@@ -35,6 +36,7 @@ TodoGate.close.watch(() => {
 function Todo() {
   const todo = useStore($todo)
   const loading = useStore(getTodoFx.pending)
+
   if (loading) {
     return <div>Loading...</div>
   }
@@ -42,6 +44,7 @@ function Todo() {
   if (Object.keys(todo).length === 0) {
     return <div>empty</div>
   }
+
   return (
     <div>
       <p>title: {todo.title}</p>
@@ -53,6 +56,7 @@ function Todo() {
 const App = () => {
   // value which need to be accessed outside from react
   const [id, setId] = React.useState(0)
+  
   return (
     <>
       <button onClick={() => setId(id + 1)}>Get next Todo</button>

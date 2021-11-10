@@ -20,6 +20,7 @@ const App = () => {
   const counter = useStore($counter)
   const counterText = useStore($counterText)
   const counterCombined = useStore($counterCombined)
+  
   return (
     <div>
       <button onClick={plus}>Plus</button>

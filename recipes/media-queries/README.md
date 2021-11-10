@@ -48,7 +48,7 @@ mediaQueryList.addListener(e => {
 
 But how this could been used in react components? (actually, we’ll make more universal thing, which can be used in various ways)
 
-Effector can reacts on media queries changes and provide current query state as store
+Effector can reacts on media queries changes and provide current query _ as store
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -58,9 +58,10 @@ Effector can reacts on media queries changes and provide current query state as 
 import {createEvent, createStore} from 'effector'
 
 const orientationChange = createEvent()
-const isPortrait = createStore(false).on(
+
+const $isPortrait = createStore(false).on(
   orientationChange,
-  (state, e) => e.matches,
+  (_, event) => event.matches,
 )
 
 const orientationMediaQuery = window.matchMedia('(orientation: portrait)')
@@ -84,11 +85,13 @@ export function mediaMatcher(query) {
   const queryChange = createEvent('query change')
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
-  return isQueryMatches
+
+  return $isQueryMatches
 }
 
 /* declaring queries */
@@ -123,11 +126,13 @@ export function mediaMatcher(query) {
   const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
-  return isQueryMatches
+
+  return $isQueryMatches
 }
 ```
 
@@ -143,7 +148,7 @@ import {mediaMatcher} from './mediaMatcher'
 
 /* declaring queries and merge them into single store*/
 
-export const screenQueries = combine({
+export const $screenQueries = combine({
   small: mediaMatcher('(max-width: 768px)'),
   medium: mediaMatcher('(min-width: 769px) and (max-width: 1024px)'),
   large: mediaMatcher('(min-width: 1025px)'),
@@ -152,7 +157,7 @@ export const screenQueries = combine({
 
 /* using queries */
 
-screenQueries.watch(queries => {
+$screenQueries.watch(queries => {
   const {small, medium, large, portrait} = queries
   console.log(`
     is small ${small}
@@ -180,11 +185,13 @@ export function mediaMatcher(query) {
   const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches).on(
+
+  const $isQueryMatches = createStore(mediaQueryList.matches).on(
     queryChange,
-    (state, e) => e.matches,
+    (_, event) => event.matches,
   )
-  return isQueryMatches
+
+  return $isQueryMatches
 }
 ```
 
@@ -201,7 +208,7 @@ import {mediaMatcher} from './mediaMatcher'
 
 /* declaring queries and merge them into single store*/
 
-export const screenQueries = combine({
+export const $screenQueries = combine({
   small: mediaMatcher('(max-width: 768px)'),
   medium: mediaMatcher('(min-width: 769px) and (max-width: 1024px)'),
   large: mediaMatcher('(min-width: 1025px)'),
@@ -242,9 +249,11 @@ export const Screen = props => {
   const queries = useStore(screenQueries)
   const orientationAllowed = orientationCheck(props, queries)
   const screenSizeAllowed = screenSizeCheck(props, queries)
+
   if (orientationAllowed && screenSizeAllowed) {
     return props.children
   }
+
   return null
 }
 

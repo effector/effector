@@ -81,6 +81,7 @@ import {
 const domain = createDomain()
 const inc = domain.createEvent()
 const dec = domain.createEvent()
+
 const $counter = domain
   .createStore(0)
   .on(inc, value => value + 1)

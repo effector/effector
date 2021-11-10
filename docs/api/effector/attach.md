@@ -57,11 +57,11 @@ const original = createEffect(params => {
   console.log('Original effect called with', params)
 })
 
-const data = createStore(8900)
+const $store = createStore(8900)
 
 const created = attach({
   effect: original,
-  source: data,
+  source: $store,
   mapParams: (params, data) => {
     console.log('Created effect called with', params, 'and data', data)
     return {wrapped: params, data}
@@ -91,17 +91,18 @@ const backendRequest = createEffect(async ({token, data, resource}) => {
   })
 })
 
-const requestsSent = createStore(0).on(backendRequest, total => total + 1)
+const $requestsSent = createStore(0)
+  .on(backendRequest, total => total + 1)
 
-requestsSent.watch(total => {
+$requestsSent.watch(total => {
   console.log(`client analytics: sent ${total} requests`)
 })
 
-const token = createStore('guest_token')
+const $token = createStore('guest_token')
 
 const authorizedRequest = attach({
   effect: backendRequest,
-  source: token,
+  source: $token,
   mapParams: ({data, resource}, token) => ({data, resource, token}),
 })
 

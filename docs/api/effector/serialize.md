@@ -28,7 +28,7 @@ Serialize forked instance state
 import {createDomain, fork, serialize} from 'effector'
 
 const domain = createDomain()
-const store = domain.createStore(42)
+const $store = domain.createStore(42)
 const scope = fork(domain)
 console.log(serialize(scope)) // => {[sid]: 42}
 ```

@@ -26,9 +26,9 @@ It works like a shortcut for `createStore(defaultState).on(event, (_, payload) =
 import {createEvent, restore} from 'effector'
 
 const event = createEvent()
-const store = restore(event, 'default')
+const $store = restore(event, 'default')
 
-store.watch(state => console.log('state: ', state))
+$store.watch(state => console.log('state: ', state))
 // state: default
 
 event('foo')
@@ -57,9 +57,9 @@ It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {res
 import {createEffect, restore} from 'effector'
 
 const effect = createEffect(() => 'foo')
-const store = restore(effect, 'default')
+const $store = restore(effect, 'default')
 
-store.watch(state => console.log('state: ', state))
+$store.watch(state => console.log('state: ', state))
 // => state: default
 
 await effect()
@@ -85,15 +85,16 @@ Creates an object with stores from object with values
 ```js
 import {restore} from 'effector'
 
-const {foo, bar} = restore({
+const {foo: $foo, bar: $bar} = restore({
   foo: 'foo',
   bar: 0,
 })
-foo.watch(foo => {
+
+$foo.watch(foo => {
   console.log('foo', foo)
 })
 // => foo 'foo'
-bar.watch(bar => {
+$bar.watch(bar => {
   console.log('bar', bar)
 })
 // => bar 0

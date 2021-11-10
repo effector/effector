@@ -33,17 +33,17 @@ $result = combine(
 ```js
 import {createStore, combine} from 'effector'
 
-const balance = createStore(0)
-const username = createStore('zerobias')
+const $balance = createStore(0)
+const $username = createStore('zerobias')
 
-const greeting = combine(balance, username, (balance, username) => {
+const $greeting = combine($balance, $username, (balance, username) => {
   return `Hello, ${username}. Your balance is ${balance}`
 })
 
-greeting.watch(data => console.log(data)) // => Hello, zerobias. Your balance is 0
+$greeting.watch(data => console.log(data)) // => Hello, zerobias. Your balance is 0
 
-const arrStores = combine([balance, username])
-arrStores.watch(console.log) // => [0, 'zerobias']
+const $arrStores = combine([$balance, $username])
+$arrStores.watch(console.log) // => [0, 'zerobias']
 ```
 
 [Try it](https://share.effector.dev/jyX3NCLt)
@@ -84,15 +84,15 @@ Formerly known as `createStoreObject`
 ```js
 import {createStore, combine} from 'effector'
 
-const r = createStore(255)
-const g = createStore(0)
-const b = createStore(255)
+const $r = createStore(255)
+const $g = createStore(0)
+const $b = createStore(255)
 
-const color = combine({r, g, b})
-color.watch(console.log) // => {r: 255, b: 0, b: 255}
+const $color = combine({r: $r, g: $g, b: $b})
+$color.watch(console.log) // => {r: 255, b: 0, b: 255}
 
-const sum = combine({r, g, b}, ({r, g, b}) => r + g + b)
-sum.watch(console.log) // => 510
+const $sum = combine({r: $r, g: $g, b: $b}, ({r, g, b}) => r + g + b)
+$sum.watch(console.log) // => 510
 ```
 
 [Try it](https://share.effector.dev/9AckAVg7)
@@ -129,16 +129,16 @@ $result = combine([$first, $second, $third])
 ```js
 import {createStore, combine} from 'effector'
 
-const r = createStore(255)
-const g = createStore(0)
-const b = createStore(255)
+const $r = createStore(255)
+const $g = createStore(0)
+const $b = createStore(255)
 
-const color = combine([r, g, b])
-color.watch(console.log)
+const $color = combine([$r, $g, $b])
+$color.watch(console.log)
 // => [255, 0, 255]
 
-const sum = combine([r, g, b], ([r, g, b]) => r + g + b)
-sum.watch(console.log)
+const $sum = combine([r, g, b], ([r, g, b]) => r + g + b)
+$sum.watch(console.log)
 // => 510
 ```
 

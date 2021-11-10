@@ -95,6 +95,7 @@ const User = ({id}) => {
 
 const UserList = () => {
   const ids = useStore($ids)
+  
   return ids.map(id => <User key={id} id={id} />)
 }
 ```
