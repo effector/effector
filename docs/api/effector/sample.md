@@ -86,7 +86,7 @@ Array of units in target are supported since effector 21.8.0
 
 ```js
 const submitForm = createEvent()
-const signIn = createEffect(params => {
+const signInFx = createEffect(params => {
   console.log(params)
 })
 
@@ -96,14 +96,14 @@ sample({
   clock: submitForm /* 1 */,
   source: $userName /* 2 */,
   fn: (name, password) => ({name, password}) /* 3 */,
-  target: signIn /* 4 */,
+  target: signInFx /* 4 */,
 })
 
 submitForm(12345678)
 // 1. when submitForm is called with params (12345678)
 // 2. take $userName store`s state ('john')
 // 3. transform payload from event (1) and current store`s state (2)
-// 4. trigger effect signIn with params received at the step (3)
+// 4. trigger effect signInFx with params received at the step (3)
 ```
 
 [Try it](https://share.effector.dev/PAjWhOJc)
@@ -133,7 +133,7 @@ It is just another form of the `sample` invocation, with the same sense.
 
 const submitForm = createEvent()
 
-const signIn = createEffect(params => {
+const signInFx = createEffect(params => {
   console.log(params)
 })
 
@@ -147,7 +147,7 @@ const sampleUnit = sample(
 /* 5 */
 forward({
   from: sampleUnit,
-  to: signIn,
+  to: signInFx,
 })
 
 submitForm(12345678)
@@ -155,7 +155,7 @@ submitForm(12345678)
 // 2. take $userName store`s state ('john')
 // 3. transform payload from event (1) and current store`s state (2)
 // 4. when sampleUnit (event in this case) is triggered,
-//    send it payload to effect signIn with params received at the step (3)
+//    send it payload to effect signInFx with params received at the step (3)
 ```
 
 [Try it](https://share.effector.dev/WO6UT8bV)

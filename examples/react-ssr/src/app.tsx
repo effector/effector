@@ -29,7 +29,7 @@ const fetchUser = app.createEffect<string, {name: string; friends: string[]}>({
   },
 })
 
-const log = app.createEffect({
+const logFx = app.createEffect({
   async handler(data) {
     console.log('data', data)
   },
@@ -59,7 +59,7 @@ export const $location = $user.map(user => (user === 'guest' ? '/' : `/${user}`)
 sample({
   source: $user,
   clock: fetchUser.done,
-  target: log,
+  target: logFx,
 })
 
 const Meta = () => (

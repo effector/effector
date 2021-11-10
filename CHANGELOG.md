@@ -378,9 +378,9 @@ await fetchUserReposFx({name: 'zerobias'})
 ```js
 import {createStore, createEffect, attach} from 'effector'
 
-const request = createEffect()
+const fx = createEffect()
 const $token = createStore('')
-const secureRequest = attach({effect: request, source: $token})
+const secureRequest = attach({effect: fx, source: $token})
 ```
 
 it's a shorthand for common use case:
@@ -388,11 +388,11 @@ it's a shorthand for common use case:
 ```js
 import {createStore, createEffect, attach} from 'effector'
 
-const $request = createEffect()
+const fx = createEffect()
 const $token = createStore('')
 
 const secureRequest = attach({
-  effect: $request,
+  effect: fx,
   source: $token,
   mapParams: (_, source) => source,
 })
@@ -515,7 +515,7 @@ import {split, createEffect, createEvent} from 'effector'
 const messageReceived = createEvent()
 const showTextPopup = createEvent()
 const playAudio = createEvent()
-const reportUnknownMessageType = createEffect({
+const reportUnknownMessageTypeFx = createEffect({
   handler({type}) {
     console.log('unknown message:', type)
   },
@@ -530,7 +530,7 @@ split({
   cases: {
     text: showTextPopup,
     audio: playAudio,
-    __: reportUnknownMessageType,
+    __: reportUnknownMessageTypeFx,
   },
 })
 
@@ -680,10 +680,10 @@ import {createDomain, attach} from 'effector'
 import {fork, allSettled} from 'effector/fork'
 
 const app = createDomain()
-const add = app.createEffect({handler: _ => _})
+const addFx = app.createEffect({handler: _ => _})
 
 const $count = app.createStore(2)
-  .on(add.doneData, (x, y) => x + y)
+  .on(addFx.doneData, (x, y) => x + y)
 
 const addWithCurrent = attach({
   source: $count,
@@ -691,7 +691,7 @@ const addWithCurrent = attach({
   mapParams: (params, current) => params + current,
 })
 
-const start = app.createEffect({
+const startFx = app.createEffect({
   async handler(val) {
     await addWithCurrent(val)
   },
@@ -699,7 +699,7 @@ const start = app.createEffect({
 
 const scope = fork(app)
 
-await allSettled(start, {
+await allSettled(startFx, {
   scope,
   params: 3,
 })
@@ -736,44 +736,44 @@ import {createDomain, forward} from 'effector'
 import {fork, allSettled} from 'effector/fork'
 
 const app = createDomain()
-const addWord = app.createEffect({handler: async word => word})
+const addWordFx = app.createEffect({handler: async word => word})
 
 const words = app
   .createStore([])
-  .on(addWord.doneData, (list, word) => [...list, word])
+  .on(addWordFx.doneData, (list, word) => [...list, word])
 
-const start = app.createEffect({
+const startFx = app.createEffect({
   async handler(word) {
-    await addWord(`${word}1`)
-    await addWord(`${word}2`)
+    await addWordFx(`${word}1`)
+    await addWordFx(`${word}2`)
     return word
   },
 })
 
-const next = app.createEffect({
+const nextFx = app.createEffect({
   async handler(word) {
-    await Promise.all([addWord(`${word}3`), addWord(`${word}4`)])
+    await Promise.all([addWordFx(`${word}3`), addWordFx(`${word}4`)])
   },
 })
 
-forward({from: start.doneData, to: next})
+forward({from: startFx.doneData, to: nextFx})
 
 const scopeA = fork(app)
 const scopeB = fork(app)
 const scopeC = fork(app)
 
 await Promise.all([
-  allSettled(start, {
+  allSettled(startFx, {
     scope: scopeA,
     params: 'A',
   }),
-  allSettled(start, {
+  allSettled(startFx, {
     scope: scopeB,
     params: 'B',
   }),
 ])
 
-await allSettled(start, {
+await allSettled(startFx, {
   scope: scopeC,
   params: 'C',
 })
@@ -891,7 +891,7 @@ import {fork, hydrate, serialize, allSettled} from 'effector/fork'
 
 //app
 const app = createDomain()
-const fetchFriends = app.createEffect<{limit: number}, string[]>({
+const fetchFriendsFx = app.createEffect<{limit: number}, string[]>({
   async handler({limit}) {
     /* some client-side data fetching */
     return []
@@ -900,23 +900,23 @@ const fetchFriends = app.createEffect<{limit: number}, string[]>({
 const $user = app.createStore('guest')
 const $friends = app
   .createStore([])
-  .on(fetchFriends.doneData, (_, result) => result)
+  .on(fetchFriendsFx.doneData, (_, result) => result)
 
 /*
   test to ensure that $friends value is populated
-  after fetchFriends call
+  after fetchFriendsFx call
 */
 const testScope = fork(app, {
   values: {
     [$user.sid]: 'alice',
   },
   handlers: {
-    [fetchFriends.sid]: () => ['bob', 'carol'],
+    [fetchFriendsFx.sid]: () => ['bob', 'carol'],
   },
 })
 
 /* trigger computations in scope and await all called effects */
-await allSettled(fetchFriends, {
+await allSettled(fetchFriendsFx, {
   scope: testScope,
   params: {limit: 10},
 })
@@ -948,9 +948,9 @@ import {createDomain, forward} from 'effector'
 import {hydrate} from 'effector/fork'
 
 const app = createDomain()
-const saveUser = app.createEffect({
+const saveUserFx = app.createEffect({
   handler(value) {
-    console.log('saveUser now called only after store update', value)
+    console.log('saveUserFx now called only after store update', value)
   },
 })
 
@@ -959,7 +959,7 @@ const $username = app.createStore('guest')
 
 forward({
   from: $username,
-  to: saveUser,
+  to: saveUserFx,
 })
 
 $username.updates.watch(value => {
@@ -1094,7 +1094,7 @@ const sourceA = createEvent<string>()
 const sourceB = createEvent<number>()
 
 const targetA = createEvent<void>()
-const targetB = createEffect<void, any>()
+const fx = createEffect<void, any>()
 
 forward({
   from: sourceA,
@@ -1103,7 +1103,7 @@ forward({
 
 forward({
   from: sourceA,
-  to: [targetA, targetB],
+  to: [targetA, fx],
 })
 
 forward({
@@ -1113,7 +1113,7 @@ forward({
 
 forward({
   from: [sourceA, sourceB],
-  to: [targetA, targetB],
+  to: [targetA, fx],
 })
 ```
 
@@ -1129,7 +1129,7 @@ Use cases: declarative passing values from stores to effects and argument prepro
 ```js
 import {createEffect, attach, createStore} from 'effector'
 
-const backendRequest = createEffect({
+const backendRequestFx = createEffect({
   async handler({token, data, resource}) {
     const req = fetch(`https://example.com/api${resource}`, {
       method: 'POST',
@@ -1141,7 +1141,7 @@ const backendRequest = createEffect({
   },
 })
 
-const $requestsSend = createStore(0).on(backendRequest, total => total + 1)
+const $requestsSend = createStore(0).on(backendRequestFx, total => total + 1)
 
 $requestsSend.watch(total => {
   console.log(`client analytics: sent ${total} requests`)
@@ -1149,22 +1149,22 @@ $requestsSend.watch(total => {
 
 const $token = createStore('guest_token')
 
-const authorizedRequest = attach({
-  effect: backendRequest,
+const authorizedRequestFx = attach({
+  effect: backendRequestFx,
   source: $token,
   mapParams: ({data, resource}, token) => ({data, resource, token}),
 })
 
-const createRequest = resource =>
+const createRequestFx = resource =>
   attach({
-    effect: authorizedRequest,
+    effect: authorizedRequestFx,
     mapParams: data => ({data, resource}),
   })
 
-const getUser = createRequest('/user')
-const getPosts = createRequest('/posts')
+const getUserFx = createRequestFx('/user')
+const getPostsFx = createRequestFx('/posts')
 
-const user = await getUser({name: 'alice'})
+const user = await getUserFx({name: 'alice'})
 /*
 POST https://example.com/api/user
 {"name": "alice"}
@@ -1173,7 +1173,7 @@ Authorization: Bearer guest_token
 
 // => client analytics: sent 1 requests
 
-const posts = await getPosts({user: user.id})
+const posts = await getPostsFx({user: user.id})
 /*
 POST https://example.com/api/posts
 {"user": 18329}
@@ -1393,11 +1393,11 @@ import {useStore, useList, Provider, useEvent} from 'effector-react/ssr'
 
 export const app = createDomain()
 
-const requestUsername = app.createEffect<{login: string}, string>()
-const requestFriends = app.createEffect<string, string[]>()
+const requestUsernameFx = app.createEffect<{login: string}, string>()
+const requestFriendsFx = app.createEffect<string, string[]>()
 
-const $username = restore(requestUsername, 'guest')
-const $friends = restore(requestFriends, [])
+const $username = restore(requestUsernameFx, 'guest')
+const $friends = restore(requestFriendsFx, [])
 
 forward({
   from: requestUserName.done.map(({result: username}) => username),
@@ -1815,24 +1815,24 @@ new Vue({
 import {createStore, createEffect, createEvent, guard, sample} from 'effector'
 
 const clickRequest = createEvent()
-const fetchRequest = createEffect({
+const fetchRequestFx = createEffect({
   handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
 })
 
 const $clicks = createStore(0).on(clickRequest, x => x + 1)
-const $requests = createStore(0).on(fetchRequest, x => x + 1)
+const $requests = createStore(0).on(fetchRequestFx, x => x + 1)
 
-const isIdle = fetchRequest.pending.map(pending => !pending)
+const isIdle = fetchRequestFx.pending.map(pending => !pending)
 
 /*
 on clickRequest, take current $clicks value,
-and call fetchRequest with it
+and call fetchRequestFx with it
 if isIdle value is true
 */
 guard({
   source: sample($clicks, clickRequest),
   filter: isIdle,
-  target: fetchRequest,
+  target: fetchRequestFx,
 })
 ```
 
@@ -1843,17 +1843,17 @@ Also, `guard` can accept common function predicate as a filter, to drop events b
 ```js
 import {createEffect, createEvent, guard} from 'effector'
 
-const searchUser = createEffect()
+const searchUserFx = createEffect()
 const submitForm = createEvent()
 
 guard({
   source: submitForm,
   filter: user => user.length > 0,
-  target: searchUser,
+  target: searchUserFx,
 })
 
 submitForm('') // nothing happens
-submitForm('alice') // ~> searchUser('alice')
+submitForm('alice') // ~> searchUserFx('alice')
 ```
 
 [Type inference](https://github.com/effector/effector/blob/master/src/types/__tests__/effector/guard.test.js)
@@ -1893,12 +1893,12 @@ const updateItem = createEvent()
 const resetItems = createEvent()
 const processClicked = createEvent()
 
-const processItems = createEffect({
+const processItemsFx = createEffect({
   async handler(items) {
     for (let {id} of items) {
       //event call inside effect
       //should be applied to items$
-      //only after processItems itself
+      //only after processItemsFx itself
       updateItem({id, status: 'PROCESS'})
       await new Promise(r => setTimeout(r, 3000))
       updateItem({id, status: 'DONE'})
@@ -1912,13 +1912,13 @@ const $items = createStore([
 ]).on(updateItem, (items, {id, status}) =>
     items.map(item => (item.id === id ? {...item, status} : item)),
   )
-  .on(processItems, items => items.map(({id}) => ({id, status: 'WAIT'})))
+  .on(processItemsFx, items => items.map(({id}) => ({id, status: 'WAIT'})))
   .reset(resetItems)
 
 sample({
   source: $items,
   clock: processClicked,
-  target: processItems,
+  target: processItemsFx,
 })
 
 const App = () => (
@@ -2047,7 +2047,7 @@ clearNode(child)
 
 import {createEffect} from 'effector'
 
-export const getUser = createEffect({sid: 'GET /user'})
+export const getUserFx = createEffect({sid: 'GET /user'})
 
 console.log(getUsers.sid)
 // => GET /user
@@ -2099,9 +2099,9 @@ See [example project](https://github.com/effector/effector/tree/master/examples/
 ```typescript
 const handler = () => console.log()
 
-const effect = createEffect({handler})
+const fx = createEffect({handler})
 
-effect()
+fx()
 ```
 
 - Fix bug with `cannot read property .toString of undefined` error during store initialization
@@ -2391,18 +2391,18 @@ source() // ~ no reaction ~
 ```js
 import {createEffect} from 'effector'
 
-const fetchApi = createEffect({
+const fetchApiFx = createEffect({
   handler: n =>
     new Promise(resolve => {
       setTimeout(resolve, n, `${n} ms`)
     }),
 })
 
-fetchApi.finally.watch(response => {
+fetchApiFx.finally.watch(response => {
   console.log(response)
 })
 
-await fetchApi(10)
+await fetchApiFx(10)
 // => {status: 'done', result: '10 ms', params: 10}
 
 // or
@@ -2540,14 +2540,14 @@ import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
 
-const fetchApi = createEffect({
+const fetchApiFx = createEffect({
   handler: n => new Promise(resolve => setTimeout(resolve, n)),
 })
 
-fetchApi.pending.watch(console.log)
+fetchApiFx.pending.watch(console.log)
 
 const Loading = createComponent(
-  fetchApi.pending,
+  fetchApiFx.pending,
   (props, pending) => pending && <div>Loading...</div>,
 )
 
@@ -2559,13 +2559,13 @@ it's a shorthand for common use case
 ```js
 import {createEffect, createStore} from 'effector'
 
-const fetchApi = createEffect()
+const fetchApiFx = createEffect()
 
-//now you can use fetchApi.pending instead
+//now you can use fetchApiFx.pending instead
 const $isLoading = createStore(false)
-  .on(fetchApi, () => true)
-  .on(fetchApi.done, () => false)
-  .on(fetchApi.fail, () => false)
+  .on(fetchApiFx, () => true)
+  .on(fetchApiFx.done, () => false)
+  .on(fetchApiFx.fail, () => false)
 ```
 
 [Try it](https://share.effector.dev/AupKHTcS)
@@ -2872,7 +2872,7 @@ import {createEffect, createEvent, forward} from 'effector'
 
 const trigger = createEvent()
 
-const sideEffect = createEffect('side-effect', {
+const fx = createEffect('side-effect', {
   async handler(args) {
     await new Promise(rs => setTimeout(rs, 500))
     console.log('args: ', args)
@@ -2881,7 +2881,7 @@ const sideEffect = createEffect('side-effect', {
 
 forward({
   from: trigger,
-  to: sideEffect,
+  to: fx,
 })
 
 trigger('payload')
@@ -3006,7 +3006,7 @@ const $counter = createStore(0).on(name, (count, name) => count++)
 ```js
 import {createEffect} from 'effector'
 
-const callApi = createEffect('call api', {
+const callApiFx = createEffect('call api', {
   async handler(url) {
     const res = await fetch(url)
     return res
@@ -3019,7 +3019,7 @@ const callApi = createEffect('call api', {
 ```js
 import {createEffect} from 'effector'
 
-const callApi = createEffect('call api').use(url => fetch(url))
+const callApiFx = createEffect('call api').use(url => fetch(url))
 ```
 
 ## 0.18.0
