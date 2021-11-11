@@ -63,7 +63,7 @@ changed('hello world')
 // => new length 11
 ```
 
-[Try it](https://share.effector.dev/XGKGMvpF)
+[Try it](https://share.effector.dev/GH6SCAZI)
 
 <hr />
 
@@ -97,15 +97,14 @@ $store.on(trigger, reducer)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const $store = createStore(0)
 const changed = createEvent()
+const $store = createStore(0)
 
-$store.on(changed, (value, incrementor) => value + incrementor)
+$store.on(changed, (state, params) => state + params)
 
 $store.watch(value => {
   console.log('updated', value)
 })
-// => updated 0
 
 changed(2)
 // => updated 2
@@ -114,7 +113,7 @@ changed(2)
 // => updated 4
 ```
 
-[Try it](https://share.effector.dev/O0JnDtIl)
+[Try it](https://share.effector.dev/0TpGYs9a)
 
 <hr />
 
@@ -152,28 +151,29 @@ $store.on([triggerA, triggerB, ...], reducer)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const changedA = createEvent()
-const changedB = createEvent()
+const eventA = createEvent()
+const eventB = createEvent()
 
-const $store = createStore(0)
-
-$store.on([changedA, changedB], (value, incrementor) => value + incrementor)
+const $store = createStore(0).on(
+  [eventA, eventB],
+  (state, params) => state + params
+)
 
 $store.watch(value => {
   console.log('updated', value)
 })
 
-changedA(2)
+eventA(2)
 // => updated 2
 
-changedB(2)
+eventB(2)
 // => updated 4
 
 // You can unsubscribe from any trigger
-$store.off(changedA)
+$store.off(eventA)
 ```
 
-[Try it](https://share.effector.dev/iP0oM3NF)
+[Try it](https://share.effector.dev/fO2qjj1F)
 
 <hr />
 
@@ -262,7 +262,7 @@ foo(3)
 // => triggered 0, 3
 ```
 
-[Try it](https://share.effector.dev/xEltaFyH)
+[Try it](https://share.effector.dev/VA9Y00CM)
 
 <hr />
 
@@ -359,7 +359,7 @@ increment() // changed 2
 reset() // changed 0
 ```
 
-[Try it](https://share.effector.dev/ot6R5ePc)
+[Try it](https://share.effector.dev/8yPC1nFv)
 
 <hr />
 
@@ -385,21 +385,24 @@ $store.off(trigger)
 ```js
 import {createEvent, createStore} from 'effector'
 
-const changedA = createEvent()
-const changedB = createEvent()
-
+const eventA = createEvent()
+const eventB = createEvent()
 const $store = createStore(0)
 
+$store.on([eventA, eventB], (state, params) => state + params)
 
-// If you want to unsubscribe from all triggers simultaneously, better to manually merge
-const changed = merge([changedA, changedB])
+$store.watch(value => {
+  console.log('updated', value)
+})
 
-$store.on(changed, (state, params) => state + params)
+eventA(2)
+// => updated 2
 
-$store.off(changed)
+eventB(2)
+// => updated 4
 ```
 
-[Try it](https://share.effector.dev/bzdoyLHm)
+[Try it](https://share.effector.dev/KQrB3CAR)
 
 <hr />
 
@@ -432,9 +435,7 @@ import {createStore, createEvent} from 'effector'
 const enhance = fn => store => store.map(fn)
 
 const inc = createEvent()
-const $num = createStore(1)
-
-$num.on(inc, n => n + 1)
+const $num = createStore(1).on(inc, n => n + 1)
 
 //prettier-ignore
 const $result = $num
@@ -456,7 +457,7 @@ inc()
 // => result 30
 ```
 
-[Try it](https://share.effector.dev/RRSyqVus)
+[Try it](https://share.effector.dev/VYUCZKOU)
 
 <hr />
 
@@ -482,6 +483,7 @@ Use case: watchers, which will not trigger immediately after creation (unlike [_
 import {createStore, is} from 'effector'
 
 const $clicksAmount = createStore(0)
+
 is.event($clicksAmount.updates) // => true
 
 $clicksAmount.watch(amount => {
@@ -493,7 +495,7 @@ $clicksAmount.updates.watch(amount => {
 })
 ```
 
-[Try it](https://share.effector.dev/F5L5kLTE)
+[Try it](https://share.effector.dev/St9vDqxN)
 
 <hr />
 

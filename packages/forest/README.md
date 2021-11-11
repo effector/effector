@@ -39,7 +39,9 @@ using(document.body, () => {
       h('button', {
         text: 'Submit',
         attr: {
-          disabled: $fields.map(fields => !(fields.username && fields.password)),
+          disabled: $fields.map(
+            fields => !(fields.username && fields.password)
+          ),
         },
       })
     })
@@ -56,10 +58,10 @@ function formModel() {
   const changed = createEvent()
   const submit = createEvent()
 
-  const $fields = createStore({})
-    .on(changed, (fields, {name, value}) => ({
-      ...fields, [name]: value
-    }))
+  const $fields = createStore({}).on(changed, (fields, {name, value}) => ({
+    ...fields,
+    [name]: value,
+  }))
 
   const change = name => changed.prepend(e => ({name, value: e.target.value}))
 
@@ -77,7 +79,7 @@ function stringify(values) {
 }
 ```
 
-[Try it](https://share.effector.dev/e2FuOsag)
+[Try it](https://share.effector.dev/Y9QLkwlc)
 
 ## API
 

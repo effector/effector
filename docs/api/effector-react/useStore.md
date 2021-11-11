@@ -20,6 +20,7 @@ useStore(store: Store<T>): T
 #### Example
 
 ```js
+import ReactDOM from 'react-dom'
 import {createStore, createApi} from 'effector'
 import {useStore} from 'effector-react'
 
@@ -32,7 +33,7 @@ const {increment, decrement} = createApi($counter, {
 
 const App = () => {
   const counter = useStore($counter)
-  
+
   return (
     <div>
       {counter}
@@ -41,6 +42,8 @@ const App = () => {
     </div>
   )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/DHzp3z4r)
+[Try it](https://share.effector.dev/muxiAjIA)

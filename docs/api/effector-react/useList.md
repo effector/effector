@@ -55,6 +55,7 @@ In such case, we need to tell react about our dependencies and pass keys explici
 ### Example 1
 
 ```js
+import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
 import {useList} from 'effector-react'
 
@@ -75,13 +76,16 @@ const App = () => {
 
   return <ul>{list}</ul>
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/dV9dmuz3)
+[Try it](https://share.effector.dev/i5hTEKHa)
 
 ### Example 2
 
 ```js
+import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
 import {useList} from 'effector-react'
 
@@ -100,7 +104,7 @@ const $todoList = createStore([
           done: !todo.done,
         }
       return todo
-    }),
+    })
   )
   .on(addTodo, (list, e) => [
     ...list,
@@ -109,10 +113,6 @@ const $todoList = createStore([
       done: false,
     },
   ])
-
-addTodo.watch(e => {
-  e.preventDefault()
-})
 
 const TodoList = () =>
   useList($todoList, ({text, done}, i) => {
@@ -125,22 +125,31 @@ const TodoList = () =>
     )
     return <li onClick={() => toggleTodo(i)}>{todo}</li>
   })
-const App = () => (
-  <div>
-    <h1>todo list</h1>
-    <form onSubmit={addTodo}>
-      <label htmlFor="content">New todo</label>
-      <input type="text" name="content" required />
-      <input type="submit" value="Add" />
-    </form>
-    <ul>
-      <TodoList />
-    </ul>
-  </div>
-)
+
+const App = () => {
+  const handleSubmit = e => {
+    e.preventDefault()
+    addTodo()
+  }
+  return (
+    <div>
+      <h1>todo list</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="content">New todo</label>
+        <input type="text" name="content" required />
+        <input type="submit" value="Add" />
+      </form>
+      <ul>
+        <TodoList />
+      </ul>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/dUay9F3U)
+[Try it](https://share.effector.dev/UtK69QJu)
 
 ### Example with config
 
@@ -156,7 +165,7 @@ const $friends = createStore(['bob'])
 
 const App = () => {
   const user = useStore($user)
-  
+
   return useList($friends, {
     keys: [user],
     fn: friend => (
@@ -176,4 +185,4 @@ setTimeout(() => {
 }, 500)
 ```
 
-[Try it](https://share.effector.dev/ijRS5TYh)
+[Try it](https://share.effector.dev/Pmyimoyn)

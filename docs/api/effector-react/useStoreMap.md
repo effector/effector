@@ -54,6 +54,8 @@ Overload used when you need to pass dependencies to react (to update items when 
 This hook is very useful for working with lists, especially with large ones
 
 ```js
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 
@@ -95,9 +97,11 @@ const User = ({id}) => {
 
 const UserList = () => {
   const ids = useStore($ids)
-  
+
   return ids.map(id => <User key={id} id={id} />)
 }
+
+ReactDOM.render(<UserList />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/cAZWHCit)
+[Try it](https://share.effector.dev/AIu4YkVO)

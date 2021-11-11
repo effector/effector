@@ -12,7 +12,8 @@ import {useStore} from 'effector-react'
 const fetchUserFx = createEffect(url => fetch(url).then(req => req.json()))
 
 const $user = createStore(null).on(
-  fetchUserFx.doneData, (state, result) => result.username,
+  fetchUserFx.doneData,
+  (_, user) => user.username
 )
 
 const url =
@@ -23,12 +24,12 @@ const url =
 const App = () => {
   const user = useStore($user)
   const pending = useStore(fetchUserFx.pending)
-  
+
   return (
     <div>
       {user ? <div>current user: {user}</div> : <div>no current user</div>}
       <button disable={pending} onClick={() => fetchUserFx(url)}>
-      	load user
+        load user
       </button>
     </div>
   )
@@ -37,4 +38,4 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/wdI27XSm)
+[Try it](https://share.effector.dev/W4qAze58)

@@ -3,11 +3,12 @@ id: dynamic-form-schema
 title: Dynamic form schema
 ---
 
-[Try it](https://share.effector.dev/kOWvKMLn)
+[Try it](https://share.effector.dev/DcYqWihz)
 
 ```js
 const submitForm = createEvent()
 const addMessage = createEvent()
+
 const $message = restore(addMessage, 'done')
 const showTooltipFx = createEffect(
   () => new Promise(rs => setTimeout(rs, 1500))
@@ -16,14 +17,15 @@ const showTooltipFx = createEffect(
 const saveFormFx = createEffect(data => {
   localStorage.setItem('form_state/2', JSON.stringify(data, null, 2))
 })
+
 const loadFormFx = createEffect(() => {
   return JSON.parse(localStorage.getItem('form_state/2'))
 })
 
 const $mainForm = createStore({}).on(loadFormFx.doneData, (state, result) => {
   let changed = false
-
   state = {...state}
+
   for (const key in result) {
     const {value} = result[key]
     if (value == null) continue
@@ -60,6 +62,7 @@ const mainFormApi = createApi($mainForm, {
     return state
   },
 })
+
 const $types = createStore({
   username: 'text',
   email: 'text',
@@ -79,11 +82,9 @@ const $types = createStore({
   })
   .on(loadFormFx.doneData, (state, result) => {
     let changed = false
-
     state = {...state}
     for (const key in result) {
       const {type} = result[key]
-
       if (type == null) continue
       if (state[key] === type) continue
       changed = true
@@ -102,6 +103,7 @@ const changeFieldInput = mainFormApi.changeField.prepend(e => [
     ? e.currentTarget.checked
     : e.currentTarget.value,
 ])
+
 const submitField = mainFormApi.addField.prepend(e => [
   e.currentTarget.fieldname.value,
   e.currentTarget.fieldtype.value === 'checkbox'
@@ -109,26 +111,15 @@ const submitField = mainFormApi.addField.prepend(e => [
     : e.currentTarget.fieldvalue.value,
   e.currentTarget.fieldtype.value,
 ])
+
 const submitRemoveField = mainFormApi.deleteField.prepend(
   e => e.currentTarget.field.value
 )
 
 const changeFieldType = createEvent()
-
 const $fieldType = createStore('text')
   .on(changeFieldType, (_, e) => e.currentTarget.value)
   .reset(submitField)
-
-submitForm.watch(e => {
-  e.preventDefault()
-})
-submitField.watch(e => {
-  e.preventDefault()
-  e.currentTarget.reset()
-})
-submitRemoveField.watch(e => {
-  e.preventDefault()
-})
 
 sample({
   clock: [submitForm, submitField, submitRemoveField],
@@ -152,14 +143,17 @@ forward({
   from: addMessage,
   to: showTooltipFx,
 })
+
 forward({
   from: submitField,
   to: addMessage.prepend(() => 'added'),
 })
+
 forward({
   from: submitRemoveField,
   to: addMessage.prepend(() => 'removed'),
 })
+
 forward({
   from: submitForm,
   to: addMessage.prepend(() => 'saved'),
@@ -175,19 +169,19 @@ function useFormField(name) {
     keys: [name],
     fn(state, [field]) {
       if (field in state) return state[field]
-
       return 'text'
     },
   })
+
   const value = useStoreMap({
     store: $mainForm,
     keys: [name],
     fn(state, [field]) {
       if (field in state) return state[field]
-
       return ''
     },
   })
+
   mainFormApi.upsertField(name)
 
   return [value, type]
@@ -195,9 +189,12 @@ function useFormField(name) {
 
 function Form() {
   const pending = useStore(saveFormFx.pending)
+  const handleSubmit = e => {
+    e.preventDefault()
+  }
 
   return (
-    <form onSubmit={submitForm} data-form autocomplete="off">
+    <form onSubmit={handleSubmit} data-form autocomplete="off">
       <header>
         <h4>Form</h4>
       </header>
@@ -259,8 +256,14 @@ function FieldForm() {
       <input id="fieldvalue" name="fieldvalue" type="text" defaultValue="" />
     )
 
+  const handleSubmit = e => {
+    e.preventDefault()
+    e.currentTarget.reset()
+    submitField()
+  }
+
   return (
-    <form onSubmit={submitField} autocomplete="off" data-form>
+    <form onSubmit={handleSubmit} autocomplete="off" data-form>
       <header>
         <h4>Insert new field</h4>
       </header>
@@ -291,8 +294,13 @@ function FieldForm() {
 }
 
 function RemoveFieldForm() {
+  const handleSubmit = e => {
+    e.preventDefault()
+    submitRemoveField()
+  }
+
   return (
-    <form onSubmit={submitRemoveField} data-form>
+    <form onSubmit={handleSubmit} data-form>
       <header>
         <h4>Remove field</h4>
       </header>
@@ -345,32 +353,25 @@ css`
     padding: 5px 5px;
     transition: transform 100ms ease-out;
   }
-
   [data-tooltip][data-visible='true']:before {
     transform: translate(0px, 0.5em);
   }
-
   [data-tooltip][data-visible='false']:before {
     transform: translate(0px, -2em);
   }
-
   [data-form] {
     display: contents;
   }
-
   [data-form] > header {
     grid-column: 1 / span 2;
   }
-
   [data-form] > header > h4 {
     margin-block-end: 0;
   }
-
   [data-form] label {
     grid-column: 1;
     justify-self: end;
   }
-
   [data-form] input:not([type='submit']),
   [data-form] select {
     grid-column: 2;
@@ -397,7 +398,7 @@ function css(tags, ...attrs) {
   node.id = 'insertedStyle'
   node.appendChild(document.createTextNode(value))
   const sheet = document.getElementById('insertedStyle')
-
+  
   if (sheet) {
     sheet.disabled = true
     sheet.parentNode.removeChild(sheet)
@@ -407,7 +408,7 @@ function css(tags, ...attrs) {
   function style(tags, ...attrs) {
     if (tags.length === 0) return ''
     let result = ' ' + tags[0]
-    
+
     for (let i = 0; i < attrs.length; i++) {
       result += attrs[i]
       result += tags[i + 1]

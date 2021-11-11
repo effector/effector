@@ -3,33 +3,32 @@ id: todo-creator
 title: TODO creator
 ---
 
-[Try it](https://share.effector.dev/CKvKkf6j)
+[Try it](https://share.effector.dev/Th2tXhrB)
 
-```ts
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent, sample} from 'effector'
 import {useStore, useList} from 'effector-react'
 
-function createTodoListApi(initial: string[] = []) {
-  const insert = createEvent<string>()
-  const remove = createEvent<number>()
-  const change = createEvent<string>()
+function createTodoListApi(initial = []) {
+  const insert = createEvent()
+  const remove = createEvent()
+  const change = createEvent()
   const reset = createEvent<void>()
 
-  const $input = createStore<string>('')
-    .on(change, (_, value) => value).reset(reset, insert)
+  const $input = createStore('')
+    .on(change, (_, text) => text).reset(reset, insert)
 
-  const $todos = createStore<string[]>(initial)
+  const $todos = createStore(initial)
     .on(insert, (todos, newTodo) => [...todos, newTodo])
     .on(remove, (todos, index) => todos.filter((_, i) => i !== index))
 
   const submit = createEvent()
-  submit.watch(event => event.preventDefault())
 
   sample({
     clock: submit,
-    source: input,
+    source: $input,
     target: insert,
   })
 
@@ -54,6 +53,11 @@ function TodoList({label, model}) {
       {value} <button type="button" onClick={() => model.remove(index)}>Remove</button>
     </li>
   ))
+  
+  const handleSubmit = (e) => {
+  	e.preventDefault();
+    model.submit()
+  }
 
   return (
     <>
@@ -61,7 +65,7 @@ function TodoList({label, model}) {
       <ul>
         {todos}
       </ul>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>Insert todo: </label>
         <input type="text" value={input} onChange={model.change}/>
         <input type="submit" onClick={model.submit} value="Insert"/>

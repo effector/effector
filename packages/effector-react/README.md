@@ -18,14 +18,12 @@ yarn add effector effector-react
 
 ```js
 import {createStore, combine, createEvent} from 'effector'
-
 import {useStore} from 'effector-react'
 
 const inputText = createEvent()
 
 const $text = createStore('')
   .on(inputText, (_, text) => text)
-  
 const $size = createStore(0)
   .on(inputText, (_, text) => text.length)
 
@@ -36,21 +34,20 @@ const $form = combine({
 
 const Form = () => {
   const {text, size} = useStore($form)
+  const handleChange = e => inputText(e.currentTarget.value)
 
   return (
     <form>
-      <input
-        type="text"
-        onChange={e => inputText(e.currentTarget.value)}
-        value={text}
-      />
+      <input type="text" onChange={handleChange} value={text} />
       <p>Length: {size}</p>
     </form>
   )
 }
+
+ReactDOM.render(<Form />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/vwTDZXOA)
+[Try it](https://share.effector.dev/dYIeUQ2o)
 
 [useStore](https://effector.dev/docs/api/effector-react/useStore) in docs
 [createStore](https://effector.dev/docs/api/effector/createStore) in docs

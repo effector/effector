@@ -3,10 +3,17 @@ id: todo-with-validation
 title: TODO list with input validation
 ---
 
-[Try it](https://share.effector.dev/4la2a6lj)
+[Try it](https://share.effector.dev/T4ZNvlrx)
 
 ```js
-import {createEvent, createStore, createEffect, restore, combine, sample} from 'effector'
+import {
+  createEvent,
+  createStore,
+  createEffect,
+  restore,
+  combine,
+  sample,
+} from 'effector'
 import {useStore, useList} from 'effector-react'
 
 const submit = createEvent()
@@ -20,7 +27,7 @@ const validateFx = createEffect(([todo, todos]) => {
     throw 'This todo is already on the list'
 
   if (!todo.trim().length) throw 'Required field'
-  
+
   return null
 })
 
@@ -28,12 +35,14 @@ const $todo = restore(changed, '').reset(submitted)
 const $error = restore(validateFx.failData, '').reset(changed)
 
 const $todos = createStore([])
-  .on(submitted, (prev, next) => [...prev, {text: next, completed: false}])
-  .on(completed, (state, index) => state.map((item, i) => ({
-    ...item,
-    completed: index === i ? !item.completed : item.completed,
-  })))
-  .on(removed, (state, index) => state.filter((_, i) => i !== index))
+  .on(submitted, (todos, next) => [...todos, {text: next, completed: false}])
+  .on(completed, (todos, index) =>
+    todos.map((item, i) => ({
+      ...item,
+      completed: index === i ? !item.completed : item.completed,
+    }))
+  )
+  .on(removed, (todos, index) => todos.filter((_, i) => i !== index))
 
 sample({
   clock: submit,
@@ -46,8 +55,6 @@ sample({
   source: $todo,
   target: submitted,
 })
-
-submit.watch(e => e.preventDefault())
 
 const App = () => {
   const tasks = useStore($todos)
@@ -68,10 +75,15 @@ const App = () => {
     </li>
   ))
 
+  const handleSubmit = e => {
+    e.preventDefault()
+    submit()
+  }
+
   return (
     <div>
       <h1>Todos</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           className="text"
           type="text"

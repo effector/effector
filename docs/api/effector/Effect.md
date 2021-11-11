@@ -100,10 +100,10 @@ fetchUserReposFx.use(async params => {
 })
 
 fetchUserReposFx({name: 'zerobias'})
-// => fetchUserRepos called with {name: 'zerobias'}
+// => fetchUserReposFx called with {name: 'zerobias'}
 ```
 
-[Try it](https://share.effector.dev/TlYuDeve)
+[Try it](https://share.effector.dev/N2BPipSV)
 
 <hr />
 

@@ -5,21 +5,24 @@ title: Forms
 
 ## Example 1
 
-```jsx
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 
-const submitted = createEvent()
-const setField = createEvent()
-
 const sendFormFx = createEffect(params => {
   console.log(params)
 })
+const submitted = createEvent()
+const setField = createEvent()
+const handleChange = setField.prepend(e => ({
+  key: e.target.name,
+  value: e.target.value,
+}))
 
-const $form = createStore({}).on(setField, (s, {key, value}) => ({
-  ...s,
+const $form = createStore({}).on(setField, (fields, {key, value}) => ({
+  ...fields,
   [key]: value,
 }))
 
@@ -29,17 +32,13 @@ sample({
   target: sendFormFx,
 })
 
-const handleChange = setField.prepend(e => ({
-  key: e.target.name,
-  value: e.target.value,
-}))
-
 const Field = ({name, type, label}) => {
   const value = useStoreMap({
     store: $form,
     keys: [name],
-    fn: values => values[name] || '',
+    fn: values => values[name] ?? '',
   })
+
   return (
     <div>
       {label}{' '}
@@ -48,22 +47,23 @@ const Field = ({name, type, label}) => {
   )
 }
 
-const App = () => (
-  <form onSubmit={submitted}>
-    <Field name="login" label="Login" />
-    <Field name="password" type="password" label="Password" />
-    <button type="submit">Submit!</button>
-  </form>
-)
-
-submitted.watch(e => {
-  e.preventDefault()
-})
+const App = () => {
+  const handleSubmit = e => {
+    e.preventDefault()
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <Field name="login" label="Login" />
+      <Field name="password" type="password" label="Password" />
+      <button type="submit">Submit!</button>
+    </form>
+  )
+}
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/G2WBDwZP)
+[Try it](https://share.effector.dev/7MLIhEFC)
 
 Let's break down the code above.
 
@@ -75,8 +75,8 @@ const sendFormFx = createEffect(params => {
 })
 const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form
 const setField = createEvent() //has intention to change $form's state in a way, defined in reducer further
-const $form = createStore({}).on(setField, (s, {key, value}) => ({
-  ...s,
+const $form = createStore({}).on(setField, (fields, {key, value}) => ({
+  ...fields,
   [key]: value,
 }))
 ```
@@ -127,42 +127,40 @@ const Field = ({name, type, label}) => {
 
 And, finally, the `App` itself! Note, how we got rid of any business-logic in view layer. It's simpler to debug, to share logic, and even more: logic is framework independent now.
 
-```jsx
-const App = () => (
-  <form
-    onSubmit={submitted /*note, there is an event, which is clock for sample*/}>
-    <Field name="login" label="Login" />
-    <Field name="password" type="password" label="Password" />
-    <button type="submit">Submit!</button>
-  </form>
-)
-```
-
-Prevent default html form submit behavior using react event from `submitted`
-
 ```js
-submitted.watch(e => {
-  e.preventDefault()
-})
+const App = () => {
+  const handleSubmit = e => {
+    e.preventDefault()
+  }
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <Field name="login" label="Login" />
+      <Field name="password" type="password" label="Password" />
+      <button type="submit">Submit!</button>
+    </form>
+  )
+}
 ```
-
 ## Example 2
 
 This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which dependend on stores, transform data passed between events.
 
-```jsx
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {createEffect, createStore} from 'effector'
+import {createEffect} from 'effector'
 import {useStore, createComponent} from 'effector-react'
 
 //defining simple Effect, which results a string in 3 seconds
 const sendFormFx = createEffect(
   formData =>
-    new Promise(rs =>
-      setTimeout(rs, 1000, `Signed in as [${formData.get('name')}]`),
-    ),
+    new Promise(resolve =>
+      setTimeout(resolve, 1000, `Signed in as [${formData.get('name')}]`)
+    )
 )
+
+const onSubmit = sendFormFx.prepend(e => new FormData(e.target)) //transforming upcoming data, from DOM Event to FormData
 
 //applying side-effect, upon sendFormFx `doneData`
 sendFormFx.doneData.watch(result => {
@@ -172,7 +170,7 @@ sendFormFx.doneData.watch(result => {
 const Loader = () => {
   //approach #1: explicit store usage, with hook `useStore`
   const loading = useStore(sendFormFx.pending) //typeof loading === "boolean"
-  
+
   return loading ? <div>Loading...</div> : null
 }
 
@@ -183,24 +181,25 @@ const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
   </button>
 ))
 
-const onSubmit = sendFormFx.prepend(e => new FormData(e.target)) //transforming upcoming data, from DOM Event to FormData
+const App = () => {
+  const handleSubmit = e => {
+    e.preventDefault()
+    onSubmit()
+  }
 
-onSubmit.watch(e => {
-  e.preventDefault()
-})
-
-const App = () => (
-  <form onSubmit={onSubmit}>
-    Login: <input name="name" />
-    <br />
-    Password: <input name="password" type="password" />
-    <br />
-    <Loader />
-    <SubmitButton />
-  </form>
-)
+  return (
+    <form onSubmit={onSubmit}>
+      Login: <input name="name" />
+      <br />
+      Password: <input name="password" type="password" />
+      <br />
+      <Loader />
+      <SubmitButton />
+    </form>
+  )
+}
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/yhE6HfCt)
+[Try it](https://share.effector.dev/7MCCii5k)

@@ -17,7 +17,7 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 
 ### Example
 
-```jsx
+```js
 import ReactDOM from 'react-dom'
 import {createDomain, fork} from 'effector'
 import {useStore, useEvent, Provider} from 'effector-react/ssr'
@@ -44,11 +44,11 @@ ReactDOM.render(
   <Provider value={scope}>
     <App />
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById('root')
 )
 ```
 
-[Try it](https://share.effector.dev/GyiJvLdo)
+[Try it](https://share.effector.dev/Ry3zXAkQ)
 
 ## `useEvent(shape)`
 

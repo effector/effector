@@ -49,17 +49,14 @@ const App = () => (
     <Gate foo="bar" />
   </section>
 )
-
 Gate.state.watch(state => {
   console.log('current state', state)
 })
 // => current state {}
-
 ReactDOM.render(<App />, document.getElementById('root'))
 // => current state {foo: 'bar'}
-
 ReactDOM.unmountComponentAtNode(document.getElementById('root'))
 // => current state {}
 ```
 
-[Try it](https://share.effector.dev/mMZSQclh)
+[Try it](https://share.effector.dev/iQU4TzCP)
