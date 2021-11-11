@@ -33,7 +33,7 @@ const scope = fork(domain)
 console.log(serialize(scope)) // => {[sid]: 42}
 ```
 
-[Try it](https://share.effector.dev/zlRJbjei)
+[Try it](https://share.effector.dev/gOWh8qpG)
 
 ## Note on `onlyChanges`
 
@@ -56,18 +56,16 @@ const clientScope = fork(app, {
   values: new Map([
     [$clientTheme, 'dark'],
     [$title, 'profile'],
-  ])
+  ]),
 })
 
 /** server side scope of chats page created for each request */
 const chatsPageScope = fork(app, {
-  values: new Map([
-    [$title, 'chats']
-  ])
+  values: new Map([[$title, 'chats']]),
 })
 
 /** this object will contain only $title data
-  * as $clientTheme never changed in server scope */
+ * as $clientTheme never changed in server scope */
 const chatsPageData = serialize(chatsPageScope, {onlyChanges: true})
 console.log(chatsPageData)
 // => {'-l644hw': 'chats'}
@@ -79,4 +77,4 @@ console.log(clientScope.getState($clientTheme))
 // => dark
 ```
 
-[Try it](https://share.effector.dev/BQhzISFV)
+[Try it](https://share.effector.dev/GrxKWTdu)
