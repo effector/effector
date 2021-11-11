@@ -56,8 +56,8 @@ resetCounter()
 
 [Try it](https://share.effector.dev/oFkPG4yJ)
 
-We created a store and an event (addNumber), and started watching the store.<br/>
-Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`, you can look at the console and see how state changes.
+We created a store `$counter` and an event `incrementBy`, and started watching the store.<br/>
+Notice the function call `incrementBy(10)`. Whenever you will call `incrementBy(10)`, you can look at the console and see how state of `$counter` changes.
 
 #### Example 2
 
