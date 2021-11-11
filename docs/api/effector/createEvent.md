@@ -28,25 +28,33 @@ createEvent(name?): Event<void>
 ```js
 import {createStore, createEvent} from 'effector'
 
-const addNumber = createEvent()
-const $store = createStore(0).on(addNumber, (state, number) => state + number)
+const incrementBy = createEvent()
+const resetCounter = createEvent()
+const $counter = createStore(0)
 
-$store.watch(state => {
-  console.log('state', state)
+$counter
+  .on(incrementBy, (counter, number) => counter + number)
+  .reset(resetCounter)
+
+$counter.watch(counter => {
+  console.log('counter is now', counter)
 })
-// => 0
+// => counter is now 0
 
-addNumber(10)
-// => 10
+incrementBy(10)
+// => counter is now 10
 
-addNumber(10)
-// => 20
+incrementBy(10)
+// => counter is now 20
 
-addNumber(10)
-// => 30
+incrementBy(10)
+// => counter is now 30
+
+resetCounter()
+// => counter is now 0
 ```
 
-[Try it](https://share.effector.dev/0OeoZMPc)
+[Try it](https://share.effector.dev/oFkPG4yJ)
 
 We created a store and an event (addNumber), and started watching the store.<br/>
 Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`, you can look at the console and see how state changes.
@@ -56,14 +64,28 @@ Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`
 ```js
 import {createEvent} from 'effector'
 
-const extractPartOfArray = createEvent()
-const array = extractPartOfArray.map(arr => arr.slice(2))
+const fullNameReceived = createEvent()
 
-array.watch(part => {
-  console.log(part)
-})
-extractPartOfArray([1, 2, 3, 4, 5, 6])
-// => [3, 4, 5, 6]
+const firstNameReceived = fullNameReceived.map(
+  fullName => fullName.split(' ')[0]
+)
+const lastNameReceived = fullNameReceived.map(
+  fullName => fullName.split(' ')[1]
+)
+const firstNameUppercaseReceived = firstNameReceived.map(
+  firstName => firstName.toUpperCase()
+)
+
+firstNameReceived.watch(firstName => console.log('First name', firstName))
+lastNameReceived.watch(firstName => console.log('Last name', firstName))
+firstNameUppercaseReceived.watch(firstName =>
+  console.log('Upper case', firstName)
+)
+
+fullNameReceived('John Doe')
+// => First name John
+// => Last name Doe
+// => Upper case JOHN
 ```
 
-[Try it](https://share.effector.dev/4lWsZr2k)
+[Try it](https://share.effector.dev/TJWghQ2z)
