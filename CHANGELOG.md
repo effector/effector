@@ -327,12 +327,14 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 import {createDomain, fork, allSettled} from 'effector'
 
 const app = createDomain()
+
 const fx = app.createEffect(() => 'ok')
 const result = await allSettled(fx, {scope: fork(app)})
+console.log(result)
 // => {status: 'done', value: 'ok'}
 ```
 
-[Try it](https://share.effector.dev/h8m4zT0k)
+[Try it](https://share.effector.dev/VnGmzuIx)
 
 - Allow to expicitly define return/error types in `createEffect(handler)`
 
@@ -359,6 +361,7 @@ import {createEffect} from 'effector'
 const fetchUserReposFx = createEffect(async ({name}) => {
   const url = `https://api.github.com/users/${name}/repos`
   const req = await fetch(url)
+
   return req.json()
 })
 
@@ -369,7 +372,7 @@ fetchUserReposFx.done.watch(({params, result}) => {
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/7K23rdej)
+[Try it](https://share.effector.dev/YJOlDxKR)
 
 - Add support for `attach({source, effect})` without `mapParams`: in case with `source` and `effect` only, inner effect will be triggered with `source` values
 
@@ -388,17 +391,16 @@ it's a shorthand for common use case:
 ```js
 import {createStore, createEffect, attach} from 'effector'
 
-const fx = createEffect()
-const $token = createStore('')
+const requestFx = createEffect()
 
+const $token = createStore('')
 const secureRequest = attach({
-  effect: fx,
+  effect: requestFx,
   source: $token,
-  mapParams: (_, source) => source,
 })
 ```
 
-[Try it](https://share.effector.dev/lManajHQ)
+[Try it](https://share.effector.dev/zBoMoYRn)
 
 - Handle throws in `attach` `mapParams` field: errors happened in `mapParams` function will force attached effect to fail
 - Add babel plugin support for `split` and `createApi`
@@ -515,10 +517,11 @@ import {split, createEffect, createEvent} from 'effector'
 const messageReceived = createEvent()
 const showTextPopup = createEvent()
 const playAudio = createEvent()
+
 const reportUnknownMessageTypeFx = createEffect({
   handler({type}) {
     console.log('unknown message:', type)
-  },
+  }
 })
 
 split({
@@ -550,7 +553,7 @@ messageReceived({
 // => unknown message: image
 ```
 
-[Try it](https://share.effector.dev/javsk7Hg)
+[Try it](https://share.effector.dev/hGqxu9i1)
 
 You can match directly to store api as well:
 
@@ -594,7 +597,7 @@ messageReceived({
 // => ['Hello', 'unknown message', 'audio 500 ms']
 ```
 
-[Try it](https://share.effector.dev/32FNNk8H)
+[Try it](https://share.effector.dev/qpGZsm66)
 
 - Merge `effector/fork` into `effector`. Now all methods required for SSR are exported from the library itself, making `effector/fork` an alias
 - Make `Scope` type alias for `Fork`
@@ -618,10 +621,12 @@ messageReceived({
 - Export `useGate` with `fork` support from `effector-react/ssr`
 
 ```tsx
-import {useGate, useStore, Provider} from 'effector-react/ssr'
-import {createGate} from 'effector-react'
+import ReactDOM from 'react-dom'
+
 import {createDomain, forward} from 'effector'
 import {fork} from 'effector/fork'
+import {createGate} from 'effector-react'
+import {Provider, useGate, useStore} from 'effector-react/ssr'
 
 const app = createDomain()
 
@@ -632,7 +637,6 @@ const getMessagesFx = app.createEffect({
     return ['hi bob!', 'Hello, Alice']
   },
 })
-
 const $messagesAmount = app
   .createStore(0)
   .on(getMessagesFx.doneData, (_, messages) => messages.length)
@@ -644,7 +648,7 @@ forward({
 
 const ChatPage = ({chatId}) => {
   useGate(activeChatGate, {chatId})
-
+  
   return (
     <div>
       <header>Chat {chatId}</header>
@@ -663,7 +667,7 @@ const scope = fork(app)
 ReactDOM.render(<App root={scope} />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/nxtytLnk)
+[Try it](https://share.effector.dev/kw54CqYs)
 
 - Add `domain` optional field to `createGate` which will be used to create gate units (useful for ssr)
 
@@ -680,35 +684,35 @@ import {createDomain, attach} from 'effector'
 import {fork, allSettled} from 'effector/fork'
 
 const app = createDomain()
+
 const addFx = app.createEffect({handler: _ => _})
 
-const $count = app.createStore(2)
-  .on(addFx.doneData, (x, y) => x + y)
+const $count = app.createStore(2).on(addFx.doneData, (x, y) => x + y)
 
-const addWithCurrent = attach({
+const addWithCurrentFx = attach({
   source: $count,
-  effect: add,
+  effect: addFx,
   mapParams: (params, current) => params + current,
 })
 
-const startFx = app.createEffect({
+const start = app.createEffect({
   async handler(val) {
-    await addWithCurrent(val)
+    await addWithCurrentFx(val)
   },
 })
 
 const scope = fork(app)
 
-await allSettled(startFx, {
+await allSettled(start, {
   scope,
   params: 3,
 })
 
-console.log(scope.getState(count))
+console.log(scope.getState($count))
 // => 7
 ```
 
-[Try it](https://share.effector.dev/IiDZW90x)
+[Try it](https://share.effector.dev/xkDosgpb)
 
 - Add validation for `combine` first argument which should be store, object with stores or array with stores [PR #362](https://github.com/effector/effector/pull/362) (thanks [@doasync](https://github.com/doasync))
 
@@ -736,10 +740,9 @@ import {createDomain, forward} from 'effector'
 import {fork, allSettled} from 'effector/fork'
 
 const app = createDomain()
-const addWordFx = app.createEffect({handler: async word => word})
 
-const words = app
-  .createStore([])
+const addWordFx = app.createEffect({handler: async word => word})
+const $words = app.createStore([])
   .on(addWordFx.doneData, (list, word) => [...list, word])
 
 const startFx = app.createEffect({
@@ -752,7 +755,10 @@ const startFx = app.createEffect({
 
 const nextFx = app.createEffect({
   async handler(word) {
-    await Promise.all([addWordFx(`${word}3`), addWordFx(`${word}4`)])
+    await Promise.all([
+      addWordFx(`${word}3`),
+      addWordFx(`${word}4`)
+    ])
   },
 })
 
@@ -778,15 +784,15 @@ await allSettled(startFx, {
   params: 'C',
 })
 
-console.log(scopeA.getState(words))
+console.log(scopeA.getState($words))
 // => [A1, A2, A3, A4]
-console.log(scopeB.getState(words))
+console.log(scopeB.getState($words))
 // => [B1, B2, B3, B4]
-console.log(scopeC.getState(words))
+console.log(scopeC.getState($words))
 // => [C1, C2, C3, C4]
 ```
 
-[Try it](https://share.effector.dev/MB9mMRAz)
+[Try it](https://share.effector.dev/264Czqtx)
 
 - Allow `createNode` to call without arguments
 
@@ -887,38 +893,38 @@ export default Vue.extend({
 
 ```typescript
 import {createDomain} from 'effector'
-import {fork, hydrate, serialize, allSettled} from 'effector/fork'
+import {fork, allSettled} from 'effector/fork'
 
 //app
 const app = createDomain()
+
 const fetchFriendsFx = app.createEffect<{limit: number}, string[]>({
   async handler({limit}) {
     /* some client-side data fetching */
     return []
-  },
+  }
 })
-const $user = app.createStore('guest')
-const $friends = app
-  .createStore([])
+const user = app.createStore('guest')
+const friends = app.createStore([])
   .on(fetchFriendsFx.doneData, (_, result) => result)
 
 /*
-  test to ensure that $friends value is populated
+  test to ensure that friends value is populated
   after fetchFriendsFx call
 */
 const testScope = fork(app, {
   values: {
-    [$user.sid]: 'alice',
+    [user.sid]: 'alice',
   },
   handlers: {
-    [fetchFriendsFx.sid]: () => ['bob', 'carol'],
-  },
+    [fetchFriendsFx.sid]: () => ['bob', 'carol']
+  }
 })
 
 /* trigger computations in scope and await all called effects */
 await allSettled(fetchFriendsFx, {
   scope: testScope,
-  params: {limit: 10},
+  params: {limit: 10}
 })
 
 /* check value of store in scope */
@@ -926,7 +932,7 @@ console.log(testScope.getState(friends))
 // => ['bob', 'carol']
 ```
 
-[Try it](https://share.effector.dev/A31Dy2UK)
+[Try it](https://share.effector.dev/cVudzJNL)
 
 - Add support for `scope.getState(store)` to access to store values in forked scopes
 - Fix `values` support for `fork`
@@ -948,14 +954,13 @@ import {createDomain, forward} from 'effector'
 import {hydrate} from 'effector/fork'
 
 const app = createDomain()
+
+const $username = app.createStore('guest')
 const saveUserFx = app.createEffect({
   handler(value) {
     console.log('saveUserFx now called only after store update', value)
   },
 })
-
-const $username = app.createStore('guest')
-
 
 forward({
   from: $username,
@@ -974,7 +979,7 @@ hydrate(app, {
 // no event watches triggered yet and no effects called as we just hydrating app state
 ```
 
-[Try it](https://share.effector.dev/ZKzbh01h)
+[Try it](https://share.effector.dev/BLs9CPX4)
 
 ## effector 20.15.0
 
@@ -983,27 +988,27 @@ hydrate(app, {
 ```js
 import {createEvent, createStore} from 'effector'
 
-const changedA = createEvent()
-const changedB = createEvent()
-
 const $store = createStore(0)
-  .on([changedA, changedB], (state, params) => state + params)
+const eventA = createEvent()
+const eventB = createEvent()
+
+$store.on([eventA, eventB], (state, params) => state + params)
 
 $store.watch(value => {
   console.log('updated', value)
 })
 
-changedA(2)
+eventA(2)
 // => updated 2
 
-changedB(2)
+eventB(2)
 // => updated 4
 
 // You can unsubscribe from any trigger
-$store.off(changedA)
+$store.off(eventA)
 ```
 
-[Try it](https://share.effector.dev/iP0oM3NF)
+[Try it](https://share.effector.dev/B2YdabgA)
 
 [Documentation for `store.on`](https://effector.dev/docs/api/effector/store#ontriggers-handler)
 
@@ -1014,10 +1019,10 @@ import {createEvent, createStore} from 'effector'
 
 const increment = createEvent()
 const reset = createEvent()
-
 const $store = createStore(0)
-  .on(increment, state => state + 1)
-  .reset([reset])
+
+
+$store.on(increment, state => state + 1).reset([reset])
 
 $store.watch(state => console.log('changed', state))
 // changed 0
@@ -1028,7 +1033,7 @@ increment() // changed 2
 reset() // changed 0
 ```
 
-[Try it](https://share.effector.dev/ot6R5ePc)
+[Try it](https://share.effector.dev/vN4rC5T2)
 
 [Documentation for `store.reset`](https://effector.dev/docs/api/effector/store#resettriggersarray)
 
@@ -1240,17 +1245,17 @@ const foo = createInputField('-', {
 ```typescript
 import {createStore, sample} from 'effector'
 
-const $a = createStore([{foo: 0}])
-const $b = createStore(0)
+const $source = createStore([{foo: 0}])
+const $target = createStore(0)
 
 sample({
-  source: $a,
-  target: $b,
+  $source,
+  $target,
   fn: list => list.length,
 })
 ```
 
-[Try it](https://share.effector.dev/fl50soxD)
+[Try it](https://share.effector.dev/dHUUzhv7)
 
 ## effector-vue 20.4.0
 
@@ -1326,7 +1331,7 @@ const apiResultOld = merge([
 import {createEffect} from 'effector'
 
 const fx = createEffect({
-  handler: () => new Promise(rs => setTimeout(rs, 500)),
+  handler: () => new Promise(resolve => setTimeout(resolve, 500)),
 })
 
 fx.inFlight.watch(amount => {
@@ -1346,7 +1351,7 @@ await Promise.all([req1, req2])
 // => 0
 ```
 
-[Try it](https://share.effector.dev/tSAhu4Kt)
+[Try it](https://share.effector.dev/schh6Hy0)
 
 [Documentation for `effect.inFlight`](https://effector.dev/docs/api/effector/effect#inflight)
 
@@ -1488,6 +1493,7 @@ This solution requires `effector/babel-plugin` in babel configuration:
 import {createDomain, createApi, restore} from 'effector'
 
 const domain = createDomain()
+
 domain.onCreateStore(store => {
   console.log('store created')
 })
@@ -1499,14 +1505,14 @@ domain.onCreateEvent(event => {
 const $position = domain.createStore({x: 0})
 // => store created
 const {move} = createApi($position, {
-  move: ({x}, payload) => ({x: x + payload}),
+  move: ({x}, payload) => ({x: x + payload})
 })
 // => event created
 const $lastMove = restore(move, 0)
 // => store created
 ```
 
-[Try it](https://share.effector.dev/d6OVcrCp)
+[Try it](https://share.effector.dev/2DuEVJw7)
 
 ## effector 20.8.2
 
@@ -1516,16 +1522,23 @@ const $lastMove = restore(move, 0)
 import {createEvent, createStore, combine} from 'effector'
 
 const event = createEvent()
-const $store = createStore(0).on(event, s => s + 1)
+const $store = createStore(0)
+  .on(event, s => s + 1)
 
-const $combined = combine([$store, combine([$store.map(d => d + 1)])])
-$combined.watch(e => fn(e))
+const $combined = combine([
+  $store,
+  combine([
+    $store.map(d => d + 1)
+  ])
+])
+
+$combined.watch(e => console.log(e))
 // => [0, [1]]
 event()
 // => [1, [2]]
 ```
 
-[Try it](https://share.effector.dev/gQGceQe6)
+[Try it](https://share.effector.dev/BEgJNCzG)
 
 ## effector-react 20.5.2
 
@@ -1629,7 +1642,7 @@ sample({
 })
 ```
 
-[Try it](https://share.effector.dev/GcYoDBf8)
+[Try it](https://share.effector.dev/7M4cz6FI)
 
 ## effector-react 20.5.0
 
@@ -1650,11 +1663,12 @@ const App = () => (
     <div>body</div>
   </>
 )
+
 ReactDOM.render(<App />, document.getElementById('root'))
 // => page meta {name: 'admin page'}
 ```
 
-[Try it](https://share.effector.dev/5g7jdANZ)
+[Try it](https://share.effector.dev/tRYam5Wj)
 
 ## effector 20.7.0
 
@@ -1700,7 +1714,7 @@ secondSource('B')
 // => second target B
 ```
 
-[Try it](https://share.effector.dev/SRwLtX4l)
+[Try it](https://share.effector.dev/oeKxTmKG)
 
 ## effector-vue 20.3.0
 
@@ -1742,16 +1756,26 @@ const $r = createStore(255)
 const $g = createStore(0)
 const $b = createStore(255)
 
-const $color = combine({r: $r, g: $g, b: $b})
+const $color = combine({
+  r: $r,
+  g: $g,
+  b: $b,
+})
+
 $color.watch(console.log)
 // => {r: 255, b: 0, b: 255}
 
-const $colorOld = createStoreObject({r, g, b})
+const $colorOld = createStoreObject({
+  r: $r,
+  g: $g,
+  b: $b,
+})
+
 $colorOld.watch(console.log)
 // => {r: 255, b: 0, b: 255}
 ```
 
-[Try it](https://share.effector.dev/YmXUET9b)
+[Try it](https://share.effector.dev/DPSswYWE)
 
 - Add ability to use arrays of stores with `combine`
 
@@ -1767,7 +1791,7 @@ $color.watch(console.log)
 // => [255, 0, 255]
 ```
 
-[Try it](https://share.effector.dev/WXJoaXQw)
+[Try it](https://share.effector.dev/ocP0cd1m)
 
 ## effector 20.4.4
 
@@ -1836,7 +1860,7 @@ guard({
 })
 ```
 
-See [ui visualization](https://share.effector.dev/zLB4NwNV)
+See [ui visualization](https://share.effector.dev/GgNCaFiL)
 
 Also, `guard` can accept common function predicate as a filter, to drop events before forwarding them to target
 
@@ -1891,14 +1915,18 @@ import {useList} from 'effector-react'
 
 const updateItem = createEvent()
 const resetItems = createEvent()
-const processClicked = createEvent()
 
-const processItemsFx = createEffect({
+const $items = createStore([
+  {id: 0, status: 'NEW'},
+  {id: 1, status: 'NEW'},
+])
+
+const processItems = createEffect({
   async handler(items) {
     for (let {id} of items) {
       //event call inside effect
-      //should be applied to items$
-      //only after processItemsFx itself
+      //should be applied to $items
+      //only after processItems itself
       updateItem({id, status: 'PROCESS'})
       await new Promise(r => setTimeout(r, 3000))
       updateItem({id, status: 'DONE'})
@@ -1906,19 +1934,19 @@ const processItemsFx = createEffect({
   },
 })
 
-const $items = createStore([
-  {id: 0, status: 'NEW'},
-  {id: 1, status: 'NEW'},
-]).on(updateItem, (items, {id, status}) =>
-    items.map(item => (item.id === id ? {...item, status} : item)),
+$items
+  .on(updateItem, (items, {id, status}) =>
+    items.map(item => (item.id === id ? {...item, status} : item))
   )
-  .on(processItemsFx, items => items.map(({id}) => ({id, status: 'WAIT'})))
+  .on(processItems, items => items.map(({id}) => ({id, status: 'WAIT'})))
   .reset(resetItems)
+
+const processClicked = createEvent()
 
 sample({
   source: $items,
   clock: processClicked,
-  target: processItemsFx,
+  target: processItems,
 })
 
 const App = () => (
@@ -1939,7 +1967,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/viApFDXj)
+[Try it](https://share.effector.dev/ANvz2mO1)
 
 ## effector 20.3.1
 
@@ -1958,13 +1986,12 @@ import {createEvent, createStore, restore} from 'effector'
 import {useStore, useList} from 'effector-react'
 
 const renameUser = createEvent()
-
 const $user = restore(renameUser, 'alice')
 const $friends = createStore(['bob'])
 
 const List = () => {
   const userName = useStore($user)
-
+  
   return useList($friends, {
     keys: [userName],
     fn: friend => (
@@ -1982,7 +2009,7 @@ setTimeout(() => {
 }, 500)
 ```
 
-[Try it](https://share.effector.dev/VSAHPO60)
+[Try it](https://share.effector.dev/DJ9GR44A)
 
 ## effector 20.3.0
 
@@ -1992,26 +2019,26 @@ setTimeout(() => {
 import {createDomain} from 'effector'
 
 const domain = createDomain('feature')
-
 console.log(domain.shortName)
 // => feature
 ```
 
-[Try it](https://share.effector.dev/vKObFGtp)
+[Try it](https://share.effector.dev/gHjdiQdo)
 
 - Add `history` to domains with read-only sets of events, effects, stores and subdomains
 
 ```js
 import {createDomain} from 'effector'
+
 const domain = createDomain()
-const eventA = domain.event()
-const $storeB = domain.store(0)
+const event = domain.event()
+const $store = domain.store(0)
 
 console.log(domain.history)
-// => {stores: Set{$storeB}, events: Set{eventA}, domains: Set, effects: Set}
+// => {events: Set{event}, stores: Set{$store}, domains: Set, effects: Set}{stores: Set{$storeB}, events: Set{eventA}, domains: Set, effects: Set}
 ```
 
-[Try it](https://share.effector.dev/HAG9a8nk)
+[Try it](https://share.effector.dev/amfaPSC7)
 
 ## effector-vue 20.2.0
 
@@ -2195,13 +2222,14 @@ const List = () => {
       {i}) {name}
     </div>
   ))
+
   return <div>{users}</div>
 }
 
 ReactDOM.render(<List />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/KJZx0uU5)
+[Try it](https://share.effector.dev/9Lln88Eg)
 
 ## effector-react 20.0.5
 
@@ -2318,7 +2346,7 @@ const foo = createEvent()
 const bar = createEvent()
 const baz = merge([foo, bar])
 
-baz.watch(v => console.log('merged event triggered: ', v))
+baz.watch(v => console.log('merged event triggered:', v))
 
 foo(1)
 // => merged event triggered: 1
@@ -2326,7 +2354,7 @@ bar(2)
 // => merged event triggered: 2
 ```
 
-[Try it](https://share.effector.dev/WxUgr6dZ)
+[Try it](https://share.effector.dev/KG7TosUo)
 
 - Add `split` for pattern-matching over events
 
@@ -2340,10 +2368,10 @@ const messageByAuthor = split(message, {
   alice: ({user}) => user === 'alice',
 })
 messageByAuthor.bob.watch(({text}) => {
-  console.log('[bob]: ', text)
+  console.log('[bob]:', text)
 })
 messageByAuthor.alice.watch(({text}) => {
-  console.log('[alice]: ', text)
+  console.log('[alice]:', text)
 })
 
 message({user: 'bob', text: 'Hello'})
@@ -2354,13 +2382,13 @@ message({user: 'alice', text: 'Hi bob'})
 /* default case, triggered if no one condition met */
 const {__: guest} = messageByAuthor
 guest.watch(({text}) => {
-  console.log('[guest]: ', text)
+  console.log('[guest]:', text)
 })
 message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 
-[Try it](https://share.effector.dev/QXZsR5yM)
+[Try it](https://share.effector.dev/OCSJsNQt)
 
 - Allow `clearNode` to automatically dispose all related intermediate steps
 
@@ -2370,7 +2398,6 @@ import {createEvent, clearNode} from 'effector'
 const source = createEvent()
 const target = source.map(x => {
   console.log('intermediate step')
-
   return x
 })
 
@@ -2378,11 +2405,12 @@ target.watch(x => console.log('target watcher'))
 source()
 // => intermediate step
 // => target watcher
+
 clearNode(target)
 source() // ~ no reaction ~
 ```
 
-[Try it](https://share.effector.dev/Ip5FAXiR)
+[Try it](https://share.effector.dev/7MdSWPMk)
 
 - Fix promise warning for effects
 
@@ -2410,7 +2438,7 @@ await fetchApiFx(10)
 // => {status: 'fail', error: Error, params: 10}
 ```
 
-[Try it](https://share.effector.dev/9Aoba2lk)
+[Try it](https://share.effector.dev/HFHIhvRd)
 
 - Add types for createEvent with config instead of string
 - Add types for createEffect with config instead of string
@@ -2430,18 +2458,18 @@ Vue adapter for effector 20
 - Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/effector/effector/issues/118)
 
 ```js
-import {createStore} from 'effector'
-import {useStore, useStoreMap} from 'effector-react'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {createStore} from 'effector'
+import {useStore, useStoreMap} from 'effector-react'
 
 const User = ({id}) => {
   const user = useStoreMap({
-    store: $users,
+    store: user$,
     keys: [id],
     fn: (users, [id]) => users[id],
   })
-  
+
   return (
     <div>
       {user.name} ({user.age})
@@ -2451,17 +2479,17 @@ const User = ({id}) => {
 
 const UserList = () => useStore(userID$).map(id => <User id={id} key={id} />)
 
-const $user = createStore({
+const user$ = createStore({
   alex: {age: 20, name: 'Alex'},
   john: {age: 30, name: 'John'},
 })
 
-const $userID = $user.map(users => Object.keys(users))
+const userID$ = user$.map(users => Object.keys(users))
 
 ReactDOM.render(<UserList />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/EbyvGcQX)
+[Try it](https://share.effector.dev/RTMPFtUC)
 
 ## effector 19.1.0
 
@@ -2503,7 +2531,7 @@ const $clicksAmount = createStore(0)
 is.event($clicksAmount.updates) // => true
 
 $clicksAmount.watch(amount => {
-  console.log('will be triggered with current state, immediately, sync', amount)
+  console.log('will be triggered immediately, sync', amount)
 })
 
 $clicksAmount.updates.watch(amount => {
@@ -2511,7 +2539,7 @@ $clicksAmount.updates.watch(amount => {
 })
 ```
 
-[Try it](https://share.effector.dev/cHkiPTtQ)
+[Try it](https://share.effector.dev/BKGfWd5A)
 
 ## effector 0.18.9
 
@@ -2568,7 +2596,7 @@ const $isLoading = createStore(false)
   .on(fetchApiFx.fail, () => false)
 ```
 
-[Try it](https://share.effector.dev/AupKHTcS)
+[Try it](https://share.effector.dev/EzdUb3wV)
 
 - Introduce `sample`. Sample allows to integrate rapidly changed values with common ui states
 

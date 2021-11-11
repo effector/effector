@@ -69,7 +69,7 @@ guard({
 })
 ```
 
-See [ui visualization](https://share.effector.dev/zLB4NwNV)
+See [ui visualization](https://share.effector.dev/tiBxV2UT)
 
 Also, guard accepts a common function predicate as filter, to drop events before forwarding them to target
 

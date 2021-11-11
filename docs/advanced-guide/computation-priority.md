@@ -32,7 +32,10 @@ Priority:
 Let's consider prioritize in the example below.
 
 ```js
+import {createEffect} from 'effector'
+
 let count = 0
+
 const fx = createEffect(() => {
   // side effect 1
   count += 1
@@ -55,7 +58,7 @@ console.log('expect count to be 2', count === 2)
 // which defer any side effect long after setState call itself
 ```
 
-[Try it](https://share.effector.dev/IRAmt9Uq)
+[Try it](https://share.effector.dev/F6X5Cy2C)
 
 :::note
 Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue)
