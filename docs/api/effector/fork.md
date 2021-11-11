@@ -103,24 +103,25 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```js
 import {createStore, createEvent, forward, fork, allSettled} from 'effector'
 
-const inc = createEvent()
-const dec = createEvent()
+const increment = createEvent()
+const decrement = createEvent()
+
 const $counter = createStore(0)
-  .on(inc, value => value + 1)
-  .on(dec, value => value - 1)
+  .on(increment, value => value + 1)
+  .on(decrement, value => value - 1)
 
 const scopeA = fork()
 const scopeB = fork()
 
-await allSettled(inc, {scope: scopeA})
-await allSettled(dec, {scope: scopeB})
+await allSettled(increment, {scope: scopeA})
+await allSettled(decrement, {scope: scopeB})
 
 console.log($counter.getState()) // => 0
 console.log(scopeA.getState($counter)) // => 1
 console.log(scopeB.getState($counter)) // => -1
 ```
 
-[Try it](https://share.effector.dev/dBSC59h8)
+[Try it](https://share.effector.dev/JKEZwHqn)
 
 ### Set initial state for store and change handler for effect
 
@@ -129,17 +130,14 @@ This is an example of test, which ensures that after a request to the server, th
 ```ts
 import {createEffect, createStore, fork, allSettled} from 'effector'
 
-const fetchFriendsFx = createEffect<{limit: number}, string[]>(
-  async ({limit}) => {
-    /* some client-side data fetching */
-    return []
-  },
-)
+const fetchFriendsFx = createEffect(async ({limit}) => {
+  /* some client-side data fetching */
+  return []
+})
+
 const $user = createStore('guest')
-const $friends = createStore([]).on(
-  fetchFriendsFx.doneData,
-  (_, result) => result,
-)
+const $friends = createStore([])
+	.on(fetchFriendsFx.doneData, (_, result) => result)
 
 const testScope = fork({
   values: [[$user, 'alice']],
@@ -157,4 +155,4 @@ console.log(testScope.getState($friends))
 // => ['bob', 'carol']
 ```
 
-[Try it](https://share.effector.dev/gnNbGZuu)
+[Try it](https://share.effector.dev/7EeMYqFB)
