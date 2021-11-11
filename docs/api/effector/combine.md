@@ -40,13 +40,15 @@ const $greeting = combine($balance, $username, (balance, username) => {
   return `Hello, ${username}. Your balance is ${balance}`
 })
 
-$greeting.watch(data => console.log(data)) // => Hello, zerobias. Your balance is 0
+$greeting.watch(data => console.log(data))
+// => Hello, zerobias. Your balance is 0
 
 const $arrStores = combine([$balance, $username])
-$arrStores.watch(console.log) // => [0, 'zerobias']
+$arrStores.watch(console.log)
+// => [0, 'zerobias']
 ```
 
-[Try it](https://share.effector.dev/jyX3NCLt)
+[Try it](https://share.effector.dev/dbD0N79x)
 
 ## `combine({ A, B, C }, fn?)`
 
@@ -95,7 +97,7 @@ const $sum = combine({r: $r, g: $g, b: $b}, ({r, g, b}) => r + g + b)
 $sum.watch(console.log) // => 510
 ```
 
-[Try it](https://share.effector.dev/9AckAVg7)
+[Try it](https://share.effector.dev/24HsMopQ)
 
 ## `combine([A, B, C], fn?)`
 
@@ -137,9 +139,9 @@ const $color = combine([$r, $g, $b])
 $color.watch(console.log)
 // => [255, 0, 255]
 
-const $sum = combine([r, g, b], ([r, g, b]) => r + g + b)
+const $sum = combine([$r, $g, $b], ([r, g, b]) => r + g + b)
 $sum.watch(console.log)
 // => 510
 ```
 
-[Try it](https://share.effector.dev/ch4CKPrX)
+[Try it](https://share.effector.dev/XBrUmYRC)
