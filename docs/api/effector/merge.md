@@ -31,7 +31,8 @@ import {createEvent, merge} from 'effector'
 const foo = createEvent()
 const bar = createEvent()
 const baz = merge([foo, bar])
-baz.watch(v => console.log('merged event triggered: ', v))
+
+baz.watch(v => console.log('merged event triggered:', v))
 
 foo(1)
 // => merged event triggered: 1
@@ -39,7 +40,7 @@ bar(2)
 // => merged event triggered: 2
 ```
 
-[Try it](https://share.effector.dev/WxUgr6dZ)
+[Try it](https://share.effector.dev/EXsBRsI7)
 
 #### Example 2
 
@@ -50,16 +51,18 @@ const setFoo = createEvent()
 const setBar = createEvent()
 
 const $foo = createStore(0).on(setFoo, (_, v) => v)
+
 const $bar = createStore(100).on(setBar, (_, v) => v)
 
 const anyUpdated = merge([$foo, $bar])
+
 anyUpdated.watch(v => console.log(`state changed to: ${v}`))
 
-setFoo(1) // => state changed to: 1
-setBar(123) // => state changed to: 123
+setFoo(1)
+setBar(123)
 ```
 
-[Try it](https://share.effector.dev/Rp9wuRvl)
+[Try it](https://share.effector.dev/PaityKsj)
 
 #### Example 3
 
@@ -70,6 +73,7 @@ const setFoo = createEvent()
 const otherEvent = createEvent()
 
 const $foo = createStore(0).on(setFoo, (_, v) => v)
+
 const merged = merge([$foo, otherEvent])
 
 merged.watch(v => console.log(`merged event payload: ${v}`))
@@ -81,4 +85,4 @@ otherEvent('bar')
 // => merged event payload: bar
 ```
 
-[Try it](https://share.effector.dev/pKkiyhVQ)
+[Try it](https://share.effector.dev/WsyXhkS5)
