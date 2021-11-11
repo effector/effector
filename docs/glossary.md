@@ -72,7 +72,7 @@ $loginSize.watch(size => {
 })
 ```
 
-[Try it](https://share.effector.dev/D5hV8C70)
+[Try it](https://share.effector.dev/9NMsXxKC)
 
 [store.map in docs](./api/effector/Store.md#mapfn-state-state-laststate-t--t)
 
@@ -94,7 +94,7 @@ forward({
 })
 ```
 
-[Try it](https://share.effector.dev/it0gXQLI)
+[Try it](https://share.effector.dev/Dm0FwM6w)
 
 [forward in docs](./api/effector/forward.md)
 
