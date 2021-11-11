@@ -27,46 +27,49 @@ Method for destroying stores, events, effects, subscriptions and domains
 ```js
 import {createStore, createEvent, clearNode} from 'effector'
 
-const inc = createEvent()
-const $store = createStore(0).on(inc, x => x + 1)
+const increment = createEvent()
+const $store = createStore(0).on(increment, x => x + 1)
 
-inc.watch(() => console.log('inc called'))
-$store.watch(x => console.log('store state: ', x))
-// => store state: 0
-inc()
-// => inc called
-// => store state: 1
-clearNode(store)
-inc()
-// => inc called
+increment.watch(() => console.log('increment called'))
+$store.watch(x => console.log('$store state: ', x))
+// => $store state: 0
+
+increment()
+// => increment called
+// => $store state: 1
+clearNode($store)
+increment()
+// => increment called
 ```
 
-[Try it](https://share.effector.dev/WjuSl6aN)
+[Try it](https://share.effector.dev/G5pWntyA)
 
 ### Example 2 (with deep)
 
 ```js
-import {createStore, createEvent, clearNode} from 'effector'
+import {createStore, createStoreObject, createEvent, clearNode} from 'effector'
 
-const inc = createEvent()
-const trigger = inc.prepend(() => {})
-const $store = createStore(0).on(inc, x => x + 1)
+const increment = createEvent()
+const trigger = increment.prepend(() => {})
+
+const $store = createStore(0).on(increment, x => x + 1)
 
 trigger.watch(() => console.log('trigger called'))
-inc.watch(() => console.log('inc called'))
-$store.watch(x => console.log('store state: ', x))
+increment.watch(() => console.log('increment called'))
+$store.watch(x => console.log('$store state: ', x))
+
 // => store state: 0
 trigger()
 // => trigger called
-// => inc called
+// => increment called
 // => store state: 1
 clearNode(trigger, {deep: true})
 trigger()
 // no reaction
-inc()
+increment()
 // no reaction!
-// all units, which depend on trigger, are erased
-// including inc and store, because it depends on inc
+// all units, which depends on trigger, are erased
+// including increment and store, because it depends on increment
 ```
 
-[Try it](https://share.effector.dev/EkETZtKI)
+[Try it](https://share.effector.dev/cLgjVXqJ)
