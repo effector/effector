@@ -64,3 +64,40 @@ clearTodoList()
 ```
 
 [Try it](https://share.effector.dev/MNibrAFC)
+
+#### Example with `updateFilter`
+
+```js
+import {createEvent, createStore, forward} from 'effector'
+
+const punch = createEvent()
+const veryStrongHit = createEvent()
+
+const $lastPunchStrength = createStore(0, {
+  // If store should be updated with strength less than 400 kg
+  // update will be skipped
+  updateFilter: strength => strength >= 400,
+})
+
+$lastPunchStrength.on(punch, (_, strength) => strength)
+
+// Each store update should trigger event `veryStrongHit`
+forward({from: $lastPunchStrength, to: veryStrongHit})
+
+// Watch on store prints initial state
+$lastPunchStrength.watch(strength => console.log('Strength: %skg', strength))
+// => Strength: 0kg
+
+veryStrongHit.watch(strength => {
+  console.log('Wooow! It was very strong! %skg', strength)
+})
+
+punch(200) // updateFilter prevented update
+punch(300) // Same here. Note: store don't updates, value is the same `0`
+punch(500) // Yeeah! updateFilter allows to update store value
+// => Strength: 500kg
+// => Wooow! It was very strong! 500kg
+punch(100) // Also nothing
+```
+
+[Try it](https://share.effector.dev/rtxfqObf)
