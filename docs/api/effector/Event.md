@@ -22,7 +22,7 @@ console.log(event())
 // => undefined
 ```
 
-[Try it](https://share.effector.dev/iVBYDJjf)
+[Try it](https://share.effector.dev/kNDZzJMc)
 
 ## Event Methods
 
@@ -55,15 +55,18 @@ const unwatch = event.watch(fn)
 import {createEvent} from 'effector'
 
 const sayHi = createEvent()
-const unwatch = sayHi.watch(name => console.log(`${name}, hi there!`))
+
+const unwatch = sayHi.watch(name => {
+  console.log(`${name}, hi there!`)
+})
 
 sayHi('Peter') // => Peter, hi there!
-unwatch()
 
+unwatch()
 sayHi('Drew') // => nothing happened
 ```
 
-[Try it](https://share.effector.dev/9YVgCl4C)
+[Try it](https://share.effector.dev/zX2VrlDG)
 
 <hr/>
 
@@ -97,15 +100,20 @@ const userUpdated = createEvent()
 const userNameUpdated = userUpdated.map(({name}) => name) // you may decompose dataflow with .map() method
 const userRoleUpdated = userUpdated.map(({role}) => role.toUpperCase()) // either way you can transform data
 
-userNameUpdated.watch(name => console.log(`User's name is [${name}] now`))
-userRoleUpdated.watch(role => console.log(`User's role is [${role}] now`))
+userNameUpdated.watch(name => {
+  console.log(`User's name is [${name}] now`)
+})
+
+userRoleUpdated.watch(name => {
+  console.log(`User's role is [${name}] now`)
+})
 
 userUpdated({name: 'john', role: 'admin'})
 // => User's name is [john] now
 // => User's role is [ADMIN] now
 ```
 
-[Try it](https://share.effector.dev/duDut6nR)
+[Try it](https://share.effector.dev/NuP56Iar)
 
 <hr />
 
@@ -146,24 +154,25 @@ userPropertyChanged.watch(({field, value}) => {
 
 const changeName = userPropertyChanged.prepend(name => ({
   field: 'name',
-  value: name
+  value: name,
 }))
+
 const changeRole = userPropertyChanged.prepend(role => ({
   field: 'role',
-  value: role.toUpperCase()
+  value: role.toUpperCase(),
 }))
 
 changeName('john')
-// => User property "name" changed to john 
+// => User property "name" changed to john
 
 changeRole('admin')
-// => User property "role" changed to ADMIN 
+// => User property "role" changed to ADMIN
 
 changeName('alice')
-// => User property "name" changed to alice 
+// => User property "name" changed to alice
 ```
 
-[Try it](https://share.effector.dev/XGxlG4LD)
+[Try it](https://share.effector.dev/bFJoct4e)
 
 <hr />
 
@@ -211,16 +220,21 @@ const second = first.filterMap(fn)
 
 #### Example
 
-```jsx
-const listReceived = createEvent<string[]>()
-const effectorFound = listReceived.filterMap(list => list.find(name => name === 'effector'))
+```js
+import {createEvent} from 'effector'
 
-effectorFound.watch(name => console.info("found", name))
-listReceived(["redux", "effector", "mobx"]) // found effector
-listReceived(["redux", "mobx"])
+const listReceived = createEvent()
+const effectorFound = listReceived.filterMap(list =>
+  list.find(name => name === 'effector')
+)
+
+effectorFound.watch(name => console.info('found', name))
+
+listReceived(['redux', 'effector', 'mobx']) // found effector
+listReceived(['redux', 'mobx'])
 ```
 
-[Try it](https://share.effector.dev/ARDanMAM)
+[Try it](https://share.effector.dev/RqLlqC1e)
 
 <hr/>
 
@@ -261,6 +275,7 @@ Object form is used because `event.filter(fn)` was an alias for [event.filterMap
 import {createEvent, createStore} from 'effector'
 
 const numbers = createEvent()
+
 const positiveNumbers = numbers.filter({
   fn: ({x}) => x > 0,
 })
@@ -283,4 +298,4 @@ numbers({x: 10})
 // => last positive: 10
 ```
 
-[Try it](https://share.effector.dev/H2Iu4iJH)
+[Try it](https://share.effector.dev/1tx5p7cJ)
