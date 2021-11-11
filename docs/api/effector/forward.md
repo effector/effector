@@ -50,8 +50,8 @@ Arrays of units are supported since [effector 20.6.0](https://changelog.effector
 ```js
 import {createStore, createEvent, forward} from 'effector'
 
-const $store = createStore(1)
 const event = createEvent()
+const $store = createStore(1)
 
 forward({
   from: event,
@@ -65,7 +65,7 @@ event(200)
 // => store changed: 200
 ```
 
-[Try it](https://share.effector.dev/UeJbgRG9)
+[Try it](https://share.effector.dev/Likqq0PW)
 
 ### Forward between arrays of units
 
@@ -74,7 +74,6 @@ import {createEvent, forward} from 'effector'
 
 const firstSource = createEvent()
 const secondSource = createEvent()
-
 const firstTarget = createEvent()
 const secondTarget = createEvent()
 
@@ -94,7 +93,7 @@ secondSource('B')
 // => second target B
 ```
 
-[Try it](https://share.effector.dev/8aVpg8nU)
+[Try it](https://share.effector.dev/wwWGz3xz)
 
 [_effect_]: Effect.md
 [_store_]: Store.md
