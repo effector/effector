@@ -37,4 +37,4 @@ hydrate(domain, {
 console.log($store.getState()) // 42
 ```
 
-[Try it](https://share.effector.dev/zZoQ5Ewm)
+[Try it](https://share.effector.dev/jK5tujqH)
