@@ -30,12 +30,11 @@ const $store = restore(event, 'default')
 
 $store.watch(state => console.log('state: ', state))
 // state: default
-
 event('foo')
 // state: foo
 ```
 
-[Try it](https://share.effector.dev/MGGQnTlQ)
+[Try it](https://share.effector.dev/6bnfHEij)
 
 ## `restore(effect, defaultState)`
 
@@ -66,7 +65,7 @@ await fx()
 // => state: foo
 ```
 
-[Try it](https://share.effector.dev/tP6RQsri)
+[Try it](https://share.effector.dev/Hk0Orzbg)
 
 ## `restore(obj)`
 
@@ -100,4 +99,4 @@ $bar.watch(bar => {
 // => bar 0
 ```
 
-[Try it](https://share.effector.dev/NQX0kotI)
+[Try it](https://share.effector.dev/vZlV2u8P)
