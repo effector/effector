@@ -28,8 +28,9 @@ const httpDomain = createDomain('http') // Named domain
 
 const statusCodeChanged = httpDomain.createEvent()
 const downloadFx = httpDomain.createEffect()
+
 const apiDomain = httpDomain.createDomain() // nested domain
 const $data = httpDomain.createStore({status: -1})
 ```
 
-[Try it](https://share.effector.dev/GMpjINHa)
+[Try it](https://share.effector.dev/ZqvB474W)
