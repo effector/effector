@@ -165,9 +165,11 @@ effector 21.0.0
 
 ```js
 import {split, createEffect, createEvent} from 'effector'
+
 const messageReceived = createEvent()
 const showTextPopup = createEvent()
 const playAudio = createEvent()
+
 const reportUnknownMessageTypeFx = createEffect(({type}) => {
   console.log('unknown message:', type)
 })
@@ -201,7 +203,7 @@ messageReceived({
 // => unknown message: image
 ```
 
-[Try it](https://share.effector.dev/W6VYZbfH)
+[Try it](https://share.effector.dev/ugfAlkpL)
 
 #### Example 2
 
@@ -211,7 +213,6 @@ You can match directly to store api as well:
 import {split, createStore, createEvent, createApi} from 'effector'
 
 const messageReceived = createEvent()
-
 const $textContent = createStore([])
 
 split({
@@ -248,7 +249,7 @@ messageReceived({
 // => ['Hello', 'unknown message', 'audio 500 ms']
 ```
 
-[Try it](https://share.effector.dev/32FNNk8H)
+[Try it](https://share.effector.dev/KZ9ROz5e)
 
 ## split without explicit cases
 
@@ -273,7 +274,6 @@ effector 20.0.0
 
 ```js
 import {createEvent, split} from 'effector'
-
 const message = createEvent()
 
 const messageByAuthor = split(message, {
@@ -281,10 +281,10 @@ const messageByAuthor = split(message, {
   alice: ({user}) => user === 'alice',
 })
 messageByAuthor.bob.watch(({text}) => {
-  console.log('[bob]: ', text)
+  console.log('[bob]:', text)
 })
 messageByAuthor.alice.watch(({text}) => {
-  console.log('[alice]: ', text)
+  console.log('[alice]:', text)
 })
 
 message({user: 'bob', text: 'Hello'})
@@ -295,13 +295,13 @@ message({user: 'alice', text: 'Hi bob'})
 /* default case, triggered if no one condition met */
 const {__: guest} = messageByAuthor
 guest.watch(({text}) => {
-  console.log('[guest]: ', text)
+  console.log('[guest]:', text)
 })
 message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 
-[Try it](https://share.effector.dev/QXZsR5yM)
+[Try it](https://share.effector.dev/Z4T9eyt5)
 
 :::note
 Only the first met match will trigger resulting event
@@ -331,4 +331,4 @@ message('Hi!')
 // => short message 'Hi!'
 ```
 
-[Try it](https://share.effector.dev/ke2tM78I)
+[Try it](https://share.effector.dev/Y5VnFqoT)
