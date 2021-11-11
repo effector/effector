@@ -100,14 +100,16 @@ effector 20.3.0
 
 ```js
 import {createDomain} from 'effector'
+
 const domain = createDomain()
 const eventA = domain.event()
-const $storeB = domain.store(0)
+const $store = domain.store(0)
+
 console.log(domain.history)
-// => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
+// => {stores: Set{store}, events: Set{eventA}, domains: Set, effects: Set}
 ```
 
-[Try it](https://share.effector.dev/flIV7Fja)
+[Try it](https://share.effector.dev/WQAbC0ya)
 
 <hr />
 
@@ -177,7 +179,7 @@ const b = domain.createEvent()
 // => new event created
 ```
 
-[Try it](https://share.effector.dev/QCQpga6u)
+[Try it](https://share.effector.dev/BWZPnbwP)
 
 <hr />
 
@@ -212,14 +214,14 @@ domain.onCreateEffect(effect => {
   console.log('new effect created')
 })
 
-const fooFx = domain.createEffect()
+const aFx = domain.createEffect()
 // => new effect created
 
-const barFx = domain.createEffect()
+const bFx = domain.createEffect()
 // => new effect created
 ```
 
-[Try it](https://share.effector.dev/uT6f8vv9)
+[Try it](https://share.effector.dev/aaZYriHE)
 
 <hr />
 
@@ -254,11 +256,11 @@ domain.onCreateStore(store => {
   console.log('new store created')
 })
 
-const $a = domain.createStore(null)
+const $store = domain.createStore(null)
 // => new store created
 ```
 
-[Try it](https://share.effector.dev/OGlYOtfz)
+[Try it](https://share.effector.dev/JOGccDB8)
 
 <hr />
 
@@ -300,7 +302,7 @@ const b = domain.createDomain()
 // => new domain created
 ```
 
-[Try it](https://share.effector.dev/dvBLiwHf)
+[Try it](https://share.effector.dev/FCoscQvZ)
 
 <hr />
 
