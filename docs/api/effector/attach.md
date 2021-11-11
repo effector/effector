@@ -46,7 +46,7 @@ await createdFx('HELLO')
 // => Original effect called with { wrapped: "HELLO" }
 ```
 
-[Try it](https://share.effector.dev/MpAfRBRi)
+[Try it](https://share.effector.dev/cZmRaxG8)
 
 ### Short example with source
 
@@ -57,13 +57,14 @@ const originalFx = createEffect(params => {
   console.log('Original effect called with', params)
 })
 
-const $store = createStore(8900)
+const $data = createStore(8900)
 
 const createdFx = attach({
   effect: originalFx,
-  source: $store,
+  source: $data,
   mapParams: (params, data) => {
     console.log('Created effect called with', params, 'and data', data)
+    
     return {wrapped: params, data}
   },
 })
@@ -74,7 +75,7 @@ await createdFx('HELLO')
 // => Original effect called with {wrapped: "HELLO", data: 8900}
 ```
 
-[Try it](https://share.effector.dev/3y20Z4I3)
+[Try it](https://share.effector.dev/oVaMPwos)
 
 ### Long example
 
