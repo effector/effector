@@ -29,13 +29,14 @@ const $playerPosition = createStore(0)
 
 // create events and attach them to store
 const api = createApi($playerPosition, {
-  moveLeft: (pos, offset) => pos - offset,
-  moveRight: (pos, offset) => pos + offset,
+  moveLeft: (position, offset) => position - offset,
+  moveRight: (position, offset) => position + offset,
 })
 
-$playerPosition.watch(pos => {
-  console.log('position', pos)
+$playerPosition.watch(position => {
+  console.log('position', position)
 })
+
 // => position 0
 
 api.moveRight(10)
@@ -44,4 +45,4 @@ api.moveLeft(5)
 // => position 5
 ```
 
-[Try it](https://share.effector.dev/SjVy8dzF)
+[Try it](https://share.effector.dev/DELmtCMr)
