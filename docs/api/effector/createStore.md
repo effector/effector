@@ -37,7 +37,7 @@ const clearTodos = createEvent()
 
 const $todos = createStore([])
   // Will update store when addTodo is fired
-  .on(addTodo, (state, todo) => [...state, todo])
+  .on(addTodo, (todos, todo) => [...todos, todo])
   // Will reset store to default state when clearTodos is fired
   .reset(clearTodos)
 
@@ -53,4 +53,4 @@ $todos.watch(state => {
 // => todos []
 ```
 
-[Try it](https://share.effector.dev/tquiUgdq)
+[Try it](https://share.effector.dev/PCX0QT6d)
