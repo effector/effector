@@ -101,3 +101,49 @@ punch(100) // Also nothing
 ```
 
 [Try it](https://share.effector.dev/rtxfqObf)
+
+
+#### Example with `serialize`
+
+```js
+import {createEvent, createStore, forward, serialize, fork, allSettled} from 'effector'
+
+const readPackage = createEvent();
+
+const $name = createStore('')
+const $version = createStore(0, { serialize: 'ignore' })
+
+$name.on(readPackage, (_, { name }) => name)
+$version.on(readPackage, (_, { version }) => version)
+
+// Watchers always called for scoped changes
+$name.watch(name => console.log("name '%s'", name))
+$version.watch(version => console.log("version %s", version))
+// => name ''
+// => version 0
+
+// Please, note, `fork()` call doesn't trigger watches
+// In the opposit of `hydrate()` call
+const scope = fork()
+
+// By default serialize saves value only for the changed stores
+// Review `onlyChanges` option https://effector.dev/docs/api/effector/serialize
+const values = serialize(scope);
+console.log(values)
+// => {}
+
+// Let's change our stores
+await allSettled(readPackage, {
+  scope,
+  params: { name: 'effector', version: 22 },
+})
+// => name 'effector'
+// => version 22
+
+const actualValues = serialize(scope);
+console.log(actualValues)
+// => {n74m6b: "effector"}
+// This is because `$version` store has `serialize: ignore`
+```
+
+[Try it](https://share.effector.dev/aLKAHDOM)
