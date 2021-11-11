@@ -40,6 +40,7 @@ import {createEffect} from 'effector'
 const fetchUserReposFx = createEffect(async ({name}) => {
   const url = `https://api.github.com/users/${name}/repos`
   const req = await fetch(url)
+
   return req.json()
 })
 
@@ -50,7 +51,7 @@ fetchUserReposFx.done.watch(({params, result}) => {
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/7K23rdej)
+[Try it](https://share.effector.dev/XnFCizrQ)
 
 ### Change state on effect completion
 
@@ -60,13 +61,12 @@ import {createStore, createEffect} from 'effector'
 const fetchUserReposFx = createEffect(async ({name}) => {
   const url = `https://api.github.com/users/${name}/repos`
   const req = await fetch(url)
+
   return req.json()
 })
 
-const $repos = createStore([]).on(
-  fetchUserReposFx.doneData,
-  (_, repos) => repos,
-)
+const $repos = createStore([])
+	.on(fetchUserReposFx.doneData, (_, repos) => repos)
 
 $repos.watch(repos => {
   console.log(`${repos.length} repos`)
@@ -77,25 +77,26 @@ await fetchUserReposFx({name: 'zerobias'})
 // => 26 repos
 ```
 
-[Try it](https://share.effector.dev/uAJFC1XM)
+[Try it](https://share.effector.dev/9nRLTBSq)
 
 #### Set handler to effect after creating
 
 ```js
 import {createEffect} from 'effector'
 
-const fetchUserReposFx = createEffect()
+const fetchUserRepos = createEffect()
 
-fetchUserReposFx.use(async ({name}) => {
+fetchUserRepos.use(async ({name}) => {
   const url = `https://api.github.com/users/${name}/repos`
   const req = await fetch(url)
+
   return req.json()
 })
 
-await fetchUserReposFx({name: 'zerobias'})
+await fetchUserRepos({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/e1QPH9Uq)
+[Try it](https://share.effector.dev/eymiDSSz)
 
 #### Watch effect status
 
@@ -105,6 +106,7 @@ import {createEffect} from 'effector'
 const fetchUserReposFx = createEffect(async ({name}) => {
   const url = `https://api.github.com/users/${name}/repos`
   const req = await fetch(url)
+  
   return req.json()
 })
 
@@ -136,7 +138,7 @@ fetchUserReposFx.finally.watch(({params, status, result, error}) => {
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/LeurvtYA)
+[Try it](https://share.effector.dev/wXNvzyPf)
 
 ## createEffect with config
 
@@ -175,4 +177,4 @@ const fetchUserReposFx = createEffect({
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/GynSzKee)
+[Try it](https://share.effector.dev/tvTwHub0)
