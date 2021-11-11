@@ -79,19 +79,19 @@ Also, guard accepts a common function predicate as filter, to drop events before
 import {createEffect, createEvent, guard} from 'effector'
 
 const submitForm = createEvent()
-const searchUser = createEffect()
+const searchUserFx = createEffect(() => {})
 
 guard({
   source: submitForm,
   filter: user => user.length > 0,
-  target: searchUser,
+  target: searchUserFx,
 })
 
 submitForm('') // nothing happens
 submitForm('alice') // ~> searchUser('alice')
 ```
 
-[Try it](https://share.effector.dev/84j97tZ7)
+[Try it](https://share.effector.dev/huTsEYFQ)
 
 ## `guard(source, {filter: booleanStore})`
 
@@ -118,14 +118,17 @@ const target = guard(trigger, {
 })
 
 target.watch(console.log)
+
 trigger('A')
+
 lock()
 trigger('B') // nothing happens
+
 unlock()
 trigger('C')
 ```
 
-[Try it](https://share.effector.dev/6bqOCO4y)
+[Try it](https://share.effector.dev/kKxdnmcU)
 
 ## `guard(source, {filter: predicate})`
 
