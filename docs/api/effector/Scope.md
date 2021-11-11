@@ -81,7 +81,6 @@ import {
 const domain = createDomain()
 const inc = domain.createEvent()
 const dec = domain.createEvent()
-
 const $counter = domain
   .createStore(0)
   .on(inc, value => value + 1)
@@ -98,4 +97,4 @@ console.log(scopeA.getState($counter)) // => 1
 console.log(scopeB.getState($counter)) // => -1
 ```
 
-[Try it](https://share.effector.dev/0grlV3bA)
+[Try it](https://share.effector.dev/gV1SLNSG)
