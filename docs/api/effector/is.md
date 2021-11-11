@@ -25,9 +25,10 @@ import {
   createDomain,
 } from 'effector'
 
-const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+
+const $store = createStore(null)
 
 is.store($store)
 // => true
@@ -54,7 +55,7 @@ is.store(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/4vzdWan1)
+[Try it](https://share.effector.dev/Ycx0AeDY)
 
 ## `is.event(value)`
 
@@ -73,9 +74,10 @@ import {
   createDomain,
 } from 'effector'
 
-const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+
+const $store = createStore(null)
 
 is.event($store)
 // => false
@@ -102,7 +104,7 @@ is.event(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/hB0JEiIo)
+[Try it](https://share.effector.dev/A4wP5Z0a)
 
 ## `is.effect(value)`
 
@@ -121,9 +123,10 @@ import {
   createDomain,
 } from 'effector'
 
-const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+
+const $store = createStore(null)
 
 is.effect($store)
 // => false
@@ -141,7 +144,7 @@ is.effect(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/ZdZ2N6VG)
+[Try it](https://share.effector.dev/v3t5FEGL)
 
 ## `is.domain(value)`
 
@@ -160,9 +163,10 @@ import {
   createDomain,
 } from 'effector'
 
-const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+
+const $store = createStore(null)
 
 is.domain($store)
 // => false
@@ -180,7 +184,7 @@ is.domain(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/Iea0gmfD)
+[Try it](https://share.effector.dev/kifqsNiu)
 
 ## `is.scope(value)`
 
@@ -197,15 +201,16 @@ boolean
 ```js
 import {fork} from 'effector'
 
-const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+
+const store = createStore(null)
 const scope = fork()
 
 is.scope(scope)
 // => true
 
-is.scope($store)
+is.scope(store)
 // => false
 
 is.scope(event)
@@ -221,7 +226,7 @@ is.scope(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/hF0krFUK)
+[Try it](https://share.effector.dev/UIJEqSIh  )
 
 ## `is.unit(value)`
 
@@ -241,9 +246,10 @@ import {
   fork,
 } from 'effector'
 
-const $store = createStore(null)
 const event = createEvent()
 const fx = createEffect()
+
+const $store = createStore(null)
 const scope = fork()
 
 is.unit(scope)
@@ -274,4 +280,4 @@ is.unit(null)
 // => false
 ```
 
-[Try it](https://share.effector.dev/iOpDvweB)
+[Try it](https://share.effector.dev/8HExLT7g)
