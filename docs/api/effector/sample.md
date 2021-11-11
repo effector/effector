@@ -106,7 +106,7 @@ submitForm(12345678)
 // 4. trigger effect signInFx with params received at the step (3)
 ```
 
-[Try it](https://share.effector.dev/PAjWhOJc)
+[Try it](https://share.effector.dev/8Ohtx2cq)
 
 ## `sample(sourceUnit, clockUnit, fn?)`
 
@@ -130,9 +130,9 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Example
 
 ```js
+import {createEvent, createEffect, createStore} from 'effector'
 
 const submitForm = createEvent()
-
 const signInFx = createEffect(params => {
   console.log(params)
 })
@@ -142,7 +142,7 @@ const $userName = createStore('john')
 const sampleUnit = sample(
   $userName /* 2 */,
   submitForm /* 1 */,
-  (name, password) => ({name, password}) /* 3 */,
+  (name, password) => ({name, password}) /* 3 */
 )
 /* 5 */
 forward({
@@ -154,11 +154,11 @@ submitForm(12345678)
 // 1. when submitForm is called with params (12345678)
 // 2. take $userName store`s state ('john')
 // 3. transform payload from event (1) and current store`s state (2)
-// 4. when sampleUnit (event in this case) is triggered,
-//    send it payload to effect signInFx with params received at the step (3)
+// 4. when sampleUnit (event in this case) is trigered,
+//    send it payload to effect signIn with params received at the step (3)
 ```
 
-[Try it](https://share.effector.dev/WO6UT8bV)
+[Try it](https://share.effector.dev/lVtVtwrW)
 
 ## `sample({name?})`
 
@@ -193,7 +193,6 @@ effector 20.8.0
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
-
 const trigger = createEvent()
 
 const $a = createStore('A')
@@ -202,7 +201,10 @@ const $b = createStore(1)
 // Target has type `Event<{ a: string, b: number }>`
 const target = sample({
   clock: trigger,
-  source: {a: $a, b: $b},
+  source: {
+    a: $a,
+    b: $b,
+  },
 })
 
 target.watch(obj => {
@@ -213,7 +215,7 @@ trigger()
 // => sampled object {a: 'A', b: 1}
 ```
 
-[Try it](https://share.effector.dev/Wp9nq14k)
+[Try it](https://share.effector.dev/tj0oiC01)
 
 ### Array of stores
 
@@ -224,7 +226,6 @@ effector 20.8.0
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
-
 const trigger = createEvent()
 
 const $a = createStore('A')
@@ -250,7 +251,7 @@ trigger()
 // => explicit names "A" 1
 ```
 
-[Try it](https://share.effector.dev/duqTwRgT)
+[Try it](https://share.effector.dev/M92jJXE9)
 
 ### Support array in clock
 
@@ -263,9 +264,10 @@ Support for sample clock field which acts like a merge call
 ```js
 import {createStore, createEvent, createEffect, sample, merge} from 'effector'
 
-const showNotification = createEvent<string>()
+const showNotification = createEvent()
 const trigger = createEvent()
 const fx = createEffect()
+
 const $store = createStore('')
 
 // array of units in clock
@@ -283,7 +285,7 @@ sample({
 })
 ```
 
-[Try it](https://share.effector.dev/1YEHUFs7)
+[Try it](https://share.effector.dev/Z7NiG4Zn)
 
 <!-- ## Other examples
 
