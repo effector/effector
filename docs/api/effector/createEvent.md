@@ -29,7 +29,9 @@ createEvent(name?): Event<void>
 import {createStore, createEvent} from 'effector'
 
 const addNumber = createEvent()
-const $store = createStore(0).on(addNumber, (state, number) => state + number)
+
+const $store = createStore(0)
+	.on(addNumber, (state, number) => state + number)
 
 $store.watch(state => {
   console.log('state', state)
@@ -46,7 +48,7 @@ addNumber(10)
 // => 30
 ```
 
-[Try it](https://share.effector.dev/0OeoZMPc)
+[Try it](https://share.effector.dev/owiebt2H)
 
 We created a store and an event (addNumber), and started watching the store.<br/>
 Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`, you can look at the console and see how state changes.
@@ -62,8 +64,9 @@ const array = extractPartOfArray.map(arr => arr.slice(2))
 array.watch(part => {
   console.log(part)
 })
+
 extractPartOfArray([1, 2, 3, 4, 5, 6])
 // => [3, 4, 5, 6]
 ```
 
-[Try it](https://share.effector.dev/4lWsZr2k)
+[Try it](https://share.effector.dev/5bhphBL7)
