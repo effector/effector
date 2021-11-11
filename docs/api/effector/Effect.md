@@ -23,6 +23,7 @@ import {createEffect, createStore} from 'effector'
 
 const fetchUserFx = createEffect(async ({id}) => {
   const res = await fetch(`https://example.com/users/${id}`)
+
   return res.json()
 })
 
@@ -52,7 +53,7 @@ fetchUserFx({id: 1})
 const data = await fetchUserFx({id: 2})
 ```
 
-[Try it](https://share.effector.dev/7sfYga4o)
+[Try it](https://share.effector.dev/C17PH81t)
 
 ## Effect Methods
 
@@ -89,21 +90,24 @@ You must provide a handler either through [`.use`](Effect.md#usehandler) method 
 #### Example
 
 ```js
+import {createEffect} from 'effector'
+
 const fetchUserReposFx = createEffect()
 
-fetchUserReposFx.use(async params => {
+fetchUserReposFx(async params => {
   console.log('fetchUserReposFx called with', params)
 
   const url = `https://api.github.com/users/${params.name}/repos`
   const req = await fetch(url)
+
   return req.json()
 })
 
 fetchUserReposFx({name: 'zerobias'})
-// => fetchUserReposFx called with {name: 'zerobias'}
+// => fetchUserRepos called with {name: 'zerobias'}
 ```
 
-[Try it](https://share.effector.dev/N2BPipSV)
+[Try it](https://share.effector.dev/aPWhV0hY)
 
 <hr />
 
@@ -143,7 +147,7 @@ await fx(10)
 // => effect called with value 10
 ```
 
-[Try it](https://share.effector.dev/VN1ef0TZ)
+[Try it](https://share.effector.dev/6DGii6kM)
 
 <hr />
 
@@ -198,6 +202,7 @@ import {createEffect} from 'effector'
 const userUpdate = createEffect(({name, role}) => {
   console.log(name, role)
 })
+
 const userNameUpdated = userUpdate.map(({name}) => name) // you may decompose dataflow with .map() method
 const userRoleUpdated = userUpdate.map(({role}) => role.toUpperCase()) // either way you can transform data
 
@@ -210,7 +215,7 @@ await userUpdate({name: 'john', role: 'admin'})
 // => john admin
 ```
 
-[Try it](https://share.effector.dev/MmBBKXZe)
+[Try it](https://share.effector.dev/JKWsW2dz)
 
 <hr />
 
@@ -235,6 +240,8 @@ fn = effect.use.getCurrent()
 #### Example
 
 ```js
+import {createEffect} from 'effector'
+
 const handlerA = () => 'A'
 const handlerB = () => 'B'
 
@@ -248,7 +255,7 @@ console.log(fx.use.getCurrent() === handlerB)
 // => true
 ```
 
-[Try it](https://share.effector.dev/CM6hgtOM)
+[Try it](https://share.effector.dev/2lDVY4xm)
 
 <hr />
 
@@ -295,7 +302,7 @@ await fx(2)
 // => Effect was successfully resolved, returning 3
 ```
 
-[Try it](https://share.effector.dev/rNesMDtw)
+[Try it](https://share.effector.dev/6gl5RprS)
 
 ### `failData`
 
@@ -336,7 +343,7 @@ fx(2)
 // => Execution failed with error 1
 ```
 
-[Try it](https://share.effector.dev/rNU3tqEx)
+[Try it](https://share.effector.dev/VuVf4HTI)
 
 ### `done`
 
@@ -361,17 +368,14 @@ import {createEffect} from 'effector'
 const fx = createEffect(value => value + 1)
 
 fx.done.watch(({params, result}) => {
-  console.log(
-    'Call with params', params, 
-    'resolved with value', result,
-	)
+  console.log('Call with params', params, 'resolved with value', result)
 })
 
 await fx(2)
 // => Call with params 2 resolved with value 3
 ```
 
-[Try it](https://share.effector.dev/VogsNaDn)
+[Try it](https://share.effector.dev/KjRv94Gv)
 
 ### `fail`
 
@@ -398,17 +402,14 @@ const fx = createEffect(async value => {
 })
 
 fx.fail.watch(({params, error}) => {
-  console.log(
-    'Call with params', params,
-    'rejected with error', error.message
-  )
+  console.log('Call with params', params, 'rejected with error', error.message)
 })
 
 fx(2)
 // => Call with params 2 rejected with error 1
 ```
 
-[Try it](https://share.effector.dev/hCPCHQ5N)
+[Try it](https://share.effector.dev/F6w3dp28)
 
 ### `finally`
 
@@ -438,6 +439,7 @@ import {createEffect} from 'effector'
 
 const fetchApiFx = createEffect(async ({time, ok}) => {
   await new Promise(resolve => setTimeout(resolve, time))
+
   if (ok) return `${time} ms`
   throw Error(`${time} ms`)
 })
@@ -445,7 +447,7 @@ const fetchApiFx = createEffect(async ({time, ok}) => {
 fetchApiFx.finally.watch(value => {
   switch (value.status) {
     case 'done':
-  		console.log(
+      console.log(
         'Call with params',
         value.params,
         'resolved with value',
@@ -453,7 +455,7 @@ fetchApiFx.finally.watch(value => {
       )
       break
     case 'fail':
-  		console.log(
+      console.log(
         'Call with params',
         value.params,
         'rejected with error',
@@ -472,7 +474,7 @@ fetchApiFx({time: 100, ok: false})
 //    rejected with error 100 ms
 ```
 
-[Try it](https://share.effector.dev/f90vETOc)
+[Try it](https://share.effector.dev/QbjP7ydv)
 
 ### `pending`
 
@@ -497,14 +499,13 @@ import {createEffect} from 'effector'
 import {useStore} from 'effector-react'
 
 const fetchApiFx = createEffect(
-  ms => new Promise(resolve => setTimeout(resolve, ms)),
+  ms => new Promise(resolve => setTimeout(resolve, ms))
 )
 
 fetchApiFx.pending.watch(console.log)
 
 const Loading = () => {
   const loading = useStore(fetchApiFx.pending)
-  
   return <div>{loading ? 'Loading...' : 'Load complete'}</div>
 }
 
@@ -513,7 +514,7 @@ ReactDOM.render(<Loading />, document.getElementById('root'))
 fetchApiFx(3000)
 ```
 
-[Try it](https://share.effector.dev/wDMQKqhl)
+[Try it](https://share.effector.dev/2l6VahcU)
 
 It's a shorthand for common use case
 
@@ -574,4 +575,4 @@ await Promise.all([req1, req2])
 // => 0
 ```
 
-[Try it](https://share.effector.dev/XsM8fZXa)
+[Try it](https://share.effector.dev/kadFfO3v)
