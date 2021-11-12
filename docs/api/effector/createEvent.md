@@ -21,7 +21,7 @@ createEvent(name?): Event<void>
 
 #### Notes
 
-[Event](./Event.md) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2))
+[Event](./Event.md) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows to send data to another event or effect via effector operators.
 
 #### Example 1
 
@@ -33,25 +33,32 @@ const addNumber = createEvent()
 const $store = createStore(0)
 	.on(addNumber, (state, number) => state + number)
 
-$store.watch(state => {
-  console.log('state', state)
+$counter
+  .on(incrementBy, (counter, number) => counter + number)
+  .reset(resetCounter)
+
+$counter.watch(counter => {
+  console.log('counter is now', counter)
 })
-// => 0
+// => counter is now 0
 
-addNumber(10)
-// => 10
+incrementBy(10)
+// => counter is now 10
 
-addNumber(10)
-// => 20
+incrementBy(10)
+// => counter is now 20
 
-addNumber(10)
-// => 30
+incrementBy(10)
+// => counter is now 30
+
+resetCounter()
+// => counter is now 0
 ```
 
 [Try it](https://share.effector.dev/owiebt2H)
 
-We created a store and an event (addNumber), and started watching the store.<br/>
-Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`, you can look at the console and see how state changes.
+We created a store `$counter` and an event `incrementBy`, and started watching the store.<br/>
+Notice the function call `incrementBy(10)`. Whenever you will call `incrementBy(10)`, you can look at the console and see how state of `$counter` changes.
 
 #### Example 2
 
