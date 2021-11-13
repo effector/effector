@@ -354,12 +354,7 @@ export type TemplateHandlers = {
   combineField(template: Template, childRef: StateRef, linkNode: Node): void
   splitBase(template: Template, lastValues: StateRef): void
   splitMatchStore(template: Template, storeRef: StateRef, linkNode: Node): void
-  sampleStoreSource(
-    template: Template,
-    sourceRef: StateRef,
-    clockState: StateRef,
-  ): void
-  sampleNonStoreSource(
+  sampleSource(
     template: Template,
     hasSource: StateRef,
     sourceState: StateRef,

@@ -1,20 +1,21 @@
 import {combine} from './combine'
 import {mov, compute, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
-import {callStackAReg, callARegStack} from './caller'
+import {callStackAReg} from './caller'
 import {processArgsToConfig} from './config'
 import {getStoreState, getGraph} from './getter'
-import {own} from './own'
-import {assertNodeSet, is, isObject, isVoid} from './is'
+import {assertNodeSet, is, isObject, isVoid, isFunction} from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
-import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {assert} from './throw'
 import {forEach} from './collection'
 import {SAMPLE, STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
+import {Cmd, NodeUnit, StateRef} from './index.h'
+import {own} from './own'
+import {createLinkNode} from './forward'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -31,53 +32,100 @@ export function validateSampleConfig(config: any, method: string) {
   })
   return atLeastOneFieldExists
 }
-export const groupInputs = (source: any, clock: any, method: string) => {
-  assert(
-    !isVoid(source) || !isVoid(clock),
-    fieldErrorMessage(method, 'either source or clock'),
-  )
-  if (isVoid(source)) {
-    assertNodeSet(clock, method, 'clock')
-    if (Array.isArray(clock)) {
-      clock = merge(clock)
-    }
-    source = clock
-  } else if (!is.unit(source)) {
-    source = combine(source)
-  }
-  return [source, clock] as const
-}
+
 export function sample(...args: any): any {
   let target
   let name
   let [[source, clock, fn], metadata] = processArgsToConfig(args)
   let sid
   let batched = true
+  let filter
   /** config case */
   if (
     isVoid(clock) &&
     isObject(source) &&
-    validateSampleConfig(source, 'sample')
+    validateSampleConfig(source, SAMPLE)
   ) {
     clock = source.clock
     fn = source.fn
     batched = !source.greedy
+    filter = source.filter
     /** optional target & name accepted only from config */
     target = source.target
     name = source.name
     sid = source.sid
     source = source.source
   }
-  ;[source, clock] = groupInputs(source, clock, 'sample')
+  return createSampling(
+    SAMPLE,
+    clock,
+    source,
+    filter,
+    target,
+    fn,
+    name,
+    metadata,
+    batched,
+    true,
+    false,
+    sid,
+  )
+}
+
+export const createSampling = (
+  method: string,
+  clock: any,
+  source: any,
+  filter: any,
+  target: any,
+  fn: any,
+  name: any,
+  metadata: any,
+  batched: boolean,
+  targetMayBeStore: boolean,
+  filterRequired: boolean,
+  sid?: any,
+) => {
+  const isUpward = !!target
+  assert(
+    !isVoid(source) || !isVoid(clock),
+    fieldErrorMessage(method, 'either source or clock'),
+  )
+  let sourceIsClock = false
+  if (isVoid(source)) {
+    sourceIsClock = true
+  } else if (!is.unit(source)) {
+    source = combine(source)
+  }
   if (isVoid(clock)) {
     /** still undefined! */
     clock = source
+  } else {
+    assertNodeSet(clock, method, 'clock')
+    if (Array.isArray(clock)) {
+      clock = merge(clock)
+    }
   }
-  assertNodeSet(clock, 'sample', 'clock')
+  if (sourceIsClock) {
+    source = clock
+  }
   if (!metadata && !name) name = source.shortName
-  const isUpward = !!target
-  if (!target) {
-    if (is.store(source) && is.store(clock)) {
+  let filterType: 'none' | 'unit' | 'fn' = 'none'
+  if (filterRequired || filter) {
+    if (is.unit(filter)) {
+      filterType = 'unit'
+    } else {
+      assert(isFunction(filter), '`filter` should be function or unit')
+      filterType = 'fn'
+    }
+  }
+  if (target) assertNodeSet(target, method, 'target')
+  else {
+    if (targetMayBeStore && is.store(source) && is.store(clock)) {
+      assert(
+        filterType === 'none',
+        'filter require source and clock not to be a store at the same time',
+      )
       const initialState = fn
         ? fn(readRef(getStoreState(source)), readRef(getStoreState(clock)))
         : readRef(getStoreState(source))
@@ -90,30 +138,63 @@ export function sample(...args: any): any {
   // const targetTemplate =
   //   isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   const clockState = createStateRef()
-  if (is.store(source)) {
-    const sourceRef = getStoreState(source)
-    own(source, [
-      createLinkNode(
-        clock,
-        target,
-        [
-          applyTemplate('sampleSourceLoader'),
-          mov({from: STACK, target: clockState}),
-          read(sourceRef, !fn, batched),
-          read(clockState, !!fn),
-          fn && compute({fn: callARegStack}),
-          applyTemplate('sampleSourceUpward', isUpward),
-        ],
-        SAMPLE,
-        fn,
-        // scope: {fn, targetTemplate}
-      ),
-    ])
-    applyTemplate('sampleStoreSource', sourceRef, clockState)
-  } else {
-    const hasSource = createStateRef(false)
-    const sourceRef = createStateRef()
-    applyTemplate('sampleNonStoreSource', hasSource, sourceRef, clockState)
+  let filterNodes: Cmd[] = []
+  if (filterType === 'unit') {
+    const [filterRef, hasFilter] = syncSourceState(
+      filter as NodeUnit,
+      target,
+      clock,
+      clockState,
+      method,
+    )
+    filterNodes = [...readAndFilter(hasFilter), ...readAndFilter(filterRef)]
+  }
+  const [sourceRef, hasSource] = syncSourceState(
+    source,
+    target,
+    clock,
+    clockState,
+    method,
+  )
+  own(source, [
+    createLinkNode(
+      clock,
+      target,
+      [
+        applyTemplate('sampleSourceLoader'),
+        mov({from: STACK, target: clockState}),
+        ...readAndFilter(hasSource),
+        read(sourceRef, true, batched),
+        ...filterNodes,
+        read(clockState),
+        filterType === 'fn' &&
+          compute({fn: (src, _, {a}) => filter(src, a), filter: true}),
+        fn && compute({fn: callStackAReg}),
+        applyTemplate('sampleSourceUpward', isUpward),
+      ],
+      method,
+      fn,
+    ),
+  ])
+  return target
+}
+
+const readAndFilter = (state: StateRef) => [
+  read(state),
+  calc((upd, scope, {a}) => a, true),
+]
+
+const syncSourceState = (
+  source: NodeUnit,
+  target: NodeUnit | NodeUnit[],
+  clock: NodeUnit,
+  clockState: StateRef,
+  method: string,
+) => {
+  const isSourceStore = is.store(source)
+  const sourceRef = isSourceStore ? getStoreState(source) : createStateRef()
+  const hasSource = createStateRef(isSourceStore)
+  if (!isSourceStore) {
     createNode({
       parent: source,
       node: [
@@ -121,28 +202,10 @@ export function sample(...args: any): any {
         mov({from: VALUE, store: true, target: hasSource}),
       ],
       family: {owners: [source, target, clock], links: target},
-      meta: {op: SAMPLE},
+      meta: {op: method},
       regional: true,
     })
-    own(source, [
-      createLinkNode(
-        clock,
-        target,
-        [
-          applyTemplate('sampleSourceLoader'),
-          mov({from: STACK, target: clockState}),
-          read(hasSource, true),
-          calc(hasSource => hasSource, true),
-          read(sourceRef, true, batched),
-          read(clockState),
-          fn && compute({fn: callStackAReg}),
-          applyTemplate('sampleSourceUpward', isUpward),
-        ],
-        SAMPLE,
-        fn,
-        // scope: {fn, targetTemplate}
-      ),
-    ])
   }
-  return target
+  applyTemplate('sampleSource', hasSource, sourceRef, clockState)
+  return [sourceRef, hasSource] as const
 }
