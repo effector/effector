@@ -30,7 +30,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Store<number[]>' is missing the following properties from type 'Event<number[]>': filter, filterMap, prepend, getType
+        no errors
         "
       `)
     })
@@ -46,7 +46,8 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: Store<string>; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: Store<string>; }'.
         "
       `)
     })
@@ -62,7 +63,8 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: Store<string>; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: Store<string>; }'.
         "
       `)
     })
@@ -229,6 +231,8 @@ describe('sample(config)', () => {
                 Types of parameters 'payload' and 'payload' are incompatible.
                   Type 'User | null' is not assignable to type 'User'.
                     Type 'null' is not assignable to type 'User'.
+        Argument of type '{ source: Event<User | null>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
         "
       `)
     })
@@ -250,6 +254,8 @@ describe('sample(config)', () => {
               Types of parameters 'watcher' and 'watcher' are incompatible.
                 Types of parameters 'payload' and 'payload' are incompatible.
                   Type 'User' is not assignable to type 'string'.
+        Argument of type '{ source: Event<User>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
         "
       `)
     })
@@ -266,8 +272,8 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<User | null>; filter: BooleanConstructor; target: Store<User>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: User | null; targetType: User; }; }'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: User | null; targetType: User; }; }'.
+          Argument of type '{ source: Event<User | null>; filter: BooleanConstructor; target: Store<User>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
+            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
           "
         `)
       })
@@ -284,8 +290,8 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<User>; filter: BooleanConstructor; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: User; targetType: string; }; }'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: User; targetType: string; }; }'.
+          Argument of type '{ source: Event<User>; filter: BooleanConstructor; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
+            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
           "
         `)
       })
@@ -300,7 +306,8 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          no errors
+          Argument of type '{ source: Event<{ pass: boolean; }>; filter: BooleanConstructor; target: Event<void>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
+            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: BooleanConstructor; }'.
           "
         `)
       })
