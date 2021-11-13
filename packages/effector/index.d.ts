@@ -761,23 +761,6 @@ type WhichType<T> = [T] extends [never]
     : 'undefined'
   : 'value'
 
-type AnyClock = Unit<any> | Tuple<Unit<any>>
-
-type ClockBound = Unit<unknown> | Tuple<unknown>
-type ClockValue<Clk extends ClockBound> =
-  Clk extends Unit<infer Value>
-  ? Value
-  : Clk extends Tuple<infer U>
-  ? U extends Unit<infer V>
-  ? V
-  : never
-  : never
-
-type SourceValue<A extends Unit<unknown> | Combinable> =
-  A extends Unit<unknown>
-  ? UnitValue<A>
-  : GetCombinedValue<A>
-
 type BuiltInObject =
     | Error
     | Date
@@ -841,7 +824,6 @@ type IfAssignable<T, U, Y, N> =
             : N
         : N
 
-type SourceNotConfig<A> = Unit<A> | Tuple<Store<any>>
 type Source<A> = Unit<A> | Combinable
 type Clock<B> = Unit<B> | Tuple<Unit<any>>
 type Target = Unit<any> | Tuple<any>
@@ -856,36 +838,6 @@ type GetMergedValue<T> = GetTupleWithoutAny<T> extends never ? any : GetTupleWit
 
 type GetSource<S> = S extends Unit<infer Value> ? Value : GetCombinedValue<S>
 type GetClock<C> = C extends Unit<infer Value> ? Value : GetMergedValue<C>
-
-type AnyFn = (...args: any) => any
-
-type GetResultS<S> = S extends Store<any> | Combinable
-  ? Store<GetSource<S>>
-  : Event<GetSource<S>>
-
-type GetResultC<C> = C extends Store<any>
-  ? Store<GetClock<C>>
-  : Event<GetClock<C>>
-
-type GetResultSR<S, R> = S extends Store<any> | Combinable
-  ? Store<R>
-  : Event<R>
-
-type GetResultCR<C, R> = C extends Store<any>
-  ? Store<R>
-  : Event<R>
-
-type GetResultSC<S, C> = S extends Store<any> | Combinable
-  ? C extends Store<any>
-    ? Store<GetSource<S>>
-    : Event<GetSource<S>>
-  : Event<GetSource<S>>
-
-type GetResultSCR<S, C, R> = S extends Store<any> | Combinable
-  ? C extends Store<any>
-    ? Store<R>
-    : Event<R>
-  : Event<R>
 
 /** Replaces incompatible unit type with string error message.
  *  There is no error message if target type is void.
@@ -909,179 +861,398 @@ type MultiTarget<Target, Result> = Target extends Unit<infer Value>
   : Target extends Tuple<unknown>
     ? TargetTuple<Target, Result>
     : 'non-unit item in target'
+type SampleImpl<
+  Target,
+  Source,
+  Clock,
+  FNSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => any
+      : never
+  ),
+  FNClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => any
+      : never
+  ),
+  FNBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+        : never
+      : never
+  ),
+  SomeFN,
+> = unknown extends Target
+    ? unknown extends Source
+      ? unknown extends Clock
+        ? [{error: 'either target, clock or source should exists'}]
+        : Clock extends Units | never[]
+          ? unknown extends SomeFN
+            ? [{clock: Clock; source?: never; fn: FNClk; target?: never} & SomeFN]
+            : SomeFN extends {fn: any}
+              ? [{clock: Clock; source?: never; fn: FNClk; target?: never} & SomeFN]
+              : [{clock: Clock; source?: never; target?: never} & SomeFN]
+          : [{error: 'clock should be units'; got: Clock}]
+      : Source extends Unit<any> | SourceRecord
+        ? unknown extends Clock
+          ? unknown extends SomeFN
+            ? [{source: Source; clock?: never; fn: FNSrc; target?: never} & SomeFN]
+            : SomeFN extends {fn: any}
+              ? [{source: Source; clock?: never; fn: FNSrc; target?: never} & SomeFN]
+              : [{source: Source; clock?: never; target?: never} & SomeFN]
+          : Clock extends Units | never[]
+            ? unknown extends SomeFN
+              ? [{source: Source; clock: Clock; fn: FNBoth; target?: never} & SomeFN]
+              : SomeFN extends {fn: any}
+                ? [{source: Source; clock: Clock; fn: FNBoth; target?: never} & SomeFN]
+                : [{source: Source; clock: Clock; target?: never} & SomeFN]
+            : [{error: 'clock should be units'; got: Clock}]
+        : [{error: 'source error'; got: Source}]
+    : Target extends Units | ReadonlyArray<Unit<any>>
+      ? unknown extends Source
+        ? unknown extends Clock
+          ? [{error: 'either target, clock or source should exists'}]
+          : Clock extends Units | never[]
+            ? unknown extends SomeFN
+              ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
+                ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
+                : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
+                  ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
+                  : [{
+                    error: 'fn result should extend target type'
+                    targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
+                  }]
+              : SomeFN extends {fn: any}
+                ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
+                  ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
+                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
+                    ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
+                    : [{
+                      error: 'fn result should extend target type'
+                      targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
+                    }]
+                : [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
+                  ? [{clock: Clock; source?: never; target?: Target} & SomeFN]
+                  : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
+                    ? [{clock: Clock; source?: never; target?: Target} & SomeFN]
+                    : [{
+                      error: 'clock should extend target type'
+                      targets: Show<TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>>
+                    }]
+            : [{error: 'clock should be units'; got: Clock}]
+        : unknown extends Clock
+          ? Source extends Unit<any> | SourceRecord
+            ? unknown extends SomeFN
+              ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
+                ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
+                : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
+                  ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
+                  : [{
+                    error: 'fn result should extend target type'
+                    targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
+                  }]
+              : SomeFN extends {fn: any}
+                ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
+                  ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
+                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
+                    ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
+                    : [{
+                      error: 'fn result should extend target type'
+                      targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
+                    }]
+                : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
+                  ? [{source: Source; clock?: never; target?: Target} & SomeFN]
+                  : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
+                    ? [{source: Source; clock?: never; target?: Target} & SomeFN]
+                    : [{
+                      error: 'source should extend target type'
+                      targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
+                    }]
+            : [{error: 'source error'; got: Source}]
+          : Source extends Unit<any> | SourceRecord
+            ? Clock extends Units | never[]
+              ? unknown extends SomeFN
+                ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
+                  ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
+                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
+                    ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
+                    : [{
+                      error: 'fn result should extend target type'
+                      targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
+                    }]
+                : SomeFN extends {fn: any}
+                  ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
+                    ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
+                    : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
+                      ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
+                      : [{
+                        error: 'fn result should extend target type'
+                        targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
+                      }]
+                  : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
+                    ? [{source: Source; clock: Clock; target?: Target} & SomeFN]
+                    : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
+                      ? [{source: Source; clock: Clock; target?: Target} & SomeFN]
+                      : [{
+                        error: 'source should extend target type'
+                        targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
+                      }]
+              : [{error: 'clock should be units'; got: Clock}]
+            :[ {error: 'source error'; got: Source}]
+      : [{error: 'target error'; got: Target}]
+type SampleRet<
+  Target,
+  Source,
+  Clock,
+  FNSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => any
+      : never
+  ),
+  FNClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => any
+      : never
+  ),
+  FNBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+        : never
+      : never
+  ),
+  SomeFN,
+  ForceTargetInference
+> = unknown extends Target
+    ? unknown extends Clock
+      ? unknown extends Source
+        ? void
+        : Source extends Unit<any> | SourceRecord
+          ? unknown extends SomeFN
+            ? Source extends Store<any> | SourceRecord
+              ? Store<TypeOfSource<Source>>
+              : EventAsReturnType<TypeOfSource<Source>>
+            : SomeFN extends {fn: any}
+              ? FNSrc extends (src: TypeOfSource<Source>) => infer Ret
+                ? Source extends Store<any> | SourceRecord
+                  ? Store<Ret>
+                  : EventAsReturnType<Ret>
+                : void
+              : Source extends Store<any> | SourceRecord
+                ? Store<TypeOfSource<Source>>
+                : EventAsReturnType<TypeOfSource<Source>>
+          : void
+      : unknown extends Source
+        ? Clock extends Units | never[]
+          ? unknown extends SomeFN
+            ? Clock extends Store<any>
+              ? Store<TypeOfClock<Clock>>
+              : EventAsReturnType<TypeOfClock<Clock>>
+            : SomeFN extends {fn: any}
+              ? FNClk extends (clk: TypeOfClock<Clock>) => infer Ret
+                ? Clock extends Store<any>
+                  ? Store<Ret>
+                  : EventAsReturnType<Ret>
+                : void
+              : Clock extends Store<any>
+                ? Store<TypeOfClock<Clock>>
+                : EventAsReturnType<TypeOfClock<Clock>>
+          : void
+        : Clock extends Units | never[]
+          ? Source extends Unit<any> | SourceRecord
+            ? unknown extends SomeFN
+              ? Clock extends Store<any>
+                ? Source extends Store<any> | SourceRecord
+                  ? Store<TypeOfSource<Source>>
+                  : EventAsReturnType<TypeOfSource<Source>>
+                : EventAsReturnType<TypeOfSource<Source>>
+              : SomeFN extends {fn: any}
+                ? FNBoth extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => infer Ret
+                  ? Clock extends Store<any>
+                    ? Source extends Store<any> | SourceRecord
+                      ? Store<Ret>
+                      : EventAsReturnType<Ret>
+                    : EventAsReturnType<Ret>
+                  : void
+                : Clock extends Store<any>
+                  ? Source extends Store<any> | SourceRecord
+                    ? Store<TypeOfSource<Source>>
+                    : EventAsReturnType<TypeOfSource<Source>>
+                  : EventAsReturnType<TypeOfSource<Source>>
+            : void
+          : void
+    : Target & ForceTargetInference
 
-/*
-* Sample generics:
-* A - source value
-* B - clock value
-* R - fn result
-*/
-
-// sample with target
-// SCFT
-export function sample<A = any, B = any, R = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
-  T extends Target = Target
->(config: {
-  source: S,
-  clock: C,
-  fn: (source: GetSource<S>, clock: GetClock<C>) => R,
-  target: MultiTarget<T, R>,
-  name?: string,
-  greedy?: boolean
-}): T
-// SFT
-export function sample<A = any, R = any,
-  S extends Source<A> = Source<A>,
-  T extends Target = Target
->(config: {
-  source: S,
-  fn: (source: GetSource<S>) => R,
-  target: MultiTarget<T, R>,
-  name?: string,
-  greedy?: boolean
-}): T
-// СFT
-export function sample<B = any, R = any,
-  C extends Clock<B> = Clock<B>,
-  T extends Target = Target
->(config: {
-  clock: C,
-  fn: (clock: GetClock<C>) => R,
-  target: MultiTarget<T, R>,
-  name?: string,
-  greedy?: boolean
-}): T
-// SСT
-export function sample<A = any, B = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
-  T extends Target = Target
->(config: {
-  source: S,
-  clock: C,
-  target: MultiTarget<T, GetSource<S>>,
-  name?: string,
-  greedy?: boolean
-}): T
-// ST
-export function sample<A = any,
-  S extends Source<A> = Source<A>,
-  T extends Target = Target
->(config: {
-  source: S,
-  target: MultiTarget<T, GetSource<S>>,
-  name?: string,
-  greedy?: boolean
-}): T
-// СT
-export function sample<B = any,
-  C extends Clock<B> = Clock<B>,
-  T extends Target = Target
->(config: {
-  clock: C,
-  target: MultiTarget<T, GetClock<C>>,
-  name?: string,
-  greedy?: boolean
-}): T
-
-// sample without target
-// SCF
-export function sample<A = any, B = any, R = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
->(config: {
-  source: S,
-  clock: C,
-  fn: (source: GetSource<S>, clock: GetClock<C>) => R,
-  name?: string,
-  greedy?: boolean
-}): GetResultSCR<S, C, R>
-// SF
-export function sample<A = any, R = any,
-  S extends Source<A> = Source<A>,
->(config: {
-  source: S,
-  fn: (source: GetSource<S>) => R,
-  name?: string,
-  greedy?: boolean
-}): GetResultSR<S, R>
-// CF
-export function sample<B = any, R = any,
-  C extends Clock<B> = Clock<B>,
->(config: {
-  clock: C,
-  fn: (clock: GetClock<C>) => R,
-  name?: string,
-  greedy?: boolean
-}): GetResultCR<C, R>
-// SC
-export function sample<A = any, B = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>
->(config: {
-  source: S,
-  clock: C,
-  name?: string,
-  greedy?: boolean
-}): GetResultSC<S, C>
-// S
-export function sample<A = any,
-  S extends Source<A> = Source<A>
->(config: {
-  source: S,
-  name?: string,
-  greedy?: boolean
-}): GetResultS<S>
-// C
-export function sample<B = any,
-  C extends Clock<B> = Clock<B>
->(config: {
-  clock: C,
-  name?: string,
-  greedy?: boolean
-}): GetResultC<C>
-
-// sample without config
-export function sample<A = any, B = any, R = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>,
->(source: S, clock: C, fn: (source: GetSource<S>, clock: GetClock<C>) => R)
-  : GetResultSCR<S, C, R>
-export function sample<A = any, B = any,
-  S extends Source<A> = Source<A>,
-  C extends Clock<B> = Clock<B>
->(source: S, clock: C): GetResultSC<S, C>
-export function sample<A = any,
-  S extends SourceNotConfig<A> = SourceNotConfig<A>
->(source: S): GetResultS<S>
-
-// sample's last overload (for readable error messages)
 export function sample<
-  S extends Source<unknown>,
-  C extends Clock<unknown>,
-  F extends IfUnknown<UnitValue<S>,
-    (clock: GetClock<C>) => unknown,
-    IfUnknown<UnitValue<C>,
-      (source: GetSource<S>) => unknown,
-      (source: GetSource<S>, clock: GetClock<C>) => unknown
-    >
-  >,
-  T extends Target
->(config: {
-  source?: S,
-  clock?: C,
-  fn?: F,
-  target: MultiTarget<T,
-    IfUnknown<ReturnType<F>,
-      IfUnknown<UnitValue<S>, GetClock<C>, GetSource<S>>,
-      ReturnType<F>
-    >
-  >,
-  name?: string,
-  greedy?: boolean
-}): T
+  Target,
+  Source,
+  Clock,
+  FNSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => any
+      : never
+  ),
+  FNClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => any
+      : never
+  ),
+  FNBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+        : never
+      : never
+  ),
+  SomeFN,
+  SourceNoConf,
+  ClockNoConf,
+  FNSrcNoConf extends (
+    SourceNoConf extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<SourceNoConf>) => any
+      : never
+  ),
+  FNBothNoConf extends (
+    SourceNoConf extends Unit<any> | SourceRecord
+      ? ClockNoConf extends Units | never[]
+        ? ((src: TypeOfSource<SourceNoConf>, clk: TypeOfClock<ClockNoConf>) => any)
+        : never
+      : never
+  ),
+  Args extends any[],
+  InferTarget,
+>(...args:
+  SourceNoConf extends Unit<any> | SourceRecord
+    ? ClockNoConf extends Units | never[]
+      ? [any, any, any] extends Args
+        ? [SourceNoConf, ClockNoConf, FNBothNoConf] & Args
+        : [any, any] extends Args
+          ? [SourceNoConf, ClockNoConf] & Args
+          : never
+      : [any, any] extends Args
+        ? [SourceNoConf, FNSrcNoConf] & Args
+        : Args extends [Unit<any>]
+          ? [SourceNoConf] & Args
+          : SampleImpl<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN>
+    : SampleImpl<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN>
+  
+): SourceNoConf extends Unit<any> | SourceRecord
+  ? ClockNoConf extends Units | never[]
+    ? [any, any, any] extends Args
+      ? SourceNoConf extends Store<any>
+        ? ClockNoConf extends Store<any>
+          ? Store<ReturnType<FNBothNoConf>>
+          : EventAsReturnType<ReturnType<FNBothNoConf>>
+        : EventAsReturnType<ReturnType<FNBothNoConf>>
+      : [any, any] extends Args
+        ? SourceNoConf extends Store<any>
+          ? ClockNoConf extends Store<any>
+            ? Store<TypeOfSource<SourceNoConf>>
+            : EventAsReturnType<TypeOfSource<SourceNoConf>>
+          : EventAsReturnType<TypeOfSource<SourceNoConf>>
+        : void
+    : [any, any] extends Args
+      ? SourceNoConf extends Store<any>
+        ? Store<ReturnType<FNSrcNoConf>>
+        : EventAsReturnType<ReturnType<FNSrcNoConf>>
+      : Args extends [Unit<any>]
+        ? SourceNoConf extends Store<any>
+          ? Store<TypeOfSource<SourceNoConf>>
+          : EventAsReturnType<TypeOfSource<SourceNoConf>>
+        : SampleRet<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN, InferTarget>
+  : SampleRet<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN, InferTarget>
+
+type TypeOfTargetSoft<SourceType, Target, Mode extends 'fnRet' | 'src' | 'clk'> =
+  Target extends Unit<any>
+    ? Target extends Unit<infer TargetType>
+      ? [SourceType] extends [Readonly<TargetType>]
+        ? Target
+        : WhichType<TargetType> extends ('void' | 'any')
+          ? Target
+          : Mode extends 'fnRet'
+            ? never & {fnResult: SourceType; targetType: TargetType}
+            : Mode extends 'src'
+              ? never & {sourceType: SourceType; targetType: TargetType}
+              : {clockType: SourceType; targetType: TargetType}
+      : never
+    : {
+      [
+        K in keyof Target
+      ]: Target[K] extends Unit<infer TargetType>
+        ? [SourceType] extends [Readonly<TargetType>]
+          ? Target[K]
+          : WhichType<TargetType> extends ('void' | 'any')
+            ? Target[K]
+            : Mode extends 'fnRet'
+              ? never & {fnResult: SourceType; targetType: TargetType}
+              : Mode extends 'src'
+                ? never & {sourceType: SourceType; targetType: TargetType}
+                : {clockType: SourceType; targetType: TargetType}
+        : never
+    }
+type TypeOfTarget<SourceType, Target, Mode extends 'fnRet' | 'src' | 'clk'> =
+  Target extends Unit<any>
+    ? Target extends Unit<infer TargetType>
+      ? [SourceType] extends [Readonly<TargetType>]
+        ? Target
+        : WhichType<TargetType> extends ('void' | 'any')
+          ? Target
+          : Mode extends 'fnRet'
+            ? {fnResult: SourceType; targetType: TargetType}
+            : Mode extends 'src'
+              ? {sourceType: SourceType; targetType: TargetType}
+              : {clockType: SourceType; targetType: TargetType}
+      : never
+    : {
+      [
+        K in keyof Target
+      ]: Target[K] extends Unit<infer TargetType>
+        ? [SourceType] extends [Readonly<TargetType>]
+          ? Target[K]
+          : WhichType<TargetType> extends ('void' | 'any')
+            ? Target[K]
+            : Mode extends 'fnRet'
+              ? {fnResult: SourceType; targetType: TargetType}
+              : Mode extends 'src'
+                ? {sourceType: SourceType; targetType: TargetType}
+                : {clockType: SourceType; targetType: TargetType}
+        : never
+    }
+type IsEqualTarget<A, B> =
+  (<G>() => G extends A ? 1 : 2) extends (<G>() => G extends B ? 1 : 2)
+    ? true
+    : false 
+type ClockValueOf<T> = T[keyof T]
+
+type TypeOfSource<Source extends Unit<any> | SourceRecord> =
+  Source extends Unit<any>
+  ? UnitValue<Source>
+  : Source extends SourceRecord
+    ? {[K in keyof Source]: UnitValue<Source[K]>}
+    : never
+
+type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
+  Clock extends never[]
+  ? unknown
+  : Clock extends Unit<any>
+    ? UnitValue<Clock>
+    : Clock extends Tuple<Unit<any>>
+      ? UnitValue<ClockValueOf<{
+          [
+            K in keyof Clock as
+              WhichType<UnitValue<Clock[K]>> extends 'any'
+                ? never
+                : K
+          ]: Clock[K]
+        }>>
+      : Clock extends ReadonlyArray<Unit<any>>
+        ? UnitValue<ClockValueOf<Clock>>
+        : never
+
+type SourceRecord = Record<string, Store<any>> | Tuple<Store<any>>
+
+type Units = Unit<any> | Tuple<Unit<any>>
 
 /* guard types */
 

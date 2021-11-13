@@ -24,7 +24,8 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Expected 13 type arguments, but got 3.
+      Parameter 'str' implicitly has an 'any' type.
       "
     `)
   })
@@ -38,7 +39,8 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Expected 13 type arguments, but got 2.
+      Parameter 'str' implicitly has an 'any' type.
       "
     `)
   })
@@ -53,7 +55,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Expected 13 type arguments, but got 1.
       "
     `)
   })
@@ -66,7 +68,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Expected 13 type arguments, but got 1.
       "
     `)
   })
@@ -80,7 +82,10 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'string' is not assignable to type 'Event<number>'.
+      Expected 13 type arguments, but got 3.
+      Parameter 'str' implicitly has an 'any' type.
+      Parameter 'num' implicitly has an 'any' type.
       "
     `)
   })
@@ -93,7 +98,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Expected 13 type arguments, but got 1.
       "
     `)
   })
@@ -106,7 +111,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Expected 13 type arguments, but got 1.
       "
     `)
   })
@@ -379,7 +384,9 @@ describe('sample + guard (should pass)', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Binding element 'isAble' implicitly has an 'any' type.
+      Binding element 'field' implicitly has an 'any' type.
+      Parameter 'data' implicitly has an 'any' type.
       "
     `)
   })
@@ -549,16 +556,15 @@ describe('clock without source', () => {
     const foo = createStore('ok')
     const target = createStore(1)
     sample({
+      //@ts-expect-error
       clock: foo,
       fn: foo => foo,
-      //@ts-expect-error
       target,
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Argument of type '{ clock: Store<string>; fn: (foo: string) => string; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
       "
     `)
   })
@@ -568,17 +574,16 @@ describe('clock without source', () => {
     const target = createStore(2)
 
     sample({
+      //@ts-expect-error
       clock: [foo, bar],
       fn: foo => true,
-      //@ts-expect-error
       target,
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Argument of type '{ clock: Store<number>[]; fn: (foo: number) => boolean; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
       "
     `)
   })
@@ -587,16 +592,15 @@ describe('clock without source', () => {
     const target = createStore(1)
 
     sample({
-      clock: foo,
       //@ts-expect-error
+      clock: foo,
       target,
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Argument of type '{ clock: Store<string>; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
       "
     `)
   })
@@ -608,16 +612,15 @@ describe('clock without source', () => {
     const target = createStore(1)
 
     sample({
-      clock: [foo, bar, baz],
       //@ts-expect-error
+      clock: [foo, bar, baz],
       target,
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Argument of type '{ clock: (Store<boolean> | Store<number> | Store<string>)[]; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
       "
     `)
   })

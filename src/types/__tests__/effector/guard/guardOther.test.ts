@@ -89,6 +89,9 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Binding element 'isAble' implicitly has an 'any' type.
+    Binding element 'field' implicitly has an 'any' type.
+    Parameter 'data' implicitly has an 'any' type.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -149,6 +152,9 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Binding element 'isAble' implicitly has an 'any' type.
+    Binding element 'field' implicitly has an 'any' type.
+    Parameter 'data' implicitly has an 'any' type.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.

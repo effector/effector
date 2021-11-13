@@ -155,108 +155,74 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: Event<string | boolean>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: Event<string | boolean>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: Event<number>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<void> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<any> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<any>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | boolean>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | boolean>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<number> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: Event<number>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<void> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<any> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<any>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | boolean>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | boolean>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<number> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | number>]; }'.
         "
       `)
     })
@@ -403,93 +369,64 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: Event<string>[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: Event<string | boolean>[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<number> | Event<string>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<void>, { fnResult: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<void>, { fnResult: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: Event<number>[]; fn: (src: number, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<void> | Event<number>)[]; fn: (src: number, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<number> | Event<string>)[]; fn: (src: number, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<any> | Event<number>)[]; fn: (src: number, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: number, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<number> | Event<string | number>)[]; fn: (src: number, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: Event<number>[]; fn: (src: string, clk: number) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<void> | Event<number>)[]; fn: (src: string, clk: number) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<number> | Event<string>)[]; fn: (src: string, clk: number) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<any> | Event<number>)[]; fn: (src: string, clk: number) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<any>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: string, clk: number) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<number>; target: (Event<number> | Event<string | number>)[]; fn: (src: string, clk: number) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: Event<number>[]; fn: (src: string, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<void> | Event<number>)[]; fn: (src: string, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<number> | Event<string>)[]; fn: (src: string, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<any> | Event<number>)[]; fn: (src: string, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<any>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: string, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
+        Argument of type '{ source: Event<string>; clock: Event<string>; target: (Event<number> | Event<string | number>)[]; fn: (src: string, clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
         "
       `)
     })
@@ -642,398 +579,220 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<string | boolean>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-                Types of parameters 'clk' and 'clock' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: number, clock: string) => unknown'.
-              Types of parameters 'clk' and 'clock' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-                Types of parameters 'src' and 'source' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(src: number, clk: number) => number' is not assignable to type '(source: string, clock: number) => unknown'.
-              Types of parameters 'src' and 'source' are incompatible.
-                Type 'string' is not assignable to type 'number'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: Event<string>[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: Event<string | boolean>[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<number> | Event<string>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<void>, { fnResult: number; targetType: string | boolean; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<void>, { fnResult: number; targetType: string | boolean; }]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<string | number>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<any>]; }'.
+        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<string | number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<string | number>]; }'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+            Types of parameters 'src' and 'src' are incompatible.
+              Type 'string' is not assignable to type 'number'.
         "
       `)
     })
@@ -1132,7 +891,14 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, Event<[number, string]>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, Event<[number, string]>]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, Event<[number, string]>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, Event<[number, string]>]; }'.
         "
       `)
     })
@@ -1206,132 +972,70 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: Event<AS>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: Event<ABN>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AN> | Event<AS>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AN> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AS> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AB> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AB>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AB>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<AS>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<ABN>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AB>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AB>, { sourceType: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [string]; }, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [string]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number, string]>, { sourceType: [number, string]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number, string]; targetType: [number, number]; }, { sourceType: [number, string]; targetType: [string]; }]; }'.
         "
       `)
     })
@@ -1429,122 +1133,70 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: Event<AS>[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: Event<ABN>[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AN> | Event<AS>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AN> | Event<ABN>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AS> | Event<AB>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AS> | Event<ABN>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AB> | Event<ABN>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; target: (Event<AS> | Event<AB>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<AS>[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<ABN>[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AN> | Event<AS>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AN> | Event<ABN>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AS> | Event<ABN>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AB> | Event<ABN>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<AS>[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<ABN>[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; fn: ({ a, b }: { a: number; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ({ a, b }: { a: number; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; fn: ({ a, b }: { a: number; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<AS>[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<ABN>[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [number, string]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
         "
       `)
     })
@@ -1650,206 +1302,86 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<[string]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: { a: Store<number>; }; target: Event<AS>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: Event<ABN>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: Event<AB>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AN> | Event<AS>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AN> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AN> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AS> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AB> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<AS>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<ABN>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<AB>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AN> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<AN>, { sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AS; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: ABN; }, { sourceType: { a: number; }; targetType: AB; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: AB; }, { sourceType: { a: number; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, string]; }, { sourceType: [number]; targetType: [number, number]; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }, { sourceType: [number]; targetType: [string]; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [number, number]; }, { sourceType: [number]; targetType: [string]; }]; }'.
         "
       `)
     })
@@ -1947,122 +1479,70 @@ const typecheck = '{global}'
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-              Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AS>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Argument of type '{ source: { a: Store<number>; }; target: Event<AS>[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: Event<ABN>[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AN> | Event<AS>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AN> | Event<ABN>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AS> | Event<AB>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AS> | Event<ABN>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AB> | Event<ABN>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; }; target: (Event<AS> | Event<AB>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: Event<AS>[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: Event<ABN>[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<AN> | Event<AS>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<AN> | Event<ABN>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<AS> | Event<ABN>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<AB> | Event<ABN>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: Store<number>[]; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<AS>[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<ABN>[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<AS>[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<ABN>[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AN>, { fnResult: { a: number; b: string; }; targetType: ABN; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: AS; }, Event<AB>]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: { a: number; b: string; }; targetType: ABN; }, Event<AB>]; }'.
+        Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [number]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<AB>, { fnResult: { a: number; b: string; }; targetType: AS; }]; }'.
         "
       `)
     })

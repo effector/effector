@@ -271,28 +271,17 @@ describe('with target', () => {
       clock: [clockA, clockB, clockC],
       //@ts-expect-error
       fn: ({a}: {a: number}, clock: any) => ({a, clock}),
-      //@ts-expect-error
       target,
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: string | void) => unknown'.
-            Types of parameters '__0' and 'source' are incompatible.
-              Type '{ a: string; }' is not assignable to type '{ a: number; }'.
-                Types of property 'a' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: string | void) => unknown'.
-            Types of parameters '__0' and 'source' are incompatible.
-              Type '{ a: string; }' is not assignable to type '{ a: number; }'.
-                Types of property 'a' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-                    Type 'Event<{ a: string; clock: any; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { a: string; }, clk: string | void) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
+        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { a: string; }, clk: string | void) => any'.
+          Types of parameters '__0' and 'src' are incompatible.
+            Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+              Types of property 'a' are incompatible.
+                Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -308,26 +297,16 @@ describe('with target', () => {
       clock: [clockA, clockC],
       //@ts-expect-error
       fn: ({a, b}: any, clock: string) => ({a, b, clock}),
-      //@ts-expect-error
       target,
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(source: { a: string; b: string; }, clock: string | void) => unknown'.
-            Types of parameters 'clock' and 'clock' are incompatible.
-              Type 'string | void' is not assignable to type 'string'.
-                Type 'void' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(source: { a: string; b: string; }, clock: string | void) => unknown'.
-            Types of parameters 'clock' and 'clock' are incompatible.
-              Type 'string | void' is not assignable to type 'string'.
-                Type 'void' is not assignable to type 'string'.
-                  Type 'Event<{ a: string; b: string; clock: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '((src: { a: string; b: string; }, clk: string | void) => any) & (({ a, b }: any, clock: string) => { a: any; b: any; clock: string; })'.
+        Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: string | void) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'string | void' is not assignable to type 'string'.
+              Type 'void' is not assignable to type 'string'.
       "
     `)
   })
@@ -424,13 +403,12 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: { a: string; }, clock: string | void) => unknown'.
-            Types of parameters '__0' and 'source' are incompatible.
-              Type '{ a: string; }' is not assignable to type '{ a: number; }'.
-                Types of property 'a' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
+      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { a: string; }, clk: string | void) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
+        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { a: string; }, clk: string | void) => any'.
+          Types of parameters '__0' and 'src' are incompatible.
+            Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+              Types of property 'a' are incompatible.
+                Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -449,12 +427,11 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(source: { a: string; b: string; }, clock: string | void) => unknown'.
-            Types of parameters 'clock' and 'clock' are incompatible.
-              Type 'string | void' is not assignable to type 'string'.
-                Type 'void' is not assignable to type 'string'.
+      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '((src: { a: string; b: string; }, clk: string | void) => any) & (({ a, b }: any, clock: string) => { a: any; b: any; clock: string; })'.
+        Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: string | void) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'string | void' is not assignable to type 'string'.
+              Type 'void' is not assignable to type 'string'.
       "
     `)
   })

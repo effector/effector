@@ -192,7 +192,7 @@ test('#on triggers[] non-intersecting types (should pass)', () => {
 test('.on(sample()) inline (should pass)', () => {
   const store = createStore('111')
   const event = createEvent<any>()
-
+  const noInline = sample({source: store, clock: event})
   const anotherStore = createStore('123').on(
     sample({source: store, clock: event}),
     (_, str) => str,
