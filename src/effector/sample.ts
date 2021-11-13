@@ -121,11 +121,12 @@ export const createSampling = (
   }
   if (target) assertNodeSet(target, method, 'target')
   else {
-    if (targetMayBeStore && is.store(source) && is.store(clock)) {
-      assert(
-        filterType === 'none',
-        'filter require source and clock not to be a store at the same time',
-      )
+    if (
+      filterType === 'none' &&
+      targetMayBeStore &&
+      is.store(source) &&
+      is.store(clock)
+    ) {
       const initialState = fn
         ? fn(readRef(getStoreState(source)), readRef(getStoreState(clock)))
         : readRef(getStoreState(source))
