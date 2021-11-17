@@ -297,7 +297,7 @@ it('handle fatal errors in mapParams', async () => {
   })
   //@ts-ignore
   await expect(fx(null)).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Cannot read property 'length' of null"`,
+    `"Cannot read properties of null (reading 'length')"`,
   )
 })
 
