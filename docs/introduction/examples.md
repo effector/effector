@@ -54,7 +54,6 @@ To connect custom range input component with state
 - [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
 - [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
 - [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
-- [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld))
 - [Recent users projects](https://github.com/effector/effector/network/dependents)
 
-
+<!-- - [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld)) -->
