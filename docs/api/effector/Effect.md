@@ -542,7 +542,7 @@ $count = effect.inFlight
 - When effect resolves to any state(done or fail) state in `$count` store will be decreased
 
 :::caution Important
-Do not modify `$store` value! It is derived store and should be in predictable state.
+Do not modify `$count` value! It is derived store and should be in predictable state.
 :::
 
 :::note since
