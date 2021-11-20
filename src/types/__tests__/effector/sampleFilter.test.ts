@@ -532,6 +532,99 @@ describe('filter return validation', () => {
   })
 })
 
+describe('any support in arguments inference', () => {
+  function assertNonNever<T>(val: T): [T] extends [never] ? 'never' : 'ok' {
+    return val as any
+  }
+  const anyt = createEvent<any>()
+  test('sample({source, filter}) (should pass)', () => {
+    sample({
+      source: anyt,
+      filter(src) {
+        const x: 'ok' = assertNonNever(src)
+        return false
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ source: Event<any>; filter(src: any): boolean; }' is not assignable to parameter of type '{ source: Event<any>; clock?: undefined; fn: (src: any) => any; target?: undefined; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<any>; clock?: undefined; fn: (src: any) => any; target?: undefined; }'.
+      Parameter 'src' implicitly has an 'any' type.
+      "
+    `)
+  })
+  test('sample({clock, filter}) (should pass)', () => {
+    sample({
+      clock: anyt,
+      filter(clk) {
+        const x: 'ok' = assertNonNever(clk)
+        return false
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: Event<any>; filter(clk: any): boolean; }' is not assignable to parameter of type '{ clock: Event<any>; source?: undefined; fn: (clk: any) => any; target?: undefined; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ clock: Event<any>; source?: undefined; fn: (clk: any) => any; target?: undefined; }'.
+      Parameter 'clk' implicitly has an 'any' type.
+      "
+    `)
+  })
+  test('sample({clock: [clock], filter}) (should pass)', () => {
+    sample({
+      clock: [anyt],
+      filter(clk) {
+        const x: 'ok' = assertNonNever(clk)
+        return false
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: [Event<any>]; filter(clk: any): boolean; }' is not assignable to parameter of type '{ clock: [Event<any>]; source?: undefined; fn: (clk: never) => any; target?: undefined; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ clock: [Event<any>]; source?: undefined; fn: (clk: never) => any; target?: undefined; }'.
+      Parameter 'clk' implicitly has an 'any' type.
+      "
+    `)
+  })
+  test('sample({source, clock, filter}) (should pass)', () => {
+    sample({
+      source: anyt,
+      clock: anyt,
+      filter(src, clk) {
+        const x1: 'ok' = assertNonNever(src)
+        const x2: 'ok' = assertNonNever(clk)
+        return false
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ source: Event<any>; clock: Event<any>; filter(src: any, clk: any): boolean; }' is not assignable to parameter of type '{ source: Event<any>; clock: Event<any>; fn: (src: any, clk: any) => any; target?: undefined; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<any>; clock: Event<any>; fn: (src: any, clk: any) => any; target?: undefined; }'.
+      Parameter 'src' implicitly has an 'any' type.
+      Parameter 'clk' implicitly has an 'any' type.
+      "
+    `)
+  })
+  test('sample({source, clock: [clock], filter}) (should pass)', () => {
+    sample({
+      source: anyt,
+      clock: [anyt],
+      filter(src, clk) {
+        const x1: 'ok' = assertNonNever(src)
+        const x2: 'ok' = assertNonNever(clk)
+        return false
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ source: Event<any>; clock: [Event<any>]; filter(src: any, clk: any): boolean; }' is not assignable to parameter of type '{ source: Event<any>; clock: [Event<any>]; fn: (src: any, clk: never) => any; target?: undefined; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<any>; clock: [Event<any>]; fn: (src: any, clk: never) => any; target?: undefined; }'.
+      Parameter 'src' implicitly has an 'any' type.
+      Parameter 'clk' implicitly has an 'any' type.
+      "
+    `)
+  })
+})
+
 test('sample return type supports union types (should pass)', () => {
   const trigger = createEvent<{a: 1} | {a: 2}>()
   const allow = createStore<boolean>(false)
