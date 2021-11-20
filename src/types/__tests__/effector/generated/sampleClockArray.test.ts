@@ -152,9 +152,7 @@ describe('fn clock assertion', () => {
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
         Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
@@ -168,7 +166,6 @@ describe('fn clock assertion', () => {
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'void' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
         Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
@@ -214,29 +211,17 @@ describe('fn clock assertion', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: unknown) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: unknown) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
-        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
       "
     `)
   })
