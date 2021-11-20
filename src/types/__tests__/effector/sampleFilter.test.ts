@@ -5,7 +5,7 @@ const typecheck = '{global}'
 describe('sample(config)', () => {
   describe('sample({source, filter: store})', () => {
     it('return new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger = createEvent<number>()
       const allow = createStore<boolean>(false)
 
       const result: Event<number> = sample({
@@ -20,7 +20,7 @@ describe('sample(config)', () => {
       `)
     })
     it('support any unit (should pass)', () => {
-      const trigger: Store<number[]> = createStore([1])
+      const trigger = createStore<number[]>([1])
       const allow = createStore<boolean>(false)
 
       const result: Event<number[]> = sample({
@@ -35,11 +35,11 @@ describe('sample(config)', () => {
       `)
     })
     test('store is not boolean (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger = createEvent<number>()
+      const allow = createStore<string>('no')
 
+      //@ts-expect-error
       sample({
-        //@ts-expect-error
         source: trigger,
         filter: allow,
       })
@@ -52,11 +52,11 @@ describe('sample(config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger = createEvent<number>()
+      const allow = createStore<string>('no')
 
+      //@ts-expect-error
       sample({
-        //@ts-expect-error
         source: trigger,
         filter: allow,
       })
@@ -107,7 +107,7 @@ describe('sample(config)', () => {
   })
   describe('sample({source, filter: fn})', () => {
     it('returns new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger = createEvent<number>()
       const result: Event<number> = sample({
         source: trigger,
         filter: n => n > 0,
@@ -122,8 +122,7 @@ describe('sample(config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger = createEvent<number>()
 
       //@ts-expect-error
       const result: Event<string> = sample({
@@ -142,8 +141,8 @@ describe('sample(config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
-        const target: Store<number> = createStore(0)
+        const trigger = createEvent<number>()
+        const target = createStore<number>(0)
 
         sample({
           source: trigger,
@@ -159,8 +158,8 @@ describe('sample(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
-        const target: Store<string> = createStore('no')
+        const trigger = createEvent<number>()
+        const target = createStore<string>('no')
 
         sample({
           source: trigger,
@@ -213,10 +212,134 @@ describe('sample(config)', () => {
       })
     })
   })
+  describe('sample({source, clock, filter: fn})', () => {
+    it('returns new event (should pass)', () => {
+      const clock = createEvent<string>()
+      const source = createEvent<number>()
+      const result: Event<number> = sample({
+        clock,
+        source,
+        filter: (src, clk) => src + clk.length > 0,
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<string>; source: Event<number>; filter: (src: any, clk: any) => boolean; }' is not assignable to parameter of type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: undefined; }'.
+          Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: undefined; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'clk' implicitly has an 'any' type.
+        "
+      `)
+    })
+    test('result type mismatch (should fail)', () => {
+      const clock = createEvent<string>()
+      const source = createEvent<number>()
+
+      //@ts-expect-error
+      const result: Event<string> = sample({
+        clock,
+        source,
+        filter: (src, clk) => src + clk.length > 0,
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Argument of type '{ clock: Event<string>; source: Event<number>; filter: (src: any, clk: any) => boolean; }' is not assignable to parameter of type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: undefined; }'.
+          Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: undefined; }'.
+        Parameter 'src' implicitly has an 'any' type.
+        Parameter 'clk' implicitly has an 'any' type.
+        "
+      `)
+    })
+    describe('support target field', () => {
+      it('allow to pass target field (should pass)', () => {
+        const clock = createEvent<string>()
+        const source = createEvent<number>()
+        const target = createStore<number>(0)
+
+        sample({
+          clock,
+          source,
+          filter: (src, clk) => src + clk.length > 0,
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          Argument of type '{ clock: Event<string>; source: Event<number>; filter: (src: any, clk: any) => boolean; target: Store<number>; }' is not assignable to parameter of type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: Store<number> | undefined; }'.
+            Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: Store<number> | undefined; }'.
+          Parameter 'src' implicitly has an 'any' type.
+          Parameter 'clk' implicitly has an 'any' type.
+          "
+        `)
+      })
+      test('type mismatch (should fail)', () => {
+        const clock = createEvent<string>()
+        const source = createEvent<number>()
+        const target = createStore<string>('no')
+
+        sample({
+          clock,
+          source,
+          filter: (src, clk) => src + clk.length > 0,
+          //@ts-expect-error
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          Argument of type '{ clock: Event<string>; source: Event<number>; filter: (src: any, clk: any) => boolean; target: Store<string>; }' is not assignable to parameter of type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: Store<string> | undefined; }'.
+            Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<number>; clock: Event<string>; fn: (src: number, clk: string) => any; target?: Store<string> | undefined; }'.
+          Parameter 'src' implicitly has an 'any' type.
+          Parameter 'clk' implicitly has an 'any' type.
+          "
+        `)
+      })
+      describe('any to void', () => {
+        test('with store (should pass)', () => {
+          const clock = createEvent<string>()
+          const filter = createStore(true)
+          const source = createEvent<string>()
+          const target = createEvent<void>()
+
+          sample({
+            clock,
+            source,
+            filter,
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('with function (should pass)', () => {
+          const clock = createEvent<string>()
+          const source = createEvent<{pass: boolean}>()
+          const target = createEvent<void>()
+
+          sample({
+            clock,
+            source,
+            filter: ({pass}, clk) => pass && clk.length > 0,
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            Argument of type '{ clock: Event<string>; source: Event<{ pass: boolean; }>; filter: ({ pass }: { pass: any; }, clk: any) => any; target: Event<void>; }' is not assignable to parameter of type '{ source: Event<{ pass: boolean; }>; clock: Event<string>; fn: (src: { pass: boolean; }, clk: string) => any; target?: Event<void> | undefined; }'.
+              Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<{ pass: boolean; }>; clock: Event<string>; fn: (src: { pass: boolean; }, clk: string) => any; target?: Event<void> | undefined; }'.
+            Binding element 'pass' implicitly has an 'any' type.
+            Parameter 'clk' implicitly has an 'any' type.
+            "
+          `)
+        })
+      })
+    })
+  })
   describe('sample({source, filter: Boolean})', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger = createEvent<User | null>()
       const result: Event<User> = sample({
         source: trigger,
         filter: Boolean,
@@ -283,9 +406,9 @@ describe('sample(config)', () => {
         const target: Store<string> = createStore('no')
 
         sample({
+          //@ts-expect-error
           source: trigger,
           filter: Boolean,
-          //@ts-expect-error
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
@@ -316,7 +439,7 @@ describe('sample(config)', () => {
 })
 
 test('sample return type supports union types (should pass)', () => {
-  const trigger: Event<{a: 1} | {a: 2}> = createEvent()
+  const trigger = createEvent<{a: 1} | {a: 2}>()
   const allow = createStore<boolean>(false)
 
   const result: Event<{a: 1} | {a: 2}> = sample({
