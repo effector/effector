@@ -865,6 +865,23 @@ type SampleImpl<
   Target,
   Source,
   Clock,
+  FilterSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => boolean
+      : never
+  ),
+  FilterClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => boolean
+      : never
+  ),
+  FilterBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
+        : never
+      : never
+  ),
   FNSrc extends (
     Source extends Unit<any> | SourceRecord
       ? (src: TypeOfSource<Source>) => any
@@ -884,246 +901,142 @@ type SampleImpl<
   ),
   FilterUnit,
   SomeFN,
-> = 
-  unknown extends FilterUnit
-  ? unknown extends Target
+> =
+  // no target
+  unknown extends Target
+    // no target, no source
+  ? unknown extends Source
+    ? unknown extends Clock
+      ? [{error: 'either target, clock or source should exists'}]
+        // no target, no source, has clock
+      : Clock extends Units | never[]
+        ? unknown extends SomeFN
+          ? SampleFilterDef<'clock/fn/filter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+          : SomeFN extends {filter: any}
+            ? SampleFilterDef<'clock/filter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+            : SomeFN extends {fn: any}
+              ? SampleFilterDef<'clock/fn/nofilter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+              : SampleFilterDef<'clock/nofilter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+        : [{error: 'clock should be units'; got: Clock}]
+      // no target, has source
+    : Source extends Unit<any> | SourceRecord
+        // no target, has source, no clock
+      ? unknown extends Clock
+        ? 
+          unknown extends SomeFN
+          ? SampleFilterDef<'source/fn/filter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+          : SomeFN extends {filter: any}
+            ? SampleFilterDef<'source/filter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+            : SomeFN extends {fn: any}
+              ? SampleFilterDef<'source/fn/nofilter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+              : SampleFilterDef<'source/nofilter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+          // no target, has source, has clock
+        : Clock extends Units | never[]
+          ? unknown extends SomeFN
+            ? SampleFilterDef<'source/clock/fn/filter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+            : SomeFN extends {filter: any}
+              ? SampleFilterDef<'source/clock/filter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+              : SomeFN extends {fn: any}
+                ? SampleFilterDef<'source/clock/fn/nofilter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                : SampleFilterDef<'source/clock/nofilter', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+          : [{error: 'clock should be units'; got: Clock}]
+      : [{error: 'source error'; got: Source}]
+  // has target
+  : Target extends Units | ReadonlyArray<Unit<any>>
+      // has target, no source
     ? unknown extends Source
       ? unknown extends Clock
         ? [{error: 'either target, clock or source should exists'}]
+          // has target, no source, has clock
         : Clock extends Units | never[]
           ? unknown extends SomeFN
-            ? [{clock: Clock; source?: never; fn: FNClk; target?: never} & SomeFN]
+            ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
+              ? SampleFilterDef<'clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+              : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
+                ? SampleFilterDef<'clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                : [{
+                  error: 'fn result should extend target type'
+                  targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
+                }]
             : SomeFN extends {fn: any}
-              ? [{clock: Clock; source?: never; fn: FNClk; target?: never} & SomeFN]
-              : [{clock: Clock; source?: never; target?: never} & SomeFN]
-          : [{error: 'clock should be units'; got: Clock}]
-      : Source extends Unit<any> | SourceRecord
-        ? unknown extends Clock
-          ? unknown extends SomeFN
-            ? [{source: Source; clock?: never; fn: FNSrc; target?: never} & SomeFN]
-            : SomeFN extends {fn: any}
-              ? [{source: Source; clock?: never; fn: FNSrc; target?: never} & SomeFN]
-              : [{source: Source; clock?: never; target?: never} & SomeFN]
-          : Clock extends Units | never[]
-            ? unknown extends SomeFN
-              ? [{source: Source; clock: Clock; fn: FNBoth; target?: never} & SomeFN]
-              : SomeFN extends {fn: any}
-                ? [{source: Source; clock: Clock; fn: FNBoth; target?: never} & SomeFN]
-                : [{source: Source; clock: Clock; target?: never} & SomeFN]
-            : [{error: 'clock should be units'; got: Clock}]
-        : [{error: 'source error'; got: Source}]
-    : Target extends Units | ReadonlyArray<Unit<any>>
-      ? unknown extends Source
-        ? unknown extends Clock
-          ? [{error: 'either target, clock or source should exists'}]
-          : Clock extends Units | never[]
-            ? unknown extends SomeFN
               ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
-                ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
+                ? SampleFilterDef<'clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                 : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
-                  ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
+                  ? SampleFilterDef<'clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                   : [{
                     error: 'fn result should extend target type'
                     targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
                   }]
-              : SomeFN extends {fn: any}
-                ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
-                  ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
-                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
-                    ? [{clock: Clock; source?: never; fn: FNClk; target?: Target} & SomeFN]
-                    : [{
-                      error: 'fn result should extend target type'
-                      targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
-                    }]
-                : [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
-                  ? [{clock: Clock; source?: never; target?: Target} & SomeFN]
-                  : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
-                    ? [{clock: Clock; source?: never; target?: Target} & SomeFN]
-                    : [{
-                      error: 'clock should extend target type'
-                      targets: Show<TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>>
-                    }]
-            : [{error: 'clock should be units'; got: Clock}]
-        : unknown extends Clock
-          ? Source extends Unit<any> | SourceRecord
-            ? unknown extends SomeFN
+              : [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
+                ? SampleFilterDef<'clock/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
+                  ? SampleFilterDef<'clock/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                  : [{
+                    error: 'clock should extend target type'
+                    targets: Show<TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>>
+                  }]
+          : [{error: 'clock should be units'; got: Clock}]
+        // has target, has source
+      : Source extends Unit<any> | SourceRecord
+        // has target, has source, no clock
+        ? unknown extends Clock
+          ? unknown extends SomeFN
+            ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
+              ? SampleFilterDef<'source/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+              : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
+                ? SampleFilterDef<'source/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                : [{
+                  error: 'fn result should extend target type'
+                  targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
+                }]
+            : SomeFN extends {fn: any}
               ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
-                ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
+                ? SampleFilterDef<'source/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                 : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
-                  ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
+                  ? SampleFilterDef<'source/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                   : [{
                     error: 'fn result should extend target type'
                     targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
                   }]
+              : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
+                ? SampleFilterDef<'source/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
+                  ? SampleFilterDef<'source/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                  : [{
+                    error: 'source should extend target type'
+                    targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
+                  }]
+            // has target, has source, has clock
+          : Clock extends Units | never[]
+            ? unknown extends SomeFN
+              ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
+                ? SampleFilterDef<'source/clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
+                  ? SampleFilterDef<'source/clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                  : [{
+                    error: 'fn result should extend target type'
+                    targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
+                  }]
               : SomeFN extends {fn: any}
-                ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
-                  ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
-                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
-                    ? [{source: Source; clock?: never; fn: FNSrc; target?: Target} & SomeFN]
-                    : [{
-                      error: 'fn result should extend target type'
-                      targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
-                    }]
-                : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
-                  ? [{source: Source; clock?: never; target?: Target} & SomeFN]
-                  : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
-                    ? [{source: Source; clock?: never; target?: Target} & SomeFN]
-                    : [{
-                      error: 'source should extend target type'
-                      targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
-                    }]
-            : [{error: 'source error'; got: Source}]
-          : Source extends Unit<any> | SourceRecord
-            ? Clock extends Units | never[]
-              ? unknown extends SomeFN
                 ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
-                  ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
+                  ? SampleFilterDef<'source/clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                   : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
-                    ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
+                    ? SampleFilterDef<'source/clock/fn/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                     : [{
                       error: 'fn result should extend target type'
                       targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
                     }]
-                : SomeFN extends {fn: any}
-                  ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
-                    ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
-                      ? [{source: Source; clock: Clock; fn: FNBoth; target?: Target} & SomeFN]
-                      : [{
-                        error: 'fn result should extend target type'
-                        targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
-                      }]
-                  : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
-                    ? [{source: Source; clock: Clock; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
-                      ? [{source: Source; clock: Clock; target?: Target} & SomeFN]
-                      : [{
-                        error: 'source should extend target type'
-                        targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
-                      }]
-              : [{error: 'clock should be units'; got: Clock}]
-            :[ {error: 'source error'; got: Source}]
-      : [{error: 'target error'; got: Target}]
-  : FilterUnit extends Unit<boolean>
-    ? unknown extends Target
-      ? unknown extends Source
-        ? unknown extends Clock
-          ? [{error: 'either target, clock or source should exists'}]
-          : Clock extends Units | never[]
-            ? unknown extends SomeFN
-              ? [{clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: never} & SomeFN]
-              : SomeFN extends {fn: any}
-                ? [{clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: never} & SomeFN]
-                : [{clock: Clock; source?: never; filter: FilterUnit; target?: never} & SomeFN]
-            : [{error: 'clock should be units'; got: Clock}]
-        : Source extends Unit<any> | SourceRecord
-          ? unknown extends Clock
-            ? unknown extends SomeFN
-              ? [{source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: never} & SomeFN]
-              : SomeFN extends {fn: any}
-                ? [{source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: never} & SomeFN]
-                : [{source: Source; clock?: never; filter: FilterUnit; target?: never} & SomeFN]
-            : Clock extends Units | never[]
-              ? unknown extends SomeFN
-                ? [{source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: never} & SomeFN]
-                : SomeFN extends {fn: any}
-                  ? [{source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: never} & SomeFN]
-                  : [{source: Source; clock: Clock; filter: FilterUnit; target?: never} & SomeFN]
-              : [{error: 'clock should be units'; got: Clock}]
-          : [{error: 'source error'; got: Source}]
-      : Target extends Units | ReadonlyArray<Unit<any>>
-        ? unknown extends Source
-          ? unknown extends Clock
-            ? [{error: 'either target, clock or source should exists'}]
-            : Clock extends Units | never[]
-              ? unknown extends SomeFN
-                ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
-                  ? [{clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: Target} & SomeFN]
-                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
-                    ? [{clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: Target} & SomeFN]
+                : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
+                  ? SampleFilterDef<'source/clock/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
+                  : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
+                    ? SampleFilterDef<'source/clock/target', Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
                     : [{
-                      error: 'fn result should extend target type'
-                      targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
+                      error: 'source should extend target type'
+                      targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
                     }]
-                : SomeFN extends {fn: any}
-                  ? [TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>] extends [Target]
-                    ? [{clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<ReturnType<FNClk>, Target, 'fnRet'>]
-                      ? [{clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: Target} & SomeFN]
-                      : [{
-                        error: 'fn result should extend target type'
-                        targets: Show<TypeOfTarget<ReturnType<FNClk>, Target, 'fnRet'>>
-                      }]
-                  : [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
-                    ? [{clock: Clock; source?: never; filter: FilterUnit; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
-                      ? [{clock: Clock; source?: never; filter: FilterUnit; target?: Target} & SomeFN]
-                      : [{
-                        error: 'clock should extend target type'
-                        targets: Show<TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>>
-                      }]
               : [{error: 'clock should be units'; got: Clock}]
-          : unknown extends Clock
-            ? Source extends Unit<any> | SourceRecord
-              ? unknown extends SomeFN
-                ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
-                  ? [{source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: Target} & SomeFN]
-                  : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
-                    ? [{source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: Target} & SomeFN]
-                    : [{
-                      error: 'fn result should extend target type'
-                      targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
-                    }]
-                : SomeFN extends {fn: any}
-                  ? [TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>] extends [Target]
-                    ? [{source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<ReturnType<FNSrc>, Target, 'fnRet'>]
-                      ? [{source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: Target} & SomeFN]
-                      : [{
-                        error: 'fn result should extend target type'
-                        targets: Show<TypeOfTarget<ReturnType<FNSrc>, Target, 'fnRet'>>
-                      }]
-                  : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
-                    ? [{source: Source; clock?: never; filter: FilterUnit; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
-                      ? [{source: Source; clock?: never; filter: FilterUnit; target?: Target} & SomeFN]
-                      : [{
-                        error: 'source should extend target type'
-                        targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
-                      }]
-              : [{error: 'source error'; got: Source}]
-            : Source extends Unit<any> | SourceRecord
-              ? Clock extends Units | never[]
-                ? unknown extends SomeFN
-                  ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
-                    ? [{source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: Target} & SomeFN]
-                    : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
-                      ? [{source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: Target} & SomeFN]
-                      : [{
-                        error: 'fn result should extend target type'
-                        targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
-                      }]
-                  : SomeFN extends {fn: any}
-                    ? [TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>] extends [Target]
-                      ? [{source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: Target} & SomeFN]
-                      : [Target] extends [TypeOfTargetSoft<ReturnType<FNBoth>, Target, 'fnRet'>]
-                        ? [{source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: Target} & SomeFN]
-                        : [{
-                          error: 'fn result should extend target type'
-                          targets: Show<TypeOfTarget<ReturnType<FNBoth>, Target, 'fnRet'>>
-                        }]
-                    : [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
-                      ? [{source: Source; clock: Clock; filter: FilterUnit; target?: Target} & SomeFN]
-                      : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
-                        ? [{source: Source; clock: Clock; filter: FilterUnit; target?: Target} & SomeFN]
-                        : [{
-                          error: 'source should extend target type'
-                          targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
-                        }]
-                : [{error: 'clock should be units'; got: Clock}]
-              :[ {error: 'source error'; got: Source}]
-        : [{error: 'target error'; got: Target}]
-    : [{error: 'filter should be a boolean unit'; got: FilterUnit}]
+        : [{error: 'source error'; got: Source}]
+    : [{error: 'target error'; got: Target}]
 type SampleRet<
   Target,
   Source,
@@ -1230,6 +1143,23 @@ export function sample<
   Target,
   Source,
   Clock,
+  FilterSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => boolean
+      : never
+  ),
+  FilterClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => boolean
+      : never
+  ),
+  FilterBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
+        : never
+      : never
+  ),
   FNSrc extends (
     Source extends Unit<any> | SourceRecord
       ? (src: TypeOfSource<Source>) => any
@@ -1277,8 +1207,8 @@ export function sample<
         ? [SourceNoConf, FNSrcNoConf] & Args
         : Args extends [Unit<any>]
           ? [SourceNoConf] & Args
-          : SampleImpl<Target, Source, Clock, FNSrc, FNClk, FNBoth, FilterUnit, SomeFN>
-    : SampleImpl<Target, Source, Clock, FNSrc, FNClk, FNBoth, FilterUnit, SomeFN>
+          : SampleImpl<Target, Source, Clock, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, FilterUnit, SomeFN>
+    : SampleImpl<Target, Source, Clock, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, FilterUnit, SomeFN>
   
 ): SourceNoConf extends Unit<any> | SourceRecord
   ? ClockNoConf extends Units | never[]
@@ -1305,6 +1235,335 @@ export function sample<
           : EventAsReturnType<TypeOfSource<SourceNoConf>>
         : SampleRet<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN, InferTarget, unknown extends FilterUnit ? 'no filter' : 'filter'>
   : SampleRet<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN, InferTarget, unknown extends FilterUnit ? 'no filter' : 'filter'>
+type FilterMode<
+  Mode extends (
+    | 'source/clock/fn/target'
+    | 'source/clock/fn/filter'
+    | 'source/clock/fn/nofilter'
+    | 'source/clock/target'
+    | 'source/clock/filter'
+    | 'source/clock/nofilter'
+
+
+    | 'source/fn/target'
+    | 'source/fn/filter'
+    | 'source/fn/nofilter'
+    | 'source/target'
+    | 'source/filter'
+    | 'source/nofilter'
+
+
+    | 'clock/fn/target'
+    | 'clock/fn/filter'
+    | 'clock/fn/nofilter'
+    | 'clock/target'
+    | 'clock/filter'
+    | 'clock/nofilter'
+  )
+> = Mode extends (
+    | 'source/clock/fn/target'
+    | 'source/clock/fn/filter'
+    | 'source/clock/fn/nofilter'
+    | 'source/clock/target'
+    | 'source/clock/filter'
+    | 'source/clock/nofilter'
+  )
+  ? 'both'
+  : Mode extends (
+    | 'source/fn/target'
+    | 'source/fn/filter'
+    | 'source/fn/nofilter'
+    | 'source/target'
+    | 'source/filter'
+    | 'source/nofilter'
+  )
+  ? 'src'
+  : 'clk'
+type FilterModeKind<
+  Mode extends (
+    | 'source/clock/fn/target'
+    | 'source/clock/fn/filter'
+    | 'source/clock/fn/nofilter'
+    | 'source/clock/target'
+    | 'source/clock/filter'
+    | 'source/clock/nofilter'
+
+
+    | 'source/fn/target'
+    | 'source/fn/filter'
+    | 'source/fn/nofilter'
+    | 'source/target'
+    | 'source/filter'
+    | 'source/nofilter'
+
+
+    | 'clock/fn/target'
+    | 'clock/fn/filter'
+    | 'clock/fn/nofilter'
+    | 'clock/target'
+    | 'clock/filter'
+    | 'clock/nofilter'
+  )
+> = Mode extends (
+      | 'source/clock/fn/filter'
+      | 'source/clock/filter'
+      | 'source/fn/filter'
+      | 'source/filter'
+      | 'clock/fn/filter'
+      | 'clock/filter'
+    )
+  ? 'filter'
+  : Mode extends (
+      | 'source/clock/fn/nofilter'
+      | 'source/clock/nofilter'
+      | 'source/fn/nofilter'
+      | 'source/nofilter'
+      | 'clock/fn/nofilter'
+      | 'clock/nofilter'
+    )
+  ? 'nofilter'
+  : '??'
+type SampleFilterDef<
+  Mode extends (
+    | 'source/clock/fn/target'
+    | 'source/clock/fn/filter'
+    | 'source/clock/fn/nofilter'
+    | 'source/clock/target'
+    | 'source/clock/filter'
+    | 'source/clock/nofilter'
+
+    | 'source/fn/target'
+    | 'source/fn/filter'
+    | 'source/fn/nofilter'
+    | 'source/target'
+    | 'source/filter'
+    | 'source/nofilter'
+
+    | 'clock/fn/target'
+    | 'clock/fn/filter'
+    | 'clock/fn/nofilter'
+    | 'clock/target'
+    | 'clock/filter'
+    | 'clock/nofilter'
+  ),
+  Target,
+  Source,
+  Clock,
+  FilterUnit,
+  FilterSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => boolean
+      : never
+  ),
+  FilterClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => boolean
+      : never
+  ),
+  FilterBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
+        : never
+      : never
+  ),
+  FNSrc extends (
+    Source extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<Source>) => any
+      : never
+  ),
+  FNClk extends (
+    Clock extends Units | never[]
+      ? (clk: TypeOfClock<Clock>) => any
+      : never
+  ),
+  FNBoth extends (
+    Source extends Unit<any> | SourceRecord
+      ? Clock extends Units | never[]
+        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+        : never
+      : never
+  ),
+  SomeFN
+> = 
+  FilterModeKind<Mode> extends 'filter'
+  ?
+    FilterUnit extends Unit<any>
+      ? boolean extends UnitValue<FilterUnit>
+        ? [(
+            Mode extends 'source/clock/fn/filter'
+            ? {source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target?: never}
+            : Mode extends 'source/clock/filter'
+            ? {source: Source; clock: Clock; filter: FilterUnit; target?: never}
+            : Mode extends 'source/fn/filter'
+            ? {source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: never}
+            : Mode extends 'source/filter'
+            ? {source: Source; clock?: never; filter: FilterUnit; target?: never}
+            : Mode extends 'clock/fn/filter'
+            ? {clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: never}
+            : Mode extends 'clock/filter'
+            ? {clock: Clock; source?: never; filter: FilterUnit; target?: never}
+            : never
+          ) & SomeFN]
+        : [{error: 'filter unit should has boolean type'; got: UnitValue<FilterUnit>}]
+        : (
+          FilterMode<Mode> extends 'both'
+          ? FilterBoth
+          : FilterMode<Mode> extends 'src'
+          ? FilterSrc
+          : FilterMode<Mode> extends 'clk'
+          ? FilterClk
+          : never
+        ) extends infer FilterFun
+          ?
+            FilterFun extends (
+              FilterMode<Mode> extends 'both'
+              ? (
+                Source extends Unit<any> | SourceRecord
+                  ? Clock extends Units | never[]
+                    ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+                    : never
+                  : never
+              )
+              : FilterMode<Mode> extends 'src'
+              ? (
+                Source extends Unit<any> | SourceRecord
+                  ? (src: TypeOfSource<Source>) => any
+                  : never
+              )
+              : (
+                Clock extends Units | never[]
+                  ? (clk: TypeOfClock<Clock>) => any
+                  : never
+              )
+            )
+            ? ReturnType<FilterFun> extends boolean
+              ? [(
+                  Mode extends 'source/clock/fn/filter'
+                  ? {source: Source; clock: Clock; filter?: FilterFun; fn?: FNBoth; target?: never}
+                  : Mode extends 'source/clock/filter'
+                  ? {source: Source; clock: Clock; filter: FilterFun; target?: never}
+                  : Mode extends 'source/fn/filter'
+                  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNSrc; target?: never}
+                  : Mode extends 'source/filter'
+                  ? {source: Source; clock?: never; filter: FilterFun; target?: never}
+                  : Mode extends 'clock/fn/filter'
+                  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNClk; target?: never}
+                  : Mode extends 'clock/filter'
+                  ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
+                  : never
+                ) & SomeFN]
+              : [{error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
+            : [{error: 'filter should be function or unit'; got: FilterFun}]
+          : never
+
+  : FilterModeKind<Mode> extends 'nofilter'
+  ?
+    [(
+      Mode extends 'source/clock/fn/nofilter'
+      ? {source: Source; clock: Clock; fn: FNBoth; target?: never}
+      : Mode extends 'source/clock/nofilter'
+      ? {source: Source; clock: Clock; target?: never}
+      : Mode extends 'source/fn/nofilter'
+      ? {source: Source; clock?: never; fn: FNSrc; target?: never}
+      : Mode extends 'source/nofilter'
+      ? {source: Source; clock?: never; target?: never}
+      : Mode extends 'clock/fn/nofilter'
+      ? {clock: Clock; source?: never; fn: FNClk; target?: never}
+      : Mode extends 'clock/nofilter'
+      ? {clock: Clock; source?: never; target?: never}
+      : never
+    ) & SomeFN]
+  :
+    unknown extends FilterUnit
+    ? [(
+        Mode extends 'source/clock/fn/target'
+        ? {source: Source; clock: Clock; fn: FNBoth; target: Target}
+        : Mode extends 'source/clock/target'
+        ? {source: Source; clock: Clock; target: Target}
+        : Mode extends 'source/fn/target'
+        ? {source: Source; clock?: never; fn: FNSrc; target: Target}
+        : Mode extends 'source/target'
+        ? {source: Source; clock?: never; target: Target}
+        : Mode extends 'clock/fn/target'
+        ? {clock: Clock; source?: never; fn: FNClk; target: Target}
+        : Mode extends 'clock/target'
+        ? {clock: Clock; source?: never; target: Target}
+        : never
+      ) & SomeFN]
+    : FilterUnit extends Unit<any>
+      ? boolean extends UnitValue<FilterUnit>
+        ? [(
+            Mode extends 'source/clock/fn/target'
+            ? {source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target: Target}
+            : Mode extends 'source/clock/target'
+            ? {source: Source; clock: Clock; filter: FilterUnit; target: Target}
+            : Mode extends 'source/fn/target'
+            ? {source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target: Target}
+            : Mode extends 'source/target'
+            ? {source: Source; clock?: never; filter: FilterUnit; target: Target}
+            : Mode extends 'clock/fn/target'
+            ? {clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target: Target}
+            : Mode extends 'clock/target'
+            ? {clock: Clock; source?: never; filter: FilterUnit; target: Target}
+            : never
+          ) & SomeFN]
+        : [{error: 'filter unit should has boolean type'; got: UnitValue<FilterUnit>}]
+      : FilterUnit extends BooleanConstructor
+        ? [(
+            Mode extends 'source/clock/fn/target'
+            ? {source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target: Target}
+            : Mode extends 'source/clock/target'
+            ? {source: Source; clock: Clock; filter: FilterUnit; target: Target}
+            : Mode extends 'source/fn/target'
+            ? {source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target: Target}
+            : Mode extends 'source/target'
+            ? {source: Source; clock?: never; filter: FilterUnit; target: Target}
+            : Mode extends 'clock/fn/target'
+            ? {clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target: Target}
+            : Mode extends 'clock/target'
+            ? {clock: Clock; source?: never; filter: FilterUnit; target: Target}
+            : never
+          ) & SomeFN]
+        : FilterUnit extends (
+            FilterMode<Mode> extends 'both'
+            ? (
+              Source extends Unit<any> | SourceRecord
+                ? Clock extends Units | never[]
+                  ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+                  : never
+                : never
+            )
+            : FilterMode<Mode> extends 'src'
+            ? (
+              Source extends Unit<any> | SourceRecord
+                ? (src: TypeOfSource<Source>) => any
+                : never
+            )
+            : (
+              Clock extends Units | never[]
+                ? (clk: TypeOfClock<Clock>) => any
+                : never
+            )
+          )
+          ? ReturnType<FilterUnit> extends boolean
+            ? [(
+                Mode extends 'source/clock/fn/target'
+                ? {source: Source; clock: Clock; filter: FilterUnit; fn: FNBoth; target: Target}
+                : Mode extends 'source/clock/target'
+                ? {source: Source; clock: Clock; filter: FilterUnit; target: Target}
+                : Mode extends 'source/fn/target'
+                ? {source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target: Target}
+                : Mode extends 'source/target'
+                ? {source: Source; clock?: never; filter: FilterUnit; target: Target}
+                : Mode extends 'clock/fn/target'
+                ? {clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target: Target}
+                : Mode extends 'clock/target'
+                ? {clock: Clock; source?: never; filter: FilterUnit; target: Target}
+                : never
+              ) & SomeFN]
+            : [{error: 'filter function should return boolean'; got: ReturnType<FilterUnit>}]
+          : [{error: 'filter should be unit or function'; got: FilterUnit}]
 
 type TypeOfTargetSoft<SourceType, Target, Mode extends 'fnRet' | 'src' | 'clk'> =
   Target extends Unit<any>
@@ -1381,7 +1640,16 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
   : Clock extends Unit<any>
     ? UnitValue<Clock>
     : Clock extends Tuple<Unit<any>>
-      ? UnitValue<ClockValueOf<{
+      ? WhichType<UnitValue<ClockValueOf<{
+          [
+            K in keyof Clock as
+              WhichType<UnitValue<Clock[K]>> extends 'any'
+                ? never
+                : K
+          ]: Clock[K]
+        }>>> extends 'never'
+        ? any
+        : UnitValue<ClockValueOf<{
           [
             K in keyof Clock as
               WhichType<UnitValue<Clock[K]>> extends 'any'

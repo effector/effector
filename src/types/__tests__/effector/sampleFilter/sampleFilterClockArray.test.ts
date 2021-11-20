@@ -38,26 +38,7 @@ describe('clock only', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ filter: () => boolean; clock: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<any>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<any>[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<string>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<any>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<string>[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: Event<any>[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Argument of type '{ filter: () => boolean; clock: (Event<any> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+      no errors
       "
     `)
   })
@@ -72,14 +53,7 @@ test('noClock (should pass)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ filter: () => boolean; source: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+    no errors
     "
   `)
 })
@@ -125,78 +99,7 @@ test(' (should pass)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: Event<void>[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: Event<void>[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: Event<void>[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: Event<string>[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: Store<string>; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: Event<void>[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: Event<string>[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-    Argument of type '{ filter: () => boolean; source: { a: Store<string>; b: Store<number>; }; clock: (Event<any> | Event<void> | Event<string>)[]; target: Event<AB>; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+    no errors
     "
   `)
 })

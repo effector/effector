@@ -24,7 +24,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 3.
+      Expected 17 type arguments, but got 3.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -39,7 +39,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 2.
+      Expected 17 type arguments, but got 2.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -55,7 +55,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -68,7 +68,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -83,7 +83,7 @@ describe('explicit generics', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'string' is not assignable to type 'Event<number>'.
-      Expected 14 type arguments, but got 3.
+      Expected 17 type arguments, but got 3.
       Parameter 'str' implicitly has an 'any' type.
       Parameter 'num' implicitly has an 'any' type.
       "
@@ -98,7 +98,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -111,7 +111,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
