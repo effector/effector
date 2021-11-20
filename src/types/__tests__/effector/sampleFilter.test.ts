@@ -438,6 +438,100 @@ describe('sample(config)', () => {
   })
 })
 
+describe('filter return validation', () => {
+  const anyt = createEvent<any>()
+  describe('wrong return', () => {
+    test('sample({source, filter}) (should fail)', () => {
+      //@ts-expect-error
+      sample({source: anyt, filter: () => 0})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: Event<any>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => number; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => number; }'.
+        "
+      `)
+    })
+    test('sample({clock, filter}) (should fail)', () => {
+      //@ts-expect-error
+      sample({clock: anyt, filter: () => 0})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<any>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => number; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => number; }'.
+        "
+      `)
+    })
+    test('sample({source, clock, filter}) (should fail)', () => {
+      //@ts-expect-error
+      sample({source: anyt, clock: anyt, filter: () => 0})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => number; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => number; }'.
+        "
+      `)
+    })
+  })
+  describe('boolean return', () => {
+    test('sample({source, filter}) (should pass)', () => {
+      sample({source: anyt, filter: () => true as boolean})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: Event<any>; filter: () => boolean; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+        "
+      `)
+    })
+    test('sample({clock, filter}) (should pass)', () => {
+      sample({clock: anyt, filter: () => true as boolean})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<any>; filter: () => boolean; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+        "
+      `)
+    })
+    test('sample({source, clock, filter}) (should pass)', () => {
+      sample({source: anyt, clock: anyt, filter: () => true as boolean})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: Event<any>; clock: Event<any>; filter: () => boolean; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => boolean; }'.
+        "
+      `)
+    })
+  })
+  describe('boolean subtype return', () => {
+    test('sample({source, filter}) (should pass)', () => {
+      sample({source: anyt, filter: () => true as true})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: Event<any>; filter: () => true; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => true; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => true; }'.
+        "
+      `)
+    })
+    test('sample({clock, filter}) (should pass)', () => {
+      sample({clock: anyt, filter: () => true as true})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<any>; filter: () => true; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => true; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => true; }'.
+        "
+      `)
+    })
+    test('sample({source, clock, filter}) (should pass)', () => {
+      sample({source: anyt, clock: anyt, filter: () => true as true})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: Event<any>; clock: Event<any>; filter: () => true; }' is not assignable to parameter of type '{ error: \\"filter should be a boolean unit\\"; got: () => true; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter should be a boolean unit\\"; got: () => true; }'.
+        "
+      `)
+    })
+  })
+})
+
 test('sample return type supports union types (should pass)', () => {
   const trigger = createEvent<{a: 1} | {a: 2}>()
   const allow = createStore<boolean>(false)
