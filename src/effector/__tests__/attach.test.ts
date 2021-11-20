@@ -287,18 +287,14 @@ it('if no source nor mapParams provided just create new derived effect', async (
 })
 
 it('handle fatal errors in mapParams', async () => {
-  const fn = jest.fn()
-  const effect = createEffect((n: number) => {
-    fn(n)
-  })
+  const effect = createEffect(() => {})
   const fx = attach({
     effect,
-    mapParams: (params: string) => params.length,
+    mapParams() {
+      throw Error('fatal error')
+    },
   })
-  //@ts-ignore
-  await expect(fx(null)).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Cannot read properties of null (reading 'length')"`,
-  )
+  await expect(fx()).rejects.toThrowErrorMatchingInlineSnapshot(`"fatal error"`)
 })
 
 test('async effect', async () => {
