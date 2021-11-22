@@ -115,6 +115,10 @@ module.exports = {
               to: 'https://github.com/effector/effector',
             },
             {
+              label: 'Reddit',
+              to: 'https://www.reddit.com/r/effectorjs/',
+            },
+            {
               label: 'Youtube',
               href: 'https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q',
             },
