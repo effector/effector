@@ -69,25 +69,21 @@ test('custom typeguards: target array support (1)', () => {
     target: [
       targetVoid,
       targetA,
-      //@ts-expect-error
       targetB,
       targetC,
-      //@ts-expect-error
       targetD,
       targetE,
-      //@ts-expect-error
       targetF,
       targetAny,
     ],
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: { field: any; data: any; } | null) => e is { field: string | number; data: number; }; target: (Event<any> | Event<void> | ... 5 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: { field: any; data: any; } | null; targetType: { field: string | number; data: number; }; }, { sourceType: { ...; } | null; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: { field: any; data: any; } | null; targetType: { field: string | number; data: number; }; }, { sourceType: { ...; } | null; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
     Binding element 'isAble' implicitly has an 'any' type.
     Binding element 'field' implicitly has an 'any' type.
     Parameter 'data' implicitly has an 'any' type.
-    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: any) => e is { field: string | number; data: number; }; target: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, ... 5 more ..., Event<...>]; }' is not assignable to parameter of type '{ source: Event<{ field: any; data: any; } | null>; clock?: undefined; fn: (src: { field: any; data: any; } | null) => any; target: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, ... 5 more ..., Event<...>]; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<{ field: any; data: any; } | null>; clock?: undefined; fn: (src: { field: any; data: any; } | null) => any; target: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, ... 5 more ..., Event<...>]; }'.
-    Parameter 'e' implicitly has an 'any' type.
     "
   `)
 })
@@ -120,25 +116,21 @@ test('custom typeguards: target array support (2)', () => {
     target: [
       targetVoid,
       targetA,
-      //@ts-expect-error
       targetB,
       targetC,
-      //@ts-expect-error
       targetD,
       targetE,
-      //@ts-expect-error
       targetF,
       targetAny,
     ],
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: { field: any; data: any; } | null) => e is { field: number; data: number; }; target: (Event<any> | Event<void> | Effect<...> | ... 4 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: { field: any; data: any; } | null; targetType: { field: string | number; data: number; }; }, { sourceType: { ...; } | null; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: { field: any; data: any; } | null; targetType: { field: string | number; data: number; }; }, { sourceType: { ...; } | null; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
     Binding element 'isAble' implicitly has an 'any' type.
     Binding element 'field' implicitly has an 'any' type.
     Parameter 'data' implicitly has an 'any' type.
-    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: any) => e is { field: number; data: number; }; target: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, ... 5 more ..., Event<...>]; }' is not assignable to parameter of type '{ source: Event<{ field: any; data: any; } | null>; clock?: undefined; fn: (src: { field: any; data: any; } | null) => any; target: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, ... 5 more ..., Event<...>]; }'.
-      Object literal may only specify known properties, and 'filter' does not exist in type '{ source: Event<{ field: any; data: any; } | null>; clock?: undefined; fn: (src: { field: any; data: any; } | null) => any; target: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, ... 5 more ..., Event<...>]; }'.
-    Parameter 'e' implicitly has an 'any' type.
     "
   `)
 })
