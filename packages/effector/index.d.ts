@@ -865,40 +865,12 @@ type SampleImpl<
   Target,
   Source,
   Clock,
-  FilterSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => boolean
-      : never
-  ),
-  FilterClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => boolean
-      : never
-  ),
-  FilterBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
-        : never
-      : never
-  ),
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FilterSrc extends SourceFilter<Source>,
+  FilterClk extends ClockFilter<Clock>,
+  FilterBoth extends SourceClockFilter<Source, Clock>,
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
   FilterUnit,
   SomeFN,
 > =
@@ -1014,23 +986,9 @@ type SampleRet<
   Target,
   Source,
   Clock,
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
   SomeFN,
   ForceTargetInference,
   FilterMode extends 'filter' | 'no filter'
@@ -1116,40 +1074,12 @@ export function sample<
   Target,
   Source,
   Clock,
-  FilterSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => boolean
-      : never
-  ),
-  FilterClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => boolean
-      : never
-  ),
-  FilterBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
-        : never
-      : never
-  ),
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FilterSrc extends SourceFilter<Source>,
+  FilterClk extends ClockFilter<Clock>,
+  FilterBoth extends SourceClockFilter<Source, Clock>,
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
   SomeFN,
   SourceNoConf,
   ClockNoConf,
@@ -1339,40 +1269,12 @@ type SampleFilterTargetDef<
   Source,
   Clock,
   FilterUnit,
-  FilterSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => boolean
-      : never
-  ),
-  FilterClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => boolean
-      : never
-  ),
-  FilterBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
-        : never
-      : never
-  ),
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FilterSrc extends SourceFilter<Source>,
+  FilterClk extends ClockFilter<Clock>,
+  FilterBoth extends SourceClockFilter<Source, Clock>,
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
   SomeFN
 > = FilterModeKind<Mode> extends 'filter'
   ? FilterUnit extends Unit<any>
@@ -1405,24 +1307,10 @@ type SampleFilterTargetDef<
       ?
         FilterFun extends (
           FilterMode<Mode> extends 'both'
-          ? (
-            Source extends Unit<any> | SourceRecord
-              ? Clock extends Units | never[]
-                ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-                : never
-              : never
-          )
+          ? SourceClockFunction<Source, Clock>
           : FilterMode<Mode> extends 'src'
-          ? (
-            Source extends Unit<any> | SourceRecord
-              ? (src: TypeOfSource<Source>) => any
-              : never
-          )
-          : (
-            Clock extends Units | never[]
-              ? (clk: TypeOfClock<Clock>) => any
-              : never
-          )
+          ? SourceFunction<Source>
+          : ClockFunction<Clock>
         )
         ? ReturnType<FilterFun> extends boolean
           ? [(
@@ -1481,40 +1369,12 @@ type SampleFilterDef<
   Source,
   Clock,
   FilterUnit,
-  FilterSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => boolean
-      : never
-  ),
-  FilterClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => boolean
-      : never
-  ),
-  FilterBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
-        : never
-      : never
-  ),
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FilterSrc extends SourceFilter<Source>,
+  FilterClk extends ClockFilter<Clock>,
+  FilterBoth extends SourceClockFilter<Source, Clock>,
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
   SomeFN
 > = 
   FilterModeKind<Mode> extends 'filter'
@@ -1606,6 +1466,34 @@ type SampleFilterDef<
       : never
     ) & SomeFN]
   : never
+type SourceFilter<Source> =
+  Source extends Unit<any> | SourceRecord
+  ? (src: TypeOfSource<Source>) => boolean
+  : never
+type ClockFilter<Clock> =
+  Clock extends Units | never[]
+  ? (clk: TypeOfClock<Clock>) => boolean
+  : never
+type SourceClockFilter<Source, Clock> =
+  Source extends Unit<any> | SourceRecord
+  ? Clock extends Units | never[]
+    ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
+    : never
+  : never
+type SourceFunction<Source> =
+  Source extends Unit<any> | SourceRecord
+  ? (src: TypeOfSource<Source>) => any
+  : never
+type ClockFunction<Clock> =
+  Clock extends Units | never[]
+  ? (clk: TypeOfClock<Clock>) => any
+  : never
+type SourceClockFunction<Source, Clock> =
+  Source extends Unit<any> | SourceRecord
+  ? Clock extends Units | never[]
+    ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+    : never
+  : never
 type FNReturn<
   Mode extends (
     | 'clock/source/filter/fn/target'
@@ -1617,23 +1505,9 @@ type FNReturn<
   ),
   Source,
   Clock,
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
 > = Mode extends (
     | 'clock/source/filter/fn/target'
     | 'clock/source/nofilter/fn/target'
@@ -1669,40 +1543,12 @@ type TargetCheck<
   Source,
   Clock,
   FilterUnit,
-  FilterSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => boolean
-      : never
-  ),
-  FilterClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => boolean
-      : never
-  ),
-  FilterBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
-        : never
-      : never
-  ),
-  FNSrc extends (
-    Source extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<Source>) => any
-      : never
-  ),
-  FNClk extends (
-    Clock extends Units | never[]
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
-  FNBoth extends (
-    Source extends Unit<any> | SourceRecord
-      ? Clock extends Units | never[]
-        ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-        : never
-      : never
-  ),
+  FilterSrc extends SourceFilter<Source>,
+  FilterClk extends ClockFilter<Clock>,
+  FilterBoth extends SourceClockFilter<Source, Clock>,
+  FNSrc extends SourceFunction<Source>,
+  FNClk extends ClockFunction<Clock>,
+  FNBoth extends SourceClockFunction<Source, Clock>,
   SomeFN
 > = Mode extends (
     | 'clock/source/filter/fn/target'
