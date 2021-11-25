@@ -88,7 +88,7 @@ describe('sample(config)', () => {
       test('type mismatch (should fail)', () => {
         const trigger: Event<number> = createEvent()
         const allow = createStore<boolean>(false)
-        const target: Store<string> = createStore('no')
+        const target = createStore<string>('no')
 
         sample({
           //@ts-expect-error
@@ -334,7 +334,7 @@ describe('sample(config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       type User = {name: string}
-      const trigger: Event<User> = createEvent()
+      const trigger = createEvent<User>()
 
       //@ts-expect-error
       const result: Event<string> = sample({
@@ -356,8 +356,8 @@ describe('sample(config)', () => {
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
-        const target: Store<User> = createStore({name: 'alice'})
+        const trigger = createEvent<User | null>()
+        const target = createStore<User>({name: 'alice'})
 
         sample({
           source: trigger,
@@ -373,8 +373,8 @@ describe('sample(config)', () => {
       })
       test('type mismatch (should fail)', () => {
         type User = {name: string}
-        const trigger: Event<User> = createEvent()
-        const target: Store<string> = createStore('no')
+        const trigger = createEvent<User>()
+        const target = createStore<string>('no')
 
         sample({
           //@ts-expect-error
@@ -395,6 +395,101 @@ describe('sample(config)', () => {
 
         sample({
           source,
+          filter: Boolean,
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          no errors
+          "
+        `)
+      })
+    })
+  })
+  describe('sample({clock, filter: Boolean})', () => {
+    it('returns new event (should pass)', () => {
+      type User = {name: string}
+      const trigger = createEvent<User | null>()
+      const result: Event<User> = sample({
+        clock: trigger,
+        filter: Boolean,
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'Event<User | null>' is not assignable to type 'Event<User>'.
+          Types of property 'watch' are incompatible.
+            Type '(watcher: (payload: User | null) => any) => Subscription' is not assignable to type '(watcher: (payload: User) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type 'User | null' is not assignable to type 'User'.
+                    Type 'null' is not assignable to type 'User'.
+        "
+      `)
+    })
+    test('result type mismatch (should fail)', () => {
+      type User = {name: string}
+      const trigger = createEvent<User>()
+
+      //@ts-expect-error
+      const result: Event<string> = sample({
+        clock: trigger,
+        filter: Boolean,
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'Event<User>' is not assignable to type 'Event<string>'.
+          Types of property 'watch' are incompatible.
+            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type 'User' is not assignable to type 'string'.
+        "
+      `)
+    })
+    describe('support target field', () => {
+      it('allow to pass target field (should pass)', () => {
+        type User = {name: string}
+        const trigger = createEvent<User | null>()
+        const target = createStore<User>({name: 'alice'})
+
+        sample({
+          clock: trigger,
+          filter: Boolean,
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          Argument of type '{ clock: Event<User | null>; filter: BooleanConstructor; target: Store<User>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: User | null; targetType: User; }; }'.
+            Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: User | null; targetType: User; }; }'.
+          "
+        `)
+      })
+      test('type mismatch (should fail)', () => {
+        type User = {name: string}
+        const trigger = createEvent<User>()
+        const target = createStore<string>('no')
+
+        sample({
+          //@ts-expect-error
+          clock: trigger,
+          filter: Boolean,
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          Argument of type '{ clock: Event<User>; filter: BooleanConstructor; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
+            Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
+          "
+        `)
+      })
+      test('any to void (should pass)', () => {
+        const clock = createEvent<{pass: boolean}>()
+        const target = createEvent<void>()
+
+        sample({
+          clock,
           filter: Boolean,
           target,
         })
