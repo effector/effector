@@ -51,25 +51,33 @@ describe('call of derived events', () => {
     const a = createEvent()
     const b = merge([a])
     b()
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
   })
   test('usage with split is deprecated', () => {
     const trigger = createEvent<number>()
     const {derived} = split(trigger, {derived: x => x > 0})
     derived(0)
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
   })
   test('usage with sample is deprecated', () => {
     const a = createEvent()
     const b = sample({clock: a, source: a})
     b()
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
   })
   test('usage with guard is deprecated', () => {
     const a = createEvent()
     const b = guard({source: a, filter: () => true})
     b()
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"call of derived event is deprecated, use createEvent instead"`,
+    )
   })
 })
 

@@ -45,8 +45,15 @@ export function split(...args: any[]): any {
   if (!targets!) targets = {}
   if (!knownCases) {
     assert(matchIsShape, 'match should be an object')
-    forIn(match, (_, key) => (targets[key] = createEvent(metadata)))
-    targets.__ = createEvent(metadata)
+    forIn(
+      match,
+      (_, key) =>
+        (targets[key] = createEvent({
+          derived: true,
+          and: metadata,
+        })),
+    )
+    targets.__ = createEvent({derived: true, and: metadata})
   }
   const owners = new Set(
     ([] as NodeUnit[]).concat(source, Object.values(targets)),

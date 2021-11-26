@@ -132,7 +132,7 @@ export const createSampling = (
         : readRef(getStoreState(source))
       target = createStore(initialState, {name, sid, or: metadata})
     } else {
-      target = createEvent(name, metadata)
+      target = createEvent({name, derived: true, or: metadata})
       applyTemplate('sampleTarget', getGraph(target))
     }
   }

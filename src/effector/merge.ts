@@ -5,11 +5,15 @@ import {unitObjectName} from './naming'
 import {assertNodeSet} from './is'
 
 export function merge<T>(
-  events: Array<Event<T> | Store<T> | Effect<T, any, any>>,
+  units: Array<Event<T> | Store<T> | Effect<T, any, any>>,
   config?: object,
 ): Event<T> {
-  const result = createEvent(config || unitObjectName(events, 'merge'))
-  assertNodeSet(events, 'merge', 'first argument')
-  createLinkNode(events, result, [], 'merge')
+  assertNodeSet(units, 'merge', 'first argument')
+  const result = createEvent({
+    name: unitObjectName(units, 'merge'),
+    derived: true,
+    and: config,
+  })
+  createLinkNode(units, result, [], 'merge')
   return result
 }
