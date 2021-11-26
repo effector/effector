@@ -1,4 +1,14 @@
-import {createEvent, createStore, combine} from 'effector'
+import {
+  createEvent,
+  createStore,
+  combine,
+  sample,
+  forward,
+  guard,
+  merge,
+  split,
+  createApi,
+} from 'effector'
 
 let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
 beforeEach(() => {
@@ -37,6 +47,39 @@ describe('call of derived events', () => {
       `"call of derived event is deprecated, use createEvent instead"`,
     )
   })
+  test('usage with merge is deprecated', () => {
+    const a = createEvent()
+    const b = merge([a])
+    b()
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('usage with split is deprecated', () => {
+    const trigger = createEvent<number>()
+    const {derived} = split(trigger, {derived: x => x > 0})
+    derived(0)
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('usage with sample is deprecated', () => {
+    const a = createEvent()
+    const b = sample({clock: a, source: a})
+    b()
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('usage with guard is deprecated', () => {
+    const a = createEvent()
+    const b = guard({source: a, filter: () => true})
+    b()
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+})
+
+test('createApi', () => {
+  const $a = createStore(0)
+  const $derived = $a.map(x => x)
+  createApi($derived, {x: () => 0})
+  expect(getWarning()).toMatchInlineSnapshot(
+    `".on in derived store is deprecated, use createStore instead"`,
+  )
 })
 
 describe('.on with derived stores', () => {
@@ -57,5 +100,105 @@ describe('.on with derived stores', () => {
     expect(getWarning()).toMatchInlineSnapshot(
       `".on in derived store is deprecated, use createStore instead"`,
     )
+  })
+})
+
+describe('split cases', () => {
+  test('with derived store', () => {
+    const trigger = createEvent<number>()
+    const $a = createStore(0)
+    const $derived = $a.map(x => x)
+    split({
+      source: trigger,
+      match: () => 'a',
+      cases: {
+        a: $derived,
+      },
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('with derived event', () => {
+    const trigger = createEvent<number>()
+    const a = createEvent<number>()
+    const derived = a.map(x => x)
+    split({
+      source: trigger,
+      match: () => 'a',
+      cases: {
+        a: derived,
+      },
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+})
+
+describe('sample target', () => {
+  test('with derived store', () => {
+    const trigger = createEvent<number>()
+    const $a = createStore(0)
+    const $derived = $a.map(x => x)
+    sample({
+      clock: trigger,
+      target: $derived,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('with derived event', () => {
+    const trigger = createEvent<number>()
+    const a = createEvent<number>()
+    const derived = a.map(x => x)
+    sample({
+      clock: trigger,
+      target: derived,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+})
+
+describe('guard target', () => {
+  test('with derived store', () => {
+    const trigger = createEvent<number>()
+    const $a = createStore(0)
+    const $derived = $a.map(x => x)
+    guard({
+      clock: trigger,
+      filter: () => true,
+      target: $derived,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('with derived event', () => {
+    const trigger = createEvent<number>()
+    const a = createEvent<number>()
+    const derived = a.map(x => x)
+    guard({
+      clock: trigger,
+      filter: () => true,
+      target: derived,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+})
+
+describe('forward to', () => {
+  test('with derived store', () => {
+    const trigger = createEvent<number>()
+    const $a = createStore(0)
+    const $derived = $a.map(x => x)
+    forward({
+      from: trigger,
+      to: $derived,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+  })
+  test('with derived event', () => {
+    const trigger = createEvent<number>()
+    const a = createEvent<number>()
+    const derived = a.map(x => x)
+    forward({
+      from: trigger,
+      to: derived,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
   })
 })
