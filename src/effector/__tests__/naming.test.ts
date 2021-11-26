@@ -107,4 +107,10 @@ describe('sample support', () => {
     const sampled = sample({source, clock})
     expect(sampled.shortName).toBe('sampled')
   })
+  test('sample(config) with explicit name', () => {
+    const source = createStore(0)
+    const clock = createEvent()
+    const sampled = sample({source, clock, name: 'foo'})
+    expect(sampled.shortName).toBe('foo')
+  })
 })
