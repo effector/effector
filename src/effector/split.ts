@@ -1,6 +1,6 @@
 import type {Event} from './unit.h'
 import type {NodeUnit, Cmd} from './index.h'
-import {is, isFunction, isObject} from './is'
+import {is, isFunction, isObject, assertTarget} from './is'
 import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
 import {createLinkNode} from './forward'
@@ -54,6 +54,10 @@ export function split(...args: any[]): any {
         })),
     )
     targets.__ = createEvent({derived: true, and: metadata})
+  } else {
+    forIn(targets, (target, field) =>
+      assertTarget('split', target, `cases.${field}`),
+    )
   }
   const owners = new Set(
     ([] as NodeUnit[]).concat(source, Object.values(targets)),

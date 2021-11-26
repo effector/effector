@@ -6,7 +6,7 @@ import {regionStack} from './region'
 import {own} from './own'
 import {add, forEach} from './collection'
 
-const arrifyNodes = (
+export const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
 ): Node[] => (Array.isArray(list) ? list : [list]).flat().map(getGraph)
 

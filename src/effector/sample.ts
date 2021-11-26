@@ -4,7 +4,14 @@ import {createStateRef, readRef} from './stateRef'
 import {callStackAReg} from './caller'
 import {processArgsToConfig} from './config'
 import {getStoreState, getGraph} from './getter'
-import {assertNodeSet, is, isObject, isVoid, isFunction} from './is'
+import {
+  assertNodeSet,
+  assertTarget,
+  is,
+  isObject,
+  isVoid,
+  isFunction,
+} from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode} from './createNode'
@@ -119,8 +126,10 @@ export const createSampling = (
       filterType = 'fn'
     }
   }
-  if (target) assertNodeSet(target, method, 'target')
-  else {
+  if (target) {
+    assertNodeSet(target, method, 'target')
+    assertTarget(method, target)
+  } else {
     if (
       filterType === 'none' &&
       targetMayBeStore &&

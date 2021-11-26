@@ -1,6 +1,9 @@
 export * as is from './validate'
 import {forEach} from './collection'
-import {assert} from './throw'
+import {assert, deprecate} from './throw'
+import {arrifyNodes} from './createNode'
+import type {NodeUnit} from './index.h'
+import {getMeta} from './getter'
 
 export const isObject = (value: any) =>
   typeof value === 'object' && value !== null
@@ -41,3 +44,16 @@ export const assertNodeSet = (
     assertNodeSetItem(value, method, valueName, ' or array of units')
   }
 }
+
+export const assertTarget = (
+  method: string,
+  target: NodeUnit | NodeUnit[],
+  targetField: string = 'target',
+) =>
+  forEach(arrifyNodes(target), item =>
+    deprecate(
+      !getMeta(item, 'derived'),
+      `${method}: derived unit in "${targetField}"`,
+      `createEvent/createStore`,
+    ),
+  )

@@ -123,7 +123,9 @@ describe('split cases', () => {
         a: $derived,
       },
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
   test('with derived event', () => {
     const trigger = createEvent<number>()
@@ -136,7 +138,9 @@ describe('split cases', () => {
         a: derived,
       },
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
 })
 
@@ -149,7 +153,9 @@ describe('sample target', () => {
       clock: trigger,
       target: $derived,
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
   test('with derived event', () => {
     const trigger = createEvent<number>()
@@ -159,7 +165,9 @@ describe('sample target', () => {
       clock: trigger,
       target: derived,
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
 })
 
@@ -173,7 +181,9 @@ describe('guard target', () => {
       filter: () => true,
       target: $derived,
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
   test('with derived event', () => {
     const trigger = createEvent<number>()
@@ -184,7 +194,9 @@ describe('guard target', () => {
       filter: () => true,
       target: derived,
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
 })
 
@@ -197,7 +209,9 @@ describe('forward to', () => {
       from: trigger,
       to: $derived,
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
   test('with derived event', () => {
     const trigger = createEvent<number>()
@@ -207,6 +221,8 @@ describe('forward to', () => {
       from: trigger,
       to: derived,
     })
-    expect(getWarning()).toMatchInlineSnapshot(`undefined`)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+    )
   })
 })
