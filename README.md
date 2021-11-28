@@ -57,7 +57,7 @@ npm install effector effector-vue
 
 **Svelte**
 
-Svelte works with effector out from a box, no additional packages needed. See [word chain](https://github.com/today-/citycatch) game application written with svelte and effector.
+Svelte works with effector out of the box, no additional packages needed. See [word chain](https://github.com/today-/citycatch) game application written with svelte and effector.
 
 **CDN**
 
