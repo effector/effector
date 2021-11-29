@@ -47,7 +47,7 @@ const keywords = [
 
 const version = {
   effector: '22.1.2',
-  'effector-react': '22.0.4',
+  'effector-react': '22.0.5',
   'effector-vue': '22.0.2',
   forest: '0.20.2',
 }
@@ -136,6 +136,7 @@ export default {
         require: './effector-react.cjs.js',
         default: './effector-react.mjs',
       },
+      './package.json': './package.json',
       './effector-react.mjs': './effector-react.mjs',
       './scope.mjs': './scope.mjs',
       './scope': {

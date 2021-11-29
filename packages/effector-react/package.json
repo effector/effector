@@ -1,16 +1,16 @@
 {
   "name": "effector-react",
-  "version": "22.0.4",
+  "version": "22.0.5",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.mjs",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
       "import": "./effector-react.mjs",
       "require": "./effector-react.cjs.js",
       "default": "./effector-react.mjs"
     },
+    "./package.json": "./package.json",
     "./effector-react.mjs": "./effector-react.mjs",
     "./scope.mjs": "./scope.mjs",
     "./scope": {
