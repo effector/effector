@@ -1,20 +1,29 @@
-const {resolve, relative, parse, sep, join, extname, basename} = require('path')
-const execa = require('execa')
-const {
+import {resolve, relative, parse, sep, join, extname, basename} from 'path'
+//@ts-expect-error
+import execa from 'execa'
+import {
   readFile,
   copy,
   outputJSON,
   outputFile,
   ensureDir,
   readdir,
-} = require('fs-extra')
+} from 'fs-extra'
 
 const WRITE_RAW_REPORTS = false
 
-async function syncDirs(from, to, filter) {
+async function syncDirs(
+  from: string,
+  to: string,
+  filter: (fullName: string, fullTargetName: string) => boolean,
+) {
   const fromRoot = from
   const toRoot = to
-  async function writeFileOnChange(from, to, map) {
+  async function writeFileOnChange(
+    from: string,
+    to: string,
+    map: (code: string) => string,
+  ) {
     try {
       const [source, target] = await Promise.all([
         readFile(from, 'utf8'),
@@ -29,9 +38,8 @@ async function syncDirs(from, to, filter) {
       return
     }
   }
-  // @ts-expect-error
-  const reqs = []
-  async function readDirRec(dir) {
+  const reqs: Promise<void>[] = []
+  async function readDirRec(dir: string) {
     const relativeSuffix = relative(fromRoot, dir)
     const targetDir = resolve(toRoot, relativeSuffix)
     const dirents = await readdir(dir, {withFileTypes: true})
@@ -56,7 +64,7 @@ async function syncDirs(from, to, filter) {
   await Promise.all(reqs)
 }
 
-module.exports = async function() {
+export default async function () {
   const reportPath = resolve(
     __dirname,
     '..',
@@ -99,9 +107,14 @@ module.exports = async function() {
 
 const PRINT_FOREIGN_FILE_NAME = false
 const TEST_DIR = 'types'
-async function getTestFiles(root) {
+async function getTestFiles(root: string) {
   const {files, dirs} = await readTypeDir(root)
-  const result = []
+  const result: Array<{
+    fullPath: string
+    type: 'ts' | 'flow' | 'both'
+    relativePath: string
+    ext: string
+  }> = []
   for (const file of files) {
     if (file.isJSFile) {
       const hasTSSibling = files.some(
@@ -126,11 +139,17 @@ async function getTestFiles(root) {
     }
   }
   return {files: result, dirs}
-  async function readTypeDir(dir) {
+  async function readTypeDir(dir: string) {
     const dirents = await readdir(dir, {withFileTypes: true})
-    const files = []
+    const files: Array<{
+      baseName: string
+      relativeDir: string
+      fullPath: string
+      isJSFile: boolean
+      ext: string
+    }> = []
     const reqs = []
-    const dirs = []
+    const dirs: string[] = []
     for (const dirent of dirents) {
       const name = dirent.name
       if (dirent.isFile()) {
@@ -159,7 +178,14 @@ async function getTestFiles(root) {
     return {files, dirs}
   }
 }
-async function runTypeScript(testFiles) {
+async function runTypeScript(
+  testFiles: Array<{
+    fullPath: string
+    type: 'ts' | 'flow' | 'both'
+    relativePath: string
+    ext: string
+  }>,
+) {
   testFiles = testFiles.filter(({type}) => type === 'ts' || type === 'both')
   const testsDir = resolve(__dirname, '..', '__tests__')
   const repoRoot = resolve(__dirname, '..', '..', '..')
@@ -179,17 +205,18 @@ async function runTypeScript(testFiles) {
     ])
     console.warn('no errors found by typescript typecheck', result)
     return ''
-  } catch (err) {
+  } catch (error) {
+    const err = error as {message: string}
     const cleanedMessage = err.message.replace(/error TS\d+: /gm, '')
     if (WRITE_RAW_REPORTS) {
       await outputFile(reportPath, cleanedMessage)
     }
     return normalizeTSReport(cleanedMessage)
   }
-  function normalizeTSReport(report) {
+  function normalizeTSReport(report: string) {
     let current = {
       pos: {line: -1, col: -1},
-      lines: [],
+      lines: [] as string[],
       file: '',
     }
     const tsProcessed = []
@@ -224,7 +251,7 @@ async function runTypeScript(testFiles) {
     }))
     return tsReport
   }
-  function recontructFileName(file) {
+  function recontructFileName(file: string) {
     file = resolve(testsDir, file)
       .replace('.tsx', '')
       .replace('.ts', '')
@@ -238,7 +265,7 @@ async function runTypeScript(testFiles) {
         .replace('.jsx', '')
         .replace('.js', '')
       return fullPath === file
-    })
+    })!
     return relative(testsDir, `${file}${ext}`)
   }
 }
