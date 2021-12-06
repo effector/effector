@@ -6,10 +6,10 @@ module.exports = function setupLocation(
 }*/,
 ) {
   //@ts-ignore
-  const {ts, fileTypes} = require('./.reports/type-report-full.json')
+  const {tsReport, fileNames} = require('./.reports/type-report-full.json')
   const reportList = []
-  if (fileTypes.ts.includes(file) || fileTypes.both.includes(file)) {
-    const tsErr = matchTypecheckerMessages(ts, file, loc)
+  if (fileNames.includes(file)) {
+    const tsErr = matchTypecheckerMessages(tsReport, file, loc)
     reportList.push(`\n${tsErr}\n`)
   }
   return reportList.join('')

@@ -72,11 +72,9 @@ export default async function () {
     'type-report-full.json',
   )
   const testsDir = resolve(__dirname, '..', '__tests__')
-  const flowTestDir = resolve(__dirname, '..', '__fixtures__', '.flow')
   const tsTestDir = resolve(__dirname, '..', '__fixtures__', '.typescript')
-  const flowTemplateDir = resolve(__dirname, '..', '__fixtures__', 'flow')
   const tsTemplateDir = resolve(__dirname, '..', '__fixtures__', 'typescript')
-  const [{files: testFiles, dirs}] = await Promise.all([
+  const [testFiles] = await Promise.all([
     getTestFiles(testsDir),
     ensureDir(tsTestDir),
   ])
@@ -88,115 +86,62 @@ export default async function () {
     }),
     syncDirs(testsDir, tsTestDir, (filePath, to) => {
       if (extname(filePath) === '') return true
-      const fileMeta = testFiles.find(file => file.fullPath === filePath)
-      if (!fileMeta) return false
-      return fileMeta.type === 'ts'
+      return !!testFiles.find(file => file.fullPath === filePath)
     }),
   ])
   const tsReport = await runTypeScript(testFiles)
-  const fileTypes = {
-    ts: [],
-    both: [],
-  }
-  for (const {fullPath, type} of testFiles) {
-    const rel = relative(testsDir, fullPath)
-    fileTypes[type].push(rel)
-  }
-  await outputJSON(reportPath, {ts: tsReport, fileTypes}, {spaces: 2})
+  const fileNames = testFiles.map(({fullPath}) => relative(testsDir, fullPath))
+  await outputJSON(reportPath, {tsReport, fileNames})
 }
 
-const PRINT_FOREIGN_FILE_NAME = false
-const TEST_DIR = 'types'
 async function getTestFiles(root: string) {
-  const {files, dirs} = await readTypeDir(root)
-  const result: Array<{
-    fullPath: string
-    type: 'ts' | 'flow' | 'both'
-    relativePath: string
-    ext: string
-  }> = []
-  for (const file of files) {
-    if (file.isJSFile) {
-      const hasTSSibling = files.some(
-        ({relativeDir, baseName, isJSFile}) =>
-          relativeDir === file.relativeDir &&
-          baseName === file.baseName &&
-          !isJSFile,
-      )
-      result.push({
-        fullPath: file.fullPath,
-        type: hasTSSibling ? 'flow' : 'both',
-        relativePath: relative(root, file.fullPath),
-        ext: file.ext,
-      })
-    } else {
-      result.push({
-        fullPath: file.fullPath,
-        type: 'ts',
-        relativePath: relative(root, file.fullPath),
-        ext: file.ext,
-      })
-    }
-  }
-  return {files: result, dirs}
+  const files = await readTypeDir(root)
+  return files.map(file => ({
+    fullPath: file.fullPath,
+    relativePath: relative(root, file.fullPath),
+    ext: file.ext,
+  }))
   async function readTypeDir(dir: string) {
     const dirents = await readdir(dir, {withFileTypes: true})
     const files: Array<{
       baseName: string
       relativeDir: string
       fullPath: string
-      isJSFile: boolean
       ext: string
     }> = []
     const reqs = []
-    const dirs: string[] = []
     for (const dirent of dirents) {
       const name = dirent.name
       if (dirent.isFile()) {
         const fullPath = resolve(dir, name)
         const ext = extname(name)
-        const isTSFile = ext === '.ts' || ext === '.tsx'
-        const isJSFile = ext === '.js' || ext === '.jsx'
-        if (!isTSFile && !isJSFile) continue
+        if (ext !== '.ts' && ext !== '.tsx') continue
         files.push({
           baseName: basename(name, ext),
           relativeDir: relative(root, dir),
           fullPath,
-          isJSFile,
           ext,
         })
       } else {
-        dirs.push(resolve(dir, name))
         reqs.push(readTypeDir(resolve(dir, name)))
       }
     }
     const subdirs = await Promise.all(reqs)
     for (const subdir of subdirs) {
-      files.push(...subdir.files)
-      dirs.push(...subdir.dirs)
+      files.push(...subdir)
     }
-    return {files, dirs}
+    return files
   }
 }
 async function runTypeScript(
   testFiles: Array<{
     fullPath: string
-    type: 'ts' | 'flow' | 'both'
     relativePath: string
     ext: string
   }>,
 ) {
-  testFiles = testFiles.filter(({type}) => type === 'ts' || type === 'both')
   const testsDir = resolve(__dirname, '..', '__tests__')
-  const repoRoot = resolve(__dirname, '..', '..', '..')
-  const tsTestDir = resolve(__dirname, '..', '__fixtures__', '.typescript')
   const reportPath = resolve(__dirname, '..', '.reports', 'type-report-ts-raw')
-  const importPaths = testFiles.map(
-    ({fullPath}) => `import './${relative(testsDir, fullPath)}'`,
-  )
-
-  // await outputFile(resolve(tsTestDir, 'index.tsx'), importPaths.join(`\n`))
-  const version = await execa('npx', ['tsc', '-v'])
   try {
     const result = await execa('npx', [
       'tsc',
@@ -252,20 +197,15 @@ async function runTypeScript(
     return tsReport
   }
   function recontructFileName(file: string) {
-    file = resolve(testsDir, file)
+    file = removeExt(resolve(testsDir, file))
+    const {ext} = testFiles.find(({fullPath}) => removeExt(fullPath) === file)!
+    return relative(testsDir, `${file}${ext}`)
+  }
+  function removeExt(file: string) {
+    return file
       .replace('.tsx', '')
       .replace('.ts', '')
       .replace('.jsx', '')
       .replace('.js', '')
-    const {ext} = testFiles.find(({fullPath, type}) => {
-      if (type === 'flow') return false
-      fullPath = fullPath
-        .replace('.tsx', '')
-        .replace('.ts', '')
-        .replace('.jsx', '')
-        .replace('.js', '')
-      return fullPath === file
-    })!
-    return relative(testsDir, `${file}${ext}`)
   }
 }
