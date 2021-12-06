@@ -1,162 +1,102 @@
-import {resolve, relative, parse, sep, join, extname, basename} from 'path'
-//@ts-expect-error
-import execa from 'execa'
-import {
-  readFile,
-  copy,
-  outputJSON,
-  outputFile,
-  ensureDir,
-  readdir,
-} from 'fs-extra'
+import {resolve, relative, extname} from 'path'
+import {promises as fs} from 'fs'
+import {compile} from './tsRunner'
 
 const WRITE_RAW_REPORTS = false
 
-async function syncDirs(
-  from: string,
-  to: string,
-  filter: (fullName: string, fullTargetName: string) => boolean,
-) {
-  const fromRoot = from
-  const toRoot = to
-  async function writeFileOnChange(
-    from: string,
-    to: string,
-    map: (code: string) => string,
-  ) {
-    try {
-      const [source, target] = await Promise.all([
-        readFile(from, 'utf8'),
-        readFile(to, 'utf8').catch(err => 'ERROR'),
-      ])
-      const mappedSource = map(source)
-      if (target === 'ERROR' || mappedSource !== target) {
-        await outputFile(to, mappedSource, 'utf8')
-      }
-    } catch (err) {
-      console.log(err)
-      return
-    }
-  }
-  const reqs: Promise<void>[] = []
-  async function readDirRec(dir: string) {
-    const relativeSuffix = relative(fromRoot, dir)
-    const targetDir = resolve(toRoot, relativeSuffix)
-    const dirents = await readdir(dir, {withFileTypes: true})
-    for (const dirent of dirents) {
-      const name = dirent.name
-      const fullName = resolve(dir, name)
-      const fullTargetName = resolve(targetDir, name)
-      if (dirent.isFile()) {
-        if (filter(fullName, fullTargetName)) {
-          reqs.push(
-            writeFileOnChange(fullName, fullTargetName, code =>
-              code.replace(/\@ts\-expect\-error/gm, ''),
-            ),
-          )
-        }
-      } else {
-        reqs.push(readDirRec(fullName))
-      }
-    }
-  }
-  reqs.push(readDirRec(from))
-  await Promise.all(reqs)
-}
-
+const TESTS_DIR = resolve(__dirname, '..', '__tests__')
+const FULL_REPORT_PATH = resolve(
+  __dirname,
+  '..',
+  '.reports',
+  'type-report-full.json',
+)
+const RAW_REPORT_PATH = resolve(
+  __dirname,
+  '..',
+  '.reports',
+  'type-report-ts-raw',
+)
 export default async function () {
-  const reportPath = resolve(
-    __dirname,
-    '..',
-    '.reports',
-    'type-report-full.json',
-  )
-  const testsDir = resolve(__dirname, '..', '__tests__')
-  const tsTestDir = resolve(__dirname, '..', '__fixtures__', '.typescript')
-  const tsTemplateDir = resolve(__dirname, '..', '__fixtures__', 'typescript')
-  const [testFiles] = await Promise.all([
-    getTestFiles(testsDir),
-    ensureDir(tsTestDir),
-  ])
-  await Promise.all([
-    copy(tsTemplateDir, tsTestDir, {
-      overwrite: true,
-      errorOnExist: false,
-      recursive: false,
-    }),
-    syncDirs(testsDir, tsTestDir, (filePath, to) => {
-      if (extname(filePath) === '') return true
-      return !!testFiles.find(file => file.fullPath === filePath)
-    }),
-  ])
+  const testFiles = await readTypeDir(TESTS_DIR, TESTS_DIR)
   const tsReport = await runTypeScript(testFiles)
-  const fileNames = testFiles.map(({fullPath}) => relative(testsDir, fullPath))
-  await outputJSON(reportPath, {tsReport, fileNames})
+  const fileNames = testFiles.map(fullPath => relative(TESTS_DIR, fullPath))
+  await fs.writeFile(
+    FULL_REPORT_PATH,
+    JSON.stringify({tsReport, fileNames}),
+    'utf8',
+  )
 }
-
-async function getTestFiles(root: string) {
-  const files = await readTypeDir(root)
-  return files.map(file => ({
-    fullPath: file.fullPath,
-    relativePath: relative(root, file.fullPath),
-    ext: file.ext,
-  }))
-  async function readTypeDir(dir: string) {
-    const dirents = await readdir(dir, {withFileTypes: true})
-    const files: Array<{
-      baseName: string
-      relativeDir: string
-      fullPath: string
-      ext: string
-    }> = []
-    const reqs = []
-    for (const dirent of dirents) {
-      const name = dirent.name
-      if (dirent.isFile()) {
-        const fullPath = resolve(dir, name)
-        const ext = extname(name)
-        if (ext !== '.ts' && ext !== '.tsx') continue
-        files.push({
-          baseName: basename(name, ext),
-          relativeDir: relative(root, dir),
-          fullPath,
-          ext,
-        })
-      } else {
-        reqs.push(readTypeDir(resolve(dir, name)))
-      }
+async function readTypeDir(dir: string, base: string) {
+  const dirents = await fs.readdir(dir, {withFileTypes: true})
+  const files: string[] = []
+  const reqs = []
+  for (const dirent of dirents) {
+    const name = dirent.name
+    if (dirent.isFile()) {
+      const fullPath = resolve(dir, name)
+      const ext = extname(name)
+      if (ext !== '.ts' && ext !== '.tsx') continue
+      files.push(fullPath)
+    } else {
+      reqs.push(readTypeDir(resolve(dir, name), base))
     }
-    const subdirs = await Promise.all(reqs)
-    for (const subdir of subdirs) {
-      files.push(...subdir)
-    }
-    return files
   }
+  const subdirs = await Promise.all(reqs)
+  for (const subdir of subdirs) {
+    files.push(...subdir)
+  }
+  return files
 }
-async function runTypeScript(
-  testFiles: Array<{
-    fullPath: string
-    relativePath: string
-    ext: string
-  }>,
-) {
-  const testsDir = resolve(__dirname, '..', '__tests__')
-  const reportPath = resolve(__dirname, '..', '.reports', 'type-report-ts-raw')
+async function runTypeScript(testFiles: string[]) {
   try {
-    const result = await execa('npx', [
-      'tsc',
-      '-p',
-      join('src', 'types', '__fixtures__', '.typescript'),
-    ])
-    console.warn('no errors found by typescript typecheck', result)
-    return ''
-  } catch (error) {
-    const err = error as {message: string}
-    const cleanedMessage = err.message.replace(/error TS\d+: /gm, '')
+    const report = await compile({
+      fullTestFileNames: testFiles,
+      testsRoot: TESTS_DIR,
+      paths: {
+        'effector/fork': '../../../packages/effector/fork.d.ts',
+        effector: '../../../packages/effector/index.d.ts',
+        'effector-react/scope': '../../../packages/effector-react/scope.d.ts',
+        'effector-react': '../../../packages/effector-react/index.d.ts',
+        'effector-vue': '../../../packages/effector-vue/index.d.ts',
+        'forest/server': '../../../packages/forest/server.d.ts',
+        forest: '../../../packages/forest/index.d.ts',
+        react: '../../../node_modules/@types/react/index.d.ts',
+        vue: '../../../node_modules/vue/types/index.d.ts',
+      },
+      typings: ['@types/jest/index.d.ts'],
+      tsConfig: {
+        strictNullChecks: true,
+        module: 'CommonJS',
+        target: 'esnext',
+        jsx: 'react',
+        allowJs: true,
+        strict: true,
+        allowSyntheticDefaultImports: true,
+        moduleResolution: 'node',
+        resolveJsonModule: false,
+        lib: ['esnext', 'es2019', 'dom'],
+        noEmit: true,
+        // disableReferencedProjectLoad: true,
+        // disableSolutionSearching: true,
+        // disableSourceOfProjectReferenceRedirect: true,
+        // composite: true,
+        // incremental: true,
+      },
+    })
+    if (report === '') {
+      console.warn('no errors found by typescript typecheck')
+      return []
+    }
+    const cleanedMessage = report.replace(/error TS\d+: /gm, '')
     if (WRITE_RAW_REPORTS) {
-      await outputFile(reportPath, cleanedMessage)
+      await fs.writeFile(RAW_REPORT_PATH, cleanedMessage, 'utf8')
     }
     return normalizeTSReport(cleanedMessage)
+  } catch (error) {
+    console.error('compilation failed')
+    console.error(error)
+    return []
   }
   function normalizeTSReport(report: string) {
     let current = {
@@ -165,15 +105,13 @@ async function runTypeScript(
       file: '',
     }
     const tsProcessed = []
-    for (const line of report.split(/\n/).slice(2)) {
+    for (const line of report.split(/\n/)) {
       if (line.startsWith(' ')) {
         current.lines.push(line)
       } else {
-        const match = line.match(
-          /src\/types\/__fixtures__\/\.typescript\/(.+)\((\d+),(\d+)\): (.+)/,
-        )
+        const match = line.match(/\.\.\/__tests__\/(.+)\((\d+),(\d+)\): (.+)/)
         if (match) {
-          const file = match[1]
+          const file = match[1].trim()
           const x = +match[3]
           const y = +match[2]
           const message = match[4]
@@ -189,23 +127,10 @@ async function runTypeScript(
       }
     }
     tsProcessed.push(current)
-    const tsReport = tsProcessed.slice(1).map(({pos, lines, file}) => ({
+    return tsProcessed.map(({pos, lines, file}) => ({
       pos,
       message: lines.join(`\n`),
-      file: recontructFileName(file),
+      file,
     }))
-    return tsReport
-  }
-  function recontructFileName(file: string) {
-    file = removeExt(resolve(testsDir, file))
-    const {ext} = testFiles.find(({fullPath}) => removeExt(fullPath) === file)!
-    return relative(testsDir, `${file}${ext}`)
-  }
-  function removeExt(file: string) {
-    return file
-      .replace('.tsx', '')
-      .replace('.ts', '')
-      .replace('.jsx', '')
-      .replace('.js', '')
   }
 }

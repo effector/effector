@@ -11,6 +11,10 @@ module.exports = function setupLocation(
   if (fileNames.includes(file)) {
     const tsErr = matchTypecheckerMessages(tsReport, file, loc)
     reportList.push(`\n${tsErr}\n`)
+  } else {
+    console.warn(`file ${file} doesnt type checked`)
+    console.log(fileNames)
+    reportList.push(`\nno errors\n`)
   }
   return reportList.join('')
 }
