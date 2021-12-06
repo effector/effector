@@ -193,7 +193,7 @@ module.exports = {
                 `<rootDir>/src/types/__tests__/**/*.test.ts`,
                 `<rootDir>/src/types/__tests__/**/*.test.tsx`,
               ],
-              globalSetup: './src/types/src/globalSetup.js',
+              globalSetup: './src/types/src/globalSetup.ts',
               globalTeardown: './src/types/src/globalTeardown.js',
               maxConcurrency: 25,
               transform,
