@@ -44,5 +44,4 @@ val/**
 **/.cache/**
 tools/builder.js
 
-**/.reports/**
 **/.serverless/**
