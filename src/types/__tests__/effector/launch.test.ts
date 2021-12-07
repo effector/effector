@@ -58,10 +58,10 @@ test('launch({target: unit})', () => {
   launch({target: foo, params: 0})
   launch({target: customNode, params: 100})
   expect(typecheck).toMatchInlineSnapshot(`
-"
-No overload matches this call.
-  Overload 1 of 3, '(config: { target: Node | Unit<number>; params: number; defer?: boolean | undefined; page?: any; scope?: Scope | undefined; }): void', gave the following error.
-    Type 'string' is not assignable to type 'number'.
-"
-`)
+    "
+    No overload matches this call.
+      Overload 1 of 3, '(config: { target: Node | Unit<number>; params: number; defer?: boolean | undefined; page?: any; scope?: Scope | undefined; }): void', gave the following error.
+        Type 'string' is not assignable to type 'number'.
+    "
+  `)
 })

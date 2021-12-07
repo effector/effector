@@ -68,15 +68,16 @@ describe('fork values', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
-          Overload 1 of 3, '(iterable: Iterable<readonly [Store<any>, any]>): Map<Store<any>, any>', gave the following error.
-            Argument of type '((number | Store<number>)[] | (string | Store<string>)[])[]' is not assignable to parameter of type 'Iterable<readonly [Store<any>, any]>'.
+          Overload 1 of 3, '(iterable: Iterable<readonly [Store<number>, number]>): Map<Store<number>, number>', gave the following error.
+            Argument of type '([Store<number>, number] | [Store<string>, string])[]' is not assignable to parameter of type 'Iterable<readonly [Store<number>, number]>'.
               The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-                Type 'IteratorResult<(number | Store<number>)[] | (string | Store<string>)[], any>' is not assignable to type 'IteratorResult<readonly [Store<any>, any], any>'.
-                  Type 'IteratorYieldResult<(number | Store<number>)[] | (string | Store<string>)[]>' is not assignable to type 'IteratorResult<readonly [Store<any>, any], any>'.
-                    Type 'IteratorYieldResult<(number | Store<number>)[] | (string | Store<string>)[]>' is not assignable to type 'IteratorYieldResult<readonly [Store<any>, any]>'.
-                      Type '(number | Store<number>)[] | (string | Store<string>)[]' is not assignable to type 'readonly [Store<any>, any]'.
-                        Type '(number | Store<number>)[]' is not assignable to type 'readonly [Store<any>, any]'.
-                          Target requires 2 element(s) but source may have fewer.
+                Type 'IteratorResult<[Store<number>, number] | [Store<string>, string], any>' is not assignable to type 'IteratorResult<readonly [Store<number>, number], any>'.
+                  Type 'IteratorYieldResult<[Store<number>, number] | [Store<string>, string]>' is not assignable to type 'IteratorResult<readonly [Store<number>, number], any>'.
+                    Type 'IteratorYieldResult<[Store<number>, number] | [Store<string>, string]>' is not assignable to type 'IteratorYieldResult<readonly [Store<number>, number]>'.
+                      Type '[Store<number>, number] | [Store<string>, string]' is not assignable to type 'readonly [Store<number>, number]'.
+                        Type '[Store<string>, string]' is not assignable to type 'readonly [Store<number>, number]'.
+                          Type at position 0 in source is not compatible with type at position 0 in target.
+                            Type 'Store<string>' is not assignable to type 'Store<number>'.
         "
       `)
     })

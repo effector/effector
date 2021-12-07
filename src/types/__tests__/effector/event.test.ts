@@ -1,10 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {
-  createEvent,
-  Event,
-  CompositeName,
-  kind,
-} from 'effector'
+import {createEvent, Event, CompositeName, kind} from 'effector'
 
 const typecheck = '{global}'
 

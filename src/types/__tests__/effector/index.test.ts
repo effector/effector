@@ -27,7 +27,11 @@ describe('split', () => {
     describe('split result no false-negative', () => {
       it('works with user-defined event', () => {
         const source: Event<string[]> = createEvent()
-        const {emptyList, oneElement, __: commonList} = split(source, {
+        const {
+          emptyList,
+          oneElement,
+          __: commonList,
+        } = split(source, {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
         })
