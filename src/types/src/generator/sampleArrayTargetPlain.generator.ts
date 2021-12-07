@@ -8,19 +8,23 @@ import {
   flag,
   config,
   permute,
+  computeVariants,
 } from '../runner/manifold/operators'
 
 export default () => {
+  const mode = union(['src', 'clk', 'src/clk'])
   const source = union(['num', 'str'])
   const clock = union(['num', 'str'])
   const fn = flag()
   const typedFn = flag({
     needs: bool({
-      source: {fn, source, clock},
+      source: {fn, source, clock, mode},
       true: [
-        {fn: true, source: 'num', clock: 'num'},
-        {fn: true, source: 'str', clock: 'num'},
-        {fn: true, source: 'num', clock: 'str'},
+        {fn: true, mode: 'src/clk', source: 'num', clock: 'num'},
+        {fn: true, mode: 'src/clk', source: 'str', clock: 'num'},
+        {fn: true, mode: 'src/clk', source: 'num', clock: 'str'},
+        {fn: true, mode: 'src', source: 'num'},
+        {fn: true, mode: 'clk', clock: 'num'},
       ],
     }),
   })
@@ -47,6 +51,7 @@ export default () => {
   })
   const pass = separate({
     source: {
+      mode,
       fn,
       source,
       clock,
@@ -58,36 +63,62 @@ export default () => {
       _: {
         validWithFn: [
           {
-            fn: true,
+            mode: 'src/clk',
             source: 'num',
             clock: 'num',
             targetAcceptNumber: true,
+            fn: true,
           },
           {
+            mode: 'src',
+            source: 'num',
+            targetAcceptNumber: true,
             fn: true,
-            typedFn: false,
+          },
+          {
+            mode: 'clk',
+            clock: 'num',
+            targetAcceptNumber: true,
+            fn: true,
+          },
+          {
+            mode: 'src/clk',
             source: 'str',
             targetAcceptString: true,
-          },
-          {
             fn: true,
             typedFn: false,
+          },
+          {
+            mode: 'src',
+            source: 'str',
+            targetAcceptString: true,
+            fn: true,
+            typedFn: false,
+          },
+          {
+            mode: 'clk',
+            clock: 'str',
+            targetAcceptString: true,
+            fn: true,
+            typedFn: false,
+          },
+          {
+            mode: 'src/clk',
             source: 'num',
             clock: 'str',
             targetAcceptString: true,
-          },
-          {
             fn: true,
             typedFn: false,
-            source: 'num',
-            clock: 'num',
-            targetAcceptNumber: true,
           },
         ],
         errorWithFn: {fn: true},
         validWithoutFn: [
-          {fn: false, source: 'num', targetAcceptNumber: true},
-          {fn: false, source: 'str', targetAcceptString: true},
+          {mode: 'src/clk', source: 'num', targetAcceptNumber: true, fn: false},
+          {mode: 'src', source: 'num', targetAcceptNumber: true, fn: false},
+          {mode: 'clk', clock: 'num', targetAcceptNumber: true, fn: false},
+          {mode: 'src/clk', source: 'str', targetAcceptString: true, fn: false},
+          {mode: 'src', source: 'str', targetAcceptString: true, fn: false},
+          {mode: 'clk', clock: 'str', targetAcceptString: true, fn: false},
         ],
         errorWithoutFn: {},
       },
@@ -99,17 +130,36 @@ export default () => {
       errorWithoutFn: value(false),
     },
   })
-  const fnCode = computeVariant({
-    source: {fn, typedFn},
+  const fnCode = computeVariants({
+    source: {mode, fn, typedFn},
     variant: {
-      noFn: {fn: false},
-      typed: {typedFn: true},
-      untyped: {typedFn: false},
+      mode: {
+        both: {mode: 'src/clk'},
+        src: {mode: 'src'},
+        clk: {mode: 'clk'},
+      },
+      fn: {
+        noFn: {fn: false},
+        typed: {typedFn: true},
+        untyped: {typedFn: false},
+      },
     },
     cases: {
-      noFn: null,
-      typed: '(src:number,clk:number) => src+clk',
-      untyped: '(src,clk) => src + clk',
+      both: {
+        noFn: value(null),
+        typed: value('(src:number,clk:number) => src+clk'),
+        untyped: value('(src,clk) => src + clk'),
+      },
+      src: {
+        noFn: value(null),
+        typed: value('(src:number) => src+1'),
+        untyped: value('(src) => src + 1'),
+      },
+      clk: {
+        noFn: value(null),
+        typed: value('(clk:number) => clk+1'),
+        untyped: value('(clk) => clk + 1'),
+      },
     },
   })
   const fnToken = computeVariant({
@@ -126,25 +176,52 @@ export default () => {
     },
     sort: ['no fn', 'untyped fn', 'typed fn'],
   })
+  const sourceClockToken = computeFn({
+    source: {mode, source, clock},
+    fn({mode, source, clock}) {
+      switch (mode) {
+        case 'src/clk':
+          return `${source}/${clock}`
+        case 'src':
+          return `src ${source}`
+        case 'clk':
+          return `clk ${clock}`
+      }
+    },
+  })
+  const targetToken = computeFn({
+    source: {targets},
+    fn: ({targets}) => targets.sort().join('/'),
+  })
   config({
     header,
     file: 'generated/sampleArrayTarget',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass,
-      getHash: {fn, typedFn, pass},
+      getHash: {mode, fn, typedFn, pass},
       tags: {
-        sourceValue: source,
-        clockValue: clock,
-        targetAcceptString,
-        targetAcceptNumber,
+        sourceClockToken,
+        targetToken,
         fn: fnToken,
       },
       createTestLines: {
         method: 'sample',
         shape: {
-          source,
-          clock,
+          source: {
+            field: source,
+            when: bool({
+              source: {mode},
+              true: [{mode: 'src/clk'}, {mode: 'src'}],
+            }),
+          },
+          clock: {
+            field: clock,
+            when: bool({
+              source: {mode},
+              true: [{mode: 'src/clk'}, {mode: 'clk'}],
+            }),
+          },
           target: targets,
           fn: fnCode,
         },

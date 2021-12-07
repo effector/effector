@@ -6,12 +6,12 @@
     "jsx": "react",
     "allowJs": true,
     "strict": true,
+    "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "lib": ["esnext", "es2019"],
     "baseUrl": "./"
   },
-  "exclude": [
-  ]
+  "exclude": []
 }
