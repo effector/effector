@@ -10,7 +10,7 @@ import {
 } from './is'
 import type {Store, Event} from './unit.h'
 
-import {calc, compute, filter, mov, read} from './step'
+import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
@@ -22,6 +22,7 @@ import {
   forkPage,
   setCurrentPage,
   initRefInScope,
+  isPure,
 } from './kernel'
 
 import type {Subscriber, Config} from './index.h'
@@ -136,6 +137,7 @@ export function createEvent<Payload = any>(
       'call of derived event',
       'createEvent',
     )
+    deprecate(!isPure, 'unit call from pure function', 'operators like sample')
     if (currentPage) {
       return callCreate(event, template, payload, args)
     }
@@ -152,12 +154,14 @@ export function createEvent<Payload = any>(
       return params
     },
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
-    map: (fn: any) => deriveEvent(event, MAP, fn, [compute({fn: callStack})]),
+    map: (fn: any) => deriveEvent(event, MAP, fn, [userFnCall()]),
     filter: (fn: any) =>
-      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [filter({fn: callStack})]),
+      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
+        userFnCall(callStack, true),
+      ]),
     filterMap: (fn: any) =>
       deriveEvent(event, 'filterMap', fn, [
-        compute({fn: callStack}),
+        userFnCall(),
         calc(value => !isVoid(value), true),
       ]),
     prepend(fn: any) {
@@ -165,13 +169,7 @@ export function createEvent<Payload = any>(
         parent: getParent(event),
       })
       applyTemplate('eventPrepend', getGraph(contramapped))
-      createLinkNode(
-        contramapped,
-        event,
-        [compute({fn: callStack})],
-        'prepend',
-        fn,
-      )
+      createLinkNode(contramapped, event, [userFnCall()], 'prepend', fn)
       applyParentHook(event, contramapped)
       return contramapped
     },
@@ -305,7 +303,7 @@ export function createStore<State>(
       }),
       read(plainState),
       calc((upd, _, {a, b}) => !isVoid(upd) && (upd !== a || b), true),
-      updateFilter && filter({fn: callStackAReg}),
+      updateFilter && userFnCall(callStackAReg, true),
       mov({from: STACK, target: plainState}),
     ],
     child: updates,
@@ -340,7 +338,7 @@ const updateStore = (
     priority: 'read',
   })
   if (op === MAP) reader.data.softRead = true
-  const node = [reader, compute({fn: caller})]
+  const node = [reader, userFnCall(caller)]
   applyTemplate(
     'storeOnMap',
     storeRef,

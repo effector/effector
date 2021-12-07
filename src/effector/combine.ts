@@ -1,7 +1,7 @@
 import type {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
-import {mov, compute, calc, read} from './step'
+import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject, isVoid} from './is'
@@ -12,7 +12,6 @@ import {readTemplate} from './region'
 import {forIn} from './collection'
 import {BARRIER, MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
-import {callStack} from './caller'
 import type {Config} from './index.h'
 
 export function combine(...args: any[]): Store<any> {
@@ -131,7 +130,7 @@ const storeCombination = (
       batch: true,
     }),
     read(rawShape, true),
-    fn && compute({fn: callStack}),
+    fn && userFnCall(),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {

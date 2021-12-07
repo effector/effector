@@ -35,7 +35,11 @@ describe('split(source, match)', () => {
     const fn1 = jest.fn()
     const fn2 = jest.fn()
     const source: Event<string[]> = createEvent()
-    const {emptyList, oneElement, __: commonList} = split(source, {
+    const {
+      emptyList,
+      oneElement,
+      __: commonList,
+    } = split(source, {
       emptyList: list => list.length === 0,
       oneElement: list => list.length === 1,
     })

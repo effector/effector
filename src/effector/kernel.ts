@@ -202,6 +202,7 @@ const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isWatch = false
+export let isPure = false
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
 export const setForkPage = (newForkPage: Scope) => {
@@ -283,7 +284,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   }
   if (upsert && !isRoot) return
   /** main execution code */
-  const lastStartedState = {isRoot, currentPage, scope: forkPage, isWatch}
+  const lastStartedState = {
+    isRoot,
+    currentPage,
+    scope: forkPage,
+    isWatch,
+    isPure,
+  }
   isRoot = false
   let stop: boolean
   let skip: boolean
@@ -384,6 +391,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           const data = step.data
           if (data.fn) {
             isWatch = getMeta(node, 'op') === 'watch'
+            isPure = data.pure
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
               : tryRun(local, data.fn, stack)
@@ -398,6 +406,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               stack.value = computationResult
             }
             isWatch = lastStartedState.isWatch
+            isPure = lastStartedState.isPure
           }
           break
       }

@@ -348,24 +348,24 @@ describe('execution order', () => {
     sum.watch(fn)
     await fx(null)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "a": null,
-        "b": null,
-      },
-      Object {
-        "a": Object {
-          "params": null,
-          "result": "ok",
-          "status": "done",
-        },
-        "b": Object {
-          "params": null,
-          "result": "ok",
-        },
-      },
-    ]
-  `)
+          Array [
+            Object {
+              "a": null,
+              "b": null,
+            },
+            Object {
+              "a": Object {
+                "params": null,
+                "result": "ok",
+                "status": "done",
+              },
+              "b": Object {
+                "params": null,
+                "result": "ok",
+              },
+            },
+          ]
+      `)
   })
 
   it('handle sync effect watchers in correct order', async () => {

@@ -5,7 +5,7 @@ import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
 import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
-import {compute, filter, calc, read} from './step'
+import {compute, userFnCall, calc, read} from './step'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
@@ -73,6 +73,7 @@ export function split(...args: any[]): any {
       compute({
         safe: matchIsUnit,
         filter: true,
+        pure: !matchIsUnit,
         fn(data, scopeTargets, stack) {
           const value = String(matchIsUnit ? stack.a : match(data))
           launchCase(
@@ -112,21 +113,19 @@ export function split(...args: any[]): any {
     }
     splitterSeq = [
       needBarrier! && read(lastValues, false, true),
-      filter({
-        fn(data, scopeTargets, stack) {
-          for (let i = 0; i < caseNames.length; i++) {
-            const caseName = caseNames[i]
-            const caseValue = includes(units, caseName)
-              ? stack.a[caseName]
-              : match[caseName](data)
-            if (caseValue) {
-              launchCase(scopeTargets, caseName, data, stack)
-              return
-            }
+      userFnCall((data, scopeTargets, stack) => {
+        for (let i = 0; i < caseNames.length; i++) {
+          const caseName = caseNames[i]
+          const caseValue = includes(units, caseName)
+            ? stack.a[caseName]
+            : match[caseName](data)
+          if (caseValue) {
+            launchCase(scopeTargets, caseName, data, stack)
+            return
           }
-          launchCase(scopeTargets, '__', data, stack)
-        },
-      }),
+        }
+        launchCase(scopeTargets, '__', data, stack)
+      }, true),
     ]
   } else {
     assert(false, 'expect match to be unit, function or object')

@@ -117,6 +117,7 @@ export type Compute = {
     fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
     safe: boolean
     filter: boolean
+    pure: boolean
   }
   order?: {
     priority: BarrierPriorityTag

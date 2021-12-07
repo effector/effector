@@ -67,12 +67,12 @@ it('support event watchers for storages', () => {
   update(a => a + 10)
 
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-        Array [
-          0,
-          2,
-          12,
-        ]
-    `)
+    Array [
+      0,
+      2,
+      12,
+    ]
+  `)
 
   watcher()
   watcher2()

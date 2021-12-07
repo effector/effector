@@ -1,5 +1,5 @@
 import {combine} from './combine'
-import {mov, compute, read, calc} from './step'
+import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg} from './caller'
 import {processArgsToConfig} from './config'
@@ -178,8 +178,8 @@ export const createSampling = (
         ...filterNodes,
         read(clockState),
         filterType === 'fn' &&
-          compute({fn: (src, _, {a}) => filter(src, a), filter: true}),
-        fn && compute({fn: callStackAReg}),
+          userFnCall((src, _, {a}) => filter(src, a), true),
+        fn && userFnCall(callStackAReg),
         applyTemplate('sampleSourceUpward', isUpward),
       ],
       method,

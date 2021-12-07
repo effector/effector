@@ -375,6 +375,7 @@ describe('imperative call support', () => {
           delayCount: scopeA.getState(delayCount),
           timeoutCount: scopeA.getState(timeoutCount),
         },
+
         __: {
           count: count.getState(),
           delayCount: delayCount.getState(),
@@ -448,16 +449,19 @@ describe('imperative call support', () => {
           delayCount: scopeA.getState(delayCount),
           timeoutCount: scopeA.getState(timeoutCount),
         },
+
         b: {
           count: scopeB.getState(count),
           delayCount: scopeB.getState(delayCount),
           timeoutCount: scopeB.getState(timeoutCount),
         },
+
         c: {
           count: scopeC.getState(count),
           delayCount: scopeC.getState(delayCount),
           timeoutCount: scopeC.getState(timeoutCount),
         },
+
         __: {
           count: count.getState(),
           delayCount: delayCount.getState(),
