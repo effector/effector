@@ -141,9 +141,11 @@ type Show<A extends any> = A extends BuiltInObject
 type UnionToIntersection<Union> = // `extends unknown` is always going to be the case and is used to convert the
   // `Union` into a [distributive conditional
   // type](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types).
-  (Union extends unknown // The union type is used as the only argument to a function since the union // of function arguments is an intersection.
-  ? (distributedUnion: Union) => void // This won't happen.
-  : never) extends (mergedIntersection: infer Intersection) => void // arguments of unions of functions as an intersection of the union. // Infer the `Intersection` type since TypeScript represents the positional
+  (
+    Union extends unknown // The union type is used as the only argument to a function since the union // of function arguments is an intersection.
+      ? (distributedUnion: Union) => void // This won't happen.
+      : never
+  ) extends (mergedIntersection: infer Intersection) => void // arguments of unions of functions as an intersection of the union. // Infer the `Intersection` type since TypeScript represents the positional
     ? Intersection
     : never
 type UnionToTuple<Union> = UnionToIntersection<
@@ -157,7 +159,7 @@ type UnionToTuple<Union> = UnionToIntersection<
 type CaseLayerLast<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
-  CurrentCase extends keyof Variants
+  CurrentCase extends keyof Variants,
 > = {
   [K in keyof Variants[CurrentCase]]: unknown
 }
@@ -182,10 +184,10 @@ type CaseLayerMiddle<
 
 export type CaseLayer<
   Src extends SourceRec,
-  Variants extends VariantLevelRec<Src>
+  Variants extends VariantLevelRec<Src>,
 > = UnionToTuple<keyof Variants> extends readonly [
   infer CurrentCase,
-  ...(infer CaseNames),
+  ...infer CaseNames
 ]
   ? CurrentCase extends string
     ? CaseNames extends readonly []
@@ -206,7 +208,7 @@ type TypeOfCaseLayerLast<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
   CurrentCase extends keyof Variants,
-  Layer extends CaseLayerLast<Src, Variants, CurrentCase>
+  Layer extends CaseLayerLast<Src, Variants, CurrentCase>,
 > = ValueOf<Layer>
 
 type TypeOfCaseLayerMiddle<
@@ -214,8 +216,8 @@ type TypeOfCaseLayerMiddle<
   Variants extends VariantLevelRec<Src>,
   CurrentCase extends keyof Variants,
   CaseNames extends Tuple<keyof Variants>,
-  Layer extends CaseLayerMiddle<Src, Variants, CurrentCase, CaseNames>
-> = CaseNames extends readonly [infer NextCase, ...(infer NextCaseNames)]
+  Layer extends CaseLayerMiddle<Src, Variants, CurrentCase, CaseNames>,
+> = CaseNames extends readonly [infer NextCase, ...infer NextCaseNames]
   ? NextCase extends string
     ? NextCaseNames extends readonly []
       ? ValueOf<
@@ -255,10 +257,10 @@ type IsEq<A, B> = A extends B ? (B extends A ? 1 : 0) : 0
 export type TypeOfCaseLayer<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
-  Layer extends CaseLayer<Src, Variants>
+  Layer extends CaseLayer<Src, Variants>,
 > = UnionToTuple<keyof Variants> extends readonly [
   infer CurrentCase,
-  ...(infer CaseNames),
+  ...infer CaseNames
 ]
   ? CurrentCase extends string
     ? CaseNames extends readonly []
@@ -274,7 +276,7 @@ export type TypeOfCaseLayer<
           }
         >
       : CaseNames extends Tuple<string>
-      ? CaseNames extends readonly [infer NextCase, ...(infer NextCaseNames)]
+      ? CaseNames extends readonly [infer NextCase, ...infer NextCaseNames]
         ? NextCase extends string
           ? NextCaseNames extends readonly []
             ? ValueOf<
@@ -318,7 +320,7 @@ type LayerValue<
   Variants extends VariantLevelRec<Src>,
   Case extends keyof Variants,
   Layer extends CaseLayer<Src, Variants>,
-  K extends keyof Layer
+  K extends keyof Layer,
 > = Layer[K] extends object
   ? IsEq<keyof Layer[K], keyof Variants[Case]> extends 1
     ? ValueOf<{[L in keyof Layer[K]]: Layer[K][L]}>
@@ -328,8 +330,8 @@ type LayerValue<
 type SepCases_<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
-  AllCases extends Tuple<keyof Variants>
-> = AllCases extends readonly [infer CurrentCase, ...(infer CaseNames)]
+  AllCases extends Tuple<keyof Variants>,
+> = AllCases extends readonly [infer CurrentCase, ...infer CaseNames]
   ? CurrentCase extends string
     ? CaseNames extends readonly []
       ? Partial<
@@ -348,7 +350,7 @@ type SepCases_<
           } &
             (CaseNames extends readonly [
               infer CurrentCaseA,
-              ...(infer CaseNamesA),
+              ...infer CaseNamesA
             ]
               ? CurrentCaseA extends string
                 ? CaseNamesA extends readonly []
@@ -375,8 +377,8 @@ type SepCases_<
 
 export type SepCases<
   Src extends SourceRec,
-  Variants extends VariantLevelRec<Src>
-> = UnionToTuple<keyof Variants> extends readonly [...(infer Keys)]
+  Variants extends VariantLevelRec<Src>,
+> = UnionToTuple<keyof Variants> extends readonly [...infer Keys]
   ? Keys extends Tuple<keyof Variants>
     ? SepCases_<Src, Variants, Keys>
     : never
@@ -386,8 +388,8 @@ type TypeofSepCases_<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
   Cases extends SepCases<Src, Variants>,
-  AllCases extends Tuple<keyof Variants>
-> = AllCases extends readonly [infer CurrentCase, ...(infer CaseNames)]
+  AllCases extends Tuple<keyof Variants>,
+> = AllCases extends readonly [infer CurrentCase, ...infer CaseNames]
   ? CurrentCase extends string
     ? CaseNames extends readonly []
       ? ValueOf<
@@ -433,8 +435,8 @@ type TypeofSepCases_<
 export type TypeofSepCases<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
-  Cases extends SepCases<Src, Variants>
-> = UnionToTuple<keyof Variants> extends readonly [...(infer Keys)]
+  Cases extends SepCases<Src, Variants>,
+> = UnionToTuple<keyof Variants> extends readonly [...infer Keys]
   ? Keys extends Tuple<keyof Variants>
     ? TypeofSepCases_<Src, Variants, Cases, Keys>
     : 'never'
@@ -452,9 +454,7 @@ export type Grouping<T extends Record<string, any>> = {
     | Record<string, Declarator>
     | Declarator[]
   describeGroup:
-    | ((
-        obj: T,
-      ) =>
+    | ((obj: T) =>
         | string
         | {
             description: string
@@ -467,7 +467,6 @@ export type Grouping<T extends Record<string, any>> = {
         noGroup?: boolean
         largeGroup?: string | null
       }>
-  dedupeHash?: ((obj: T) => string) | DataDecl<string>
   createTestLines:
     | ((obj: T) => any[])
     | {

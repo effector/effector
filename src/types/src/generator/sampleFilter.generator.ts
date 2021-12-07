@@ -621,13 +621,6 @@ export default () => {
     },
   })
 
-  const largeGroup = fmt`${sourceType} source`
-
-  const pass = bool({
-    source: {wrongTarget},
-    true: {wrongTarget: false},
-  })
-
   sortOrder([
     inferByFilter,
     sourceType,
@@ -645,8 +638,7 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample'],
     header,
     grouping: {
-      pass,
-      dedupeHash: fmt`sample({source: ${sourceCode}, clock: ${clockCode}, target: ${targetCode}, filter: ${filterCode}})`,
+      pass: bool({source: {wrongTarget}, true: {wrongTarget: false}}),
       getHash: [
         inferByFilter,
         sourceIsWiderThatTarget,
@@ -664,9 +656,9 @@ export default () => {
         clock: clockType,
       },
       describeGroup: computeFn({
-        source: {groupTokens, largeGroup},
-        fn: ({groupTokens, largeGroup}) => ({
-          largeGroup,
+        source: {groupTokens, sourceType},
+        fn: ({groupTokens, sourceType}) => ({
+          largeGroup: `${sourceType} source`,
           description: groupTokens,
         }),
       }),

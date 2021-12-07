@@ -21,22 +21,6 @@ const typecheck = '{global}'
         sample({source:num, target:[num,numStr]    })
         sample({source:num, target:[anyt,voidt]    })
         sample({source:num, target:[numStr,voidt]  })
-        sample({source:num, target:[anyt,voidt]    })
-        sample({source:num, target:[anyt,numStr]   })
-        sample({source:num, target:[numStr,voidt]  })
-        sample({source:num, target:[anyt,numStr]   })
-        sample({source:num, target:[num]           })
-        sample({source:num, target:[voidt]         })
-        sample({source:num, target:[anyt]          })
-        sample({source:num, target:[numStr]        })
-        sample({source:num, target:[num,voidt]     })
-        sample({source:num, target:[anyt,num]      })
-        sample({source:num, target:[num,numStr]    })
-        sample({source:num, target:[anyt,voidt]    })
-        sample({source:num, target:[numStr,voidt]  })
-        sample({source:num, target:[anyt,voidt]    })
-        sample({source:num, target:[anyt,numStr]   })
-        sample({source:num, target:[numStr,voidt]  })
         sample({source:num, target:[anyt,numStr]   })
         sample({source:str, target:[voidt]         })
         sample({source:str, target:[str]           })
@@ -49,31 +33,9 @@ const typecheck = '{global}'
         sample({source:str, target:[str,voidt]     })
         sample({source:str, target:[anyt,str]      })
         sample({source:str, target:[numStr,str]    })
-        sample({source:str, target:[anyt,voidt]    })
         sample({source:str, target:[anyt,numStr]   })
-        sample({source:str, target:[strBool,voidt] })
         sample({source:str, target:[anyt,strBool]  })
         sample({source:str, target:[numStr,strBool]})
-        sample({source:str, target:[numStr,voidt]  })
-        sample({source:str, target:[anyt,numStr]   })
-        sample({source:str, target:[voidt]         })
-        sample({source:str, target:[str]           })
-        sample({source:str, target:[anyt]          })
-        sample({source:str, target:[strBool]       })
-        sample({source:str, target:[numStr]        })
-        sample({source:str, target:[anyt,voidt]    })
-        sample({source:str, target:[strBool,voidt] })
-        sample({source:str, target:[numStr,voidt]  })
-        sample({source:str, target:[str,voidt]     })
-        sample({source:str, target:[anyt,str]      })
-        sample({source:str, target:[numStr,str]    })
-        sample({source:str, target:[anyt,voidt]    })
-        sample({source:str, target:[anyt,numStr]   })
-        sample({source:str, target:[strBool,voidt] })
-        sample({source:str, target:[anyt,strBool]  })
-        sample({source:str, target:[numStr,strBool]})
-        sample({source:str, target:[numStr,voidt]  })
-        sample({source:str, target:[anyt,numStr]   })
         sample({clock:num, target:[num]           })
         sample({clock:num, target:[voidt]         })
         sample({clock:num, target:[anyt]          })
@@ -82,9 +44,6 @@ const typecheck = '{global}'
         sample({clock:num, target:[anyt,num]      })
         sample({clock:num, target:[num,numStr]    })
         sample({clock:num, target:[anyt,voidt]    })
-        sample({clock:num, target:[numStr,voidt]  })
-        sample({clock:num, target:[anyt,voidt]    })
-        sample({clock:num, target:[anyt,numStr]   })
         sample({clock:num, target:[numStr,voidt]  })
         sample({clock:num, target:[anyt,numStr]   })
         sample({clock:str, target:[voidt]         })
@@ -98,44 +57,9 @@ const typecheck = '{global}'
         sample({clock:str, target:[str,voidt]     })
         sample({clock:str, target:[anyt,str]      })
         sample({clock:str, target:[numStr,str]    })
-        sample({clock:str, target:[anyt,voidt]    })
         sample({clock:str, target:[anyt,numStr]   })
-        sample({clock:str, target:[strBool,voidt] })
         sample({clock:str, target:[anyt,strBool]  })
         sample({clock:str, target:[numStr,strBool]})
-        sample({clock:str, target:[numStr,voidt]  })
-        sample({clock:str, target:[anyt,numStr]   })
-        sample({clock:num, target:[num]           })
-        sample({clock:num, target:[voidt]         })
-        sample({clock:num, target:[anyt]          })
-        sample({clock:num, target:[numStr]        })
-        sample({clock:num, target:[num,voidt]     })
-        sample({clock:num, target:[anyt,num]      })
-        sample({clock:num, target:[num,numStr]    })
-        sample({clock:num, target:[anyt,voidt]    })
-        sample({clock:num, target:[numStr,voidt]  })
-        sample({clock:num, target:[anyt,voidt]    })
-        sample({clock:num, target:[anyt,numStr]   })
-        sample({clock:num, target:[numStr,voidt]  })
-        sample({clock:num, target:[anyt,numStr]   })
-        sample({clock:str, target:[voidt]         })
-        sample({clock:str, target:[str]           })
-        sample({clock:str, target:[anyt]          })
-        sample({clock:str, target:[strBool]       })
-        sample({clock:str, target:[numStr]        })
-        sample({clock:str, target:[anyt,voidt]    })
-        sample({clock:str, target:[strBool,voidt] })
-        sample({clock:str, target:[numStr,voidt]  })
-        sample({clock:str, target:[str,voidt]     })
-        sample({clock:str, target:[anyt,str]      })
-        sample({clock:str, target:[numStr,str]    })
-        sample({clock:str, target:[anyt,voidt]    })
-        sample({clock:str, target:[anyt,numStr]   })
-        sample({clock:str, target:[strBool,voidt] })
-        sample({clock:str, target:[anyt,strBool]  })
-        sample({clock:str, target:[numStr,strBool]})
-        sample({clock:str, target:[numStr,voidt]  })
-        sample({clock:str, target:[anyt,numStr]   })
         sample({source:num, clock:num, target:[num]           })
         sample({source:num, clock:num, target:[voidt]         })
         sample({source:num, clock:num, target:[anyt]          })
@@ -144,9 +68,6 @@ const typecheck = '{global}'
         sample({source:num, clock:num, target:[anyt,num]      })
         sample({source:num, clock:num, target:[num,numStr]    })
         sample({source:num, clock:num, target:[anyt,voidt]    })
-        sample({source:num, clock:num, target:[numStr,voidt]  })
-        sample({source:num, clock:num, target:[anyt,voidt]    })
-        sample({source:num, clock:num, target:[anyt,numStr]   })
         sample({source:num, clock:num, target:[numStr,voidt]  })
         sample({source:num, clock:num, target:[anyt,numStr]   })
         sample({source:num, clock:str, target:[num]           })
@@ -157,9 +78,6 @@ const typecheck = '{global}'
         sample({source:num, clock:str, target:[anyt,num]      })
         sample({source:num, clock:str, target:[num,numStr]    })
         sample({source:num, clock:str, target:[anyt,voidt]    })
-        sample({source:num, clock:str, target:[numStr,voidt]  })
-        sample({source:num, clock:str, target:[anyt,voidt]    })
-        sample({source:num, clock:str, target:[anyt,numStr]   })
         sample({source:num, clock:str, target:[numStr,voidt]  })
         sample({source:num, clock:str, target:[anyt,numStr]   })
         sample({source:str, clock:num, target:[voidt]         })
@@ -173,13 +91,9 @@ const typecheck = '{global}'
         sample({source:str, clock:num, target:[str,voidt]     })
         sample({source:str, clock:num, target:[anyt,str]      })
         sample({source:str, clock:num, target:[numStr,str]    })
-        sample({source:str, clock:num, target:[anyt,voidt]    })
         sample({source:str, clock:num, target:[anyt,numStr]   })
-        sample({source:str, clock:num, target:[strBool,voidt] })
         sample({source:str, clock:num, target:[anyt,strBool]  })
         sample({source:str, clock:num, target:[numStr,strBool]})
-        sample({source:str, clock:num, target:[numStr,voidt]  })
-        sample({source:str, clock:num, target:[anyt,numStr]   })
         sample({source:str, clock:str, target:[voidt]         })
         sample({source:str, clock:str, target:[str]           })
         sample({source:str, clock:str, target:[anyt]          })
@@ -191,13 +105,9 @@ const typecheck = '{global}'
         sample({source:str, clock:str, target:[str,voidt]     })
         sample({source:str, clock:str, target:[anyt,str]      })
         sample({source:str, clock:str, target:[numStr,str]    })
-        sample({source:str, clock:str, target:[anyt,voidt]    })
         sample({source:str, clock:str, target:[anyt,numStr]   })
-        sample({source:str, clock:str, target:[strBool,voidt] })
         sample({source:str, clock:str, target:[anyt,strBool]  })
         sample({source:str, clock:str, target:[numStr,strBool]})
-        sample({source:str, clock:str, target:[numStr,voidt]  })
-        sample({source:str, clock:str, target:[anyt,numStr]   })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -225,45 +135,9 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:num, target:[numStr,str]    })
         //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] })
-        //@ts-expect-error
         sample({source:num, target:[anyt,strBool]  })
         //@ts-expect-error
         sample({source:num, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({source:num, target:[str]           })
-        //@ts-expect-error
-        sample({source:num, target:[strBool]       })
-        //@ts-expect-error
-        sample({source:num, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:num, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({source:num, target:[str,voidt]     })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,str]      })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,strBool]  })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({source:str, target:[num]           })
-        //@ts-expect-error
-        sample({source:str, target:[num,voidt]     })
-        //@ts-expect-error
-        sample({source:str, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:str, target:[anyt,num]      })
-        //@ts-expect-error
-        sample({source:str, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:str, target:[num,numStr]    })
         //@ts-expect-error
         sample({source:str, target:[num]           })
         //@ts-expect-error
@@ -292,42 +166,6 @@ const typecheck = '{global}'
         sample({clock:num, target:[anyt,str]      })
         //@ts-expect-error
         sample({clock:num, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,strBool]  })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({clock:str, target:[num]           })
-        //@ts-expect-error
-        sample({clock:str, target:[num,voidt]     })
-        //@ts-expect-error
-        sample({clock:str, target:[num,str]       })
-        //@ts-expect-error
-        sample({clock:str, target:[anyt,num]      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({clock:str, target:[num,numStr]    })
-        //@ts-expect-error
-        sample({clock:num, target:[str]           })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool]       })
-        //@ts-expect-error
-        sample({clock:num, target:[num,str]       })
-        //@ts-expect-error
-        sample({clock:num, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({clock:num, target:[str,voidt]     })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,str]      })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] })
         //@ts-expect-error
         sample({clock:num, target:[anyt,strBool]  })
         //@ts-expect-error
@@ -361,8 +199,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:num, clock:num, target:[numStr,str]    })
         //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool,voidt] })
-        //@ts-expect-error
         sample({source:num, clock:num, target:[anyt,strBool]  })
         //@ts-expect-error
         sample({source:num, clock:num, target:[numStr,strBool]})
@@ -382,8 +218,6 @@ const typecheck = '{global}'
         sample({source:num, clock:str, target:[anyt,str]      })
         //@ts-expect-error
         sample({source:num, clock:str, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[strBool,voidt] })
         //@ts-expect-error
         sample({source:num, clock:str, target:[anyt,strBool]  })
         //@ts-expect-error
@@ -431,46 +265,10 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: Event<string | boolean>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<string>; target: Event<number>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<void> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string>]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<any> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: string; targetType: number; }]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | boolean>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | boolean>]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<number> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<string | number>]; }'.
         Argument of type '{ source: Event<string>; target: Event<number>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }]; }'.
         Argument of type '{ source: Event<string>; target: (Event<void> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: string; targetType: number; }, Event<void>]; }'.
@@ -499,42 +297,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string; }]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<string>; target: Event<number>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<void> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<string>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<string>]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<any> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: string; targetType: number; }]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<string | boolean>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<string | boolean>]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<number> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<string | number>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: string; targetType: number; }, Event<string | number>]; }'.
-        Argument of type '{ clock: Event<number>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: Event<string | boolean>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<number>, { clockType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<number>, { clockType: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<number>, { clockType: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<number>, { clockType: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [{ clockType: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: [Event<any>, { clockType: number; targetType: string | boolean; }]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: [Event<string | number>, { clockType: number; targetType: string | boolean; }]; }'.
@@ -567,8 +329,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string | boolean; }]; }'.
@@ -589,8 +349,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<void> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<any> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<string>; target: (Event<string | number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string | boolean; }]; }'.
@@ -636,22 +394,6 @@ const typecheck = '{global}'
         sample({source:num, target:[num,numStr]    , fn:(src) => src + 1      })
         sample({source:num, target:[anyt,voidt]    , fn:(src) => src + 1      })
         sample({source:num, target:[numStr,voidt]  , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,voidt]    , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,numStr]   , fn:(src) => src + 1      })
-        sample({source:num, target:[numStr,voidt]  , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,numStr]   , fn:(src) => src + 1      })
-        sample({source:num, target:[num]           , fn:(src) => src + 1      })
-        sample({source:num, target:[voidt]         , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt]          , fn:(src) => src + 1      })
-        sample({source:num, target:[numStr]        , fn:(src) => src + 1      })
-        sample({source:num, target:[num,voidt]     , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,num]      , fn:(src) => src + 1      })
-        sample({source:num, target:[num,numStr]    , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,voidt]    , fn:(src) => src + 1      })
-        sample({source:num, target:[numStr,voidt]  , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,voidt]    , fn:(src) => src + 1      })
-        sample({source:num, target:[anyt,numStr]   , fn:(src) => src + 1      })
-        sample({source:num, target:[numStr,voidt]  , fn:(src) => src + 1      })
         sample({source:num, target:[anyt,numStr]   , fn:(src) => src + 1      })
         sample({source:str, target:[voidt]         , fn:(src) => src + 1      })
         sample({source:str, target:[str]           , fn:(src) => src + 1      })
@@ -664,31 +406,9 @@ const typecheck = '{global}'
         sample({source:str, target:[str,voidt]     , fn:(src) => src + 1      })
         sample({source:str, target:[anyt,str]      , fn:(src) => src + 1      })
         sample({source:str, target:[numStr,str]    , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,voidt]    , fn:(src) => src + 1      })
         sample({source:str, target:[anyt,numStr]   , fn:(src) => src + 1      })
-        sample({source:str, target:[strBool,voidt] , fn:(src) => src + 1      })
         sample({source:str, target:[anyt,strBool]  , fn:(src) => src + 1      })
         sample({source:str, target:[numStr,strBool], fn:(src) => src + 1      })
-        sample({source:str, target:[numStr,voidt]  , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,numStr]   , fn:(src) => src + 1      })
-        sample({source:str, target:[voidt]         , fn:(src) => src + 1      })
-        sample({source:str, target:[str]           , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt]          , fn:(src) => src + 1      })
-        sample({source:str, target:[strBool]       , fn:(src) => src + 1      })
-        sample({source:str, target:[numStr]        , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,voidt]    , fn:(src) => src + 1      })
-        sample({source:str, target:[strBool,voidt] , fn:(src) => src + 1      })
-        sample({source:str, target:[numStr,voidt]  , fn:(src) => src + 1      })
-        sample({source:str, target:[str,voidt]     , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,str]      , fn:(src) => src + 1      })
-        sample({source:str, target:[numStr,str]    , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,voidt]    , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,numStr]   , fn:(src) => src + 1      })
-        sample({source:str, target:[strBool,voidt] , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,strBool]  , fn:(src) => src + 1      })
-        sample({source:str, target:[numStr,strBool], fn:(src) => src + 1      })
-        sample({source:str, target:[numStr,voidt]  , fn:(src) => src + 1      })
-        sample({source:str, target:[anyt,numStr]   , fn:(src) => src + 1      })
         sample({clock:num, target:[num]           , fn:(clk) => clk + 1      })
         sample({clock:num, target:[voidt]         , fn:(clk) => clk + 1      })
         sample({clock:num, target:[anyt]          , fn:(clk) => clk + 1      })
@@ -697,9 +417,6 @@ const typecheck = '{global}'
         sample({clock:num, target:[anyt,num]      , fn:(clk) => clk + 1      })
         sample({clock:num, target:[num,numStr]    , fn:(clk) => clk + 1      })
         sample({clock:num, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
         sample({clock:num, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
         sample({clock:num, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
         sample({clock:str, target:[voidt]         , fn:(clk) => clk + 1      })
@@ -713,44 +430,9 @@ const typecheck = '{global}'
         sample({clock:str, target:[str,voidt]     , fn:(clk) => clk + 1      })
         sample({clock:str, target:[anyt,str]      , fn:(clk) => clk + 1      })
         sample({clock:str, target:[numStr,str]    , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
         sample({clock:str, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[strBool,voidt] , fn:(clk) => clk + 1      })
         sample({clock:str, target:[anyt,strBool]  , fn:(clk) => clk + 1      })
         sample({clock:str, target:[numStr,strBool], fn:(clk) => clk + 1      })
-        sample({clock:str, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[num]           , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[voidt]         , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt]          , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[numStr]        , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[num,voidt]     , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,num]      , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[num,numStr]    , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
-        sample({clock:num, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[voidt]         , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[str]           , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt]          , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[strBool]       , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[numStr]        , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[strBool,voidt] , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[str,voidt]     , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,str]      , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[numStr,str]    , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,voidt]    , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[strBool,voidt] , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,strBool]  , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[numStr,strBool], fn:(clk) => clk + 1      })
-        sample({clock:str, target:[numStr,voidt]  , fn:(clk) => clk + 1      })
-        sample({clock:str, target:[anyt,numStr]   , fn:(clk) => clk + 1      })
         sample({source:num, clock:num, target:[num]           , fn:(src,clk) => src + clk})
         sample({source:num, clock:num, target:[voidt]         , fn:(src,clk) => src + clk})
         sample({source:num, clock:num, target:[anyt]          , fn:(src,clk) => src + clk})
@@ -759,9 +441,6 @@ const typecheck = '{global}'
         sample({source:num, clock:num, target:[anyt,num]      , fn:(src,clk) => src + clk})
         sample({source:num, clock:num, target:[num,numStr]    , fn:(src,clk) => src + clk})
         sample({source:num, clock:num, target:[anyt,voidt]    , fn:(src,clk) => src + clk})
-        sample({source:num, clock:num, target:[numStr,voidt]  , fn:(src,clk) => src + clk})
-        sample({source:num, clock:num, target:[anyt,voidt]    , fn:(src,clk) => src + clk})
-        sample({source:num, clock:num, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
         sample({source:num, clock:num, target:[numStr,voidt]  , fn:(src,clk) => src + clk})
         sample({source:num, clock:num, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
         sample({source:num, clock:str, target:[voidt]         , fn:(src,clk) => src + clk})
@@ -775,13 +454,9 @@ const typecheck = '{global}'
         sample({source:num, clock:str, target:[str,voidt]     , fn:(src,clk) => src + clk})
         sample({source:num, clock:str, target:[anyt,str]      , fn:(src,clk) => src + clk})
         sample({source:num, clock:str, target:[numStr,str]    , fn:(src,clk) => src + clk})
-        sample({source:num, clock:str, target:[anyt,voidt]    , fn:(src,clk) => src + clk})
         sample({source:num, clock:str, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
-        sample({source:num, clock:str, target:[strBool,voidt] , fn:(src,clk) => src + clk})
         sample({source:num, clock:str, target:[anyt,strBool]  , fn:(src,clk) => src + clk})
         sample({source:num, clock:str, target:[numStr,strBool], fn:(src,clk) => src + clk})
-        sample({source:num, clock:str, target:[numStr,voidt]  , fn:(src,clk) => src + clk})
-        sample({source:num, clock:str, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[voidt]         , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[str]           , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[anyt]          , fn:(src,clk) => src + clk})
@@ -793,13 +468,9 @@ const typecheck = '{global}'
         sample({source:str, clock:num, target:[str,voidt]     , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[anyt,str]      , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[numStr,str]    , fn:(src,clk) => src + clk})
-        sample({source:str, clock:num, target:[anyt,voidt]    , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
-        sample({source:str, clock:num, target:[strBool,voidt] , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[anyt,strBool]  , fn:(src,clk) => src + clk})
         sample({source:str, clock:num, target:[numStr,strBool], fn:(src,clk) => src + clk})
-        sample({source:str, clock:num, target:[numStr,voidt]  , fn:(src,clk) => src + clk})
-        sample({source:str, clock:num, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[voidt]         , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[str]           , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[anyt]          , fn:(src,clk) => src + clk})
@@ -811,13 +482,9 @@ const typecheck = '{global}'
         sample({source:str, clock:str, target:[str,voidt]     , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[anyt,str]      , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[numStr,str]    , fn:(src,clk) => src + clk})
-        sample({source:str, clock:str, target:[anyt,voidt]    , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
-        sample({source:str, clock:str, target:[strBool,voidt] , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[anyt,strBool]  , fn:(src,clk) => src + clk})
         sample({source:str, clock:str, target:[numStr,strBool], fn:(src,clk) => src + clk})
-        sample({source:str, clock:str, target:[numStr,voidt]  , fn:(src,clk) => src + clk})
-        sample({source:str, clock:str, target:[anyt,numStr]   , fn:(src,clk) => src + clk})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -845,45 +512,9 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:num, target:[numStr,str]    , fn:(src) => src + 1      })
         //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src) => src + 1      })
-        //@ts-expect-error
         sample({source:num, target:[anyt,strBool]  , fn:(src) => src + 1      })
         //@ts-expect-error
         sample({source:num, target:[numStr,strBool], fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[str]           , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[strBool]       , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[num,str]       , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[num,strBool]   , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[str,voidt]     , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,str]      , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,str]    , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,strBool]  , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,strBool], fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num]           , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,voidt]     , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,str]       , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[anyt,num]      , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,strBool]   , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,numStr]    , fn:(src) => src + 1      })
         //@ts-expect-error
         sample({source:str, target:[num]           , fn:(src) => src + 1      })
         //@ts-expect-error
@@ -912,42 +543,6 @@ const typecheck = '{global}'
         sample({clock:num, target:[anyt,str]      , fn:(clk) => clk + 1      })
         //@ts-expect-error
         sample({clock:num, target:[numStr,str]    , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,strBool]  , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,strBool], fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num]           , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,voidt]     , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,str]       , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[anyt,num]      , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,strBool]   , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,numStr]    , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[str]           , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool]       , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[num,str]       , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[num,strBool]   , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[str,voidt]     , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,str]      , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,str]    , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk) => clk + 1      })
         //@ts-expect-error
         sample({clock:num, target:[anyt,strBool]  , fn:(clk) => clk + 1      })
         //@ts-expect-error
@@ -980,8 +575,6 @@ const typecheck = '{global}'
         sample({source:num, clock:num, target:[anyt,str]      , fn:(src,clk) => src + clk})
         //@ts-expect-error
         sample({source:num, clock:num, target:[numStr,str]    , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool,voidt] , fn:(src,clk) => src + clk})
         //@ts-expect-error
         sample({source:num, clock:num, target:[anyt,strBool]  , fn:(src,clk) => src + clk})
         //@ts-expect-error
@@ -1041,46 +634,10 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: Event<string>[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: Event<string | boolean>[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<number> | Event<string>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<any> | Event<string>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<string>; target: Event<number>[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<void> | Event<number>)[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<number> | Event<string>)[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<any> | Event<number>)[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: string; targetType: number; }]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
-        Argument of type '{ source: Event<string>; target: (Event<number> | Event<string | number>)[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
         Argument of type '{ source: Event<string>; target: Event<number>[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
         Argument of type '{ source: Event<string>; target: (Event<void> | Event<number>)[]; fn: (src: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
@@ -1109,42 +666,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<string>; target: Event<number>[]; fn: (clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<void> | Event<number>)[]; fn: (clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<number> | Event<string>)[]; fn: (clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string>]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<any> | Event<number>)[]; fn: (clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: string; targetType: number; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: string; targetType: number; }]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<number> | Event<string | boolean>)[]; fn: (clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | boolean>]; }'.
-        Argument of type '{ clock: Event<string>; target: (Event<number> | Event<string | number>)[]; fn: (clk: string) => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: string; targetType: number; }, Event<string | number>]; }'.
-        Argument of type '{ clock: Event<number>; target: Event<string>[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: Event<string | boolean>[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<number> | Event<string>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
@@ -1177,8 +698,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
@@ -1236,22 +755,6 @@ const typecheck = '{global}'
         sample({source:num, target:[num,numStr]  , fn:(src:number) => src+1             })
         sample({source:num, target:[anyt,voidt]  , fn:(src:number) => src+1             })
         sample({source:num, target:[numStr,voidt], fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,voidt]  , fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,numStr] , fn:(src:number) => src+1             })
-        sample({source:num, target:[numStr,voidt], fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,numStr] , fn:(src:number) => src+1             })
-        sample({source:num, target:[num]         , fn:(src:number) => src+1             })
-        sample({source:num, target:[voidt]       , fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt]        , fn:(src:number) => src+1             })
-        sample({source:num, target:[numStr]      , fn:(src:number) => src+1             })
-        sample({source:num, target:[num,voidt]   , fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,num]    , fn:(src:number) => src+1             })
-        sample({source:num, target:[num,numStr]  , fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,voidt]  , fn:(src:number) => src+1             })
-        sample({source:num, target:[numStr,voidt], fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,voidt]  , fn:(src:number) => src+1             })
-        sample({source:num, target:[anyt,numStr] , fn:(src:number) => src+1             })
-        sample({source:num, target:[numStr,voidt], fn:(src:number) => src+1             })
         sample({source:num, target:[anyt,numStr] , fn:(src:number) => src+1             })
         sample({clock:num, target:[num]         , fn:(clk:number) => clk+1             })
         sample({clock:num, target:[voidt]       , fn:(clk:number) => clk+1             })
@@ -1261,22 +764,6 @@ const typecheck = '{global}'
         sample({clock:num, target:[anyt,num]    , fn:(clk:number) => clk+1             })
         sample({clock:num, target:[num,numStr]  , fn:(clk:number) => clk+1             })
         sample({clock:num, target:[anyt,voidt]  , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[numStr,voidt], fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,voidt]  , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,numStr] , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[numStr,voidt], fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,numStr] , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[num]         , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[voidt]       , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt]        , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[numStr]      , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[num,voidt]   , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,num]    , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[num,numStr]  , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,voidt]  , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[numStr,voidt], fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,voidt]  , fn:(clk:number) => clk+1             })
-        sample({clock:num, target:[anyt,numStr] , fn:(clk:number) => clk+1             })
         sample({clock:num, target:[numStr,voidt], fn:(clk:number) => clk+1             })
         sample({clock:num, target:[anyt,numStr] , fn:(clk:number) => clk+1             })
         sample({source:num, clock:num, target:[num]         , fn:(src:number,clk:number) => src+clk})
@@ -1287,9 +774,6 @@ const typecheck = '{global}'
         sample({source:num, clock:num, target:[anyt,num]    , fn:(src:number,clk:number) => src+clk})
         sample({source:num, clock:num, target:[num,numStr]  , fn:(src:number,clk:number) => src+clk})
         sample({source:num, clock:num, target:[anyt,voidt]  , fn:(src:number,clk:number) => src+clk})
-        sample({source:num, clock:num, target:[numStr,voidt], fn:(src:number,clk:number) => src+clk})
-        sample({source:num, clock:num, target:[anyt,voidt]  , fn:(src:number,clk:number) => src+clk})
-        sample({source:num, clock:num, target:[anyt,numStr] , fn:(src:number,clk:number) => src+clk})
         sample({source:num, clock:num, target:[numStr,voidt], fn:(src:number,clk:number) => src+clk})
         sample({source:num, clock:num, target:[anyt,numStr] , fn:(src:number,clk:number) => src+clk})
       }
@@ -1319,30 +803,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:num, target:[numStr,str]    , fn:(src:number) => src+1             })
         //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,strBool]  , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,strBool], fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[str]           , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[strBool]       , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[num,str]       , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[num,strBool]   , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[str,voidt]     , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,str]      , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,str]    , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src:number) => src+1             })
-        //@ts-expect-error
         sample({source:num, target:[anyt,strBool]  , fn:(src:number) => src+1             })
         //@ts-expect-error
         sample({source:num, target:[numStr,strBool], fn:(src:number) => src+1             })
@@ -1362,30 +822,6 @@ const typecheck = '{global}'
         sample({clock:num, target:[anyt,str]      , fn:(clk:number) => clk+1             })
         //@ts-expect-error
         sample({clock:num, target:[numStr,str]    , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,strBool]  , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,strBool], fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[str]           , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool]       , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[num,str]       , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[num,strBool]   , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[str,voidt]     , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,str]      , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,str]    , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk:number) => clk+1             })
         //@ts-expect-error
         sample({clock:num, target:[anyt,strBool]  , fn:(clk:number) => clk+1             })
         //@ts-expect-error
@@ -1406,8 +842,6 @@ const typecheck = '{global}'
         sample({source:num, clock:num, target:[anyt,str]      , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:num, clock:num, target:[numStr,str]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool,voidt] , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:num, clock:num, target:[anyt,strBool]  , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
@@ -1447,19 +881,11 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:num, clock:str, target:[numStr,str]    , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,voidt]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
         sample({source:num, clock:str, target:[anyt,numStr]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[strBool,voidt] , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:num, clock:str, target:[anyt,strBool]  , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:num, clock:str, target:[numStr,strBool], fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr,voidt]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,numStr]   , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:str, clock:num, target:[num]           , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
@@ -1495,19 +921,11 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:str, clock:num, target:[numStr,str]    , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,voidt]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
         sample({source:str, clock:num, target:[anyt,numStr]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[strBool,voidt] , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:str, clock:num, target:[anyt,strBool]  , fn:(src:number,clk:number) => src+clk})
         //@ts-expect-error
         sample({source:str, clock:num, target:[numStr,strBool], fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[numStr,voidt]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,numStr]   , fn:(src:number,clk:number) => src+clk})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1527,30 +945,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: Event<string>[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: Event<string | boolean>[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<number> | Event<string>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<any> | Event<string>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
@@ -1571,30 +965,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: Event<string>[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: Event<string | boolean>[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<number> | Event<string>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<number> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<number>, { fnResult: number; targetType: string | boolean; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string; }, Event<void>]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
         Argument of type '{ clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
@@ -1615,8 +985,6 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string> | Event<string | number>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string; }]; }'.
-        Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<void> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [{ fnResult: number; targetType: string | boolean; }, Event<void>]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<any> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: [Event<any>, { fnResult: number; targetType: string | boolean; }]; }'.
         Argument of type '{ source: Event<number>; clock: Event<number>; target: (Event<string | number> | Event<string | boolean>)[]; fn: (src: number, clk: number) => number; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: [Event<string | number>, { fnResult: number; targetType: string | boolean; }]; }'.
@@ -1700,38 +1068,6 @@ const typecheck = '{global}'
         Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
           Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
             Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
               Type 'string' is not assignable to type 'number'.
         Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
           Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.

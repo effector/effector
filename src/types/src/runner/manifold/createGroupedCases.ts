@@ -65,7 +65,21 @@ function createHashReader<T extends Obj>(getHash: Grouping<T>['getHash']) {
     return values.join(' ')
   }
 }
-
+function createDedupeReader<T extends Obj>(
+  objectToLines: (
+    value: T,
+  ) => string | Array<string | null | undefined | false>,
+) {
+  return (value: T) => {
+    const linesRaw = objectToLines(value)
+    const textLines = Array.isArray(linesRaw) ? linesRaw : [linesRaw]
+    return textLines
+      .filter((line): line is string => typeof line === 'string')
+      .map(line => line.trim())
+      .filter(line => !line.includes(`@ts-expect-error`))
+      .join(`\n`)
+  }
+}
 export function createGroupedCases<T extends Obj>(
   casesDefs: T[],
   {
@@ -74,7 +88,6 @@ export function createGroupedCases<T extends Obj>(
     describeGroup,
     sortByFields,
     filter,
-    dedupeHash,
     pass,
     tags,
   }: Grouping<T>,
@@ -89,7 +102,7 @@ export function createGroupedCases<T extends Obj>(
       return result
     }
   }
-  const dedupeGetter = dedupeHash && createReader(dedupeHash)
+  let dedupeGetter: ((obj: T) => string) | undefined
   const hashGetter = createHashReader(getHash)
   const groupDescriber = createReader(describeGroup)
   const passGetter = createReader(pass!, {
@@ -173,14 +186,18 @@ export function createGroupedCases<T extends Obj>(
             if (!isPass) lines.push('//' + '@ts-expect-error')
             return lines
           }
+          function createLineBlock(value: T) {
+            const linesRaw = renderer.textValueReader(value)
+            return renderVisibleValues(
+              Array.isArray(linesRaw) ? linesRaw : [linesRaw],
+              true,
+            )
+          }
+          if (!dedupeGetter) {
+            dedupeGetter = createDedupeReader(createLineBlock)
+          }
           createLinesForTestList = (values: T[], pass, description) => {
-            const lineBlocks = values.map(value => {
-              const linesRaw = renderer.textValueReader(value)
-              return renderVisibleValues(
-                Array.isArray(linesRaw) ? linesRaw : [linesRaw],
-                true,
-              )
-            })
+            const lineBlocks = values.map(createLineBlock)
             const items = values.map((value, i) => {
               const lines = lineBlocks[i]
               return {
@@ -210,15 +227,23 @@ export function createGroupedCases<T extends Obj>(
         addExpectError = (obj: T) => !passGetter(obj),
       } = createTestLines
       const readExpectError = createReader(addExpectError, {isBool: true})
-      const printShape: Record<
-        string,
-        string | {field: string; when: string}
-      > = {}
+      const printShape: Record<string, string | {field: string; when: string}> =
+        {}
       forIn(shape, (value, key) => {
         printShape[key] = isRef(value)
           ? value.name
           : {field: value.field.name, when: value.when.name}
       })
+      if (!dedupeGetter) {
+        dedupeGetter = createDedupeReader(value =>
+          printMethodValues({
+            method,
+            values: [value],
+            shape: printShape,
+            addExpectError: () => false,
+          }),
+        )
+      }
       createLinesForTestList = (values: T[], pass, description) => {
         const textLines = printMethodValues({
           method,
@@ -238,6 +263,9 @@ export function createGroupedCases<T extends Obj>(
       }
     }
   } else {
+    if (!dedupeGetter) {
+      dedupeGetter = createDedupeReader(createTestLines)
+    }
     createLinesForTestList = (values: T[], pass, description) => {
       const lineBlocks = values.map(value =>
         createTestLines(value).filter(line => typeof line === 'string'),
@@ -453,7 +481,7 @@ const collator = new Intl.Collator('en', {
   numeric: true,
 })
 function skewHeapSortFieldsComparator<
-  Obj extends Record<string, ReadonlyArray<any> | 'string'>
+  Obj extends Record<string, ReadonlyArray<any> | 'string'>,
 >(sortByFields: Obj) {
   const fields = [] as Array<
     | {

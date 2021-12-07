@@ -6,14 +6,7 @@ import {Ref, ExecutionPlan} from './types'
 function getDeclsReferencedByConfig(): string[] {
   const results: Ref<unknown, unknown>[] = []
   const grouping = ctx.config.grouping!
-  const {
-    pass,
-    getHash,
-    describeGroup,
-    createTestLines,
-    dedupeHash,
-    tags,
-  } = grouping
+  const {pass, getHash, describeGroup, createTestLines, tags} = grouping
   if (isRef(pass)) {
     results.push(pass)
   }
@@ -24,9 +17,6 @@ function getDeclsReferencedByConfig(): string[] {
   }
   if (isRef(describeGroup)) {
     results.push(describeGroup)
-  }
-  if (isRef(dedupeHash)) {
-    results.push(dedupeHash)
   }
   if (tags) {
     results.push(...Object.values(tags))

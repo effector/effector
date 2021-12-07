@@ -201,8 +201,6 @@ export default () => {
       tuple: '[Event<AN>, Store<AN>]',
     },
   })
-  const testLine = fmt`{const result: ${returnCode} = ${methodCode}}`
-  const description = fmt`${targetToken}${typedFnToken}, ${clock} clock`
   sortOrder([targetToken, typedFn, source, clock, fn, methodCode])
   config({
     header,
@@ -210,7 +208,6 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample', 'Event', 'Store'],
     grouping: {
       pass,
-      dedupeHash: testLine,
       getHash: [targetToken, clock, typedFn],
       tags: {
         sourceType: source,
@@ -220,7 +217,10 @@ export default () => {
         target: targetToken,
       },
       describeGroup: computeFn({
-        source: {largeGroup, description},
+        source: {
+          largeGroup,
+          description: fmt`${targetToken}${typedFnToken}, ${clock} clock`,
+        },
         fn: ({largeGroup, description}) => ({
           largeGroup,
           noGroup: true,
@@ -229,7 +229,7 @@ export default () => {
       }),
       createTestLines: {
         type: 'text',
-        value: testLine,
+        value: fmt`{const result: ${returnCode} = ${methodCode}}`,
       },
     },
   })
