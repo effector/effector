@@ -399,6 +399,7 @@ export type Compute = {
     fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
     safe: boolean
     filter: boolean
+    pure: boolean
   }
   order?: {
     priority: BarrierPriorityTag
@@ -425,11 +426,13 @@ export const step: {
     priority?: BarrierPriorityTag | false
     safe?: boolean
     filter?: boolean
+    pure?: boolean
   }): Compute
   filter(data: {
-    fn: (data: any, scope: {[field: string]: any}) => boolean
+    fn: (data: any, scope: {[field: string]: any}, stack: Stack) => boolean
+    pure?: boolean
   }): Compute
-  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Compute
+  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}, stack: Stack): Compute
   mov(data: {
     from?: 'value' | 'store' | 'stack' | 'a' | 'b'
     to?: 'stack' | 'a' | 'b' | 'store'
