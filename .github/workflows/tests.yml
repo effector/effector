@@ -18,11 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with: {node-version: 12}
+        with: {node-version: 16}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn test
@@ -33,11 +33,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with: {node-version: 12}
+        with: {node-version: 16}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn build
@@ -79,11 +79,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with: {node-version: 12}
+        with: {node-version: 16}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn coverage
@@ -99,11 +99,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with: {node-version: 12}
+        with: {node-version: 16}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2
@@ -123,11 +123,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with: {node-version: 12}
+        with: {node-version: 16}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2
