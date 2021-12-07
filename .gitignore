@@ -43,5 +43,6 @@ val/**
 .size-snapshot.json
 **/.cache/**
 tools/builder.js
+src/types/jsonOutput.json
 
 **/.serverless/**
