@@ -780,8 +780,6 @@ describe('unit source', () => {
         "
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; target: Event<AB>; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
-        Argument of type '{ source: Event<AB | null>; target: Event<AB>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: AB; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: AB; }; }'.
         "
       `)
     })
@@ -797,8 +795,8 @@ describe('unit source', () => {
         "
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; target: Event<ABN>; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: ABN; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: ABN; }; }'.
-        Argument of type '{ source: Event<AB | null>; target: Event<ABN>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: ABN; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: ABN; }; }'.
+        Argument of type '{ source: Event<AB | null>; target: Event<ABN>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
         "
       `)
     })
@@ -817,8 +815,6 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<number>; target: Event<AB>; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<AB>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: AB; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: AB; }; }'.
         "
       `)
     })
@@ -834,8 +830,8 @@ describe('unit source', () => {
         "
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<any>; target: Event<ABN>; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: ABN; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: ABN; }; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<ABN>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: ABN; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: ABN; }; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<ABN>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
         "
       `)
     })
@@ -854,8 +850,6 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: (Store<number> | Event<number>)[]; target: Event<AB>; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: AB; }; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<AB>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: AB; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: AB; }; }'.
         "
       `)
     })
@@ -871,8 +865,8 @@ describe('unit source', () => {
         "
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<any>[]; target: Event<ABN>; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: ABN; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: ABN; }; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<ABN>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: ABN; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: ABN; }; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<ABN>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
         "
       `)
     })
@@ -883,8 +877,7 @@ describe('unit source', () => {
       sample({source:nullableAB, target:aNum, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; target: Event<{ a: number; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: number; }; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: number; }; }; }'.
+        no errors
         "
       `)
     })
@@ -894,8 +887,8 @@ describe('unit source', () => {
       sample({source:nullableAB, target:aStr, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; target: Event<{ a: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: string; }; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: string; }; }; }'.
+        Argument of type '{ source: Event<AB | null>; target: Event<{ a: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
         "
       `)
     })
@@ -906,8 +899,7 @@ describe('unit source', () => {
       sample({source:nullableAB, clock:anyt, target:aNum, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<{ a: number; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: number; }; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: number; }; }; }'.
+        no errors
         "
       `)
     })
@@ -917,8 +909,8 @@ describe('unit source', () => {
       sample({source:nullableAB, clock:anyt, target:aStr, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<{ a: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: string; }; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: string; }; }; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<{ a: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
         "
       `)
     })
@@ -929,8 +921,7 @@ describe('unit source', () => {
       sample({source:nullableAB, clock:[anyt], target:aNum, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<{ a: number; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: number; }; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: number; }; }; }'.
+        no errors
         "
       `)
     })
@@ -940,8 +931,8 @@ describe('unit source', () => {
       sample({source:nullableAB, clock:[anyt], target:aStr, filter:Boolean})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<{ a: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: string; }; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB | null; targetType: { a: string; }; }; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<{ a: string; }>; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
         "
       `)
     })
@@ -969,14 +960,6 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<void>]; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; target: (Event<any> | Event<void> | Event<AB>)[]; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<any>, Event<void>]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<any>, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: Event<AB>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<void> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<void> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1010,14 +993,14 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<void>]; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<any>, Event<void>]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<any>, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: Event<ABN>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: Event<ABN>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1057,14 +1040,6 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<void>]; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<number>; target: (Event<any> | Event<void> | Event<AB>)[]; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<any>, Event<void>]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<any>, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<AB>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<void> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<void> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1098,14 +1073,14 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<void>]; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<any>; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<any>, Event<void>]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<any>, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<ABN>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<ABN>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1145,14 +1120,6 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<void>]; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: (Store<number> | Event<number>)[]; target: (Event<any> | Event<void> | Event<AB>)[]; filter: (val: { ...; }, n: number) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<any>, Event<void>]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: AB; }, Event<any>, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<AB>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<void> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<AB>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: AB; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1186,14 +1153,14 @@ describe('unit source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<void>]; }'.
         Argument of type '{ source: Event<{ a: number | null; b: string; }>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: (val: { a: number | null; b: string; }) => val is AB; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<any>, Event<void>]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number | null; b: string; }; targetType: ABN; }, Event<any>, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<ABN>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: ABN; }, Event<any>, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<ABN>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<ABN>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: ABN; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1209,14 +1176,7 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; target: Event<{ a: number; }>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<void> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<void> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>, Event<void>]; }'.
+        no errors
         "
       `)
     })
@@ -1234,14 +1194,14 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; target: (Event<AB> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, { sourceType: AB | null; targetType: AB; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, { sourceType: AB | null; targetType: AB; }]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<AB> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<AB>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; target: (Event<any> | Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1257,14 +1217,7 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: Event<{ a: number; }>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<void> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<void> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>, Event<void>]; }'.
+        no errors
         "
       `)
     })
@@ -1282,14 +1235,14 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<AB> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, { sourceType: AB | null; targetType: AB; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, { sourceType: AB | null; targetType: AB; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<AB> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<AB>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>; target: (Event<any> | Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
         "
       `)
     })
@@ -1305,14 +1258,7 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: Event<{ a: number; }>[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<void> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<{ a: number; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: number; }; }, Event<any>, Event<void>]; }'.
+        no errors
         "
       `)
     })
@@ -1330,14 +1276,14 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<AB> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, { sourceType: AB | null; targetType: AB; }]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, { sourceType: AB | null; targetType: AB; }]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<void>]; }'.
-        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB | null; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<AB> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<AB>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<AB>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<void>]; }'.
+        Argument of type '{ source: Event<AB | null>; clock: Event<any>[]; target: (Event<any> | Event<void> | Event<{ a: string; }>)[]; filter: BooleanConstructor; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: AB; targetType: { a: string; }; }, Event<any>, Event<void>]; }'.
         "
       `)
     })

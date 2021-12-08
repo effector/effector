@@ -366,8 +366,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<User | null>; filter: BooleanConstructor; target: Store<User>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: User | null; targetType: User; }; }'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: User | null; targetType: User; }; }'.
+          no errors
           "
         `)
       })
@@ -461,8 +460,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ clock: Event<User | null>; filter: BooleanConstructor; target: Store<User>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: User | null; targetType: User; }; }'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: User | null; targetType: User; }; }'.
+          no errors
           "
         `)
       })
