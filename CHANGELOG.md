@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.0.6
+
+- Fix `Can't perform a React state update on an unmounted component` warning for `useStoreMap` in a few cases (issue [#574](https://github.com/effector/effector/issues/574))
+
 ## effector 22.1.2
 
 - Allow to use `effector/babel-plugin` in `patronum/macro` 
