@@ -2113,14 +2113,6 @@ export function attach<
   name?: string
 }): Effect<Parameters<FN>[0] , EffectResult<FX>, EffectError<FX>>
 
-type UnionToStoresUnion<T> = (T extends never
-  ? never
-  : () => T) extends infer U
-    ? U extends () => infer S
-      ? UnionToStoresUnion<Exclude<T, S>> | Store<S>
-      : never
-    : never
-
 type CombineState<State> = State[keyof State] extends Store<any>
   // ensure that CombineState will be used only with explicit generics
   // without Store type in them
