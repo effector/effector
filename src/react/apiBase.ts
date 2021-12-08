@@ -87,12 +87,22 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     val: Result
     init: boolean
     store: Store<State>
+    active: boolean
   }>({} as any)
   const refState = result.current
   refState.fn = fn
   refState.upd = updateFilter
   refState.init = refState.store === store
   refState.store = store
+  refState.active = true
+  useIsomorphicLayoutEffect(
+    () => () => {
+      if (result.current) {
+        result.current.active = false
+      }
+    },
+    [],
+  )
   const inc = createNotifier()
   const deps = [scope, ...keys]
   const stop = React.useMemo(() => {
@@ -114,6 +124,7 @@ function updateRef<State, Keys, Result>(
     upd: (update: Result, current: Result) => boolean
     val: Result
     init: boolean
+    active: boolean
   },
   inc?: React.DispatchWithoutAction,
 ) {
@@ -128,7 +139,7 @@ function updateRef<State, Keys, Result>(
       refState.upd(newValue, refState.val)
     ) {
       refState.val = newValue
-      inc && inc()
+      inc && refState.active && inc()
     }
   }
 }
