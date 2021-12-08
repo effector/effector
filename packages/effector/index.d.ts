@@ -887,10 +887,10 @@ type SampleImpl<
       : Clock extends Units | never[]
         ? SampleFilterDef<
             ModeSelector<
-              'clock/filter/fn',
-              'clock/filter',
-              'clock/nofilter/fn',
-              'clock/nofilter',
+              'clock |        | filter | fn |       ',
+              'clock |        | filter |    |       ',
+              'clock |        |        | fn |       ',
+              'clock |        |        |    |       ',
               SomeFN
             >,
             Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN
@@ -902,10 +902,10 @@ type SampleImpl<
       ? unknown extends Clock
         ? SampleFilterDef<
             ModeSelector<
-              'source/filter/fn',
-              'source/filter',
-              'source/nofilter/fn',
-              'source/nofilter',
+              '      | source | filter | fn |       ',
+              '      | source | filter |    |       ',
+              '      | source |        | fn |       ',
+              '      | source |        |    |       ',
               SomeFN
             >,
             Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN
@@ -914,10 +914,10 @@ type SampleImpl<
         : Clock extends Units | never[]
           ? SampleFilterDef<
               ModeSelector<
-                'clock/source/filter/fn',
-                'clock/source/filter',
-                'clock/source/nofilter/fn',
-                'clock/source/nofilter',
+                'clock | source | filter | fn |       ',
+                'clock | source | filter |    |       ',
+                'clock | source |        | fn |       ',
+                'clock | source |        |    |       ',
                 SomeFN
               >,
               Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN
@@ -934,10 +934,10 @@ type SampleImpl<
         : Clock extends Units | never[]
           ? TargetCheck<
               ModeSelector<
-                'clock/filter/fn/target',
-                'clock/filter/target',
-                'clock/nofilter/fn/target',
-                'clock/nofilter/target',
+                'clock |        | filter | fn | target',
+                'clock |        | filter |    | target',
+                'clock |        |        | fn | target',
+                'clock |        |        |    | target',
                 SomeFN
               >,
               Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN
@@ -949,10 +949,10 @@ type SampleImpl<
         ? unknown extends Clock
           ? TargetCheck<
               ModeSelector<
-                'source/filter/fn/target',
-                'source/filter/target',
-                'source/nofilter/fn/target',
-                'source/nofilter/target',
+                '      | source | filter | fn | target',
+                '      | source | filter |    | target',
+                '      | source |        | fn | target',
+                '      | source |        |    | target',
                 SomeFN
               >,
               Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN
@@ -961,10 +961,10 @@ type SampleImpl<
           : Clock extends Units | never[]
             ? TargetCheck<
                 ModeSelector<
-                  'clock/source/filter/fn/target',
-                  'clock/source/filter/target',
-                  'clock/source/nofilter/fn/target',
-                  'clock/source/nofilter/target',
+                  'clock | source | filter | fn | target',
+                  'clock | source | filter |    | target',
+                  'clock | source |        | fn | target',
+                  'clock | source |        |    | target',
                   SomeFN
                 >,
                 Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN
@@ -1143,130 +1143,130 @@ export function sample<
   : SampleRet<Target, Source, Clock, FNSrc, FNClk, FNBoth, SomeFN, InferTarget, unknown extends FilterUnit ? 'no filter' : 'filter'>
 type FilterMode<
   Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'clock/source/filter/fn'
-    | 'clock/source/nofilter/fn'
-    | 'clock/source/filter/target'
-    | 'clock/source/nofilter/target'
-    | 'clock/source/filter'
-    | 'clock/source/nofilter'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | 'clock | source | filter | fn |       '
+    | 'clock | source |        | fn |       '
+    | 'clock | source | filter |    | target'
+    | 'clock | source |        |    | target'
+    | 'clock | source | filter |    |       '
+    | 'clock | source |        |    |       '
 
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'source/filter/fn'
-    | 'source/nofilter/fn'
-    | 'source/filter/target'
-    | 'source/nofilter/target'
-    | 'source/filter'
-    | 'source/nofilter'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | '      | source | filter | fn |       '
+    | '      | source |        | fn |       '
+    | '      | source | filter |    | target'
+    | '      | source |        |    | target'
+    | '      | source | filter |    |       '
+    | '      | source |        |    |       '
 
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
-    | 'clock/filter/fn'
-    | 'clock/nofilter/fn'
-    | 'clock/filter/target'
-    | 'clock/nofilter/target'
-    | 'clock/filter'
-    | 'clock/nofilter'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
+    | 'clock |        | filter | fn |       '
+    | 'clock |        |        | fn |       '
+    | 'clock |        | filter |    | target'
+    | 'clock |        |        |    | target'
+    | 'clock |        | filter |    |       '
+    | 'clock |        |        |    |       '
   )
 > = Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'clock/source/filter/fn'
-    | 'clock/source/nofilter/fn'
-    | 'clock/source/filter/target'
-    | 'clock/source/nofilter/target'
-    | 'clock/source/filter'
-    | 'clock/source/nofilter'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | 'clock | source | filter | fn |       '
+    | 'clock | source |        | fn |       '
+    | 'clock | source | filter |    | target'
+    | 'clock | source |        |    | target'
+    | 'clock | source | filter |    |       '
+    | 'clock | source |        |    |       '
   )
   ? 'both'
   : Mode extends (
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'source/filter/fn'
-    | 'source/nofilter/fn'
-    | 'source/filter/target'
-    | 'source/nofilter/target'
-    | 'source/filter'
-    | 'source/nofilter'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | '      | source | filter | fn |       '
+    | '      | source |        | fn |       '
+    | '      | source | filter |    | target'
+    | '      | source |        |    | target'
+    | '      | source | filter |    |       '
+    | '      | source |        |    |       '
   )
   ? 'src'
   : 'clk'
 type FilterModeKind<
   Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'clock/source/filter/fn'
-    | 'clock/source/nofilter/fn'
-    | 'clock/source/filter/target'
-    | 'clock/source/nofilter/target'
-    | 'clock/source/filter'
-    | 'clock/source/nofilter'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | 'clock | source | filter | fn |       '
+    | 'clock | source |        | fn |       '
+    | 'clock | source | filter |    | target'
+    | 'clock | source |        |    | target'
+    | 'clock | source | filter |    |       '
+    | 'clock | source |        |    |       '
 
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'source/filter/fn'
-    | 'source/nofilter/fn'
-    | 'source/filter/target'
-    | 'source/nofilter/target'
-    | 'source/filter'
-    | 'source/nofilter'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | '      | source | filter | fn |       '
+    | '      | source |        | fn |       '
+    | '      | source | filter |    | target'
+    | '      | source |        |    | target'
+    | '      | source | filter |    |       '
+    | '      | source |        |    |       '
 
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
-    | 'clock/filter/fn'
-    | 'clock/nofilter/fn'
-    | 'clock/filter/target'
-    | 'clock/nofilter/target'
-    | 'clock/filter'
-    | 'clock/nofilter'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
+    | 'clock |        | filter | fn |       '
+    | 'clock |        |        | fn |       '
+    | 'clock |        | filter |    | target'
+    | 'clock |        |        |    | target'
+    | 'clock |        | filter |    |       '
+    | 'clock |        |        |    |       '
   )
 > = Mode extends (
-      | 'clock/source/filter/fn/target'
-      | 'clock/source/filter/fn'
-      | 'clock/source/filter/target'
-      | 'clock/source/filter'
-      | 'source/filter/fn/target'
-      | 'source/filter/fn'
-      | 'source/filter/target'
-      | 'source/filter'
-      | 'clock/filter/fn/target'
-      | 'clock/filter/fn'
-      | 'clock/filter/target'
-      | 'clock/filter'
+      | 'clock | source | filter | fn | target'
+      | 'clock | source | filter | fn |       '
+      | 'clock | source | filter |    | target'
+      | 'clock | source | filter |    |       '
+      | '      | source | filter | fn | target'
+      | '      | source | filter | fn |       '
+      | '      | source | filter |    | target'
+      | '      | source | filter |    |       '
+      | 'clock |        | filter | fn | target'
+      | 'clock |        | filter | fn |       '
+      | 'clock |        | filter |    | target'
+      | 'clock |        | filter |    |       '
     )
   ? 'filter'
   : Mode extends (
-      | 'clock/source/nofilter/fn/target'
-      | 'clock/source/nofilter/fn'
-      | 'clock/source/nofilter/target'
-      | 'clock/source/nofilter'
-      | 'source/nofilter/fn/target'
-      | 'source/nofilter/fn'
-      | 'source/nofilter/target'
-      | 'source/nofilter'
-      | 'clock/nofilter/fn/target'
-      | 'clock/nofilter/fn'
-      | 'clock/nofilter/target'
-      | 'clock/nofilter'
+      | 'clock | source |        | fn | target'
+      | 'clock | source |        | fn |       '
+      | 'clock | source |        |    | target'
+      | 'clock | source |        |    |       '
+      | '      | source |        | fn | target'
+      | '      | source |        | fn |       '
+      | '      | source |        |    | target'
+      | '      | source |        |    |       '
+      | 'clock |        |        | fn | target'
+      | 'clock |        |        | fn |       '
+      | 'clock |        |        |    | target'
+      | 'clock |        |        |    |       '
     )
   ? 'nofilter'
   : never
 type SampleFilterTargetDef<
   Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'clock/source/filter/target'
-    | 'clock/source/nofilter/target'
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'source/filter/target'
-    | 'source/nofilter/target'
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
-    | 'clock/filter/target'
-    | 'clock/nofilter/target'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | 'clock | source | filter |    | target'
+    | 'clock | source |        |    | target'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | '      | source | filter |    | target'
+    | '      | source |        |    | target'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
+    | 'clock |        | filter |    | target'
+    | 'clock |        |        |    | target'
   ),
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
@@ -1283,23 +1283,23 @@ type SampleFilterTargetDef<
   ? FilterUnit extends Unit<any>
     ? boolean extends UnitValue<FilterUnit>
       ? [(
-          Mode extends 'clock/source/filter/fn/target'
+            Mode extends 'clock | source | filter | fn | target'
           ? {clock: Clock; source: Source; filter: FilterUnit; fn: FNBoth; target: Target}
-          : Mode extends 'clock/source/filter/target'
+          : Mode extends 'clock | source | filter |    | target'
           ? {clock: Clock; source: Source; filter: FilterUnit; target: Target}
-          : Mode extends 'source/filter/fn/target'
+          : Mode extends '      | source | filter | fn | target'
           ? {source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target: Target}
-          : Mode extends 'source/filter/target'
+          : Mode extends '      | source | filter |    | target'
           ? {source: Source; clock?: never; filter: FilterUnit; target: Target}
-          : Mode extends 'clock/filter/fn/target'
+          : Mode extends 'clock |        | filter | fn | target'
           ? {clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target: Target}
-          : Mode extends 'clock/filter/target'
+          : Mode extends 'clock |        | filter |    | target'
           ? {clock: Clock; source?: never; filter: FilterUnit; target: Target}
           : never
         ) & SomeFN]
       : [{error: 'filter unit should has boolean type'; got: UnitValue<FilterUnit>}]
     : (
-        FilterMode<Mode> extends 'both'
+          FilterMode<Mode> extends 'both'
         ? FilterBoth
         : FilterMode<Mode> extends 'src'
         ? FilterSrc
@@ -1309,7 +1309,7 @@ type SampleFilterTargetDef<
       ) extends infer FilterFun
       ?
         FilterFun extends (
-          FilterMode<Mode> extends 'both'
+            FilterMode<Mode> extends 'both'
           ? SourceClockFunction<Source, Clock>
           : FilterMode<Mode> extends 'src'
           ? SourceFunction<Source>
@@ -1317,17 +1317,17 @@ type SampleFilterTargetDef<
         )
         ? ReturnType<FilterFun> extends boolean
           ? [(
-              Mode extends 'clock/source/filter/fn/target'
+                Mode extends 'clock | source | filter | fn | target'
               ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNBoth; target: Target}
-              : Mode extends 'clock/source/filter/target'
+              : Mode extends 'clock | source | filter |    | target'
               ? {clock: Clock; source: Source; filter: FilterFun; target: Target}
-              : Mode extends 'source/filter/fn/target'
+              : Mode extends '      | source | filter | fn | target'
               ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNSrc; target: Target}
-              : Mode extends 'source/filter/target'
+              : Mode extends '      | source | filter |    | target'
               ? {source: Source; clock?: never; filter: FilterFun; target: Target}
-              : Mode extends 'clock/filter/fn/target'
+              : Mode extends 'clock |        | filter | fn | target'
               ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNClk; target: Target}
-              : Mode extends 'clock/filter/target'
+              : Mode extends 'clock |        | filter |    | target'
               ? {clock: Clock; source?: never; filter: FilterFun; target: Target}
               : never
             ) & SomeFN]
@@ -1337,37 +1337,37 @@ type SampleFilterTargetDef<
 
   : FilterModeKind<Mode> extends 'nofilter'
     ? [(
-        Mode extends 'clock/source/nofilter/fn/target'
+          Mode extends 'clock | source |        | fn | target'
         ? {clock: Clock; source: Source; fn: FNBoth; target: Target}
-        : Mode extends 'clock/source/nofilter/target'
+        : Mode extends 'clock | source |        |    | target'
         ? {clock: Clock; source: Source; target: Target}
-        : Mode extends 'source/nofilter/fn/target'
+        : Mode extends '      | source |        | fn | target'
         ? {source: Source; clock?: never; fn: FNSrc; target: Target}
-        : Mode extends 'source/nofilter/target'
+        : Mode extends '      | source |        |    | target'
         ? {source: Source; clock?: never; target: Target}
-        : Mode extends 'clock/nofilter/fn/target'
+        : Mode extends 'clock |        |        | fn | target'
         ? {clock: Clock; source?: never; fn: FNClk; target: Target}
-        : Mode extends 'clock/nofilter/target'
+        : Mode extends 'clock |        |        |    | target'
         ? {clock: Clock; source?: never; target: Target}
         : never
       ) & SomeFN]
     : never
 type SampleFilterDef<
   Mode extends (
-    | 'clock/source/filter/fn'
-    | 'clock/source/nofilter/fn'
-    | 'clock/source/filter'
-    | 'clock/source/nofilter'
+    | 'clock | source | filter | fn |       '
+    | 'clock | source |        | fn |       '
+    | 'clock | source | filter |    |       '
+    | 'clock | source |        |    |       '
 
-    | 'source/filter/fn'
-    | 'source/nofilter/fn'
-    | 'source/filter'
-    | 'source/nofilter'
+    | '      | source | filter | fn |       '
+    | '      | source |        | fn |       '
+    | '      | source | filter |    |       '
+    | '      | source |        |    |       '
 
-    | 'clock/filter/fn'
-    | 'clock/nofilter/fn'
-    | 'clock/filter'
-    | 'clock/nofilter'
+    | 'clock |        | filter | fn |       '
+    | 'clock |        |        | fn |       '
+    | 'clock |        | filter |    |       '
+    | 'clock |        |        |    |       '
   ),
   Source,
   Clock,
@@ -1385,23 +1385,23 @@ type SampleFilterDef<
     FilterUnit extends Unit<any>
       ? boolean extends UnitValue<FilterUnit>
         ? [(
-            Mode extends 'clock/source/filter/fn'
+              Mode extends 'clock | source | filter | fn |       '
             ? {clock: Clock; source: Source; filter: FilterUnit; fn: FNBoth; target?: never}
-            : Mode extends 'clock/source/filter'
+            : Mode extends 'clock | source | filter |    |       '
             ? {clock: Clock; source: Source; filter: FilterUnit; target?: never}
-            : Mode extends 'source/filter/fn'
+            : Mode extends '      | source | filter | fn |       '
             ? {source: Source; clock?: never; filter: FilterUnit; fn: FNSrc; target?: never}
-            : Mode extends 'source/filter'
+            : Mode extends '      | source | filter |    |       '
             ? {source: Source; clock?: never; filter: FilterUnit; target?: never}
-            : Mode extends 'clock/filter/fn'
+            : Mode extends 'clock |        | filter | fn |       '
             ? {clock: Clock; source?: never; filter: FilterUnit; fn: FNClk; target?: never}
-            : Mode extends 'clock/filter'
+            : Mode extends 'clock |        | filter |    |       '
             ? {clock: Clock; source?: never; filter: FilterUnit; target?: never}
             : never
           ) & SomeFN]
         : [{error: 'filter unit should has boolean type'; got: UnitValue<FilterUnit>}]
         : (
-          FilterMode<Mode> extends 'both'
+            FilterMode<Mode> extends 'both'
           ? FilterBoth
           : FilterMode<Mode> extends 'src'
           ? FilterSrc
@@ -1433,17 +1433,17 @@ type SampleFilterDef<
             )
             ? ReturnType<FilterFun> extends boolean
               ? [(
-                  Mode extends 'clock/source/filter/fn'
+                    Mode extends 'clock | source | filter | fn |       '
                   ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNBoth; target?: never}
-                  : Mode extends 'clock/source/filter'
+                  : Mode extends 'clock | source | filter |    |       '
                   ? {clock: Clock; source: Source; filter: FilterFun; target?: never}
-                  : Mode extends 'source/filter/fn'
+                  : Mode extends '      | source | filter | fn |       '
                   ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNSrc; target?: never}
-                  : Mode extends 'source/filter'
+                  : Mode extends '      | source | filter |    |       '
                   ? {source: Source; clock?: never; filter: FilterFun; target?: never}
-                  : Mode extends 'clock/filter/fn'
+                  : Mode extends 'clock |        | filter | fn |       '
                   ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNClk; target?: never}
-                  : Mode extends 'clock/filter'
+                  : Mode extends 'clock |        | filter |    |       '
                   ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
                   : never
                 ) & SomeFN]
@@ -1454,17 +1454,17 @@ type SampleFilterDef<
   : FilterModeKind<Mode> extends 'nofilter'
   ?
     [(
-      Mode extends 'clock/source/nofilter/fn'
+        Mode extends 'clock | source |        | fn |       '
       ? {clock: Clock; source: Source; fn: FNBoth; target?: never}
-      : Mode extends 'clock/source/nofilter'
+      : Mode extends 'clock | source |        |    |       '
       ? {clock: Clock; source: Source; target?: never}
-      : Mode extends 'source/nofilter/fn'
+      : Mode extends '      | source |        | fn |       '
       ? {source: Source; clock?: never; fn: FNSrc; target?: never}
-      : Mode extends 'source/nofilter'
+      : Mode extends '      | source |        |    |       '
       ? {source: Source; clock?: never; target?: never}
-      : Mode extends 'clock/nofilter/fn'
+      : Mode extends 'clock |        |        | fn |       '
       ? {clock: Clock; source?: never; fn: FNClk; target?: never}
-      : Mode extends 'clock/nofilter'
+      : Mode extends 'clock |        |        |    |       '
       ? {clock: Clock; source?: never; target?: never}
       : never
     ) & SomeFN]
@@ -1499,12 +1499,12 @@ type SourceClockFunction<Source, Clock> =
   : never
 type FNReturn<
   Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
   ),
   Source,
   Clock,
@@ -1512,35 +1512,35 @@ type FNReturn<
   FNClk extends ClockFunction<Clock>,
   FNBoth extends SourceClockFunction<Source, Clock>,
 > = Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
   )
   ? ReturnType<FNBoth>
   : Mode extends (
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
   )
   ? ReturnType<FNSrc>
   : Mode extends (
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
   )
   ? ReturnType<FNClk>
   : never
 type TargetCheck<
   Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'clock/source/filter/target'
-    | 'clock/source/nofilter/target'
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'source/filter/target'
-    | 'source/nofilter/target'
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
-    | 'clock/filter/target'
-    | 'clock/nofilter/target'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | 'clock | source | filter |    | target'
+    | 'clock | source |        |    | target'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | '      | source | filter |    | target'
+    | '      | source |        |    | target'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
+    | 'clock |        | filter |    | target'
+    | 'clock |        |        |    | target'
   ),
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
@@ -1554,12 +1554,12 @@ type TargetCheck<
   FNBoth extends SourceClockFunction<Source, Clock>,
   SomeFN
 > = Mode extends (
-    | 'clock/source/filter/fn/target'
-    | 'clock/source/nofilter/fn/target'
-    | 'source/filter/fn/target'
-    | 'source/nofilter/fn/target'
-    | 'clock/filter/fn/target'
-    | 'clock/nofilter/fn/target'
+    | 'clock | source | filter | fn | target'
+    | 'clock | source |        | fn | target'
+    | '      | source | filter | fn | target'
+    | '      | source |        | fn | target'
+    | 'clock |        | filter | fn | target'
+    | 'clock |        |        | fn | target'
   )
   ? [TypeOfTarget<FNReturn<Mode, Source, Clock, FNSrc, FNClk, FNBoth>, Target, 'fnRet'>] extends [Target]
     ? SampleFilterTargetDef<Mode, Target, Source, Clock, FilterUnit, FilterSrc, FilterClk, FilterBoth, FNSrc, FNClk, FNBoth, SomeFN>
@@ -1570,10 +1570,10 @@ type TargetCheck<
         targets: Show<TypeOfTarget<FNReturn<Mode, Source, Clock, FNSrc, FNClk, FNBoth>, Target, 'fnRet'>>
       }]
   : Mode extends (
-    | 'clock/source/filter/target'
-    | 'clock/source/nofilter/target'
-    | 'source/filter/target'
-    | 'source/nofilter/target'
+    | 'clock | source | filter |    | target'
+    | 'clock | source |        |    | target'
+    | '      | source | filter |    | target'
+    | '      | source |        |    | target'
   )
   ? Source extends Unit<any> | SourceRecord
     ? [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
@@ -1586,8 +1586,8 @@ type TargetCheck<
         }]
     : never
   : Mode extends (
-    | 'clock/filter/target'
-    | 'clock/nofilter/target'
+    | 'clock |        | filter |    | target'
+    | 'clock |        |        |    | target'
   )
   ? Clock extends Units | never[]
     ? [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
