@@ -1181,7 +1181,7 @@ type Mode_Clk_Src = `clock | source | ${string}`;
 type Mode_Clk_NoSrc  = `clock |        | ${string}`;
 type Mode_NoClk_Src  = `      | source | ${string}`;
 type TargetFilterUnitConfig<
-  Mode extends `${string} | filter | ${string} | target`,
+  Mode /*extends `${string} | filter | ${string} | target`*/,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1203,7 +1203,7 @@ type TargetFilterUnitConfig<
   ? {clock: Clock; source?: never; filter: FilterUnit; target: Target}
   : never
 type TargetFilterFnConfig<
-  Mode extends `${string} | filter | ${string} | target`,
+  Mode /*extends `${string} | filter | ${string} | target`*/,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1225,7 +1225,7 @@ type TargetFilterFnConfig<
   ? {clock: Clock; source?: never; filter: FilterFun; target: Target}
   : never
 type TargetNoFilterConfig<
-  Mode extends `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`,
+  Mode /*extends `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`*/,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1246,7 +1246,7 @@ type TargetNoFilterConfig<
   ? {clock: Clock; source?: never; target: Target}
   : never
 type TargetConfigCheck<
-  Mode extends `${string} | target`,
+  Mode /*extends `${string} | target`*/,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1298,7 +1298,7 @@ type TargetConfigCheck<
   : never
 
 type SampleFilterTargetDef<
-  Mode extends `${string} | target`,
+  Mode /*extends `${string} | target`*/,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1420,7 +1420,7 @@ type SampleFilterTargetDef<
       >
     : never
 type SampleFilterDef<
-  Mode extends `${string} |       `,
+  Mode /*extends `${string} |       `*/,
   Source,
   Clock,
   FilterUnit,
@@ -1545,7 +1545,7 @@ type SourceClockFunction<Source, Clock> =
     : never
   : never
 type FNReturn<
-  Mode extends `${string} | fn | target`,
+  Mode /*extends `${string} | fn | target`*/,
   Source,
   Clock,
   FNSrc extends SourceFunction<Source>,
