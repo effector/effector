@@ -1268,7 +1268,7 @@ type SampleFilterTargetDef<
     | 'clock/filter/target'
     | 'clock/nofilter/target'
   ),
-  Target,
+  Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
   FilterUnit,
@@ -1542,7 +1542,7 @@ type TargetCheck<
     | 'clock/filter/target'
     | 'clock/nofilter/target'
   ),
-  Target,
+  Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
   FilterUnit,
@@ -1600,7 +1600,7 @@ type TargetCheck<
         }]
     : never
   : never
-type TypeOfTargetSoft<SourceType, Target, Mode extends 'fnRet' | 'src' | 'clk'> =
+type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
   Target extends Unit<any>
     ? Target extends Unit<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
@@ -1628,7 +1628,7 @@ type TypeOfTargetSoft<SourceType, Target, Mode extends 'fnRet' | 'src' | 'clk'> 
                 : {clockType: SourceType; targetType: TargetType}
         : never
     }
-type TypeOfTarget<SourceType, Target, Mode extends 'fnRet' | 'src' | 'clk'> =
+type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
   Target extends Unit<any>
     ? Target extends Unit<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
