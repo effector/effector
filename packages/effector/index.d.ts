@@ -432,7 +432,7 @@ export const step: {
     fn: (data: any, scope: {[field: string]: any}, stack: Stack) => boolean
     pure?: boolean
   }): Compute
-  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}, stack: Stack): Compute
+  run(data: {fn: (data: any, scope: {[field: string]: any}, stack: Stack) => any}): Compute
   mov(data: {
     from?: 'value' | 'store' | 'stack' | 'a' | 'b'
     to?: 'stack' | 'a' | 'b' | 'store'
