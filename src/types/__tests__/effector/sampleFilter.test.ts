@@ -688,3 +688,22 @@ test('sample return type supports union types (should pass)', () => {
     "
   `)
 })
+
+test('incorrect filter', () => {
+  const trigger = createEvent()
+  const target = createEvent()
+  function factory() {
+    sample({
+      source: trigger,
+      filter: null,
+      target,
+    })
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'Event<void>' is not assignable to type 'never'.
+    Type 'null' is not assignable to type 'never'.
+    Type 'Event<void>' is not assignable to type 'never'.
+    "
+  `)
+})
