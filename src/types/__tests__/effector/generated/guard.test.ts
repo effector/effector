@@ -1393,10 +1393,6 @@ describe('object source', () => {
         guard({source:{a,b}, target:[ab,anyt]      , filter:$filter           })
         guard({source:{a,b}, target:[ab,voidt]     , filter:$filter           })
         guard({source:{a,b}, target:[ab,anyt,voidt], filter:$filter           })
-        guard({source:{a,b}, target:[ab]           , filter:Boolean           })
-        guard({source:{a,b}, target:[ab,anyt]      , filter:Boolean           })
-        guard({source:{a,b}, target:[ab,voidt]     , filter:Boolean           })
-        guard({source:{a,b}, target:[ab,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1423,29 +1419,9 @@ describe('object source', () => {
         guard({source:{a,b}, target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
         guard({source:{a,b}, target:[abn,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[abn]           , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[abn,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[abn,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[abn,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1486,10 +1462,6 @@ describe('object source', () => {
         guard({source:{a,b}, target:[aNum,anyt]      , filter:$filter           })
         guard({source:{a,b}, target:[aNum,voidt]     , filter:$filter           })
         guard({source:{a,b}, target:[aNum,anyt,voidt], filter:$filter           })
-        guard({source:{a,b}, target:[aNum]           , filter:Boolean           })
-        guard({source:{a,b}, target:[aNum,anyt]      , filter:Boolean           })
-        guard({source:{a,b}, target:[aNum,voidt]     , filter:Boolean           })
-        guard({source:{a,b}, target:[aNum,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1516,29 +1488,9 @@ describe('object source', () => {
         guard({source:{a,b}, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
         guard({source:{a,b}, target:[aStr,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1583,10 +1535,6 @@ describe('object source', () => {
         guard({source:{a,b}, clock:anyt, target:[ab,anyt]      , filter:$filter             })
         guard({source:{a,b}, clock:anyt, target:[ab,voidt]     , filter:$filter             })
         guard({source:{a,b}, clock:anyt, target:[ab,anyt,voidt], filter:$filter             })
-        guard({source:{a,b}, clock:anyt, target:[ab]           , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:[ab,anyt]      , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:[ab,voidt]     , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:[ab,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1613,29 +1561,9 @@ describe('object source', () => {
         guard({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
         guard({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[abn]           , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1680,10 +1608,6 @@ describe('object source', () => {
         guard({source:{a,b}, clock:anyt, target:[aNum,anyt]      , filter:$filter             })
         guard({source:{a,b}, clock:anyt, target:[aNum,voidt]     , filter:$filter             })
         guard({source:{a,b}, clock:anyt, target:[aNum,anyt,voidt], filter:$filter             })
-        guard({source:{a,b}, clock:anyt, target:[aNum]           , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:[aNum,anyt]      , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:[aNum,voidt]     , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1710,29 +1634,9 @@ describe('object source', () => {
         guard({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
         guard({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1777,10 +1681,6 @@ describe('object source', () => {
         guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt]      , filter:$filter             })
         guard({source:{a,b}, clock:[anyt]     , target:[ab,voidt]     , filter:$filter             })
         guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt,voidt], filter:$filter             })
-        guard({source:{a,b}, clock:[anyt]     , target:[ab]           , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1807,29 +1707,9 @@ describe('object source', () => {
         guard({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:$filter           })
         //@ts-expect-error
         guard({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[abn]           , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1874,10 +1754,6 @@ describe('object source', () => {
         guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt]      , filter:$filter             })
         guard({source:{a,b}, clock:[anyt]     , target:[aNum,voidt]     , filter:$filter             })
         guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt,voidt], filter:$filter             })
-        guard({source:{a,b}, clock:[anyt]     , target:[aNum]           , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt]      , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:[aNum,voidt]     , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:[aNum,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1904,29 +1780,9 @@ describe('object source', () => {
         guard({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
         guard({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1967,10 +1823,6 @@ describe('object source', () => {
         guard({source:{a,b}, target:anyt , filter:$filter           })
         guard({source:{a,b}, target:voidt, filter:$filter           })
         guard({source:{a}  , target:aNum , filter:$filter           })
-        guard({source:{a,b}, target:ab   , filter:Boolean           })
-        guard({source:{a,b}, target:anyt , filter:Boolean           })
-        guard({source:{a,b}, target:voidt, filter:Boolean           })
-        guard({source:{a}  , target:aNum , filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1993,24 +1845,9 @@ describe('object source', () => {
         guard({source:{a}  , target:ab  , filter:$filter           })
         //@ts-expect-error
         guard({source:{a}  , target:aStr, filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:abn , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a}  , target:ab  , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a}  , target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2041,14 +1878,9 @@ describe('object source', () => {
         guard({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0})
         guard({source:{a,b}     , target:aNum, filter:$filter                                        })
         guard({source:{a:aOpt,b}, target:aNum, filter:$filter                                        })
-        guard({source:{a,b}     , target:aNum, filter:Boolean                                        })
-        guard({source:{a:aOpt,b}, target:aNum, filter:Boolean                                        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2065,14 +1897,9 @@ describe('object source', () => {
         guard({source:{a,b}, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
         guard({source:{a,b}, target:aStr, filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2099,10 +1926,6 @@ describe('object source', () => {
         guard({source:{a,b}, clock:anyt, target:anyt , filter:$filter             })
         guard({source:{a,b}, clock:anyt, target:voidt, filter:$filter             })
         guard({source:{a}  , clock:anyt, target:aNum , filter:$filter             })
-        guard({source:{a,b}, clock:anyt, target:ab   , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:anyt , filter:Boolean             })
-        guard({source:{a,b}, clock:anyt, target:voidt, filter:Boolean             })
-        guard({source:{a}  , clock:anyt, target:aNum , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2125,24 +1948,9 @@ describe('object source', () => {
         guard({source:{a}  , clock:anyt, target:ab  , filter:$filter           })
         //@ts-expect-error
         guard({source:{a}  , clock:anyt, target:aStr, filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:abn , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a}  , clock:anyt, target:ab  , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a}  , clock:anyt, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2175,14 +1983,9 @@ describe('object source', () => {
         guard({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n})
         guard({source:{a,b}     , clock:anyt, target:aNum, filter:$filter                                          })
         guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                          })
-        guard({source:{a,b}     , clock:anyt, target:aNum, filter:Boolean                                          })
-        guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:Boolean                                          })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2202,14 +2005,9 @@ describe('object source', () => {
         guard({source:{a,b}, clock:anyt, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
         guard({source:{a,b}, clock:anyt, target:aStr, filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2236,10 +2034,6 @@ describe('object source', () => {
         guard({source:{a,b}, clock:[anyt]     , target:anyt , filter:$filter             })
         guard({source:{a,b}, clock:[anyt]     , target:voidt, filter:$filter             })
         guard({source:{a}  , clock:[anyt]     , target:aNum , filter:$filter             })
-        guard({source:{a,b}, clock:[anyt]     , target:ab   , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:anyt , filter:Boolean             })
-        guard({source:{a,b}, clock:[anyt]     , target:voidt, filter:Boolean             })
-        guard({source:{a}  , clock:[anyt]     , target:aNum , filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2262,24 +2056,9 @@ describe('object source', () => {
         guard({source:{a}  , clock:[anyt], target:ab  , filter:$filter           })
         //@ts-expect-error
         guard({source:{a}  , clock:[anyt], target:aStr, filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:abn , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a}  , clock:[anyt], target:ab  , filter:Boolean           })
-        //@ts-expect-error
-        guard({source:{a}  , clock:[anyt], target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2312,14 +2091,9 @@ describe('object source', () => {
         guard({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n})
         guard({source:{a,b}     , clock:[anyt]     , target:aNum, filter:$filter                                          })
         guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                          })
-        guard({source:{a,b}     , clock:[anyt]     , target:aNum, filter:Boolean                                          })
-        guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:Boolean                                          })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2339,14 +2113,9 @@ describe('object source', () => {
         guard({source:{a,b}, clock:[anyt], target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
         guard({source:{a,b}, clock:[anyt], target:aStr, filter:$filter           })
-        //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2404,10 +2173,6 @@ describe('tuple source', () => {
         guard({source:[a,b], target:[lNumStr,anyt]      , filter:$filter            })
         guard({source:[a,b], target:[lNumStr,voidt]     , filter:$filter            })
         guard({source:[a,b], target:[lNumStr,anyt,voidt], filter:$filter            })
-        guard({source:[a,b], target:[lNumStr]           , filter:Boolean            })
-        guard({source:[a,b], target:[lNumStr,anyt]      , filter:Boolean            })
-        guard({source:[a,b], target:[lNumStr,voidt]     , filter:Boolean            })
-        guard({source:[a,b], target:[lNumStr,anyt,voidt], filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2434,29 +2199,9 @@ describe('tuple source', () => {
         guard({source:[a,b], target:[lNumNum,voidt]     , filter:$filter            })
         //@ts-expect-error
         guard({source:[a,b], target:[lNumNum,anyt,voidt], filter:$filter            })
-        //@ts-expect-error
-        guard({source:[a,b], target:[lNumNum]           , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], target:[lNumNum,anyt]      , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], target:[lNumNum,voidt]     , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], target:[lNumNum,anyt,voidt], filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2501,10 +2246,6 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:anyt, target:[lNumStr,anyt]      , filter:$filter               })
         guard({source:[a,b], clock:anyt, target:[lNumStr,voidt]     , filter:$filter               })
         guard({source:[a,b], clock:anyt, target:[lNumStr,anyt,voidt], filter:$filter               })
-        guard({source:[a,b], clock:anyt, target:[lNumStr]           , filter:Boolean               })
-        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt]      , filter:Boolean               })
-        guard({source:[a,b], clock:anyt, target:[lNumStr,voidt]     , filter:Boolean               })
-        guard({source:[a,b], clock:anyt, target:[lNumStr,anyt,voidt], filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2531,29 +2272,9 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:$filter            })
         //@ts-expect-error
         guard({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:$filter            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:anyt, target:[lNumNum]           , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2598,10 +2319,6 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt]      , filter:$filter               })
         guard({source:[a,b], clock:[anyt]     , target:[lNumStr,voidt]     , filter:$filter               })
         guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt,voidt], filter:$filter               })
-        guard({source:[a,b], clock:[anyt]     , target:[lNumStr]           , filter:Boolean               })
-        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt]      , filter:Boolean               })
-        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,voidt]     , filter:Boolean               })
-        guard({source:[a,b], clock:[anyt]     , target:[lNumStr,anyt,voidt], filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2628,29 +2345,9 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:$filter            })
         //@ts-expect-error
         guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:$filter            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:[anyt], target:[lNumNum]           , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2691,10 +2388,6 @@ describe('tuple source', () => {
         guard({source:[a,b], target:anyt   , filter:$filter            })
         guard({source:[a,b], target:voidt  , filter:$filter            })
         guard({source:[a]  , target:lNum   , filter:$filter            })
-        guard({source:[a,b], target:lNumStr, filter:Boolean            })
-        guard({source:[a,b], target:anyt   , filter:Boolean            })
-        guard({source:[a,b], target:voidt  , filter:Boolean            })
-        guard({source:[a]  , target:lNum   , filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2713,19 +2406,9 @@ describe('tuple source', () => {
         guard({source:[a,b], target:lNumNum, filter:$filter            })
         //@ts-expect-error
         guard({source:[a]  , target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        guard({source:[a,b], target:lNumNum, filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a]  , target:lNumNum, filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2758,10 +2441,6 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:anyt, target:anyt   , filter:$filter               })
         guard({source:[a,b], clock:anyt, target:voidt  , filter:$filter               })
         guard({source:[a]  , clock:anyt, target:lNum   , filter:$filter               })
-        guard({source:[a,b], clock:anyt, target:lNumStr, filter:Boolean               })
-        guard({source:[a,b], clock:anyt, target:anyt   , filter:Boolean               })
-        guard({source:[a,b], clock:anyt, target:voidt  , filter:Boolean               })
-        guard({source:[a]  , clock:anyt, target:lNum   , filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2780,19 +2459,9 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:anyt, target:lNumNum, filter:$filter            })
         //@ts-expect-error
         guard({source:[a]  , clock:anyt, target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:anyt, target:lNumNum, filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a]  , clock:anyt, target:lNumNum, filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -2825,10 +2494,6 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:[anyt]     , target:anyt   , filter:$filter               })
         guard({source:[a,b], clock:[anyt]     , target:voidt  , filter:$filter               })
         guard({source:[a]  , clock:[anyt]     , target:lNum   , filter:$filter               })
-        guard({source:[a,b], clock:[anyt]     , target:lNumStr, filter:Boolean               })
-        guard({source:[a,b], clock:[anyt]     , target:anyt   , filter:Boolean               })
-        guard({source:[a,b], clock:[anyt]     , target:voidt  , filter:Boolean               })
-        guard({source:[a]  , clock:[anyt]     , target:lNum   , filter:Boolean               })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2847,19 +2512,9 @@ describe('tuple source', () => {
         guard({source:[a,b], clock:[anyt], target:lNumNum, filter:$filter            })
         //@ts-expect-error
         guard({source:[a]  , clock:[anyt], target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        guard({source:[a,b], clock:[anyt], target:lNumNum, filter:Boolean            })
-        //@ts-expect-error
-        guard({source:[a]  , clock:[anyt], target:lNumNum, filter:Boolean            })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.

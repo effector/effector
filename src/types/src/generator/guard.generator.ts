@@ -24,11 +24,26 @@ export default () => {
     sort: ['fn', 'store', 'bool'],
   })
   const sourceType = separate({
-    source: {clockType},
-    variant: {_: {noClock: {clockType: 'no'}}} as const,
+    source: {clockType, filterType},
+    variant: {
+      clock: {
+        noClock: {clockType: 'no'},
+        hasClock: {},
+      },
+      filter: {
+        boolFilter: {filterType: 'bool'},
+        nonBool: {},
+      },
+    } as const,
     cases: {
-      noClock: union(['unit', 'object', 'tuple']),
-      __: union(['no', 'unit', 'object', 'tuple']),
+      noClock: {
+        boolFilter: union(['unit']),
+        nonBool: union(['unit', 'object', 'tuple']),
+      },
+      hasClock: {
+        boolFilter: union(['no', 'unit']),
+        nonBool: union(['no', 'unit', 'object', 'tuple']),
+      },
     },
     sort: ['unit', 'object', 'tuple', 'no'],
   })

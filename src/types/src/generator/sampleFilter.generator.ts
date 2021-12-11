@@ -24,11 +24,26 @@ export default () => {
     sort: ['fn', 'store', 'bool'],
   })
   const sourceType = separate({
-    source: {clockType},
-    variant: {_: {noClock: {clockType: 'no'}}} as const,
+    source: {clockType, filterType},
+    variant: {
+      clock: {
+        noClock: {clockType: 'no'},
+        hasClock: {},
+      },
+      filter: {
+        boolFilter: {filterType: 'bool'},
+        nonBool: {},
+      },
+    } as const,
     cases: {
-      noClock: union(['unit', 'object', 'tuple']),
-      __: union(['no', 'unit', 'object', 'tuple']),
+      noClock: {
+        boolFilter: union(['unit']),
+        nonBool: union(['unit', 'object', 'tuple']),
+      },
+      hasClock: {
+        boolFilter: union(['no', 'unit']),
+        nonBool: union(['no', 'unit', 'object', 'tuple']),
+      },
     },
     sort: ['unit', 'object', 'tuple', 'no'],
   })
@@ -601,20 +616,25 @@ export default () => {
 
   const groupTokens = computeFn({
     source: {
-      inferByFilter,
       sourceIsWiderThatTarget,
       sourceType,
+      sourceCode,
       targetType,
       clockDescription,
     },
     fn({
-      inferByFilter,
       sourceIsWiderThatTarget,
       sourceType,
+      sourceCode,
       targetType,
       clockDescription,
     }) {
-      const nullable = inferByFilter ? 'nullable ' : ''
+      const nullable = ['nullableAB', 'abNull', '{a:aOpt,b}'].includes(
+        sourceCode || '',
+      )
+        ? 'nullable '
+        : ''
+      //sourceSubtype === 'nullableField' ? 'nullable ' : ''
       return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
         sourceIsWiderThatTarget ? 'wide' : 'same'
       }`
@@ -644,6 +664,7 @@ export default () => {
         sourceIsWiderThatTarget,
         filterType,
         sourceType,
+        sourceCode,
         targetType,
         clockType,
       ],
@@ -652,6 +673,7 @@ export default () => {
         sourceIsWiderThatTarget,
         filter: filterType,
         source: sourceType,
+        sourceCode,
         target: targetType,
         clock: clockType,
       },
