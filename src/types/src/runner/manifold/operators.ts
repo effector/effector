@@ -49,7 +49,7 @@ function getName(id: string, name?: string) {
 export function separate<
   Src extends SourceRec,
   Variants extends Record<string, VariantLevel<Src> /* | VariantLevel<Src>[]*/>,
-  Cases extends SepCases<Src, Variants>
+  Cases extends SepCases<Src, Variants>,
 >({
   name,
   variant,
@@ -138,10 +138,8 @@ function traverseCases(
     >,
     cases: Record<string, Declarator | Record<string, unknown>>,
   ) {
-    const resultCases: Record<
-      string,
-      Declarator | Record<string, Declarator>
-    > = {}
+    const resultCases: Record<string, Declarator | Record<string, Declarator>> =
+      {}
     const variant = variants[currentVariantName]
     const branchNames = [
       ...new Set(
@@ -293,20 +291,35 @@ export function bool<Src extends SourceRec>({
     'either true or false should be defined but not both',
   )
   const id = nextID()
+  let boolDef: Bool['bool']
+  let decls: Bool['decls']
+  if (onFalse && !onTrue) {
+    boolDef = {
+      true: singleMatcher(source, onFalse),
+      false: undefined,
+    }
+    decls = {
+      true: value(false),
+      false: value(true),
+    }
+  } else {
+    boolDef = {
+      true: onTrue && singleMatcher(source, onTrue),
+      false: onFalse && singleMatcher(source, onFalse),
+    }
+    decls = {
+      true: value(true),
+      false: value(false),
+    }
+  }
   const val: Bool = {
     id,
     name: getName(id, name),
     kind: 'bool',
     __t: false,
     prepared: {},
-    bool: {
-      true: onTrue && singleMatcher(source, onTrue),
-      false: onFalse && singleMatcher(source, onFalse),
-    },
-    decls: {
-      true: value(true),
-      false: value(false),
-    },
+    bool: boolDef,
+    decls,
   }
   /* if (name === val.name) */ ctx.shape[val.name] = val
   ctx.items[val.id] = val
@@ -405,7 +418,7 @@ export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
 export function computeVariants<
   Src extends SourceRec,
   Variants extends VariantLevelRec<Src>,
-  Cases extends CaseLayer<Src, Variants>
+  Cases extends CaseLayer<Src, Variants>,
 >({
   source,
   variant,
@@ -446,7 +459,7 @@ export function computeVariants<
 export function computeVariant<
   Src extends SourceRec,
   Variant extends VariantLevel<Src>,
-  Cases extends {[K in keyof Variant]: unknown}
+  Cases extends {[K in keyof Variant]: unknown},
 >({
   source,
   variant,
@@ -597,7 +610,7 @@ function sourceToArgs<
   Src extends SourceRec,
   Case extends Partial<
     {[K in keyof Src]: Src[K] extends Ref<infer S, unknown> ? S : never}
-  >
+  >,
 >(source: Src, caseItem: Case) {
   const realMatchMap = {} as Record<string, any>
   for (const alias in caseItem) {
@@ -614,7 +627,7 @@ function sourceToArgs<
 
 export function matcher<
   Src extends SourceRec,
-  Variant extends VariantLevel<Src>
+  Variant extends VariantLevel<Src>,
 >(
   source: Src,
   cases: Variant,
@@ -625,7 +638,7 @@ export function matcher<
 }
 export function matcher<
   Src extends SourceRec,
-  Variants extends VariantLevel<Src>[]
+  Variants extends VariantLevel<Src>[],
 >(
   source: Src,
   cases: Variants,
@@ -636,11 +649,11 @@ export function matcher<
         ? {[M in keyof Variants[L][K]]: Record<string, any>}
         : Record<string, any>
     }
-  },
+  }
 ]
 export function matcher<
   Src extends SourceRec,
-  Variant extends VariantLevel<Src> | VariantLevel<Src>[]
+  Variant extends VariantLevel<Src> | VariantLevel<Src>[],
 >(source: Src, cases: Variant) {
   const result = {} as any
   for (const key in cases) {
@@ -650,7 +663,7 @@ export function matcher<
 }
 function singleMatcher<
   Src extends SourceRec,
-  VariantField extends SingleVariant<Src>
+  VariantField extends SingleVariant<Src>,
 >(source: Src, caseItem: VariantField) {
   if (Array.isArray(caseItem)) {
     return caseItem.map(caseItem => sourceToArgs(source, caseItem))
