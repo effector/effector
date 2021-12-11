@@ -618,24 +618,11 @@ export default () => {
     source: {
       sourceIsWiderThatTarget,
       sourceType,
-      sourceCode,
       targetType,
       clockDescription,
     },
-    fn({
-      sourceIsWiderThatTarget,
-      sourceType,
-      sourceCode,
-      targetType,
-      clockDescription,
-    }) {
-      const nullable = ['nullableAB', 'abNull', '{a:aOpt,b}'].includes(
-        sourceCode || '',
-      )
-        ? 'nullable '
-        : ''
-      //sourceSubtype === 'nullableField' ? 'nullable ' : ''
-      return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
+    fn({sourceIsWiderThatTarget, sourceType, targetType, clockDescription}) {
+      return `${sourceType}${clockDescription} -> ${targetType} ${
         sourceIsWiderThatTarget ? 'wide' : 'same'
       }`
     },
@@ -658,7 +645,18 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample'],
     header,
     grouping: {
-      pass: bool({source: {wrongTarget}, true: {wrongTarget: false}}),
+      pass: bool({
+        source: {wrongTarget, sourceSubtype, filterType, inferByFilter},
+        false: [
+          {wrongTarget: true},
+          {sourceSubtype: 'nullableField', filterType: 'store'},
+          {
+            sourceSubtype: 'nullableField',
+            filterType: 'fn',
+            inferByFilter: false,
+          },
+        ],
+      }),
       getHash: [
         inferByFilter,
         sourceIsWiderThatTarget,

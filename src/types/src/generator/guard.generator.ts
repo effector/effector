@@ -616,21 +616,13 @@ export default () => {
 
   const groupTokens = computeFn({
     source: {
-      inferByFilter,
       sourceIsWiderThatTarget,
       sourceType,
       targetType,
       clockDescription,
     },
-    fn({
-      inferByFilter,
-      sourceIsWiderThatTarget,
-      sourceType,
-      targetType,
-      clockDescription,
-    }) {
-      const nullable = inferByFilter ? 'nullable ' : ''
-      return `${nullable}${sourceType}${clockDescription} -> ${targetType} ${
+    fn({sourceIsWiderThatTarget, sourceType, targetType, clockDescription}) {
+      return `${sourceType}${clockDescription} -> ${targetType} ${
         sourceIsWiderThatTarget ? 'wide' : 'same'
       }`
     },
@@ -653,7 +645,18 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'guard'],
     header,
     grouping: {
-      pass: bool({source: {wrongTarget}, true: {wrongTarget: false}}),
+      pass: bool({
+        source: {wrongTarget, sourceSubtype, filterType, inferByFilter},
+        false: [
+          {wrongTarget: true},
+          {sourceSubtype: 'nullableField', filterType: 'store'},
+          {
+            sourceSubtype: 'nullableField',
+            filterType: 'fn',
+            inferByFilter: false,
+          },
+        ],
+      }),
       getHash: [
         inferByFilter,
         sourceIsWiderThatTarget,

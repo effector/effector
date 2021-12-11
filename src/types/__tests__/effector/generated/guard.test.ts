@@ -29,15 +29,17 @@ describe('unit source', () => {
     test('unit -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, target:ab   , filter:(val) => val.a > 0})
-        guard({source:ab, target:anyt , filter:(val) => val.a > 0})
-        guard({source:ab, target:voidt, filter:(val) => val.a > 0})
-        guard({source:ab, target:ab   , filter:$filter           })
-        guard({source:ab, target:anyt , filter:$filter           })
-        guard({source:ab, target:voidt, filter:$filter           })
-        guard({source:ab, target:ab   , filter:Boolean           })
-        guard({source:ab, target:anyt , filter:Boolean           })
-        guard({source:ab, target:voidt, filter:Boolean           })
+        guard({source:ab        , target:ab   , filter:(val) => val.a > 0                })
+        guard({source:ab        , target:anyt , filter:(val) => val.a > 0                })
+        guard({source:ab        , target:voidt, filter:(val) => val.a > 0                })
+        guard({source:ab        , target:ab   , filter:$filter                           })
+        guard({source:ab        , target:anyt , filter:$filter                           })
+        guard({source:ab        , target:voidt, filter:$filter                           })
+        guard({source:ab        , target:ab   , filter:Boolean                           })
+        guard({source:ab        , target:anyt , filter:Boolean                           })
+        guard({source:ab        , target:voidt, filter:Boolean                           })
+        guard({source:abNull    , target:ab   , filter:(val): val is AB => val.a !== null})
+        guard({source:nullableAB, target:ab   , filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -49,14 +51,24 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, target:abn, filter:(val) => val.a > 0})
+        guard({source:ab        , target:abn, filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, target:abn, filter:$filter           })
+        guard({source:ab        , target:abn, filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, target:abn, filter:Boolean           })
+        guard({source:ab        , target:abn, filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:abNull    , target:abn, filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:nullableAB, target:abn, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -74,9 +86,10 @@ describe('unit source', () => {
     test('unit -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, target:aNum, filter:(val) => val.a > 0})
-        guard({source:ab, target:aNum, filter:$filter           })
-        guard({source:ab, target:aNum, filter:Boolean           })
+        guard({source:ab        , target:aNum, filter:(val) => val.a > 0})
+        guard({source:ab        , target:aNum, filter:$filter           })
+        guard({source:ab        , target:aNum, filter:Boolean           })
+        guard({source:nullableAB, target:aNum, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -88,14 +101,19 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, target:aStr, filter:(val) => val.a > 0})
+        guard({source:ab        , target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, target:aStr, filter:$filter           })
+        guard({source:ab        , target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, target:aStr, filter:Boolean           })
+        guard({source:ab        , target:aStr, filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -113,18 +131,21 @@ describe('unit source', () => {
     test('unit + clock -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:anyt, target:ab   , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:anyt , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:voidt, filter:(val) => val.a > 0  })
-        guard({source:ab, clock:numt, target:ab   , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:anyt , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:voidt, filter:(val,n) => val.a > n})
-        guard({source:ab, clock:anyt, target:ab   , filter:$filter             })
-        guard({source:ab, clock:anyt, target:anyt , filter:$filter             })
-        guard({source:ab, clock:anyt, target:voidt, filter:$filter             })
-        guard({source:ab, clock:anyt, target:ab   , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:anyt , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:voidt, filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:ab   , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:anyt, target:anyt , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:anyt, target:voidt, filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:numt, target:ab   , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:numt, target:anyt , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:numt, target:voidt, filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:anyt, target:ab   , filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:anyt , filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:voidt, filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:ab   , filter:Boolean                                      })
+        guard({source:ab        , clock:anyt, target:anyt , filter:Boolean                                      })
+        guard({source:ab        , clock:anyt, target:voidt, filter:Boolean                                      })
+        guard({source:abNull    , clock:anyt, target:ab   , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:numt, target:ab   , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:anyt, target:ab   , filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -136,14 +157,24 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:abn, filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:abn, filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:abn, filter:$filter           })
+        guard({source:ab        , clock:anyt, target:abn, filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:abn, filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:abn, filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:abNull    , clock:anyt, target:abn, filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:abn, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -161,10 +192,11 @@ describe('unit source', () => {
     test('unit + clock -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:anyt, target:aNum, filter:(val) => val.a > 0  })
-        guard({source:ab, clock:numt, target:aNum, filter:(val,n) => val.a > n})
-        guard({source:ab, clock:anyt, target:aNum, filter:$filter             })
-        guard({source:ab, clock:anyt, target:aNum, filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:aNum, filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:numt, target:aNum, filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:anyt, target:aNum, filter:$filter             })
+        guard({source:ab        , clock:anyt, target:aNum, filter:Boolean             })
+        guard({source:nullableAB, clock:anyt, target:aNum, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -176,14 +208,19 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:aStr, filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:aStr, filter:$filter           })
+        guard({source:ab        , clock:anyt, target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:aStr, filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:aStr, filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -201,18 +238,21 @@ describe('unit source', () => {
     test('unit + [clock] -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:[anyt]     , target:ab   , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:anyt , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:voidt, filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[numt,$num], target:ab   , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:anyt , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:voidt, filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[anyt]     , target:ab   , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:anyt , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:voidt, filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:ab   , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:anyt , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:voidt, filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:ab   , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[anyt]     , target:anyt , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[anyt]     , target:voidt, filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[numt,$num], target:ab   , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[numt,$num], target:anyt , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[numt,$num], target:voidt, filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[anyt]     , target:ab   , filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:anyt , filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:voidt, filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:ab   , filter:Boolean                                      })
+        guard({source:ab        , clock:[anyt]     , target:anyt , filter:Boolean                                      })
+        guard({source:ab        , clock:[anyt]     , target:voidt, filter:Boolean                                      })
+        guard({source:abNull    , clock:[anyt]     , target:ab   , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[numt,$num], target:ab   , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:[anyt]     , target:ab   , filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -224,14 +264,24 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:abn, filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:abn, filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:abn, filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:abn, filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:abn, filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:abn, filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:abNull    , clock:[anyt], target:abn, filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:abn, filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -249,10 +299,11 @@ describe('unit source', () => {
     test('unit + [clock] -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:[anyt]     , target:aNum, filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[numt,$num], target:aNum, filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[anyt]     , target:aNum, filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:aNum, filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:aNum, filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:[numt,$num], target:aNum, filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:[anyt]     , target:aNum, filter:$filter             })
+        guard({source:ab        , clock:[anyt]     , target:aNum, filter:Boolean             })
+        guard({source:nullableAB, clock:[anyt]     , target:aNum, filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -264,14 +315,19 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:aStr, filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:aStr, filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:aStr, filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:aStr, filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:aStr, filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:aStr, filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:aStr, filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -289,18 +345,26 @@ describe('unit source', () => {
     test('unit -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, target:[ab]           , filter:(val) => val.a > 0})
-        guard({source:ab, target:[ab,anyt]      , filter:(val) => val.a > 0})
-        guard({source:ab, target:[ab,voidt]     , filter:(val) => val.a > 0})
-        guard({source:ab, target:[ab,anyt,voidt], filter:(val) => val.a > 0})
-        guard({source:ab, target:[ab]           , filter:$filter           })
-        guard({source:ab, target:[ab,anyt]      , filter:$filter           })
-        guard({source:ab, target:[ab,voidt]     , filter:$filter           })
-        guard({source:ab, target:[ab,anyt,voidt], filter:$filter           })
-        guard({source:ab, target:[ab]           , filter:Boolean           })
-        guard({source:ab, target:[ab,anyt]      , filter:Boolean           })
-        guard({source:ab, target:[ab,voidt]     , filter:Boolean           })
-        guard({source:ab, target:[ab,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , target:[ab]           , filter:(val) => val.a > 0                })
+        guard({source:ab        , target:[ab,anyt]      , filter:(val) => val.a > 0                })
+        guard({source:ab        , target:[ab,voidt]     , filter:(val) => val.a > 0                })
+        guard({source:ab        , target:[ab,anyt,voidt], filter:(val) => val.a > 0                })
+        guard({source:ab        , target:[ab]           , filter:$filter                           })
+        guard({source:ab        , target:[ab,anyt]      , filter:$filter                           })
+        guard({source:ab        , target:[ab,voidt]     , filter:$filter                           })
+        guard({source:ab        , target:[ab,anyt,voidt], filter:$filter                           })
+        guard({source:ab        , target:[ab]           , filter:Boolean                           })
+        guard({source:ab        , target:[ab,anyt]      , filter:Boolean                           })
+        guard({source:ab        , target:[ab,voidt]     , filter:Boolean                           })
+        guard({source:ab        , target:[ab,anyt,voidt], filter:Boolean                           })
+        guard({source:abNull    , target:[ab]           , filter:(val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[ab,anyt]      , filter:(val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[ab,voidt]     , filter:(val): val is AB => val.a !== null})
+        guard({source:abNull    , target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null})
+        guard({source:nullableAB, target:[ab]           , filter:Boolean                           })
+        guard({source:nullableAB, target:[ab,anyt]      , filter:Boolean                           })
+        guard({source:nullableAB, target:[ab,voidt]     , filter:Boolean                           })
+        guard({source:nullableAB, target:[ab,anyt,voidt], filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -312,32 +376,72 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, target:[abn]           , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[abn]           , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, target:[abn,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[abn,anyt]      , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, target:[abn,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[abn,voidt]     , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , target:[abn,anyt,voidt], filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, target:[abn]           , filter:$filter           })
+        guard({source:ab        , target:[abn]           , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn,anyt]      , filter:$filter           })
+        guard({source:ab        , target:[abn,anyt]      , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn,voidt]     , filter:$filter           })
+        guard({source:ab        , target:[abn,voidt]     , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn,anyt,voidt], filter:$filter           })
+        guard({source:ab        , target:[abn,anyt,voidt], filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn]           , filter:Boolean           })
+        guard({source:ab        , target:[abn]           , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn,anyt]      , filter:Boolean           })
+        guard({source:ab        , target:[abn,anyt]      , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn,voidt]     , filter:Boolean           })
+        guard({source:ab        , target:[abn,voidt]     , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, target:[abn,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , target:[abn,anyt,voidt], filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:abNull    , target:[abn]           , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:nullableAB, target:[abn]           , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[abn,anyt]      , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[abn,voidt]     , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[abn,anyt,voidt], filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -382,18 +486,22 @@ describe('unit source', () => {
     test('unit -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, target:[aNum]           , filter:(val) => val.a > 0})
-        guard({source:ab, target:[aNum,anyt]      , filter:(val) => val.a > 0})
-        guard({source:ab, target:[aNum,voidt]     , filter:(val) => val.a > 0})
-        guard({source:ab, target:[aNum,anyt,voidt], filter:(val) => val.a > 0})
-        guard({source:ab, target:[aNum]           , filter:$filter           })
-        guard({source:ab, target:[aNum,anyt]      , filter:$filter           })
-        guard({source:ab, target:[aNum,voidt]     , filter:$filter           })
-        guard({source:ab, target:[aNum,anyt,voidt], filter:$filter           })
-        guard({source:ab, target:[aNum]           , filter:Boolean           })
-        guard({source:ab, target:[aNum,anyt]      , filter:Boolean           })
-        guard({source:ab, target:[aNum,voidt]     , filter:Boolean           })
-        guard({source:ab, target:[aNum,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , target:[aNum]           , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aNum,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aNum,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aNum,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aNum]           , filter:$filter           })
+        guard({source:ab        , target:[aNum,anyt]      , filter:$filter           })
+        guard({source:ab        , target:[aNum,voidt]     , filter:$filter           })
+        guard({source:ab        , target:[aNum,anyt,voidt], filter:$filter           })
+        guard({source:ab        , target:[aNum]           , filter:Boolean           })
+        guard({source:ab        , target:[aNum,anyt]      , filter:Boolean           })
+        guard({source:ab        , target:[aNum,voidt]     , filter:Boolean           })
+        guard({source:ab        , target:[aNum,anyt,voidt], filter:Boolean           })
+        guard({source:nullableAB, target:[aNum]           , filter:Boolean           })
+        guard({source:nullableAB, target:[aNum,anyt]      , filter:Boolean           })
+        guard({source:nullableAB, target:[aNum,voidt]     , filter:Boolean           })
+        guard({source:nullableAB, target:[aNum,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -405,32 +513,52 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, target:[aStr,ab]        , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, target:[aStr,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, target:[aStr,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, target:[aStr,ab]        , filter:$filter           })
+        guard({source:ab        , target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,anyt]      , filter:$filter           })
+        guard({source:ab        , target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,voidt]     , filter:$filter           })
+        guard({source:ab        , target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,anyt,voidt], filter:$filter           })
+        guard({source:ab        , target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,ab]        , filter:Boolean           })
+        guard({source:ab        , target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,anyt]      , filter:Boolean           })
+        guard({source:ab        , target:[aStr,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,voidt]     , filter:Boolean           })
+        guard({source:ab        , target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, target:[aStr,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , target:[aStr,anyt,voidt], filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[aStr,ab]        , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[aStr,anyt]      , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[aStr,voidt]     , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -475,22 +603,34 @@ describe('unit source', () => {
     test('unit + clock -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:anyt, target:[ab]           , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:[ab,anyt]      , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:[ab,voidt]     , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:[ab,anyt,voidt], filter:(val) => val.a > 0  })
-        guard({source:ab, clock:numt, target:[ab]           , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:[ab,anyt]      , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:[ab,voidt]     , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:[ab,anyt,voidt], filter:(val,n) => val.a > n})
-        guard({source:ab, clock:anyt, target:[ab]           , filter:$filter             })
-        guard({source:ab, clock:anyt, target:[ab,anyt]      , filter:$filter             })
-        guard({source:ab, clock:anyt, target:[ab,voidt]     , filter:$filter             })
-        guard({source:ab, clock:anyt, target:[ab,anyt,voidt], filter:$filter             })
-        guard({source:ab, clock:anyt, target:[ab]           , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:[ab,anyt]      , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:[ab,voidt]     , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:[ab,anyt,voidt], filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:[ab]           , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:anyt, target:[ab,anyt]      , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:anyt, target:[ab,voidt]     , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:anyt, target:[ab,anyt,voidt], filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:numt, target:[ab]           , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:numt, target:[ab,anyt]      , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:numt, target:[ab,voidt]     , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:numt, target:[ab,anyt,voidt], filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:anyt, target:[ab]           , filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:[ab,anyt]      , filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:[ab,voidt]     , filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:[ab,anyt,voidt], filter:$filter                                      })
+        guard({source:ab        , clock:anyt, target:[ab]           , filter:Boolean                                      })
+        guard({source:ab        , clock:anyt, target:[ab,anyt]      , filter:Boolean                                      })
+        guard({source:ab        , clock:anyt, target:[ab,voidt]     , filter:Boolean                                      })
+        guard({source:ab        , clock:anyt, target:[ab,anyt,voidt], filter:Boolean                                      })
+        guard({source:abNull    , clock:anyt, target:[ab]           , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:anyt, target:[ab,anyt]      , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:anyt, target:[ab,voidt]     , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:anyt, target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:numt, target:[ab]           , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:numt, target:[ab,anyt]      , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:numt, target:[ab,voidt]     , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:numt, target:[ab,anyt,voidt], filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:anyt, target:[ab]           , filter:Boolean                                      })
+        guard({source:nullableAB, clock:anyt, target:[ab,anyt]      , filter:Boolean                                      })
+        guard({source:nullableAB, clock:anyt, target:[ab,voidt]     , filter:Boolean                                      })
+        guard({source:nullableAB, clock:anyt, target:[ab,anyt,voidt], filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -502,32 +642,72 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn]           , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[abn]           , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[abn,voidt]     , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn]           , filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[abn]           , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,anyt]      , filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[abn,anyt]      , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,voidt]     , filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[abn,voidt]     , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,anyt,voidt], filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn]           , filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[abn]           , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,anyt]      , filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[abn,anyt]      , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,voidt]     , filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[abn,voidt]     , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[abn,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:abNull    , clock:anyt, target:[abn]           , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , clock:anyt, target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , clock:anyt, target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , clock:anyt, target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[abn]           , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[abn,anyt]      , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[abn,voidt]     , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -572,22 +752,26 @@ describe('unit source', () => {
     test('unit + clock -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:anyt, target:[aNum]           , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:[aNum,anyt]      , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:[aNum,voidt]     , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:anyt, target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
-        guard({source:ab, clock:numt, target:[aNum]           , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:[aNum,anyt]      , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:[aNum,voidt]     , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:numt, target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
-        guard({source:ab, clock:anyt, target:[aNum]           , filter:$filter             })
-        guard({source:ab, clock:anyt, target:[aNum,anyt]      , filter:$filter             })
-        guard({source:ab, clock:anyt, target:[aNum,voidt]     , filter:$filter             })
-        guard({source:ab, clock:anyt, target:[aNum,anyt,voidt], filter:$filter             })
-        guard({source:ab, clock:anyt, target:[aNum]           , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:[aNum,anyt]      , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:[aNum,voidt]     , filter:Boolean             })
-        guard({source:ab, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:[aNum]           , filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:anyt, target:[aNum,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:anyt, target:[aNum,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:anyt, target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:numt, target:[aNum]           , filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:numt, target:[aNum,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:numt, target:[aNum,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:numt, target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:anyt, target:[aNum]           , filter:$filter             })
+        guard({source:ab        , clock:anyt, target:[aNum,anyt]      , filter:$filter             })
+        guard({source:ab        , clock:anyt, target:[aNum,voidt]     , filter:$filter             })
+        guard({source:ab        , clock:anyt, target:[aNum,anyt,voidt], filter:$filter             })
+        guard({source:ab        , clock:anyt, target:[aNum]           , filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:[aNum,voidt]     , filter:Boolean             })
+        guard({source:ab        , clock:anyt, target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:nullableAB, clock:anyt, target:[aNum]           , filter:Boolean             })
+        guard({source:nullableAB, clock:anyt, target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:nullableAB, clock:anyt, target:[aNum,voidt]     , filter:Boolean             })
+        guard({source:nullableAB, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -599,32 +783,52 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,ab]        , filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,anyt]      , filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,voidt]     , filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
+        guard({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,ab]        , filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[aStr,ab]        , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -669,22 +873,34 @@ describe('unit source', () => {
     test('unit + [clock] -> array same (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:[anyt]     , target:[ab]           , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:[ab,anyt]      , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:[ab,voidt]     , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:[ab,anyt,voidt], filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[numt,$num], target:[ab]           , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:[ab,anyt]      , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:[ab,voidt]     , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[anyt]     , target:[ab]           , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[ab,anyt]      , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[ab,voidt]     , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[ab,anyt,voidt], filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[ab]           , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:[ab]           , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[anyt]     , target:[ab,anyt]      , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[anyt]     , target:[ab,voidt]     , filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[anyt]     , target:[ab,anyt,voidt], filter:(val) => val.a > 0                           })
+        guard({source:ab        , clock:[numt,$num], target:[ab]           , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[numt,$num], target:[ab,anyt]      , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[numt,$num], target:[ab,voidt]     , filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n) => val.a > n                         })
+        guard({source:ab        , clock:[anyt]     , target:[ab]           , filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab,anyt]      , filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab,voidt]     , filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab,anyt,voidt], filter:$filter                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab]           , filter:Boolean                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab,anyt]      , filter:Boolean                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab,voidt]     , filter:Boolean                                      })
+        guard({source:ab        , clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean                                      })
+        guard({source:abNull    , clock:[anyt]     , target:[ab]           , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[anyt]     , target:[ab,anyt]      , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[anyt]     , target:[ab,voidt]     , filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[anyt]     , target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null           })
+        guard({source:abNull    , clock:[numt,$num], target:[ab]           , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:[numt,$num], target:[ab,anyt]      , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:[numt,$num], target:[ab,voidt]     , filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:abNull    , clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n): val is AB => n > 0 && val.a !== null})
+        guard({source:nullableAB, clock:[anyt]     , target:[ab]           , filter:Boolean                                      })
+        guard({source:nullableAB, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean                                      })
+        guard({source:nullableAB, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean                                      })
+        guard({source:nullableAB, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean                                      })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -696,32 +912,72 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn]           , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[abn]           , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[abn,voidt]     , filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0                })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn]           , filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[abn]           , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,anyt]      , filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,voidt]     , filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[abn,voidt]     , filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,anyt,voidt], filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:$filter                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn]           , filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[abn]           , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,anyt]      , filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,voidt]     , filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[abn,voidt]     , filter:Boolean                           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:abNull    , clock:[anyt], target:[abn]           , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , clock:[anyt], target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , clock:[anyt], target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:abNull    , clock:[anyt], target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[abn]           , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[abn,voidt]     , filter:Boolean                           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -766,22 +1022,26 @@ describe('unit source', () => {
     test('unit + [clock] -> array wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:ab, clock:[anyt]     , target:[aNum]           , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:[aNum,anyt]      , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:[aNum,voidt]     , filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[anyt]     , target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
-        guard({source:ab, clock:[numt,$num], target:[aNum]           , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:[aNum,anyt]      , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:[aNum,voidt]     , filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[numt,$num], target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
-        guard({source:ab, clock:[anyt]     , target:[aNum]           , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[aNum,anyt]      , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[aNum,voidt]     , filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[aNum,anyt,voidt], filter:$filter             })
-        guard({source:ab, clock:[anyt]     , target:[aNum]           , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:[aNum,anyt]      , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:[aNum,voidt]     , filter:Boolean             })
-        guard({source:ab, clock:[anyt]     , target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum]           , filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,anyt]      , filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,voidt]     , filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,anyt,voidt], filter:(val) => val.a > 0  })
+        guard({source:ab        , clock:[numt,$num], target:[aNum]           , filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:[numt,$num], target:[aNum,anyt]      , filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:[numt,$num], target:[aNum,voidt]     , filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:[numt,$num], target:[aNum,anyt,voidt], filter:(val,n) => val.a > n})
+        guard({source:ab        , clock:[anyt]     , target:[aNum]           , filter:$filter             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,anyt]      , filter:$filter             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,voidt]     , filter:$filter             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,anyt,voidt], filter:$filter             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum]           , filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,voidt]     , filter:Boolean             })
+        guard({source:ab        , clock:[anyt]     , target:[aNum,anyt,voidt], filter:Boolean             })
+        guard({source:nullableAB, clock:[anyt]     , target:[aNum]           , filter:Boolean             })
+        guard({source:nullableAB, clock:[anyt]     , target:[aNum,anyt]      , filter:Boolean             })
+        guard({source:nullableAB, clock:[anyt]     , target:[aNum,voidt]     , filter:Boolean             })
+        guard({source:nullableAB, clock:[anyt]     , target:[aNum,anyt,voidt], filter:Boolean             })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -793,29 +1053,37 @@ describe('unit source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,voidt]     , filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[aStr,voidt]     , filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
+        guard({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,ab]        , filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,anyt]      , filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
+        guard({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
         //@ts-expect-error
-        guard({source:ab, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
+        guard({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
+        //@ts-expect-error
+        guard({source:nullableAB, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -855,514 +1123,6 @@ describe('unit source', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit -> unit same', () => {
-    test('nullable unit -> unit same (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:abNull    , target:ab, filter:(val): val is AB => val.a !== null})
-        guard({source:nullableAB, target:ab, filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit -> unit same (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:abNull    , target:abn, filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:nullableAB, target:abn, filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + clock -> unit same', () => {
-    test('nullable unit + clock -> unit same (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:abNull    , clock:anyt, target:ab, filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:numt, target:ab, filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:nullableAB, clock:anyt, target:ab, filter:Boolean                                      })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + clock -> unit same (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:abNull    , clock:anyt, target:abn, filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:abn, filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + [clock] -> unit same', () => {
-    test('nullable unit + [clock] -> unit same (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:abNull    , clock:[anyt]     , target:ab, filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:[numt,$num], target:ab, filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:nullableAB, clock:[anyt]     , target:ab, filter:Boolean                                      })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + [clock] -> unit same (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:abNull    , clock:[anyt], target:abn, filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:abn, filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit -> unit wide', () => {
-    test('nullable unit -> unit wide (should pass)', () => {
-      //prettier-ignore
-      guard({source:nullableAB, target:aNum, filter:Boolean})
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit -> unit wide (should fail)', () => {
-      //prettier-ignore
-      //@ts-expect-error
-      guard({source:nullableAB, target:aStr, filter:Boolean})
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + clock -> unit wide', () => {
-    test('nullable unit + clock -> unit wide (should pass)', () => {
-      //prettier-ignore
-      guard({source:nullableAB, clock:anyt, target:aNum, filter:Boolean})
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + clock -> unit wide (should fail)', () => {
-      //prettier-ignore
-      //@ts-expect-error
-      guard({source:nullableAB, clock:anyt, target:aStr, filter:Boolean})
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + [clock] -> unit wide', () => {
-    test('nullable unit + [clock] -> unit wide (should pass)', () => {
-      //prettier-ignore
-      guard({source:nullableAB, clock:[anyt], target:aNum, filter:Boolean})
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + [clock] -> unit wide (should fail)', () => {
-      //prettier-ignore
-      //@ts-expect-error
-      guard({source:nullableAB, clock:[anyt], target:aStr, filter:Boolean})
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit -> array same', () => {
-    test('nullable unit -> array same (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:abNull    , target:[ab]           , filter:(val): val is AB => val.a !== null})
-        guard({source:abNull    , target:[ab,anyt]      , filter:(val): val is AB => val.a !== null})
-        guard({source:abNull    , target:[ab,voidt]     , filter:(val): val is AB => val.a !== null})
-        guard({source:abNull    , target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        guard({source:nullableAB, target:[ab]           , filter:Boolean                           })
-        guard({source:nullableAB, target:[ab,anyt]      , filter:Boolean                           })
-        guard({source:nullableAB, target:[ab,voidt]     , filter:Boolean                           })
-        guard({source:nullableAB, target:[ab,anyt,voidt], filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit -> array same (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:abNull    , target:[abn]           , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:nullableAB, target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, target:[abn,anyt,voidt], filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + clock -> array same', () => {
-    test('nullable unit + clock -> array same (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:abNull    , clock:anyt, target:[ab]           , filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:anyt, target:[ab,anyt]      , filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:anyt, target:[ab,voidt]     , filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:anyt, target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:numt, target:[ab]           , filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:abNull    , clock:numt, target:[ab,anyt]      , filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:abNull    , clock:numt, target:[ab,voidt]     , filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:abNull    , clock:numt, target:[ab,anyt,voidt], filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:nullableAB, clock:anyt, target:[ab]           , filter:Boolean                                      })
-        guard({source:nullableAB, clock:anyt, target:[ab,anyt]      , filter:Boolean                                      })
-        guard({source:nullableAB, clock:anyt, target:[ab,voidt]     , filter:Boolean                                      })
-        guard({source:nullableAB, clock:anyt, target:[ab,anyt,voidt], filter:Boolean                                      })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + clock -> array same (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:abNull    , clock:anyt, target:[abn]           , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , clock:anyt, target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , clock:anyt, target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , clock:anyt, target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + [clock] -> array same', () => {
-    test('nullable unit + [clock] -> array same (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:abNull    , clock:[anyt]     , target:[ab]           , filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:[anyt]     , target:[ab,anyt]      , filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:[anyt]     , target:[ab,voidt]     , filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:[anyt]     , target:[ab,anyt,voidt], filter:(val): val is AB => val.a !== null           })
-        guard({source:abNull    , clock:[numt,$num], target:[ab]           , filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:abNull    , clock:[numt,$num], target:[ab,anyt]      , filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:abNull    , clock:[numt,$num], target:[ab,voidt]     , filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:abNull    , clock:[numt,$num], target:[ab,anyt,voidt], filter:(val,n): val is AB => n > 0 && val.a !== null})
-        guard({source:nullableAB, clock:[anyt]     , target:[ab]           , filter:Boolean                                      })
-        guard({source:nullableAB, clock:[anyt]     , target:[ab,anyt]      , filter:Boolean                                      })
-        guard({source:nullableAB, clock:[anyt]     , target:[ab,voidt]     , filter:Boolean                                      })
-        guard({source:nullableAB, clock:[anyt]     , target:[ab,anyt,voidt], filter:Boolean                                      })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + [clock] -> array same (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:abNull    , clock:[anyt], target:[abn]           , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , clock:[anyt], target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , clock:[anyt], target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:abNull    , clock:[anyt], target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit -> array wide', () => {
-    test('nullable unit -> array wide (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:nullableAB, target:[aNum]           , filter:Boolean})
-        guard({source:nullableAB, target:[aNum,anyt]      , filter:Boolean})
-        guard({source:nullableAB, target:[aNum,voidt]     , filter:Boolean})
-        guard({source:nullableAB, target:[aNum,anyt,voidt], filter:Boolean})
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit -> array wide (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:nullableAB, target:[aStr,ab]        , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, target:[aStr,anyt]      , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, target:[aStr,voidt]     , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, target:[aStr,anyt,voidt], filter:Boolean})
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + clock -> array wide', () => {
-    test('nullable unit + clock -> array wide (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:nullableAB, clock:anyt, target:[aNum]           , filter:Boolean})
-        guard({source:nullableAB, clock:anyt, target:[aNum,anyt]      , filter:Boolean})
-        guard({source:nullableAB, clock:anyt, target:[aNum,voidt]     , filter:Boolean})
-        guard({source:nullableAB, clock:anyt, target:[aNum,anyt,voidt], filter:Boolean})
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + clock -> array wide (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[aStr,ab]        , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[aStr,anyt]      , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[aStr,voidt]     , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean})
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        "
-      `)
-    })
-  })
-  describe('nullable unit + [clock] -> array wide', () => {
-    test('nullable unit + [clock] -> array wide (should pass)', () => {
-      //prettier-ignore
-      {
-        guard({source:nullableAB, clock:[anyt], target:[aNum]           , filter:Boolean})
-        guard({source:nullableAB, clock:[anyt], target:[aNum,anyt]      , filter:Boolean})
-        guard({source:nullableAB, clock:[anyt], target:[aNum,voidt]     , filter:Boolean})
-        guard({source:nullableAB, clock:[anyt], target:[aNum,anyt,voidt], filter:Boolean})
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        no errors
-        "
-      `)
-    })
-    test('nullable unit + [clock] -> array wide (should fail)', () => {
-      //prettier-ignore
-      {
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[aStr,ab]        , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[aStr,anyt]      , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[aStr,voidt]     , filter:Boolean})
-        //@ts-expect-error
-        guard({source:nullableAB, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean})
-      }
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -1874,19 +1634,13 @@ describe('object source', () => {
     test('object -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:{a,b}     , target:aNum, filter:(val) => val.a > 0                             })
-        guard({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0})
-        guard({source:{a,b}     , target:aNum, filter:$filter                                        })
-        guard({source:{a:aOpt,b}, target:aNum, filter:$filter                                        })
+        guard({source:{a,b}     , target:aNum, filter:(val) => val.a > 0                                        })
+        guard({source:{a,b}     , target:aNum, filter:$filter                                                   })
+        guard({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        no errors
         "
       `)
     })
@@ -1894,9 +1648,13 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:{a,b}, target:aStr, filter:(val) => val.a > 0})
+        guard({source:{a,b}     , target:aStr, filter:(val) => val.a > 0                             })
         //@ts-expect-error
-        guard({source:{a,b}, target:aStr, filter:$filter           })
+        guard({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0})
+        //@ts-expect-error
+        guard({source:{a,b}     , target:aStr, filter:$filter                                        })
+        //@ts-expect-error
+        guard({source:{a:aOpt,b}, target:aNum, filter:$filter                                        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1905,7 +1663,13 @@ describe('object source', () => {
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1977,24 +1741,15 @@ describe('object source', () => {
     test('object + clock -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:{a,b}     , clock:anyt, target:aNum, filter:(val) => val.a > 0                               })
-        guard({source:{a,b}     , clock:numt, target:aNum, filter:(val,n) => val.a > n                             })
-        guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0  })
-        guard({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n})
-        guard({source:{a,b}     , clock:anyt, target:aNum, filter:$filter                                          })
-        guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                          })
+        guard({source:{a,b}     , clock:anyt, target:aNum, filter:(val) => val.a > 0                                          })
+        guard({source:{a,b}     , clock:numt, target:aNum, filter:(val,n) => val.a > n                                        })
+        guard({source:{a,b}     , clock:anyt, target:aNum, filter:$filter                                                     })
+        guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  })
+        guard({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        no errors
         "
       `)
     })
@@ -2002,9 +1757,15 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:aStr, filter:(val) => val.a > 0})
+        guard({source:{a,b}     , clock:anyt, target:aStr, filter:(val) => val.a > 0                               })
         //@ts-expect-error
-        guard({source:{a,b}, clock:anyt, target:aStr, filter:$filter           })
+        guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0  })
+        //@ts-expect-error
+        guard({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n})
+        //@ts-expect-error
+        guard({source:{a,b}     , clock:anyt, target:aStr, filter:$filter                                          })
+        //@ts-expect-error
+        guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                          })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2013,7 +1774,16 @@ describe('object source', () => {
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -2085,24 +1855,15 @@ describe('object source', () => {
     test('object + [clock] -> unit wide (should pass)', () => {
       //prettier-ignore
       {
-        guard({source:{a,b}     , clock:[anyt]     , target:aNum, filter:(val) => val.a > 0                               })
-        guard({source:{a,b}     , clock:[numt,$num], target:aNum, filter:(val,n) => val.a > n                             })
-        guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0  })
-        guard({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n})
-        guard({source:{a,b}     , clock:[anyt]     , target:aNum, filter:$filter                                          })
-        guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                          })
+        guard({source:{a,b}     , clock:[anyt]     , target:aNum, filter:(val) => val.a > 0                                          })
+        guard({source:{a,b}     , clock:[numt,$num], target:aNum, filter:(val,n) => val.a > n                                        })
+        guard({source:{a,b}     , clock:[anyt]     , target:aNum, filter:$filter                                                     })
+        guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  })
+        guard({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        no errors
         "
       `)
     })
@@ -2110,9 +1871,15 @@ describe('object source', () => {
       //prettier-ignore
       {
         //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:aStr, filter:(val) => val.a > 0})
+        guard({source:{a,b}     , clock:[anyt]     , target:aStr, filter:(val) => val.a > 0                               })
         //@ts-expect-error
-        guard({source:{a,b}, clock:[anyt], target:aStr, filter:$filter           })
+        guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0  })
+        //@ts-expect-error
+        guard({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n})
+        //@ts-expect-error
+        guard({source:{a,b}     , clock:[anyt]     , target:aStr, filter:$filter                                          })
+        //@ts-expect-error
+        guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                          })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2121,43 +1888,19 @@ describe('object source', () => {
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
             Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
-  })
-  test('nullable object -> unit wide (should pass)', () => {
-    //prettier-ignore
-    guard({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('nullable object + clock -> unit wide (should pass)', () => {
-    //prettier-ignore
-    {
-      guard({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  })
-      guard({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n})
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('nullable object + [clock] -> unit wide (should pass)', () => {
-    //prettier-ignore
-    {
-      guard({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  })
-      guard({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n})
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
   })
 })
 describe('tuple source', () => {
@@ -2536,9 +2279,10 @@ describe('no source', () => {
   test('no + clock -> unit same (should pass)', () => {
     //prettier-ignore
     {
-      guard({clock:anyt, target:numt, filter:(n) => n > 0})
-      guard({clock:anyt, target:numt, filter:$filter     })
-      guard({clock:anyt, target:numt, filter:Boolean     })
+      guard({clock:anyt, target:numt, filter:(n) => n > 0                                      })
+      guard({clock:anyt, target:numt, filter:$filter                                           })
+      guard({clock:anyt, target:numt, filter:Boolean                                           })
+      guard({clock:anyt, target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -2549,9 +2293,10 @@ describe('no source', () => {
   test('no + [clock] -> unit same (should pass)', () => {
     //prettier-ignore
     {
-      guard({clock:[anyt], target:numt, filter:(n) => n > 0})
-      guard({clock:[anyt], target:numt, filter:$filter     })
-      guard({clock:[anyt], target:numt, filter:Boolean     })
+      guard({clock:[anyt], target:numt, filter:(n) => n > 0                                      })
+      guard({clock:[anyt], target:numt, filter:$filter                                           })
+      guard({clock:[anyt], target:numt, filter:Boolean                                           })
+      guard({clock:[anyt], target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -2562,9 +2307,10 @@ describe('no source', () => {
   test('no + clock -> array same (should pass)', () => {
     //prettier-ignore
     {
-      guard({clock:anyt, filter:(n) => n > 0})
-      guard({clock:anyt, filter:$filter     })
-      guard({clock:anyt, filter:Boolean     })
+      guard({clock:anyt, filter:(n) => n > 0                                      })
+      guard({clock:anyt, filter:$filter                                           })
+      guard({clock:anyt, filter:Boolean                                           })
+      guard({clock:anyt, filter:(n): n is number => typeof n === 'number' && n > 0})
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -2575,46 +2321,11 @@ describe('no source', () => {
   test('no + [clock] -> array same (should pass)', () => {
     //prettier-ignore
     {
-      guard({clock:[anyt], filter:(n) => n > 0})
-      guard({clock:[anyt], filter:$filter     })
-      guard({clock:[anyt], filter:Boolean     })
+      guard({clock:[anyt], filter:(n) => n > 0                                      })
+      guard({clock:[anyt], filter:$filter                                           })
+      guard({clock:[anyt], filter:Boolean                                           })
+      guard({clock:[anyt], filter:(n): n is number => typeof n === 'number' && n > 0})
     }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('nullable no + clock -> unit same (should pass)', () => {
-    //prettier-ignore
-    guard({clock:anyt, target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('nullable no + [clock] -> unit same (should pass)', () => {
-    //prettier-ignore
-    guard({clock:[anyt], target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('nullable no + clock -> array same (should pass)', () => {
-    //prettier-ignore
-    guard({clock:anyt, filter:(n): n is number => typeof n === 'number' && n > 0})
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('nullable no + [clock] -> array same (should pass)', () => {
-    //prettier-ignore
-    guard({clock:[anyt], filter:(n): n is number => typeof n === 'number' && n > 0})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
