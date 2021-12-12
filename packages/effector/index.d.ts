@@ -1186,8 +1186,18 @@ type ModeTag = `${ClTag} | ${SrTag} | ${FlTag} | ${FnTag} | ${TrTag}`;
 type Mode_Clk_Src = `clock | source | ${string}`;
 type Mode_Clk_NoSrc  = `clock |        | ${string}`;
 type Mode_NoClk_Src  = `      | source | ${string}`;
+type Mode_Trg = `${string} | target`;
+type Mode_Flt_Trg = `${string} | filter | ${string} | target`;
+type Mode_NoFlt = `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`;
+type Mode_Fn_Trg = `${string} | fn | target`;
+type Mode_Src = `${string} | source | ${string}`;
+type Mode_Flt_Fn_Trg = `${string} | filter | fn | target`;
+type Mode_Src_Flt_NoFn_Trg = `${string} | source | filter |    | target`;
+type Mode_NoTrg = `${string} |       `;
+type Mode_Flt = `${string} | filter | ${string}`;
+
 type TargetFilterUnitConfig<
-  Mode extends `${string} | filter | ${string} | target`,
+  Mode extends Mode_Flt_Trg,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1207,7 +1217,7 @@ type TargetFilterUnitConfig<
   ? {clock: Clock; source?: never; filter: FLUnit; target: Target}
   : never
 type TargetFilterFnConfig<
-  Mode extends `${string} | filter | ${string} | target`,
+  Mode extends Mode_Flt_Trg,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1227,7 +1237,7 @@ type TargetFilterFnConfig<
   ? {clock: Clock; source?: never; filter: FilterFun; target: Target}
   : never
 type TargetNoFilterConfig<
-  Mode extends `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`,
+  Mode extends Mode_NoFlt,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1246,7 +1256,7 @@ type TargetNoFilterConfig<
   ? {clock: Clock; source?: never; target: Target}
   : never
 type TargetConfigCheck<
-  Mode extends `${string} | target`,
+  Mode extends Mode_Trg,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1266,7 +1276,7 @@ type TargetConfigCheck<
   SomeFN
 > = 
     // mode with fn
-    Mode extends `${string} | fn | target`
+    Mode extends Mode_Fn_Trg
   ? [TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>] extends [Target]
     ? [Config & SomeFN]
     : [Target] extends [TypeOfTargetSoft<ReturnType<FN>, Target, 'fnRet'>]
@@ -1276,7 +1286,7 @@ type TargetConfigCheck<
         targets: Show<TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>>
       }]
     // mode with source only or with both clock and source
-  : Mode extends `${string} | source | ${string}`
+  : Mode extends Mode_Src
   ? Source extends Unit<any> | SourceRecord
     ? [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
       ? [Config & SomeFN]
@@ -1302,7 +1312,7 @@ type TargetConfigCheck<
   : never
 
 type SampleFilterTargetDef<
-  Mode extends `${string} | target`,
+  Mode extends Mode_Trg,
   Target extends Units | ReadonlyArray<Unit<any>>,
   Source,
   Clock,
@@ -1319,7 +1329,7 @@ type SampleFilterTargetDef<
   ),
   FN extends DataSourceFunction<Source, Clock>,
   SomeFN
-> = Mode extends `${string} | filter | ${string} | target`
+> = Mode extends Mode_Flt_Trg
   ? FLUnit extends Unit<any>
     ? boolean extends UnitValue<FLUnit>
       ? TargetConfigCheck<
@@ -1329,7 +1339,7 @@ type SampleFilterTargetDef<
         >
       : [{error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
     : FLBool extends BooleanConstructor
-      ? Mode extends `${string} | filter | fn | target`
+      ? Mode extends Mode_Flt_Fn_Trg
         ? [TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>] extends [Target]
           ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FN> & SomeFN]
           : [Target] extends [TypeOfTargetSoft<ReturnType<FN>, Target, 'fnRet'>]
@@ -1339,7 +1349,7 @@ type SampleFilterTargetDef<
               targets: Show<TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>>
             }]
           // mode with source only or with both clock and source
-        : Mode extends `${string} | source | filter |    | target`
+        : Mode extends Mode_Src_Flt_NoFn_Trg
         ? Source extends Unit<any> | SourceRecord
           ? [TypeOfTarget<NonNullable<TypeOfSource<Source>>, Target, 'src'>] extends [Target]
             ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FN> & SomeFN]
@@ -1372,7 +1382,7 @@ type SampleFilterTargetDef<
       )
       ? FilterFun extends (value: any, secondArg: any) => value is infer Ret
           // mode with fn
-        ? Mode extends `${string} | filter | fn | target`
+        ? Mode extends Mode_Flt_Fn_Trg
           ? [TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>] extends [Target]
             ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
             : [Target] extends [TypeOfTargetSoft<ReturnType<FN>, Target, 'fnRet'>]
@@ -1382,7 +1392,7 @@ type SampleFilterTargetDef<
                 targets: Show<TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>>
               }]
             // mode with source only or with both clock and source
-          : Mode extends `${string} | source | filter |    | target`
+          : Mode extends Mode_Src_Flt_NoFn_Trg
           ? Source extends Unit<any> | SourceRecord
             ? [TypeOfTarget<Ret, Target, 'src'>] extends [Target]
               ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
@@ -1408,7 +1418,7 @@ type SampleFilterTargetDef<
           : never
         : ReturnType<FilterFun> extends boolean
           // mode with fn
-          ? Mode extends `${string} | filter | fn | target`
+          ? Mode extends Mode_Flt_Fn_Trg
             ? [TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>] extends [Target]
               ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
               : [Target] extends [TypeOfTargetSoft<ReturnType<FN>, Target, 'fnRet'>]
@@ -1418,7 +1428,7 @@ type SampleFilterTargetDef<
                   targets: Show<TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>>
                 }]
               // mode with source only or with both clock and source
-            : Mode extends `${string} | source | filter |    | target`
+            : Mode extends Mode_Src_Flt_NoFn_Trg
             ? Source extends Unit<any> | SourceRecord
               ? [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
                 ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
@@ -1445,7 +1455,7 @@ type SampleFilterTargetDef<
           : [{error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
       : [{error: 'filter should be function or unit'; got: FilterFun}]
 
-  : Mode extends `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`
+  : Mode extends Mode_NoFlt
     ? TargetConfigCheck<
         Mode, Target, Source, Clock, FLUnit, FLBool, FilterFun, FN,
         TargetNoFilterConfig<Mode, Target, Source, Clock, FN>,
@@ -1453,7 +1463,7 @@ type SampleFilterTargetDef<
       >
     : never
 type SampleFilterDef<
-  Mode extends `${string} |       `,
+  Mode extends Mode_NoTrg,
   Source,
   Clock,
   FLUnit,
@@ -1462,7 +1472,7 @@ type SampleFilterDef<
   FN extends DataSourceFunction<Source, Clock>,
   SomeFN
 > = 
-  Mode extends `${string} | filter | ${string}`
+  Mode extends Mode_Flt
   ?
     FLUnit extends Unit<any>
       ? boolean extends UnitValue<FLUnit>
@@ -1516,7 +1526,7 @@ type SampleFilterDef<
             : [{error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
           : [{error: 'filter should be function or unit'; got: FilterFun}]
 
-  : Mode extends `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`
+  : Mode extends Mode_NoFlt
   ?
     [(
         Mode extends 'clock | source |        | fn |       '
