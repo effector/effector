@@ -456,19 +456,6 @@ export default () => {
       },
     },
   })
-  const clockDescription = computeVariant({
-    source: {clockType},
-    variant: {
-      noClock: {clockType: 'no'},
-      clockSingle: {clockType: 'unit'},
-      clockArray: {clockType: 'array'},
-    },
-    cases: {
-      noClock: '',
-      clockSingle: ' + clock',
-      clockArray: ' + [clock]',
-    },
-  })
   const sourceCode = separate({
     source: {sourceType, sourceSubtype, filterType, inferByFilter},
     variant: {
@@ -618,11 +605,15 @@ export default () => {
     source: {
       sourceIsWiderThatTarget,
       sourceType,
+      clockType,
       targetType,
-      clockDescription,
     },
-    fn({sourceIsWiderThatTarget, sourceType, targetType, clockDescription}) {
-      return `${sourceType}${clockDescription} -> ${targetType} ${
+    fn({sourceIsWiderThatTarget, sourceType, clockType, targetType}) {
+      return `${
+        sourceType === 'no'
+          ? ''
+          : `${sourceType}${clockType === 'no' ? '' : ' + '}`
+      }${clockType === 'no' ? '' : 'clock'} -> ${targetType} ${
         sourceIsWiderThatTarget ? 'wide' : 'same'
       }`
     },

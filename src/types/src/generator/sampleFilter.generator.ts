@@ -23,6 +23,25 @@ export default () => {
     oneOf: ['fn', 'store', 'bool'],
     sort: ['fn', 'store', 'bool'],
   })
+
+  const fnType = union({
+    oneOf: [
+      'no',
+      'good untyped',
+      'good typed',
+      'bad untyped',
+      'bad typed',
+      'bad return',
+    ],
+    sort: [
+      'no',
+      'good untyped',
+      'good typed',
+      'bad untyped',
+      'bad typed',
+      'bad return',
+    ],
+  })
   const sourceType = separate({
     source: {clockType, filterType},
     variant: {
@@ -47,6 +66,7 @@ export default () => {
     },
     sort: ['unit', 'object', 'tuple', 'no'],
   })
+
   const targetType = union({oneOf: ['unit', 'array'], sort: ['unit', 'array']})
   const sourceSubtype = separate({
     source: {sourceType, targetType},
@@ -243,6 +263,49 @@ export default () => {
     }),
     sort: [false, true],
   })
+  //@ts-expect-error
+  const filterFnType: Separate<
+    | 'no'
+    | 'infer'
+    | 'good untyped'
+    | 'good typed'
+    | 'bad untyped'
+    | 'bad typed'
+    | 'bad return'
+  > = separate({
+    source: {sourceType, clockType, filterType, inferByFilter},
+    variant: {
+      src: {
+        noSource: {sourceType: 'no'},
+        hasSource: {},
+      } as const,
+      filter: {
+        fn: {filterType: 'fn'},
+        rest: {},
+      } as const,
+      infer: {
+        infer: {inferByFilter: true},
+        noInfer: {},
+      } as const,
+    } as const,
+    cases: {
+      //@ts-expect-error
+      noSource: {
+        fn: {
+          infer: union(['infer']),
+          noInfer: union([
+            'good untyped',
+            'good typed',
+            'bad untyped',
+            'bad typed',
+            'bad return',
+          ]),
+        },
+        rest: union(['no']),
+      },
+      hasSource: union(['no']),
+    },
+  })
   const fnSecondArg = flag({
     needs: [
       bool({
@@ -304,7 +367,7 @@ export default () => {
       },
     }
   }
-  //@ts-ignore
+  //@ts-expect-error
   const targetValue: Separate<string | string[]> = separate({
     source: {
       targetType,
@@ -359,7 +422,7 @@ export default () => {
       singleAny: value('anyt'),
       single: {
         none: {
-          correct: value('numt'),
+          correct: value('$ab'),
           wrong: value('strt'),
         },
         nonTuple: {
@@ -425,6 +488,91 @@ export default () => {
       }),
     },
   })
+  const fnCode = separate({
+    source: {
+      fnType,
+      sourceType,
+      clockType,
+      targetType,
+      sourceSubtype,
+      inferByFilter,
+      filterType,
+    },
+    variant: {
+      dataSources: {
+        clockOnly: {sourceType: 'no'},
+        nullableField: {sourceSubtype: 'nullableField'},
+      } as const,
+      infer: {
+        inferClockOnly: {
+          sourceType: 'no',
+          inferByFilter: true,
+          targetType: 'unit',
+        },
+        infer: {inferByFilter: true},
+        noInfer: {inferByFilter: false},
+      } as const,
+      fnType: {
+        noFn: {fnType: 'no'},
+        goodUntyped: {fnType: 'good untyped'},
+        goodTyped: {fnType: 'good typed'},
+        badUntyped: {fnType: 'bad untyped'},
+        badTyped: {fnType: 'bad typed'},
+        badReturn: {fnType: 'bad return'},
+      } as const,
+      filter: {
+        bool: {filterType: 'bool'},
+        rest: {},
+      } as const,
+    },
+    cases: {
+      clockOnly: {
+        inferClockOnly: {
+          noFn: value(null),
+          goodUntyped: value('(val) => ({a:val.a, b:val.b})'),
+          goodTyped: value('(val: AB) => ({a:val.a, b:val.b})'),
+          badUntyped: value('(val) => ({a:val.c, b:val.b})'),
+          badTyped: value('(val: ABN) => ({a:val.a, b:val.b})'),
+          badReturn: value('() => ({a:0, b:1})'),
+        },
+        noInfer: {
+          noFn: value(null),
+          goodUntyped: {
+            bool: value('(val) => ({a:val.a, b:val.b})'),
+            rest: value("(val) => ({a:1, b: val ? val.b : ''})"),
+          },
+          goodTyped: {
+            bool: value('(val: AB) => ({a:val.a, b:val.b})'),
+            rest: value("(val: AB | null) => ({a:1, b: val ? val.b : ''})"),
+          },
+          badUntyped: value('(val) => ({a:val.c, b:val.b})'),
+          badTyped: value("(val: ABN) => ({a:val.c, b:''})"),
+          badReturn: value(null),
+        },
+      },
+      nullableField: {
+        infer: {
+          noFn: value(null),
+          goodUntyped: value('(val) => ({a: val.a + 1, b: val.b})'),
+          goodTyped: value('(val: AB) => ({a: val.a + 1, b: val.b})'),
+          badUntyped: value('(val) => ({a: 1 + val.c, b: val.b})'),
+          badTyped: value("(val: ABN) => ({a: val.a + 1, b: ''})"),
+          badReturn: value("() => 'wrong'"),
+        },
+        noInfer: {
+          noFn: value(null),
+          goodUntyped: value('(val) => ({a: val.a, b: `${val.b.length}`})'),
+          goodTyped: value(
+            '(val: AoptB) => ({a: val.a, b: `${val.b.length}`})',
+          ),
+          badUntyped: value('(val) => ({a: val.a + 1, b: val.b})'),
+          badTyped: value('(val: AB) => ({a: val.a + 1, b: val.b})'),
+          badReturn: value("() => 'wrong'"),
+        },
+      },
+      __: value(null),
+    },
+  })
   const targetCode = computeFn({
     source: {targetValue},
     fn({targetValue}) {
@@ -432,9 +580,11 @@ export default () => {
     },
   })
   const clockCode = separate({
-    source: {clockType, fnSecondArg},
+    source: {clockType, sourceType, fnSecondArg},
     variant: {
       clock: {
+        clockOnlySingle: {sourceType: 'no', clockType: 'unit'},
+        clockOnlyArray: {sourceType: 'no', clockType: 'array'},
         noClock: {clockType: 'no'},
         clockSingle: {clockType: 'unit'},
         clockArray: {clockType: 'array'},
@@ -445,6 +595,8 @@ export default () => {
       },
     },
     cases: {
+      clockOnlySingle: value('nullableAB'),
+      clockOnlyArray: value('[ab,nullableAB]'),
       noClock: value(null),
       clockSingle: {
         hasFnSecondArg: value('numt'),
@@ -454,19 +606,6 @@ export default () => {
         hasFnSecondArg: value('[numt,$num]'),
         noFnSecondArg: value('[anyt]'),
       },
-    },
-  })
-  const clockDescription = computeVariant({
-    source: {clockType},
-    variant: {
-      noClock: {clockType: 'no'},
-      clockSingle: {clockType: 'unit'},
-      clockArray: {clockType: 'array'},
-    },
-    cases: {
-      noClock: '',
-      clockSingle: ' + clock',
-      clockArray: ' + [clock]',
     },
   })
   const sourceCode = separate({
@@ -520,7 +659,14 @@ export default () => {
     },
   })
   const filterCode: Separate<string> = separate({
-    source: {filterType, fnSecondArg, sourceType, sourceSubtype, inferByFilter},
+    source: {
+      filterType,
+      fnSecondArg,
+      sourceType,
+      sourceSubtype,
+      inferByFilter,
+      filterFnType,
+    },
     variant: {
       Afilter: {
         fn: {filterType: 'fn'},
@@ -546,10 +692,17 @@ export default () => {
         infer: {inferByFilter: true},
         noInfer: {inferByFilter: false},
       },
+      Etype: {
+        goodUntyped: {filterFnType: 'good untyped'},
+        goodTyped: {filterFnType: 'good typed'},
+        badUntyped: {filterFnType: 'bad untyped'},
+        badTyped: {filterFnType: 'bad typed'},
+        badReturn: {filterFnType: 'bad return'},
+      },
     },
     cases: {
       fn: {
-        //@ts-ignore
+        //@ts-expect-error
         hasFnSecondArg: {
           unit: {
             infer: value('(val,n): val is AB => n > 0 && val.a !== null'),
@@ -579,8 +732,14 @@ export default () => {
         },
         noFnSecondArg: {
           none: {
-            infer: value("(n): n is number => typeof n === 'number' && n > 0"),
-            noInfer: value('(n) => n > 0'),
+            infer: value('(clk): clk is AB => clk !== null'),
+            noInfer: {
+              goodUntyped: value('(clk) => clk !== null'),
+              goodTyped: value('(clk: AB | null) => clk !== null'),
+              badUntyped: value('(clk) => clk.a > 0'),
+              badTyped: value('(clk: AB) => clk.a > 0'),
+              badReturn: value('() => 1'),
+            },
           },
           unit: {
             infer: value('(val): val is AB => val.a !== null'),
@@ -618,11 +777,26 @@ export default () => {
     source: {
       sourceIsWiderThatTarget,
       sourceType,
+      clockType,
       targetType,
-      clockDescription,
+      targetCode,
+      fnType,
     },
-    fn({sourceIsWiderThatTarget, sourceType, targetType, clockDescription}) {
-      return `${sourceType}${clockDescription} -> ${targetType} ${
+    fn({
+      sourceIsWiderThatTarget,
+      sourceType,
+      clockType,
+      targetType,
+      targetCode,
+      fnType,
+    }) {
+      return `${
+        sourceType === 'no'
+          ? ''
+          : `${sourceType}${clockType === 'no' ? '' : ' + '}`
+      }${clockType === 'no' ? '' : clockType === 'unit' ? 'clock' : '[clock]'}${
+        fnType === 'no' ? '' : ', fn'
+      } -> ${targetCode ? targetType : 'new unit'} ${
         sourceIsWiderThatTarget ? 'wide' : 'same'
       }`
     },
@@ -646,7 +820,16 @@ export default () => {
     header,
     grouping: {
       pass: bool({
-        source: {wrongTarget, sourceSubtype, filterType, inferByFilter},
+        source: {
+          wrongTarget,
+          sourceType,
+          targetType,
+          sourceSubtype,
+          filterType,
+          inferByFilter,
+          fnType,
+          filterFnType,
+        },
         false: [
           {wrongTarget: true},
           {sourceSubtype: 'nullableField', filterType: 'store'},
@@ -655,6 +838,22 @@ export default () => {
             filterType: 'fn',
             inferByFilter: false,
           },
+          {sourceSubtype: 'nullableField', fnType: 'bad typed'},
+          {sourceSubtype: 'nullableField', fnType: 'bad untyped'},
+          {sourceSubtype: 'nullableField', fnType: 'bad return'},
+          {sourceType: 'no', targetType: 'unit', filterType: 'store'},
+          {
+            sourceType: 'no',
+            targetType: 'unit',
+            filterType: 'fn',
+            inferByFilter: false,
+          },
+          {sourceType: 'no', fnType: 'bad typed'},
+          {sourceType: 'no', fnType: 'bad untyped'},
+          {sourceType: 'no', targetType: 'unit', fnType: 'bad return'},
+          {sourceType: 'no', filterFnType: 'bad typed'},
+          {sourceType: 'no', filterFnType: 'bad untyped'},
+          {sourceType: 'no', filterFnType: 'bad return'},
         ],
       }),
       getHash: [
@@ -663,6 +862,7 @@ export default () => {
         filterType,
         sourceType,
         sourceCode,
+        fnType,
         targetType,
         clockType,
       ],
@@ -674,6 +874,7 @@ export default () => {
         sourceCode,
         target: targetType,
         clock: clockType,
+        fn: fnType,
       },
       describeGroup: computeFn({
         source: {groupTokens, sourceType},
@@ -690,6 +891,7 @@ export default () => {
           clock: clockCode,
           target: targetCode,
           filter: filterCode,
+          fn: fnCode,
         },
       },
     },
@@ -711,6 +913,7 @@ const numt = createEvent<number>()
 const strt = createEvent<number>()
 const $num = createStore(0)
 const ab = createEvent<AB>()
+const $ab = createStore<AB>({a: 0, b: ''})
 const nullableAB = createEvent<AB | null>()
 const abNull = createEvent<{a: number | null; b: string}>()
 const aNum = createEvent<{a: number}>()

@@ -15,6 +15,7 @@ const numt = createEvent<number>()
 const strt = createEvent<number>()
 const $num = createStore(0)
 const ab = createEvent<AB>()
+const $ab = createStore<AB>({a: 0, b: ''})
 const nullableAB = createEvent<AB | null>()
 const abNull = createEvent<{a: number | null; b: string}>()
 const aNum = createEvent<{a: number}>()
@@ -1738,6 +1739,415 @@ describe('object source', () => {
       `)
     })
   })
+  describe('object, fn -> unit wide', () => {
+    test('object, fn -> unit wide (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0, fn:(val) => ({a: val.a + 1, b: val.b})    })
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0, fn:(val: AB) => ({a: val.a + 1, b: val.b})})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        "
+      `)
+    })
+    test('object, fn -> unit wide (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0           , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0           , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0           , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0           , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0           , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:$filter                                                   , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:$filter                                                   , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:$filter                                                   , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:$filter                                                   , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:$filter                                                   , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0, fn:(val) => ({a: 1 + val.c, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0, fn:(val: ABN) => ({a: val.a + 1, b: ''})             })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0, fn:() => 'wrong'                                     })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => boolean; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: (val: AoptB) => { a: number | null; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => boolean; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: { a: number | null; b: string; }) => { a: number | null; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: AoptB) => { a: number | null; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: { a: number | null; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: AB) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: Store<boolean>; fn: () => string; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
+        Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: any) => val is AB; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        "
+      `)
+    })
+  })
+  describe('object + clock, fn -> unit wide', () => {
+    test('object + clock, fn -> unit wide (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val) => ({a: val.a + 1, b: val.b})    })
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val) => ({a: val.a + 1, b: val.b})    })
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val: AB) => ({a: val.a + 1, b: val.b})})
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val: AB) => ({a: val.a + 1, b: val.b})})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        "
+      `)
+    })
+    test('object + clock, fn -> unit wide (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                                     , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                                     , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                                     , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                                     , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:$filter                                                     , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val) => ({a: 1 + val.c, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val) => ({a: 1 + val.c, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val: ABN) => ({a: val.a + 1, b: ''})             })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val: ABN) => ({a: val.a + 1, b: ''})             })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:() => 'wrong'                                     })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: (val: AoptB) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: any, n: any) => boolean; fn: (val: AoptB) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Parameter 'n' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: any, n: any) => boolean; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Parameter 'n' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: AoptB) => { a: number | null; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: AB) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: Store<boolean>; fn: () => string; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
+        Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>; target: Event<{ a: number; }>; filter: (val: any) => val is AB; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<number>; target: Event<{ a: number; }>; filter: (val: any, n: any) => val is AB; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Parameter 'n' implicitly has an 'any' type.
+        "
+      `)
+    })
+  })
+  describe('object + [clock], fn -> unit wide', () => {
+    test('object + [clock], fn -> unit wide (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val) => ({a: val.a + 1, b: val.b})    })
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val) => ({a: val.a + 1, b: val.b})    })
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val: AB) => ({a: val.a + 1, b: val.b})})
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val: AB) => ({a: val.a + 1, b: val.b})})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        "
+      `)
+    })
+    test('object + [clock], fn -> unit wide (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0             , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n) => typeof val.a === 'number' && val.a > n           , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                                     , fn:(val) => ({a: val.a, b: `${val.b.length}`})       })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                                     , fn:(val: AoptB) => ({a: val.a, b: `${val.b.length}`})})
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                                     , fn:(val) => ({a: val.a + 1, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                                     , fn:(val: AB) => ({a: val.a + 1, b: val.b})           })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:$filter                                                     , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val) => ({a: 1 + val.c, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val) => ({a: 1 + val.c, b: val.b})               })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val: ABN) => ({a: val.a + 1, b: ''})             })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val: ABN) => ({a: val.a + 1, b: ''})             })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:() => 'wrong'                                     })
+        //@ts-expect-error
+        sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:() => 'wrong'                                     })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: (val: AoptB) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: any, n: any) => boolean; fn: (val: AoptB) => { ...; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Parameter 'n' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => boolean; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: any, n: any) => boolean; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Parameter 'n' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: AoptB) => { a: number | null; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: { a: number | null; b: string; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: Store<boolean>; fn: (val: AB) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: Store<boolean>; fn: () => string; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: { a: number | null; b: string; }, n: number) => val is AB; fn: (val: { ...; }) => { ...; }; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
+        Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: Event<any>[]; target: Event<{ a: number; }>; filter: (val: any) => val is AB; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; clock: (Store<number> | Event<number>)[]; target: Event<{ a: number; }>; filter: (val: any, n: any) => val is AB; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Parameter 'val' implicitly has an 'any' type.
+        Parameter 'n' implicitly has an 'any' type.
+        "
+      `)
+    })
+  })
 })
 describe('tuple source', () => {
   describe('tuple -> array same', () => {
@@ -2076,60 +2486,852 @@ describe('tuple source', () => {
   })
 })
 describe('no source', () => {
-  test('no + clock -> unit same (should pass)', () => {
-    //prettier-ignore
-    {
-      sample({clock:anyt, target:numt, filter:(n) => n > 0                                      })
-      sample({clock:anyt, target:numt, filter:$filter                                           })
-      sample({clock:anyt, target:numt, filter:Boolean                                           })
-      sample({clock:anyt, target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+  describe('clock -> unit same', () => {
+    test('clock -> unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         })
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => clk is AB; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        "
+      `)
+    })
+    test('clock -> unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:() => 1                         })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:$filter                         })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        "
+      `)
+    })
   })
-  test('no + [clock] -> unit same (should pass)', () => {
-    //prettier-ignore
-    {
-      sample({clock:[anyt], target:numt, filter:(n) => n > 0                                      })
-      sample({clock:[anyt], target:numt, filter:$filter                                           })
-      sample({clock:[anyt], target:numt, filter:Boolean                                           })
-      sample({clock:[anyt], target:numt, filter:(n): n is number => typeof n === 'number' && n > 0})
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+  describe('clock, fn -> unit same', () => {
+    test('clock, fn -> unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})    })
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})})
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})    })
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: AB) => ({a:val.a, b:val.b})})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        "
+      `)
+    })
+    test('clock, fn -> unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: ABN) => ({a:val.a, b:val.b})              })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                              })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.a, b:val.b})              })
+        //@ts-expect-error
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                              })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: Store<boolean>; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: any) => clk is AB; fn: () => { a: number; b: number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+        Parameter 'clk' implicitly has an 'any' type.
+        "
+      `)
+    })
   })
-  test('no + clock -> array same (should pass)', () => {
-    //prettier-ignore
-    {
-      sample({clock:anyt, filter:(n) => n > 0                                      })
-      sample({clock:anyt, filter:$filter                                           })
-      sample({clock:anyt, filter:Boolean                                           })
-      sample({clock:anyt, filter:(n): n is number => typeof n === 'number' && n > 0})
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+  describe('[clock] -> unit same', () => {
+    test('[clock] -> unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         })
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => clk is AB; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        "
+      `)
+    })
+    test('[clock] -> unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        "
+      `)
+    })
   })
-  test('no + [clock] -> array same (should pass)', () => {
-    //prettier-ignore
-    {
-      sample({clock:[anyt], filter:(n) => n > 0                                      })
-      sample({clock:[anyt], filter:$filter                                           })
-      sample({clock:[anyt], filter:Boolean                                           })
-      sample({clock:[anyt], filter:(n): n is number => typeof n === 'number' && n > 0})
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+  describe('[clock], fn -> unit same', () => {
+    test('[clock], fn -> unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})    })
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})})
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})    })
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: AB) => ({a:val.a, b:val.b})})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        "
+      `)
+    })
+    test('[clock], fn -> unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: ABN) => ({a:val.a, b:val.b})              })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                              })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.a, b:val.b})              })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                              })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'ABN'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: any) => clk is AB; fn: () => { a: number; b: number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+        Parameter 'clk' implicitly has an 'any' type.
+        "
+      `)
+    })
+  })
+  describe('clock -> new unit same', () => {
+    test('clock -> new unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:nullableAB, filter:(clk) => clk !== null           })
+        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null})
+        sample({clock:nullableAB, filter:$filter                         })
+        sample({clock:nullableAB, filter:Boolean                         })
+        sample({clock:nullableAB, filter:(clk): clk is AB => clk !== null})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('clock -> new unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk.a > 0    })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0})
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:() => 1               })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '((clk: AB | null) => boolean) & ((clk: AB) => boolean)'.
+          Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'AB | null' is not assignable to type 'AB'.
+                Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '((clk: AB | null) => boolean) & (() => number)'.
+          Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
+        "
+      `)
+    })
+  })
+  describe('clock, fn -> new unit same', () => {
+    test('clock, fn -> new unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:nullableAB, filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})                   })
+        sample({clock:nullableAB, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})               })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        "
+      `)
+    })
+    test('clock, fn -> new unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:nullableAB, filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '((clk: AB | null) => boolean) & ((clk: AB) => boolean)'.
+          Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'AB | null' is not assignable to type 'AB'.
+                Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '((clk: AB | null) => boolean) & (() => number)'.
+          Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Type '(clk: AB) => boolean' is not assignable to type '((clk: AB | null) => boolean) & ((clk: AB) => boolean)'.
+          Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'AB | null' is not assignable to type 'AB'.
+                Type 'null' is not assignable to type 'AB'.
+        Property 'c' does not exist on type 'ABN'.
+        Type '() => number' is not assignable to type '((clk: AB | null) => boolean) & (() => number)'.
+          Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'ABN'.
+        "
+      `)
+    })
+  })
+  describe('[clock] -> new unit same', () => {
+    test('[clock] -> new unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           })
+        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null})
+        sample({clock:[ab,nullableAB], filter:$filter                         })
+        sample({clock:[ab,nullableAB], filter:Boolean                         })
+        sample({clock:[ab,nullableAB], filter:(clk): clk is AB => clk !== null})
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('[clock] -> new unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0    })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:() => 1               })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '((clk: AB | null) => boolean) & ((clk: AB) => boolean)'.
+          Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'AB | null' is not assignable to type 'AB'.
+                Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '((clk: AB | null) => boolean) & (() => number)'.
+          Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
+        "
+      `)
+    })
+  })
+  describe('[clock], fn -> new unit same', () => {
+    test('[clock], fn -> new unit same (should pass)', () => {
+      //prettier-ignore
+      {
+        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})                   })
+        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})               })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        "
+      `)
+    })
+    test('[clock], fn -> new unit same (should fail)', () => {
+      //prettier-ignore
+      {
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
+        //@ts-expect-error
+        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+      }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '((clk: AB | null) => boolean) & ((clk: AB) => boolean)'.
+          Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'AB | null' is not assignable to type 'AB'.
+                Type 'null' is not assignable to type 'AB'.
+        Type '() => number' is not assignable to type '((clk: AB | null) => boolean) & (() => number)'.
+          Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+          Type 'number' is not assignable to type 'boolean'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
+        Property 'c' does not exist on type 'ABN'.
+        Type '(clk: AB) => boolean' is not assignable to type '((clk: AB | null) => boolean) & ((clk: AB) => boolean)'.
+          Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
+            Types of parameters 'clk' and 'clk' are incompatible.
+              Type 'AB | null' is not assignable to type 'AB'.
+                Type 'null' is not assignable to type 'AB'.
+        Property 'c' does not exist on type 'ABN'.
+        Type '() => number' is not assignable to type '((clk: AB | null) => boolean) & (() => number)'.
+          Type '() => number' is not assignable to type '(clk: AB | null) => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'ABN'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        Object is possibly 'null'.
+        Property 'c' does not exist on type 'ABN'.
+        "
+      `)
+    })
   })
 })
