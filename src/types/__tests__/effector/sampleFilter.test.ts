@@ -253,6 +253,33 @@ describe('sample(config)', () => {
           "
         `)
       })
+      test('filter + fn edge case (should pass)', () => {
+        const $source = createStore({a: null as number | null, b: ''})
+        const aNum = createEvent<number>()
+        sample({
+          source: $source,
+          target: aNum,
+          filter: (val): val is {a: number; b: string} =>
+            typeof val.a === 'number' && val.a > 0,
+          fn: val => 1,
+        })
+        sample({
+          source: $source,
+          target: aNum,
+          filter: (val): val is {a: number; b: string} =>
+            typeof val.a === 'number' && val.a > 0,
+          fn: val => val.a + 1,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          Argument of type '{ source: Store<{ a: number | null; b: string; }>; target: Event<number>; filter: (val: { a: number | null; b: string; }) => val is { a: number; b: string; }; fn: (val: { a: number | null; b: string; }) => number; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: number; }; }'.
+            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: number; }; }'.
+          Argument of type '{ source: Store<{ a: number | null; b: string; }>; target: Event<number>; filter: (val: { a: number | null; b: string; }) => val is { a: number; b: string; }; fn: (val: { a: number | null; b: string; }) => number; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: number; }; }'.
+            Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: number; }; }'.
+          Object is possibly 'null'.
+          "
+        `)
+      })
       test('type mismatch (should fail)', () => {
         const clock = createEvent<string>()
         const source = createEvent<number>()
