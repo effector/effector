@@ -119,27 +119,55 @@ describe('explicit generics', () => {
 
 test('generic edge cases', () => {
   function generic1<A, B>(target: Store<A>, clock: Event<B>) {
-    const result = sample({
-      source: target,
-      clock,
-      target,
-    })
-  }
-  function generic2<A, B>(target: Store<A>, clock: Event<B>) {
-    const result: Store<A> = sample({
-      source: target,
-      clock,
-      fn: (source, clock) => source,
-      target,
-    })
-  }
-  function generic3<A, B>(target: Store<A>, clock: Event<B>) {
-    const result: Event<B> = sample({
-      source: target,
-      clock,
-      fn: (source, clock) => clock,
-      target: clock,
-    })
+    {
+      const result = sample({
+        source: target,
+        clock,
+        target,
+      })
+    }
+    {
+      const result: Store<A> = sample({
+        source: target,
+        clock,
+        fn: (source, clock) => source,
+        target,
+      })
+    }
+    {
+      const result: Event<B> = sample({
+        source: target,
+        clock,
+        fn: (source, clock) => clock,
+        target: clock,
+      })
+    }
+    {
+      const result = sample({
+        clock,
+        source: target,
+        filter: Boolean,
+        target,
+      })
+    }
+    {
+      const result = sample({
+        clock,
+        source: target,
+        filter: Boolean,
+        fn: (source, clock) => clock,
+        target,
+      })
+    }
+    {
+      const result = sample({
+        clock,
+        source: target,
+        filter: (source, clock) => true,
+        fn: (source, clock) => clock,
+        target,
+      })
+    }
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
