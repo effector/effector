@@ -1,11 +1,11 @@
 export function createDefer(): {
-  rs: (value: any) => any
-  rj: (value: any) => any
+  rs: (value) => any
+  rj: (value) => any
   req: Promise<any>
 } {
   const result = {} as {
-    rs: (value: any) => any
-    rj: (value: any) => any
+    rs: (value) => any
+    rj: (value) => any
     req: Promise<any>
   }
   result.req = new Promise((rs, rj) => {

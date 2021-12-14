@@ -9,7 +9,7 @@ import {read, calc} from './step'
 import {launch} from './kernel'
 import {EFFECT} from './tag'
 
-export function attach(config: any) {
+export function attach(config) {
   let injected
   ;[config, injected] = processArgsToConfig(config, true)
   let {source, effect, mapParams} = config
@@ -25,7 +25,7 @@ export function attach(config: any) {
       const sourceData = stack.a
       const isEffectHandler = is.effect(handler)
       let ok = true
-      let computedParams: any
+      let computedParams
       if (mapParams) {
         ;[ok, computedParams] = runFn(mapParams, rj, [params, sourceData])
       } else {

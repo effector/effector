@@ -5,13 +5,13 @@ export type ID = string
 export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
 export type StateRefOp =
-  | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
+  | {type: 'map'; from?: StateRef; fn?: (value) => any}
   | {type: 'field'; from: StateRef; field: string}
   | {type: 'closure'; of: StateRef}
 
 export type StateRef = {
   id: ID
-  current: any
+  current
   type?: 'list' | 'shape'
   before?: StateRefOp[]
   noInit?: boolean
@@ -29,7 +29,7 @@ export type Config = {
   name?: string
   and?: Config
   or?: Config
-  parent?: any
+  parent?
   handler?: Function
   derived?: boolean
 }
@@ -38,9 +38,9 @@ export type Node = {
   id: ID
   next: Array<Node>
   seq: Array<Cmd>
-  scope: {[key: string]: any}
+  scope: {[key: string]}
   // reg: {[id: string]: StateRef}
-  meta: {[tag: string]: any}
+  meta: {[tag: string]}
   family: {
     type: 'regular' | 'crosslink' | 'domain'
     links: Node[]
@@ -114,7 +114,7 @@ export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
+    fn?: (data, scope: {[key: string]}, reg: Stack) => any
     safe: boolean
     filter: boolean
     pure: boolean

@@ -1,2 +1,2 @@
-export const observableSymbol: any =
+export const observableSymbol =
   (typeof Symbol !== 'undefined' && Symbol.observable) || '@@observable'

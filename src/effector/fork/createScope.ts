@@ -34,7 +34,7 @@ export function createScope(unit?: Domain): Scope {
           if (scope.inFlight > 0 || defers.length === 0) return
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
-            forEach(defers.splice(0, defers.length), (defer: any) => {
+            forEach(defers.splice(0, defers.length), defer => {
               setForkPage(defer.parentFork)
               defer.rs(defer.value)
             })
@@ -71,7 +71,7 @@ export function createScope(unit?: Domain): Scope {
     reg: page,
     sidValuesMap: {},
     sidIdMap: {},
-    getState(store: any) {
+    getState(store) {
       if ('current' in store) {
         return getPageRef(currentPage, resultScope, null, store).current
       }

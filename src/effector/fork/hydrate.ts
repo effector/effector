@@ -16,12 +16,12 @@ import {getGraph} from '../getter'
 })
 
  */
-export function hydrate(domain: Domain | Scope, {values}: {values: any}) {
+export function hydrate(domain: Domain | Scope, {values}: {values}) {
   assert(isObject(values), 'values property should be an object')
   const normalizedValues = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(normalizedValues)
   const storeNodes: Node[] = []
-  const storeValues: any[] = []
+  const storeValues[] = []
   let forkPage: Scope
   let traverseTarget: Node
   let needToAssign: true | void

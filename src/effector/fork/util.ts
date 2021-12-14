@@ -25,7 +25,7 @@ export function traverseStores(
 
 export function normalizeValues(
   values: Map<Store<any>, any> | Array<[any, any]> | Record<string, any>,
-  assertEach?: (key: any, value: any) => void,
+  assertEach?: (key, value) => void,
 ) {
   if (Array.isArray(values)) values = new Map(values)
   if (values instanceof Map) {

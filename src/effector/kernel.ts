@@ -26,10 +26,10 @@ type Layer = {
 
 /** Call stack */
 export type Stack = {
-  value: any
-  a: any
-  b: any
-  c?: any
+  value
+  a
+  b
+  c?
   parent: Stack | null
   node: Node
   page: Leaf | null
@@ -54,7 +54,7 @@ type QueueBucket = {
 /** Dedicated local metadata */
 type Local = {
   fail: boolean
-  scope: {[key: string]: any}
+  scope: {[key: string]}
 }
 
 let heap: QueueItem | null = null
@@ -128,7 +128,7 @@ const pushFirstHeapItem = (
   page: Leaf | null,
   node: Node,
   parent: Stack | null,
-  value: any,
+  value,
   scope?: Scope | null | void,
 ) =>
   pushHeap(
@@ -239,14 +239,14 @@ export const getPageRef = (
 
 export function launch(config: {
   target: NodeUnit | NodeUnit[]
-  params?: any
+  params?
   defer?: boolean
   page?: Leaf | void | null
   scope?: Scope | void
   stack?: Stack | void
 }): void
-export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
-export function launch(unit: any, payload?: any, upsert?: boolean) {
+export function launch(unit: NodeUnit, payload?, upsert?: boolean): void
+export function launch(unit, payload?, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage

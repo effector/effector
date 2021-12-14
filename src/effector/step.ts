@@ -14,11 +14,11 @@ import {callStack} from './caller'
 
 const cmd = (
   type: 'compute' | 'mov',
-  data: any,
+  data,
   priority?: BarrierPriorityTag | false,
   batch?: boolean,
 ) => {
-  const result: any = {
+  const result = {
     id: nextStepID(),
     type,
     data,
@@ -106,7 +106,7 @@ export const compute = ({
   filter = false,
   pure = false,
 }: {
-  fn?: (data: any, scope: {[key: string]: any}, stack: Stack) => any
+  fn?: (data, scope: {[key: string]}, stack: Stack) => any
   batch?: boolean
   priority?: BarrierPriorityTag | false
   safe?: boolean
@@ -118,18 +118,15 @@ export const filter = ({
   fn,
   pure,
 }: {
-  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
+  fn(data, scope: {[key: string]}, stack: Stack)
   pure?: boolean
 }) => compute({fn, filter: true, pure})
 
-export const run = ({
-  fn,
-}: {
-  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
-}) => compute({fn, priority: EFFECT})
+export const run = ({fn}: {fn(data, scope: {[key: string]}, stack: Stack)}) =>
+  compute({fn, priority: EFFECT})
 
 export const calc = (
-  fn: (data: any, scope: {[key: string]: any}, stack: Stack) => any,
+  fn: (data, scope: {[key: string]}, stack: Stack) => any,
   filter?: boolean,
   isEffect?: boolean,
 ) => compute({fn, safe: true, filter, priority: isEffect && EFFECT})
@@ -157,7 +154,7 @@ export const read = (
   })
 
 export const userFnCall = (
-  fn: (data: any, scope: {[key: string]: any}, stack: Stack) => any = callStack,
+  fn: (data, scope: {[key: string]}, stack: Stack) => any = callStack,
   isFilter?: boolean,
 ) => compute({fn, pure: true, filter: isFilter})
 

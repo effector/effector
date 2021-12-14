@@ -3,13 +3,13 @@ import {is} from './is'
 import {getParent} from './getter'
 import {forIn} from './collection'
 
-const getCompostite = (unit: any): CompositeName => unit.compositeName
+const getCompostite = (unit): CompositeName => unit.compositeName
 
-export function unitObjectName(objOrArr: any, method: string = 'combine') {
+export function unitObjectName(objOrArr, method: string = 'combine') {
   let name = method + '('
   let comma = ''
   let i = 0
-  forIn(objOrArr, (unit: any) => {
+  forIn(objOrArr, unit => {
     /* inlined max object names constant */
     if (i < 25) {
       if (unit != null) {

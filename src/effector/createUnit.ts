@@ -46,14 +46,14 @@ import {forEach} from './collection'
 import {flattenConfig} from './config'
 
 export const applyParentHook = (
-  source: any,
-  target: any,
+  source,
+  target,
   hookType: 'event' | 'effect' = EVENT,
 ) => {
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (kind: any, unit: any, configA: any, configB?: any) => {
+export const initUnit = (kind, unit, configA, configB?) => {
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
   const config = flattenConfig({
@@ -86,7 +86,7 @@ export const initUnit = (kind: any, unit: any, configA: any, configB?: any) => {
       return unit.watch(
         isFunction(observer)
           ? observer
-          : (upd: any) => observer.next && observer.next(upd),
+          : (upd) => observer.next && observer.next(upd),
       )
     }
     unit[observableSymbol] = () => unit
@@ -97,7 +97,7 @@ export const initUnit = (kind: any, unit: any, configA: any, configB?: any) => {
 }
 export const createNamedEvent = (named: string) => createEvent({named})
 
-const deriveEvent = (event: any, op: string, fn: any, node: any) => {
+const deriveEvent = (event, op: string, fn, node) => {
   let config
   if (isObject(fn)) {
     config = fn
@@ -112,7 +112,7 @@ const deriveEvent = (event: any, op: string, fn: any, node: any) => {
   return mapped
 }
 
-function callCreate(unit: any, template: any, payload: any, args: any[]): any {
+function callCreate(unit, template, payload, args[]) {
   const oldPage = currentPage
   let page = null
   if (template) {
@@ -128,10 +128,10 @@ function callCreate(unit: any, template: any, payload: any, args: any[]): any {
 }
 
 export function createEvent<Payload = any>(
-  nameOrConfig?: any,
-  maybeConfig?: any,
+  nameOrConfig?,
+  maybeConfig?,
 ): Event<Payload> {
-  const event: any = (payload: Payload, ...args: any[]) => {
+  const event = (payload: Payload, ...args[]) => {
     deprecate(
       !getMeta(event, 'derived'),
       'call of derived event',
@@ -149,22 +149,22 @@ export function createEvent<Payload = any>(
       meta: initUnit(EVENT, event, nameOrConfig, maybeConfig),
       regional: true,
     }),
-    create(params: any, _: any) {
+    create(params, _) {
       launch({target: event, params, scope: forkPage!})
       return params
     },
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
-    map: (fn: any) => deriveEvent(event, MAP, fn, [userFnCall()]),
-    filter: (fn: any) =>
+    map: (fn) => deriveEvent(event, MAP, fn, [userFnCall()]),
+    filter: (fn) =>
       deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
         userFnCall(callStack, true),
       ]),
-    filterMap: (fn: any) =>
+    filterMap: (fn) =>
       deriveEvent(event, 'filterMap', fn, [
         userFnCall(),
         calc(value => !isVoid(value), true),
       ]),
-    prepend(fn: any) {
+    prepend(fn) {
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
       })
@@ -184,7 +184,7 @@ export function createStore<State>(
   const updates = createNamedEvent('updates')
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
-  const store: any = {
+  const store = {
     subscribers: new Map(),
     updates,
     defaultState,
@@ -206,18 +206,18 @@ export function createStore<State>(
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
       return readRef(targetRef)
     },
-    setState: (state: any) =>
+    setState: (state) =>
       launch({
         target: store,
         params: state,
         defer: true,
         scope: forkPage!,
       }),
-    reset(...units: any[]) {
+    reset(...units[]) {
       forEach(units, unit => store.on(unit, () => store.defaultState))
       return store
     },
-    on(nodeSet: any, fn: Function) {
+    on(nodeSet, fn: Function) {
       assertNodeSet(nodeSet, '.on', 'first argument')
       deprecate(
         !getMeta(store, 'derived'),
@@ -235,7 +235,7 @@ export function createStore<State>(
       })
       return store
     },
-    off(unit: any) {
+    off(unit) {
       const currentSubscription = getSubscribers(store).get(unit)
       if (currentSubscription) {
         currentSubscription()
@@ -243,7 +243,7 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: any, firstState?: any) {
+    map(fn, firstState?) {
       let config
       if (isObject(fn)) {
         config = fn
@@ -278,7 +278,7 @@ export function createStore<State>(
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },
-    watch(eventOrFn: any, fn?: Function) {
+    watch(eventOrFn, fn?: Function) {
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -287,7 +287,7 @@ export function createStore<State>(
         return subscription
       }
       assert(isFunction(fn), 'second argument should be a function')
-      return eventOrFn.watch((payload: any) => fn(store.getState(), payload))
+      return eventOrFn.watch((payload) => fn(store.getState(), payload))
     },
   }
   const meta = initUnit(STORE, store, props)
@@ -325,7 +325,7 @@ export function createStore<State>(
 }
 
 const updateStore = (
-  from: any,
+  from,
   store: Store<any>,
   op: string,
   caller: typeof callStackAReg,

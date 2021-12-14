@@ -7,9 +7,9 @@ export function forIn<T>(
   }
 }
 
-export const includes = (list: any[], item: any) => list.includes(item)
+export const includes = (list[], item) => list.includes(item)
 
-export const removeItem = (list: any[], item: any) => {
+export const removeItem = (list[], item) => {
   const pos = list.indexOf(item)
   if (pos !== -1) {
     list.splice(pos, 1)
@@ -27,6 +27,6 @@ export function forEach<K, T>(
   fn: (item: T, key: K) => void,
 ): void
 export function forEach<T>(list: Set<T>, fn: (item: T) => void): void
-export function forEach(list: any, fn: Function) {
+export function forEach(list, fn: Function) {
   list.forEach(fn)
 }

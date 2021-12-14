@@ -5,10 +5,10 @@ import {normalizeValues} from './util'
 import {createScope} from './createScope'
 
 export function fork(
-  domainOrConfig?: Domain | {values?: any; handlers?: any},
-  optiionalConfig?: {values?: any; handlers?: any},
+  domainOrConfig?: Domain | {values?; handlers?},
+  optiionalConfig?: {values?; handlers?},
 ) {
-  let config: {values?: any; handlers?: any} | void = domainOrConfig as any
+  let config: {values?; handlers?} | void = domainOrConfig as any
   let domain: Domain
   if (is.domain(domainOrConfig)) {
     domain = domainOrConfig

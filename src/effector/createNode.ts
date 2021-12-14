@@ -30,8 +30,8 @@ export function createNode({
   to?: NodeUnit | NodeUnit[]
   target?: NodeUnit | NodeUnit[]
   child?: NodeUnit | NodeUnit[]
-  scope?: {[name: string]: any}
-  meta?: {[name: string]: any}
+  scope?: {[name: string]}
+  meta?: {[name: string]}
   family?: {
     type?: 'regular' | 'crosslink' | 'domain'
     links?: NodeUnit | NodeUnit[]

@@ -46,7 +46,7 @@ const clearNodeNormalized = (
     }
   }
 }
-const clearMap = (map: any) => map.clear()
+const clearMap = map => map.clear()
 export const clearNode = (
   graphite: NodeUnit,
   {

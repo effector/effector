@@ -8,7 +8,7 @@ import {isFunction} from './is'
 
 export const watchUnit = (
   unit: NodeUnit,
-  handler: (payload: any) => any,
+  handler: (payload) => any,
 ): Subscription => {
   assert(isFunction(handler), '.watch argument should be a function')
   return createSubscription(

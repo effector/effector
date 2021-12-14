@@ -4,7 +4,7 @@ import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './forward'
 
-export function restore(obj: any, defaultState: any, config?: any): any {
+export function restore(obj, defaultState, config?) {
   if (is.store(obj)) return obj
   if (is.event(obj) || is.effect(obj)) {
     const domain = getParent(obj)

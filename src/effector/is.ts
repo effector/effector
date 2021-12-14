@@ -5,20 +5,19 @@ import {arrifyNodes} from './createNode'
 import type {NodeUnit} from './index.h'
 import {getMeta} from './getter'
 
-export const isObject = (value: any) =>
-  typeof value === 'object' && value !== null
-export const isFunction = (value: any) => typeof value === 'function'
+export const isObject = value => typeof value === 'object' && value !== null
+export const isFunction = value => typeof value === 'function'
 
-export const isVoid = (value: any) => value === undefined
+export const isVoid = value => value === undefined
 
-export const assertObject = (value: any) =>
+export const assertObject = value =>
   assert(
     isObject(value) || isFunction(value),
     'expect first argument be an object',
   ) // or function
 
 const assertNodeSetItem = (
-  value: any,
+  value,
   method: string,
   valueName: string,
   reason: string,
@@ -31,11 +30,7 @@ const assertNodeSetItem = (
     `${method}: expect ${valueName} to be a unit (store, event or effect)${reason}`,
   )
 
-export const assertNodeSet = (
-  value: any,
-  method: string,
-  valueName: string,
-) => {
+export const assertNodeSet = (value, method: string, valueName: string) => {
   if (Array.isArray(value)) {
     forEach(value, (item, i) =>
       assertNodeSetItem(item, method, `${i} item of ${valueName}`, ''),

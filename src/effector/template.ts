@@ -9,7 +9,7 @@ export function applyTemplate<K extends keyof TemplateHandlers>(
 ): ReturnType<TemplateHandlers[K]> | void {
   const template = readTemplate()
   if (template) {
-    const fn: any = template.handlers[method]
+    const fn = template.handlers[method]
     if (fn) return fn(template, ...args)
   }
 }

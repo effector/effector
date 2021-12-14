@@ -29,7 +29,7 @@ const sampleConfigFields = ['source', 'clock', 'target']
 const fieldErrorMessage = (method: string, field: string) =>
   method + `: ${field} should be defined`
 
-export function validateSampleConfig(config: any, method: string) {
+export function validateSampleConfig(config, method: string) {
   let atLeastOneFieldExists = false
   forEach(sampleConfigFields, field => {
     if (field in config) {
@@ -40,7 +40,7 @@ export function validateSampleConfig(config: any, method: string) {
   return atLeastOneFieldExists
 }
 
-export function sample(...args: any): any {
+export function sample(...args) {
   let target
   let name
   let [[source, clock, fn], metadata] = processArgsToConfig(args)
@@ -81,17 +81,17 @@ export function sample(...args: any): any {
 
 export const createSampling = (
   method: string,
-  clock: any,
-  source: any,
-  filter: any,
-  target: any,
-  fn: any,
-  name: any,
-  metadata: any,
+  clock,
+  source,
+  filter,
+  target,
+  fn,
+  name,
+  metadata,
   batched: boolean,
   targetMayBeStore: boolean,
   filterRequired: boolean,
-  sid?: any,
+  sid?,
 ) => {
   const isUpward = !!target
   assert(

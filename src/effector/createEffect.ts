@@ -12,10 +12,10 @@ import type {Unit} from './index.h'
 import {add} from './collection'
 
 export function createEffect<Payload, Done>(
-  nameOrConfig: any,
-  maybeConfig?: any,
+  nameOrConfig,
+  maybeConfig?,
 ) {
-  const instance: any = createEvent(
+  const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
   )
@@ -30,23 +30,23 @@ export function createEffect<Payload, Done>(
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
-    fn({status, params, result}: any) {
+    fn({status, params, result}) {
       if (status === 'done') return {params, result}
     },
   }))
   const fail = (instance.fail = (anyway as any).filterMap({
     named: 'fail',
-    fn({status, params, error}: any) {
+    fn({status, params, error}) {
       if (status === 'fail') return {params, error}
     },
   }))
   const doneData = (instance.doneData = done.map({
     named: 'doneData',
-    fn: ({result}: any) => result,
+    fn: ({result}) => result,
   }))
   const failData = (instance.failData = fail.map({
     named: 'failData',
-    fn: ({error}: any) => error,
+    fn: ({error}) => error,
   }))
 
   const runner = createNode({
@@ -96,7 +96,7 @@ export function createEffect<Payload, Done>(
     calc(
       (params, {runner}, stack) => {
         const upd = getParent(stack)
-          ? {params, req: {rs(data: any) {}, rj(data: any) {}}}
+          ? {params, req: {rs(data) {}, rj(data) {}}}
           : /** empty stack means that this node was launched directly */
             params
         launch({
@@ -146,8 +146,8 @@ export function createEffect<Payload, Done>(
 }
 export const runFn = (
   fn: Function,
-  onReject: (data: any) => void,
-  args: any[],
+  onReject: (data) => void,
+  args[],
 ): [boolean, any] => {
   try {
     return [true, fn(...args)]
@@ -159,16 +159,16 @@ export const runFn = (
 
 export const onSettled =
   (
-    params: any,
+    params,
     req: {
-      rs(_: any): any
-      rj(_: any): any
+      rs(_)
+      rj(_)
     },
     ok: boolean,
     anyway: Unit,
     stack: Stack,
   ) =>
-  (data: any) =>
+  (data) =>
     launch({
       target: [anyway, sidechain],
       params: [

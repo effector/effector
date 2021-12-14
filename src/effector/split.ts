@@ -16,8 +16,8 @@ import {applyTemplate} from './template'
 const launchCase = (
   scopeTargets: Record<string, NodeUnit>,
   field: string,
-  data: any,
-  stack: any,
+  data,
+  stack,
 ) => {
   const target = scopeTargets[field]
   if (target) {
@@ -30,7 +30,7 @@ const launchCase = (
   }
 }
 
-export function split(...args: any[]): any {
+export function split(...args[]) {
   let targets: Record<string, Event<any> | NodeUnit>
   let [[source, match], metadata] = processArgsToConfig(args)
   const knownCases = !match
@@ -90,7 +90,7 @@ export function split(...args: any[]): any {
     lastValues.type = 'shape'
     const units = [] as string[]
     let needBarrier: boolean
-    forIn(match, (storeOrFn: any, key) => {
+    forIn(match, (storeOrFn, key) => {
       if (is.unit(storeOrFn)) {
         needBarrier = true
         add(units, key)

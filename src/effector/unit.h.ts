@@ -15,7 +15,7 @@ export interface Event<E> extends Unit {
   id: string
   kind: kind
   getType(): string
-  create(payload: E, type: string, args: any[]): E
+  create(payload: E, type: string, args[]): E
   watch(watcher: (payload: E) => any): Subscription
   map<T>(fn: (_: E) => T): Event<T>
   filter(config: {fn(_: E): boolean}): Event<E>
@@ -48,7 +48,7 @@ export interface Store<State> extends Unit {
     handler: (state: State, payload: E) => State | void,
   ): Store<State>
   off(event: Event<any>): void
-  subscribe(listener: any): Subscription
+  subscribe(listener): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
   //prettier-ignore
   watch: (
@@ -124,7 +124,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
     */
     getCurrent(): (params: Params) => Promise<Done>
   }
-  create(payload: Params, type: string, args: any[]): Params
+  create(payload: Params, type: string, args[]): Params
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
   // getNode(): Vertex<['event', string]>,
@@ -174,12 +174,12 @@ export interface Scope extends Unit {
   reg: Record<string, StateRef>
   cloneOf?: Domain
   getState<T>(store: Store<T>): T
-  getState(ref: StateRef): any
+  getState(ref: StateRef)
   /** value could be set only for stores with sid (they can be created by createStore, restore and combine) */
   sidValuesMap: Record<string, any>
   sidIdMap: Record<string, string>
   additionalLinks: Record<string, Node[]>
-  handlers: Record<string, (params: any) => any>
+  handlers: Record<string, (params) => any>
   fxCount: Node
   storeChange: Node
 }

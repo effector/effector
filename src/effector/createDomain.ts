@@ -16,10 +16,10 @@ import {DOMAIN} from './tag'
 import {launch} from './kernel'
 import {calc} from './step'
 
-export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
+export function createDomain(nameOrConfig, maybeConfig?): Domain {
   const node = createNode({family: {type: DOMAIN}, regional: true})
 
-  const result: any = {
+  const result = {
     history: {},
     graphite: node,
     hooks: {},
@@ -34,7 +34,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
       Store: createStore,
       Domain: createDomain,
     },
-    (factory: any, tag) => {
+    (factory, tag) => {
       const lowerCaseTag = tag.toLowerCase()
 
       const trigger = createNamedEvent(`on${tag}`)
@@ -62,12 +62,12 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
       })
       own(result, [trigger])
 
-      result[`onCreate${tag}`] = (hook: (data: any) => any) => {
+      result[`onCreate${tag}`] = (hook: (data) => any) => {
         forEach(acc, hook)
         return trigger.watch(hook)
       }
       result[`create${tag}`] = result[lowerCaseTag] = (
-        nameOrConfig: any,
+        nameOrConfig,
         config?: Config,
       ) => trigger(factory(nameOrConfig, {parent: result, or: config}))
     },
