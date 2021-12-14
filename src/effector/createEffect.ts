@@ -11,10 +11,7 @@ import {EFFECT} from './tag'
 import type {Unit} from './index.h'
 import {add} from './collection'
 
-export function createEffect<Payload, Done>(
-  nameOrConfig,
-  maybeConfig?,
-) {
+export function createEffect<Payload, Done>(nameOrConfig, maybeConfig?) {
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
@@ -147,7 +144,7 @@ export function createEffect<Payload, Done>(
 export const runFn = (
   fn: Function,
   onReject: (data) => void,
-  args[],
+  args,
 ): [boolean, any] => {
   try {
     return [true, fn(...args)]
@@ -168,7 +165,7 @@ export const onSettled =
     anyway: Unit,
     stack: Stack,
   ) =>
-  (data) =>
+  data =>
     launch({
       target: [anyway, sidechain],
       params: [

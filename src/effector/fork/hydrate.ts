@@ -21,7 +21,7 @@ export function hydrate(domain: Domain | Scope, {values}: {values}) {
   const normalizedValues = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(normalizedValues)
   const storeNodes: Node[] = []
-  const storeValues[] = []
+  const storeValues = []
   let forkPage: Scope
   let traverseTarget: Node
   let needToAssign: true | void

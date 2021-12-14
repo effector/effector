@@ -14,7 +14,7 @@ import {BARRIER, MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
 
-export function combine(...args[]): Store<any> {
+export function combine(...args): Store<any> {
   let handler
   let stores
   let config
@@ -65,7 +65,7 @@ export function combine(...args[]): Store<any> {
     if (handler) {
       noArraySpread = true
       const fn = handler
-      handler = (list[]) => fn(...list)
+      handler = list => fn(...list)
     }
   }
   assert(isObject(structStoreShape), 'shape should be an object')
@@ -85,7 +85,7 @@ const storeCombination = (
   config?: Config,
   fn?: (upd) => any,
 ) => {
-  const clone = isArray ? (list) => list.slice() : (obj) => ({...obj})
+  const clone = isArray ? list => list.slice() : obj => ({...obj})
   const defaultState = isArray ? [] : {}
 
   const stateNew = clone(defaultState)
@@ -164,7 +164,7 @@ const storeCombination = (
   return store
 }
 
-export function createStoreObject(...args[]) {
+export function createStoreObject(...args) {
   deprecate(false, 'createStoreObject', 'combine')
   return combine(...args)
 }

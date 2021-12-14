@@ -86,7 +86,7 @@ export const initUnit = (kind, unit, configA, configB?) => {
       return unit.watch(
         isFunction(observer)
           ? observer
-          : (upd) => observer.next && observer.next(upd),
+          : upd => observer.next && observer.next(upd),
       )
     }
     unit[observableSymbol] = () => unit
@@ -112,7 +112,7 @@ const deriveEvent = (event, op: string, fn, node) => {
   return mapped
 }
 
-function callCreate(unit, template, payload, args[]) {
+function callCreate(unit, template, payload, args) {
   const oldPage = currentPage
   let page = null
   if (template) {
@@ -131,7 +131,7 @@ export function createEvent<Payload = any>(
   nameOrConfig?,
   maybeConfig?,
 ): Event<Payload> {
-  const event = (payload: Payload, ...args[]) => {
+  const event = (payload: Payload, ...args) => {
     deprecate(
       !getMeta(event, 'derived'),
       'call of derived event',
@@ -154,12 +154,12 @@ export function createEvent<Payload = any>(
       return params
     },
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
-    map: (fn) => deriveEvent(event, MAP, fn, [userFnCall()]),
-    filter: (fn) =>
+    map: fn => deriveEvent(event, MAP, fn, [userFnCall()]),
+    filter: fn =>
       deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
         userFnCall(callStack, true),
       ]),
-    filterMap: (fn) =>
+    filterMap: fn =>
       deriveEvent(event, 'filterMap', fn, [
         userFnCall(),
         calc(value => !isVoid(value), true),
@@ -206,14 +206,14 @@ export function createStore<State>(
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
       return readRef(targetRef)
     },
-    setState: (state) =>
+    setState: state =>
       launch({
         target: store,
         params: state,
         defer: true,
         scope: forkPage!,
       }),
-    reset(...units[]) {
+    reset(...units) {
       forEach(units, unit => store.on(unit, () => store.defaultState))
       return store
     },
@@ -243,7 +243,7 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn, firstState?) {
+    map(fn, firstState) {
       let config
       if (isObject(fn)) {
         config = fn
@@ -287,7 +287,7 @@ export function createStore<State>(
         return subscription
       }
       assert(isFunction(fn), 'second argument should be a function')
-      return eventOrFn.watch((payload) => fn(store.getState(), payload))
+      return eventOrFn.watch(payload => fn(store.getState(), payload))
     },
   }
   const meta = initUnit(STORE, store, props)

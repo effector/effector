@@ -15,7 +15,7 @@ export interface Event<E> extends Unit {
   id: string
   kind: kind
   getType(): string
-  create(payload: E, type: string, args[]): E
+  create(payload: E, type: string, args): E
   watch(watcher: (payload: E) => any): Subscription
   map<T>(fn: (_: E) => T): Event<T>
   filter(config: {fn(_: E): boolean}): Event<E>
@@ -124,7 +124,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
     */
     getCurrent(): (params: Params) => Promise<Done>
   }
-  create(payload: Params, type: string, args[]): Params
+  create(payload: Params, type: string, args): Params
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
   // getNode(): Vertex<['event', string]>,

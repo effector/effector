@@ -5,7 +5,7 @@ export function processArgsToConfig(
   arg,
   singleArgument: true,
 ): [any, any | void]
-export function processArgsToConfig(args[]): [any[], any | void]
+export function processArgsToConfig(args): [any[], any | void]
 export function processArgsToConfig(
   args,
   singleArgument?: boolean,

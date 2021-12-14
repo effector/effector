@@ -7,9 +7,9 @@ export function forIn<T>(
   }
 }
 
-export const includes = (list[], item) => list.includes(item)
+export const includes = <T>(list: T[], item: T) => list.includes(item)
 
-export const removeItem = (list[], item) => {
+export const removeItem = <T>(list: T[], item: T) => {
   const pos = list.indexOf(item)
   if (pos !== -1) {
     list.splice(pos, 1)

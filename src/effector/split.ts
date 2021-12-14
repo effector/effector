@@ -30,7 +30,7 @@ const launchCase = (
   }
 }
 
-export function split(...args[]) {
+export function split(...args) {
   let targets: Record<string, Event<any> | NodeUnit>
   let [[source, match], metadata] = processArgsToConfig(args)
   const knownCases = !match
