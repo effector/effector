@@ -79,11 +79,14 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: { field: any; data: any; } | null) => e is { field: string | number; data: number; }; target: (Event<any> | Event<void> | ... 5 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: string | number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: string | number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
+    Argument of type '{ source: void; filter: (e: any) => e is { field: string | number; data: number; }; target: (Event<any> | Event<void> | Effect<{ field: string | number; data: number; }, void, Error> | ... 4 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: void; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source error\\"; got: void; }'.
+    Argument of type '{ clock: Event<{ a: number; }>; source: (Store<boolean> | Store<string | number>)[]; fn: ([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<boolean> | Store<string | number>)[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source error\\"; got: (Store<boolean> | Store<string | number>)[]; }'.
     Binding element 'isAble' implicitly has an 'any' type.
     Binding element 'field' implicitly has an 'any' type.
     Parameter 'data' implicitly has an 'any' type.
+    Parameter 'e' implicitly has an 'any' type.
     "
   `)
 })
@@ -126,11 +129,14 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: { field: any; data: any; } | null) => e is { field: number; data: number; }; target: (Event<any> | Event<void> | Effect<...> | ... 4 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
+    Argument of type '{ source: void; filter: (e: any) => e is { field: number; data: number; }; target: (Event<any> | Event<void> | Effect<{ field: string | number; data: number; }, void, Error> | ... 4 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: void; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source error\\"; got: void; }'.
+    Argument of type '{ clock: Event<{ a: number; }>; source: (Store<boolean> | Store<string | number>)[]; fn: ([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<boolean> | Store<string | number>)[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source error\\"; got: (Store<boolean> | Store<string | number>)[]; }'.
     Binding element 'isAble' implicitly has an 'any' type.
     Binding element 'field' implicitly has an 'any' type.
     Parameter 'data' implicitly has an 'any' type.
+    Parameter 'e' implicitly has an 'any' type.
     "
   `)
 })

@@ -662,7 +662,9 @@ describe('any support in arguments inference', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ clock: Event<any>[]; filter(clk: any): boolean; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: Event<any>[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should be units\\"; got: Event<any>[]; }'.
+      Parameter 'clk' implicitly has an 'any' type.
       "
     `)
   })
@@ -694,7 +696,10 @@ describe('any support in arguments inference', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ source: Event<any>; clock: Event<any>[]; filter(src: any, clk: any): boolean; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: Event<any>[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: Event<any>[]; }'.
+      Parameter 'src' implicitly has an 'any' type.
+      Parameter 'clk' implicitly has an 'any' type.
       "
     `)
   })

@@ -412,6 +412,11 @@ describe('sample + guard (should pass)', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'void' is not assignable to type 'Source<unknown> | undefined'.
+      Argument of type '{ clock: Event<number>; source: (Store<boolean> | Store<number>)[]; fn: ([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<boolean> | Store<number>)[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source error\\"; got: (Store<boolean> | Store<number>)[]; }'.
       Binding element 'isAble' implicitly has an 'any' type.
       Binding element 'field' implicitly has an 'any' type.
       Parameter 'data' implicitly has an 'any' type.
@@ -523,7 +528,9 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ clock: Store<{ foo: string; bar: number; }>[]; target: Store<{ foo: string; bar: number; }>; fn: (foo: any) => any; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: Store<{ foo: string; bar: number; }>[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should be units\\"; got: Store<{ foo: string; bar: number; }>[]; }'.
+      Parameter 'foo' implicitly has an 'any' type.
       "
     `)
   })
@@ -563,7 +570,8 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ clock: (Store<number> | Store<string>)[]; target: Event<string | number>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Store<string>)[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Store<string>)[]; }'.
       "
     `)
   })
@@ -610,8 +618,9 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: Store<number>[]; fn: (foo: number) => boolean; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
+      Argument of type '{ clock: Store<number>[]; fn: (foo: any) => boolean; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: Store<number>[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should be units\\"; got: Store<number>[]; }'.
+      Parameter 'foo' implicitly has an 'any' type.
       "
     `)
   })
@@ -647,8 +656,8 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: (Store<boolean> | Store<number> | Store<string>)[]; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
+      Argument of type '{ clock: (Store<boolean> | Store<number> | Store<string>)[]; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<boolean> | Store<number> | Store<string>)[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<boolean> | Store<number> | Store<string>)[]; }'.
       "
     `)
   })
