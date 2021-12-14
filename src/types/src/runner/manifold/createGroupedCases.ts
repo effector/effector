@@ -75,7 +75,7 @@ function createDedupeReader<T extends Obj>(
     const textLines = Array.isArray(linesRaw) ? linesRaw : [linesRaw]
     return textLines
       .filter((line): line is string => typeof line === 'string')
-      .map(line => line.trim())
+      .map(line => line.replace(/ /gim, ''))
       .filter(line => !line.includes(`@ts-expect-error`))
       .join(`\n`)
   }
