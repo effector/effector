@@ -4,7 +4,7 @@
  *
  * @see https://github.com/krzkaczor/ts-essentials/blob/a4c2485bc3f37843267820ec552aa662251767bc/lib/types.ts#L169
  */
-type Tuple<T = unknown> = [T] | [T, ...T[]]
+type Tuple<T = unknown> = [T?, ...T[]]
 
 /**
  * Non inferential type parameter usage. NoInfer in source and in return of fn helps with
@@ -871,10 +871,10 @@ type SampleImpl<
   FLBool,
   FilterFun extends (
     Source extends Unit<any> | SourceRecord
-    ? Clock extends Units | never[]
+    ? Clock extends Units
       ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean
       : (src: TypeOfSource<Source>) => boolean
-    : Clock extends Units | never[]
+    : Clock extends Units
       ? (clk: TypeOfClock<Clock>) => boolean
       : never
   ),
@@ -889,7 +889,7 @@ type SampleImpl<
     ? unknown extends Clock
       ? [{error: 'either target, clock or source should exists'}]
         // no target, no source, has clock
-      : Clock extends Units | never[]
+      : Clock extends Units
         ? SampleFilterDef<
             ModeSelector<
               'clock |        | filter | fn |       ',
@@ -916,7 +916,7 @@ type SampleImpl<
             Source, Clock, FLUnit, FLBool, FilterFun, FN, SomeFN
           >
           // no target, has source, has clock
-        : Clock extends Units | never[]
+        : Clock extends Units
           ? SampleFilterDef<
               ModeSelector<
                 'clock | source | filter | fn |       ',
@@ -936,7 +936,7 @@ type SampleImpl<
       ? unknown extends Clock
         ? [{error: 'either target, clock or source should exists'}]
           // has target, no source, has clock
-        : Clock extends Units | never[]
+        : Clock extends Units
           ? SampleFilterTargetDef<
               ModeSelector<
                 'clock |        | filter | fn | target',
@@ -963,7 +963,7 @@ type SampleImpl<
               Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, SomeFN
             >
             // has target, has source, has clock
-          : Clock extends Units | never[]
+          : Clock extends Units
             ? SampleFilterTargetDef<
                 ModeSelector<
                   'clock | source | filter | fn | target',
@@ -1024,7 +1024,7 @@ type SampleRet<
                   : EventAsReturnType<TypeOfSource<Source>>
           : void
       : unknown extends Source
-        ? Clock extends Units | never[]
+        ? Clock extends Units
           ? unknown extends SomeFN
             ? FilterMode extends 'filter'
               ? EventAsReturnType<TypeOfClock<Clock>>
@@ -1045,7 +1045,7 @@ type SampleRet<
                   ? Store<TypeOfClock<Clock>>
                   : EventAsReturnType<TypeOfClock<Clock>>
           : void
-        : Clock extends Units | never[]
+        : Clock extends Units
           ? Source extends Unit<any> | SourceRecord
             ? unknown extends SomeFN
               ? FilterMode extends 'filter'
@@ -1083,10 +1083,10 @@ export function sample<
   FLBool,
   FilterFun extends (
     Source extends Unit<any> | SourceRecord
-    ? Clock extends Units | never[]
+    ? Clock extends Units
       ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean
       : (src: TypeOfSource<Source>) => boolean
-    : Clock extends Units | never[]
+    : Clock extends Units
       ? (clk: TypeOfClock<Clock>) => boolean
       : never
   ),
@@ -1101,7 +1101,7 @@ export function sample<
   ),
   FNBothNoConf extends (
     SourceNoConf extends Unit<any> | SourceRecord
-      ? ClockNoConf extends Units | never[]
+      ? ClockNoConf extends Units
         ? ((src: TypeOfSource<SourceNoConf>, clk: TypeOfClock<ClockNoConf>) => any)
         : never
       : never
@@ -1111,7 +1111,7 @@ export function sample<
   InferTarget,
 >(...args:
   SourceNoConf extends Unit<any> | SourceRecord
-    ? ClockNoConf extends Units | never[]
+    ? ClockNoConf extends Units
       ? [any, any, any] extends Args
         ? [SourceNoConf, ClockNoConf, FNBothNoConf] & Args
         : [any, any] extends Args
@@ -1125,7 +1125,7 @@ export function sample<
     : SampleImpl<Target, Source, Clock, FLBool, FilterFun, FN, FLUnit, SomeFN>
   
 ): SourceNoConf extends Unit<any> | SourceRecord
-  ? ClockNoConf extends Units | never[]
+  ? ClockNoConf extends Units
     ? [any, any, any] extends Args
       ? SourceNoConf extends Store<any>
         ? ClockNoConf extends Store<any>
@@ -1264,10 +1264,10 @@ type TargetConfigCheck<
   FLBool,
   FilterFun extends (
     Source extends Unit<any> | SourceRecord
-    ? Clock extends Units | never[]
+    ? Clock extends Units
       ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean
       : (src: TypeOfSource<Source>) => boolean
-    : Clock extends Units | never[]
+    : Clock extends Units
       ? (clk: TypeOfClock<Clock>) => boolean
       : never
   ),
@@ -1299,7 +1299,7 @@ type TargetConfigCheck<
     : never
     // mode with clock only
   : Mode extends Mode_Clk_NoSrc
-  ? Clock extends Units | never[]
+  ? Clock extends Units
     ? [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
       ? [Config & SomeFN]
       : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
@@ -1320,10 +1320,10 @@ type SampleFilterTargetDef<
   FLBool,
   FilterFun extends (
     Source extends Unit<any> | SourceRecord
-    ? Clock extends Units | never[]
+    ? Clock extends Units
       ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean
       : (src: TypeOfSource<Source>) => boolean
-    : Clock extends Units | never[]
+    : Clock extends Units
       ? (clk: TypeOfClock<Clock>) => boolean
       : never
   ),
@@ -1362,7 +1362,7 @@ type SampleFilterTargetDef<
           : never
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
-        ? Clock extends Units | never[]
+        ? Clock extends Units
           ? [TypeOfTarget<NonNullable<TypeOfClock<Clock>>, Target, 'clk'>] extends [Target]
             ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FN> & SomeFN]
             : [Target] extends [TypeOfTargetSoft<NonNullable<TypeOfClock<Clock>>, Target, 'clk'>]
@@ -1405,7 +1405,7 @@ type SampleFilterTargetDef<
             : never
             // mode with clock only
           : Mode extends Mode_Clk_NoSrc
-          ? Clock extends Units | never[]
+          ? Clock extends Units
             ? [TypeOfTarget<Ret, Target, 'clk'>] extends [Target]
               ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
               : [Target] extends [TypeOfTargetSoft<Ret, Target, 'clk'>]
@@ -1441,7 +1441,7 @@ type SampleFilterTargetDef<
               : never
               // mode with clock only
             : Mode extends Mode_Clk_NoSrc
-            ? Clock extends Units | never[]
+            ? Clock extends Units
               ? [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
                 ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
                 : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
@@ -1495,7 +1495,7 @@ type SampleFilterDef<
         : FilterFun extends (
             Mode extends Mode_Clk_Src
             ? Source extends Unit<any> | SourceRecord
-              ? Clock extends Units | never[]
+              ? Clock extends Units
                 ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
                 : never
               : never
@@ -1503,7 +1503,7 @@ type SampleFilterDef<
             ? Source extends Unit<any> | SourceRecord
               ? (src: TypeOfSource<Source>) => any
               : never
-            : Clock extends Units | never[]
+            : Clock extends Units
               ? (clk: TypeOfClock<Clock>) => any
               : never
           )
@@ -1546,10 +1546,10 @@ type SampleFilterDef<
   : never
 type DataSourceFunction<Source, Clock> =
   Source extends Unit<any> | SourceRecord
-  ? Clock extends Units | never[]
+  ? Clock extends Units
     ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
     : (src: TypeOfSource<Source>) => any
-  : Clock extends Units | never[]
+  : Clock extends Units
     ? (clk: TypeOfClock<Clock>) => any
     : never
 type SourceFunction<Source> =
@@ -1557,12 +1557,12 @@ type SourceFunction<Source> =
   ? (src: TypeOfSource<Source>) => any
   : never
 type ClockFunction<Clock> =
-  Clock extends Units | never[]
+  Clock extends Units
   ? (clk: TypeOfClock<Clock>) => any
   : never
 type SourceClockFunction<Source, Clock> =
   Source extends Unit<any> | SourceRecord
-  ? Clock extends Units | never[]
+  ? Clock extends Units
     ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
     : never
   : never

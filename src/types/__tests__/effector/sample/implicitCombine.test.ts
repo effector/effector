@@ -40,8 +40,7 @@ it('supports a list of stores as a source (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
+    no errors
     "
   `)
 })
@@ -77,11 +76,7 @@ it('supports a list of stores as a source + mapping (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; fn: ([a, b]: [any, any], clock: any) => any; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
@@ -119,8 +114,8 @@ it('supports a list of stores as a source + target forwarding (should pass)', ()
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
+    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
     "
   `)
 })
@@ -160,11 +155,7 @@ it('supports a list of stores as a source + mapping + target forwarding (should 
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; fn: ([a, b]: [any, any], clock: any) => any; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source error\\"; got: (Store<number> | Store<string>)[]; }'.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
@@ -192,7 +183,7 @@ it('supports a list of stores as a source (should pass) [non-config sample overl
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    no errors
     "
   `)
 })
@@ -228,10 +219,7 @@ it('supports a list of stores as a source + mapping (should pass) [non-config sa
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })

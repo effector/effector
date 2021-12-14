@@ -93,51 +93,7 @@ describe('no target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -200,24 +156,7 @@ describe('no target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
+      no errors
       "
     `)
   })
@@ -349,72 +288,7 @@ describe('unit target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -498,30 +372,7 @@ describe('unit target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
+      no errors
       "
     `)
   })
@@ -640,50 +491,17 @@ describe('tuple target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: { a: any; }, c: any) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: { a: any; }, c: any) => { ...; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: () => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: { a: any; }) => { a: any; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: { a: any; }, c: any) => { ...; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Binding element 'a' implicitly has an 'any' type.
-      Parameter 'c' implicitly has an 'any' type.
       "
     `)
   })
@@ -759,23 +577,11 @@ describe('tuple target, typed fn', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: AN, c: number) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: AN, c: number) => { ...; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: AN) => { a: number; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; fn: ({ a }: AN, c: number) => { ...; }; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       "
     `)
   })

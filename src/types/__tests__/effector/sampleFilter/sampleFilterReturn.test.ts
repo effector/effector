@@ -61,15 +61,7 @@ describe('no target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ filter: () => boolean; source: Event<AN>; clock: (Store<number> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ filter: () => boolean; source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Type 'void' is not assignable to type 'Event<AN>'.
-      Argument of type '{ filter: () => boolean; source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
+      no errors
       "
     `)
   })
@@ -135,18 +127,7 @@ describe('unit target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ filter: () => boolean; source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ filter: () => boolean; source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ filter: () => boolean; source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Event<AN>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ filter: () => boolean; source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ filter: () => boolean; source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Event<AN>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-      Argument of type '{ filter: () => boolean; source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: Store<{ a: number; }>; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
+      no errors
       "
     `)
   })
@@ -208,14 +189,8 @@ describe('tuple target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ filter: () => boolean; source: Event<AN>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ filter: () => boolean; source: Store<{ a: number; }>; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Argument of type '{ filter: () => boolean; source: { a: Store<number>; }; clock: (Store<number> | Event<number>)[]; target: (Event<AN> | Store<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be units\\"; got: (Store<number> | Event<number>)[]; }'.
       "
     `)
   })
