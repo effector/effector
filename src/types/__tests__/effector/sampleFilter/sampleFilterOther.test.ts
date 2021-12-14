@@ -79,15 +79,11 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (string | number | boolean)[], clk: { a: number; }) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (string | number | boolean)[], clk: { a: number; }) => any'.
-        Types of parameters '__0' and 'src' are incompatible.
-          Type '(string | number | boolean)[]' is not assignable to type '[any, any]'.
+    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: { field: any; data: any; } | null) => e is { field: string | number; data: number; }; target: (Event<any> | Event<void> | ... 5 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: string | number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: string | number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
     Binding element 'isAble' implicitly has an 'any' type.
     Binding element 'field' implicitly has an 'any' type.
     Parameter 'data' implicitly has an 'any' type.
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: string | number; data: number; }' is missing the following properties from type '(string | number | boolean)[]': length, pop, push, concat, and 28 more.
     "
   `)
 })
@@ -130,15 +126,11 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (string | number | boolean)[], clk: { a: number; }) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (string | number | boolean)[], clk: { a: number; }) => any'.
-        Types of parameters '__0' and 'src' are incompatible.
-          Type '(string | number | boolean)[]' is not assignable to type '[any, any]'.
+    Argument of type '{ source: Event<{ field: any; data: any; } | null>; filter: (e: { field: any; data: any; } | null) => e is { field: number; data: number; }; target: (Event<any> | Event<void> | Effect<...> | ... 4 more ... | Event<...>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, Effect<{ field: string | number; data: number; }, void, Error>, { sourceType: { field: number; data: number; }; targetType: { ...; }; }, ... 4 more ..., Event<...>]; }'.
     Binding element 'isAble' implicitly has an 'any' type.
     Binding element 'field' implicitly has an 'any' type.
     Parameter 'data' implicitly has an 'any' type.
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: number; data: number; }' is missing the following properties from type '(string | number | boolean)[]': length, pop, push, concat, and 28 more.
     "
   `)
 })

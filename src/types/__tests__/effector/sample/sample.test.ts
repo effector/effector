@@ -412,16 +412,9 @@ describe('sample + guard (should pass)', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (number | boolean)[], clk: number) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-        Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (number | boolean)[], clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type '(number | boolean)[]' is not assignable to type '[any, any]'.
-              Target requires 2 element(s) but source may have fewer.
       Binding element 'isAble' implicitly has an 'any' type.
       Binding element 'field' implicitly has an 'any' type.
       Parameter 'data' implicitly has an 'any' type.
-      A type predicate's type must be assignable to its parameter's type.
-        Type '{ field: number; data: number; }' is missing the following properties from type '(number | boolean)[]': length, pop, push, concat, and 28 more.
       "
     `)
   })

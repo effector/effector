@@ -92,11 +92,11 @@ describe('explicit generics', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Target' is not assignable to type 'Unit<string | null>'.
-        Type '[any]' is not assignable to type 'Unit<string | null>'.
+        Type 'Tuple<any>' is not assignable to type 'Unit<string | null>'.
       Type 'Target' is not assignable to type 'Unit<string | null>'.
-        Type '[any]' is not assignable to type 'Unit<string | null>'.
+        Type 'Tuple<any>' is not assignable to type 'Unit<string | null>'.
       Type 'Target' is not assignable to type 'Unit<string>'.
-        Type '[any]' is not assignable to type 'Unit<string>'.
+        Type 'Tuple<any>' is not assignable to type 'Unit<string>'.
       "
     `)
   })
@@ -133,7 +133,7 @@ describe('explicit generics', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Target' is not assignable to type 'Unit<string>'.
-        Type '[any]' is not assignable to type 'Unit<string>'.
+        Type 'Tuple<any>' is not assignable to type 'Unit<string>'.
       "
     `)
   })

@@ -142,10 +142,7 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      no errors
       "
     `)
   })
@@ -158,9 +155,7 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      no errors
       "
     `)
   })
@@ -173,9 +168,7 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      no errors
       "
     `)
   })
@@ -188,9 +181,7 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-      Type '(Event<AN> | Store<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      no errors
       "
     `)
   })
