@@ -24,7 +24,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 3.
+      Expected 17 type arguments, but got 3.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -39,7 +39,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 2.
+      Expected 17 type arguments, but got 2.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -55,7 +55,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -68,7 +68,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -83,7 +83,7 @@ describe('explicit generics', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'string' is not assignable to type 'Event<number>'.
-      Expected 14 type arguments, but got 3.
+      Expected 17 type arguments, but got 3.
       Parameter 'str' implicitly has an 'any' type.
       Parameter 'num' implicitly has an 'any' type.
       "
@@ -98,7 +98,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -111,7 +111,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 14 type arguments, but got 1.
+      Expected 17 type arguments, but got 1.
       "
     `)
   })
@@ -171,7 +171,10 @@ test('generic edge cases', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+    Parameter 'source' implicitly has an 'any' type.
+    Parameter 'clock' implicitly has an 'any' type.
     "
   `)
 })

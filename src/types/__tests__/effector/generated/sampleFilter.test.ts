@@ -2471,8 +2471,6 @@ describe('no source', () => {
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Object is possibly 'null'.
         Object is possibly 'null'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(clk: AB | null) => any'.
           Types of parameters 'val' and 'clk' are incompatible.
             Type 'AB | null' is not assignable to type 'AB'.
@@ -2608,9 +2606,7 @@ describe('no source', () => {
         Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: Store<boolean>; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Object is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
@@ -2703,8 +2699,6 @@ describe('no source', () => {
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
         Object is possibly 'null'.
         Object is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(clk: AB | null) => any'.
@@ -2842,9 +2836,7 @@ describe('no source', () => {
         Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: Store<boolean>; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Object is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
@@ -2916,8 +2908,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        no errors
         "
       `)
     })
@@ -3031,9 +3022,7 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         Object is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         "
       `)
@@ -3095,8 +3084,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        no errors
         "
       `)
     })
@@ -3210,9 +3198,7 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         Object is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         "
       `)
