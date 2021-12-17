@@ -258,6 +258,7 @@ describe('generic edge cases', () => {
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
       Parameter 'source' implicitly has an 'any' type.
       Parameter 'clock' implicitly has an 'any' type.
+      Argument of type '[{ clock: Event<B>; source: Store<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? Store<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? Store<A> : { fnResult: B; targetType: A; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
       "
     `)
   })

@@ -987,11 +987,13 @@ type ModeSelector<
   SomeFN,
 > = unknown extends SomeFN
   ? FilterAndFN
-  : SomeFN extends {filter: any}
-    ? FilterOnly
-    : SomeFN extends {fn: any}
-      ? FNOnly
-      : None
+  : SomeFN extends {fn: any; filter: any}
+    ? FilterAndFN
+    : SomeFN extends {filter: any}
+      ? FilterOnly
+      : SomeFN extends {fn: any}
+        ? FNOnly
+        : None
 type SampleRet<
   Target,
   Source,
@@ -1232,15 +1234,15 @@ type TargetFilterUnitConfig<
   FLUnit,
   FN extends DataSourceFunction<Source, Clock>,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter: FLUnit; fn: FN; target: Target}
+  ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target}
   : Mode extends 'clock | source | filter |    | target'
   ? {clock: Clock; source: Source; filter: FLUnit; target: Target}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter: FLUnit; fn: FN; target: Target}
+  ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target}
   : Mode extends '      | source | filter |    | target'
   ? {source: Source; clock?: never; filter: FLUnit; target: Target}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter: FLUnit; fn: FN; target: Target}
+  ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target}
   : Mode extends 'clock |        | filter |    | target'
   ? {clock: Clock; source?: never; filter: FLUnit; target: Target}
   : never
@@ -1271,17 +1273,17 @@ type TargetNoFilterConfig<
   Clock,
   FN extends DataSourceFunction<Source, Clock>,
 > = Mode extends 'clock | source |        | fn | target'
-  ? {clock: Clock; source: Source; fn: FN; target: Target}
+  ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target}
   : Mode extends 'clock | source |        |    | target'
-  ? {clock: Clock; source: Source; target: Target}
+  ? {clock: Clock; source: Source; filter?: never; target: Target}
   : Mode extends '      | source |        | fn | target'
-  ? {source: Source; clock?: never; fn: FN; target: Target}
+  ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target}
   : Mode extends '      | source |        |    | target'
-  ? {source: Source; clock?: never; target: Target}
+  ? {source: Source; clock?: never; filter?: never; target: Target}
   : Mode extends 'clock |        |        | fn | target'
-  ? {clock: Clock; source?: never; fn: FN; target: Target}
+  ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target}
   : Mode extends 'clock |        |        |    | target'
-  ? {clock: Clock; source?: never; target: Target}
+  ? {clock: Clock; source?: never; filter?: never; target: Target}
   : never
 type TargetConfigCheck<
   Mode extends Mode_Trg,
@@ -1559,15 +1561,15 @@ type SampleFilterDef<
       ? boolean extends UnitValue<FLUnit>
         ? [(
               Mode extends 'clock | source | filter | fn |       '
-            ? {clock: Clock; source: Source; filter: FLUnit; fn: FN; target?: never}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never}
             : Mode extends 'clock | source | filter |    |       '
             ? {clock: Clock; source: Source; filter: FLUnit; target?: never}
             : Mode extends '      | source | filter | fn |       '
-            ? {source: Source; clock?: never; filter: FLUnit; fn: FN; target?: never}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never}
             : Mode extends '      | source | filter |    |       '
             ? {source: Source; clock?: never; filter: FLUnit; target?: never}
             : Mode extends 'clock |        | filter | fn |       '
-            ? {clock: Clock; source?: never; filter: FLUnit; fn: FN; target?: never}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never}
             : Mode extends 'clock |        | filter |    |       '
             ? {clock: Clock; source?: never; filter: FLUnit; target?: never}
             : never
@@ -1647,17 +1649,17 @@ type SampleFilterDef<
   ?
     [(
         Mode extends 'clock | source |        | fn |       '
-      ? {clock: Clock; source: Source; fn: FN; target?: never}
+      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never}
       : Mode extends 'clock | source |        |    |       '
-      ? {clock: Clock; source: Source; target?: never}
+      ? {clock: Clock; source: Source; filter?: never; target?: never}
       : Mode extends '      | source |        | fn |       '
-      ? {source: Source; clock?: never; fn: FN; target?: never}
+      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never}
       : Mode extends '      | source |        |    |       '
-      ? {source: Source; clock?: never; target?: never}
+      ? {source: Source; clock?: never; filter?: never; target?: never}
       : Mode extends 'clock |        |        | fn |       '
-      ? {clock: Clock; source?: never; fn: FN; target?: never}
+      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never}
       : Mode extends 'clock |        |        |    |       '
-      ? {clock: Clock; source?: never; target?: never}
+      ? {clock: Clock; source?: never; filter?: never; target?: never}
       : never
     ) & SomeFN]
   : never
