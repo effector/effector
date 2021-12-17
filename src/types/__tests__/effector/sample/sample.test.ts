@@ -16,9 +16,11 @@ describe('explicit generics', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const target = createEvent<number>()
+    //@ts-expect-error
     sample<string, number, number>({
       source,
       clock,
+      //@ts-expect-error
       fn: str => str.length,
       target,
     })
@@ -32,8 +34,10 @@ describe('explicit generics', () => {
   test('sample<A, B>({source, fn, target})', () => {
     const source = createEvent<string>()
     const target = createEvent<number>()
+    //@ts-expect-error
     sample<string, number>({
       source,
+      //@ts-expect-error
       fn: str => str.length,
       target,
     })
@@ -48,6 +52,7 @@ describe('explicit generics', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
     const target = createEvent<string>()
+    //@ts-expect-error
     sample<string>({
       source,
       clock,
@@ -62,6 +67,7 @@ describe('explicit generics', () => {
   test('sample<A>({source, target})', () => {
     const source = createEvent<string>()
     const target = createEvent<string>()
+    //@ts-expect-error
     sample<string>({
       source,
       target,
@@ -75,9 +81,11 @@ describe('explicit generics', () => {
   test('sample<A, B, R>({source, clock, fn})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
+    //@ts-expect-error
     const result: Event<number> = sample<string, number, number>({
       source,
       clock,
+      //@ts-expect-error
       fn: (str, num) => str.length + num,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -92,6 +100,7 @@ describe('explicit generics', () => {
   test('sample<A>({source: store, clock})', () => {
     const source = createStore('')
     const clock = createEvent<number>()
+    //@ts-expect-error
     sample<string>({
       source,
       clock,
@@ -105,6 +114,7 @@ describe('explicit generics', () => {
   test('sample<A>({source: event, clock})', () => {
     const source = createEvent<string>()
     const clock = createEvent<number>()
+    //@ts-expect-error
     sample<string>({
       source,
       clock,
@@ -117,66 +127,140 @@ describe('explicit generics', () => {
   })
 })
 
-test('generic edge cases', () => {
-  function generic1<A, B>(target: Store<A>, clock: Event<B>) {
-    {
-      const result = sample({
-        source: target,
-        clock,
-        target,
-      })
+describe('generic edge cases', () => {
+  test('generic edge cases (should pass)', () => {
+    function generic1<A, B>(target: Store<A>, clock: Event<B>) {
+      {
+        const result = sample({
+          source: target,
+          clock,
+          target,
+        })
+      }
+      {
+        const result: Store<A> = sample({
+          source: target,
+          clock,
+          fn: (source, clock) => source,
+          target,
+        })
+      }
+      {
+        const result: Event<B> = sample({
+          source: target,
+          clock,
+          fn: (source, clock) => clock,
+          target: clock,
+        })
+      }
+      {
+        const result = sample({
+          clock,
+          source: target,
+          filter: Boolean,
+          target,
+        })
+      }
+      {
+        const result = sample({
+          clock,
+          source: target,
+          filter: Boolean,
+          fn: (source, clock) => source,
+          target,
+        })
+      }
+      {
+        const result = sample({
+          clock,
+          source: target,
+          filter: (source, clock) => true,
+          fn: (source, clock) => source,
+          target,
+        })
+      }
     }
-    {
-      const result: Store<A> = sample({
-        source: target,
-        clock,
-        fn: (source, clock) => source,
-        target,
-      })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      "
+    `)
+  })
+  test('generic edge cases (should fail)', () => {
+    function generic1<A, B>(target: Store<A>, clock: Event<B>) {
+      {
+        //@ts-expect-error
+        sample({
+          source: target,
+          clock,
+          target: clock,
+        })
+      }
+      {
+        //@ts-expect-error
+        sample({
+          source: target,
+          clock,
+          fn: (source, clock) => source,
+          target: clock,
+        })
+      }
+      {
+        //@ts-expect-error
+        sample({
+          source: target,
+          clock,
+          fn: (source, clock) => clock,
+          target,
+        })
+      }
+      {
+        //@ts-expect-error
+        const result = sample({
+          clock,
+          source: target,
+          filter: Boolean,
+          target: clock,
+        })
+      }
+      {
+        const result = sample({
+          //@ts-expect-error
+          clock,
+          source: target,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (source, clock) => clock,
+          target,
+        })
+      }
+      {
+        //@ts-expect-error
+        const result = sample({
+          clock,
+          source: target,
+          filter: (source, clock) => true,
+          fn: (source, clock) => clock,
+          target,
+        })
+      }
     }
-    {
-      const result: Event<B> = sample({
-        source: target,
-        clock,
-        fn: (source, clock) => clock,
-        target: clock,
-      })
-    }
-    {
-      const result = sample({
-        clock,
-        source: target,
-        filter: Boolean,
-        target,
-      })
-    }
-    {
-      const result = sample({
-        clock,
-        source: target,
-        filter: Boolean,
-        fn: (source, clock) => clock,
-        target,
-      })
-    }
-    {
-      const result = sample({
-        clock,
-        source: target,
-        filter: (source, clock) => true,
-        fn: (source, clock) => clock,
-        target,
-      })
-    }
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
-    Parameter 'source' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
-    "
-  `)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '[{ source: Store<A>; clock: Event<B>; target: Event<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? Event<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? Event<B> : { sourceType: A; targetType: B; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
+      Argument of type '[{ source: Store<A>; clock: Event<B>; fn: (source: A, clock: B) => A; target: Event<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? Event<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? Event<B> : { fnResult: A; targetType: B; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
+      Argument of type '[{ source: Store<A>; clock: Event<B>; fn: (source: A, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? Store<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? Store<A> : { fnResult: B; targetType: A; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
+      Argument of type '[{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; target: Event<B>; }]' is not assignable to parameter of type '[[NonNullable<A>] extends [Readonly<B>] ? Event<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? Event<B> : { sourceType: NonNullable<A>; targetType: B; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
+      Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      "
+    `)
+  })
 })
 
 test('event by event', () => {
