@@ -142,8 +142,23 @@ export default () => {
   })
   const pass = bool({
     sort: [true, false],
-    source: {noClock, noSource, fnClockTypeAssertion},
-    true: [{noClock: true}, {noSource: true}, {fnClockTypeAssertion: false}],
+    source: {
+      noClock,
+      noSource,
+      fnClockTypeAssertion,
+      unificationToAny,
+      clockAnyOnly: computeFn({
+        source: {clock},
+        fn: ({clock}) =>
+          Array.isArray(clock) && clock.length === 1 && clock[0] === 'anyt',
+      }),
+    },
+    true: [
+      {noClock: true},
+      {noSource: true},
+      {fnClockTypeAssertion: false},
+      {fnClockTypeAssertion: true, unificationToAny: true, clockAnyOnly: true},
+    ],
   })
   const target = computeVariant({
     source: {noTarget, combinable, fn, secondArgument},
@@ -202,7 +217,7 @@ export default () => {
       combinable: '{a,b}',
     },
   })
-  //@ts-ignore
+  //@ts-expect-error
   const fnCode: Value<string> = separate({
     source: {
       noSource,
@@ -232,7 +247,7 @@ export default () => {
       },
     },
     cases: {
-      //@ts-ignore
+      //@ts-expect-error
       none: {
         noArgs: value("()=>({a:'',b:2})"),
         typed: value('fnAString'),
