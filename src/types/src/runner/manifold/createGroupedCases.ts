@@ -49,8 +49,7 @@ function createReader<T, O extends Obj>(
   }
 }
 function createHashReader<T extends Obj>(getHash: Grouping<T>['getHash']) {
-  if (typeof getHash === 'function' || isDataDecl(getHash))
-    return createReader(getHash)
+  if (isDataDecl(getHash)) return createReader(getHash)
   const declList = Array.isArray(getHash) ? getHash : Object.values(getHash)
   declList.forEach(value => {
     assertRef(value)
@@ -104,7 +103,16 @@ export function createGroupedCases<T extends Obj>(
   }
   let dedupeGetter: ((obj: T) => string) | undefined
   const hashGetter = createHashReader(getHash)
-  const groupDescriber = createReader(describeGroup)
+  const groupDescriber = createReader(
+    describeGroup as DataDecl<
+      | string
+      | {
+          description: string
+          noGroup?: boolean | undefined
+          largeGroup?: string | null | undefined
+        }
+    >,
+  )
   const passGetter = createReader(pass!, {
     isBool: true,
     defaultVal: true,

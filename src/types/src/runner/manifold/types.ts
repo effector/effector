@@ -448,19 +448,8 @@ export type Word = WordValue | WordDecl
 
 export type Grouping<T extends Record<string, any>> = {
   filter?: (obj: T) => boolean
-  getHash:
-    | DataDecl<string>
-    | ((obj: T) => string)
-    | Record<string, Declarator>
-    | Declarator[]
+  getHash: DataDecl<string> | Record<string, Declarator> | Declarator[]
   describeGroup:
-    | ((obj: T) =>
-        | string
-        | {
-            description: string
-            noGroup?: boolean
-            largeGroup?: string | null
-          })
     | DataDecl<string>
     | DataDecl<{
         description: string
@@ -476,9 +465,6 @@ export type Grouping<T extends Record<string, any>> = {
     | {
         type: 'text'
         value: DataDecl<WordValue | WordValue[]>
-        // pass?: boolean | BoolDecl
-        // inlineSnapshot?: boolean | BoolDecl
-        // addPrettierIgnore?: boolean | BoolDecl
       }
     | {
         method: string

@@ -11,7 +11,6 @@ import {
   bool,
   sortOrder,
 } from '../runner/manifold/operators'
-import {Ref} from '../runner/manifold/types'
 
 const variables = {
   number: 'num',
@@ -264,28 +263,13 @@ export default () => {
       }),
     },
   })
-  const clockText = value('num' as const)
+
   const targetText = computeFn({
     source: {target},
     fn({target}) {
       return target.map(
-        //@ts-ignore
+        //@ts-expect-error
         (item: keyof typeof variables) => variables[item] || item,
-      )
-    },
-  })
-  const pass = computeFn({
-    source: {
-      target,
-      noFalsePositive,
-      fn,
-      source,
-    },
-    fn({noFalsePositive, fn, target, source}) {
-      if (noFalsePositive) return false
-      if (fn) return failCases.ab.every(failCase => !target.includes(failCase))
-      return failCases[source as keyof typeof failCases].every(
-        failCase => !target.includes(failCase),
       )
     },
   })
@@ -295,13 +279,28 @@ export default () => {
     file: 'generated/sampleArrayTarget',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
-      pass,
+      pass: computeFn({
+        source: {
+          target,
+          noFalsePositive,
+          fn,
+          source,
+        },
+        fn({noFalsePositive, fn, target, source}) {
+          if (noFalsePositive) return false
+          if (fn)
+            return failCases.ab.every(failCase => !target.includes(failCase))
+          return failCases[source as keyof typeof failCases].every(
+            failCase => !target.includes(failCase),
+          )
+        },
+      }),
       createTestLines: {
         method: 'sample',
         shape: {
           source: sourceCode,
           clock: {
-            field: clockText,
+            field: value('num'),
             when: hasClock,
           },
           target: targetText,
@@ -318,12 +317,14 @@ export default () => {
         hasClock,
         hasFn: fn,
       },
-      getHash: (cur: any) =>
-        `${cur.sourceDescription} ${cur.fn ? cur.fnDescription : ''}`,
-      describeGroup: (cur: any) =>
-        `source:${cur.sourceDescription}${
-          cur.fn ? `, fn:${cur.fnDescription}` : ''
-        }`,
+      getHash: {sourceDescription, fn, fnDescription},
+      describeGroup: computeFn({
+        source: {sourceDescription, fn, fnDescription},
+        fn: cur =>
+          `source:${cur.sourceDescription}${
+            cur.fn ? `, fn:${cur.fnDescription}` : ''
+          }`,
+      }),
     },
   })
 }
