@@ -225,12 +225,7 @@ describe('function without argument support', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: Event<number | null>; source: Event<number | null>; filter: BooleanConstructor; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-      Argument of type '{ clock: Event<number | null>; filter: BooleanConstructor; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-      Argument of type '{ source: Event<number | null>; filter: BooleanConstructor; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      no errors
       "
     `)
   })
@@ -314,12 +309,7 @@ describe('function without argument support', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: Event<number | null>; source: Event<number | null>; filter: BooleanConstructor; fn: () => string; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-      Argument of type '{ clock: Event<number | null>; filter: BooleanConstructor; fn: () => string; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-      Argument of type '{ source: Event<number | null>; filter: BooleanConstructor; fn: () => string; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      no errors
       "
     `)
   })

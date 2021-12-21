@@ -2658,8 +2658,8 @@ describe('no source', () => {
           Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
             Types of parameters 'val' and 'clk' are incompatible.
               Type 'AB' is not assignable to type 'ABN'.
-        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: BooleanConstructor; fn: () => { a: number; b: number; }; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: AB; got: undefined; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: AB; got: undefined; }'.
+        Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: BooleanConstructor; fn: () => { a: number; b: number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
         "
       `)
     })
@@ -2941,8 +2941,8 @@ describe('no source', () => {
           Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
             Types of parameters 'val' and 'clk' are incompatible.
               Type 'AB' is not assignable to type 'ABN'.
-        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: BooleanConstructor; fn: () => { a: number; b: number; }; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: AB; got: undefined; }'.
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: AB; got: undefined; }'.
+        Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: BooleanConstructor; fn: () => { a: number; b: number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
         "
       `)
     })

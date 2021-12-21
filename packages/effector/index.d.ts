@@ -1431,16 +1431,14 @@ type SampleFilterTargetDef<
     : FLBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
         ? FNAltArg extends (arg: infer FNArg) => any
-          ? [FNArg] extends [FNNonNull]
-            ? [TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>] extends [Target]
+          ? [TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>] extends [Target]
+            ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
+            : [Target] extends [TypeOfTargetSoft<ReturnType<FNAltArg>, Target, 'fnRet'>]
               ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
-              : [Target] extends [TypeOfTargetSoft<ReturnType<FNAltArg>, Target, 'fnRet'>]
-                ? [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
-                : [{
-                  error: 'fn result should extend target type'
-                  targets: Show<TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>>
-                }]
-            : [{error: 'fn arg should match data source type'; dataSource: FNNonNull; got: Parameters<FNAltArg>[0]}]
+              : [{
+                error: 'fn result should extend target type'
+                targets: Show<TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>>
+              }]
           : [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
@@ -1645,39 +1643,21 @@ type SampleFilterDef<
         : [{error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
         : FLBool extends BooleanConstructor
           ? Mode extends Mode_Flt_Fn
-            ? FNAltArg extends (arg: infer FNArg) => any
-              ? [FNArg] extends [FNNonNull]
-                ? [(
-                    Mode extends 'clock | source | filter | fn |       '
-                  ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
-                  : Mode extends 'clock | source | filter |    |       '
-                  ? {clock: Clock; source: Source; filter: FLBool; target?: never}
-                  : Mode extends '      | source | filter | fn |       '
-                  ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
-                  : Mode extends '      | source | filter |    |       '
-                  ? {source: Source; clock?: never; filter: FLBool; target?: never}
-                  : Mode extends 'clock |        | filter | fn |       '
-                  ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
-                  : Mode extends 'clock |        | filter |    |       '
-                  ? {clock: Clock; source?: never; filter: FLBool; target?: never}
-                  : never
-                ) & SomeFN]
-                : [{error: 'fn arg should match data source type'; dataSource: FNNonNull; got: Parameters<FNAltArg>[0]}]
-              : [(
-                    Mode extends 'clock | source | filter | fn |       '
-                  ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
-                  : Mode extends 'clock | source | filter |    |       '
-                  ? {clock: Clock; source: Source; filter: FLBool; target?: never}
-                  : Mode extends '      | source | filter | fn |       '
-                  ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
-                  : Mode extends '      | source | filter |    |       '
-                  ? {source: Source; clock?: never; filter: FLBool; target?: never}
-                  : Mode extends 'clock |        | filter | fn |       '
-                  ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
-                  : Mode extends 'clock |        | filter |    |       '
-                  ? {clock: Clock; source?: never; filter: FLBool; target?: never}
-                  : never
-                ) & SomeFN]
+            ? [(
+                  Mode extends 'clock | source | filter | fn |       '
+                ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
+                : Mode extends 'clock | source | filter |    |       '
+                ? {clock: Clock; source: Source; filter: FLBool; target?: never}
+                : Mode extends '      | source | filter | fn |       '
+                ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
+                : Mode extends '      | source | filter |    |       '
+                ? {source: Source; clock?: never; filter: FLBool; target?: never}
+                : Mode extends 'clock |        | filter | fn |       '
+                ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
+                : Mode extends 'clock |        | filter |    |       '
+                ? {clock: Clock; source?: never; filter: FLBool; target?: never}
+                : never
+              ) & SomeFN]
             : [(
                   Mode extends 'clock | source | filter | fn |       '
                 ? {clock: Clock; source: Source; filter?: FLBool; fn?: FN; target?: never}
