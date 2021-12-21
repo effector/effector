@@ -272,11 +272,25 @@ describe('sample(config)', () => {
           target: aNum,
           filter: (val): val is {a: number; b: string} =>
             typeof val.a === 'number' && val.a > 0,
-          fn: val => val.a + 1,
+          fn: (val: {a: number; b: string}) => val.a + 1,
+        })
+        sample({
+          clock: $source,
+          target: aNum,
+          filter: (val): val is {a: number; b: string} =>
+            typeof val.a === 'number' && val.a > 0,
+          fn: val => 1,
+        })
+        sample({
+          clock: $source,
+          target: aNum,
+          filter: (val): val is {a: number; b: string} =>
+            typeof val.a === 'number' && val.a > 0,
+          fn: (val: {a: number; b: string}) => val.a + 1,
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object is possibly 'null'.
+          no errors
           "
         `)
       })
