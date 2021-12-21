@@ -1441,7 +1441,7 @@ type SampleFilterTargetDef<
                   targets: Show<TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>>
                 }]
             : [{error: 'fn arg should match data source type'; dataSource: FNNonNull; got: Parameters<FNAltArg>[0]}]
-          : [{error: 'function should accept data source types'; got: FNAltArg}]
+          : [TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? Source extends Unit<any> | SourceRecord
@@ -1663,7 +1663,21 @@ type SampleFilterDef<
                   : never
                 ) & SomeFN]
                 : [{error: 'fn arg should match data source type'; dataSource: FNNonNull; got: Parameters<FNAltArg>[0]}]
-              : [{error: 'function should accept data source types'; got: FNAltArg}]
+              : [(
+                    Mode extends 'clock | source | filter | fn |       '
+                  ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
+                  : Mode extends 'clock | source | filter |    |       '
+                  ? {clock: Clock; source: Source; filter: FLBool; target?: never}
+                  : Mode extends '      | source | filter | fn |       '
+                  ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
+                  : Mode extends '      | source | filter |    |       '
+                  ? {source: Source; clock?: never; filter: FLBool; target?: never}
+                  : Mode extends 'clock |        | filter | fn |       '
+                  ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
+                  : Mode extends 'clock |        | filter |    |       '
+                  ? {clock: Clock; source?: never; filter: FLBool; target?: never}
+                  : never
+                ) & SomeFN]
             : [(
                   Mode extends 'clock | source | filter | fn |       '
                 ? {clock: Clock; source: Source; filter?: FLBool; fn?: FN; target?: never}
