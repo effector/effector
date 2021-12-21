@@ -314,3 +314,133 @@ describe('function without argument support', () => {
     `)
   })
 })
+
+describe('difference in behavior between typed and untyped filters/functions combinations', () => {
+  type AN = {a: number}
+  const aNumNull = createEvent<AN | null>()
+  const num = createEvent<number>()
+  const aNum = createEvent<number>()
+  describe('with target', () => {
+    test('typed filter, untyped fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val: AN | null): val is AN => val !== null,
+        fn: ({a}) => a,
+        target: aNum,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('typed filter, typed fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val: AN | null): val is AN => val !== null,
+        fn: ({a}: AN) => a,
+        target: aNum,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('untyped filter, untyped fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val): val is AN => val !== null,
+        fn: ({a}) => a,
+        target: aNum,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Property 'a' does not exist on type 'AN | null'.
+        "
+      `)
+    })
+    test('untyped filter, typed fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val): val is AN => val !== null,
+        fn: ({a}: AN) => a,
+        target: aNum,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+  })
+  describe('without target', () => {
+    test('typed filter, untyped fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val: AN | null): val is AN => val !== null,
+        fn: ({a}) => a,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Property 'a' does not exist on type 'AN | null'.
+        "
+      `)
+    })
+    test('typed filter, typed fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val: AN | null): val is AN => val !== null,
+        fn: ({a}: AN) => a,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type '({ a }: AN) => number' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => number)'.
+          Type '({ a }: AN) => number' is not assignable to type '(src: AN | null, clk: number) => any'.
+            Types of parameters '__0' and 'src' are incompatible.
+              Type 'AN | null' is not assignable to type 'AN'.
+                Type 'null' is not assignable to type 'AN'.
+        "
+      `)
+    })
+    test('untyped filter, untyped fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val): val is AN => val !== null,
+        fn: ({a}) => a,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Property 'a' does not exist on type 'AN | null'.
+        "
+      `)
+    })
+    test('untyped filter, typed fn', () => {
+      sample({
+        clock: num,
+        source: aNumNull,
+        filter: (val): val is AN => val !== null,
+        fn: ({a}: AN) => a,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Argument of type '[{ clock: Event<number>; source: Event<AN | null>; filter: (val: AN | null) => val is AN; fn: ({ a }: AN) => number; }]' is not assignable to parameter of type '[{ clock: Event<number>; source: Event<AN | null>; filter?: ((src: AN | null, clk: number) => boolean) | undefined; fn?: ((src: AN | null, clk: number) => any) | undefined; target?: undefined; }] | [...]'.
+          Type '[{ clock: Event<number>; source: Event<AN | null>; filter: (val: AN | null) => val is AN; fn: ({ a }: AN) => number; }]' is not assignable to type '[{ clock: Event<number>; source: Event<AN | null>; filter?: ((src: AN | null, clk: number) => boolean) | undefined; fn?: ((src: AN | null, clk: number) => any) | undefined; target?: undefined; }]'.
+            Type '{ clock: Event<number>; source: Event<AN | null>; filter: (val: AN | null) => val is AN; fn: ({ a }: AN) => number; }' is not assignable to type '{ clock: Event<number>; source: Event<AN | null>; filter?: ((src: AN | null, clk: number) => boolean) | undefined; fn?: ((src: AN | null, clk: number) => any) | undefined; target?: undefined; }'.
+              Types of property 'fn' are incompatible.
+                Type '({ a }: AN) => number' is not assignable to type '(src: AN | null, clk: number) => any'.
+                  Types of parameters '__0' and 'src' are incompatible.
+                    Type 'AN | null' is not assignable to type 'AN'.
+                      Type 'null' is not assignable to type 'AN'.
+        "
+      `)
+    })
+  })
+})
