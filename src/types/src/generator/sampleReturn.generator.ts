@@ -11,6 +11,7 @@ import {
   sortOrder,
   fmt,
 } from '../runner/manifold/operators'
+import type {ComputeVariant} from '../runner/manifold/types'
 
 export default () => {
   const source = union({
@@ -61,7 +62,20 @@ export default () => {
       untyped: '',
     },
   })
-
+  const filter = separate({
+    source: {source},
+    variant: {
+      source: {
+        combinable: {source: 'combinable'},
+        rest: {},
+      },
+    } as const,
+    cases: {
+      combinable: union(['none']),
+      rest: union(['none', 'unit', 'fn', 'infer', 'bool']),
+    },
+    sort: ['none', 'unit', 'fn', 'infer', 'bool'],
+  })
   const targetToken = computeVariant({
     source: {target},
     variant: {
@@ -77,16 +91,28 @@ export default () => {
     sort: ['no target', 'unit target', 'tuple target'],
   })
   const fields = {
-    source: computeVariant({
-      source: {source},
+    source: computeVariants({
+      source: {source, filter},
       variant: {
-        event: {source: 'event'},
-        store: {source: 'store'},
-        combinable: {source: 'combinable'},
+        source: {
+          event: {source: 'event'},
+          store: {source: 'store'},
+          combinable: {source: 'combinable'},
+        },
+        filter: {
+          inferFilter: [{filter: 'infer'}, {filter: 'bool'}],
+          plainFilter: {},
+        },
       },
       cases: {
-        event: 'aNum    ',
-        store: 'a       ',
+        event: {
+          inferFilter: 'aNumNull',
+          plainFilter: 'aNum    ',
+        },
+        store: {
+          inferFilter: '$aNull  ',
+          plainFilter: 'a       ',
+        },
         combinable: '{a:$num}',
       },
     }),
@@ -121,7 +147,7 @@ export default () => {
       },
     }),
     fn: computeVariants({
-      source: {fn, typedFn},
+      source: {fn, typedFn, filter},
       variant: {
         fn: {
           none: {fn: 'none'},
@@ -131,6 +157,10 @@ export default () => {
         },
         types: {
           typed: {typedFn: true},
+          inferred: [
+            {typedFn: false, filter: 'bool'},
+            {typedFn: false, filter: 'infer'},
+          ],
           untyped: {typedFn: false},
         },
       } as const,
@@ -139,12 +169,31 @@ export default () => {
         noArgs: 'fn0',
         arg: {
           typed: 'fn1',
+          inferred: '({a}:AN) => ({a})',
           untyped: '({a}) => ({a})',
         },
         argPair: {
           typed: 'fn2',
+          inferred: '({a}:AN,c) => ({a:a+c})',
           untyped: '({a},c) => ({a:a+c})',
         },
+      },
+    }),
+    filter: computeVariant({
+      source: {filter},
+      variant: {
+        none: {filter: 'none'},
+        unit: {filter: 'unit'},
+        fn: {filter: 'fn'},
+        infer: {filter: 'infer'},
+        bool: {filter: 'bool'},
+      },
+      cases: {
+        none: null,
+        unit: '$flag',
+        fn: 'filterFun',
+        infer: 'filterInf',
+        bool: 'Boolean',
       },
     }),
   }
@@ -155,6 +204,7 @@ export default () => {
       clockCode: fields.clock,
       targetCode: fields.target,
       fnCode: fields.fn,
+      filterCode: fields.filter,
     },
     fn: value => {
       return printMethod({
@@ -163,6 +213,7 @@ export default () => {
           source: 'sourceCode',
           clock: 'clockCode',
           target: 'targetCode',
+          filter: 'filterCode',
           fn: 'fnCode',
         },
         value,
@@ -172,14 +223,19 @@ export default () => {
     sort: 'string',
   })
   const largeGroup = fmt`${targetToken}${typedFnToken}`
-  const returnCode = computeVariants({
-    source: {target, source, clock},
+  //@ts-expect-error
+  const returnCode: ComputeVariant<string> = computeVariants({
+    source: {target, source, clock, filter},
     variant: {
       Target: {
         none: {target: 'none'},
         event: {target: 'event'},
         store: {target: 'store'},
         tuple: {target: 'tuple'},
+      },
+      filter: {
+        noFilter: {filter: 'none'},
+        hasFilter: {},
       },
       sources: {
         store: [
@@ -193,8 +249,11 @@ export default () => {
     },
     cases: {
       none: {
-        store: 'Store<AN>',
-        event: 'Event<AN>',
+        noFilter: {
+          store: 'Store<AN>',
+          event: 'Event<AN>',
+        },
+        hasFilter: 'Event<AN>',
       },
       event: 'Event<AN>',
       store: 'Store<AN>',
@@ -208,13 +267,14 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample', 'Event', 'Store'],
     grouping: {
       pass,
-      getHash: [targetToken, clock, typedFn],
+      getHash: [targetToken, clock, typedFn, filter],
       tags: {
-        sourceType: source,
-        clockType: clock,
-        fnType: fn,
-        targetType: target,
-        target: targetToken,
+        source,
+        clock,
+        fn,
+        target,
+        targetToken,
+        filter,
       },
       describeGroup: computeFn({
         source: {
@@ -239,11 +299,16 @@ const header = `
 type AN = {a: number}
 const $num = createStore(0)
 const a = createStore({a: 0})
+const $aNull = createStore<AN | null>({a: 0})
 const num = createEvent<number>()
 const aNum = createEvent<AN>()
+const aNumNull = createEvent<AN | null>()
 const aT = createStore({a: 0})
 const aNumT = createEvent<AN>()
+const $flag = createStore(true)
 const fn0 = () => ({a: 0})
 const fn1 = ({a}: AN) => ({a})
 const fn2 = ({a}: AN, c: number) => ({a: a + c})
+const filterFun = (val: AN | null) => val !== null
+const filterInf = (val: AN | null): val is AN => val !== null
 `
