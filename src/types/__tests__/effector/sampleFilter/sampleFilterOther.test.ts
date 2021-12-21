@@ -151,3 +151,176 @@ test('generic support', () => {
     "
   `)
 })
+
+describe('function without argument support', () => {
+  const target = createEvent<string>()
+  test('filter function', () => {
+    const clock = createEvent<number>()
+    const source = createEvent<number>()
+    sample({
+      clock,
+      source,
+      filter: arg => arg > 0,
+      fn: () => 'ok',
+    })
+    sample({
+      clock,
+      filter: arg => arg > 0,
+      fn: () => 'ok',
+    })
+    sample({
+      source,
+      filter: arg => arg > 0,
+      fn: () => 'ok',
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('filter infer', () => {
+    const clock = createEvent<number | null>()
+    const source = createEvent<number | null>()
+    sample({
+      clock,
+      source,
+      filter: (arg): arg is number => typeof arg === 'number',
+      fn: () => 'ok',
+    })
+    sample({
+      clock,
+      filter: (arg): arg is number => typeof arg === 'number',
+      fn: () => 'ok',
+    })
+    sample({
+      source,
+      filter: (arg): arg is number => typeof arg === 'number',
+      fn: () => 'ok',
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('filter bool', () => {
+    const clock = createEvent<number | null>()
+    const source = createEvent<number | null>()
+    sample({
+      clock,
+      source,
+      filter: Boolean,
+      fn: () => 'ok',
+    })
+    sample({
+      clock,
+      filter: Boolean,
+      fn: () => 'ok',
+    })
+    sample({
+      source,
+      filter: Boolean,
+      fn: () => 'ok',
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: Event<number | null>; source: Event<number | null>; filter: BooleanConstructor; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      Argument of type '{ clock: Event<number | null>; filter: BooleanConstructor; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      Argument of type '{ source: Event<number | null>; filter: BooleanConstructor; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      "
+    `)
+  })
+  test('filter function + target', () => {
+    const clock = createEvent<number>()
+    const source = createEvent<number>()
+    sample({
+      clock,
+      source,
+      filter: arg => arg > 0,
+      fn: () => 'ok',
+      target,
+    })
+    sample({
+      clock,
+      filter: arg => arg > 0,
+      fn: () => 'ok',
+      target,
+    })
+    sample({
+      source,
+      filter: arg => arg > 0,
+      fn: () => 'ok',
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('filter infer + target', () => {
+    const clock = createEvent<number | null>()
+    const source = createEvent<number | null>()
+    sample({
+      clock,
+      source,
+      filter: (arg): arg is number => typeof arg === 'number',
+      fn: () => 'ok',
+      target,
+    })
+    sample({
+      clock,
+      filter: (arg): arg is number => typeof arg === 'number',
+      fn: () => 'ok',
+      target,
+    })
+    sample({
+      source,
+      filter: (arg): arg is number => typeof arg === 'number',
+      fn: () => 'ok',
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('filter bool + target', () => {
+    const clock = createEvent<number | null>()
+    const source = createEvent<number | null>()
+    sample({
+      clock,
+      source,
+      filter: Boolean,
+      fn: () => 'ok',
+      target,
+    })
+    sample({
+      clock,
+      filter: Boolean,
+      fn: () => 'ok',
+      target,
+    })
+    sample({
+      source,
+      filter: Boolean,
+      fn: () => 'ok',
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: Event<number | null>; source: Event<number | null>; filter: BooleanConstructor; fn: () => string; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      Argument of type '{ clock: Event<number | null>; filter: BooleanConstructor; fn: () => string; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      Argument of type '{ source: Event<number | null>; filter: BooleanConstructor; fn: () => string; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn arg should match data source type\\"; dataSource: number; got: undefined; }'.
+      "
+    `)
+  })
+})
