@@ -115,7 +115,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Parameter 'n' implicitly has an 'any' type.
+        no errors
         "
       `)
     })
@@ -131,7 +131,6 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
-        Parameter 'n' implicitly has an 'any' type.
         "
       `)
     })
@@ -215,8 +214,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'clk' implicitly has an 'any' type.
+        no errors
         "
       `)
     })
@@ -234,8 +232,6 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'clk' implicitly has an 'any' type.
         "
       `)
     })
@@ -550,12 +546,12 @@ describe('filter return validation', () => {
       sample({source: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ source: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[{ source: Event<any>; clock?: undefined; filter: (src: any) => src is unknown; target?: undefined; } & { source: Event<any>; filter: () => number; }] | [{ source: Event<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; } & { ...; }]'.
-          Type '[{ source: Event<any>; filter: () => number; }]' is not assignable to type '[{ source: Event<any>; clock?: undefined; filter: (src: any) => src is unknown; target?: undefined; } & { source: Event<any>; filter: () => number; }]'.
-            Type '{ source: Event<any>; filter: () => number; }' is not assignable to type '{ source: Event<any>; clock?: undefined; filter: (src: any) => src is unknown; target?: undefined; } & { source: Event<any>; filter: () => number; }'.
-              Type '{ source: Event<any>; filter: () => number; }' is not assignable to type '{ source: Event<any>; clock?: undefined; filter: (src: any) => src is unknown; target?: undefined; }'.
+        Argument of type '[{ source: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[{ source: Event<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; } & { source: Event<any>; filter: () => number; }] | [{ source: Event<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; } & { ...; }]'.
+          Type '[{ source: Event<any>; filter: () => number; }]' is not assignable to type '[{ source: Event<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; } & { source: Event<any>; filter: () => number; }]'.
+            Type '{ source: Event<any>; filter: () => number; }' is not assignable to type '{ source: Event<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; } & { source: Event<any>; filter: () => number; }'.
+              Type '{ source: Event<any>; filter: () => number; }' is not assignable to type '{ source: Event<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; }'.
                 Types of property 'filter' are incompatible.
-                  Type '() => number' is not assignable to type '(src: any) => src is unknown'.
+                  Type '() => number' is not assignable to type '(src: any) => src is any'.
                     Signature '(): number' must be a type predicate.
         "
       `)
@@ -565,12 +561,12 @@ describe('filter return validation', () => {
       sample({clock: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ clock: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is unknown; target?: undefined; } & { clock: Event<any>; filter: () => number; }] | [{ clock: Event<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; } & { ...; }]'.
-          Type '[{ clock: Event<any>; filter: () => number; }]' is not assignable to type '[{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is unknown; target?: undefined; } & { clock: Event<any>; filter: () => number; }]'.
-            Type '{ clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is unknown; target?: undefined; } & { clock: Event<any>; filter: () => number; }'.
-              Type '{ clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is unknown; target?: undefined; }'.
+        Argument of type '[{ clock: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; } & { clock: Event<any>; filter: () => number; }] | [{ clock: Event<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; } & { ...; }]'.
+          Type '[{ clock: Event<any>; filter: () => number; }]' is not assignable to type '[{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; } & { clock: Event<any>; filter: () => number; }]'.
+            Type '{ clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; } & { clock: Event<any>; filter: () => number; }'.
+              Type '{ clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; }'.
                 Types of property 'filter' are incompatible.
-                  Type '() => number' is not assignable to type '(clk: any) => clk is unknown'.
+                  Type '() => number' is not assignable to type '(clk: any) => clk is any'.
                     Signature '(): number' must be a type predicate.
         "
       `)
@@ -580,12 +576,12 @@ describe('filter return validation', () => {
       sample({source: anyt, clock: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ source: Event<any>; clock: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is unknown; target?: undefined; } & { source: Event<any>; clock: Event<any>; filter: () => number; }] | [...]'.
-          Type '[{ source: Event<any>; clock: Event<any>; filter: () => number; }]' is not assignable to type '[{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is unknown; target?: undefined; } & { source: Event<any>; clock: Event<any>; filter: () => number; }]'.
-            Type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is unknown; target?: undefined; } & { source: Event<any>; clock: Event<any>; filter: () => number; }'.
-              Type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is unknown; target?: undefined; }'.
+        Argument of type '[{ source: Event<any>; clock: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is any; target?: undefined; } & { source: Event<any>; clock: Event<any>; filter: () => number; }] | [...]'.
+          Type '[{ source: Event<any>; clock: Event<any>; filter: () => number; }]' is not assignable to type '[{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is any; target?: undefined; } & { source: Event<any>; clock: Event<any>; filter: () => number; }]'.
+            Type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is any; target?: undefined; } & { source: Event<any>; clock: Event<any>; filter: () => number; }'.
+              Type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is any; target?: undefined; }'.
                 Types of property 'filter' are incompatible.
-                  Type '() => number' is not assignable to type '(src: any, clk: any) => src is unknown'.
+                  Type '() => number' is not assignable to type '(src: any, clk: any) => src is any'.
                     Signature '(): number' must be a type predicate.
         "
       `)
@@ -757,7 +753,7 @@ test('incorrect filter', () => {
     Argument of type '[{ source: Event<void>; filter: null; target: Event<void>; }]' is not assignable to parameter of type '[never] | [never]'.
       Type '[{ source: Event<void>; filter: null; target: Event<void>; }]' is not assignable to type '[never]'.
         Type '{ source: Event<void>; filter: null; target: Event<void>; }' is not assignable to type 'never'.
-          The intersection '{ source: Event<void>; clock?: undefined; filter: (src: any) => src is unknown; target: Event<void>; } & { source: Event<void>; filter: null; target: Event<void>; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+          The intersection '{ source: Event<void>; clock?: undefined; filter: (src: void) => src is void; target: Event<void>; } & { source: Event<void>; filter: null; target: Event<void>; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
     "
   `)
 })
