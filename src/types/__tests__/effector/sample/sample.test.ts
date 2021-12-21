@@ -26,7 +26,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 17 type arguments, but got 3.
+      Expected 19 type arguments, but got 3.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -43,7 +43,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 17 type arguments, but got 2.
+      Expected 19 type arguments, but got 2.
       Parameter 'str' implicitly has an 'any' type.
       "
     `)
@@ -60,7 +60,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 17 type arguments, but got 1.
+      Expected 19 type arguments, but got 1.
       "
     `)
   })
@@ -74,7 +74,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 17 type arguments, but got 1.
+      Expected 19 type arguments, but got 1.
       "
     `)
   })
@@ -91,7 +91,7 @@ describe('explicit generics', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'string' is not assignable to type 'Event<number>'.
-      Expected 17 type arguments, but got 3.
+      Expected 19 type arguments, but got 3.
       Parameter 'str' implicitly has an 'any' type.
       Parameter 'num' implicitly has an 'any' type.
       "
@@ -107,7 +107,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 17 type arguments, but got 1.
+      Expected 19 type arguments, but got 1.
       "
     `)
   })
@@ -121,7 +121,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Expected 17 type arguments, but got 1.
+      Expected 19 type arguments, but got 1.
       "
     `)
   })
@@ -182,8 +182,16 @@ describe('generic edge cases', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       Parameter 'source' implicitly has an 'any' type.
       Parameter 'clock' implicitly has an 'any' type.
       "
@@ -251,14 +259,19 @@ describe('generic edge cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Argument of type '[{ source: Store<A>; clock: Event<B>; target: Event<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? Event<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? Event<B> : { sourceType: A; targetType: B; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
-      Argument of type '[{ source: Store<A>; clock: Event<B>; fn: (source: A, clock: B) => A; target: Event<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? Event<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? Event<B> : { fnResult: A; targetType: B; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
-      Argument of type '[{ source: Store<A>; clock: Event<B>; fn: (source: A, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? Store<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? Store<A> : { fnResult: B; targetType: A; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       Argument of type '[{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; target: Event<B>; }]' is not assignable to parameter of type '[[NonNullable<A>] extends [Readonly<B>] ? Event<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? Event<B> : { sourceType: NonNullable<A>; targetType: B; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
       Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
       Parameter 'source' implicitly has an 'any' type.
       Parameter 'clock' implicitly has an 'any' type.
-      Argument of type '[{ clock: Event<B>; source: Store<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? Store<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? Store<A> : { fnResult: B; targetType: A; }] extends [...] ? [...] : [...] extends [...] ? [...] : [...]'.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       "
     `)
   })

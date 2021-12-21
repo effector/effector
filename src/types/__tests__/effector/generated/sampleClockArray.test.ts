@@ -365,7 +365,8 @@ describe('clock only', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Parameter 'a' implicitly has an 'any' type.
+      Parameter 'a' implicitly has an 'any' type.
       "
     `)
   })
