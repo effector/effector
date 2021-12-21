@@ -131,10 +131,14 @@ describe('generic edge cases', () => {
   test('generic edge cases (should pass)', () => {
     function generic1<A, B>(target: Store<A>, clock: Event<B>) {
       {
-        const result = sample({
+        sample({
           source: target,
           clock,
           target,
+        })
+        const result = sample({
+          source: target,
+          clock,
         })
       }
       {
@@ -154,35 +158,56 @@ describe('generic edge cases', () => {
         })
       }
       {
-        const result = sample({
+        sample({
           clock,
           source: target,
           filter: Boolean,
           target,
         })
+        const result = sample({
+          clock,
+          source: target,
+          filter: Boolean,
+        })
       }
       {
-        const result = sample({
+        sample({
           clock,
           source: target,
           filter: Boolean,
           fn: (source, clock) => source,
           target,
         })
+        const result = sample({
+          clock,
+          source: target,
+          filter: Boolean,
+          fn: (source, clock) => source,
+        })
       }
       {
-        const result = sample({
+        sample({
           clock,
           source: target,
           filter: (source, clock) => true,
           fn: (source, clock) => source,
           target,
         })
+        const result = sample({
+          clock,
+          source: target,
+          filter: (source, clock) => true,
+          fn: (source, clock) => source,
+        })
       }
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; target: Store<A>; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
+      Argument of type '{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: any, clock: any) => any; }' is not assignable to parameter of type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"function should accept data source types\\"; got: (src: NonNullable<A>, clk: B) => any; }'.
       Parameter 'source' implicitly has an 'any' type.
       Parameter 'clock' implicitly has an 'any' type.
