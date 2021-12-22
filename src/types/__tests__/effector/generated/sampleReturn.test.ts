@@ -63,17 +63,7 @@ describe('no target', () => {
               Types of parameters 'payload' and 'payload' are incompatible.
                 Type 'AN | null' is not assignable to type 'AN'.
                   Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       "
@@ -132,29 +122,7 @@ describe('no target', () => {
       "
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       "
@@ -211,29 +179,7 @@ describe('no target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       "
@@ -290,29 +236,7 @@ describe('no target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
       "
@@ -337,16 +261,7 @@ describe('no target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
+      no errors
       "
     `)
   })
@@ -378,26 +293,7 @@ describe('no target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
+      no errors
       "
     `)
   })
@@ -429,26 +325,7 @@ describe('no target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
+      no errors
       "
     `)
   })
@@ -480,26 +357,7 @@ describe('no target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => { a: number; })'.
-        Type '({ a }: AN) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
-      Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN, c: number) => { a: number; })'.
-        Type '({ a }: AN, c: number) => { a: number; }' is not assignable to type '(src: AN | null, clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type 'AN | null' is not assignable to type 'AN'.
-              Type 'null' is not assignable to type 'AN'.
+      no errors
       "
     `)
   })

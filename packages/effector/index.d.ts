@@ -904,7 +904,7 @@ type SampleImpl<
               'clock |        |        |    |       ',
               SomeFN
             >,
-            Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNNonNull, SomeFN
+            Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FNNonNull, SomeFN
           >
         : [{error: 'clock should be units'; got: Clock}]
       // no target, has source
@@ -919,7 +919,7 @@ type SampleImpl<
               '      | source |        |    |       ',
               SomeFN
             >,
-            Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNNonNull, SomeFN
+            Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FNNonNull, SomeFN
           >
           // no target, has source, has clock
         : Clock extends Units
@@ -931,7 +931,7 @@ type SampleImpl<
                 'clock | source |        |    |       ',
                 SomeFN
               >,
-              Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNNonNull, SomeFN
+              Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FNNonNull, SomeFN
             >
           : [{error: 'clock should be units'; got: Clock}]
       : [{error: 'source error'; got: Source}]
@@ -1617,99 +1617,143 @@ type SampleFilterDef<
   FLBool,
   FilterFun,
   FN,
+  FNInf,
+  FNInfSource extends (
+    Source extends Unit<any> | SourceRecord
+      ? TypeOfSource<Source>
+      : never
+    ),
+  FNInfClock extends (
+    Clock extends Units
+      ? TypeOfClock<Clock>
+      : never
+    ),
   FNAltArg,
   FNNonNull,
   SomeFN
 > =
   Mode extends Mode_Flt
-  ?
-    FLUnit extends Unit<any>
-      ? boolean extends UnitValue<FLUnit>
+  ? FLUnit extends Unit<any>
+    ? boolean extends UnitValue<FLUnit>
+      ? [(
+            Mode extends 'clock | source | filter | fn |       '
+          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never}
+          : Mode extends 'clock | source | filter |    |       '
+          ? {clock: Clock; source: Source; filter: FLUnit; target?: never}
+          : Mode extends '      | source | filter | fn |       '
+          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never}
+          : Mode extends '      | source | filter |    |       '
+          ? {source: Source; clock?: never; filter: FLUnit; target?: never}
+          : Mode extends 'clock |        | filter | fn |       '
+          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never}
+          : Mode extends 'clock |        | filter |    |       '
+          ? {clock: Clock; source?: never; filter: FLUnit; target?: never}
+          : never
+        ) & SomeFN]
+      : [{error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
+    : FLBool extends BooleanConstructor
+      ? Mode extends Mode_Flt_Fn
         ? [(
               Mode extends 'clock | source | filter | fn |       '
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never}
+            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
             : Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FLUnit; target?: never}
+            ? {clock: Clock; source: Source; filter: FLBool; target?: never}
             : Mode extends '      | source | filter | fn |       '
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never}
+            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FLUnit; target?: never}
+            ? {source: Source; clock?: never; filter: FLBool; target?: never}
             : Mode extends 'clock |        | filter | fn |       '
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never}
+            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FLUnit; target?: never}
+            ? {clock: Clock; source?: never; filter: FLBool; target?: never}
             : never
           ) & SomeFN]
-        : [{error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
-        : FLBool extends BooleanConstructor
-          ? Mode extends Mode_Flt_Fn
+        : [(
+              Mode extends 'clock | source | filter | fn |       '
+            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FN; target?: never}
+            : Mode extends 'clock | source | filter |    |       '
+            ? {clock: Clock; source: Source; filter: FLBool; target?: never}
+            : Mode extends '      | source | filter | fn |       '
+            ? {source: Source; clock?: never; filter?: FLBool; fn?: FN; target?: never}
+            : Mode extends '      | source | filter |    |       '
+            ? {source: Source; clock?: never; filter: FLBool; target?: never}
+            : Mode extends 'clock |        | filter | fn |       '
+            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FN; target?: never}
+            : Mode extends 'clock |        | filter |    |       '
+            ? {clock: Clock; source?: never; filter: FLBool; target?: never}
+            : never
+          ) & SomeFN]
+      : FilterFun extends (
+          Source extends Unit<any> | SourceRecord
+          ? Clock extends Units
+            ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
+            : (src: TypeOfSource<Source>) => src is FNInfSource
+          : Clock extends Units
+            ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
+            : never
+        )
+        ? Mode extends Mode_Flt_Fn
+          ? FNInf extends (
+              Source extends Unit<any> | SourceRecord
+              ? Clock extends Units
+                ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                : (src: FNInfSource) => any
+              : Clock extends Units
+                ? (clk: FNInfClock) => any
+                : any
+            ) 
             ? [(
                   Mode extends 'clock | source | filter | fn |       '
-                ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
-                : Mode extends 'clock | source | filter |    |       '
-                ? {clock: Clock; source: Source; filter: FLBool; target?: never}
+                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never}
                 : Mode extends '      | source | filter | fn |       '
-                ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
-                : Mode extends '      | source | filter |    |       '
-                ? {source: Source; clock?: never; filter: FLBool; target?: never}
+                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never}
                 : Mode extends 'clock |        | filter | fn |       '
-                ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
-                : Mode extends 'clock |        | filter |    |       '
-                ? {clock: Clock; source?: never; filter: FLBool; target?: never}
+                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never}
                 : never
               ) & SomeFN]
-            : [(
-                  Mode extends 'clock | source | filter | fn |       '
-                ? {clock: Clock; source: Source; filter?: FLBool; fn?: FN; target?: never}
-                : Mode extends 'clock | source | filter |    |       '
-                ? {clock: Clock; source: Source; filter: FLBool; target?: never}
-                : Mode extends '      | source | filter | fn |       '
-                ? {source: Source; clock?: never; filter?: FLBool; fn?: FN; target?: never}
-                : Mode extends '      | source | filter |    |       '
-                ? {source: Source; clock?: never; filter: FLBool; target?: never}
-                : Mode extends 'clock |        | filter | fn |       '
-                ? {clock: Clock; source?: never; filter?: FLBool; fn?: FN; target?: never}
-                : Mode extends 'clock |        | filter |    |       '
-                ? {clock: Clock; source?: never; filter: FLBool; target?: never}
-                : never
-              ) & SomeFN]
-          : FilterFun extends (
-              Mode extends Mode_Clk_Src
-              ? Source extends Unit<any> | SourceRecord
-                ? Clock extends Units
-                  ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-                  : never
-                : never
-              : Mode extends Mode_NoClk_Src
-              ? Source extends Unit<any> | SourceRecord
-                ? (src: TypeOfSource<Source>) => any
-                : never
-              : Clock extends Units
-                ? (clk: TypeOfClock<Clock>) => any
-                : never
-            )
-            ? ReturnType<FilterFun> extends boolean
-              ? [(
-                    Mode extends 'clock | source | filter | fn |       '
-                  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never}
-                  : Mode extends 'clock | source | filter |    |       '
-                  ? {clock: Clock; source: Source; filter: FilterFun; target?: never}
-                  : Mode extends '      | source | filter | fn |       '
-                  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never}
-                  : Mode extends '      | source | filter |    |       '
-                  ? {source: Source; clock?: never; filter: FilterFun; target?: never}
-                  : Mode extends 'clock |        | filter | fn |       '
-                  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never}
-                  : Mode extends 'clock |        | filter |    |       '
-                  ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
-                  : never
-                ) & SomeFN]
-              : [{error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
-            : [{error: 'filter should be function or unit'; got: FilterFun}]
-
+            : [{
+              error: 'fn should match inferred type'
+              inferred: (Source extends Unit<any> | SourceRecord ? FNInfSource : FNInfClock)
+              fnArg: FNInf extends (arg: infer Arg) => any ? Arg : never
+            }]
+          : [(
+              Mode extends 'clock | source | filter |    |       '
+            ? {clock: Clock; source: Source; filter: FilterFun; target?: never}
+            : Mode extends '      | source | filter |    |       '
+            ? {source: Source; clock?: never; filter: FilterFun; target?: never}
+            : Mode extends 'clock |        | filter |    |       '
+            ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
+            : never
+          ) & SomeFN]
+      : FilterFun extends (
+          Source extends Unit<any> | SourceRecord
+          ? Clock extends Units
+            ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+            : (src: TypeOfSource<Source>) => any
+          : Clock extends Units
+            ? (clk: TypeOfClock<Clock>) => any
+            : never
+        )
+        ? ReturnType<FilterFun> extends boolean
+          ? [(
+                Mode extends 'clock | source | filter | fn |       '
+              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never}
+              : Mode extends 'clock | source | filter |    |       '
+              ? {clock: Clock; source: Source; filter: FilterFun; target?: never}
+              : Mode extends '      | source | filter | fn |       '
+              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never}
+              : Mode extends '      | source | filter |    |       '
+              ? {source: Source; clock?: never; filter: FilterFun; target?: never}
+              : Mode extends 'clock |        | filter | fn |       '
+              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never}
+              : Mode extends 'clock |        | filter |    |       '
+              ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
+              : never
+            ) & SomeFN]
+          : [{error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
+        : [{error: 'filter should be function or unit'; got: FilterFun}]
   : Mode extends Mode_NoFlt
-  ?
-    [(
+  ? [(
         Mode extends 'clock | source |        | fn |       '
       ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never}
       : Mode extends 'clock | source |        |    |       '

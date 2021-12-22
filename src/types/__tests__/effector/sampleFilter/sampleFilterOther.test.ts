@@ -388,7 +388,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Property 'a' does not exist on type 'AN | null'.
+        no errors
         "
       `)
     })
@@ -401,11 +401,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type '({ a }: AN) => number' is not assignable to type '((src: AN | null, clk: number) => any) & (({ a }: AN) => number)'.
-          Type '({ a }: AN) => number' is not assignable to type '(src: AN | null, clk: number) => any'.
-            Types of parameters '__0' and 'src' are incompatible.
-              Type 'AN | null' is not assignable to type 'AN'.
-                Type 'null' is not assignable to type 'AN'.
+        no errors
         "
       `)
     })
@@ -431,14 +427,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ clock: Event<number>; source: Event<AN | null>; filter: (val: AN | null) => val is AN; fn: ({ a }: AN) => number; }]' is not assignable to parameter of type '[{ clock: Event<number>; source: Event<AN | null>; filter?: ((src: AN | null, clk: number) => boolean) | undefined; fn?: ((src: AN | null, clk: number) => any) | undefined; target?: undefined; }] | [...]'.
-          Type '[{ clock: Event<number>; source: Event<AN | null>; filter: (val: AN | null) => val is AN; fn: ({ a }: AN) => number; }]' is not assignable to type '[{ clock: Event<number>; source: Event<AN | null>; filter?: ((src: AN | null, clk: number) => boolean) | undefined; fn?: ((src: AN | null, clk: number) => any) | undefined; target?: undefined; }]'.
-            Type '{ clock: Event<number>; source: Event<AN | null>; filter: (val: AN | null) => val is AN; fn: ({ a }: AN) => number; }' is not assignable to type '{ clock: Event<number>; source: Event<AN | null>; filter?: ((src: AN | null, clk: number) => boolean) | undefined; fn?: ((src: AN | null, clk: number) => any) | undefined; target?: undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '({ a }: AN) => number' is not assignable to type '(src: AN | null, clk: number) => any'.
-                  Types of parameters '__0' and 'src' are incompatible.
-                    Type 'AN | null' is not assignable to type 'AN'.
-                      Type 'null' is not assignable to type 'AN'.
+        no errors
         "
       `)
     })
