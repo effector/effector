@@ -9,7 +9,7 @@ import styles from './styles.module.css'
 import {Code} from '../components/Code'
 
 const codeExample = {
-  en: `import {createEvent, createStore, createEffect, sample} from 'effector'
+  en: `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
 
 const nextPost = createEvent()
 
@@ -50,7 +50,7 @@ nextPost()
 // => Loading post... 
 // => Post 2 has 5 comments 
 `,
-  ru: `import {createEvent, createStore, createEffect, sample} from 'effector'
+  ru: `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
 
 const nextPost = createEvent()
 
