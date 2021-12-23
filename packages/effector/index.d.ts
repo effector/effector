@@ -1701,7 +1701,7 @@ type SampleFilterDef<
               : Clock extends Units
                 ? (clk: FNInfClock) => any
                 : any
-            ) 
+            )
             ? [(
                   Mode extends 'clock | source | filter | fn |       '
                 ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never}
@@ -1800,11 +1800,14 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
           ? Target
-          : Mode extends 'fnRet'
-            ? never & {fnResult: SourceType; targetType: TargetType}
-            : Mode extends 'src'
-              ? never & {sourceType: SourceType; targetType: TargetType}
-              : {clockType: SourceType; targetType: TargetType}
+          : IfAssignable<SourceType, TargetType,
+            Target,
+            Mode extends 'fnRet'
+              ? never & {fnResult: SourceType; targetType: TargetType}
+              : Mode extends 'src'
+                ? never & {sourceType: SourceType; targetType: TargetType}
+                : {clockType: SourceType; targetType: TargetType}
+            >
       : never
     : {
       [
@@ -1814,11 +1817,14 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
             ? Target[K]
-            : Mode extends 'fnRet'
-              ? never & {fnResult: SourceType; targetType: TargetType}
-              : Mode extends 'src'
-                ? never & {sourceType: SourceType; targetType: TargetType}
-                : {clockType: SourceType; targetType: TargetType}
+            : IfAssignable<SourceType, TargetType,
+              Target[K],
+              Mode extends 'fnRet'
+                ? never & {fnResult: SourceType; targetType: TargetType}
+                : Mode extends 'src'
+                  ? never & {sourceType: SourceType; targetType: TargetType}
+                  : {clockType: SourceType; targetType: TargetType}
+              >
         : never
     }
 

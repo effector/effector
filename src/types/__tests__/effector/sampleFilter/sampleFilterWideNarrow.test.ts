@@ -299,10 +299,7 @@ test('wide tuple (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }; }'.
-    Argument of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [1, 2, 3]; targetType: [1, 2]; }]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [1, 2, 3]; targetType: [1, 2]; }]; }'.
+    no errors
     "
   `)
 })
