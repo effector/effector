@@ -6,23 +6,22 @@ import {withDisplayName} from './withDisplayName'
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  props: Props = {} as any,
+  props: Props = {} as any
 ) {
-  const propsRef = React.useRef<{value: any; count: number}>({
-    value: null,
-    count: 0,
-  })
+  const prevPropsRef = React.useRef<any>(null);
+
   useIsomorphicLayoutEffect(() => {
-    GateComponent.open(propsRef.current.value)
-    return () => GateComponent.close(propsRef.current.value) as any
-  }, [GateComponent])
-  if (!shallowCompare(propsRef.current.value, props)) {
-    propsRef.current.value = props
-    propsRef.current.count += 1
-  }
+    GateComponent.open(props);
+    return () => GateComponent.close(props) as any;
+  }, [GateComponent]);
+
   useIsomorphicLayoutEffect(() => {
-    GateComponent.set(propsRef.current.value)
-  }, [propsRef.current.count])
+    if (!shallowCompare(prevPropsRef.current, props)) {
+      GateComponent.set(props);
+
+      prevPropsRef.current = props;
+    }
+  }, [props]);
 }
 
 function shallowCompare(a: any, b: any) {
