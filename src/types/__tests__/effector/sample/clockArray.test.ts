@@ -1,13 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  sample,
-  Store,
-  Event,
-  guard,
-} from 'effector'
+import {createStore, createEvent, sample, Event} from 'effector'
 
 const typecheck = '{global}'
 
@@ -356,10 +348,20 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
-    const target: Event<{a: string; b: string; clock: any}> = sample({
+    const target1 = sample({
       source,
       clock: [clockA, clockB, clockC],
       fn: ({a, b}, clock) => ({a, b, clock}),
+    })
+    const target2: Event<{a: string; b: string; clock: any}> = sample({
+      source,
+      clock: [clockA, clockB, clockC],
+      fn: ({a, b}, clock) => ({a, b, clock}),
+    })
+    const target3: Event<{a: string; b: string; clock: any}> = sample({
+      source,
+      clock: [clockA, clockB, clockC],
+      fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -375,7 +377,17 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
-    const target: Event<{a: string; b: string; clock: any}> = sample({
+    const target1 = sample({
+      source: {a, b},
+      clock: [clockA, clockB, clockC],
+      fn: ({a, b}, clock) => ({a, b, clock}),
+    })
+    const target2: Event<{a: string; b: string; clock: any}> = sample({
+      source: {a, b},
+      clock: [clockA, clockB, clockC],
+      fn: ({a, b}, clock) => ({a, b, clock}),
+    })
+    const target3: Event<{a: string; b: string; clock: any}> = sample({
       source: {a, b},
       clock: [clockA, clockB, clockC],
       fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
