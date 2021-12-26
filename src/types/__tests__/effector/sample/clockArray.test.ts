@@ -365,7 +365,9 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Binding element 'a' implicitly has an 'any' type.
+      Binding element 'b' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       "
     `)
   })
@@ -395,7 +397,9 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Binding element 'a' implicitly has an 'any' type.
+      Binding element 'b' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       "
     `)
   })

@@ -1004,84 +1004,197 @@ type SampleRet<
   Target,
   Source,
   Clock,
+  FLUnit,
+  FLBool,
+  FilterFun,
   FN,
+  FNAltArg,
+  FNInf,
+  FNInfSource extends (
+    Source extends Unit<any> | SourceRecord
+      ? TypeOfSource<Source>
+      : never
+  ),
+  FNInfClock extends (
+    Clock extends Units
+      ? TypeOfClock<Clock>
+      : never
+  ),
   SomeFN,
-  ForceTargetInference,
-  FilterMode extends 'filter' | 'no filter'
+  ForceTargetInference
 > = unknown extends Target
     ? unknown extends Clock
       ? unknown extends Source
         ? void
         : Source extends Unit<any> | SourceRecord
+          // has filter, has fn
           ? unknown extends SomeFN
-            ? FilterMode extends 'filter'
-              ? EventAsReturnType<TypeOfSource<Source>>
-              : Source extends Store<any> | SourceRecord
-                ? Store<TypeOfSource<Source>>
-                : EventAsReturnType<TypeOfSource<Source>>
-            : SomeFN extends {fn: any}
-              ? FN extends (src: TypeOfSource<Source>) => infer Ret
-                ? FilterMode extends 'filter'
-                  ? EventAsReturnType<Ret>
+            ? FLUnit extends Unit<any>
+              ? FN extends (src: TypeOfSource<Source>) => any
+                ? EventAsReturnType<ReturnType<FN>>
+                : never
+              : FLBool extends BooleanConstructor
+                ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
+                  ? EventAsReturnType<ReturnType<FNAltArg>>
+                  : never
+                : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
+                  ? FNInf extends (src: FNInfSource) => any
+                    ? EventAsReturnType<ReturnType<FNInf>>
+                    : never
+                  : FN extends (src: TypeOfSource<Source>) => any
+                    ? EventAsReturnType<ReturnType<FN>>
+                    : never
+            // has filter, has fn
+            : SomeFN extends {filter: any; fn: any}
+              ? FLUnit extends Unit<any>
+                ? FN extends (src: TypeOfSource<Source>) => any
+                  ? EventAsReturnType<ReturnType<FN>>
+                  : never
+                : FLBool extends BooleanConstructor
+                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
+                    ? EventAsReturnType<ReturnType<FNAltArg>>
+                    : never
+                  : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
+                    ? FNInf extends (src: FNInfSource) => any
+                      ? EventAsReturnType<ReturnType<FNInf>>
+                      : never
+                    : FN extends (src: TypeOfSource<Source>) => any
+                      ? EventAsReturnType<ReturnType<FN>>
+                      : never
+              // no filter, has fn
+              : SomeFN extends {fn: any}
+                ? FN extends (src: TypeOfSource<Source>) => any
+                  ? Source extends Store<any> | SourceRecord
+                    ? Store<ReturnType<FN>>
+                    : EventAsReturnType<ReturnType<FN>>
+                  : never
+                // has filter, no fn
+                : SomeFN extends {filter: any}
+                  ? FLUnit extends Unit<any>
+                    ? EventAsReturnType<TypeOfSource<Source>>
+                    : FLBool extends BooleanConstructor
+                      ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
+                      : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
+                        ? EventAsReturnType<FNInfSource>
+                        : EventAsReturnType<TypeOfSource<Source>>
+                  // no filter, no fn
                   : Source extends Store<any> | SourceRecord
-                    ? Store<Ret>
-                    : EventAsReturnType<Ret>
-                : void
-              : FilterMode extends 'filter'
-                ? EventAsReturnType<TypeOfSource<Source>>
-                : Source extends Store<any> | SourceRecord
-                  ? Store<TypeOfSource<Source>>
-                  : EventAsReturnType<TypeOfSource<Source>>
+                    ? Store<TypeOfSource<Source>>
+                    : EventAsReturnType<TypeOfSource<Source>>
           : void
       : unknown extends Source
         ? Clock extends Units
+          // has filter, has fn
           ? unknown extends SomeFN
-            ? FilterMode extends 'filter'
-              ? EventAsReturnType<TypeOfClock<Clock>>
-              : Clock extends Store<any>
-                ? Store<TypeOfClock<Clock>>
-                : EventAsReturnType<TypeOfClock<Clock>>
-            : SomeFN extends {fn: any}
-              ? FN extends (clk: TypeOfClock<Clock>) => infer Ret
-                ? FilterMode extends 'filter'
-                  ? EventAsReturnType<Ret>
+            ? FLUnit extends Unit<any>
+              ? FN extends (clk: TypeOfClock<Clock>) => any
+                ? EventAsReturnType<ReturnType<FN>>
+                : never
+              : FLBool extends BooleanConstructor
+                ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
+                  ? EventAsReturnType<ReturnType<FNAltArg>>
+                  : never
+                : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
+                  ? FNInf extends (clk: FNInfClock) => any
+                    ? EventAsReturnType<ReturnType<FNInf>>
+                    : never
+                  : FN extends (clk: TypeOfClock<Clock>) => any
+                    ? EventAsReturnType<ReturnType<FN>>
+                    : never
+            // has filter, has fn
+            : SomeFN extends {filter: any; fn: any}
+              ? FLUnit extends Unit<any>
+                ? FN extends (clk: TypeOfClock<Clock>) => any
+                  ? EventAsReturnType<ReturnType<FN>>
+                  : never
+                : FLBool extends BooleanConstructor
+                  ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
+                    ? EventAsReturnType<ReturnType<FNAltArg>>
+                    : never
+                  : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
+                    ? FNInf extends (src: FNInfClock) => any
+                      ? EventAsReturnType<ReturnType<FNInf>>
+                      : never
+                    : FN extends (clk: TypeOfClock<Clock>) => any
+                      ? EventAsReturnType<ReturnType<FN>>
+                      : never
+              // no filter, has fn
+              : SomeFN extends {fn: any}
+                ? FN extends (clk: TypeOfClock<Clock>) => any
+                  ? Clock extends Store<any>
+                    ? Store<ReturnType<FN>>
+                    : EventAsReturnType<ReturnType<FN>>
+                  : never
+                // has filter, no fn
+                : SomeFN extends {filter: any}
+                  ? FLUnit extends Unit<any>
+                    ? EventAsReturnType<TypeOfClock<Clock>>
+                    : FLBool extends BooleanConstructor
+                      ? EventAsReturnType<NonNullable<TypeOfClock<Clock>>>
+                      : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
+                        ? EventAsReturnType<FNInfClock>
+                        : EventAsReturnType<TypeOfClock<Clock>>
+                  // no filter, no fn
                   : Clock extends Store<any>
-                    ? Store<Ret>
-                    : EventAsReturnType<Ret>
-                : void
-              : FilterMode extends 'filter'
-                ? EventAsReturnType<TypeOfClock<Clock>>
-                : Clock extends Store<any>
-                  ? Store<TypeOfClock<Clock>>
-                  : EventAsReturnType<TypeOfClock<Clock>>
+                    ? Store<TypeOfClock<Clock>>
+                    : EventAsReturnType<TypeOfClock<Clock>>
           : void
         : Clock extends Units
           ? Source extends Unit<any> | SourceRecord
+            // has filter, has fn
             ? unknown extends SomeFN
-              ? FilterMode extends 'filter'
-                ? EventAsReturnType<TypeOfSource<Source>>
-                : Clock extends Store<any>
-                  ? Source extends Store<any> | SourceRecord
-                    ? Store<TypeOfSource<Source>>
-                    : EventAsReturnType<TypeOfSource<Source>>
-                  : EventAsReturnType<TypeOfSource<Source>>
-              : SomeFN extends {fn: any}
-                ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => infer Ret
-                  ? FilterMode extends 'filter'
-                    ? EventAsReturnType<Ret>
-                    : Clock extends Store<any>
-                      ? Source extends Store<any> | SourceRecord
-                        ? Store<Ret>
-                        : EventAsReturnType<Ret>
-                      : EventAsReturnType<Ret>
-                  : void
-                : FilterMode extends 'filter'
-                  ? EventAsReturnType<TypeOfSource<Source>>
-                  : Clock extends Store<any>
-                    ? Source extends Store<any> | SourceRecord
+              ? FLUnit extends Unit<any>
+                ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+                  ? EventAsReturnType<ReturnType<FN>>
+                  : never
+                : FLBool extends BooleanConstructor
+                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                    ? EventAsReturnType<ReturnType<FNAltArg>>
+                    : never
+                  : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
+                    ? FNInf extends (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                      ? EventAsReturnType<ReturnType<FNInf>>
+                      : never
+                    : FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+                      ? EventAsReturnType<ReturnType<FN>>
+                      : never
+              // has filter, has fn
+              : SomeFN extends {filter: any; fn: any}
+                ? FLUnit extends Unit<any>
+                  ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+                    ? EventAsReturnType<ReturnType<FN>>
+                    : never
+                  : FLBool extends BooleanConstructor
+                    ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                      ? EventAsReturnType<ReturnType<FNAltArg>>
+                      : never
+                    : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
+                      ? FNInf extends (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                        ? EventAsReturnType<ReturnType<FNInf>>
+                        : never
+                      : FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+                        ? EventAsReturnType<ReturnType<FN>>
+                        : never
+                // no filter, has fn
+                : SomeFN extends {fn: any}
+                  ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+                    ? [Clock, Source] extends [Store<any>, Store<any> | SourceRecord]
+                      ? Store<ReturnType<FN>>
+                      : EventAsReturnType<ReturnType<FN>>
+                    : never
+                  // has filter, no fn
+                  : SomeFN extends {filter: any}
+                    ? FLUnit extends Unit<any>
+                      ? EventAsReturnType<TypeOfSource<Source>>
+                      : FLBool extends BooleanConstructor
+                        ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
+                        : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
+                          ? EventAsReturnType<FNInfSource>
+                          : EventAsReturnType<TypeOfSource<Source>>
+                    // no filter, no fn
+                    : [Clock, Source] extends [Store<any>, Store<any> | SourceRecord]
                       ? Store<TypeOfSource<Source>>
                       : EventAsReturnType<TypeOfSource<Source>>
-                    : EventAsReturnType<TypeOfSource<Source>>
             : void
           : void
     : Target & ForceTargetInference
@@ -1211,8 +1324,8 @@ export function sample<
         ? SourceNoConf extends Store<any>
           ? Store<TypeOfSource<SourceNoConf>>
           : EventAsReturnType<TypeOfSource<SourceNoConf>>
-        : SampleRet<Target, Source, Clock, FN, SomeFN, InferTarget, unknown extends FLUnit ? 'no filter' : 'filter'>
-  : SampleRet<Target, Source, Clock, FN, SomeFN, InferTarget, unknown extends FLUnit ? 'no filter' : 'filter'>
+        : SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>
+  : SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>
 
 type ClTag = 'clock' | '     '
 type SrTag = 'source' | '      '

@@ -56,16 +56,7 @@ describe('no target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-        Types of property 'watch' are incompatible.
-          Type '(watcher: (payload: AN | null) => any) => Subscription' is not assignable to type '(watcher: (payload: AN) => any) => Subscription'.
-            Types of parameters 'watcher' and 'watcher' are incompatible.
-              Types of parameters 'payload' and 'payload' are incompatible.
-                Type 'AN | null' is not assignable to type 'AN'.
-                  Type 'null' is not assignable to type 'AN'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
+      no errors
       "
     `)
   })
@@ -120,11 +111,7 @@ describe('no target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
+      no errors
       "
     `)
   })
@@ -178,10 +165,7 @@ describe('no target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
+      no errors
       "
     `)
   })
@@ -235,10 +219,7 @@ describe('no target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
-      Type 'Event<AN | null>' is not assignable to type 'Event<AN>'.
+      no errors
       "
     `)
   })

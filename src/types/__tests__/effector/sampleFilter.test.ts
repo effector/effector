@@ -359,13 +359,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User | null>' is not assignable to type 'Event<User>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User | null) => any) => Subscription' is not assignable to type '(watcher: (payload: User) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User | null' is not assignable to type 'User'.
-                    Type 'null' is not assignable to type 'User'.
+        no errors
         "
       `)
     })
@@ -453,13 +447,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User | null>' is not assignable to type 'Event<User>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User | null) => any) => Subscription' is not assignable to type '(watcher: (payload: User) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User | null' is not assignable to type 'User'.
-                    Type 'null' is not assignable to type 'User'.
+        no errors
         "
       `)
     })
