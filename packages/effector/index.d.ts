@@ -1701,7 +1701,7 @@ type SampleFilterTargetDef<
         : [message: {error: 'function should accept data source types'; got: FN}]
     : FLBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
-        ? FNAltArg extends (arg: infer FNArg) => any
+        ? FNAltArg extends (arg?: any, clk?: any) => any
           ? [TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>] extends [Target]
             ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
             : [Target] extends [TypeOfTargetSoft<ReturnType<FNAltArg>, Target, 'fnRet'>]
@@ -1710,7 +1710,7 @@ type SampleFilterTargetDef<
                   error: 'fn result should extend target type'
                   targets: Show<TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>>
                 }]
-          : [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
+          : never
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? Source extends Unit<any> | SourceRecord
