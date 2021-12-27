@@ -386,9 +386,8 @@ describe('sample(config)', () => {
     })
     it('filters falsy values (should pass)', () => {
       type User = {name: string}
-      const trigger = createEvent<
-        User | null | undefined | false | 0 | 0n | ''
-      >()
+      type FalsyValues = null | undefined | false | 0 | 0n | ''
+      const trigger = createEvent<User | FalsyValues>()
       const result: Event<User> = sample({
         source: trigger,
         filter: Boolean,
@@ -400,11 +399,7 @@ describe('sample(config)', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type '(arg: User) => User' is not assignable to type '((src: false | \\"\\" | 0 | 0n | User) => any) & ((arg: User) => User)'.
-          Type '(arg: User) => User' is not assignable to type '(src: false | \\"\\" | 0 | 0n | User) => any'.
-            Types of parameters 'arg' and 'src' are incompatible.
-              Type 'false | \\"\\" | 0 | 0n | User' is not assignable to type 'User'.
-                Type 'boolean' is not assignable to type 'User'.
+        no errors
         "
       `)
     })
