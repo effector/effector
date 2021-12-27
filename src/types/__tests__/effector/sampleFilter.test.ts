@@ -384,6 +384,27 @@ describe('sample(config)', () => {
         "
       `)
     })
+    it('filters falsy values (should pass)', () => {
+      type User = {name: string}
+      const trigger = createEvent<
+        User | null | undefined | false | 0 | 0n | ''
+      >()
+      const result: Event<User> = sample({
+        source: trigger,
+        filter: Boolean,
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'Event<false | \\"\\" | 0 | 0n | User>' is not assignable to type 'Event<User>'.
+          Types of property 'watch' are incompatible.
+            Type '(watcher: (payload: false | \\"\\" | 0 | 0n | User) => any) => Subscription' is not assignable to type '(watcher: (payload: User) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type 'false | \\"\\" | 0 | 0n | User' is not assignable to type 'User'.
+        "
+      `)
+    })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
