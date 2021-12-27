@@ -396,12 +396,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<false | \\"\\" | 0 | 0n | User>' is not assignable to type 'Event<User>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: false | \\"\\" | 0 | 0n | User) => any) => Subscription' is not assignable to type '(watcher: (payload: User) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'false | \\"\\" | 0 | 0n | User' is not assignable to type 'User'.
+        no errors
         "
       `)
     })
