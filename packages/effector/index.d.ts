@@ -109,6 +109,10 @@ export type CompositeName = {
  */
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
 
+/**
+ * Function you can subscribe to.
+ * It can be an intention to change the store, indication of something happening in the application, a command to be executed, aggregated analytics trigger and so on
+ */
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
    (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
@@ -131,6 +135,9 @@ export interface Event<Payload> extends Unit<Payload> {
   shortName: string
 }
 
+/**
+ * Container for (possibly async) side effects
+ */
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (params: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
@@ -228,6 +235,10 @@ interface InternalStore<State> extends Store<State> {
   setState(state: State): void
 }
 
+/**
+ * A way to group and process events, stores and effects. Useful for logging and assigning a reset trigger to many effects.
+ * Domain is notified via onCreateEvent, onCreateStore, onCreateEffect, onCreateDomain methods when events, stores, effects, or nested domains are created
+ */
 export class Domain implements Unit<any> {
   readonly kind: kind
   readonly __: any
@@ -443,6 +454,9 @@ export const step: {
   }): Mov
 }
 
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward<T>(opts: {
   /**
    * By default TS picks "best common type" `T` between `from` and `to` arguments.
@@ -461,35 +475,69 @@ export function forward<T>(opts: {
   from: Unit<T & {}>
   to: Unit<T> | ReadonlyArray<Unit<T>>
 }): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward(opts: {
   from: Unit<any>
   to: ReadonlyArray<Unit<void>>
 }): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
   to: ReadonlyArray<Unit<void>>
 }): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
   to: Unit<void>
 }): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
   to: Unit<To> | ReadonlyArray<Unit<To>>
 }): Subscription
 // Allow `* -> void` forwarding (e.g. `string -> void`).
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ */
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
   to: Unit<To> | ReadonlyArray<Unit<To>>
 }): Subscription
 
-export function merge<T>(events: ReadonlyArray<Unit<T>>): EventAsReturnType<T>
+/**
+ * Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
+ * @param units array of units to be merged
+ */
+export function merge<T>(units: ReadonlyArray<Unit<T>>): EventAsReturnType<T>
+/**
+ * Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
+ * @param units array of units to be merged
+ */
 export function merge<T extends ReadonlyArray<Unit<any>>>(
-  events: T,
+  units: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
+/**
+ * Method for destroying units and graph nodes. Low level tool, usually absent in common applications
+ * @param unit unit to be erased
+ * @param opts optional configuration object
+ */
 export function clearNode(unit: Unit<any> | Node, opts?: {deep?: boolean}): void
+/**
+ * Method to create a new graph node. Low level tool, usually absent in common applications
+ */
 export function createNode(opts?: {
   node?: Array<Cmd | false | void | null>
   parent?: Array<Unit<any> | Node>
@@ -503,7 +551,16 @@ export function createNode(opts?: {
   }
   regional?: boolean
 }): Node
+/**
+ * Allows to directly start computation from given unit or graph node. Low level tool, usually absent in common applications
+ * @param unit unit or graph node to launch
+ * @param payload data to pass to computation
+ */
 export function launch<T>(unit: Unit<T> | Node, payload: T): void
+/**
+ * Allows to directly start computation from given unit or graph node. Low level tool, usually absent in common applications
+ * @param config configuration object
+ */
 export function launch<T>(config: {
   target: Unit<T> | Node
   params: T
@@ -511,6 +568,10 @@ export function launch<T>(config: {
   page?: any
   scope?: Scope
 }): void
+/**
+ * Allows to directly start computation from given unit or graph node. Low level tool, usually absent in common applications
+ * @param config configuration object
+ */
 export function launch(config: {
   target: Array<Unit<any> | Node>
   params: any[]
@@ -519,23 +580,50 @@ export function launch(config: {
   scope?: Scope
 }): void
 
+/**
+ * Method to create an event subscribed to given observable
+ * @param observable object with `subscribe` method, e.g. rxjs stream or redux store
+ */
 export function fromObservable<T>(observable: unknown): Event<T>
-
+/**
+ * Creates an event
+ */
 export function createEvent<E = void>(eventName?: string): Event<E>
+/**
+ * Creates an event
+ */
 export function createEvent<E = void>(config: {
   name?: string
   sid?: string
 }): Event<E>
 
+/**
+ * Creates an effect
+ * @param handler function to handle effect calls
+ */
 export function createEffect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
+/**
+ * Creates an effect
+ * @param handler function to handle effect calls
+ */
 export function createEffect<Params, Done, Fail = Error>(
   handler: (params: Params) => Done | Promise<Done>,
 ): Effect<Params, Done, Fail>
+/**
+ * Creates an effect
+ * @param handler function to handle effect calls
+ */
 export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
+/**
+ * Creates an effect
+ */
 export function createEffect<FN extends Function>(name: string, config: {
   handler: FN
   sid?: string
 }): EffectByHandler<FN, Error>
+/**
+ * Creates an effect
+ */
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
@@ -543,17 +631,28 @@ export function createEffect<Params, Done, Fail = Error>(
     sid?: string
   },
 ): Effect<Params, Done, Fail>
+/**
+ * Creates an effect
+ */
 export function createEffect<FN extends Function>(config: {
   name?: string
   handler: FN
   sid?: string
 }): EffectByHandler<FN, Error>
+/**
+ * Creates an effect
+ */
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
   sid?: string
 }): Effect<Params, Done, Fail>
 
+/**
+ * Creates a store
+ * @param defaultState default state
+ * @param config optional configuration object
+ */
 export function createStore<State>(
   defaultState: State,
   config?: {
@@ -572,6 +671,12 @@ export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 
+/**
+ * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
+ * Works like pattern matching for payload values and external stores
+ * @param source unit which will trigger computation in split
+ * @param match object with matching functions which allows to trigger one of created events
+ */
 export function split<
   S,
   Match extends {[name: string]: (payload: S) => boolean}
@@ -632,6 +737,10 @@ type SplitType<
     caseType: CaseTypeReader<Cases, keyof Cases>
   }
 
+/**
+ * Chooses one of cases by given conditions. It "splits" source unit into several targets, which fires when payload matches their conditions.
+ * Works like pattern matching for payload values and external units
+ */
 export function split<
   Cases,
   Source,
@@ -708,6 +817,11 @@ type CaseValue<Cases, Match, K extends keyof Match> =
   ? CaseTypeReader<Cases, K>
   : never
 
+/**
+ * Shorthand for creating events attached to store by providing object with reducers for them
+ * @param store target store
+ * @param api object with reducers
+ */
 export function createApi<
   S,
   Api extends {[name: string]: ((store: S, e: any) => (S | void))}
@@ -724,15 +838,39 @@ export function createApi<
     : any
 }
 
+/**
+ * Creates a Store out of successful results of Effect.
+ * It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
+ * @param effect source effect
+ * @param defaultState initial state of new store
+ */
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
+/**
+ * Creates a Store out of successful results of Effect.
+ * It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
+ * @param effect source effect
+ * @param defaultState initial state of new store
+ */
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: null,
 ): Store<Done | null>
+/**
+ * Creates a Store from Event.
+ * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
+ * @param event source event
+ * @param defaultState initial state of new store
+ */
 export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+/**
+ * Creates a Store from Event.
+ * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
+ * @param event source event
+ * @param defaultState initial state of new store
+ */
 export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
@@ -742,6 +880,9 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
     : Store<State[K]>
 }
 
+/**
+ * Creates a domain
+ */
 export function createDomain(domainName?: string): Domain
 
 type WhichTypeKind =
@@ -1199,6 +1340,25 @@ type SampleRet<
           : void
     : Target & ForceTargetInference
 
+/**
+ * Represents a step in a business logic workflow. It tells an application when it should act, which data it needs,
+ * how it should be transformed and what should happens next
+ * 
+ * ```js
+ * sample({
+ *   // when clickBuy event is triggered
+ *   clock: clickBuy,
+ *   // read state of $shoppingCart store
+ *   source: $shoppingCart,
+ *   // and if there at least one item in cart
+ *   filter: (cart) => cart.items.length > 0, 
+ *   // then select items from cart
+ *   fn: cart => cart.items,
+ *   // and pass results to buyItemsFx effect and clearCart event
+ *   target: [buyItemsFx, clearCart]
+ * })
+ * ```
+ */
 export function sample<
   Target,
   Source,
@@ -2041,6 +2201,10 @@ type GetGuardClock<C, F> = F extends BooleanConstructor
 // ---------------------------------------
 /* user-defined typeguard: with target */
 // SСT
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
@@ -2054,6 +2218,10 @@ export function guard<A, X extends GetSource<S>, B = any,
   greedy?: boolean
 }): T
 // ST
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
   T extends Target = Target
@@ -2065,6 +2233,10 @@ export function guard<A, X extends GetSource<S>,
   greedy?: boolean
 }): T
 // СT
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>,
   T extends Target = Target
@@ -2078,6 +2250,10 @@ export function guard<B, X extends GetClock<C>,
 
 /* user-defined typeguard: without target */
 // SC
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>
@@ -2089,6 +2265,10 @@ export function guard<A, X extends GetSource<S>, B = any,
   greedy?: boolean
 }): GuardResult<X>
 // S
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
 >(config: {
@@ -2098,6 +2278,10 @@ export function guard<A, X extends GetSource<S>,
   greedy?: boolean
 }): GuardResult<X>
 // C
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>
 >(config: {
@@ -2110,6 +2294,10 @@ export function guard<B, X extends GetClock<C>,
 // ---------------------------------------
 /* boolean fn or store: with target */
 // SСT
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
@@ -2124,6 +2312,10 @@ export function guard<A = any, B = any,
   greedy?: boolean
 }): T
 // ST
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
   F extends GuardFilterS<S> = GuardFilterS<S>,
@@ -2136,6 +2328,10 @@ export function guard<A = any,
   greedy?: boolean
 }): T
 // СT
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
   F extends GuardFilterC<C> = GuardFilterC<C>,
@@ -2150,6 +2346,10 @@ export function guard<B = any,
 
 /* boolean fn or store: without target */
 // SC (units: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
   clock: Unit<B>,
@@ -2158,6 +2358,10 @@ export function guard<A = any, B = any>(config: {
   greedy?: boolean
 }): GuardResult<NonFalsy<A>>
 // SC (units: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
   clock: Unit<B>,
@@ -2166,6 +2370,10 @@ export function guard<A = any, B = any>(config: {
   greedy?: boolean
 }): GuardResult<A>
 // SC
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
@@ -2178,6 +2386,10 @@ export function guard<A = any, B = any,
   greedy?: boolean
 }): GuardResult<GetGuardSource<S, F>>
 // S (unit: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any>(config: {
   source: Unit<A>,
   filter: BooleanConstructor,
@@ -2185,6 +2397,10 @@ export function guard<A = any>(config: {
   greedy?: boolean
 }): GuardResult<NonFalsy<A>>
 // S (unit - boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any>(config: {
   source: Unit<A>,
   filter: ((source: A) => boolean) | Store<boolean>,
@@ -2192,6 +2408,10 @@ export function guard<A = any>(config: {
   greedy?: boolean
 }): GuardResult<A>
 // S
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
   F extends GuardFilterS<S> = GuardFilterS<S>,
@@ -2202,6 +2422,10 @@ export function guard<A = any,
   greedy?: boolean
 }): GuardResult<GetGuardSource<S, F>>
 // C (unit: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<B = any>(config: {
   clock: Unit<B>,
   filter: BooleanConstructor,
@@ -2209,6 +2433,10 @@ export function guard<B = any>(config: {
   greedy?: boolean
 }): GuardResult<NonFalsy<B>>
 // C (unit: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<B = any>(config: {
   clock: Unit<B>,
   filter: ((clock: B) => boolean) | Store<boolean>,
@@ -2216,6 +2444,10 @@ export function guard<B = any>(config: {
   greedy?: boolean
 }): GuardResult<B>
 // C
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
   F extends GuardFilterC<C> = GuardFilterC<C>,
@@ -2232,6 +2464,10 @@ export function guard<B = any,
 
 /* user-defined typeguard: with target */
 // SСT
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
@@ -2244,6 +2480,10 @@ export function guard<A, X extends GetSource<S>, B = any,
   greedy?: boolean
 }): T
 // ST
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
   T extends Target = Target
@@ -2256,6 +2496,10 @@ export function guard<A, X extends GetSource<S>,
 
 /* user-defined typeguard: without target */
 // SC
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>
@@ -2266,6 +2510,10 @@ export function guard<A, X extends GetSource<S>, B = any,
   greedy?: boolean
 }): GuardResult<X>
 // S
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
 >(source: S, config: {
@@ -2277,6 +2525,10 @@ export function guard<A, X extends GetSource<S>,
 // ---------------------------------------
 /* boolean fn or store: with target */
 // SСT
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
@@ -2290,6 +2542,10 @@ export function guard<A = any, B = any,
   greedy?: boolean
 }): T
 // ST
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
   F extends GuardFilterS<S> = GuardFilterS<S>,
@@ -2303,6 +2559,10 @@ export function guard<A = any,
 
 /* boolean fn or store: without target */
 // SC (units: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
   filter: BooleanConstructor,
@@ -2310,6 +2570,10 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
   greedy?: boolean
 }): GuardResult<NonFalsy<A>>
 // SC (units: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
   filter: ((source: A, clock: B) => boolean) | Store<boolean>,
@@ -2317,6 +2581,10 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
   greedy?: boolean
 }): GuardResult<A>
 // SC
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
   C extends Clock<B> = Clock<B>,
@@ -2328,18 +2596,30 @@ export function guard<A = any, B = any,
   greedy?: boolean
 }): GuardResult<GetGuardSource<S, F>>
 // S (unit: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: BooleanConstructor,
   name?: string,
   greedy?: boolean
 }): GuardResult<NonFalsy<A>>
 // S (unit: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: ((source: A) => boolean) | Store<boolean>,
   name?: string,
   greedy?: boolean
 }): GuardResult<A>
 // S
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
   F extends GuardFilterS<S> = GuardFilterS<S>,
@@ -2350,6 +2630,10 @@ export function guard<A = any,
 }): GuardResult<GetGuardSource<S, F>>
 
 // guard's last overload for `guard(source, config)`
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<
   S extends Source<unknown>,
   C extends Clock<unknown>,
@@ -2372,6 +2656,10 @@ export function guard<
 }): T
 
 // guard's last overload for `guard(config)`
+/**
+ * Method for conditional event routing.
+ * > Superseded by `sample({clock, source, filter, fn, target})`
+ */
 export function guard<
   S extends Source<unknown>,
   C extends Clock<unknown>,
@@ -2404,6 +2692,10 @@ export function guard<
 type StoreShape = Store<any> | Combinable
 type GetShapeValue<T> = T extends Store<infer S> ? S : GetCombinedValue<T>
 
+/**
+ * Method for creating state-dependent effect and transforming effect payloads
+ * @returns new effect
+ */
 export function attach<
   Params,
   States extends StoreShape,
@@ -2414,6 +2706,10 @@ export function attach<
   mapParams: (params: Params, states: GetShapeValue<States>) => NoInfer<EffectParams<FX>>
   name?: string
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
+/**
+ * Method for transforming effect payloads
+ * @returns new effect
+ */
 export function attach<FN extends ((params: any) => any), FX extends Effect<any, any, any>>(config: {
   effect: FX
   mapParams: FN extends (...args: any[]) => NoInfer<EffectParams<FX>>
@@ -2431,11 +2727,19 @@ export function attach<FN extends ((params: any) => any), FX extends Effect<any,
     EffectError<FX>
   >
   : never
+/**
+ * Method for transforming effect payloads
+ * @returns new effect
+ */
 export function attach<Params, FX extends Effect<any, any, any>>(config: {
   effect: FX
   mapParams: (params: Params) => NoInfer<EffectParams<FX>>
   name?: string
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
+/**
+ * Method for passing state values to effects
+ * @returns new effect
+ */
 export function attach<
   States extends StoreShape,
   FX extends Effect<GetShapeValue<States>, any, any>
@@ -2444,6 +2748,11 @@ export function attach<
   effect: FX
   name?: string
 }): Effect<void, EffectResult<FX>, EffectError<FX>>
+/**
+ * Creates state-dependent effect with provided function handler.
+ * Allows the one to omit intermediate effects and declare effect handler right next to data source
+ * @returns new effect
+ */
 export function attach<
   States extends StoreShape,
   FX extends (state: GetShapeValue<States>, params: any) => any
@@ -2454,11 +2763,19 @@ export function attach<
 }): FX extends (source: any, ...args: infer Args) => infer Done
   ? Effect<OptionalParams<Args>, AsyncResult<Done>>
   : never
+/**
+ * Creates independent instance of given effect. Used to add subscribers to effect call in a particular business case
+ * @returns new effect linked to given one
+ */
 export function attach<
   FX extends Effect<any, any, any>,
 >(config: {
   effect: FX
 }): Effect<EffectParams<FX>, EffectResult<FX>, EffectError<FX>>
+/**
+ * Method for creating state-dependent effect and transforming effect payload
+ * @returns new effect
+ */
 export function attach<
   States extends StoreShape,
   FX extends Effect<any, any, any>,
@@ -2482,41 +2799,100 @@ type CombineState<State> = State[keyof State] extends Store<any>
         : Store<State[K]>)
 }
 
+/**
+ * Bind units and links between them created inside `cb` callback to unit or graph node to erase during `clearNode` call
+ * Low level tool, usually absent in common applications
+ * @param unit parent unit or graph node
+ * @param cb callback assumed to create some units
+ */
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
+
+/**
+ * Convert given stores to store with array which values updated upon changes in given ones
+ * @returns derived store
+ */
 export function combine<T extends Store<any>>(
   store: T,
 ): T extends Store<infer R> ? Store<[R]> : never
+/**
+ * Convert array of stores to store with array which values updated upon changes in given ones
+ * @param tuple array of stores
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<State extends Tuple>(
-  shape: State,
+  tuple: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
+/**
+ * Convert object with stores to object store which fields updated upon changes in given ones
+ * @param shape object with stores
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<State>(shape: CombineState<State>): Store<State>
+/**
+ * Convert object with stores to object store which fields updated upon changes in given ones
+ * @param shape object with stores
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<State>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
-export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
+/**
+ * Creates derived store from given one, transforming value using the function
+ * @param source source store
+ * @param fn transformer function, accepts a store value
+ * @returns derived store updated upon changes in given one
+ */
+export function combine<A, R>(source: Store<A>, fn: (source: A) => R): Store<R>
+/**
+ * Convert array of stores into derived store, transforming values using the function
+ * @param tuple array of stores
+ * @param fn transformer function, accepts an array of values
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<State extends Tuple, R>(
-  shape: State,
+  tuple: State,
   fn: (
-    shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
+    tuple: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
   ) => R,
 ): Store<R>
+/**
+ * Convert object with stores into derived store, transforming values using the function
+ * @param shape object with stores
+ * @param fn transformer function, accepts object with values
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<State, R>(
   shape: State,
   fn: (
     shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
   ) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, R>(
   a: Store<A>,
   b: Store<B>,
   fn: (a: A, b: B) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, R>(
   a: Store<A>,
   b: Store<B>,
   c: Store<C>,
   fn: (a: A, b: B, c: C) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2524,6 +2900,11 @@ export function combine<A, B, C, D, R>(
   d: Store<D>,
   fn: (a: A, b: B, c: C, d: D) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2532,6 +2913,11 @@ export function combine<A, B, C, D, E, R>(
   e: Store<E>,
   fn: (a: A, b: B, c: C, d: D, e: E) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, F, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2541,6 +2927,11 @@ export function combine<A, B, C, D, E, F, R>(
   f: Store<F>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, F, G, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2551,6 +2942,14 @@ export function combine<A, B, C, D, E, F, G, R>(
   g: Store<G>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * 
+ * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
+ * 
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, F, G, H, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2562,6 +2961,14 @@ export function combine<A, B, C, D, E, F, G, H, R>(
   h: Store<H>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * 
+ * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
+ * 
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, F, G, H, I, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2574,6 +2981,14 @@ export function combine<A, B, C, D, E, F, G, H, I, R>(
   i: Store<I>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * 
+ * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
+ * 
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, F, G, H, I, J, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2587,6 +3002,14 @@ export function combine<A, B, C, D, E, F, G, H, I, J, R>(
   j: Store<J>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
 ): Store<R>
+/**
+ * Convert given stores into derived store, transforming values using the function
+ * 
+ * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
+ * 
+ * @param fn transformer function, accepts store values in separate arguments
+ * @returns derived store updated upon changes in given ones
+ */
 export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
   a: Store<A>,
   b: Store<B>,
@@ -2601,10 +3024,17 @@ export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
   k: Store<K>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
 ): Store<R>
+/**
+ * Convert given stores to store with array which values updated upon changes in given ones
+ * @returns derived store
+ */
 export function combine<T extends Tuple<Store<any>>>(
   ...stores: T
 ): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
 
+/**
+ * Fully isolated instance of application. The primary purpose of scope includes SSR and testing
+ */
 export interface Scope extends Unit<any> {
   getState<T>(store: Store<T>): T
 }
@@ -2612,28 +3042,42 @@ export interface Scope extends Unit<any> {
 export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: string]: any}
 
 /**
-hydrate state on client
-
-const root = createDomain()
-hydrate(root, {
-  values: window.__initialState__
-})
-
-*/
+ * Fill stores with given values in provided scope or domain
+ */
 export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
 
 /**
-serialize state on server
-*/
+ * Serialize store values from given scope
+ * @returns object with saved values
+ */
 export function serialize(
   scope: Scope,
   options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
 ): {[sid: string]: any}
 
-/** bind event to scope from .watch call */
+/** 
+ * Bind event to a scope to be called lated.
+ * 
+ * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
+ * @param unit event to bind
+ * @returns function which will trigger an event in a given scope
+ */
 export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T) => void
+/** 
+ * Bind effect to a scope to be called lated.
+ * 
+ * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
+ * @param unit effect to bind
+ * @returns function which will trigger an effect in a given scope and returns a promise with a result
+ */
 export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope: Scope}): (params: P) => Promise<D>
 
+/**
+ * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * @param domain optional root domain
+ * @param config optional configuration object with initial store values and effect handlers
+ * @returns new scope
+ */
 export function fork(
   domain: Domain,
   config?: {
@@ -2641,6 +3085,11 @@ export function fork(
     handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any>, Function]> | {[sid: string]: Function}
   },
 ): Scope
+/**
+ * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * @param config optional configuration object with initial store values and effect handlers
+ * @returns new scope
+ */
 export function fork(
   config?: {
     values?: ValueMap
@@ -2648,19 +3097,38 @@ export function fork(
   },
 ): Scope
 
-/** run effect or event in scope and wait for all triggered effects */
+/**
+ * Run effect in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit effect to run
+ * @returns promise with status object for given effect, will resolve when there will be no pending effects in given scope
+ */
 export function allSettled<FX extends Effect<any, any, any>>(
   unit: FX,
   config: {scope: Scope; params: EffectParams<FX>},
 ): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
+/**
+ * Run effect withot arguments in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit effect to run
+ * @returns promise with status object for given effect, will resolve when there will be no pending effects in given scope
+ */
 export function allSettled<FX extends Effect<void, any, any>>(
   unit: FX,
   config: {scope: Scope},
 ): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
+/**
+ * Run event in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit event to run
+ * @returns void promise, will resolve when there will be no pending effects in given scope
+ */
 export function allSettled<T>(
   unit: Unit<T>,
   config: {scope: Scope; params: T},
 ): Promise<void>
+/**
+ * Run event withot arguments in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit event to run
+ * @returns void promise, will resolve when there will be no pending effects in given scope
+ */
 export function allSettled(
   unit: Unit<void>,
   config: {scope: Scope},
