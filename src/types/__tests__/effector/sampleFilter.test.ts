@@ -393,10 +393,18 @@ describe('sample(config)', () => {
         source: trigger,
         filter: Boolean,
       })
-
+      const resultFn: Event<User> = sample({
+        source: trigger,
+        filter: Boolean,
+        fn: (arg: User) => arg,
+      })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Type '(arg: User) => User' is not assignable to type '((src: false | \\"\\" | 0 | 0n | User) => any) & ((arg: User) => User)'.
+          Type '(arg: User) => User' is not assignable to type '(src: false | \\"\\" | 0 | 0n | User) => any'.
+            Types of parameters 'arg' and 'src' are incompatible.
+              Type 'false | \\"\\" | 0 | 0n | User' is not assignable to type 'User'.
+                Type 'boolean' is not assignable to type 'User'.
         "
       `)
     })
