@@ -1174,7 +1174,7 @@ type SampleRet<
                 ? EventAsReturnType<ReturnType<FN>>
                 : never
               : FLBool extends BooleanConstructor
-                ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
+                ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
                   ? EventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
@@ -1191,7 +1191,7 @@ type SampleRet<
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
                 : FLBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
+                  ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
@@ -1213,7 +1213,7 @@ type SampleRet<
                   ? FLUnit extends Unit<any>
                     ? EventAsReturnType<TypeOfSource<Source>>
                     : FLBool extends BooleanConstructor
-                      ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
+                      ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
                       : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
                         ? EventAsReturnType<FNInfSource>
                         : EventAsReturnType<TypeOfSource<Source>>
@@ -1231,7 +1231,7 @@ type SampleRet<
                 ? EventAsReturnType<ReturnType<FN>>
                 : never
               : FLBool extends BooleanConstructor
-                ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
+                ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
                   ? EventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
@@ -1248,7 +1248,7 @@ type SampleRet<
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
                 : FLBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
+                  ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
@@ -1270,7 +1270,7 @@ type SampleRet<
                   ? FLUnit extends Unit<any>
                     ? EventAsReturnType<TypeOfClock<Clock>>
                     : FLBool extends BooleanConstructor
-                      ? EventAsReturnType<NonNullable<TypeOfClock<Clock>>>
+                      ? EventAsReturnType<NonFalsy<TypeOfClock<Clock>>>
                       : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
                         ? EventAsReturnType<FNInfClock>
                         : EventAsReturnType<TypeOfClock<Clock>>
@@ -1288,7 +1288,7 @@ type SampleRet<
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
                 : FLBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                  ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1305,7 +1305,7 @@ type SampleRet<
                     ? EventAsReturnType<ReturnType<FN>>
                     : never
                   : FLBool extends BooleanConstructor
-                    ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                    ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
                       ? EventAsReturnType<ReturnType<FNAltArg>>
                       : never
                     : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1327,7 +1327,7 @@ type SampleRet<
                     ? FLUnit extends Unit<any>
                       ? EventAsReturnType<TypeOfSource<Source>>
                       : FLBool extends BooleanConstructor
-                        ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
+                        ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
                         : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
                           ? EventAsReturnType<FNInfSource>
                           : EventAsReturnType<TypeOfSource<Source>>
@@ -1342,7 +1342,7 @@ type SampleRet<
 /**
  * Represents a step in a business logic workflow. It tells an application when it should act, which data it needs,
  * how it should be transformed and what should happens next
- * 
+ *
  * ```js
  * sample({
  *   // when clickBuy event is triggered
@@ -1350,7 +1350,7 @@ type SampleRet<
  *   // read state of $shoppingCart store
  *   source: $shoppingCart,
  *   // and if there at least one item in cart
- *   filter: (cart) => cart.items.length > 0, 
+ *   filter: (cart) => cart.items.length > 0,
  *   // then select items from cart
  *   fn: cart => cart.items,
  *   // and pass results to buyItemsFx effect and clearCart event
@@ -1412,20 +1412,20 @@ export function sample<
       ? (clk: FNInfClock) => any
       : never
   ),
-  FNNonNull extends (
+  FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
-    ? NonNullable<TypeOfSource<Source>>
+    ? NonFalsy<TypeOfSource<Source>>
     : Clock extends Units
-      ? NonNullable<TypeOfClock<Clock>>
+      ? NonFalsy<TypeOfClock<Clock>>
       : never
   ),
   FNAltArg extends (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
-      ? (src: FNNonNull, clk: TypeOfClock<Clock>) => any
-      : (src: FNNonNull) => any
+      ? (src: FNNonFalsy, clk: TypeOfClock<Clock>) => any
+      : (src: FNNonFalsy) => any
     : Clock extends Units
-      ? (clk: FNNonNull) => any
+      ? (clk: FNNonFalsy) => any
       : never
   ),
   SomeFN,
@@ -1606,7 +1606,7 @@ type TargetConfigCheck<
   SomeFN
 > = // mode with fn
     Mode extends Mode_Fn_Trg
-    // there should be an explicit conditional selection 
+    // there should be an explicit conditional selection
     // of generic variable for function type
     // this could be a reason for a few unfixed implicit any
   ? FN extends DataSourceFunction<Source, Clock>
@@ -1714,25 +1714,25 @@ type SampleFilterTargetDef<
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? Source extends Unit<any> | SourceRecord
-          ? [TypeOfTarget<NonNullable<TypeOfSource<Source>>, Target, 'src'>] extends [Target]
+          ? [TypeOfTarget<NonFalsy<TypeOfSource<Source>>, Target, 'src'>] extends [Target]
             ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<NonNullable<TypeOfSource<Source>>, Target, 'src'>]
+            : [Target] extends [TypeOfTargetSoft<NonFalsy<TypeOfSource<Source>>, Target, 'src'>]
               ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
               : [message: {
                   error: 'source should extend target type'
-                  targets: Show<TypeOfTarget<NonNullable<TypeOfSource<Source>>, Target, 'src'>>
+                  targets: Show<TypeOfTarget<NonFalsy<TypeOfSource<Source>>, Target, 'src'>>
                 }]
           : [message: {error: 'source should be unit or object with stores'; got: Source}]
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
         ? Clock extends Units
-          ? [TypeOfTarget<NonNullable<TypeOfClock<Clock>>, Target, 'clk'>] extends [Target]
+          ? [TypeOfTarget<NonFalsy<TypeOfClock<Clock>>, Target, 'clk'>] extends [Target]
             ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<NonNullable<TypeOfClock<Clock>>, Target, 'clk'>]
+            : [Target] extends [TypeOfTargetSoft<NonFalsy<TypeOfClock<Clock>>, Target, 'clk'>]
               ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
               : [message: {
                   error: 'clock should extend target type'
-                  targets: Show<TypeOfTarget<NonNullable<TypeOfClock<Clock>>, Target, 'clk'>>
+                  targets: Show<TypeOfTarget<NonFalsy<TypeOfClock<Clock>>, Target, 'clk'>>
                 }]
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : never
@@ -2929,9 +2929,9 @@ export function combine<A, B, C, D, E, F, G, R>(
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
- * 
+ *
  * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
- * 
+ *
  * @param fn transformer function, accepts store values in separate arguments
  * @returns derived store updated upon changes in given ones
  */
@@ -2948,9 +2948,9 @@ export function combine<A, B, C, D, E, F, G, H, R>(
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
- * 
+ *
  * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
- * 
+ *
  * @param fn transformer function, accepts store values in separate arguments
  * @returns derived store updated upon changes in given ones
  */
@@ -2968,9 +2968,9 @@ export function combine<A, B, C, D, E, F, G, H, I, R>(
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
- * 
+ *
  * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
- * 
+ *
  * @param fn transformer function, accepts store values in separate arguments
  * @returns derived store updated upon changes in given ones
  */
@@ -2989,9 +2989,9 @@ export function combine<A, B, C, D, E, F, G, H, I, J, R>(
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
- * 
+ *
  * > Consider using `combine(arrayOfStores, arrayOfValues => ...)` instead
- * 
+ *
  * @param fn transformer function, accepts store values in separate arguments
  * @returns derived store updated upon changes in given ones
  */
@@ -3040,17 +3040,17 @@ export function serialize(
   options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
 ): {[sid: string]: any}
 
-/** 
+/**
  * Bind event to a scope to be called lated.
- * 
+ *
  * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
  * @param unit event to bind
  * @returns function which will trigger an event in a given scope
  */
 export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T) => void
-/** 
+/**
  * Bind effect to a scope to be called lated.
- * 
+ *
  * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
  * @param unit effect to bind
  * @returns function which will trigger an effect in a given scope and returns a promise with a result

@@ -384,6 +384,25 @@ describe('sample(config)', () => {
         "
       `)
     })
+    it('filters falsy values (should pass)', () => {
+      type User = {name: string}
+      type FalsyValues = null | undefined | false | 0 | 0n | ''
+      const trigger = createEvent<User | FalsyValues>()
+      const result: Event<User> = sample({
+        source: trigger,
+        filter: Boolean,
+      })
+      const resultFn: Event<User> = sample({
+        source: trigger,
+        filter: Boolean,
+        fn: (arg: User) => arg,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
