@@ -21,6 +21,7 @@
       "effector-react": ["packages/effector-react/index.d.ts"],
       "forest/server": ["packages/forest/server.d.ts"],
       "forest": ["packages/forest/index.d.ts"],
+      "effector-vue/ssr": ["packages/effector-vue/ssr.d.ts"],
       "effector-vue/composition": ["packages/effector-vue/composition.d.ts"],
       "effector-vue": ["packages/effector-vue/index.d.ts"]
     }
