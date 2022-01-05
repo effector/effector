@@ -123,6 +123,11 @@ const sidebar = {
         },
         {
           type: 'category',
+          label: 'SSR',
+          items: ['api/effector-vue/useEvent', 'api/effector-vue/VueSSRPlugin'],
+        },
+        {
+          type: 'category',
           label: 'Hooks',
           items: ['api/effector-vue/useStore', 'api/effector-vue/useVModel'],
         },
