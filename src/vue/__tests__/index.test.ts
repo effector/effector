@@ -316,7 +316,7 @@ test('change value in array from UI via v-model', async () => {
     localVue
   })
   const checkbox = wrapper.find('[data-test="checkbox"]')
-  console.log(checkbox);
+
   await checkbox.setChecked()
 
   expect($users.getState()[0].selected).toBeTruthy()
