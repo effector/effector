@@ -1610,38 +1610,32 @@ type TargetConfigCheck<
     // of generic variable for function type
     // this could be a reason for a few unfixed implicit any
   ? FN extends DataSourceFunction<Source, Clock>
-    ? [TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>] extends [Target]
-      ? [config: Config & SomeFN]
-      : [Target] extends [TypeOfTargetSoft<ReturnType<FN>, Target, 'fnRet'>]
-        ? [config: Config & SomeFN]
-        : [message: {
-            error: 'fn result should extend target type'
-            targets: Show<TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>>
-          }]
+    ? TargetOrError<
+        ReturnType<FN>,
+        'fnRet',
+        Target,
+        Config & SomeFN
+      >
     : [message: {error: 'function should accept data source types'; got: FN}]
     // mode with source only or with both clock and source
   : Mode extends Mode_Src
   ? Source extends Unit<any> | SourceRecord
-    ? [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
-      ? [config: Config & SomeFN]
-      : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
-        ? [config: Config & SomeFN]
-        : [message: {
-            error: 'source should extend target type'
-            targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
-          }]
+    ? TargetOrError<
+        TypeOfSource<Source>,
+        'src',
+        Target,
+        Config & SomeFN
+      >
     : [message: {error: 'source should be unit or object with stores'; got: Source}]
     // mode with clock only
   : Mode extends Mode_Clk_NoSrc
   ? Clock extends Units
-    ? [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
-      ? [config: Config & SomeFN]
-      : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
-        ? [config: Config & SomeFN]
-        : [message: {
-            error: 'clock should extend target type'
-            targets: Show<TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>>
-          }]
+    ? TargetOrError<
+        TypeOfClock<Clock>,
+        'clk',
+        Target,
+        Config & SomeFN
+      >
     : [message: {error: 'clock should be unit or array of units'; got: Clock}]
   : never
 
@@ -1702,38 +1696,32 @@ type SampleFilterTargetDef<
     : FLBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
         ? FNAltArg extends (arg?: any, clk?: any) => any
-          ? [TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>] extends [Target]
-            ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<ReturnType<FNAltArg>, Target, 'fnRet'>]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN]
-              : [message: {
-                  error: 'fn result should extend target type'
-                  targets: Show<TypeOfTarget<ReturnType<FNAltArg>, Target, 'fnRet'>>
-                }]
+          ? TargetOrError<
+              ReturnType<FNAltArg>,
+              'fnRet',
+              Target,
+              TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN
+            >
           : never
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? Source extends Unit<any> | SourceRecord
-          ? [TypeOfTarget<NonFalsy<TypeOfSource<Source>>, Target, 'src'>] extends [Target]
-            ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<NonFalsy<TypeOfSource<Source>>, Target, 'src'>]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
-              : [message: {
-                  error: 'source should extend target type'
-                  targets: Show<TypeOfTarget<NonFalsy<TypeOfSource<Source>>, Target, 'src'>>
-                }]
+          ? TargetOrError<
+              NonFalsy<TypeOfSource<Source>>,
+              'src',
+              Target,
+              TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN
+            >
           : [message: {error: 'source should be unit or object with stores'; got: Source}]
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
         ? Clock extends Units
-          ? [TypeOfTarget<NonFalsy<TypeOfClock<Clock>>, Target, 'clk'>] extends [Target]
-            ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<NonFalsy<TypeOfClock<Clock>>, Target, 'clk'>]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN]
-              : [message: {
-                  error: 'clock should extend target type'
-                  targets: Show<TypeOfTarget<NonFalsy<TypeOfClock<Clock>>, Target, 'clk'>>
-                }]
+          ? TargetOrError<
+              NonFalsy<TypeOfClock<Clock>>,
+              'clk',
+              Target,
+              TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN
+            >
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : never
     : FilterFun extends (
@@ -1756,70 +1744,48 @@ type SampleFilterTargetDef<
               ? (clk: FNInfClock) => any
               : any
           )
-          ? [TypeOfTarget<ReturnType<FNInf>, Target, 'fnRet'>] extends [Target]
-            ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun & (
-              Source extends Unit<any> | SourceRecord
-              ? Clock extends Units
-                ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
-                : (src: TypeOfSource<Source>) => src is FNInfSource
-              : Clock extends Units
-                ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
-                : never
-            ), FNInf & (
-              Source extends Unit<any> | SourceRecord
-              ? Clock extends Units
-                ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                : (src: FNInfSource) => any
-              : Clock extends Units
-                ? (clk: FNInfClock) => any
-                : any
-            )> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<ReturnType<FNInf>, Target, 'fnRet'>]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun & (
-                  Source extends Unit<any> | SourceRecord
-                  ? Clock extends Units
-                    ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
-                    : (src: TypeOfSource<Source>) => src is FNInfSource
-                  : Clock extends Units
-                    ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
-                    : never
-                ), FNInf & (
-                  Source extends Unit<any> | SourceRecord
-                  ? Clock extends Units
-                    ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                    : (src: FNInfSource) => any
-                  : Clock extends Units
-                    ? (clk: FNInfClock) => any
-                    : any
-                )> & SomeFN]
-              : [message: {
-                  error: 'fn result should extend target type'
-                  targets: Show<TypeOfTarget<ReturnType<FNInf>, Target, 'fnRet'>>
-                }]
+          ? TargetOrError<
+              ReturnType<FNInf>,
+              'fnRet',
+              Target,
+              TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun & (
+                Source extends Unit<any> | SourceRecord
+                ? Clock extends Units
+                  ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
+                  : (src: TypeOfSource<Source>) => src is FNInfSource
+                : Clock extends Units
+                  ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
+                  : never
+              ), FNInf & (
+                Source extends Unit<any> | SourceRecord
+                ? Clock extends Units
+                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                  : (src: FNInfSource) => any
+                : Clock extends Units
+                  ? (clk: FNInfClock) => any
+                  : any
+              )> & SomeFN
+            >
           : [message: {error: 'function should accept data source types'; got: FNInf}]
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? Source extends Unit<any> | SourceRecord
-          ? [TypeOfTarget<InferredType<Source, Clock, FilterFun>, Target, 'src'>] extends [Target]
-            ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<InferredType<Source, Clock, FilterFun>, Target, 'src'>]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-              : [message: {
-                  error: 'source should extend target type'
-                  targets: Show<TypeOfTarget<InferredType<Source, Clock, FilterFun>, Target, 'src'>>
-                }]
+          ? TargetOrError<
+              InferredType<Source, Clock, FilterFun>,
+              'src',
+              Target,
+              TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
+            >
           : [message: {error: 'source should be unit or object with stores'; got: Source}]
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
         ? Clock extends Units
-          ? [TypeOfTarget<InferredType<Source, Clock, FilterFun>, Target, 'clk'>] extends [Target]
-            ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-            : [Target] extends [TypeOfTargetSoft<InferredType<Source, Clock, FilterFun>, Target, 'clk'>]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-              : [message: {
-                  error: 'clock should extend target type'
-                  targets: Show<TypeOfTarget<InferredType<Source, Clock, FilterFun>, Target, 'clk'>>
-                }]
+          ? TargetOrError<
+              InferredType<Source, Clock, FilterFun>,
+              'clk',
+              Target,
+              TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
+            >
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : never
     : FilterFun extends (
@@ -1833,38 +1799,32 @@ type SampleFilterTargetDef<
         // mode with fn
         ? Mode extends Mode_Flt_Fn_Trg
           ? FN extends DataSourceFunction<Source, Clock>
-            ? [TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>] extends [Target]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
-              : [Target] extends [TypeOfTargetSoft<ReturnType<FN>, Target, 'fnRet'>]
-                ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN]
-                : [message: {
-                    error: 'fn result should extend target type'
-                    targets: Show<TypeOfTarget<ReturnType<FN>, Target, 'fnRet'>>
-                  }]
+            ? TargetOrError<
+                ReturnType<FN>,
+                'fnRet',
+                Target,
+                TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN
+              >
             : [message: {error: 'function should accept data source types'; got: FN}]
             // mode with source only or with both clock and source
           : Mode extends Mode_Src_Flt_NoFn_Trg
           ? Source extends Unit<any> | SourceRecord
-            ? [TypeOfTarget<TypeOfSource<Source>, Target, 'src'>] extends [Target]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-              : [Target] extends [TypeOfTargetSoft<TypeOfSource<Source>, Target, 'src'>]
-                ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-                : [message: {
-                    error: 'source should extend target type'
-                    targets: Show<TypeOfTarget<TypeOfSource<Source>, Target, 'src'>>
-                  }]
+            ? TargetOrError<
+                TypeOfSource<Source>,
+                'src',
+                Target,
+                TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
+              >
             : [message: {error: 'source should be unit or object with stores'; got: Source}]
             // mode with clock only
           : Mode extends Mode_Clk_NoSrc
           ? Clock extends Units
-            ? [TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>] extends [Target]
-              ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-              : [Target] extends [TypeOfTargetSoft<TypeOfClock<Clock>, Target, 'clk'>]
-                ? [config: TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN]
-                : [message: {
-                    error: 'clock should extend target type'
-                    targets: Show<TypeOfTarget<TypeOfClock<Clock>, Target, 'clk'>>
-                  }]
+            ? TargetOrError<
+                TypeOfClock<Clock>,
+                'clk',
+                Target,
+                TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
+              >
             : [message: {error: 'clock should be unit or array of units'; got: Clock}]
           : never
         : [message: {error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
@@ -1879,6 +1839,24 @@ type SampleFilterTargetDef<
         >
       : [message: {error: 'function should accept data source types'; got: FN}]
     : never
+
+type TargetOrError<
+  MatchingValue,
+  Mode extends 'fnRet' | 'src' | 'clk',
+  Target extends Units | ReadonlyArray<Unit<any>>,
+  ResultConfig
+> = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
+    ? [config: ResultConfig]
+    : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
+      ? [config: ResultConfig]
+      : [message: {
+          error: Mode extends 'fnRet'
+            ? 'fn result should extend target type'
+            : Mode extends 'src'
+              ? 'source should extend target type'
+              : 'clock should extend target type'
+          targets: Show<TypeOfTarget<MatchingValue, Target, Mode>>
+        }]
 
 type SampleFilterDef<
   Mode extends Mode_NoTrg,
