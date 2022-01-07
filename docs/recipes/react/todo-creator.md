@@ -3,7 +3,7 @@ id: todo-creator
 title: TODO creator
 ---
 
-[Try it](https://share.effector.dev/CKvKkf6j)
+[Try it](https://share.effector.dev/AeiP1Jeb)
 
 ```ts
 import React from 'react'
@@ -24,19 +24,19 @@ function createTodoListApi(initial: string[] = []) {
     .on(insert, (todos, newTodo) => [...todos, newTodo])
     .on(remove, (todos, index) => todos.filter((_, i) => i !== index))
 
-  const submit = createEvent()
+  const submit = createEvent<React.SyntheticEvent>()
   submit.watch(event => event.preventDefault())
 
   sample({
     clock: submit,
-    source: input,
+    source: $input,
     target: insert,
   })
 
   return {
     submit,
     remove,
-    change: change.prepend(e => e.currentTarget.value),
+    change,
     reset,
     $todos,
     $input,
@@ -63,7 +63,7 @@ function TodoList({label, model}) {
       </ul>
       <form>
         <label>Insert todo: </label>
-        <input type="text" value={input} onChange={model.change}/>
+        <input type="text" value={input} onChange={(event) => model.change(event.currentTarget.value)}/>
         <input type="submit" onClick={model.submit} value="Insert"/>
       </form>
     </>
