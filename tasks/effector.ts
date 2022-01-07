@@ -101,6 +101,10 @@ export default {
           'composition.d.ts',
           ['composition.d.ts', 'composition.cjs.d.ts', 'composition.mjs.d.ts'],
         ],
+        [
+          'ssr.d.ts',
+          ['ssr.d.ts', 'ssr.cjs.d.ts', 'ssr.mjs.d.ts'],
+        ],
         'README.md',
         'package.json',
         [

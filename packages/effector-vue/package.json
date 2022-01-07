@@ -15,8 +15,14 @@
       "require": "./composition.cjs.js",
       "default": "./composition.mjs"
     },
+    "./ssr": {
+      "import": "./ssr.mjs",
+      "require": "./ssr.cjs.js",
+      "default": "./ssr.mjs"
+    },
     "./effector-vue.mjs": "./effector-vue.mjs",
     "./composition.mjs": "./composition.mjs",
+    "./ssr.mjs": "./ssr.mjs",
     "./compat": "./compat.js",
     "./effector-vue.umd": "./effector-vue.umd.js"
   },
@@ -51,11 +57,18 @@
     "compat.d.ts",
     "composition.cjs.js",
     "composition.cjs.js.map",
+    "ssr.cjs.js",
+    "ssr.cjs.js.map",
     "composition.mjs",
     "composition.mjs.map",
+    "ssr.mjs",
+    "ssr.mjs.map",
     "composition.d.ts",
     "composition.mjs.d.ts",
-    "composition.cjs.d.ts"
+    "composition.cjs.d.ts",
+    "ssr.d.ts",
+    "ssr.mjs.d.ts",
+    "ssr.cjs.d.ts"
   ],
   "keywords": [
     "vue",
