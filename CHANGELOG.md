@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 22.1.0
+
+- Add support for Vue 3 SSR via new [useEvent hook](https://effector.dev/docs/api/effector-vue/useEvent) and [VueSSRPlugin](https://effector.dev/docs/api/effector-vue/VueSSRPlugin) ([PR #595](https://github.com/effector/effector/pull/595))
+
 ## effector-react 22.0.6
 
 - Fix `Can't perform a React state update on an unmounted component` warning for `useStoreMap` in a few cases (issue [#574](https://github.com/effector/effector/issues/574))
