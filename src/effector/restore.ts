@@ -3,9 +3,13 @@ import {is} from './is'
 import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './forward'
+import {deprecate} from './throw'
 
 export function restore(obj, defaultState, config?) {
-  if (is.store(obj)) return obj
+  if (is.store(obj)) {
+    deprecate(false, 'restore($store)')
+    return obj
+  }
   if (is.event(obj) || is.effect(obj)) {
     const domain = getParent(obj)
     const result = createStore(defaultState, {
