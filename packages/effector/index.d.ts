@@ -1486,11 +1486,6 @@ export function sample<
         : SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>
   : SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>
 
-type ClTag = 'clock' | '     '
-type SrTag = 'source' | '      '
-type FlTag = 'filter' | '      '
-type FnTag = 'fn' | '  '
-type TrTag = 'target' | '      '
 /*
   | 'clock | source | filter | fn | target'
   | 'clock | source |        | fn | target'
@@ -1519,13 +1514,12 @@ type TrTag = 'target' | '      '
   | 'clock |        | filter |    |       '
   | 'clock |        |        |    |       '
 */
-type ModeTag = `${ClTag} | ${SrTag} | ${FlTag} | ${FnTag} | ${TrTag}`;
 type Mode_Clk_Src = `clock | source | ${string}`;
 type Mode_Clk_NoSrc  = `clock |        | ${string}`;
 type Mode_NoClk_Src  = `      | source | ${string}`;
 type Mode_Trg = `${string} | target`;
 type Mode_Flt_Trg = `${string} | filter | ${string} | target`;
-type Mode_NoFlt = `${ClTag} | ${SrTag} |        | ${FnTag} | ${TrTag}`;
+type Mode_NoFlt = `${string} | ${string} |        | ${string} | ${string}`;
 type Mode_Fn_Trg = `${string} | fn | target`;
 type Mode_Src = `${string} | source | ${string}`;
 type Mode_Flt_Fn_Trg = `${string} | filter | fn | target`;
@@ -1533,27 +1527,6 @@ type Mode_Src_Flt_NoFn_Trg = `${string} | source | filter |    | target`;
 type Mode_NoTrg = `${string} |       `;
 type Mode_Flt = `${string} | filter | ${string}`;
 type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
-
-type TargetFilterUnitConfig<
-  Mode extends Mode_Flt_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
-  Source,
-  Clock,
-  FLUnit,
-  FN,
-> = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target}
-  : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FLUnit; target: Target}
-  : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target}
-  : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FLUnit; target: Target}
-  : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target}
-  : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FLUnit; target: Target}
-  : never
 
 type TargetFilterFnConfig<
   Mode extends Mode_Flt_Trg,
@@ -1574,26 +1547,6 @@ type TargetFilterFnConfig<
   ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target}
   : Mode extends 'clock |        | filter |    | target'
   ? {clock: Clock; source?: never; filter: FilterFun; target: Target}
-  : never
-
-type TargetNoFilterConfig<
-  Mode extends Mode_NoFlt,
-  Target extends Units | ReadonlyArray<Unit<any>>,
-  Source,
-  Clock,
-  FN,
-> = Mode extends 'clock | source |        | fn | target'
-  ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target}
-  : Mode extends 'clock | source |        |    | target'
-  ? {clock: Clock; source: Source; filter?: never; target: Target}
-  : Mode extends '      | source |        | fn | target'
-  ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target}
-  : Mode extends '      | source |        |    | target'
-  ? {source: Source; clock?: never; filter?: never; target: Target}
-  : Mode extends 'clock |        |        | fn | target'
-  ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target}
-  : Mode extends 'clock |        |        |    | target'
-  ? {clock: Clock; source?: never; filter?: never; target: Target}
   : never
 
 type TargetConfigCheck<
@@ -1688,7 +1641,19 @@ type SampleFilterTargetDef<
       ? FN extends DataSourceFunction<Source, Clock>
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
-            TargetFilterUnitConfig<Mode, Target, Source, Clock, FLUnit, FN>,
+            Mode extends 'clock | source | filter | fn | target'
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target}
+            : Mode extends 'clock | source | filter |    | target'
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target}
+            : Mode extends '      | source | filter | fn | target'
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target}
+            : Mode extends '      | source | filter |    | target'
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target}
+            : Mode extends 'clock |        | filter | fn | target'
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target}
+            : Mode extends 'clock |        | filter |    | target'
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target}
+            : never,
             SomeFN
           >
           : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
@@ -1790,10 +1755,18 @@ type SampleFilterTargetDef<
         : never
     : FilterFun extends (
           Mode extends Mode_Clk_Src
-        ? SourceClockFunction<Source, Clock>
+        ? Source extends Unit<any> | SourceRecord
+          ? Clock extends Units
+            ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
+            : never
+          : never
         : Mode extends Mode_NoClk_Src
-        ? SourceFunction<Source>
-        : ClockFunction<Clock>
+        ? Source extends Unit<any> | SourceRecord
+          ? (src: TypeOfSource<Source>) => any
+          : never
+        : Clock extends Units
+          ? (clk: TypeOfClock<Clock>) => any
+          : never
       )
       ? ReturnType<FilterFun> extends boolean
         // mode with fn
@@ -1834,7 +1807,19 @@ type SampleFilterTargetDef<
     ? FN extends DataSourceFunction<Source, Clock>
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
-          TargetNoFilterConfig<Mode, Target, Source, Clock, FN>,
+          Mode extends 'clock | source |        | fn | target'
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target}
+          : Mode extends 'clock | source |        |    | target'
+          ? {clock: Clock; source: Source; filter?: never; target: Target}
+          : Mode extends '      | source |        | fn | target'
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target}
+          : Mode extends '      | source |        |    | target'
+          ? {source: Source; clock?: never; filter?: never; target: Target}
+          : Mode extends 'clock |        |        | fn | target'
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target}
+          : Mode extends 'clock |        |        |    | target'
+          ? {clock: Clock; source?: never; filter?: never; target: Target}
+          : never,
           SomeFN
         >
       : [message: {error: 'function should accept data source types'; got: FN}]
@@ -2014,20 +1999,6 @@ type DataSourceFunction<Source, Clock> =
   : Clock extends Units
     ? (clk: TypeOfClock<Clock>) => any
     : never
-type SourceFunction<Source> =
-  Source extends Unit<any> | SourceRecord
-  ? (src: TypeOfSource<Source>) => any
-  : never
-type ClockFunction<Clock> =
-  Clock extends Units
-  ? (clk: TypeOfClock<Clock>) => any
-  : never
-type SourceClockFunction<Source, Clock> =
-  Source extends Unit<any> | SourceRecord
-  ? Clock extends Units
-    ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-    : never
-  : never
 
 type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
   Target extends Unit<any>
@@ -2093,11 +2064,6 @@ type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, M
         : never
     }
 
-type IsEqualTarget<A, B> =
-  (<G>() => G extends A ? 1 : 2) extends (<G>() => G extends B ? 1 : 2)
-    ? true
-    : false
-
 type ClockValueOf<T> = T[keyof T]
 
 type TypeOfSource<Source extends Unit<any> | SourceRecord> =
@@ -2111,28 +2077,28 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
   Clock extends never[]
   ? unknown
   : Clock extends Unit<any>
-    ? UnitValue<Clock>
-    : Clock extends Tuple<Unit<any>>
-      ? WhichType<UnitValue<ClockValueOf<{
-          [
-            K in keyof Clock as
-              WhichType<UnitValue<Clock[K]>> extends 'any'
-                ? never
-                : K
-          ]: Clock[K]
-        }>>> extends 'never'
-        ? any
-        : UnitValue<ClockValueOf<{
-          [
-            K in keyof Clock as
-              WhichType<UnitValue<Clock[K]>> extends 'any'
-                ? never
-                : K
-          ]: Clock[K]
-        }>>
-      : Clock extends ReadonlyArray<Unit<any>>
-        ? UnitValue<ClockValueOf<Clock>>
-        : never
+  ? UnitValue<Clock>
+  : Clock extends Tuple<Unit<any>>
+    ? WhichType<UnitValue<ClockValueOf<{
+        [
+          K in keyof Clock as
+            WhichType<UnitValue<Clock[K]>> extends 'any'
+              ? never
+              : K
+        ]: Clock[K]
+      }>>> extends 'never'
+      ? any
+      : UnitValue<ClockValueOf<{
+        [
+          K in keyof Clock as
+            WhichType<UnitValue<Clock[K]>> extends 'any'
+              ? never
+              : K
+        ]: Clock[K]
+      }>>
+    : Clock extends ReadonlyArray<Unit<any>>
+      ? UnitValue<ClockValueOf<Clock>>
+      : never
 
 type SourceRecord = Record<string, Store<any>> | Tuple<Store<any>>
 

@@ -742,10 +742,11 @@ test('sample return type supports union types (should pass)', () => {
   `)
 })
 
-test('incorrect filter', () => {
+test('incorrect filter (should fail)', () => {
   const trigger = createEvent()
   const target = createEvent()
   function factory() {
+    //@ts-expect-error
     sample({
       source: trigger,
       filter: null,
