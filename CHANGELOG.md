@@ -2,6 +2,52 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## [WIP] effector 22.2.0
+
+- Added `filter` option to `sample`, thereby making `guard` an alias (issue [#521](https://github.com/effector/effector/issues/521))
+```ts
+sample({
+  clock: submitPasswordEvent,
+  source: $store,
+  filter: (state: AuthFlowState) => state is WaitingPasswordState,
+  fn: (waitingPasswordState, clock) => waitingPasswordState.password,
+  target: submitPassowrdFx,
+})
+```
+- Added `clock` option to `split` (issue [#537](https://github.com/effector/effector/issues/537))
+```ts
+split({
+  clock: submit,
+  source: $form,
+  match: $mode,
+  cases: {
+    draft: saveFormDraftFx,
+    send: sendFormToBackendFx,
+  }
+})
+```
+- Improved `sample` type checking:
+  - Fixed cases when target units becomes compatible with any type
+  - Fixed cases when method call being marked as error when it perfectly correct
+  - Removed vague "incompatible unit in target" error
+  - Error messages now explicitly tells which type is given by source and which one is expected by target
+  - 16 overloads was merged into single one to improve clarity of error messages. Will remove a lot of noise from IDE output thereby improving developer expirience
+- Improved `split` type checking:
+  - Fixed a case when units in cases becomes compatible with any type
+  - Removed vague "incompatible unit in target" error
+  - Error messages now explicitly tells which type is given by source and which one is expected by failed target case
+- Added jsdoc documentation for all top level methods. Will be used by IDE such as VS Code and Webstorm to provide better developer expirience
+- Added a warning message for case when a store without `sid` is used in `fork` (issue [#567](https://github.com/effector/effector/issues/567))
+- Derived units in target of `sample`, `guard`, `split` and `forward` are deprecated (issue [#563](https://github.com/effector/effector/issues/563))
+- Imperative calls of derived units created by `merge`, `sample` and `split` are deprecated
+- Imperative calls of events and effects in pure functions are deprecated (issue [#541](https://github.com/effector/effector/issues/541))
+- `restore($store)` is deprecated (issue [#571](https://github.com/effector/effector/issues/571))
+- Effects created by `attach` got correct name for use in developer tools like [effector-logger](https://github.com/effector/logger) (issue [#527](https://github.com/effector/effector/issues/527))
+- Fixed a case when `sample/guard` pass obsolete data from it's `source` store (issue [#544](https://github.com/effector/effector/issues/544))
+- Fixed `combine` support for units with large union types (issue [#531](https://github.com/effector/effector/issues/531))
+- Fixed support for calls without payload for `Event<unknown>` (PR [#454](https://github.com/effector/effector/pull/454))
+- Fixed circular reference warning during import of typings (issue [#578](https://github.com/effector/effector/issues/578))
+
 ## effector-vue 22.1.0
 
 - Add support for Vue 3 SSR via new [useEvent hook](https://effector.dev/docs/api/effector-vue/useEvent) and [VueSSRPlugin](https://effector.dev/docs/api/effector-vue/VueSSRPlugin) ([PR #595](https://github.com/effector/effector/pull/595))
