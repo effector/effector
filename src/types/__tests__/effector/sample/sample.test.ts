@@ -792,3 +792,19 @@ describe('sample + .map', () => {
     `)
   })
 })
+
+test('from unknown to known type (should fail)', () => {
+  const emitUnknown = createEvent<unknown>()
+  const receiveNumber = createEvent<number>()
+  sample({
+    //@ts-expect-error
+    source: emitUnknown,
+    target: receiveNumber,
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Argument of type '{ source: Event<unknown>; target: Event<number>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
+    "
+  `)
+})

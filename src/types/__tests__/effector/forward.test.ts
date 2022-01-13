@@ -45,13 +45,31 @@ describe('forward between effects', () => {
   })
 })
 
-test('forward between stores', () => {
+test('forward between stores (should pass)', () => {
   const e = createStore(0)
   const f = createStore(0)
   forward({from: e, to: f})
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
+    "
+  `)
+})
+test('from unknown to known type (should fail)', () => {
+  const emitUnknown = createEvent<unknown>()
+  const receiveNumber = createEvent<number>()
+  forward({
+    //@ts-expect-error
+    from: emitUnknown,
+    to: receiveNumber,
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
     "
   `)
 })
