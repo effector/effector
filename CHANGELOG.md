@@ -27,7 +27,7 @@ split({
 })
 ```
 - Improved `sample` type checking:
-  - Fixed cases when target units becomes compatible with any type
+  - Fixed cases when target units becomes compatible with any type (issue [#600](https://github.com/effector/effector/issues/600))
   - Fixed cases when method call being marked as error when it perfectly correct
   - Removed vague "incompatible unit in target" error
   - Error messages now explicitly tells which type is given by source and which one is expected by target
