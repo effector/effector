@@ -25,7 +25,6 @@ export interface Event<E> extends Unit {
   thru<U>(fn: (event: Event<E>) => U): U
   getType(): string
   shortName: string
-  domainName?: CompositeName
   graphite: Node
   compositeName: CompositeName
 }
@@ -71,11 +70,10 @@ export interface Store<State> extends Unit {
   }
   defaultShape?: Object
   shortName: string
-  domainName?: CompositeName
   sid: string | null
   graphite: Node
   updates: Event<State>
-  compositeName?: CompositeName
+  compositeName: CompositeName
 }
 
 export interface Effect<Params, Done, Fail = Error> extends Unit {
@@ -104,9 +102,15 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   >
   id: string
   use: {
+    (handler: (params: Params) => Done | Promise<Done>): Effect<
+      Params,
+      Done,
+      Fail
+    >
     getCurrent(): (params: Params) => Promise<Done>
   }
   create(payload: Params, args: unknown[]): Params
+  inFlight: Store<number>
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
@@ -114,7 +118,6 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   getType(): string
   kind: kind
   shortName: string
-  domainName?: CompositeName
   graphite: Node
   compositeName: CompositeName
 }

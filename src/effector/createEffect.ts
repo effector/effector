@@ -1,3 +1,5 @@
+import type {Unit} from './index.h'
+import type {Effect} from './unit.h'
 import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
@@ -8,16 +10,19 @@ import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
 import {EFFECT} from './tag'
-import type {Unit} from './index.h'
 import {add} from './collection'
 
-export function createEffect<Payload, Done>(nameOrConfig, maybeConfig?) {
+export function createEffect<Payload, Done, Fail = Error>(
+  nameOrConfig,
+  maybeConfig?,
+): Effect<Payload, Done, Fail> {
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
-  )
+  ) as unknown as Effect<Payload, Done, Fail>
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
+  //@ts-expect-error
   instance.use = (fn: Function) => {
     assert(isFunction(fn), '.use argument should be a function')
     runner.scope.handler = fn
@@ -108,6 +113,7 @@ export function createEffect<Payload, Done>(nameOrConfig, maybeConfig?) {
       true,
     ),
   )
+  //@ts-expect-error
   instance.create = (params: Payload) => {
     const req = createDefer()
     const payload = {params, req}
@@ -179,7 +185,7 @@ export const onSettled =
       scope: getForkPage(stack),
     })
 
-export const sidechain = createNode({
+const sidechain = createNode({
   node: [run({fn: ({fn, value}) => fn(value)})],
   meta: {op: 'fx', fx: 'sidechain'},
 })

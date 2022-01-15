@@ -1,9 +1,7 @@
-import type {Store, Domain} from './unit.h'
+import type {Store, CommonUnit, Domain} from './unit.h'
 import {is} from './is'
-import {getParent} from './getter'
+import {getParent, getCompositeName} from './getter'
 import {forIn} from './collection'
-
-const getCompostite = (unit): CompositeName => unit.compositeName
 
 export function unitObjectName(objOrArr, method: string = 'combine') {
   let name = method + '('
@@ -14,7 +12,9 @@ export function unitObjectName(objOrArr, method: string = 'combine') {
     if (i < 25) {
       if (unit != null) {
         name += comma
-        name += is.unit(unit) ? getCompostite(unit).fullName : unit.toString()
+        name += is.unit(unit)
+          ? getCompositeName(unit as CommonUnit | Domain).fullName
+          : unit.toString()
       }
       i += 1
       comma = ', '
@@ -25,7 +25,7 @@ export function unitObjectName(objOrArr, method: string = 'combine') {
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   store.shortName = rawName
-  Object.assign(getCompostite(store), createName(rawName, getParent(store)))
+  Object.assign(getCompositeName(store), createName(rawName, getParent(store)))
 }
 
 export type CompositeName = {
@@ -42,7 +42,7 @@ export function createName(name: string, parent?: Domain): CompositeName {
     path = name.length === 0 ? [] : [name]
     fullName = name
   } else {
-    const composite = getCompostite(parent)
+    const composite = getCompositeName(parent)
     if (name.length === 0) {
       path = composite.path
       fullName = composite.fullName

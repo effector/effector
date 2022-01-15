@@ -1,13 +1,21 @@
+import type {Domain} from './unit.h'
 import {combine} from './combine'
 import {createEffect, onSettled, runFn} from './createEffect'
 import {applyParentHook} from './createUnit'
 import {processArgsToConfig} from './config'
-import {getGraph, getStoreState, setMeta} from './getter'
+import {
+  getGraph,
+  getParent,
+  getStoreState,
+  setMeta,
+  getCompositeName,
+} from './getter'
 import {own} from './own'
 import {is} from './is'
 import {read, calc} from './step'
 import {launch} from './kernel'
 import {EFFECT} from './tag'
+import {createName} from './naming'
 
 export function attach(config) {
   let injected
@@ -66,6 +74,15 @@ export function attach(config) {
   }
   runner.seq.splice(1, 0, ...runnerSteps)
   attached.use(effect)
+  const parentDomain: Domain | void = getParent(effect)
+  if (parentDomain) {
+    Object.assign(
+      getCompositeName(attached),
+      createName(attached.shortName, parentDomain),
+    )
+    //@ts-expect-error
+    attached.defaultConfig.parent = parentDomain
+  }
   applyParentHook(effect, attached, EFFECT)
   return attached
 }

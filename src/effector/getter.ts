@@ -1,5 +1,5 @@
 import type {Node, StateRef, NodeUnit} from './index.h'
-import type {Scope, Store} from './unit.h'
+import type {Scope, Store, CommonUnit, Domain} from './unit.h'
 
 export const getGraph = (graph: NodeUnit): Node =>
   (graph as {graphite: Node}).graphite || graph
@@ -14,3 +14,5 @@ export const getMeta = (unit: NodeUnit, field: string) =>
   getGraph(unit).meta[field]
 export const setMeta = (unit: NodeUnit, field: string, value: unknown) =>
   (getGraph(unit).meta[field] = value)
+export const getCompositeName = (unit: CommonUnit | Domain) =>
+  unit.compositeName

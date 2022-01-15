@@ -1,4 +1,11 @@
-import {attach, createEffect, createEvent, createStore, forward} from 'effector'
+import {
+  attach,
+  createDomain,
+  createEffect,
+  createEvent,
+  createStore,
+  forward,
+} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 it('map params and results by provided functions', async () => {
@@ -366,4 +373,11 @@ test('interaction with watch and parallel updates', async () => {
     {n: 22, tag: 'b'},
     {n: 22, tag: 'b'},
   ])
+})
+
+test('attached effect should got its name from parent domain', () => {
+  const app = createDomain()
+  const fx = app.createEffect(() => {})
+  const attached = attach({effect: fx})
+  expect(attached.compositeName.fullName).toBe('app/attached')
 })
