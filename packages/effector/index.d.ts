@@ -1536,17 +1536,17 @@ type TargetFilterFnConfig<
   FilterFun,
   FN,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target}
+  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
   : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target}
+  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target}
+  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
   : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target}
+  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target}
+  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
   : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target}
+  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean}
   : never
 
 type TargetConfigCheck<
@@ -1642,17 +1642,17 @@ type SampleFilterTargetDef<
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
             Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
             : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target}
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean}
             : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
             : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target}
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean}
             : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
             : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target}
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean}
             : never,
             SomeFN
           >
@@ -1808,17 +1808,17 @@ type SampleFilterTargetDef<
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
           Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target}
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean}
           : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target}
+          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean}
           : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target}
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean}
           : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target}
+          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean}
           : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target}
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean}
           : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target}
+          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean}
           : never,
           SomeFN
         >
@@ -1870,17 +1870,17 @@ type SampleFilterDef<
     ? boolean extends UnitValue<FLUnit>
       ? [config: (
             Mode extends 'clock | source | filter | fn |       '
-          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never}
+          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
           : Mode extends 'clock | source | filter |    |       '
-          ? {clock: Clock; source: Source; filter: FLUnit; target?: never}
+          ? {clock: Clock; source: Source; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
           : Mode extends '      | source | filter | fn |       '
-          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never}
+          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
           : Mode extends '      | source | filter |    |       '
-          ? {source: Source; clock?: never; filter: FLUnit; target?: never}
+          ? {source: Source; clock?: never; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
           : Mode extends 'clock |        | filter | fn |       '
-          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never}
+          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
           : Mode extends 'clock |        | filter |    |       '
-          ? {clock: Clock; source?: never; filter: FLUnit; target?: never}
+          ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
           : never
         ) & SomeFN]
       : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
@@ -1888,20 +1888,20 @@ type SampleFilterDef<
       ? Mode extends Mode_Flt_Fn
         ? [config: (
               Mode extends 'clock | source | filter | fn |       '
-            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never}
+            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
             : Mode extends '      | source | filter | fn |       '
-            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
+            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
             : Mode extends 'clock |        | filter | fn |       '
-            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never}
+            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
             : never
           ) & SomeFN]
         : [config: (
               Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FLBool; target?: never}
+            ? {clock: Clock; source: Source; filter: FLBool; target?: never; greedy?: boolean; name?: string}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FLBool; target?: never}
+            ? {source: Source; clock?: never; filter: FLBool; target?: never; greedy?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FLBool; target?: never}
+            ? {clock: Clock; source?: never; filter: FLBool; target?: never; greedy?: boolean; name?: string}
             : never
           ) & SomeFN]
       : FilterFun extends (
@@ -1925,11 +1925,11 @@ type SampleFilterDef<
             )
             ? [config: (
                   Mode extends 'clock | source | filter | fn |       '
-                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never}
+                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
                 : Mode extends '      | source | filter | fn |       '
-                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never}
+                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
                 : Mode extends 'clock |        | filter | fn |       '
-                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never}
+                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
                 : never
               ) & SomeFN]
             : [message: {
@@ -1939,11 +1939,11 @@ type SampleFilterDef<
               }]
           : [config: (
               Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FilterFun; target?: never}
+            ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FilterFun; target?: never}
+            ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
+            ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
             : never
           ) & SomeFN]
       : FilterFun extends (
@@ -1958,17 +1958,17 @@ type SampleFilterDef<
         ? ReturnType<FilterFun> extends boolean
           ? [config: (
                 Mode extends 'clock | source | filter | fn |       '
-              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never}
+              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
               : Mode extends 'clock | source | filter |    |       '
-              ? {clock: Clock; source: Source; filter: FilterFun; target?: never}
+              ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
               : Mode extends '      | source | filter | fn |       '
-              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never}
+              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
               : Mode extends '      | source | filter |    |       '
-              ? {source: Source; clock?: never; filter: FilterFun; target?: never}
+              ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
               : Mode extends 'clock |        | filter | fn |       '
-              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never}
+              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
               : Mode extends 'clock |        | filter |    |       '
-              ? {clock: Clock; source?: never; filter: FilterFun; target?: never}
+              ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
               : never
             ) & SomeFN]
           : [message: {error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
@@ -1976,17 +1976,17 @@ type SampleFilterDef<
   : Mode extends Mode_NoFlt
   ? [config: (
         Mode extends 'clock | source |        | fn |       '
-      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never}
+      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
       : Mode extends 'clock | source |        |    |       '
-      ? {clock: Clock; source: Source; filter?: never; target?: never}
+      ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; name?: string}
       : Mode extends '      | source |        | fn |       '
-      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never}
+      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
       : Mode extends '      | source |        |    |       '
-      ? {source: Source; clock?: never; filter?: never; target?: never}
+      ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; name?: string}
       : Mode extends 'clock |        |        | fn |       '
-      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never}
+      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
       : Mode extends 'clock |        |        |    |       '
-      ? {clock: Clock; source?: never; filter?: never; target?: never}
+      ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; name?: string}
       : never
     ) & SomeFN]
   : never
