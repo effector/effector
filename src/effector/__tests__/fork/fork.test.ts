@@ -130,6 +130,13 @@ describe('fork values support', () => {
       `"Values map can contain only stores as keys"`,
     )
   })
+  test('store without sid should throw', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    expect(() => {
+      fork({values: [[$foo, 1]]})
+    }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
+  })
   describe('consistency simple', () => {
     test('consistency simple with getState', async () => {
       const secondOne1 = createStore(1, {sid: `1.2`})
@@ -417,6 +424,16 @@ describe('handlers validation', () => {
         handlers: new Map().set(attached, () => {}),
       })
     }).not.toThrow()
+  })
+  test('effect without sid should throw', () => {
+    const fx = createEffect({
+      handler() {},
+      //@ts-expect-error
+      sid: null,
+    })
+    expect(() => {
+      fork({handlers: [[fx, () => {}]]})
+    }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
   })
 })
 
