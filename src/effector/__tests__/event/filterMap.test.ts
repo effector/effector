@@ -51,9 +51,9 @@ describe('event.filterMap', () => {
       ]
     `)
 
-    //@ts-ignore
+    //@ts-expect-error
     expect(show(num.graphite)).toMatchSnapshot('num event graph')
-    //@ts-ignore
+    //@ts-expect-error
     expect(show(evenNum.graphite)).toMatchSnapshot('evenNum event graph')
   })
 })

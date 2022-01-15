@@ -142,7 +142,6 @@ describe('source as object support', () => {
     expect(() => {
       guard({
         source: {
-          //@ts-ignore
           a: createStore(0),
           b: createStore(0),
         },
@@ -154,7 +153,6 @@ describe('source as object support', () => {
     expect(() => {
       guard({
         source: {
-          //@ts-ignore
           a: createStore(0),
           b: createStore(0),
         },
@@ -170,11 +168,9 @@ test('temporal consistency', () => {
   const target = createEvent<number>()
   const filter = trigger.map(x => x > 0)
   guard({
-    //@ts-ignore
     source: trigger,
-    //@ts-ignore
+    //@ts-expect-error
     filter,
-    //@ts-ignore
     target,
   })
 

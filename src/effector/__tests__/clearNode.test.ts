@@ -26,7 +26,7 @@ it('will deactivate store', () => {
   store.watch(x => fn(x))
   expect(fn).toBeCalledTimes(1)
   clearNode(store)
-  //@ts-ignore
+  //@ts-expect-error
   store.setState(1)
   expect(fn).toBeCalledTimes(1)
 })
@@ -66,11 +66,11 @@ test('deep cleaning', () => {
   //please be careful with {deep: true}
   //it will destroy everything related to that node
   clearNode(source, {deep: true})
-  //@ts-ignore
+  //@ts-expect-error
   source.setState(1) //nothing happens
   expect(fn1).toBeCalledTimes(1)
   expect(fn2).toBeCalledTimes(1)
-  //@ts-ignore
+  //@ts-expect-error
   target.setState(2) //dead as well
   expect(fn2).toBeCalledTimes(1)
 })
@@ -83,11 +83,11 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
-    //@ts-ignore
+    //@ts-expect-error
     source.setState(1)
     expect(fn).toBeCalledTimes(2)
     clearNode(target)
-    //@ts-ignore
+    //@ts-expect-error
     source.setState(2)
     expect(fn).toBeCalledTimes(2)
   })
@@ -226,7 +226,7 @@ describe('based on clearNode', () => {
       from: store.updates,
       to: event,
     })
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(1)
     event(2)
     clearNode(store)
@@ -248,10 +248,10 @@ describe('based on clearNode', () => {
       from: store.updates,
       to: event,
     })
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(1)
     clearNode(event)
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(2)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
@@ -344,7 +344,7 @@ describe('domain support', () => {
       from: store.updates,
       to: event,
     })
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(1)
     event(2)
     clearNode(store)
@@ -367,10 +367,10 @@ describe('domain support', () => {
       from: store.updates,
       to: event,
     })
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(1)
     clearNode(event)
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(2)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [

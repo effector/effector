@@ -1,14 +1,16 @@
-import type {Node, StateRef} from './index.h'
-import type {Scope} from './unit.h'
+import type {Node, StateRef, NodeUnit} from './index.h'
+import type {Scope, Store} from './unit.h'
 
-export const getGraph = (graph): Node => graph.graphite || graph
+export const getGraph = (graph: NodeUnit): Node =>
+  (graph as {graphite: Node}).graphite || graph
 export const getOwners = (node: Node) => node.family.owners
 export const getLinks = (node: Node) => node.family.links
-export const getStoreState = (store): StateRef => store.stateRef
+export const getStoreState = (store: Store<any>): StateRef => store.stateRef
 export const getValue = stack => stack.value
-export const getSubscribers = store => store.subscribers
+export const getSubscribers = (store: Store<any>) => store.subscribers
 export const getParent = unit => unit.parent
 export const getForkPage = (val): Scope | void => val.scope
-export const getMeta = (unit, field: string) => getGraph(unit).meta[field]
-export const setMeta = (unit, field: string, value) =>
+export const getMeta = (unit: NodeUnit, field: string) =>
+  getGraph(unit).meta[field]
+export const setMeta = (unit: NodeUnit, field: string, value: unknown) =>
   (getGraph(unit).meta[field] = value)

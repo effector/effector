@@ -78,7 +78,6 @@ describe('split(config)', () => {
       (_, msg) => msg.type === 'audio',
     )
 
-    //@ts-ignore
     split({
       source: messageReceived,
       match: {

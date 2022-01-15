@@ -14,10 +14,10 @@ it('triggers after each store update', () => {
     unlike store.watch, store.updates.watch will not been called immediately
   */
   expect(fn).not.toBeCalled()
-  //@ts-ignore
+  //@ts-expect-error
   store.setState(1)
   expect(fn).toBeCalledTimes(1)
-  //@ts-ignore
+  //@ts-expect-error
   store.setState(1) // state will not change, as store.getState() === 1
   expect(fn).toBeCalledTimes(1)
 })

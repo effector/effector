@@ -60,9 +60,7 @@ test('list', () => {
 
   done()
 
-  function storeList<T>(
-    initials: Array<T>,
-  ): {
+  function storeList<T>(initials: Array<T>): {
     self: Store<Array<T>>
     watch: Store<Array<T>>['watch']
     on: Store<Array<T>>['on']
@@ -321,7 +319,7 @@ test('list', () => {
 
       watch: model.store.watch,
       on: model.store.on,
-      //@ts-ignore
+      //@ts-expect-error
       self: model.store,
     }
   }
@@ -344,13 +342,18 @@ test('list', () => {
     list: Array<T>,
   ): Array<{entries: Array<T>; offset: number}> {
     return segments
-      .map(({entries, offset}): {
-        entries: Array<T>
-        offset: number
-      } => ({
-        entries,
-        offset: normalizeOffset<T>(offset, list, entries),
-      }))
+      .map(
+        ({
+          entries,
+          offset,
+        }): {
+          entries: Array<T>
+          offset: number
+        } => ({
+          entries,
+          offset: normalizeOffset<T>(offset, list, entries),
+        }),
+      )
       .sort((a, b) => a.offset - b.offset)
   }
 })

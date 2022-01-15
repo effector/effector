@@ -16,7 +16,7 @@ const clearNodeNormalized = (
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
-  //@ts-ignore
+  //@ts-expect-error
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
@@ -46,7 +46,7 @@ const clearNodeNormalized = (
     }
   }
 }
-const clearMap = map => map.clear()
+const clearMap = (map: Map<any, any> | Set<any>) => map.clear()
 export const clearNode = (
   graphite: NodeUnit,
   {
@@ -56,13 +56,12 @@ export const clearNode = (
   } = {},
 ) => {
   let isDomainUnit = false
-  //@ts-ignore
+  //@ts-expect-error
   if (graphite.ownerSet) graphite.ownerSet.delete(graphite)
   if (is.store(graphite)) {
     clearMap(getSubscribers(graphite))
   } else if (is.domain(graphite)) {
     isDomainUnit = true
-    //@ts-ignore
     const history = graphite.history
     clearMap(history.events)
     clearMap(history.effects)

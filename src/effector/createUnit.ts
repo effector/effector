@@ -8,7 +8,7 @@ import {
   assertNodeSet,
   isVoid,
 } from './is'
-import type {Store, Event} from './unit.h'
+import type {Store, Event, CommonUnit, Effect} from './unit.h'
 
 import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
@@ -44,6 +44,7 @@ import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
+import type {Template} from '../forest/index.h'
 
 export const applyParentHook = (
   source,
@@ -112,7 +113,12 @@ const deriveEvent = (event, op: string, fn, node) => {
   return mapped
 }
 
-function callCreate(unit, template, payload, args) {
+function callCreate<T>(
+  unit: Event<T> | Effect<T, any, any>,
+  template: Template | null,
+  payload: T,
+  args: any[],
+) {
   const oldPage = currentPage
   let page = null
   if (template) {
@@ -131,7 +137,7 @@ export function createEvent<Payload = any>(
   nameOrConfig?,
   maybeConfig?,
 ): Event<Payload> {
-  const event = (payload: Payload, ...args) => {
+  const event = ((payload: Payload, ...args: unknown[]) => {
     deprecate(
       !getMeta(event, 'derived'),
       'call of derived event',
@@ -142,29 +148,29 @@ export function createEvent<Payload = any>(
       return callCreate(event, template, payload, args)
     }
     return event.create(payload, args)
-  }
+  }) as Event<Payload>
   const template = readTemplate()
   return Object.assign(event, {
     graphite: createNode({
       meta: initUnit(EVENT, event, nameOrConfig, maybeConfig),
       regional: true,
     }),
-    create(params, _) {
+    create(params: Payload, _: any[]) {
       launch({target: event, params, scope: forkPage!})
       return params
     },
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
-    map: fn => deriveEvent(event, MAP, fn, [userFnCall()]),
-    filter: fn =>
+    map: (fn: Function) => deriveEvent(event, MAP, fn, [userFnCall()]),
+    filter: (fn: {fn: Function}) =>
       deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
         userFnCall(callStack, true),
       ]),
-    filterMap: fn =>
+    filterMap: (fn: Function) =>
       deriveEvent(event, 'filterMap', fn, [
         userFnCall(),
         calc(value => !isVoid(value), true),
       ]),
-    prepend(fn) {
+    prepend(fn: Function) {
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
       })
@@ -206,18 +212,18 @@ export function createStore<State>(
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
       return readRef(targetRef)
     },
-    setState: state =>
+    setState: (state: State) =>
       launch({
         target: store,
         params: state,
         defer: true,
         scope: forkPage!,
       }),
-    reset(...units) {
+    reset(...units: CommonUnit[]) {
       forEach(units, unit => store.on(unit, () => store.defaultState))
       return store
     },
-    on(nodeSet, fn: Function) {
+    on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
       assertNodeSet(nodeSet, '.on', 'first argument')
       deprecate(
         !getMeta(store, 'derived'),
@@ -235,7 +241,7 @@ export function createStore<State>(
       })
       return store
     },
-    off(unit) {
+    off(unit: CommonUnit) {
       const currentSubscription = getSubscribers(store).get(unit)
       if (currentSubscription) {
         currentSubscription()
@@ -243,11 +249,11 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn, firstState) {
+    map(fn: (value: any, prevArg?: any) => any, firstState?: any) {
       let config
       if (isObject(fn)) {
         config = fn
-        fn = fn.fn
+        fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
       deprecate(
         isVoid(firstState),
@@ -289,7 +295,7 @@ export function createStore<State>(
       assert(isFunction(fn), 'second argument should be a function')
       return eventOrFn.watch(payload => fn(store.getState(), payload))
     },
-  }
+  } as unknown as Store<State>
   const meta = initUnit(STORE, store, props)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
@@ -325,7 +331,7 @@ export function createStore<State>(
 }
 
 const updateStore = (
-  from,
+  from: CommonUnit,
   store: Store<any>,
   op: string,
   caller: typeof callStackAReg,

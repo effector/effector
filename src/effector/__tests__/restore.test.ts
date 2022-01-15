@@ -58,7 +58,7 @@ test('all together', () => {
 test('babel plugin naming', () => {
   const event = createEvent()
   const foo = restore(event, null)
-  //@ts-ignore
+  //@ts-expect-error
   const bar = restore(event, null, {name: 'baz'})
   expect(foo.shortName).toBe('foo')
   expect(bar.shortName).toBe('baz')

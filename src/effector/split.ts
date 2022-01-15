@@ -1,5 +1,5 @@
-import type {Event} from './unit.h'
-import type {NodeUnit, Cmd} from './index.h'
+import type {DataCarrier} from './unit.h'
+import type {Cmd} from './index.h'
 import {is, isFunction, isObject, assertTarget} from './is'
 import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
@@ -7,17 +7,17 @@ import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
 import {compute, userFnCall, calc, read} from './step'
 import {createNode} from './createNode'
-import {launch} from './kernel'
+import {launch, Stack} from './kernel'
 import {getStoreState} from './getter'
 import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
 
 const launchCase = (
-  scopeTargets: Record<string, NodeUnit>,
+  scopeTargets: Record<string, DataCarrier>,
   field: string,
-  data,
-  stack,
+  data: any,
+  stack: Stack,
 ) => {
   const target = scopeTargets[field]
   if (target) {
@@ -31,7 +31,7 @@ const launchCase = (
 }
 
 export function split(...args) {
-  let targets: Record<string, Event<any> | NodeUnit>
+  let targets: Record<string, DataCarrier>
   let [[source, match], metadata] = processArgsToConfig(args)
   const knownCases = !match
   if (knownCases) {
@@ -60,7 +60,7 @@ export function split(...args) {
     )
   }
   const owners = new Set(
-    ([] as NodeUnit[]).concat(source, Object.values(targets)),
+    ([] as DataCarrier[]).concat(source, Object.values(targets)),
   )
   const caseNames = Object.keys(
     matchIsUnit || matchIsFunction ? targets : match,

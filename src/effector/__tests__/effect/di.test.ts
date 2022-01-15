@@ -7,9 +7,9 @@ test('effect.create single argument', async () => {
     await 1
     return 'done!'
   })
-  //@ts-ignore
+  //@ts-expect-error
   const oldCreate = effect.create
-  //@ts-ignore
+  //@ts-expect-error
   effect.create = jest.fn((payload, args) => oldCreate(payload, args))
   const baz = jest.fn()
   effect.done.watch(baz)
@@ -18,7 +18,7 @@ test('effect.create single argument', async () => {
   await effect(200)
   await effect(300)
 
-  //@ts-ignore
+  //@ts-expect-error
   expect(effect.create.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
@@ -55,12 +55,12 @@ test('effect.create single argument', async () => {
 
 function variadicEffect(name?: string) {
   const effect = createEffect<any, any>(name)
-  //@ts-ignore
+  //@ts-expect-error
   const oldCreate = effect.create
-  //@ts-ignore
+  //@ts-expect-error
   effect.create = jest.fn((payload, args) => oldCreate([payload, ...args], []))
   const oldUse = effect.use
-  //@ts-ignore
+  //@ts-expect-error
   effect.use = handler => oldUse(payload => handler(...payload))
 
   return effect as any
@@ -71,7 +71,7 @@ test('effect.create multiple arguments', async () => {
   const baz = jest.fn()
   const effect = variadicEffect('long request')
 
-  //@ts-ignore
+  //@ts-expect-error
   effect.use(async (a, b) => {
     useSpy({a, b})
     await 1

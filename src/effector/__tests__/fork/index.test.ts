@@ -529,7 +529,7 @@ test('setState support', async () => {
   const start = createEvent()
   const store = createStore(0)
   start.watch(() => {
-    //@ts-ignore
+    //@ts-expect-error
     store.setState(1)
   })
   const scope = fork()

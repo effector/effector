@@ -6,7 +6,7 @@ import {
   sample,
   attach,
   guard,
-  //@ts-ignore
+  //@ts-expect-error
   withFactory,
   fork,
   serialize,

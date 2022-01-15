@@ -2,7 +2,6 @@ import type {
   Subscription,
   Subscriber,
   Node,
-  NodeUnit,
   kind,
   StateRef,
   Unit,
@@ -15,7 +14,7 @@ export interface Event<E> extends Unit {
   id: string
   kind: kind
   getType(): string
-  create(payload: E, type: string, args): E
+  create(payload: E, args: unknown[]): E
   watch(watcher: (payload: E) => any): Subscription
   map<T>(fn: (_: E) => T): Event<T>
   filter(config: {fn(_: E): boolean}): Event<E>
@@ -32,48 +31,36 @@ export interface Event<E> extends Unit {
 }
 
 export interface Store<State> extends Unit {
-  subscribers: Map<Event<any>, Subscription>
+  subscribers: Map<CommonUnit, Subscription>
   id: string
   stateRef: StateRef
-  reset(event: Event<any> | Effect<any, any, any>): Store<State>
+  reset(...units: CommonUnit[]): Store<State>
   getState(): State
   setState(newState: State): void
   //prettier-ignore
   map: (
-  & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
-  & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
- );
+    & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
+    & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
+  );
   on<E>(
-    event: Event<E> | Effect<E, any, any> | Store<E>,
+    event: CommonUnit<E>,
     handler: (state: State, payload: E) => State | void,
   ): Store<State>
-  off(event: Event<any>): void
-  subscribe(listener): Subscription
+  off(unit: CommonUnit): void
+  subscribe(listener: (upd: State) => void): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
   //prettier-ignore
   watch: (
     & (
       <E>(
-        watcher: (state: State, payload: E, type: string) => any,
+        watcher: (state: State, payload: E) => any,
         _: void,
       ) => Subscription
     )
     & (
       <E>(
-        trigger: Store<E>,
-        watcher: (state: State, payload: E, type: string) => any,
-      ) => Subscription
-    )
-    & (
-      <E>(
-        event: Event<E>,
-        watcher: (state: State, payload: E, type: string) => any,
-      ) => Subscription
-    )
-    & (
-      <E>(
-        effect: Effect<E, any, any>,
-        watcher: (state: State, payload: E, type: string) => any,
+        trigger: CommonUnit<E>,
+        watcher: (state: State, payload: E) => any,
       ) => Subscription
     )
   );
@@ -92,9 +79,7 @@ export interface Store<State> extends Unit {
 }
 
 export interface Effect<Params, Done, Fail = Error> extends Unit {
-  /*::
-  [[call]](payload: Params): Promise<Done>,
-  */
+  (payload: Params): Promise<Done>
   done: Event<{
     params: Params
     result: Done
@@ -119,28 +104,14 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   >
   id: string
   use: {
-    /*::
-    [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
-    */
     getCurrent(): (params: Params) => Promise<Done>
   }
-  create(payload: Params, type: string, args): Params
+  create(payload: Params, args: unknown[]): Params
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
-  // getNode(): Vertex<['event', string]>,
-  //map<T>(fn: (_: E) => T): Event<T>,
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(subscriber: Subscriber<Params>): Subscription
-  //prettier-ignore
-  //   to: (
-  //   & (<T>(
-  //    store: Store<T>,
-  //    reducer: (state: T, payload: Params) => T
-  //   ) => Subscription)
-  //   & ((store: Store<Params>, _: void) => Subscription)
-  //  ),
-  // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
-  getType(): string;
+  getType(): string
   kind: kind
   shortName: string
   domainName?: CompositeName
@@ -161,6 +132,12 @@ export interface Domain extends Unit {
   ): Effect<Params, Done, Fail>
   domain(name?: string): Domain
   store<State>(defaultState: State, config?: Config): Store<State>
+  history: {
+    events: Set<Event<any>>
+    effects: Set<Effect<any, any>>
+    stores: Set<Store<any>>
+    domains: Set<Domain>
+  }
   compositeName: CompositeName
   getType(): string
   kind: kind
@@ -174,12 +151,15 @@ export interface Scope extends Unit {
   reg: Record<string, StateRef>
   cloneOf?: Domain
   getState<T>(store: Store<T>): T
-  getState(ref: StateRef)
+  getState(ref: StateRef): unknown
   /** value could be set only for stores with sid (they can be created by createStore, restore and combine) */
   sidValuesMap: Record<string, any>
   sidIdMap: Record<string, string>
   additionalLinks: Record<string, Node[]>
-  handlers: Record<string, (params) => any>
+  handlers: Record<string, (params: unknown) => any>
   fxCount: Node
   storeChange: Node
 }
+
+export type CommonUnit<T = any> = Event<T> | Effect<T, any, any> | Store<T>
+export type DataCarrier = CommonUnit | Node

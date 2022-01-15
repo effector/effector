@@ -25,11 +25,11 @@ export function allSettled(
           params: ctx,
           req: {
             rs(value) {
-              //@ts-ignore
+              //@ts-expect-error
               defer.value = {status: 'done', value}
             },
             rj(value) {
-              //@ts-ignore
+              //@ts-expect-error
               defer.value = {status: 'fail', value}
             },
           },

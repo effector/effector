@@ -11,7 +11,6 @@ import {argumentHistory} from 'effector/fixtures'
 
 test('sid support', () => {
   const source = createStore(null)
-  //@ts-ignore
   const sampled = sample({source, sid: 'foo'})
 
   expect(sampled.sid).toBe('foo')
@@ -116,6 +115,7 @@ describe('temporal consistency', () => {
 it('should not accept undefined clocks', () => {
   expect(() => {
     sample({
+      //@ts-expect-error
       source: createStore(null),
       clock: undefined,
     })
@@ -130,6 +130,7 @@ describe('sample type', () => {
     ${createEvent()}  | ${createStore(0)} | ${'event'}
     ${createEvent()}  | ${createEvent()}  | ${'event'}
   `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
+    //@ts-expect-error
     expect(sample(source, clock).kind).toBe(kind)
   })
   test.each`
@@ -142,6 +143,7 @@ describe('sample type', () => {
     `$kind <- $source.kind by $clock.kind with handler`,
     ({source, clock, kind}) => {
       expect(
+        //@ts-expect-error
         sample(source, clock, (source, clock) => ({source, clock})).kind,
       ).toBe(kind)
     },
@@ -152,13 +154,11 @@ describe('sample', () => {
   it('works with config', () => {
     const foo = createStore('')
     const bar = createStore('')
-
-    //@ts-ignore
     sample({clock: foo, source: foo, target: bar})
   })
   it('handles object combination', () => {
     const foo = createStore('')
-    //@ts-ignore
+    //@ts-expect-error
     sample({foo})
   })
   it('works with single source', () => {
@@ -327,12 +327,12 @@ describe('sample', () => {
       const clock = createStore(0)
       const result = sample(source, clock)
       result.watch(value => fn(value))
-      //@ts-ignore
+      //@ts-expect-error
       clock.setState(1)
       expect(fn).not.toHaveBeenCalled()
       source('run')
       expect(fn).not.toHaveBeenCalled()
-      //@ts-ignore
+      //@ts-expect-error
       clock.setState(2)
       expect(argumentHistory(fn)).toEqual(['run'])
     })
@@ -348,14 +348,14 @@ describe('sample', () => {
         }),
       )
       result.watch(value => fn(value))
-      //@ts-ignore
+      //@ts-expect-error
       clock.setState(1)
       expect(fn).not.toHaveBeenCalled()
       expect(handler).not.toHaveBeenCalled()
       source('run')
       expect(fn).not.toHaveBeenCalled()
       expect(handler).not.toHaveBeenCalled()
-      //@ts-ignore
+      //@ts-expect-error
       clock.setState(2)
       expect(argumentHistory(fn)).toEqual([{source: 'run', clock: 2}])
       expect(argumentHistory(handler)).toEqual([{source: 'run', clock: 2}])
@@ -472,7 +472,7 @@ describe('sample', () => {
       const stop = createEvent()
 
       const s1 = createStore(0)
-      //@ts-ignore
+      //@ts-expect-error
       s1.setState(1)
 
       const s2 = sample(s1, stop)
@@ -485,7 +485,7 @@ describe('sample', () => {
       const stop = createStore(0)
 
       const s1 = createStore(0)
-      //@ts-ignore
+      //@ts-expect-error
       s1.setState(1)
 
       const s2 = sample(s1, stop)
@@ -512,14 +512,14 @@ describe('sample', () => {
     const stop = createEvent<string>()
 
     const s1 = createStore(0)
-    //@ts-ignore
+    //@ts-expect-error
     s1.setState(1)
 
     const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => fn(value))
     expect(fn).toHaveBeenCalledTimes(0)
-    //@ts-ignore
+    //@ts-expect-error
     s1.setState(2)
 
     stop('x')
@@ -531,19 +531,19 @@ describe('sample', () => {
     const stop = createStore(false)
 
     const s1 = createStore(0)
-    //@ts-ignore
+    //@ts-expect-error
     s1.setState(1)
 
     const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => fn(value))
     expect(argumentHistory(fn)).toEqual([{s1: 1, stop: false}])
-    //@ts-ignore
+    //@ts-expect-error
     s1.setState(2)
-    //@ts-ignore
+    //@ts-expect-error
     s1.setState(0)
 
-    //@ts-ignore
+    //@ts-expect-error
     stop.setState(true)
     expect(argumentHistory(fn)).toEqual([
       {s1: 1, stop: false},
@@ -575,7 +575,7 @@ test('array target', () => {
 test('validate shape', () => {
   expect(() => {
     const clock = createEvent()
-    //@ts-ignore
+    //@ts-expect-error
     sample(0, clock)
   }).toThrowErrorMatchingInlineSnapshot(`"expect first argument be an object"`)
 })
@@ -650,6 +650,7 @@ describe('validation', () => {
   test('source validation', () => {
     const target = createEffect((_: any) => {})
     expect(() => {
+      //@ts-expect-error
       sample({source: undefined, target})
     }).toThrowErrorMatchingInlineSnapshot(`"sample: source should be defined"`)
   })
@@ -657,6 +658,7 @@ describe('validation', () => {
     const target = createEffect((_: any) => {})
 
     expect(() => {
+      //@ts-expect-error
       sample({clock: undefined, target})
     }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
   })
@@ -664,6 +666,7 @@ describe('validation', () => {
     const target = createEffect((_: any) => {})
 
     expect(() => {
+      //@ts-expect-error
       sample({target})
     }).toThrowErrorMatchingInlineSnapshot(
       `"sample: either source or clock should be defined"`,

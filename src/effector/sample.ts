@@ -1,3 +1,5 @@
+import type {Cmd, StateRef} from './index.h'
+import type {CommonUnit, DataCarrier} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
@@ -20,7 +22,6 @@ import {forEach} from './collection'
 import {SAMPLE, STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
-import {Cmd, NodeUnit, StateRef} from './index.h'
 import {own} from './own'
 import {createLinkNode} from './forward'
 
@@ -81,17 +82,17 @@ export function sample(...args) {
 
 export const createSampling = (
   method: string,
-  clock,
-  source,
-  filter,
-  target,
-  fn,
-  name,
-  metadata,
+  clock: DataCarrier | DataCarrier[] | void,
+  source: DataCarrier | Array<Store<any>> | Record<string, Store<any>> | void,
+  filter: any,
+  target: DataCarrier | DataCarrier[] | void,
+  fn: any,
+  name: string | undefined,
+  metadata: object | void,
   batched: boolean,
   targetMayBeStore: boolean,
   filterRequired: boolean,
-  sid?,
+  sid?: string | undefined,
 ) => {
   const isUpward = !!target
   assert(
@@ -110,7 +111,7 @@ export const createSampling = (
   } else {
     assertNodeSet(clock, method, 'clock')
     if (Array.isArray(clock)) {
-      clock = merge(clock)
+      clock = merge(clock as CommonUnit[])
     }
   }
   if (sourceIsClock) {
@@ -151,7 +152,7 @@ export const createSampling = (
   let filterNodes: Cmd[] = []
   if (filterType === 'unit') {
     const [filterRef, hasFilter] = syncSourceState(
-      filter as NodeUnit,
+      filter as DataCarrier,
       target,
       clock,
       clockState,
@@ -195,9 +196,9 @@ const readAndFilter = (state: StateRef) => [
 ]
 
 const syncSourceState = (
-  source: NodeUnit,
-  target: NodeUnit | NodeUnit[],
-  clock: NodeUnit,
+  source: DataCarrier,
+  target: DataCarrier | DataCarrier[],
+  clock: DataCarrier | DataCarrier[],
   clockState: StateRef,
   method: string,
 ) => {
