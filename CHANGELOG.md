@@ -37,7 +37,6 @@ split({
   - Removed vague "incompatible unit in target" error
   - Error messages now explicitly tells which type is given by source and which one is expected by failed target case
 - Added jsdoc documentation for all top level methods. Will be used by IDE such as VS Code and Webstorm to provide better developer expirience
-- Added a warning message for case when a store without `sid` is used in `fork` (issue [#567](https://github.com/effector/effector/issues/567))
 - Derived units in target of `sample`, `guard`, `split` and `forward` are deprecated (issue [#563](https://github.com/effector/effector/issues/563))
 - Imperative calls of derived units created by `merge`, `sample` and `split` are deprecated
 - Imperative calls of events and effects in pure functions are deprecated (issue [#541](https://github.com/effector/effector/issues/541))
