@@ -12,6 +12,7 @@ import {getStoreState} from './getter'
 import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
+import {createSampling} from './sample'
 
 const launchCase = (
   scopeTargets: Record<string, DataCarrier>,
@@ -31,19 +32,22 @@ const launchCase = (
 }
 
 export function split(...args) {
+  const METHOD = 'split'
   let targets: Record<string, DataCarrier>
+  let clock: void | DataCarrier | DataCarrier[]
   let [[source, match], metadata] = processArgsToConfig(args)
-  const knownCases = !match
-  if (knownCases) {
+  const configForm = !match
+  if (configForm) {
     targets = source.cases
     match = source.match
+    clock = source.clock
     source = source.source
   }
   const matchIsUnit = is.store(match)
   const matchIsFunction = !is.unit(match) && isFunction(match)
   const matchIsShape = !matchIsUnit && !matchIsFunction && isObject(match)
   if (!targets!) targets = {}
-  if (!knownCases) {
+  if (!configForm) {
     assert(matchIsShape, 'match should be an object')
     forIn(
       match,
@@ -56,11 +60,11 @@ export function split(...args) {
     targets.__ = createEvent({derived: true, and: metadata})
   } else {
     forIn(targets, (target, field) =>
-      assertTarget('split', target, `cases.${field}`),
+      assertTarget(METHOD, target, `cases.${field}`),
     )
   }
   const owners = new Set(
-    ([] as DataCarrier[]).concat(source, Object.values(targets)),
+    ([] as DataCarrier[]).concat(source, clock || [], Object.values(targets)),
   )
   const caseNames = Object.keys(
     matchIsUnit || matchIsFunction ? targets : match,
@@ -130,13 +134,29 @@ export function split(...args) {
   } else {
     assert(false, 'expect match to be unit, function or object')
   }
-  createNode({
-    meta: {op: 'split'},
-    parent: source,
+  const splitterNode = createNode({
+    meta: {op: METHOD},
+    parent: clock ? [] : source,
     scope: targets,
     node: splitterSeq!,
     family: {owners: Array.from(owners)},
     regional: true,
   })
-  if (!knownCases) return targets
+  if (clock) {
+    createSampling(
+      METHOD,
+      clock,
+      source,
+      null,
+      splitterNode,
+      null,
+      METHOD,
+      metadata,
+      /* non-batched */
+      false,
+      false,
+      false,
+    )
+  }
+  if (!configForm) return targets
 }

@@ -463,6 +463,83 @@ describe('split(config)', () => {
       ]
     `)
   })
+
+  test('clock support', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const fn3 = jest.fn()
+
+    const messageReceived = createEvent<Message>()
+    const refresh = createEvent()
+    const showTextPopup = createEvent<Text>()
+    const playAudio = createEvent<Audio>()
+    const reportUnknownMessageType = createEffect<Message, void>(fn3)
+
+    const messageType = createStore<Message['type']>('system').on(
+      messageReceived,
+      (_, {type}) => type,
+    )
+
+    split({
+      clock: refresh,
+      source: messageReceived,
+      match: messageType,
+      cases: {
+        text: showTextPopup,
+        audio: playAudio,
+        __: reportUnknownMessageType,
+      },
+    })
+
+    showTextPopup.watch(fn1)
+    playAudio.watch(fn2)
+
+    messageReceived({
+      type: 'text',
+      value: 'Hello',
+    })
+    refresh()
+    refresh()
+    messageReceived({
+      type: 'image',
+      imageUrl: '...',
+    })
+    refresh()
+    messageReceived({
+      type: 'audio',
+      duration: 500,
+    })
+    refresh()
+
+    expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "duration": 500,
+          "type": "audio",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "imageUrl": "...",
+          "type": "image",
+        },
+      ]
+    `)
+  })
 })
 
 type Message = Text | Image | Audio | System
