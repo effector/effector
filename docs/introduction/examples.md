@@ -21,7 +21,7 @@ We'll need it when second request to the server requires resolved data from the 
 
 When we need to cancel our effect since it's pointless at the time
 
-### [Modal dialog](https://share.effector.dev/B2ShiBzm)
+### [Modal dialog](https://share.effector.dev/DzljrdjR)
 
 To connect react modal with state
 
