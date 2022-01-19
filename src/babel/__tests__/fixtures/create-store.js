@@ -1,10 +1,8 @@
-//@flow
 import {createStore} from 'effector'
 
 const foo = createStore('foo')
 const a = createStore('h')
 const b = createStore('h', {})
-//$off
 const c = createStore('h', 23020)
 const config = {option: 0}
 const dod = createStore(null, config)
@@ -17,3 +15,15 @@ const {shortName} = createStore(null, {name: 'foo'})
 createStore(null)
 
 createStore(null)
+
+{
+  const incorrect = createStore(null)
+  function createStore() {}
+}
+
+{
+  const createStore = () => {}
+  if (true) {
+    const incorrect = createStore(null)
+  }
+}

@@ -33,6 +33,12 @@ const f = () =>
 
 {
   const incorrect = guard(bar, {filter: foo})
-
   function guard() {}
+}
+
+{
+  const guard = () => {}
+  if (true) {
+    const incorrect = guard(bar, {filter: foo})
+  }
 }

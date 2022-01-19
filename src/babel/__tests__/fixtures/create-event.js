@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent} from 'effector'
 
 const foo = createEvent()
@@ -14,3 +12,15 @@ const {shortName} = createEvent({name: 'foo'})
 createEvent()
 
 createEvent()
+
+{
+  const incorrect = createEvent()
+  function createEvent() {}
+}
+
+{
+  const createEvent = () => {}
+  if (true) {
+    const incorrect = createEvent()
+  }
+}

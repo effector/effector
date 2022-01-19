@@ -23,3 +23,10 @@ const f = a => combine({foo, bar})
 
   function combine() {}
 }
+
+{
+  const combine = () => {}
+  if (true) {
+    const incorrect = combine({foo})
+  }
+}

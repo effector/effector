@@ -39,3 +39,14 @@ const f = () => split(foo, {nonEmpty: list => list.length === 0})
 
   function split() {}
 }
+
+{
+  const split = () => {}
+  if (true) {
+    const incorrect = split({
+      source: foo,
+      match: {nonEmpty: list => list.length === 0},
+      cases: {nonEmpty: bar},
+    })
+  }
+}

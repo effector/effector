@@ -30,3 +30,15 @@ const f = () =>
 
   function attach() {}
 }
+
+{
+  const attach = () => {}
+  const incorrect = attach(config)
+}
+
+{
+  const attach = () => {}
+  if (true) {
+    const incorrect = attach(config)
+  }
+}

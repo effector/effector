@@ -1,5 +1,3 @@
-//@flow
-
 import {createEffect} from 'effector'
 
 const foo = createEffect()
@@ -23,3 +21,15 @@ const {shortName} = createEffect({name: 'foo'})
 createEffect()
 
 createEffect()
+
+{
+  const incorrect = createEffect()
+  function createEffect() {}
+}
+
+{
+  const createEffect = () => {}
+  if (true) {
+    const incorrect = createEffect()
+  }
+}

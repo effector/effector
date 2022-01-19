@@ -1,10 +1,8 @@
-//@flow
 import {createEvent, restore} from 'effector'
 
 const foo = createEvent()
 const a = restore(foo, null)
 const b = restore(foo, null, {})
-//$off
 const c = restore(foo, null, 23020)
 const config = {option: 0}
 const dod = restore(foo, null, config)
@@ -17,3 +15,15 @@ const {shortName} = restore(foo, null, {name: 'bar'})
 restore(foo, null)
 
 restore(foo, null)
+
+{
+  const incorrect = restore(foo, null)
+  function restore() {}
+}
+
+{
+  const restore = () => {}
+  if (true) {
+    const incorrect = restore(foo, null)
+  }
+}

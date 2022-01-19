@@ -1,4 +1,3 @@
-//@flow
 import {createDomain} from 'effector'
 
 const domain = createDomain()
@@ -11,3 +10,15 @@ const {shortName} = createDomain({name: 'foo'})
 createDomain()
 
 createDomain()
+
+{
+  const incorrect = createDomain()
+  function createDomain() {}
+}
+
+{
+  const createDomain = () => {}
+  if (true) {
+    const incorrect = createDomain()
+  }
+}

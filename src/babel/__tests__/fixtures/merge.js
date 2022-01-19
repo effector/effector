@@ -14,6 +14,12 @@ const c = merge(...args)
 
 {
   const incorrect = merge([foo])
-
   function merge() {}
+}
+
+{
+  const merge = () => {}
+  if (true) {
+    const incorrect = merge([foo])
+  }
 }

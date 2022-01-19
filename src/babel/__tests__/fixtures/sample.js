@@ -1,4 +1,3 @@
-//@flow
 import {createStore, createEvent, sample} from 'effector'
 
 const foo = createStore('foo')
@@ -31,3 +30,15 @@ const f = () =>
     source: foo,
     clock: bar,
   })
+
+{
+  const incorrect = sample(config)
+  function sample() {}
+}
+
+{
+  const sample = () => {}
+  if (true) {
+    const incorrect = sample(config)
+  }
+}

@@ -1,5 +1,3 @@
-//@flow
-
 import {createStore, createEvent, forward} from 'effector'
 
 const foo = createStore('foo')
@@ -29,3 +27,15 @@ const f = () =>
     from: foo,
     to: bar,
   })
+
+{
+  const incorrect = forward({from: foo, to: bar})
+  function forward() {}
+}
+
+{
+  const forward = () => {}
+  if (true) {
+    const incorrect = forward({from: foo, to: bar})
+  }
+}

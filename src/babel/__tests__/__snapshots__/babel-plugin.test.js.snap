@@ -80,6 +80,29 @@ const f = () =>
 
   function attach() {}
 }
+{
+  const attach = () => {}
+
+  const incorrect = attach(config)
+}
+{
+  const attach = () => {}
+
+  if (true) {
+    const incorrect = attach({
+      and: config,
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 42,
+          column: 22,
+        },
+        name: 'incorrect',
+        sid: 'jlk9o1',
+      },
+    })
+  }
+}
 "
 `;
 
@@ -228,46 +251,67 @@ const f = a =>
 
   function combine() {}
 }
+{
+  const combine = () => {}
+
+  if (true) {
+    const incorrect = combine({
+      and: [
+        {
+          foo,
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 30,
+          column: 22,
+        },
+        name: 'incorrect',
+        sid: '-lqs26y',
+      },
+    })
+  }
+}
 "
 `;
 
 exports[`babel-plugin should create domain 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-domain.js'
-//@flow
 import {createDomain} from 'effector'
 const domain = createDomain({
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 15,
   },
   name: 'domain',
-  sid: '-r2jo9q',
+  sid: '-rjlanx',
 })
 const foo = createDomain('bar', {
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 4,
     column: 12,
   },
   name: 'foo',
-  sid: '-kylwgu',
+  sid: '-lfniv1',
 })
 const {sid} = createDomain({
   loc: {
     file: _effectorFileName,
-    line: 7,
+    line: 6,
     column: 14,
   },
-  sid: '-ikueb0',
+  sid: '-j1w0p7',
 })
 const {name} = createDomain('foo', {
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 7,
     column: 15,
   },
-  sid: '-i3srvy',
+  sid: '-ikuea5',
 })
 const {shortName} = createDomain(
   {
@@ -276,95 +320,122 @@ const {shortName} = createDomain(
   {
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 8,
       column: 20,
     },
-    sid: '-hmr4vd',
+    sid: '-i3sr9k',
   },
 )
 createDomain({
   loc: {
     file: _effectorFileName,
-    line: 11,
+    line: 10,
     column: 0,
   },
-  sid: '-klzve2',
+  sid: '-kmjnzf',
 })
 createDomain({
   loc: {
     file: _effectorFileName,
-    line: 13,
+    line: 12,
     column: 0,
   },
-  sid: '-kkwa7c',
+  sid: '-klg2sp',
 })
+{
+  const incorrect = createDomain({
+    loc: {
+      file: _effectorFileName,
+      line: 15,
+      column: 20,
+    },
+    name: 'incorrect',
+    sid: '-y0p1qh',
+  })
+
+  function createDomain() {}
+}
+{
+  const createDomain = () => {}
+
+  if (true) {
+    const incorrect = createDomain({
+      loc: {
+        file: _effectorFileName,
+        line: 22,
+        column: 22,
+      },
+      name: 'incorrect',
+      sid: '-krfmnb',
+    })
+  }
+}
 "
 `;
 
 exports[`babel-plugin should create domain domain 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-domain-domain.js'
-//@flow
 import {createDomain} from 'effector'
 const domain = createDomain({
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 15,
   },
   name: 'domain',
-  sid: '-jsqfil',
+  sid: '-k9s1ws',
 })
 const foo = domain.domain({
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 12,
+  },
+  name: 'foo',
+  sid: '-vvg548',
+})
+const bar = domain.domain('baz', {
   loc: {
     file: _effectorFileName,
     line: 5,
     column: 12,
   },
-  name: 'foo',
-  sid: '-veeiq1',
-})
-const bar = domain.domain('baz', {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 12,
-  },
   name: 'bar',
-  sid: 'ksdvxf',
+  sid: 'kbc9j8',
 })
 const fooAlias = domain.createDomain({
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 17,
+  },
+  name: 'fooAlias',
+  sid: '6ob94k',
+})
+const barAlias = domain.createDomain('bazAlias', {
   loc: {
     file: _effectorFileName,
     line: 8,
     column: 17,
   },
-  name: 'fooAlias',
-  sid: '75cvir',
-})
-const barAlias = domain.createDomain('bazAlias', {
-  loc: {
-    file: _effectorFileName,
-    line: 9,
-    column: 17,
-  },
   name: 'barAlias',
-  sid: '-abn323',
+  sid: '-asopga',
 })
 const {sid} = domain.createDomain({
   loc: {
     file: _effectorFileName,
-    line: 11,
+    line: 10,
     column: 14,
   },
-  sid: 'sm28rc',
+  sid: 's50md5',
 })
 const {name} = domain.createDomain('foo', {
   loc: {
     file: _effectorFileName,
-    line: 12,
+    line: 11,
     column: 15,
   },
-  sid: 't33v6e',
+  sid: 'sm28s7',
 })
 const {shortName} = domain.createDomain(
   {
@@ -373,143 +444,142 @@ const {shortName} = domain.createDomain(
   {
     loc: {
       file: _effectorFileName,
-      line: 13,
+      line: 12,
       column: 20,
     },
-    sid: 'tk5i6z',
+    sid: 't33vss',
   },
 )
 domain.createDomain({
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 14,
     column: 0,
   },
-  sid: 'asytpf',
+  sid: 'asf142',
 })
 domain.createDomain({
   loc: {
     file: _effectorFileName,
-    line: 17,
+    line: 16,
     column: 0,
   },
-  sid: 'au2ew5',
+  sid: 'atimas',
 })
 "
 `;
 
 exports[`babel-plugin should create domain effect 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-domain-effect.js'
-//@flow
 import {createDomain} from 'effector'
 const domain = createDomain({
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 15,
   },
   name: 'domain',
-  sid: '-gfxji2',
+  sid: '-gwz5w9',
 })
 const a = domain.effect({
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 5,
     column: 10,
   },
   name: 'a',
-  sid: '-yaax6i',
+  sid: '-yrcjkp',
 })
 
 const f = () =>
   domain.effect({
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 16,
     },
     name: 'f',
-    sid: 'jyl44k',
+    sid: 'jhjhqd',
   })
 
 const b = domain.effect('hello', {
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 7,
     column: 10,
   },
   name: 'b',
-  sid: 'y8n8xx',
+  sid: 'xrlmjq',
 })
 
 const g = () =>
   domain.effect('baz', {
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 8,
       column: 16,
     },
     name: 'g',
-    sid: 'hgf89v',
+    sid: 'gzdlvo',
   })
 
 const aAlias = domain.createEffect({
   loc: {
     file: _effectorFileName,
-    line: 10,
+    line: 9,
     column: 15,
   },
   name: 'aAlias',
-  sid: '-ej7o7u',
+  sid: 'lkzafg',
 })
 
 const fAlias = () =>
   domain.createEffect({
     loc: {
       file: _effectorFileName,
-      line: 11,
+      line: 10,
       column: 21,
     },
     name: 'fAlias',
-    sid: '-yfer5d',
+    sid: '-ywgdjk',
   })
 
 const bAlias = domain.createEffect('helloAlias', {
   loc: {
     file: _effectorFileName,
-    line: 12,
+    line: 11,
     column: 15,
   },
   name: 'bAlias',
-  sid: '-hnrrtn',
+  sid: '-i4te7u',
 })
 
 const gAlias = () =>
   domain.createEffect('bazAlias', {
     loc: {
       file: _effectorFileName,
-      line: 13,
+      line: 12,
       column: 21,
     },
     name: 'gAlias',
-    sid: 'xh577y',
+    sid: 'x03ktr',
   })
 
 const {sid} = domain.createEffect({
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 14,
     column: 14,
   },
-  sid: '-7j3t5r',
+  sid: '-805fjy',
 })
 const {name} = domain.createEffect('foo', {
   loc: {
     file: _effectorFileName,
-    line: 16,
+    line: 15,
     column: 15,
   },
-  sid: '-7226qp',
+  sid: '-7j3t4w',
 })
 const {shortName} = domain.createEffect(
   {
@@ -518,143 +588,142 @@ const {shortName} = domain.createEffect(
   {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 16,
       column: 20,
     },
-    sid: '-6l0jq4',
+    sid: '-72264b',
   },
 )
 domain.createEffect({
   loc: {
     file: _effectorFileName,
-    line: 19,
+    line: 18,
     column: 0,
   },
-  sid: 'e7yw3e',
+  sid: 'e7f3i1',
 })
 domain.createEffect({
   loc: {
     file: _effectorFileName,
-    line: 21,
+    line: 20,
     column: 0,
   },
-  sid: 'ekm5qp',
+  sid: 'ek2d5c',
 })
 "
 `;
 
 exports[`babel-plugin should create domain event 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-domain-event.js'
-//@flow
 import {createDomain} from 'effector'
 const domain = createDomain({
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 15,
   },
   name: 'domain',
-  sid: '3a2uet',
+  sid: '2t180m',
 })
 const a = domain.event({
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 5,
     column: 10,
   },
   name: 'a',
-  sid: '-h01fmt',
+  sid: '-hh3210',
 })
 
 const f = () =>
   domain.event({
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 16,
     },
     name: 'f',
-    sid: '-nyhxip',
+    sid: '-ofjjww',
   })
 
 const b = domain.event('asm', {
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 7,
     column: 10,
   },
   name: 'b',
-  sid: 'p2tf20',
+  sid: 'olrsnt',
 })
 
 const g = () =>
   domain.event('tasm', {
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 8,
       column: 16,
     },
     name: 'g',
-    sid: 'i4cx64',
+    sid: 'hnbarx',
   })
 
 const aAlias = domain.createEvent({
   loc: {
     file: _effectorFileName,
-    line: 10,
+    line: 9,
     column: 15,
   },
   name: 'aAlias',
-  sid: 'ocb24t',
+  sid: 'p4m37p',
 })
 
 const fAlias = () =>
   domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 11,
+      line: 10,
       column: 21,
     },
     name: 'fAlias',
-    sid: 'sqoaj0',
+    sid: 's9mo4t',
   })
 
 const bAlias = domain.createEvent('asmAlias', {
   loc: {
     file: _effectorFileName,
-    line: 12,
+    line: 11,
     column: 15,
   },
   name: 'bAlias',
-  sid: '-2c6lli',
+  sid: '-2t87zp',
 })
 
 const gAlias = () =>
   domain.createEvent('tasmAlias', {
     loc: {
       file: _effectorFileName,
-      line: 13,
+      line: 12,
       column: 21,
     },
     name: 'gAlias',
-    sid: '226msp',
+    sid: '1l50ei',
   })
 
 const {sid} = domain.createEvent({
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 14,
     column: 14,
   },
-  sid: '68j0kq',
+  sid: '5rhe6j',
 })
 const {name} = domain.createEvent('foo', {
   loc: {
     file: _effectorFileName,
-    line: 16,
+    line: 15,
     column: 15,
   },
-  sid: '6pkmzs',
+  sid: '68j0ll',
 })
 const {shortName} = domain.createEvent(
   {
@@ -663,60 +732,59 @@ const {shortName} = domain.createEvent(
   {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 16,
       column: 20,
     },
-    sid: '76ma0d',
+    sid: '6pknm6',
   },
 )
 domain.createEvent({
   loc: {
     file: _effectorFileName,
-    line: 19,
+    line: 18,
     column: 0,
   },
-  sid: '-v9zudr',
+  sid: '-vajmz4',
 })
 domain.createEvent({
   loc: {
     file: _effectorFileName,
-    line: 21,
+    line: 20,
     column: 0,
   },
-  sid: '-uxckqg',
+  sid: '-uxwdbt',
 })
 domain.createEvent('foo', {
   loc: {
     file: _effectorFileName,
-    line: 23,
+    line: 22,
     column: 0,
   },
-  sid: '-uw8zjq',
+  sid: '-uwss53',
 })
 "
 `;
 
 exports[`babel-plugin should create domain store 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-domain-store.js'
-//@flow
 import {createDomain} from 'effector'
 const domain = createDomain({
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 15,
   },
   name: 'domain',
-  sid: '-fpi1bm',
+  sid: '-g6jnpt',
 })
 const a = domain.store('bar', {
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 5,
     column: 10,
   },
   name: 'a',
-  sid: 'z1hqlw',
+  sid: 'ykg47p',
 })
 const b = domain.store('h', {
   and: {
@@ -725,11 +793,11 @@ const b = domain.store('h', {
   },
   loc: {
     file: _effectorFileName,
-    line: 7,
+    line: 6,
     column: 10,
   },
   name: 'b',
-  sid: '5m6wxe',
+  sid: '555aj7',
 })
 const c = domain.store('h', {
   and: {
@@ -737,52 +805,50 @@ const c = domain.store('h', {
   },
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 7,
     column: 10,
   },
   name: 'c',
-  sid: '-nt3wr4',
-}) //$off
-
+  sid: '-oa5j5b',
+})
 const d = domain.store('h', {
   and: null,
   loc: {
     file: _effectorFileName,
-    line: 10,
+    line: 9,
     column: 10,
   },
   name: 'd',
-  sid: 'a6fhta',
-}) //$off
-
+  sid: 'hspbji',
+})
 const e = domain.store('h', {
   and: 4234,
   loc: {
     file: _effectorFileName,
-    line: 12,
+    line: 11,
     column: 10,
   },
   name: 'e',
-  sid: '7o9lyl',
+  sid: '777zke',
 })
 const f = domain.store('h', {
   and: {},
   loc: {
     file: _effectorFileName,
-    line: 13,
+    line: 12,
     column: 10,
   },
   name: 'f',
-  sid: '4p23pp',
+  sid: '480hbi',
 })
 const aAlias = domain.createStore('bar', {
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 14,
     column: 15,
   },
   name: 'aAlias',
-  sid: '6bga5r',
+  sid: '5uenrk',
 })
 const bAlias = domain.createStore('h', {
   and: {
@@ -791,11 +857,11 @@ const bAlias = domain.createStore('h', {
   },
   loc: {
     file: _effectorFileName,
-    line: 16,
+    line: 15,
     column: 15,
   },
   name: 'bAlias',
-  sid: '-ku2zyr',
+  sid: '-lb4mcy',
 })
 const cAlias = domain.createStore('h', {
   and: {
@@ -803,51 +869,49 @@ const cAlias = domain.createStore('h', {
   },
   loc: {
     file: _effectorFileName,
-    line: 17,
+    line: 16,
     column: 15,
   },
   name: 'cAlias',
-  sid: 'n1hrvv',
-}) //$off
-
+  sid: 'mkg5ho',
+})
 const dAlias = domain.createStore('h', {
   and: null,
   loc: {
     file: _effectorFileName,
-    line: 19,
+    line: 18,
     column: 15,
   },
   name: 'dAlias',
-  sid: '-3mzvug',
-}) //$off
-
+  sid: '-441i8n',
+})
 const eAlias = domain.createStore('h', {
   and: 4234,
   loc: {
     file: _effectorFileName,
-    line: 21,
+    line: 20,
     column: 15,
   },
   name: 'eAlias',
-  sid: '-kdjhao',
+  sid: '-kul3ov',
 })
 const fAlias = domain.createStore('h', {
   and: {},
   loc: {
     file: _effectorFileName,
-    line: 22,
+    line: 21,
     column: 15,
   },
   name: 'fAlias',
-  sid: 'ni1ajy',
+  sid: 'n0zo5r',
 })
 const {sid} = domain.createStore(null, {
   loc: {
     file: _effectorFileName,
-    line: 23,
+    line: 22,
     column: 14,
   },
-  sid: '-f8txo',
+  sid: '-wagbv',
 })
 const {shortName} = domain.createStore(null, {
   and: {
@@ -855,51 +919,50 @@ const {shortName} = domain.createStore(null, {
   },
   loc: {
     file: _effectorFileName,
-    line: 24,
+    line: 23,
     column: 20,
   },
-  sid: '1st3s',
+  sid: '-f8taf',
 })
 domain.createStore(null, {
   loc: {
     file: _effectorFileName,
-    line: 26,
+    line: 25,
     column: 0,
   },
-  sid: 'l6xkh2',
+  sid: 'l6drvp',
 })
 domain.createStore(null, {
   loc: {
     file: _effectorFileName,
-    line: 28,
+    line: 27,
     column: 0,
   },
-  sid: 'l815ns',
+  sid: 'l7hd2f',
 })
 "
 `;
 
 exports[`babel-plugin should create effect 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-effect.js'
-//@flow
 import {createEffect} from 'effector'
 const foo = createEffect({
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 3,
     column: 12,
   },
   name: 'foo',
-  sid: '-hlt0gb',
+  sid: '-ijw98p',
 })
 const bar = createEffect('hello', {
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 4,
     column: 12,
   },
   name: 'bar',
-  sid: '-ydp1p5',
+  sid: '-zbsahj',
 })
 const baz = createEffect(
   {
@@ -910,11 +973,11 @@ const baz = createEffect(
   {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 5,
       column: 12,
     },
     name: 'baz',
-    sid: '-v7s7ya',
+    sid: '-w5vgqo',
   },
 )
 const quux = createEffect('nice', {
@@ -925,39 +988,39 @@ const quux = createEffect('nice', {
   },
   loc: {
     file: _effectorFileName,
-    line: 12,
+    line: 10,
     column: 13,
   },
   name: 'quux',
-  sid: '-evyqqj',
+  sid: '-fu1zix',
 })
 
 const f = () =>
   createEffect({
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 15,
       column: 16,
     },
     name: 'f',
-    sid: 'y82cl8',
+    sid: 'x9z3su',
   })
 
 const {sid} = createEffect({
   loc: {
     file: _effectorFileName,
-    line: 19,
+    line: 17,
     column: 14,
   },
-  sid: 'el3ns6',
+  sid: 'dn0ezs',
 })
 const {name} = createEffect('foo', {
   loc: {
     file: _effectorFileName,
-    line: 20,
+    line: 18,
     column: 15,
   },
-  sid: 'p03chb',
+  sid: 'e421eu',
 })
 const {shortName} = createEffect(
   {
@@ -966,12 +1029,20 @@ const {shortName} = createEffect(
   {
     loc: {
       file: _effectorFileName,
-      line: 21,
+      line: 19,
       column: 20,
     },
-    sid: 'ph4zhw',
+    sid: 'el3off',
   },
 )
+createEffect({
+  loc: {
+    file: _effectorFileName,
+    line: 21,
+    column: 0,
+  },
+  sid: '-gs5czc',
+})
 createEffect({
   loc: {
     file: _effectorFileName,
@@ -980,38 +1051,57 @@ createEffect({
   },
   sid: '-gr1rsm',
 })
-createEffect({
-  loc: {
-    file: _effectorFileName,
-    line: 25,
-    column: 0,
-  },
-  sid: '-gpy6lw',
-})
+{
+  const incorrect = createEffect({
+    loc: {
+      file: _effectorFileName,
+      line: 26,
+      column: 20,
+    },
+    name: 'incorrect',
+    sid: 'e4idd0',
+  })
+
+  function createEffect() {}
+}
+{
+  const createEffect = () => {}
+
+  if (true) {
+    const incorrect = createEffect({
+      loc: {
+        file: _effectorFileName,
+        line: 33,
+        column: 22,
+      },
+      name: 'incorrect',
+      sid: 'rdrsg6',
+    })
+  }
+}
 "
 `;
 
 exports[`babel-plugin should create event 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-event.js'
-//@flow
 import {createEvent} from 'effector'
 const foo = createEvent({
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 3,
     column: 12,
   },
   name: 'foo',
-  sid: 'qm3jl6',
+  sid: 'po0ass',
 })
 const bar = createEvent('hello', {
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 4,
     column: 12,
   },
   name: 'bar',
-  sid: 'f2obva',
+  sid: 'e4l32w',
 })
 const baz = createEvent(
   {
@@ -1020,11 +1110,11 @@ const baz = createEvent(
   {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 5,
       column: 12,
     },
     name: 'baz',
-    sid: '-yrvnsz',
+    sid: 'zb55dr',
   },
 )
 
@@ -1032,28 +1122,28 @@ const f = () =>
   createEvent({
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 6,
       column: 16,
     },
     name: 'f',
-    sid: 'vi2m03',
+    sid: 'ujzd7p',
   })
 
 const {sid} = createEvent({
   loc: {
     file: _effectorFileName,
-    line: 10,
+    line: 8,
     column: 14,
   },
-  sid: '-bimhsq',
+  sid: 'uddyxb',
 })
 const {name} = createEvent('foo', {
   loc: {
     file: _effectorFileName,
-    line: 11,
+    line: 9,
     column: 15,
   },
-  sid: '-b1kvdo',
+  sid: 'uuflcd',
 })
 const {shortName} = createEvent(
   {
@@ -1062,12 +1152,20 @@ const {shortName} = createEvent(
   {
     loc: {
       file: _effectorFileName,
-      line: 12,
+      line: 10,
       column: 20,
     },
-    sid: '-akj8d3',
+    sid: '-bimh5h',
   },
 )
+createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 12,
+    column: 0,
+  },
+  sid: '-4wemi5',
+})
 createEvent({
   loc: {
     file: _effectorFileName,
@@ -1076,59 +1174,77 @@ createEvent({
   },
   sid: '-4vb1bf',
 })
-createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 16,
-    column: 0,
-  },
-  sid: '-4u7g4p',
-})
+{
+  const incorrect = createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 17,
+      column: 20,
+    },
+    name: 'incorrect',
+    sid: 'pq2mfj',
+  })
+
+  function createEvent() {}
+}
+{
+  const createEvent = () => {}
+
+  if (true) {
+    const incorrect = createEvent({
+      loc: {
+        file: _effectorFileName,
+        line: 24,
+        column: 22,
+      },
+      name: 'incorrect',
+      sid: '-w1s0gf',
+    })
+  }
+}
 "
 `;
 
 exports[`babel-plugin should create store 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-store.js'
-//@flow
 import {createStore} from 'effector'
 const foo = createStore('foo', {
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 12,
   },
   name: 'foo',
-  sid: '75h1gk',
+  sid: '6off2d',
 })
 const a = createStore('h', {
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 4,
     column: 10,
   },
   name: 'a',
-  sid: 'osbuqo',
+  sid: 'oba8ch',
 })
 const b = createStore('h', {
   and: {},
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 5,
     column: 10,
   },
   name: 'b',
-  sid: '-yawrls',
-}) //$off
-
+  sid: '-yrydzz',
+})
 const c = createStore('h', {
   and: 23020,
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 6,
     column: 10,
   },
   name: 'c',
-  sid: '-lvzpkx',
+  sid: '-mu2ydb',
 })
 const config = {
   option: 0,
@@ -1137,31 +1253,31 @@ const dod = createStore(null, {
   and: config,
   loc: {
     file: _effectorFileName,
-    line: 10,
+    line: 8,
     column: 12,
   },
   name: 'dod',
-  sid: 'qtb6qu',
+  sid: '441vf7',
 })
 
 const f = a =>
   createStore(a, {
     loc: {
       file: _effectorFileName,
-      line: 12,
+      line: 10,
       column: 15,
     },
     name: 'f',
-    sid: '42loz8',
+    sid: '34ig6u',
   })
 
 const {sid} = createStore(null, {
   loc: {
     file: _effectorFileName,
-    line: 14,
+    line: 12,
     column: 14,
   },
-  sid: '-u0iw5z',
+  sid: '-uym4yd',
 })
 const {shortName} = createStore(null, {
   and: {
@@ -1169,10 +1285,18 @@ const {shortName} = createStore(null, {
   },
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 13,
     column: 20,
   },
-  sid: '-tjh94j',
+  sid: '-uhkhwx',
+})
+createStore(null, {
+  loc: {
+    file: _effectorFileName,
+    line: 15,
+    column: 0,
+  },
+  sid: '-nuc4gh',
 })
 createStore(null, {
   loc: {
@@ -1182,38 +1306,57 @@ createStore(null, {
   },
   sid: '-nt8j9r',
 })
-createStore(null, {
-  loc: {
-    file: _effectorFileName,
-    line: 19,
-    column: 0,
-  },
-  sid: '-ns4y31',
-})
+{
+  const incorrect = createStore(null, {
+    loc: {
+      file: _effectorFileName,
+      line: 20,
+      column: 20,
+    },
+    name: 'incorrect',
+    sid: 'gp2ny6',
+  })
+
+  function createStore() {}
+}
+{
+  const createStore = () => {}
+
+  if (true) {
+    const incorrect = createStore(null, {
+      loc: {
+        file: _effectorFileName,
+        line: 27,
+        column: 22,
+      },
+      name: 'incorrect',
+      sid: 'k0e0r9',
+    })
+  }
+}
 "
 `;
 
 exports[`babel-plugin should createApi 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/createApi.js'
-//@flow
 import {createStore, createEvent, createApi} from 'effector'
 const foo = createStore([], {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 12,
+  },
+  name: 'foo',
+  sid: '-i3v0at',
+})
+const bar = createEvent({
   loc: {
     file: _effectorFileName,
     line: 4,
     column: 12,
   },
-  name: 'foo',
-  sid: '-hmtdwm',
-})
-const bar = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12,
-  },
   name: 'bar',
-  sid: 'bo1nrg',
+  sid: 'b701d9',
 })
 const baz1 = createApi({
   and: [
@@ -1225,10 +1368,10 @@ const baz1 = createApi({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 13,
     },
-    sid: 'i3pgik',
+    sid: 'hmnu4d',
   },
 })
 createApi({
@@ -1241,10 +1384,10 @@ createApi({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 7,
       column: 0,
     },
-    sid: '-3zehg3',
+    sid: '-3zya1g',
   },
 })
 const spread = [
@@ -1258,10 +1401,10 @@ const baz4 = createApi({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 11,
+      line: 10,
       column: 13,
     },
-    sid: '-ljq5ad',
+    sid: '-m0rrok',
   },
 })
 
@@ -1276,12 +1419,45 @@ const f = () =>
     or: {
       loc: {
         file: _effectorFileName,
-        line: 13,
+        line: 12,
         column: 16,
       },
-      sid: '-klmwfe',
+      sid: '-l2oitl',
     },
   })
+
+{
+  const incorrect = createApi({
+    and: [foo, {}],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 15,
+        column: 20,
+      },
+      sid: '-jnjn1h',
+    },
+  })
+
+  function createApi() {}
+}
+{
+  const createApi = () => {}
+
+  if (true) {
+    const incorrect = createApi({
+      and: [foo, {}],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 22,
+          column: 22,
+        },
+        sid: '-6ea7yb',
+      },
+    })
+  }
+}
 "
 `;
 
@@ -1814,25 +1990,24 @@ const result = _withFactory({
 
 exports[`babel-plugin should forward 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/forward.js'
-//@flow
 import {createStore, createEvent, forward} from 'effector'
 const foo = createStore('foo', {
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 3,
     column: 12,
   },
   name: 'foo',
-  sid: 'c0eo5u',
+  sid: 'b2bfdg',
 })
 const bar = createEvent({
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 4,
     column: 12,
   },
   name: 'bar',
-  sid: '-skx5bw',
+  sid: '-tj0e4a',
 })
 const baz1 = forward({
   and: {
@@ -1842,11 +2017,11 @@ const baz1 = forward({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 6,
       column: 13,
     },
     name: 'baz1',
-    sid: '-izumle',
+    sid: '-jxxvds',
   },
 })
 const baz2 = forward({
@@ -1857,11 +2032,11 @@ const baz2 = forward({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 7,
       column: 13,
     },
     name: 'baz2',
-    sid: '-mi0m5g',
+    sid: '-ng3uxu',
   },
 })
 forward({
@@ -1872,10 +2047,10 @@ forward({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 14,
+      line: 12,
       column: 0,
     },
-    sid: '-do0gmv',
+    sid: '-dp41tl',
   },
 })
 forward({
@@ -1886,10 +2061,10 @@ forward({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 15,
+      line: 13,
       column: 0,
     },
-    sid: '-dngo1i',
+    sid: '-dok988',
   },
 })
 const config = {
@@ -1901,11 +2076,11 @@ const baz5 = forward({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 25,
+      line: 23,
       column: 13,
     },
     name: 'baz5',
-    sid: '-tagonb',
+    sid: '-u8jxfp',
   },
 })
 
@@ -1918,13 +2093,54 @@ const f = () =>
     or: {
       loc: {
         file: _effectorFileName,
-        line: 28,
+        line: 26,
         column: 2,
       },
       name: 'f',
-      sid: '7acgzo',
+      sid: '798vsy',
     },
   })
+
+{
+  const incorrect = forward({
+    and: {
+      from: foo,
+      to: bar,
+    },
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 32,
+        column: 20,
+      },
+      name: 'incorrect',
+      sid: '-zq45w',
+    },
+  })
+
+  function forward() {}
+}
+{
+  const forward = () => {}
+
+  if (true) {
+    const incorrect = forward({
+      and: {
+        from: foo,
+        to: bar,
+      },
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 39,
+          column: 22,
+        },
+        name: 'incorrect',
+        sid: '2bl8n7',
+      },
+    })
+  }
+}
 "
 `;
 
@@ -2075,6 +2291,29 @@ const f = () =>
   })
 
   function guard() {}
+}
+{
+  const guard = () => {}
+
+  if (true) {
+    const incorrect = guard({
+      and: [
+        bar,
+        {
+          filter: foo,
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 42,
+          column: 22,
+        },
+        name: 'incorrect',
+        sid: 'w2a3uz',
+      },
+    })
+  }
 }
 "
 `;
@@ -2621,6 +2860,21 @@ const c = merge(...args, {
 
   function merge() {}
 }
+{
+  const merge = () => {}
+
+  if (true) {
+    const incorrect = merge([foo], {
+      loc: {
+        file: _effectorFileName,
+        line: 23,
+        column: 22,
+      },
+      name: 'incorrect',
+      sid: '26qqm3',
+    })
+  }
+}
 "
 `;
 
@@ -2840,46 +3094,44 @@ const bar = () => {}
 
 exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/restore.js'
-//@flow
 import {createEvent, restore} from 'effector'
 const foo = createEvent({
   loc: {
     file: _effectorFileName,
-    line: 4,
+    line: 3,
     column: 12,
   },
   name: 'foo',
-  sid: 'uytd56',
+  sid: 'uhrqqz',
 })
 const a = restore(foo, null, {
   loc: {
     file: _effectorFileName,
-    line: 5,
+    line: 4,
     column: 10,
   },
   name: 'a',
-  sid: '-n6x72o',
+  sid: '-nnytgv',
 })
 const b = restore(foo, null, {
   and: {},
   loc: {
     file: _effectorFileName,
-    line: 6,
+    line: 5,
     column: 10,
   },
   name: 'b',
-  sid: '-qp36mq',
-}) //$off
-
+  sid: '-r64t0x',
+})
 const c = restore(foo, null, {
   and: 23020,
   loc: {
     file: _effectorFileName,
-    line: 8,
+    line: 6,
     column: 10,
   },
   name: 'c',
-  sid: '-tq7jsl',
+  sid: '-uoaskz',
 })
 const config = {
   option: 0,
@@ -2888,31 +3140,31 @@ const dod = restore(foo, null, {
   and: config,
   loc: {
     file: _effectorFileName,
-    line: 10,
+    line: 8,
     column: 12,
   },
   name: 'dod',
-  sid: '-5s8kqi',
+  sid: '-juogjx',
 })
 
 const f = a =>
   restore(foo, null, {
     loc: {
       file: _effectorFileName,
-      line: 12,
+      line: 10,
       column: 15,
     },
     name: 'f',
-    sid: 'tcvrf2',
+    sid: 'sesimo',
   })
 
 const {sid} = restore(foo, null, {
   loc: {
     file: _effectorFileName,
-    line: 14,
+    line: 12,
     column: 14,
   },
-  sid: 'duje3b',
+  sid: 'cwg5ax',
 })
 const {shortName} = restore(foo, null, {
   and: {
@@ -2920,10 +3172,18 @@ const {shortName} = restore(foo, null, {
   },
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 13,
     column: 20,
   },
-  sid: 'ebl14r',
+  sid: 'ddhscd',
+})
+restore(foo, null, {
+  loc: {
+    file: _effectorFileName,
+    line: 15,
+    column: 0,
+  },
+  sid: '5rznc1',
 })
 restore(foo, null, {
   loc: {
@@ -2933,49 +3193,68 @@ restore(foo, null, {
   },
   sid: '5t38ir',
 })
-restore(foo, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 19,
-    column: 0,
-  },
-  sid: '5u6tph',
-})
+{
+  const incorrect = restore(foo, null, {
+    loc: {
+      file: _effectorFileName,
+      line: 20,
+      column: 20,
+    },
+    name: 'incorrect',
+    sid: 'hfxpo6',
+  })
+
+  function restore() {}
+}
+{
+  const restore = () => {}
+
+  if (true) {
+    const incorrect = restore(foo, null, {
+      loc: {
+        file: _effectorFileName,
+        line: 27,
+        column: 22,
+      },
+      name: 'incorrect',
+      sid: 'kr92h9',
+    })
+  }
+}
 "
 `;
 
 exports[`babel-plugin should sample 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/sample.js'
-//@flow
 import {createStore, createEvent, sample} from 'effector'
 const foo = createStore('foo', {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 12,
+  },
+  name: 'foo',
+  sid: '-4vbj4l',
+})
+const bar = createEvent({
   loc: {
     file: _effectorFileName,
     line: 4,
     column: 12,
   },
-  name: 'foo',
-  sid: '-4e9wqe',
-})
-const bar = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12,
-  },
   name: 'bar',
-  sid: '-nktibu',
+  sid: '-o1v4q1',
 })
 const baz1 = sample({
   and: [foo, bar],
   or: {
     loc: {
       file: _effectorFileName,
-      line: 7,
+      line: 6,
       column: 13,
     },
     name: 'baz1',
-    sid: '-mcp4ju',
+    sid: '-mtqqy1',
   },
 })
 const baz2 = sample({
@@ -2988,11 +3267,11 @@ const baz2 = sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 8,
+      line: 7,
       column: 13,
     },
     name: 'baz2',
-    sid: '-m09tbe',
+    sid: '-mhbfpl',
   },
 })
 sample({
@@ -3000,10 +3279,10 @@ sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 13,
+      line: 12,
       column: 0,
     },
-    sid: 'u6o7kj',
+    sid: 'u64ez6',
   },
 })
 sample({
@@ -3016,10 +3295,10 @@ sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 14,
+      line: 13,
       column: 0,
     },
-    sid: 'u7805w',
+    sid: 'u6o7kj',
   },
 })
 const spread = [foo, bar]
@@ -3028,11 +3307,11 @@ const baz4 = sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 20,
+      line: 19,
       column: 13,
     },
     name: 'baz4',
-    sid: '55gj6o',
+    sid: '-59j5hm',
   },
 })
 const config = {
@@ -3044,11 +3323,11 @@ const baz5 = sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 27,
+      line: 26,
       column: 13,
     },
     name: 'baz5',
-    sid: '4hk9zs',
+    sid: '40inll',
   },
 })
 
@@ -3063,13 +3342,48 @@ const f = () =>
     or: {
       loc: {
         file: _effectorFileName,
-        line: 30,
+        line: 29,
         column: 2,
       },
       name: 'f',
-      sid: 'hzwgc2',
+      sid: 'hnsza4',
     },
   })
+
+{
+  const incorrect = sample({
+    and: [config],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 35,
+        column: 20,
+      },
+      name: 'incorrect',
+      sid: 'btvhv8',
+    },
+  })
+
+  function sample() {}
+}
+{
+  const sample = () => {}
+
+  if (true) {
+    const incorrect = sample({
+      and: [config],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 42,
+          column: 22,
+        },
+        name: 'incorrect',
+        sid: 'p34wye',
+      },
+    })
+  }
+}
 "
 `;
 
@@ -3236,6 +3550,33 @@ const f = () =>
   })
 
   function split() {}
+}
+{
+  const split = () => {}
+
+  if (true) {
+    const incorrect = split({
+      and: [
+        {
+          source: foo,
+          match: {
+            nonEmpty: list => list.length === 0,
+          },
+          cases: {
+            nonEmpty: bar,
+          },
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 46,
+          column: 22,
+        },
+        sid: 'ha65zr',
+      },
+    })
+  }
 }
 "
 `;
