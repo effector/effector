@@ -176,6 +176,20 @@ const babelConfig = {
     },
     {
       test(filename) {
+        return filename && filename.includes('multiPass')
+      },
+      plugins: [
+        [
+          babelPlugin,
+          {
+            addLoc: true,
+          },
+          'effector-logger',
+        ],
+      ],
+    },
+    {
+      test(filename) {
         return (
           filename && (filename.endsWith('.tsx') || filename.endsWith('.ts'))
         )

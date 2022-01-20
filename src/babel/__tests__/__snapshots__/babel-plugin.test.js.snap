@@ -3511,3 +3511,320 @@ exports[`babel-plugin should units without name with options 1`] = `
 }
 "
 `;
+
+exports[`babel-plugin support multiple passes of babel plugin 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/multiPass.js',
+  _effectorFileName2 = '/src/babel/__tests__/fixtures/multiPass.js'
+import {
+  attach,
+  combine,
+  createDomain,
+  createEffect,
+  createEvent,
+  createStore,
+  createApi,
+  forward,
+  guard,
+  merge,
+  restore,
+  sample,
+  split,
+} from 'effector'
+const korben = attach({
+  and: {
+    and: {
+      effect() {},
+    },
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 17,
+        column: 15,
+      },
+      name: 'korben',
+      sid: '-5ddctg',
+    },
+  },
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 17,
+      column: 15,
+    },
+    name: 'korben',
+    sid: '-5ddctg',
+  },
+})
+const dallas = combine({
+  and: [
+    {
+      and: [{}, () => {}],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 18,
+          column: 15,
+        },
+        name: 'dallas',
+        sid: '-2wtc0j',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 18,
+      column: 15,
+    },
+    name: 'dallas',
+    sid: '-2wtc0j',
+  },
+})
+const c = createDomain(
+  {
+    loc: {
+      file: _effectorFileName,
+      line: 19,
+      column: 10,
+    },
+    name: 'c',
+    sid: 't890l',
+  },
+  {
+    loc: {
+      file: _effectorFileName2,
+      line: 19,
+      column: 10,
+    },
+    name: 'c',
+    sid: 't890l',
+  },
+)
+const d = createEffect(
+  {
+    loc: {
+      file: _effectorFileName,
+      line: 20,
+      column: 10,
+    },
+    name: 'd',
+    sid: '-km6xbk',
+  },
+  {
+    loc: {
+      file: _effectorFileName2,
+      line: 20,
+      column: 10,
+    },
+    name: 'd',
+    sid: '-km6xbk',
+  },
+)
+const e = createEvent(
+  {
+    loc: {
+      file: _effectorFileName,
+      line: 21,
+      column: 10,
+    },
+    name: 'e',
+    sid: 'j1jw1c',
+  },
+  {
+    loc: {
+      file: _effectorFileName2,
+      line: 21,
+      column: 10,
+    },
+    name: 'e',
+    sid: 'j1jw1c',
+  },
+)
+const f = createStore(null, {
+  and: {
+    loc: {
+      file: _effectorFileName,
+      line: 22,
+      column: 10,
+    },
+    name: 'f',
+    sid: '-cbtckw',
+  },
+  loc: {
+    file: _effectorFileName2,
+    line: 22,
+    column: 10,
+  },
+  name: 'f',
+  sid: '-cbtckw',
+})
+const g = createApi({
+  and: [
+    {
+      and: [f, {}],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 23,
+          column: 10,
+        },
+        sid: '-v3udvb',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 23,
+      column: 10,
+    },
+    sid: '-v3udvb',
+  },
+})
+const h = forward({
+  and: {
+    and: {
+      from: d,
+      to: e,
+    },
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 24,
+        column: 10,
+      },
+      name: 'h',
+      sid: '-41fru8',
+    },
+  },
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 24,
+      column: 10,
+    },
+    name: 'h',
+    sid: '-41fru8',
+  },
+})
+const i = guard({
+  and: [
+    {
+      and: [
+        e,
+        {
+          filter: Boolean,
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 25,
+          column: 10,
+        },
+        name: 'i',
+        sid: '-zet0gg',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 25,
+      column: 10,
+    },
+    name: 'i',
+    sid: '-zet0gg',
+  },
+})
+const j = merge([e], {
+  and: {
+    loc: {
+      file: _effectorFileName,
+      line: 26,
+      column: 10,
+    },
+    name: 'j',
+    sid: '48xswg',
+  },
+  loc: {
+    file: _effectorFileName2,
+    line: 26,
+    column: 10,
+  },
+  name: 'j',
+  sid: '48xswg',
+})
+const k = restore(d, null, {
+  and: {
+    loc: {
+      file: _effectorFileName,
+      line: 27,
+      column: 10,
+    },
+    name: 'k',
+    sid: '-r4ffps',
+  },
+  loc: {
+    file: _effectorFileName2,
+    line: 27,
+    column: 10,
+  },
+  name: 'k',
+  sid: '-r4ffps',
+})
+const m = sample({
+  and: [
+    {
+      and: [
+        {
+          clock: e,
+          source: f,
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 28,
+          column: 10,
+        },
+        name: 'm',
+        sid: '-jb3hdb',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 28,
+      column: 10,
+    },
+    name: 'm',
+    sid: '-jb3hdb',
+  },
+})
+const n = split({
+  and: [
+    {
+      and: [f, {}],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 29,
+          column: 10,
+        },
+        sid: '-s9kni5',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 29,
+      column: 10,
+    },
+    sid: '-s9kni5',
+  },
+})
+"
+`;
