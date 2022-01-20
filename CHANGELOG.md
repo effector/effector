@@ -43,6 +43,7 @@ split({
 - `restore($store)` is deprecated (issue [#571](https://github.com/effector/effector/issues/571))
 - Effects created by `attach` got correct name for use in developer tools like [effector-logger](https://github.com/effector/logger) (issue [#527](https://github.com/effector/effector/issues/527))
 - Fixed a case when `sample/guard` pass obsolete data from it's `source` store (issue [#544](https://github.com/effector/effector/issues/544))
+- Fixed cases when `effector/babel-plugin` changes function calls which it should avoid (issue [#603](https://github.com/effector/effector/issues/603))
 - Fixed `combine` support for units with large union types (issue [#531](https://github.com/effector/effector/issues/531))
 - Fixed support for calls without payload for `Event<unknown>` (PR [#454](https://github.com/effector/effector/pull/454))
 - Fixed circular reference warning during import of typings (issue [#578](https://github.com/effector/effector/issues/578))

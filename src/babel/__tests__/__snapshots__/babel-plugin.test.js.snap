@@ -89,18 +89,7 @@ const f = () =>
   const attach = () => {}
 
   if (true) {
-    const incorrect = attach({
-      and: config,
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 42,
-          column: 22,
-        },
-        name: 'incorrect',
-        sid: 'jlk9o1',
-      },
-    })
+    const incorrect = attach(config)
   }
 }
 "
@@ -256,20 +245,7 @@ const f = a =>
 
   if (true) {
     const incorrect = combine({
-      and: [
-        {
-          foo,
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 30,
-          column: 22,
-        },
-        name: 'incorrect',
-        sid: '-lqs26y',
-      },
+      foo,
     })
   }
 }
@@ -343,15 +319,7 @@ createDomain({
   sid: '-klg2sp',
 })
 {
-  const incorrect = createDomain({
-    loc: {
-      file: _effectorFileName,
-      line: 15,
-      column: 20,
-    },
-    name: 'incorrect',
-    sid: '-y0p1qh',
-  })
+  const incorrect = createDomain()
 
   function createDomain() {}
 }
@@ -359,15 +327,7 @@ createDomain({
   const createDomain = () => {}
 
   if (true) {
-    const incorrect = createDomain({
-      loc: {
-        file: _effectorFileName,
-        line: 22,
-        column: 22,
-      },
-      name: 'incorrect',
-      sid: '-krfmnb',
-    })
+    const incorrect = createDomain()
   }
 }
 "
@@ -1052,15 +1012,7 @@ createEffect({
   sid: '-gr1rsm',
 })
 {
-  const incorrect = createEffect({
-    loc: {
-      file: _effectorFileName,
-      line: 26,
-      column: 20,
-    },
-    name: 'incorrect',
-    sid: 'e4idd0',
-  })
+  const incorrect = createEffect()
 
   function createEffect() {}
 }
@@ -1068,15 +1020,7 @@ createEffect({
   const createEffect = () => {}
 
   if (true) {
-    const incorrect = createEffect({
-      loc: {
-        file: _effectorFileName,
-        line: 33,
-        column: 22,
-      },
-      name: 'incorrect',
-      sid: 'rdrsg6',
-    })
+    const incorrect = createEffect()
   }
 }
 "
@@ -1175,15 +1119,7 @@ createEvent({
   sid: '-4vb1bf',
 })
 {
-  const incorrect = createEvent({
-    loc: {
-      file: _effectorFileName,
-      line: 17,
-      column: 20,
-    },
-    name: 'incorrect',
-    sid: 'pq2mfj',
-  })
+  const incorrect = createEvent()
 
   function createEvent() {}
 }
@@ -1191,15 +1127,7 @@ createEvent({
   const createEvent = () => {}
 
   if (true) {
-    const incorrect = createEvent({
-      loc: {
-        file: _effectorFileName,
-        line: 24,
-        column: 22,
-      },
-      name: 'incorrect',
-      sid: '-w1s0gf',
-    })
+    const incorrect = createEvent()
   }
 }
 "
@@ -1307,15 +1235,7 @@ createStore(null, {
   sid: '-nt8j9r',
 })
 {
-  const incorrect = createStore(null, {
-    loc: {
-      file: _effectorFileName,
-      line: 20,
-      column: 20,
-    },
-    name: 'incorrect',
-    sid: 'gp2ny6',
-  })
+  const incorrect = createStore(null)
 
   function createStore() {}
 }
@@ -1323,15 +1243,7 @@ createStore(null, {
   const createStore = () => {}
 
   if (true) {
-    const incorrect = createStore(null, {
-      loc: {
-        file: _effectorFileName,
-        line: 27,
-        column: 22,
-      },
-      name: 'incorrect',
-      sid: 'k0e0r9',
-    })
+    const incorrect = createStore(null)
   }
 }
 "
@@ -1427,17 +1339,7 @@ const f = () =>
   })
 
 {
-  const incorrect = createApi({
-    and: [foo, {}],
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 15,
-        column: 20,
-      },
-      sid: '-jnjn1h',
-    },
-  })
+  const incorrect = createApi(foo, {})
 
   function createApi() {}
 }
@@ -1445,17 +1347,7 @@ const f = () =>
   const createApi = () => {}
 
   if (true) {
-    const incorrect = createApi({
-      and: [foo, {}],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 22,
-          column: 22,
-        },
-        sid: '-6ea7yb',
-      },
-    })
+    const incorrect = createApi(foo, {})
   }
 }
 "
@@ -2103,19 +1995,8 @@ const f = () =>
 
 {
   const incorrect = forward({
-    and: {
-      from: foo,
-      to: bar,
-    },
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 32,
-        column: 20,
-      },
-      name: 'incorrect',
-      sid: '-zq45w',
-    },
+    from: foo,
+    to: bar,
   })
 
   function forward() {}
@@ -2125,19 +2006,8 @@ const f = () =>
 
   if (true) {
     const incorrect = forward({
-      and: {
-        from: foo,
-        to: bar,
-      },
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 39,
-          column: 22,
-        },
-        name: 'incorrect',
-        sid: '2bl8n7',
-      },
+      from: foo,
+      to: bar,
     })
   }
 }
@@ -2296,22 +2166,8 @@ const f = () =>
   const guard = () => {}
 
   if (true) {
-    const incorrect = guard({
-      and: [
-        bar,
-        {
-          filter: foo,
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 42,
-          column: 22,
-        },
-        name: 'incorrect',
-        sid: 'w2a3uz',
-      },
+    const incorrect = guard(bar, {
+      filter: foo,
     })
   }
 }
@@ -2864,15 +2720,7 @@ const c = merge(...args, {
   const merge = () => {}
 
   if (true) {
-    const incorrect = merge([foo], {
-      loc: {
-        file: _effectorFileName,
-        line: 23,
-        column: 22,
-      },
-      name: 'incorrect',
-      sid: '26qqm3',
-    })
+    const incorrect = merge([foo])
   }
 }
 "
@@ -2906,42 +2754,10 @@ function outerScope() {
   const allSettled = foo
 
   function nameClashCheck() {
-    const domain = createDomain({
-      loc: {
-        file: _effectorFileName,
-        line: 25,
-        column: 19,
-      },
-      name: 'domain',
-      sid: '-bw6u54',
-    })
-    const event = createEvent({
-      loc: {
-        file: _effectorFileName,
-        line: 26,
-        column: 18,
-      },
-      name: 'event',
-      sid: '-utoer2',
-    })
-    const store = createStore(0, {
-      loc: {
-        file: _effectorFileName,
-        line: 27,
-        column: 18,
-      },
-      name: 'store',
-      sid: 'am2yve',
-    })
-    const effect = createEffect({
-      loc: {
-        file: _effectorFileName,
-        line: 28,
-        column: 19,
-      },
-      name: 'effect',
-      sid: '-sjvrag',
-    })
+    const domain = createDomain()
+    const event = createEvent()
+    const store = createStore(0)
+    const effect = createEffect()
     const domainEvent = domain.createEvent({
       loc: {
         file: _effectorFileName,
@@ -2954,126 +2770,29 @@ function outerScope() {
     const scope = fork(domain)
     const node = createNode()
     const a = attach({
-      and: {
-        effect,
-      },
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 33,
-          column: 14,
-        },
-        name: 'a',
-        sid: '-oczfal',
-      },
+      effect,
     })
     const b = clearNode(node)
     const c = combine({
-      and: [
-        {
-          store,
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 35,
-          column: 14,
-        },
-        name: 'c',
-        sid: '-8xc1wx',
-      },
+      store,
     })
-    const d = createApi({
-      and: [store, {}],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 36,
-          column: 14,
-        },
-        sid: '-fac70v',
-      },
-    })
+    const d = createApi(store, {})
     const e = forward({
-      and: {
-        from: event,
-        to: store,
-      },
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 37,
-          column: 14,
-        },
-        name: 'e',
-        sid: '6ibbgr',
-      },
+      from: event,
+      to: store,
     })
     const f = guard({
-      and: [
-        {
-          source: event,
-          filter: Boolean,
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 38,
-          column: 14,
-        },
-        name: 'f',
-        sid: 'e8505l',
-      },
+      source: event,
+      filter: Boolean,
     })
     const g = launch(event, null)
-    const h = merge([event], {
-      loc: {
-        file: _effectorFileName,
-        line: 40,
-        column: 14,
-      },
-      name: 'h',
-      sid: '-vfdm5s',
-    })
-    const i = restore(event, null, {
-      loc: {
-        file: _effectorFileName,
-        line: 41,
-        column: 14,
-      },
-      name: 'i',
-      sid: '-npjxgy',
-    })
+    const h = merge([event])
+    const i = restore(event, null)
     const j = sample({
-      and: [
-        {
-          source: store,
-          clock: event,
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 42,
-          column: 14,
-        },
-        name: 'j',
-        sid: '-fzq8s4',
-      },
+      source: store,
+      clock: event,
     })
-    const k = split({
-      and: [event, {}],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 43,
-          column: 14,
-        },
-        sid: '-212rzf',
-      },
-    })
+    const k = split(event, {})
     const l = withRegion(node, () => {})
     const n = hydrate(scope, {
       values: {},
@@ -3194,15 +2913,7 @@ restore(foo, null, {
   sid: '5t38ir',
 })
 {
-  const incorrect = restore(foo, null, {
-    loc: {
-      file: _effectorFileName,
-      line: 20,
-      column: 20,
-    },
-    name: 'incorrect',
-    sid: 'hfxpo6',
-  })
+  const incorrect = restore(foo, null)
 
   function restore() {}
 }
@@ -3210,15 +2921,7 @@ restore(foo, null, {
   const restore = () => {}
 
   if (true) {
-    const incorrect = restore(foo, null, {
-      loc: {
-        file: _effectorFileName,
-        line: 27,
-        column: 22,
-      },
-      name: 'incorrect',
-      sid: 'kr92h9',
-    })
+    const incorrect = restore(foo, null)
   }
 }
 "
@@ -3351,18 +3054,7 @@ const f = () =>
   })
 
 {
-  const incorrect = sample({
-    and: [config],
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 35,
-        column: 20,
-      },
-      name: 'incorrect',
-      sid: 'btvhv8',
-    },
-  })
+  const incorrect = sample(config)
 
   function sample() {}
 }
@@ -3370,18 +3062,7 @@ const f = () =>
   const sample = () => {}
 
   if (true) {
-    const incorrect = sample({
-      and: [config],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 42,
-          column: 22,
-        },
-        name: 'incorrect',
-        sid: 'p34wye',
-      },
-    })
+    const incorrect = sample(config)
   }
 }
 "
@@ -3556,24 +3237,12 @@ const f = () =>
 
   if (true) {
     const incorrect = split({
-      and: [
-        {
-          source: foo,
-          match: {
-            nonEmpty: list => list.length === 0,
-          },
-          cases: {
-            nonEmpty: bar,
-          },
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 46,
-          column: 22,
-        },
-        sid: 'ha65zr',
+      source: foo,
+      match: {
+        nonEmpty: list => list.length === 0,
+      },
+      cases: {
+        nonEmpty: bar,
       },
     })
   }

@@ -62,31 +62,31 @@ module.exports = function (babel, options = {}) {
       flag: stores,
       set: storeCreators,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false),
+        setStoreNameAfter(path, state, id, t, smallConfig, false, name),
     },
     {
       flag: events,
       set: eventCreators,
       fn: (path, state, name, id) =>
-        setEventNameAfter(path, state, id, t, smallConfig),
+        setEventNameAfter(path, state, id, t, smallConfig, name),
     },
     {
       flag: effects,
       set: effectCreators,
       fn: (path, state, name, id) =>
-        setEventNameAfter(path, state, id, t, smallConfig),
+        setEventNameAfter(path, state, id, t, smallConfig, name),
     },
     {
       flag: domains,
       set: domainCreators,
       fn: (path, state, name, id) =>
-        setEventNameAfter(path, state, id, t, smallConfig),
+        setEventNameAfter(path, state, id, t, smallConfig, name),
     },
     {
       flag: restores,
       set: restoreCreators,
       fn: (path, state, name, id) =>
-        setRestoreNameAfter(path, state, id, t, smallConfig),
+        setRestoreNameAfter(path, state, id, t, smallConfig, name),
     },
     {
       flag: combines,
@@ -98,13 +98,13 @@ module.exports = function (babel, options = {}) {
       flag: samples,
       set: sampleCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false),
+        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
     },
     {
       flag: forwards,
       set: forwardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true),
+        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
     },
     {
       flag: guards,
@@ -128,7 +128,7 @@ module.exports = function (babel, options = {}) {
       flag: apis,
       set: apiCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false),
+        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
     },
     {
       flag: merges,
@@ -588,8 +588,16 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
-function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, addNames, debugSids}) {
+function setRestoreNameAfter(
+  path,
+  state,
+  nameNodeId,
+  t,
+  {addLoc, addNames, debugSids},
+  checkBindingName,
+) {
   const displayName = nameNodeId ? nameNodeId.name : ''
+  if (isLocalVariable(path, checkBindingName)) return
   let args
   let loc
   path.find(path => {
@@ -697,11 +705,8 @@ function setStoreNameAfter(
 }
 function isLocalVariable(path, checkBindingName) {
   if (!checkBindingName) return false
-  const binding = path.scope.getOwnBinding(checkBindingName)
-  if (binding) {
-    const module = binding.path.find(path => path.isImportDeclaration())
-    return !module
-  }
+  const binding = path.scope.getBinding(checkBindingName)
+  if (binding) return binding.kind !== 'module'
   return false
 }
 function setConfigForConfMethod(
@@ -765,9 +770,16 @@ function setConfigForConfMethod(
   }
 }
 
-function setEventNameAfter(path, state, nameNodeId, t, {addLoc, addNames, debugSids}) {
+function setEventNameAfter(
+  path,
+  state,
+  nameNodeId,
+  t,
+  {addLoc, addNames, debugSids},
+  checkBindingName,
+) {
   const displayName = nameNodeId ? nameNodeId.name : ''
-
+  if (isLocalVariable(path, checkBindingName)) return
   let args
   let loc
   path.find(path => {
@@ -839,10 +851,19 @@ function stripRoot(babelRoot, fileName, omitFirstSlash) {
 /**
  * "foo src/index.js [12,30]"
  */
-function generateStableID(babelRoot, fileName, varName, line, column, debugSids) {
+function generateStableID(
+  babelRoot,
+  fileName,
+  varName,
+  line,
+  column,
+  debugSids,
+) {
   const normalizedPath = stripRoot(babelRoot, fileName, false)
   const appendix = debugSids ? `:${normalizedPath}:${varName}` : ''
-  return hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`) + appendix
+  return (
+    hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`) + appendix
+  )
 }
 function hashCode(s) {
   let h = 0
