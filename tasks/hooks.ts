@@ -21,7 +21,6 @@ export default {
       if (typeof body !== 'object' || body === null) return
       cliArgs.current.splice(0, 1)
       for (const field in body) {
-        //$todo
         setConfig(field, body[field])
       }
     },

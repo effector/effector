@@ -1384,14 +1384,12 @@ exports[`babel-plugin should debug sids with options 1`] = `
     },
     name: 'c',
     sid: '-9od9nc:/src/babel/__tests__/fixtures/debug-sids.js:c',
-  }) //$off
-
+  })
   const d = domain.store('h', {
     and: null,
     name: 'd',
     sid: '-1hhykb:/src/babel/__tests__/fixtures/debug-sids.js:d',
-  }) //$off
-
+  })
   const e = domain.store('h', {
     and: 4234,
     name: 'e',
@@ -1420,14 +1418,12 @@ exports[`babel-plugin should debug sids with options 1`] = `
     },
     name: 'cAlias',
     sid: '-3jl1wl:/src/babel/__tests__/fixtures/debug-sids.js:cAlias',
-  }) //$off
-
+  })
   const dAlias = domain.createStore('h', {
     and: null,
     name: 'dAlias',
     sid: '21f28q:/src/babel/__tests__/fixtures/debug-sids.js:dAlias',
-  }) //$off
-
+  })
   const eAlias = domain.createStore('h', {
     and: 4234,
     name: 'eAlias',
@@ -1524,8 +1520,7 @@ exports[`babel-plugin should debug sids with options 1`] = `
     and: {},
     name: 'b',
     sid: '-ek9ysy:/src/babel/__tests__/fixtures/debug-sids.js:b',
-  }) //$off
-
+  })
   const c = createStore('h', {
     and: 23020,
     name: 'c',
@@ -1621,8 +1616,7 @@ exports[`babel-plugin should debug sids with options 1`] = `
     and: {},
     name: 'b',
     sid: 'vd3dfx:/src/babel/__tests__/fixtures/debug-sids.js:b',
-  }) //$off
-
+  })
   const c = restore(foo, null, {
     and: 23020,
     name: 'c',
@@ -2186,7 +2180,6 @@ const store = createStore(0)
 
 exports[`babel-plugin should imports 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/imports.js'
-//@flow
 import {
   createStore as createStoreEffector,
   attach as attachEffector,
@@ -2217,47 +2210,47 @@ import {createStore} from 'redux'
   const domain = createDomainEffector({
     loc: {
       file: _effectorFileName,
-      line: 31,
+      line: 29,
       column: 17,
     },
     name: 'domain',
-    sid: 'crobcd',
+    sid: '1vn09w',
   })
   const event = createEventEffector({
     loc: {
       file: _effectorFileName,
-      line: 32,
+      line: 30,
       column: 16,
     },
     name: 'event',
-    sid: '-l79y9p',
+    sid: '-m5d723',
   })
   const store = createStoreEffector(0, {
     loc: {
       file: _effectorFileName,
-      line: 33,
+      line: 31,
       column: 16,
     },
     name: 'store',
-    sid: '2u1g89',
+    sid: '1vy7fv',
   })
   const effect = createEffectEffector({
     loc: {
       file: _effectorFileName,
-      line: 34,
+      line: 32,
       column: 17,
     },
     name: 'effect',
-    sid: '-hjxlwp',
+    sid: '-ii0up3',
   })
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 35,
+      line: 33,
       column: 22,
     },
     name: 'domainEvent',
-    sid: 'vnavwh',
+    sid: 'up7n43',
   })
   const scope = forkEffector(domain)
   const node = createNodeEffector()
@@ -2268,11 +2261,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 39,
+        line: 37,
         column: 12,
       },
       name: 'a',
-      sid: '-1nlqzd',
+      sid: '-2lozrr',
     },
   })
   const b = clearNodeEffector(node)
@@ -2285,11 +2278,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 41,
+        line: 39,
         column: 12,
       },
       name: 'c',
-      sid: '-obc2z2',
+      sid: '-z7de1j',
     },
   })
   const d = createApiEffector({
@@ -2297,10 +2290,10 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 42,
+        line: 40,
         column: 12,
       },
-      sid: '-wdxjiq',
+      sid: '-xc0sb4',
     },
   })
   const j = forwardEffector({
@@ -2311,11 +2304,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 43,
+        line: 41,
         column: 12,
       },
       name: 'j',
-      sid: '-y8rhxl',
+      sid: '-z6uqpz',
     },
   })
   const l = guardEffector({
@@ -2328,31 +2321,31 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 44,
+        line: 42,
         column: 12,
       },
       name: 'l',
-      sid: '3pmjdk',
+      sid: '2rjal6',
     },
   })
   const m = launchEffector(event, null)
   const n = mergeEffector([event], {
     loc: {
       file: _effectorFileName,
-      line: 46,
+      line: 44,
       column: 12,
     },
     name: 'n',
-    sid: '-sw1uw8',
+    sid: '-tu53om',
   })
   const o = restoreEffector(event, null, {
     loc: {
       file: _effectorFileName,
-      line: 47,
+      line: 45,
       column: 12,
     },
     name: 'o',
-    sid: '-9oc11k',
+    sid: '-amf9ty',
   })
   const p = sampleEffector({
     and: [
@@ -2364,11 +2357,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 48,
+        line: 46,
         column: 12,
       },
       name: 'p',
-      sid: '9jdst4',
+      sid: '8lak0q',
     },
   })
   const q = splitEffector({
@@ -2376,10 +2369,10 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 49,
+        line: 47,
         column: 12,
       },
-      sid: '-t2m6rd',
+      sid: '-u0pfjr',
     },
   })
   const r = withRegionEffector(node, () => {})
@@ -2401,11 +2394,11 @@ function nameClashCheck() {
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 62,
+      line: 60,
       column: 22,
     },
     name: 'domainEvent',
-    sid: '388tev',
+    sid: '2a5kmh',
   })
   const scope = fork(domain)
   const node = createNode()
@@ -3277,13 +3270,11 @@ exports[`babel-plugin should units without name with options 1`] = `
       name: 'test',
     },
     sid: '-exuvjd',
-  }) //$off
-
+  })
   const d = domain.store('h', {
     and: null,
     sid: 'r4zz5g',
-  }) //$off
-
+  })
   const e = domain.store('h', {
     and: 4234,
     sid: '-1t984v',
@@ -3307,13 +3298,11 @@ exports[`babel-plugin should units without name with options 1`] = `
       name: 'testAlias',
     },
     sid: '8mivwq',
-  }) //$off
-
+  })
   const dAlias = domain.createStore('h', {
     and: null,
     sid: '-hf2ev',
-  }) //$off
-
+  })
   const eAlias = domain.createStore('h', {
     and: 4234,
     sid: '-9ld0qg',
@@ -3400,8 +3389,7 @@ exports[`babel-plugin should units without name with options 1`] = `
   const b = createStore('h', {
     and: {},
     sid: 'hbcxod',
-  }) //$off
-
+  })
   const c = createStore('h', {
     and: 23020,
     sid: '-bmw9ly',
@@ -3487,8 +3475,7 @@ exports[`babel-plugin should units without name with options 1`] = `
   const b = restore(foo, null, {
     and: {},
     sid: '-7sds1w',
-  }) //$off
-
+  })
   const c = restore(foo, null, {
     and: 23020,
     sid: 'yah2mx',

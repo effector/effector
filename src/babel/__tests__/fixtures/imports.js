@@ -1,5 +1,3 @@
-//@flow
-
 import {
   createStore as createStoreEffector,
   attach as attachEffector,

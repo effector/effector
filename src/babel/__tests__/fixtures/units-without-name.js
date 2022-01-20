@@ -11,18 +11,18 @@ import {
   const a = domain.store('bar')
   const b = domain.store('h', {option: 'test', ['na' + 'me']: 'LOL'})
   const c = domain.store('h', {name: 'test'})
-  //$off
+
   const d = domain.store('h', null)
-  //$off
+
   const e = domain.store('h', 4234)
   const f = domain.store('h', {})
 
   const aAlias = domain.createStore('bar')
   const bAlias = domain.createStore('h', {option: 'test', ['na' + 'me']: 'LOL'})
   const cAlias = domain.createStore('h', {name: 'testAlias'})
-  //$off
+
   const dAlias = domain.createStore('h', null)
-  //$off
+
   const eAlias = domain.createStore('h', 4234)
   const fAlias = domain.createStore('h', {})
   const {sid} = domain.createStore(null)
@@ -61,7 +61,7 @@ import {
   const foo = createStore('foo')
   const a = createStore('h')
   const b = createStore('h', {})
-  //$off
+
   const c = createStore('h', 23020)
   const config = {option: 0}
   const dod = createStore(null, config)
@@ -95,7 +95,7 @@ import {
   const foo = createEvent()
   const a = restore(foo, null)
   const b = restore(foo, null, {})
-  //$off
+
   const c = restore(foo, null, 23020)
   const config = {option: 0}
   const dod = restore(foo, null, config)

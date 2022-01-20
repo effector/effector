@@ -1,5 +1,3 @@
-//@flow strict
-
 import fs from 'fs'
 import path from 'path'
 import {transformFileSync} from '@babel/core'
@@ -12,10 +10,7 @@ describe('babel-plugin', () => {
     .filter(file => file.endsWith('.js'))
     .sort()
   for (const caseFile of testCases) {
-    const caseName = caseFile
-      .split('-')
-      .join(' ')
-      .slice(0, -3)
+    const caseName = caseFile.split('-').join(' ').slice(0, -3)
 
     const optionsName = `${caseFile.slice(0, -3)}.options.json`
     const optionsPath = path.join(fixturesDir, optionsName)

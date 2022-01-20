@@ -1,13 +1,11 @@
-//@flow
-
 const SHOW_FUN_SOURCE = false
-const printFn = (fn: Function) => {
+const printFn = fn => {
   const name = fn.name
   if (name && name !== '' && name !== 'fn') return name
   if (SHOW_FUN_SOURCE) return fn.toString()
   return 'Function'
 }
-const showCmd = (_: any) => {
+const showCmd = _ => {
   const replacer = (key, val) => {
     if (key === 'meta') return
     if (_.type === 'filter' && key === 'fn') {
@@ -54,7 +52,7 @@ const print = {
     return `seq: [\n${inner}\n]`
   },
 }
-export function show(unit: any): string {
+export function show(unit) {
   const value = unit.graphite ? unit.graphite : unit
   const seq = addIndent(print.seq(value.seq))
   const next = addIndent(print.multi(value.next))

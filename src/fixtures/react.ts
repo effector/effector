@@ -1,18 +1,14 @@
-//@flow
-
-import * as React from 'react'
+import type {DOMElement} from 'react'
 import {render as renderDom, unmountComponentAtNode} from 'react-dom'
 import {act} from 'react-dom/test-utils'
 
 export {act}
 
-//$off
-export let container: HTMLDivElement = null
-let dom
+export let container = null as unknown as HTMLDivElement
+let dom: typeof globalThis
 beforeEach(() => {
   if (typeof document === 'undefined') {
     if (!dom) {
-      //$off
       const {JSDOM} = require('jsdom')
       dom = new JSDOM('<!DOCTYPE html><html><body></body></html>')
     }
@@ -20,24 +16,23 @@ beforeEach(() => {
     global.window = dom.window
   }
   container = document.createElement('div')
-  //$off
+
   document.body.appendChild(container)
 })
-export const cleanup = async() =>
-  act(async() => {
+export const cleanup = async () =>
+  act(async () => {
     if (!container) return
     unmountComponentAtNode(container)
     container.remove()
-    container = null
+    container = null as unknown as HTMLDivElement
   })
 afterEach(cleanup)
 
-export const render = async(node: React.Node) =>
-  act(async() => {
-    //$off
+export const render = async (node: DOMElement<any, any>) =>
+  act(async () => {
     renderDom(node, container)
   })
-export async function renderHTML(node: React.Node) {
+export async function renderHTML(node: DOMElement<any, any>) {
   await render(node)
   return container.firstChild
 }

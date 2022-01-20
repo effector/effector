@@ -4,9 +4,9 @@ import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
 import {terser} from 'rollup-plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
-//@ts-ignore
+//@ts-expect-error
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
-//@ts-ignore
+//@ts-expect-error
 import analyze from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
 
@@ -339,7 +339,7 @@ async function createUmd(
 }
 async function createCompat(name: string, extension = 'js') {
   const plugins = getPlugins(`${name}.compat`)
-  //$off
+
   const {getAliases} = require('../babel.config')
   const terserConfig = minifyConfig({
     beautify: !!process.env.PRETTIFY,
