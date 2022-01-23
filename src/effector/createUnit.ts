@@ -72,6 +72,7 @@ export const initUnit = (kind, unit, configA, configB?) => {
     unitId: (unit.id = id),
     serialize: config.serialize,
     derived: config.derived,
+    config,
   }
   unit.parent = parent
   unit.compositeName = compositeName
