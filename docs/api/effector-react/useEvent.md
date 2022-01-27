@@ -19,13 +19,12 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 
 ```jsx
 import ReactDOM from 'react-dom'
-import {createDomain, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/ssr'
+import {createEvent, createStore, fork} from 'effector'
+import {useStore, useEvent, Provider} from 'effector-react/scope'
 
-const app = createDomain()
-
-const inc = app.createEvent()
-const $count = app.createStore(0).on(inc, x => x + 1)
+const inc = createEvent()
+const $count = createStore(0)
+  .on(inc, x => x + 1)
 
 const App = () => {
   const count = useStore($count)
@@ -39,7 +38,8 @@ const App = () => {
   )
 }
 
-const scope = fork(app)
+const scope = fork()
+
 ReactDOM.render(
   <Provider value={scope}>
     <App />
@@ -64,16 +64,13 @@ ReactDOM.render(
 
 ```jsx
 import ReactDOM from 'react-dom'
-import {createDomain, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/ssr'
+import {createStore, createEvent, fork} from 'effector'
+import {useStore, useEvent, Provider} from 'effector-react/scope'
 
-const app = createDomain()
+const inc = createEvent()
+const dec = createEvent()
 
-const inc = app.createEvent()
-const dec = app.createEvent()
-
-const $count = app
-  .createStore(0)
+const $count = createStore(0)
   .on(inc, x => x + 1)
   .on(dec, x => x - 1)
 
@@ -92,7 +89,8 @@ const App = () => {
   )
 }
 
-const scope = fork(app)
+const scope = fork()
+
 ReactDOM.render(
   <Provider value={scope}>
     <App />
