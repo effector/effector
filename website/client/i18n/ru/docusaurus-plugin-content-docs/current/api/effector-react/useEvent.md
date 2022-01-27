@@ -5,7 +5,7 @@ title: useEvent
 
 Реакт-хук, который привязывает событие к текущему [scope](../effector/Scope.md) для использования в обработчиках событий
 
-Используется с ssr, импортируется из `effector-react/ssr`
+Используется с серверным рендерингом и в тестировании, импортируется из `effector-react/scope`
 
 ## _useEvent(unit)_ {#useEvent-unit}
 
@@ -36,13 +36,12 @@ const fxFn = useEvent(/*unit*/ fx)
 
 ```jsx
 import ReactDOM from 'react-dom'
-import {createDomain, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/ssr'
+import {createEvent, createStore, fork} from 'effector'
+import {useStore, useEvent, Provider} from 'effector-react/scope'
 
-const app = createDomain()
-
-const inc = app.createEvent()
-const $count = app.createStore(0).on(inc, x => x + 1)
+const inc = createEvent()
+const $count = createStore(0)
+  .on(inc, x => x + 1)
 
 const App = () => {
   const count = useStore($count)
@@ -55,7 +54,8 @@ const App = () => {
   )
 }
 
-const scope = fork(app)
+const scope = fork()
+
 ReactDOM.render(
   <Provider value={scope}>
     <App />
@@ -92,15 +92,12 @@ const [aFn, bFn] = useEvent(/*list*/ [a, bFx])
 
 ```jsx
 import ReactDOM from 'react-dom'
-import {createDomain, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/ssr'
+import {createEvent, createStore, fork} from 'effector'
+import {useStore, useEvent, Provider} from 'effector-react/scope'
 
-const app = createDomain()
-
-const inc = app.createEvent()
-const dec = app.createEvent()
-const $count = app
-  .createStore(0)
+const inc = createEvent()
+const dec = createEvent()
+const $count = createStore(0)
   .on(inc, x => x + 1)
   .on(dec, x => x - 1)
 
@@ -116,7 +113,8 @@ const App = () => {
   )
 }
 
-const scope = fork(app)
+const scope = fork()
+
 ReactDOM.render(
   <Provider value={scope}>
     <App />
@@ -153,15 +151,12 @@ const {a: aFn, b: bFn} = useEvent(/*shape*/ {a, b: bFx})
 
 ```jsx
 import ReactDOM from 'react-dom'
-import {createDomain, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/ssr'
+import {createEvent, createStore, fork} from 'effector'
+import {useStore, useEvent, Provider} from 'effector-react/scope'
 
-const app = createDomain()
-
-const inc = app.createEvent()
-const dec = app.createEvent()
-const $count = app
-  .createStore(0)
+const inc = createEvent()
+const dec = createEvent()
+const $count = createStore(0)
   .on(inc, x => x + 1)
   .on(dec, x => x - 1)
 
@@ -177,7 +172,8 @@ const App = () => {
   )
 }
 
-const scope = fork(app)
+const scope = fork()
+
 ReactDOM.render(
   <Provider value={scope}>
     <App />
