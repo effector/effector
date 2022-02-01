@@ -2,7 +2,7 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## [WIP] effector 22.2.0
+## effector 22.2.0
 
 - Added `filter` option to `sample`, thereby making `guard` an alias (issue [#521](https://github.com/effector/effector/issues/521))
 ```ts
