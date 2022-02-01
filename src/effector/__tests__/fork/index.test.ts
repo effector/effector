@@ -7,6 +7,7 @@ import {
   launch,
   createEffect,
   createStore,
+  combine,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -676,4 +677,48 @@ test('handlers without sid should throw an error', () => {
   expect(() => {
     fork({handlers: [[a, () => {}]]})
   }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
+})
+
+describe('diamond deps (issue #613)', () => {
+  test('with getState (should pass)', async () => {
+    const fn = jest.fn()
+    const historyChanged = createEvent<{path: string; search: string}>()
+    const $history = createStore<{path: string; search: string} | null>(
+      null,
+    ).on(historyChanged, (_, upd) => upd)
+    const $path = $history.map(location => location?.path ?? '')
+    const $search = $history.map(location => location?.search ?? '')
+    const $href = combine($path, $search, (path, search) => `${path}/${search}`)
+    $search.watch(s => fn(s))
+    const scope = fork()
+    scope.getState($search)
+    await allSettled(historyChanged, {
+      scope,
+      params: {
+        path: 'path',
+        search: 'search',
+      },
+    })
+    expect(argumentHistory(fn)).toEqual(['', 'search'])
+  })
+  test('without getState (should pass)', async () => {
+    const fn = jest.fn()
+    const historyChanged = createEvent<{path: string; search: string}>()
+    const $history = createStore<{path: string; search: string} | null>(
+      null,
+    ).on(historyChanged, (_, upd) => upd)
+    const $path = $history.map(location => location?.path ?? '')
+    const $search = $history.map(location => location?.search ?? '')
+    const $href = combine($path, $search, (path, search) => `${path}/${search}`)
+    $search.watch(s => fn(s))
+    const scope = fork()
+    await allSettled(historyChanged, {
+      scope,
+      params: {
+        path: 'path',
+        search: 'search',
+      },
+    })
+    expect(argumentHistory(fn)).toEqual(['', 'search'])
+  })
 })

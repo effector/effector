@@ -1,4 +1,11 @@
-import {combine, createDomain, createEvent, createStore} from 'effector'
+import {
+  allSettled,
+  combine,
+  createDomain,
+  createEvent,
+  createStore,
+  fork,
+} from 'effector'
 
 import {argumentHistory} from 'effector/fixtures'
 
@@ -181,8 +188,8 @@ test('combine', () => {
 
 test('no dull updates', () => {
   const store = createStore(false)
-  const e1 = createEvent()
-  const e2 = createEvent()
+  const e1 = createEvent<boolean>()
+  const e2 = createEvent<boolean>()
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const fn3 = jest.fn()
@@ -197,6 +204,56 @@ test('no dull updates', () => {
   e1(false)
   e2(false)
   e2(false)
+  expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
+      true,
+      false,
+    ]
+  `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
+      true,
+      false,
+    ]
+  `)
+  expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
+      true,
+      false,
+    ]
+  `)
+  expect(fn1).toHaveBeenCalledTimes(5)
+  expect(fn2).toHaveBeenCalledTimes(5)
+  expect(fn3).toHaveBeenCalledTimes(5)
+})
+test('no dull updates with fork', async () => {
+  const store = createStore(false)
+  const e1 = createEvent<boolean>()
+  const e2 = createEvent<boolean>()
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const fn3 = jest.fn()
+  store.watch(fn1)
+  store.on(e1, (_, payload): boolean => payload)
+  store.on(e2, (_, p) => _ === p)
+  const nextStore = store.map(x => (fn2(x), x))
+  nextStore.watch(fn3)
+  store.watch(() => {})
+  const scope = fork()
+  await allSettled(e1, {params: false, scope})
+  await allSettled(e1, {params: true, scope})
+  await allSettled(e1, {params: false, scope})
+  await allSettled(e2, {params: false, scope})
+  await allSettled(e2, {params: false, scope})
   expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
     Array [
       false,
