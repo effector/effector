@@ -102,6 +102,13 @@ const storeCombination = (
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
+  const rawShapeReader = read(rawShape)
+  /**
+   * usual ref reading has very high priority, which leads to data races
+   * ref reading for combine should have same "barrier" priority but without batching
+   * (thats why order has no "barrierID" field, which assume batching)
+   **/
+  rawShapeReader.order = {priority: 'barrier'}
   const node = [
     calc((upd, _, stack) => {
       if (stack.scope && !stack.scope.reg[rawShape.id]) {
@@ -109,7 +116,7 @@ const storeCombination = (
       }
       return upd
     }),
-    read(rawShape),
+    rawShapeReader,
     mov({store: isFresh, to: 'b'}),
     calc((upd, {key}, reg) => {
       if (reg.c || upd !== reg.a[key]) {
