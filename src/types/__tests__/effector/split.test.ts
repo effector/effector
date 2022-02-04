@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, createStore, Event, guard, split} from 'effector'
+import {createEvent, createStore, Event, guard, split, attach} from 'effector'
 
 const typecheck = '{global}'
 
@@ -2123,4 +2123,24 @@ describe('array cases', () => {
       "
     `)
   })
+})
+
+test('split + attach', () => {
+  const $number = createStore<number>(0)
+  split({
+    source: $number,
+    match: {},
+    cases: {
+      __: attach({
+        source: createStore<any>(null),
+        effect: (_, param: number) => {},
+      }),
+    },
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Argument of type '{ source: Store<number>; match: {}; cases: { __: Effect<number, void, Error>; }; }' is not assignable to parameter of type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: Store<number>; match: {}; cases: unknown; clock: unknown; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: Store<number>; match: {}; cases: unknown; clock: unknown; }; }'.
+    "
+  `)
 })
