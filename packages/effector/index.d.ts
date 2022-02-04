@@ -1165,7 +1165,7 @@ type SampleRet<
 > = unknown extends Target
     ? unknown extends Clock
       ? unknown extends Source
-        ? void
+        ? never
         : Source extends Unit<any> | SourceRecord
           // has filter, has fn
           ? unknown extends SomeFN
@@ -1221,7 +1221,7 @@ type SampleRet<
                   : Source extends Store<any> | SourceRecord
                     ? Store<TypeOfSource<Source>>
                     : EventAsReturnType<TypeOfSource<Source>>
-          : void
+          : never
       : unknown extends Source
         ? Clock extends Units
           // has filter, has fn
@@ -1278,7 +1278,7 @@ type SampleRet<
                   : Clock extends Store<any>
                     ? Store<TypeOfClock<Clock>>
                     : EventAsReturnType<TypeOfClock<Clock>>
-          : void
+          : never
         : Clock extends Units
           ? Source extends Unit<any> | SourceRecord
             // has filter, has fn
@@ -1335,8 +1335,8 @@ type SampleRet<
                     : [Clock, Source] extends [Store<any>, Store<any> | SourceRecord]
                       ? Store<TypeOfSource<Source>>
                       : EventAsReturnType<TypeOfSource<Source>>
-            : void
-          : void
+            : never
+          : never
     : Target & ForceTargetInference
 
 /**
@@ -1474,7 +1474,7 @@ export function sample<
             ? Store<TypeOfSource<SourceNoConf>>
             : EventAsReturnType<TypeOfSource<SourceNoConf>>
           : EventAsReturnType<TypeOfSource<SourceNoConf>>
-        : void
+        : never
     : [any, any] extends Args
       ? SourceNoConf extends Store<any>
         ? Store<ReturnType<FNSrcNoConf>>
