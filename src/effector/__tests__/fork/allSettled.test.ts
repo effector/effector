@@ -30,17 +30,14 @@ test('allSettled first argument validation', async () => {
   ).resolves.toBeUndefined()
 
   await expect(
-    // @ts-expect-error
-    allSettled(createStore(0), {scope: fork()}),
-  ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and events"`,
-  )
+    allSettled(createStore(0), {scope: fork(), params: 10}),
+  ).resolves.toBeUndefined()
 
   await expect(
     // @ts-expect-error
     allSettled(createDomain(), {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and events"`,
+    `"first argument accepts only effects, events and stores"`,
   )
 })
 
