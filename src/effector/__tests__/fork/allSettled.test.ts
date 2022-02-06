@@ -7,7 +7,6 @@ import {
   allSettled,
   sample,
   serialize,
-  createStore,
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
@@ -16,31 +15,6 @@ test('allSettled first argument validation', async () => {
     allSettled(null, {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"first argument should be unit"`,
-  )
-
-  await expect(
-    allSettled(
-      createEffect(() => {}),
-      {scope: fork()},
-    ),
-  ).resolves.toEqual({status: 'done', value: undefined})
-
-  await expect(
-    allSettled(createEvent(), {scope: fork()}),
-  ).resolves.toBeUndefined()
-
-  await expect(
-    // @ts-expect-error
-    allSettled(createStore(0), {scope: fork()}),
-  ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and events"`,
-  )
-
-  await expect(
-    // @ts-expect-error
-    allSettled(createDomain(), {scope: fork()}),
-  ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and events"`,
   )
 })
 
@@ -188,22 +162,22 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-3nax9h": "a",
-        "qv6ij9": Array [
+        "w3iw57": Array [
           "a",
         ],
+        "z6qtwf": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-20x5sr": Array [
+        "-44cjly": "b",
+        "qv6j32": Array [
           "b",
         ],
-        "-3nax9h": "b",
-        "-x0g8hr": "b",
-        "qv6ij9": Array [
+        "w3iw57": Array [
           "b",
         ],
+        "z6qtwf": "b",
       }
     `)
   })

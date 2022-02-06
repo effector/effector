@@ -2,35 +2,33 @@ import {add} from '../collection'
 import {createDefer} from '../defer'
 import {is} from '../is'
 import {launch, forkPage} from '../kernel'
-import type {Scope, Event, Effect, DataCarrier} from '../unit.h'
+import type {Scope} from '../unit.h'
 
-export function allSettled<T>(
-  start: Event<T> | Effect<T, any, any>,
-  {scope, params: ctx}: {scope: Scope; params?: unknown},
+export function allSettled(
+  start,
+  {scope, params: ctx}: {scope: Scope; params?},
 ) {
   if (!is.unit(start))
-    return Promise.reject(new Error('first argument should be unit'))
-  if (!is.effect(start) && !is.event(start))
-    return Promise.reject(new Error('first argument accepts only effects and events'))
+    return Promise.reject(Error('first argument should be unit'))
   const defer = createDefer()
   //@ts-expect-error
   defer.parentFork = forkPage
   const {fxCount} = scope
   add(fxCount.scope.defers, defer)
 
-  const launchUnits: DataCarrier[] = [start]
-  const launchParams = [] as Array<{params: unknown; req: unknown} | null>
+  const launchUnits = [start]
+  const launchParams = [] as Array<{params; req} | null>
   add(
     launchParams,
     is.effect(start)
       ? {
           params: ctx,
           req: {
-            rs(value: unknown) {
+            rs(value) {
               //@ts-expect-error
               defer.value = {status: 'done', value}
             },
-            rj(value: unknown) {
+            rj(value) {
               //@ts-expect-error
               defer.value = {status: 'fail', value}
             },
