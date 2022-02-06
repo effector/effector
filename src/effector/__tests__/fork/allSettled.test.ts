@@ -30,17 +30,14 @@ test('allSettled first argument validation', async () => {
   ).resolves.toBeUndefined()
 
   await expect(
-    // @ts-expect-error
-    allSettled(createStore(0), {scope: fork()}),
-  ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and events"`,
-  )
+    allSettled(createStore(0), {scope: fork(), params: 10}),
+  ).resolves.toBeUndefined()
 
   await expect(
     // @ts-expect-error
     allSettled(createDomain(), {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and events"`,
+    `"first argument accepts only effects, events and stores"`,
   )
 })
 
@@ -61,6 +58,12 @@ describe('allSettled return value', () => {
     const event = createEvent()
     const scope = fork()
     const result = await allSettled(event, {scope})
+    expect(result).toBe(undefined)
+  })
+  test('in case of store call', async () => {
+    const $store = createStore('value')
+    const scope = fork()
+    const result = await allSettled($store, {scope, params: 'value in scope'})
     expect(result).toBe(undefined)
   })
   describe('attach support', () => {
@@ -188,23 +191,49 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-3nax9h": "a",
-        "qv6ij9": Array [
+        "7ps077": "a",
+        "sabdpu": Array [
           "a",
         ],
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-20x5sr": Array [
+        "-lsam6": Array [
           "b",
         ],
-        "-3nax9h": "b",
-        "-x0g8hr": "b",
-        "qv6ij9": Array [
+        "-vlbdb6": "b",
+        "7ps077": "b",
+        "sabdpu": Array [
           "b",
         ],
       }
     `)
+  })
+  test('starting store is serialized', async () => {
+    const $store = createStore('value')
+    const scope = fork()
+
+    await allSettled($store, {scope, params: 'value in scope'})
+    expect(serialize(scope)).toMatchObject({
+      [$store.sid as string]: 'value in scope',
+    })
+    expect(scope.getState($store)).toEqual('value in scope')
+  })
+  test('starting store is serialized with correct value, if affected twice', async () => {
+    const $store = createStore('value')
+    sample({
+      source: $store,
+      filter: str => !str.includes('1'),
+      fn: str => str + '1',
+      target: $store,
+    })
+    const scope = fork()
+
+    await allSettled($store, {scope, params: 'value in scope'})
+    expect(serialize(scope)).toMatchObject({
+      [$store.sid as string]: 'value in scope1',
+    })
+    expect(scope.getState($store)).toEqual('value in scope1')
   })
 })
