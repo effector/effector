@@ -7,6 +7,7 @@ import {
   allSettled,
   sample,
   serialize,
+  createStore,
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
@@ -35,6 +36,12 @@ describe('allSettled return value', () => {
     const event = createEvent()
     const scope = fork()
     const result = await allSettled(event, {scope})
+    expect(result).toBe(undefined)
+  })
+  test('in case of store call', async () => {
+    const $store = createStore('value')
+    const scope = fork()
+    const result = await allSettled($store, {scope, params: 'value in scope'})
     expect(result).toBe(undefined)
   })
   describe('attach support', () => {
@@ -162,23 +169,33 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "w3iw57": Array [
+        "-20kfim": Array [
           "a",
         ],
-        "z6qtwf": "a",
+        "-ml3t19": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-44cjly": "b",
-        "qv6j32": Array [
+        "-20kfim": Array [
           "b",
         ],
-        "w3iw57": Array [
+        "-ml3t19": "b",
+        "-uwo3um": Array [
           "b",
         ],
-        "z6qtwf": "b",
+        "94wvfi": "b",
       }
     `)
+  })
+  test('starting store is serialized', async () => {
+    const $store = createStore('value')
+    const scope = fork()
+
+    await allSettled($store, {scope, params: 'value in scope'})
+    expect(serialize(scope)).toMatchObject({
+      [$store.sid as string]: "value in scope"
+    })
+    expect(scope.getState($store)).toEqual('value in scope')
   })
 })
