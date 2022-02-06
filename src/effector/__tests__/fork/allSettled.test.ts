@@ -188,20 +188,20 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-52fsg2": "a",
-        "pg1nco": Array [
+        "-3nax9h": "a",
+        "qv6ij9": Array [
           "a",
         ],
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-52fsg2": "b",
-        "-de039f": Array [
+        "-20x5sr": Array [
           "b",
         ],
-        "-yfl3oc": "b",
-        "pg1nco": Array [
+        "-3nax9h": "b",
+        "-x0g8hr": "b",
+        "qv6ij9": Array [
           "b",
         ],
       }
