@@ -6,7 +6,8 @@ import {
   fork,
   allSettled,
   sample,
-  serialize, createStore,
+  serialize,
+  createStore,
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
@@ -18,27 +19,29 @@ test('allSettled first argument validation', async () => {
   )
 
   await expect(
-    allSettled(createEffect(() => {}), { scope: fork() }),
-  ).resolves.toEqual({ "status": "done", value: undefined })
+    allSettled(
+      createEffect(() => {}),
+      {scope: fork()},
+    ),
+  ).resolves.toEqual({status: 'done', value: undefined})
 
   await expect(
-    allSettled(createEvent(), { scope: fork() }),
+    allSettled(createEvent(), {scope: fork()}),
   ).resolves.toBeUndefined()
 
   await expect(
     // @ts-expect-error
-    allSettled(createStore(0), { scope: fork() })
+    allSettled(createStore(0), {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and units"`
-  );
+    `"first argument accepts only effects and events"`,
+  )
 
   await expect(
     // @ts-expect-error
-    allSettled(createDomain(), { scope: fork() })
+    allSettled(createDomain(), {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects and units"`
-  );
-
+    `"first argument accepts only effects and events"`,
+  )
 })
 
 describe('allSettled return value', () => {
@@ -185,22 +188,22 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "w3iw57": Array [
+        "-52fsg2": "a",
+        "pg1nco": Array [
           "a",
         ],
-        "z6qtwf": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-44cjly": "b",
-        "qv6j32": Array [
+        "-52fsg2": "b",
+        "-de039f": Array [
           "b",
         ],
-        "w3iw57": Array [
+        "-yfl3oc": "b",
+        "pg1nco": Array [
           "b",
         ],
-        "z6qtwf": "b",
       }
     `)
   })

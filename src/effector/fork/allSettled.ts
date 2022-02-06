@@ -9,7 +9,9 @@ export function allSettled<T>(
   {scope, params: ctx}: {scope: Scope; params?: unknown},
 ) {
   if (!is.unit(start))
-    return Promise.reject(Error('first argument should be unit'))
+    return Promise.reject(new Error('first argument should be unit'))
+  if (!is.effect(start) && !is.event(start))
+    return Promise.reject(new Error('first argument accepts only effects and events'))
   const defer = createDefer()
   //@ts-expect-error
   defer.parentFork = forkPage
