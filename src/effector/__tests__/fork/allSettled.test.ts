@@ -198,4 +198,20 @@ describe('transactions', () => {
     })
     expect(scope.getState($store)).toEqual('value in scope')
   })
+  test('starting store is serialized with correct value, if affected twice', async () => {
+    const $store = createStore('value')
+    sample({
+      source: $store,
+      filter: str => !str.includes("1"),
+      fn: str => str + "1",
+      target: $store,
+    })
+    const scope = fork()
+
+    await allSettled($store, {scope, params: 'value in scope'})
+    expect(serialize(scope)).toMatchObject({
+      [$store.sid as string]: "value in scope1"
+    })
+    expect(scope.getState($store)).toEqual('value in scope1')
+  })
 })
