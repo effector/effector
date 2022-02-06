@@ -194,22 +194,22 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-20kfim": Array [
+        "-vdpqsm": Array [
           "a",
         ],
-        "-ml3t19": "a",
+        "94wvds": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-20kfim": Array [
+        "-k88fui": "b",
+        "-vdpqsm": Array [
           "b",
         ],
-        "-ml3t19": "b",
-        "-uwo3um": Array [
+        "94wvds": "b",
+        "tckkf": Array [
           "b",
         ],
-        "94wvfi": "b",
       }
     `)
   })
@@ -219,7 +219,7 @@ describe('transactions', () => {
 
     await allSettled($store, {scope, params: 'value in scope'})
     expect(serialize(scope)).toMatchObject({
-      [$store.sid as string]: "value in scope"
+      [$store.sid as string]: 'value in scope',
     })
     expect(scope.getState($store)).toEqual('value in scope')
   })
@@ -227,15 +227,15 @@ describe('transactions', () => {
     const $store = createStore('value')
     sample({
       source: $store,
-      filter: str => !str.includes("1"),
-      fn: str => str + "1",
+      filter: str => !str.includes('1'),
+      fn: str => str + '1',
       target: $store,
     })
     const scope = fork()
 
     await allSettled($store, {scope, params: 'value in scope'})
     expect(serialize(scope)).toMatchObject({
-      [$store.sid as string]: "value in scope1"
+      [$store.sid as string]: 'value in scope1',
     })
     expect(scope.getState($store)).toEqual('value in scope1')
   })
