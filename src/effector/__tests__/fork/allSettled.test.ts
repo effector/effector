@@ -191,20 +191,20 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-vdpqsm": Array [
+        "7ps077": "a",
+        "sabdpu": Array [
           "a",
         ],
-        "94wvds": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-k88fui": "b",
-        "-vdpqsm": Array [
+        "-lsam6": Array [
           "b",
         ],
-        "94wvds": "b",
-        "tckkf": Array [
+        "-vlbdb6": "b",
+        "7ps077": "b",
+        "sabdpu": Array [
           "b",
         ],
       }
