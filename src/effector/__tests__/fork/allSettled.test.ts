@@ -6,7 +6,7 @@ import {
   fork,
   allSettled,
   sample,
-  serialize,
+  serialize, createStore,
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
@@ -16,6 +16,29 @@ test('allSettled first argument validation', async () => {
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"first argument should be unit"`,
   )
+
+  await expect(
+    allSettled(createEffect(() => {}), { scope: fork() }),
+  ).resolves.toEqual({ "status": "done", value: undefined })
+
+  await expect(
+    allSettled(createEvent(), { scope: fork() }),
+  ).resolves.toBeUndefined()
+
+  await expect(
+    // @ts-expect-error
+    allSettled(createStore(0), { scope: fork() })
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"first argument accepts only effects and units"`
+  );
+
+  await expect(
+    // @ts-expect-error
+    allSettled(createDomain(), { scope: fork() })
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"first argument accepts only effects and units"`
+  );
+
 })
 
 describe('allSettled return value', () => {
