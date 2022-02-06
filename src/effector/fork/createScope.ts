@@ -50,11 +50,12 @@ export function createScope(unit?: Domain): Scope {
     node: [
       calc((value, __, stack) => {
         const storeStack = getParent(stack)
-        if (storeStack && getParent(storeStack)) {
+        if (storeStack) {
           const storeNode = storeStack.node
           if (
             !getMeta(storeNode, 'isCombine') ||
-            getMeta(getParent(storeStack).node, 'op') !== 'combine'
+            (getParent(storeStack) &&
+              getMeta(getParent(storeStack).node, 'op') !== 'combine')
           ) {
             const forkPage = getForkPage(stack)!
             const id = storeNode.scope.state.id
