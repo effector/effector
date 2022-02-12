@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, createStore, Event, guard, split, attach} from 'effector'
+import {
+  createEvent,
+  createStore,
+  Event,
+  guard,
+  split,
+  attach,
+  sample,
+} from 'effector'
 
 const typecheck = '{global}'
 
@@ -1237,6 +1245,31 @@ describe('array cases', () => {
         Argument of type '{ source: Event<{ foo: 1; }>; match: (src: any) => \\"a\\"; cases: { a: Event<{ foo: 1; bar: number; }>[]; b: Event<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
+        "
+      `)
+    })
+
+    test('source doesnt satisfy cases but match do it', () => {
+      const source = sample({
+        clock: createEvent<number | null>(),
+        source: createStore<number | null>(1),
+        fn: ($value, evtPayload) => ({a: $value, b: evtPayload}),
+      })
+      const cases = {
+        write: createEvent<{a: number; b: number}>(),
+      }
+
+      split({
+        source,
+        match: {
+          write: data => data.a !== null && data.b !== null,
+        },
+        cases,
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
         "
       `)
     })
