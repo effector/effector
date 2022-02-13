@@ -164,6 +164,7 @@ export interface Scope extends Unit {
   storeChange: Node
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
   warnSerialize?: boolean
+  warnSerializeNode: Node
 }
 
 export type CommonUnit<T = any> = Event<T> | Effect<T, any, any> | Store<T>
