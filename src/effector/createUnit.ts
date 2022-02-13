@@ -317,14 +317,18 @@ export function createStore<State>(
     meta,
     regional: true,
   })
+  const derived = getMeta(store, 'derived')
+  const ignored = getMeta(store, 'serialize') === 'ignore'
   const sid: string | null = getMeta(store, 'sid')
   if (sid) {
-    if (getMeta(store, 'serialize') !== 'ignore')
-      setMeta(store, 'storeChange', true)
+    if (!ignored) setMeta(store, 'storeChange', true)
     plainState.sid = sid
   }
+  if (!sid && !ignored && !derived) {
+    setMeta(store, 'warnSerialize', true)
+  }
   assert(
-    getMeta(store, 'derived') || !isVoid(defaultState),
+    derived || !isVoid(defaultState),
     "current state can't be undefined, use null instead",
   )
   own(store, [updates])
