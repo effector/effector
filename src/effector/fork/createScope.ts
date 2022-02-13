@@ -70,7 +70,7 @@ export function createScope(unit?: Domain): Scope {
   const warnSerializeNode = createNode({
     node: [
       calc((_, __, stack) => {
-        const forkPage = getForkPage(stack);
+        const forkPage = getForkPage(stack)
         if (forkPage) {
           const storeStack = getParent(stack)
           if (storeStack) {

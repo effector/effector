@@ -493,7 +493,7 @@ describe('serialize: missing sids', () => {
 
     const result = serialize(scope)
     expect(result).toEqual({
-      [$store.sid as string]: 'scope value'
+      [$store.sid as string]: 'scope value',
     })
     expect(scope.getState($store)).toEqual('scope value')
     expect(error).toHaveBeenCalledTimes(0)
@@ -516,7 +516,7 @@ describe('serialize: missing sids', () => {
     expect(scope.getState($store)).toEqual('scope value')
     expect(scope.getState($combine)).toEqual('scope value')
     expect(result).toEqual({
-      [$store.sid as string]: 'scope value'
+      [$store.sid as string]: 'scope value',
     })
     expect(error).toHaveBeenCalledTimes(0)
     console.error = consoleError
