@@ -1,6 +1,6 @@
 # ☄️ effector
 
-The state manager
+Business logic with ease
 
 ## Visit [effector.dev](https://effector.dev) for docs, guides and examples
 
@@ -27,7 +27,7 @@ The state manager
 
 ## Introduction
 
-Effector is an effective multi-store state manager for JavaScript apps **(React/React Native/Vue/Node.js)**, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both **TypeScript** and **Flow** type annotations _out of the box_.
+Effector implements business logic with ease for Javascript apps **(React/React Native/Vue/Svelte/Node.js/Vanilla)**, allows you to manage data flow in complex applications. Effector provides best **TypeScript** support _out of the box_.
 
 ### Effector follows five basic principles:
 
