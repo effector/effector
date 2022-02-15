@@ -1,7 +1,7 @@
 {
   "name": "effector-dev",
   "version": "1.25.2",
-  "description": "The state manager",
+  "description": "Business logic with ease",
   "private": true,
   "scripts": {
     "browserstack": "COMPAT=true npx jest --config=jest.config.js --runInBand",
