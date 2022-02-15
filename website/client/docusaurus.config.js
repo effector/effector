@@ -4,7 +4,7 @@ module.exports = {
     locales: ['en', 'ru'],
   },
   title: 'effector',
-  tagline: 'The state manager',
+  tagline: 'Business logic with ease',
   url: process.env.SITE_URL || 'https://effector.dev',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
@@ -130,7 +130,7 @@ module.exports = {
         },
       ],
       logo: {
-        alt: 'effector - the state manager',
+        alt: 'effector - business logic with ease',
         src: 'img/comet.png',
         href: 'https://github.com/effector/effector',
       },
