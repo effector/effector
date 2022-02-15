@@ -32,6 +32,10 @@ const common = {
 }
 
 const keywords = [
+  'business',
+  'logic',
+  'data',
+  'flow',
   'state management',
   'state manager',
   'algebraic effects',
@@ -88,7 +92,7 @@ export default {
   effector: {
     name: 'effector',
     version: version['effector'],
-    description: 'The state manager',
+    description: 'Business logic with ease',
     main: 'effector.cjs.js',
     module: 'effector.mjs',
     'umd:main': 'effector.umd.js',
