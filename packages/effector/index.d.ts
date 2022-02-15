@@ -731,13 +731,12 @@ type SplitType<
 
       : {error: 'not implemented'}
 
-  : UnitValue<Match> extends CaseTypeReader<Cases, keyof Cases>
-    ? Config
-    : {
-        error: 'source type should extends cases'
-        sourceType: UnitValue<Source>
-        caseType: CaseTypeReader<Cases, keyof Cases>
-      }
+  : {
+    error: 'source type should extends cases'
+    sourceType: UnitValue<Source>
+    caseType: CaseTypeReader<Cases, keyof Cases>
+  }
+
 /**
  * Chooses one of cases by given conditions. It "splits" source unit into several targets, which fires when payload matches their conditions.
  * Works like pattern matching for payload values and external units

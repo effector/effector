@@ -1249,7 +1249,7 @@ describe('array cases', () => {
       `)
     })
 
-    test('source doesnt satisfy cases but match do it', () => {
+    test('source doesnt satisfy cases but match do it (should fail)', () => {
       const source = sample({
         clock: createEvent<number | null>(),
         source: createStore<number | null>(1),
@@ -1260,16 +1260,20 @@ describe('array cases', () => {
       }
 
       split({
+        //@ts-expect-error
         source,
         match: {
-          write: data => data.a !== null && data.b !== null,
+          //@ts-expect-error src is any
+          write: src => src.a !== null && src.b !== null,
         },
         cases,
       })
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: Event<{ a: number | null; b: number | null; }>; match: { write: (src: any) => boolean; }; cases: { write: Event<{ a: number; b: number; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { a: number | null; b: number | null; }; caseType: { a: number; b: number; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { a: number | null; b: number | null; }; caseType: { a: number; b: number; }; }'.
+        Parameter 'src' implicitly has an 'any' type.
         "
       `)
     })
