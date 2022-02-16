@@ -110,8 +110,8 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }]; }'.
+      Argument of type '{ source: Event<number>; clock: Event<any>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
       "
     `)
   })
@@ -124,8 +124,7 @@ describe('basic cases', () => {
     sample({source: num, clock: anyt, target: [num, str]})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string; }]; }'.
+      no errors
       "
     `)
   })
@@ -139,8 +138,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<number> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<number>]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<number>]; }'.
+      no errors
       "
     `)
   })
@@ -155,8 +153,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<string | number>, { sourceType: number; targetType: string; }]; }'.
+      no errors
       "
     `)
   })
@@ -171,8 +168,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<string> | Event<string | number>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<string | number>]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<string | number>]; }'.
+      no errors
       "
     `)
   })
@@ -186,8 +182,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<number>, { sourceType: number; targetType: string | boolean; }]; }'.
+      no errors
       "
     `)
   })
@@ -201,8 +196,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<number> | Event<string | boolean>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<number>]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string | boolean; }, Event<number>]; }'.
+      no errors
       "
     `)
   })
@@ -217,8 +211,8 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: number; targetType: string; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<void>, { sourceType: number; targetType: string; }]; }'.
+      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
       "
     `)
   })
@@ -233,8 +227,8 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<void>]; }'.
+      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
       "
     `)
   })
@@ -248,8 +242,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<any>, { sourceType: number; targetType: string; }]; }'.
+      no errors
       "
     `)
   })
@@ -263,8 +256,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; clock: Event<any>; target: (Event<any> | Event<string>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<any>]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: number; targetType: string; }, Event<any>]; }'.
+      no errors
       "
     `)
   })
@@ -365,8 +357,8 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: { a: Store<number>; }; clock: Event<any>; target: Event<{ a: string; }>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: { a: string; }; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: { a: string; }; }]; }'.
+      Argument of type '{ source: { a: Store<number>; }; clock: Event<any>; target: Event<{ a: string; }>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }[]; }'.
       "
     `)
   })
@@ -381,8 +373,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: { a: Store<number>; }; clock: Event<any>; target: (Event<{ a: string; }> | Event<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<{ a: number; }>, { sourceType: { a: number; }; targetType: { a: string; }; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<{ a: number; }>, { sourceType: { a: number; }; targetType: { a: string; }; }]; }'.
+      no errors
       "
     `)
   })
@@ -396,8 +387,8 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: { a: Store<number>; }; clock: Event<any>; target: Event<{ a: number; b: string; }>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: { a: number; b: string; }; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: { a: number; b: string; }; }]; }'.
+      Argument of type '{ source: { a: Store<number>; }; clock: Event<any>; target: Event<{ a: number; b: string; }>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: number; b: string; }; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: number; b: string; }; }[]; }'.
       "
     `)
   })
@@ -413,8 +404,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: { a: Store<number>; }; clock: Event<any>; target: (Event<{ a: number; b: number; }> | Event<{ a: number; }>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: { a: number; b: number; }; }, Event<{ a: number; }>]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: { a: number; }; targetType: { a: number; b: number; }; }, Event<{ a: number; }>]; }'.
+      no errors
       "
     `)
   })
@@ -469,7 +459,8 @@ describe('combinable source list (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
       "
     `)
   })
@@ -487,7 +478,8 @@ describe('combinable source list (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
       "
     `)
   })
@@ -503,8 +495,8 @@ describe('combinable source list (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [{ sourceType: [number]; targetType: [string]; }]; }'.
+      Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string]; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string]; }[]; }'.
       "
     `)
   })
@@ -519,8 +511,8 @@ describe('combinable source list (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Store<number>[]; clock: Event<any>; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [string]; }]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: [Event<[number]>, { sourceType: [number]; targetType: [string]; }]; }'.
+      Argument of type '{ source: Store<number>[]; clock: Event<any>; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
       "
     `)
   })

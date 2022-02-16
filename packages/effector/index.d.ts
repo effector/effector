@@ -1076,7 +1076,7 @@ type SampleImpl<
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
       : [message: {error: 'source should be unit or object with stores'; got: Source}]
   // has target
-  : Target extends Units | ReadonlyArray<Unit<any>>
+  : Target extends Units
       // has target, no source
     ? unknown extends Source
       ? unknown extends Clock
@@ -1359,7 +1359,7 @@ type SampleRet<
  * ```
  */
 export function sample<
-  Target,
+  Target ,
   Source,
   Clock,
   FLBool,
@@ -1530,7 +1530,7 @@ type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
 
 type TargetFilterFnConfig<
   Mode extends Mode_Flt_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends Units,
   Source,
   Clock,
   FilterFun,
@@ -1551,7 +1551,7 @@ type TargetFilterFnConfig<
 
 type TargetConfigCheck<
   Mode extends Mode_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends Units,
   Source,
   Clock,
   FN,
@@ -1615,7 +1615,7 @@ type InferredType<Source, Clock, FilterFN> =
 
 type SampleFilterTargetDef<
   Mode extends Mode_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends Units,
   Source,
   Clock,
   FLUnit,
@@ -1828,20 +1828,18 @@ type SampleFilterTargetDef<
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends Units,
   ResultConfig
 > = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
     ? [config: ResultConfig]
-    : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
-      ? [config: ResultConfig]
-      : [message: {
-          error: Mode extends 'fnRet'
-            ? 'fn result should extend target type'
-            : Mode extends 'src'
-              ? 'source should extend target type'
-              : 'clock should extend target type'
-          targets: Show<TypeOfTarget<MatchingValue, Target, Mode>>
-        }]
+    : [message: {
+        error: Mode extends 'fnRet'
+          ? 'fn result should extend target type'
+          : Mode extends 'src'
+            ? 'source should extend target type'
+            : 'clock should extend target type'
+        targets: Show<TypeOfTarget<MatchingValue, Target, Mode>>
+      }]
 
 type SampleFilterDef<
   Mode extends Mode_NoTrg,
@@ -2000,42 +1998,7 @@ type DataSourceFunction<Source, Clock> =
     ? (clk: TypeOfClock<Clock>) => any
     : never
 
-type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends Unit<any>
-    ? Target extends Unit<infer TargetType>
-      ? [SourceType] extends [Readonly<TargetType>]
-        ? Target
-        : WhichType<TargetType> extends ('void' | 'any')
-          ? Target
-          : IfAssignable<SourceType, TargetType,
-            Target,
-            Mode extends 'fnRet'
-              ? never & {fnResult: SourceType; targetType: TargetType}
-              : Mode extends 'src'
-                ? never & {sourceType: SourceType; targetType: TargetType}
-                : {clockType: SourceType; targetType: TargetType}
-            >
-      : never
-    : {
-      [
-        K in keyof Target
-      ]: Target[K] extends Unit<infer TargetType>
-        ? [SourceType] extends [Readonly<TargetType>]
-          ? Target[K]
-          : WhichType<TargetType> extends ('void' | 'any')
-            ? Target[K]
-            : IfAssignable<SourceType, TargetType,
-              Target[K],
-              Mode extends 'fnRet'
-                ? never & {fnResult: SourceType; targetType: TargetType}
-                : Mode extends 'src'
-                  ? never & {sourceType: SourceType; targetType: TargetType}
-                  : {clockType: SourceType; targetType: TargetType}
-              >
-        : never
-    }
-
-type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
+type TypeOfTarget<SourceType, Target extends Units, Mode extends 'fnRet' | 'src' | 'clk'> =
   Target extends Unit<any>
     ? Target extends Unit<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
@@ -2073,7 +2036,7 @@ type TypeOfSource<Source extends Unit<any> | SourceRecord> =
     ? {[K in keyof Source]: UnitValue<Source[K]>}
     : never
 
-type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
+type TypeOfClock<Clock extends Units> =
   Clock extends never[]
   ? unknown
   : Clock extends Unit<any>
