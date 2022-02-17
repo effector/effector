@@ -32,12 +32,12 @@ test('clock param name in the function', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ source: Event<number>; clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ source: Event<number>; filter: Store<string>; } & { error: \\"filter unit should has boolean type\\"; got: string; }'.
+      Type '{ source: Event<number>; filter: Store<string>; }' is missing the following properties from type '{ error: \\"filter unit should has boolean type\\"; got: string; }': error, got
+    Argument of type '{ source: Event<number>; clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ source: Event<number>; clock: Event<number>; filter: Store<string>; } & { error: \\"filter unit should has boolean type\\"; got: string; }'.
+      Type '{ source: Event<number>; clock: Event<number>; filter: Store<string>; }' is missing the following properties from type '{ error: \\"filter unit should has boolean type\\"; got: string; }': error, got
+    Argument of type '{ clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ clock: Event<number>; filter: Store<string>; } & { error: \\"filter unit should has boolean type\\"; got: string; }'.
+      Type '{ clock: Event<number>; filter: Store<string>; }' is missing the following properties from type '{ error: \\"filter unit should has boolean type\\"; got: string; }': error, got
     "
   `)
 })

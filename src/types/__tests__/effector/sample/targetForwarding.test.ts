@@ -103,8 +103,8 @@ test('when a target receives a more loose value type from a source [with clock] 
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Store<{ a: string; }>; clock: Event<void>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Argument of type '{ source: Store<{ a: string; }>; clock: Event<void>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<{ a: string; }>; clock: Event<void>; target: Event<{ a: string; b: string; }>; } & { error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { ...; }; }; }'.
+      Type '{ source: Store<{ a: string; }>; clock: Event<void>; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }': error, targets
     "
   `)
 })
@@ -117,8 +117,8 @@ test('when a target receives a more loose value type from a source [without cloc
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Store<{ a: string; }>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Argument of type '{ source: Store<{ a: string; }>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<{ a: string; }>; target: Event<{ a: string; b: string; }>; } & { error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+      Type '{ source: Store<{ a: string; }>; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }': error, targets
     "
   `)
 })
@@ -133,8 +133,8 @@ test('when a target receives a more loose value type from a mapping fn [with clo
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Store<null>; clock: Event<void>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Argument of type '{ source: Store<null>; clock: Event<void>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<null>; clock: Event<void>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; } & { error: \\"fn result should extend target type\\"; targets: { ...; }; }'.
+      Type '{ source: Store<null>; clock: Event<void>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }': error, targets
     "
   `)
 })
@@ -148,8 +148,8 @@ test('when a target receives a more loose value type from a mapping fn [without 
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Store<null>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Argument of type '{ source: Store<null>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<null>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; } & { error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { ...; }; }; }'.
+      Type '{ source: Store<null>; fn: () => { a: string; }; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }': error, targets
     "
   `)
 })
@@ -166,8 +166,8 @@ test('when nullable field passed to strict target [with clock] (should fail)', (
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Store<{ foo: string; bar: string | null; }>; clock: Store<string | null>; target: Effect<{ foo: string; bar: string; }, void, Error>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }'.
+    Argument of type '{ source: Store<{ foo: string; bar: string | null; }>; clock: Store<string | null>; target: Effect<{ foo: string; bar: string; }, void, Error>; }' is not assignable to parameter of type '{ source: Store<{ foo: string; bar: string | null; }>; clock: Store<string | null>; target: Effect<{ foo: string; bar: string; }, void, Error>; } & { error: \\"source should extend target type\\"; targets: { ...; }; }'.
+      Type '{ source: Store<{ foo: string; bar: string | null; }>; clock: Store<string | null>; target: Effect<{ foo: string; bar: string; }, void, Error>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }': error, targets
     "
   `)
 })
@@ -183,8 +183,8 @@ test('when nullable field passed to strict target [without clock] (should fail)'
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Store<{ foo: string; bar: string | null; }>; target: Effect<{ foo: string; bar: string; }, void, Error>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }'.
+    Argument of type '{ source: Store<{ foo: string; bar: string | null; }>; target: Effect<{ foo: string; bar: string; }, void, Error>; }' is not assignable to parameter of type '{ source: Store<{ foo: string; bar: string | null; }>; target: Effect<{ foo: string; bar: string; }, void, Error>; } & { error: \\"source should extend target type\\"; targets: { ...; }; }'.
+      Type '{ source: Store<{ foo: string; bar: string | null; }>; target: Effect<{ foo: string; bar: string; }, void, Error>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }': error, targets
     "
   `)
 })
@@ -200,8 +200,8 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Store<{}>; clock: Event<void>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
+      Argument of type '{ source: Store<{}>; clock: Event<void>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<{}>; clock: Event<void>; target: Event<{ a: string; b: string; }>; } & { error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { ...; }; }; }'.
+        Type '{ source: Store<{}>; clock: Event<void>; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }': error, targets
       "
     `)
   })
@@ -213,8 +213,8 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Store<{}>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
+      Argument of type '{ source: Store<{}>; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<{}>; target: Event<{ a: string; b: string; }>; } & { error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
+        Type '{ source: Store<{}>; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }': error, targets
       "
     `)
   })
@@ -229,8 +229,8 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Store<null>; clock: Event<void>; fn: () => {}; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
+      Argument of type '{ source: Store<null>; clock: Event<void>; fn: () => {}; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<null>; clock: Event<void>; fn: () => {}; target: Event<{ a: string; b: string; }>; } & { error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { ...; }; }; }'.
+        Type '{ source: Store<null>; clock: Event<void>; fn: () => {}; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }': error, targets
       "
     `)
   })
@@ -244,8 +244,8 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Store<null>; fn: () => {}; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
+      Argument of type '{ source: Store<null>; fn: () => {}; target: Event<{ a: string; b: string; }>; }' is not assignable to parameter of type '{ source: Store<null>; fn: () => {}; target: Event<{ a: string; b: string; }>; } & { error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
+        Type '{ source: Store<null>; fn: () => {}; target: Event<{ a: string; b: string; }>; }' is missing the following properties from type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }': error, targets
       "
     `)
   })

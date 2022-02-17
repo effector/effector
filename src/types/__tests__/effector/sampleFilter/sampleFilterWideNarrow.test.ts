@@ -35,16 +35,16 @@ test('wide union (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
+    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>; } & { error: \\"clock should extend target type\\"; targets: { clockType: { ...; } | ... 1 more ... | { ...; }; targetType: { ...; } | { ...; }; }; }'.
+      Type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }': error, targets
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
       Types of property 'watch' are incompatible.
         Type '(watcher: (payload: { a: 1; } | { a: 2; } | { a: 3; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; } | { a: 2; }) => any) => Subscription'.
           Types of parameters 'watcher' and 'watcher' are incompatible.
             Types of parameters 'payload' and 'payload' are incompatible.
               Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
+    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; } & { error: \\"clock should extend target type\\"; targets: { clockType: { ...; } | ... 1 more ... | { ...; }; targetType: { ...; } | { ...; }; }[]; }'.
+      Type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }': error, targets
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[Event<{ a: 1; } | { a: 2; }>]'.
     "
   `)
@@ -107,11 +107,11 @@ test('unknown type in source (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
+    Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>; }' is not assignable to parameter of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>; } & { error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
+      Type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }': error, targets
     Type 'Event<unknown>' is not assignable to type 'Event<string>'.
-    Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
+    Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>[]; }' is not assignable to parameter of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>[]; } & { error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
+      Type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>[]; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }': error, targets
     Type 'Event<unknown>' is not assignable to type '[Event<string>]'.
     "
   `)
@@ -174,16 +174,16 @@ test('optional props (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
+    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>; } & { error: \\"clock should extend target type\\"; targets: { clockType: { ...; }; targetType: { ...; }; }; }'.
+      Type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }': error, targets
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
       Types of property 'watch' are incompatible.
         Type '(watcher: (payload: { a: 1; b?: 2 | undefined; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription'.
           Types of parameters 'watcher' and 'watcher' are incompatible.
             Types of parameters 'payload' and 'payload' are incompatible.
               Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
-    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
+    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>[]; } & { error: \\"clock should extend target type\\"; targets: { clockType: { ...; }; targetType: { ...; }; }[]; }'.
+      Type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>[]; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }': error, targets
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[Event<{ a: 1; b: 2; }>]'.
     "
   `)
@@ -246,16 +246,16 @@ test('narrow object (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
+    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; } & { error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { ...; }; }; }'.
+      Type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }': error, targets
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
       Types of property 'watch' are incompatible.
         Type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; c: 3; }) => any) => Subscription'.
           Types of parameters 'watcher' and 'watcher' are incompatible.
             Types of parameters 'payload' and 'payload' are incompatible.
               Type '{ a: 1; b: 2; }' is not assignable to type '{ a: 1; b: 2; c: 3; }'.
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
+    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; } & { error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { ...; }; }[]; }'.
+      Type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }': error, targets
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[Event<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
@@ -274,8 +274,8 @@ test('narrow object combined (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: { foo: Store<string>; }; filter: () => boolean; target: Event<{ foo: string; bar: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
+    Argument of type '{ source: { foo: Store<string>; }; filter: () => boolean; target: Event<{ foo: string; bar: string; }>; }' is not assignable to parameter of type '{ source: { foo: Store<string>; }; filter: () => boolean; target: Event<{ foo: string; bar: string; }>; } & { error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { ...; }; }; }'.
+      Type '{ source: { foo: Store<string>; }; filter: () => boolean; target: Event<{ foo: string; bar: string; }>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }': error, targets
     "
   `)
 })
@@ -299,10 +299,10 @@ test('wide tuple (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }; }'.
-    Argument of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }[]; }'.
+    Argument of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>; }' is not assignable to parameter of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>; } & { error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [...]; }; }'.
+      Type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }; }': error, targets
+    Argument of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>[]; }' is not assignable to parameter of type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>[]; } & { error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [...]; }[]; }'.
+      Type '{ source: Event<[1, 2, 3]>; filter: Store<boolean>; target: Event<[1, 2]>[]; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2, 3]; targetType: [1, 2]; }[]; }': error, targets
     "
   `)
 })
@@ -328,10 +328,10 @@ test('narrow tuple (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
-    Argument of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
+    Argument of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>; }' is not assignable to parameter of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>; } & { error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [...]; }; }'.
+      Type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }': error, targets
+    Argument of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>[]; }' is not assignable to parameter of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>[]; } & { error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [...]; }[]; }'.
+      Type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>[]; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }': error, targets
     "
   `)
 })
@@ -369,11 +369,11 @@ test('wide union in array (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
+    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>; }' is not assignable to parameter of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>; } & { error: \\"clock should extend target type\\"; targets: { ...; }; }'.
+      Type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }': error, targets
     Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
-    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
+    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>[]; }' is not assignable to parameter of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>[]; } & { error: \\"clock should extend target type\\"; targets: { ...; }[]; }'.
+      Type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>[]; }' is missing the following properties from type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }': error, targets
     Type 'Event<(string | number | boolean)[]>' is not assignable to type '[Event<(string | number)[]>]'.
     "
   `)

@@ -114,8 +114,8 @@ it('supports a list of stores as a source + target forwarding (should pass)', ()
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; }' is not assignable to parameter of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; } & { error: \\"source should extend target type\\"; targets: { ...; }; }'.
+      Type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; }' is missing the following properties from type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }': error, targets
     "
   `)
 })
