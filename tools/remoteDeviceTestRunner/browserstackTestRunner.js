@@ -23,6 +23,7 @@ const browserStackConfig = {
       // seleniumVersion: '3.141.59',
       userName: process.env.BROWSERSTACK_USERNAME,
       accessKey: process.env.BROWSERSTACK_ACCESS_KEY,
+      idleTimeout: 600,
       // local: 'true',
       // debug: 'true',
       // video: 'true',
@@ -34,6 +35,7 @@ const browserStackConfig = {
     'browserstack.use_w3c': true,
     // 'browserstack.local': true,
     'browserstack.console': 'verbose',
+    'browserstack.idleTimeout': '600',
     acceptSslCert: true,
     // 'browserstack.networkLogs': true,
   },
@@ -128,6 +130,14 @@ function moduleRequest(name, field, result) {
   return moduleRequests[name].req
 }
 
+async function setSessionStatus(browser, status, reason) {
+  const reasonString = JSON.stringify(reason)
+  const script = `browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"${status}","reason": ${reasonString}}}`
+  try {
+    await browser.executeScript(script)
+  } catch (error) {}
+}
+
 module.exports = class BSTestRunner extends require('jest-runner').default {
   constructor(...args) {
     super(...args)
@@ -136,13 +146,17 @@ module.exports = class BSTestRunner extends require('jest-runner').default {
   }
   async runTests(tests, watcher, onStart, onResult, onFailure, options) {
     const browserRequests = {}
+    const testMap = {}
     function requestBrowser(tag, config) {
       if (!browserRequests[tag]) {
+        testMap[tag] = {browser: null, fails: []}
         browserRequests[tag] = remote(createBrowserstackConfig(config))
+        browserRequests[tag].then(browser => {
+          testMap[tag].browser = browser
+        })
       }
       return browserRequests[tag]
     }
-    const browserInstances = []
     try {
       return await super.runTests(
         tests,
@@ -271,6 +285,11 @@ module.exports = class BSTestRunner extends require('jest-runner').default {
           return result
         },
         async (test, result) => {
+          const tag = test.context.config.globals.capabilitiesTag
+          const name =
+            test.context.config.displayName || test.context.config.name
+          const testName = `[${tag}] ${name}`
+          testMap[tag].fails.push(testName)
           console.error('onFailure result:', result)
           if (typeof onFailure === 'function')
             return await onFailure(test, result)
@@ -279,13 +298,25 @@ module.exports = class BSTestRunner extends require('jest-runner').default {
         options,
       )
     } finally {
-      await Promise.all(
-        browserInstances.map(async browser => {
-          try {
-            await browser.deleteSession()
-          } catch (err) {}
-        }),
-      )
+      const instances = Object.values(testMap).filter(e => !!e.browser)
+      if (instances.length > 0) {
+        await Promise.all(
+          instances.map(async ({browser, fails}) => {
+            if (fails.length > 0) {
+              await setSessionStatus(
+                browser,
+                'failed',
+                `Failed tests (${fails.length}): ${fails.join('|')}`,
+              )
+            } else {
+              await setSessionStatus(browser, 'passed', '')
+            }
+            try {
+              await browser.deleteSession()
+            } catch (err) {}
+          }),
+        )
+      }
     }
   }
 }
@@ -294,10 +325,10 @@ function execAsyncCode(cb, done) {
   try {
     var evaluated = eval('(' + cb + ')()')
     return Promise.resolve(evaluated)
-      .then(function(result) {
+      .then(function (result) {
         done(result)
       })
-      .catch(function(error) {
+      .catch(function (error) {
         document.body.innerHTML =
           '<h1>' +
           JSON.stringify(error.message) +
@@ -324,11 +355,11 @@ function execAsyncCode(cb, done) {
 function initPageRuntime(modules) {
   var loadedModules = {}
   var domSnapshots = (window.domSnapshots = [])
-  window.requireModule = window.require = function(path) {
+  window.requireModule = window.require = function (path) {
     if (path in loadedModules) return loadedModules[path]
     throw Error('module "' + path + '" not found')
   }
-  var evalModule = (window.evalModule = function(mod) {
+  var evalModule = (window.evalModule = function (mod) {
     var name = mod.name
     var src = mod.src
     var exports = {}
@@ -346,8 +377,8 @@ function initPageRuntime(modules) {
     }
     return loadedModules[name]
   })
-  var addGlobals = (window.addGlobals = function(shape) {
-    Object.keys(shape).forEach(function(key) {
+  var addGlobals = (window.addGlobals = function (shape) {
+    Object.keys(shape).forEach(function (key) {
       window[key] = shape[key]
     })
     return shape
