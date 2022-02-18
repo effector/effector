@@ -457,11 +457,16 @@ test('onlyChanges: false supported only in domain-based scopes', () => {
 })
 
 describe('serialize: missing sids', () => {
-  test('serialize: warns about missing sids', () => {
-    const error = jest.fn()
-    const consoleError = console.error
-    console.error = error
+  const consoleError = console.error
+  beforeEach(() => {
+    console.error = jest.fn()
+  })
 
+  afterEach(() => {
+    console.error = consoleError
+  })
+
+  test('serialize: warns about missing sids', () => {
     // forcing missing sid
     // equals to situation, if user forgot to configure babel-plugin
     // or did not install the sid manually
@@ -474,17 +479,11 @@ describe('serialize: missing sids', () => {
     const result = serialize(scope)
     expect(result).toEqual({})
     expect(scope.getState($store)).toEqual('scope value')
-    expect(error).toHaveBeenCalledWith(
+    expect(console.error).toHaveBeenCalledWith(
       'provided scope cannot be serialized in a reliable way because some stores are missing sid. Please, check that babel-plugin is working or provide sid manually',
     )
-
-    console.error = consoleError
   })
   test('serialize: doesn not warn, if no sid is missing', () => {
-    const error = jest.fn()
-    const consoleError = console.error
-    console.error = error
-
     const $store = createStore('value')
 
     const scope = fork()
@@ -496,14 +495,9 @@ describe('serialize: missing sids', () => {
       [$store.sid as string]: 'scope value',
     })
     expect(scope.getState($store)).toEqual('scope value')
-    expect(error).toHaveBeenCalledTimes(0)
-    console.error = consoleError
+    expect(console.error).toHaveBeenCalledTimes(0)
   })
   test('serialize: doesn not warn on mapped or combined stores', () => {
-    const error = jest.fn()
-    const consoleError = console.error
-    console.error = error
-
     const $store = createStore('value')
     const $mapped = $store.map(s => s)
     const $combine = combine($store, $mapped, (_, m) => m)
@@ -518,7 +512,6 @@ describe('serialize: missing sids', () => {
     expect(result).toEqual({
       [$store.sid as string]: 'scope value',
     })
-    expect(error).toHaveBeenCalledTimes(0)
-    console.error = consoleError
+    expect(console.error).toHaveBeenCalledTimes(0)
   })
 })
