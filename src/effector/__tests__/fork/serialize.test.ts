@@ -500,13 +500,16 @@ describe('serialize: missing sids', () => {
   test('serialize: doesn not warn on mapped or combined stores', () => {
     const $store = createStore('value')
     const $mapped = $store.map(s => s)
-    const $combine = combine($store, $mapped, (_, m) => m)
+    // combined stores have sids, but not used in serialize
+    // this trick is needed to hide combine call from plugin
+    const $combine = {_: combine}._($store, $mapped, (_, m) => m)
 
     const scope = fork()
 
     allSettled($store, {scope, params: 'scope value'})
 
     const result = serialize(scope)
+    expect($combine.sid).toEqual(null)
     expect(scope.getState($store)).toEqual('scope value')
     expect(scope.getState($combine)).toEqual('scope value')
     expect(result).toEqual({
