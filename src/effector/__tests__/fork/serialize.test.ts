@@ -482,7 +482,7 @@ describe('serialize: missing sids', () => {
     expect(result).toEqual({})
     expect(scope.getState($store)).toEqual('scope value')
     expect(console.error).toHaveBeenCalledWith(
-      'provided scope cannot be serialized in a reliable way because some stores are missing sid. Please, check that babel-plugin is working or provide sid manually',
+      'There is a store without sid in this scope, its value is omitted',
     )
   })
   test('serialize: doesn not warn, if no sid is missing', () => {

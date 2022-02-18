@@ -12,7 +12,9 @@ export function serialize(
   config: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
   if (scope.warnSerialize) {
-    console.error("provided scope cannot be serialized in a reliable way because some stores are missing sid. Please, check that babel-plugin is working or provide sid manually");
+    console.error(
+      'There is a store without sid in this scope, its value is omitted',
+    )
   }
   const ignoredStores = config.ignore ? config.ignore.map(({sid}) => sid) : []
   const result = {} as Record<string, any>
