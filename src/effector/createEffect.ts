@@ -133,7 +133,11 @@ export function createEffect<Payload, Done, Fail = Error>(
     return req.req
   }
 
-  const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
+  const inFlight = (instance.inFlight = createStore(0, {
+    named: 'inFlight',
+    // @ts-expect-error
+    serialize: 'ignore',
+  })
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1))
   setMeta(anyway, 'needFxCounter', 'dec')
