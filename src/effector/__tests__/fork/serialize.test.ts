@@ -8,6 +8,8 @@ import {
   hydrate,
   serialize,
   sample,
+  createEffect,
+  attach,
 } from 'effector'
 
 it('serialize stores to object of sid as keys', () => {
@@ -516,5 +518,28 @@ describe('serialize: missing sids', () => {
       [$store.sid as string]: 'scope value',
     })
     expect(console.error).toHaveBeenCalledTimes(0)
+  })
+  test('serialize: does not warn on internal store changes', async () => {
+    const sleep = (p: number) => new Promise(r => setTimeout(r, p))
+    const sleepFx = createEffect(sleep)
+    const $sleep = createStore(1)
+    const sleepAttachedFx = attach({
+      source: $sleep,
+      effect: sleep,
+    })
+    const start = createEvent<number>()
+
+    sample({
+      clock: start,
+      target: [sleepFx, sleepAttachedFx],
+    })
+
+    const scope = fork()
+
+    await allSettled(start, {scope, params: 1})
+
+    const result = serialize(scope)
+    expect(result).toMatchObject({})
+    expect(console.error).toBeCalledTimes(0)
   })
 })
