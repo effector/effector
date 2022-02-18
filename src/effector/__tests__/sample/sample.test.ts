@@ -673,3 +673,62 @@ describe('validation', () => {
     )
   })
 })
+
+describe('event/effect sampling behavior (issue #633)', () => {
+  test('event behavior', () => {
+    const fn = jest.fn()
+    const triggerEvent = createEvent()
+
+    const targetFx = createEffect(() => {})
+    const initEvent = createEvent()
+
+    sample({
+      clock: triggerEvent,
+      target: [initEvent.prepend(() => 1), initEvent.prepend(() => 2)],
+    })
+
+    sample({
+      clock: initEvent,
+      filter: targetFx.pending.map(val => !val),
+      target: targetFx,
+    })
+
+    targetFx.watch(params => fn(params))
+
+    triggerEvent()
+    /*
+    [effect] targetFx 2
+    [effect] targetFx.done {params: 2, result: undefined}
+    */
+    expect(argumentHistory(fn)).toEqual([2])
+  })
+  test('effect behavior', () => {
+    const fn = jest.fn()
+    const triggerEffect = createEvent()
+
+    const targetFx = createEffect(() => {})
+    const initFx = createEffect(() => {})
+
+    sample({
+      clock: triggerEffect,
+      target: [initFx.prepend(() => 1), initFx.prepend(() => 2)],
+    })
+
+    sample({
+      clock: initFx,
+      filter: targetFx.pending.map(val => !val),
+      target: targetFx,
+    })
+
+    targetFx.watch(params => fn(params))
+
+    triggerEffect()
+    /*
+    [effect] targetFx 1
+    [effect] targetFx 2
+    [effect] targetFx.done {params: 1, result: undefined}
+    [effect] targetFx.done {params: 2, result: undefined}
+    */
+    expect(argumentHistory(fn)).toEqual([1, 2])
+  })
+})
