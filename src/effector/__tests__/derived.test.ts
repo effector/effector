@@ -1,6 +1,7 @@
 import {
   createEvent,
   createStore,
+  createEffect,
   combine,
   sample,
   forward,
@@ -109,6 +110,16 @@ describe('.on with derived stores', () => {
       `".on in derived store is deprecated, use createStore instead"`,
     )
   })
+  describe('internal stores', () => {
+    test('usage with effect.inFlight is warned', () => {
+      const trigger = createEvent()
+      const fx = createEffect(() => {})
+      fx.inFlight.on(trigger, s => s + 1)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `".on in derived store is deprecated, use createStore instead"`,
+      )
+    })
+  })
 })
 
 describe('split cases', () => {
@@ -142,6 +153,22 @@ describe('split cases', () => {
       `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
     )
   })
+  describe('internal stores', () => {
+    test('usage with effect.inFlight is warned', () => {
+      const trigger = createEvent<number>()
+      const fx = createEffect(() => {})
+      split({
+        source: trigger,
+        match: () => 'a',
+        cases: {
+          a: fx.inFlight,
+        },
+      })
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
+      )
+    })
+  })
 })
 
 describe('sample target', () => {
@@ -168,6 +195,19 @@ describe('sample target', () => {
     expect(getWarning()).toMatchInlineSnapshot(
       `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
     )
+  })
+  describe('internal stores', () => {
+    test('usage with effect.inFlight is warned', () => {
+      const trigger = createEvent<number>()
+      const fx = createEffect(() => {})
+      sample({
+        clock: trigger,
+        target: fx.inFlight,
+      })
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      )
+    })
   })
 })
 
@@ -198,6 +238,20 @@ describe('guard target', () => {
       `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
     )
   })
+  describe('internal stores', () => {
+    test('usage with effect.inFlight is warned', () => {
+      const trigger = createEvent<number>()
+      const fx = createEffect(() => {})
+      guard({
+        clock: trigger,
+        filter: () => true,
+        target: fx.inFlight,
+      })
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      )
+    })
+  })
 })
 
 describe('forward to', () => {
@@ -224,5 +278,18 @@ describe('forward to', () => {
     expect(getWarning()).toMatchInlineSnapshot(
       `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
     )
+  })
+  describe('internal stores', () => {
+    test('usage with effect.inFlight is warned', () => {
+      const trigger = createEvent<number>()
+      const fx = createEffect(() => {})
+      forward({
+        from: trigger,
+        to: fx.inFlight,
+      })
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+      )
+    })
   })
 })
