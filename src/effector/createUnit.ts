@@ -188,7 +188,7 @@ export function createStore<State>(
   props?: Config,
 ): Store<State> {
   const plainState = createStateRef(defaultState)
-  const updates = createNamedEvent('updates')
+  const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
   const store = {
