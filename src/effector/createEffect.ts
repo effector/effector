@@ -29,7 +29,10 @@ export function createEffect<Payload, Done, Fail = Error>(
     return instance
   }
   instance.use.getCurrent = () => runner.scope.handler
-  const anyway = (instance.finally = createNamedEvent('finally'))
+  const anyway = (instance.finally = createEvent({
+    named: 'finally',
+    derived: true,
+  }))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
     fn({status, params, result}) {
