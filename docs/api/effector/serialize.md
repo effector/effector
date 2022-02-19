@@ -20,6 +20,10 @@ A companion method for [_fork_](./fork.md). Allows to get a serialized value for
 
 An object with store values using sids as a keys
 
+:::caution
+If a store [does not have a sid](./babel-plugin.md#sid), its value will be omitted during serialization.
+:::
+
 ### Example
 
 Serialize forked instance state

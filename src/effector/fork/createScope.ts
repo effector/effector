@@ -67,6 +67,26 @@ export function createScope(unit?: Domain): Scope {
       }),
     ],
   })
+  const warnSerializeNode = createNode({
+    node: [
+      calc((_, __, stack) => {
+        const forkPage = getForkPage(stack)
+        if (forkPage) {
+          const storeStack = getParent(stack)
+          if (storeStack) {
+            const storeNode = storeStack.node
+            if (
+              !getMeta(storeNode, 'isCombine') ||
+              (getParent(storeStack) &&
+                getMeta(getParent(storeStack).node, 'op') !== 'combine')
+            ) {
+              forkPage.warnSerialize = true
+            }
+          }
+        }
+      }),
+    ],
+  })
   const resultScope: Scope = {
     cloneOf: unit,
     reg: page,
@@ -84,7 +104,7 @@ export function createScope(unit?: Domain): Scope {
     graphite: createNode({
       family: {
         type: DOMAIN,
-        links: [forkInFlightCounter, storeChange],
+        links: [forkInFlightCounter, storeChange, warnSerializeNode],
       },
       meta: {unit: 'fork'},
       scope: {forkInFlightCounter},
@@ -93,6 +113,7 @@ export function createScope(unit?: Domain): Scope {
     handlers: {},
     fxCount: forkInFlightCounter,
     storeChange,
+    warnSerializeNode,
   }
   return resultScope
 }

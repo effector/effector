@@ -11,6 +11,11 @@ export function serialize(
   scope: Scope,
   config: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
+  if (scope.warnSerialize) {
+    console.error(
+      'There is a store without sid in this scope, its value is omitted',
+    )
+  }
   const ignoredStores = config.ignore ? config.ignore.map(({sid}) => sid) : []
   const result = {} as Record<string, any>
   forIn(scope.sidValuesMap, (value, sid) => {

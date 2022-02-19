@@ -444,6 +444,15 @@ export function launch(unit, payload?, upsert?: boolean) {
             finalValue,
             forkPage,
           )
+        if (getMeta(node, 'warnSerialize'))
+          pushFirstHeapItem(
+            'child',
+            page,
+            forkPage.warnSerializeNode,
+            stack,
+            finalValue,
+            forkPage,
+          )
         const additionalLinks = forkPage.additionalLinks[node.id]
         if (additionalLinks) {
           forEach(additionalLinks, nextNode => {

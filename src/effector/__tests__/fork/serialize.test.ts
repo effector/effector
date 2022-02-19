@@ -8,6 +8,8 @@ import {
   hydrate,
   serialize,
   sample,
+  createEffect,
+  attach,
 } from 'effector'
 
 it('serialize stores to object of sid as keys', () => {
@@ -454,4 +456,90 @@ test('onlyChanges: false supported only in domain-based scopes', () => {
   expect(() => {
     serialize(scope, {onlyChanges: false})
   }).toThrowErrorMatchingInlineSnapshot(`"scope should be created from domain"`)
+})
+
+describe('serialize: missing sids', () => {
+  const consoleError = console.error
+  beforeEach(() => {
+    console.error = jest.fn()
+  })
+
+  afterEach(() => {
+    console.error = consoleError
+  })
+
+  test('serialize: warns about missing sids', () => {
+    // forcing missing sid
+    // equals to situation, if user forgot to configure babel-plugin
+    // or did not install the sid manually
+    const $store = createStore('value', {sid: ''})
+
+    const scope = fork()
+
+    allSettled($store, {scope, params: 'scope value'})
+
+    const result = serialize(scope)
+    expect(result).toEqual({})
+    expect(scope.getState($store)).toEqual('scope value')
+    expect(console.error).toHaveBeenCalledWith(
+      'There is a store without sid in this scope, its value is omitted',
+    )
+  })
+  test('serialize: doesn not warn, if no sid is missing', () => {
+    const $store = createStore('value')
+
+    const scope = fork()
+
+    allSettled($store, {scope, params: 'scope value'})
+
+    const result = serialize(scope)
+    expect(result).toEqual({
+      [$store.sid as string]: 'scope value',
+    })
+    expect(scope.getState($store)).toEqual('scope value')
+    expect(console.error).toHaveBeenCalledTimes(0)
+  })
+  test('serialize: doesn not warn on mapped or combined stores', () => {
+    const $store = createStore('value')
+    const $mapped = $store.map(s => s)
+    // combined stores have sids, but not used in serialize
+    // this trick is needed to hide combine call from plugin
+    const $combine = {_: combine}._($store, $mapped, (_, m) => m)
+
+    const scope = fork()
+
+    allSettled($store, {scope, params: 'scope value'})
+
+    const result = serialize(scope)
+    expect($combine.sid).toEqual(null)
+    expect(scope.getState($store)).toEqual('scope value')
+    expect(scope.getState($combine)).toEqual('scope value')
+    expect(result).toEqual({
+      [$store.sid as string]: 'scope value',
+    })
+    expect(console.error).toHaveBeenCalledTimes(0)
+  })
+  test('serialize: does not warn on internal store changes', async () => {
+    const sleep = (p: number) => new Promise(r => setTimeout(r, p))
+    const sleepFx = createEffect(sleep)
+    const $sleep = createStore(1)
+    const sleepAttachedFx = attach({
+      source: $sleep,
+      effect: sleep,
+    })
+    const start = createEvent<number>()
+
+    sample({
+      clock: start,
+      target: [sleepFx, sleepAttachedFx],
+    })
+
+    const scope = fork()
+
+    await allSettled(start, {scope, params: 1})
+
+    const result = serialize(scope)
+    expect(result).toMatchObject({})
+    expect(console.error).toBeCalledTimes(0)
+  })
 })
