@@ -11,7 +11,9 @@ export const VueEffector = (
   options: Object,
 ) => {
   vue.mixin(effectorMixin)
+  /** @deprecated since v21.1.0 */
   vue.prototype.$watchAsStore = watchAsStore
+  /** @deprecated since v21.1.0 */
   vue.prototype.$store = store
 }
 
@@ -114,6 +116,8 @@ function watchAsStore(
     immediate: true,
   },
 ): Store<{oldValue: any; newValue: any}> {
+  console.error('$watchAsStore is deprecated')
+  
   const update = createEvent<{oldValue: any; newValue: any}>()
   const store = restore(update, {} as any)
   const watch = () => {
@@ -141,5 +145,7 @@ function store<State>(
   this: EffectorVue,
   expOrFn: string | Function,
 ): Store<State> {
+  console.error('$store is deprecated')
+
   return this.$watchAsStore(expOrFn).map(({newValue}) => newValue)
 }
