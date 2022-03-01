@@ -5,7 +5,7 @@ import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage, isWatch, Stack} from './kernel'
-import {createNamedEvent, createStore, createEvent} from './createUnit'
+import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
@@ -29,7 +29,10 @@ export function createEffect<Payload, Done, Fail = Error>(
     return instance
   }
   instance.use.getCurrent = () => runner.scope.handler
-  const anyway = (instance.finally = createNamedEvent('finally'))
+  const anyway = (instance.finally = createEvent({
+    named: 'finally',
+    derived: true,
+  }))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
     fn({status, params, result}) {
@@ -134,12 +137,16 @@ export function createEffect<Payload, Done, Fail = Error>(
   }
 
   const inFlight = (instance.inFlight = createStore(0, {
-    named: 'inFlight',
     // @ts-expect-error
     serialize: 'ignore',
   })
     .on(instance, x => x + 1)
-    .on(anyway, x => x - 1))
+    .on(anyway, x => x - 1)
+    .map({
+      // @ts-expect-error
+      fn: x => x,
+      named: 'inFlight',
+    }))
   setMeta(anyway, 'needFxCounter', 'dec')
   setMeta(instance, 'needFxCounter', true)
   const pending = (instance.pending = inFlight.map({

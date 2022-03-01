@@ -478,6 +478,10 @@ $store.updates
 
 Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
 
+:::caution Important
+Do not manually call this event. It is event that depends on a store.
+:::
+
 ```js
 import {createStore, is} from 'effector'
 
