@@ -43,6 +43,13 @@ export type Template = {
   handlers: TemplateHandlers
 }
 
+export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
+export type ClassListArray = Array<Store<string | null> | string>
+export type ClassListProperty = {
+  name: StoreOrData<string>
+  enabled: StoreOrData<boolean>
+}
+
 export type DOMProperty = string | number | null | boolean
 export type PropertyMap = {[field: string]: StoreOrData<DOMProperty>}
 export type StylePropertyMap = Partial<
@@ -90,6 +97,11 @@ export type StaticOperationDef =
       field: string
       value: DOMProperty
     }
+  | {
+      type: 'classList'
+      field: string
+      value: DOMProperty
+    }
 
 export type OperationDef =
   | {
@@ -115,6 +127,11 @@ export type OperationDef =
       type: 'styleVar'
       field: string
       value: Store<DOMProperty>
+    }
+  | {
+      type: 'classList'
+      name: Store<string>
+      enabled: Store<boolean>
     }
   | {
       type: 'staticText'
@@ -145,7 +162,12 @@ export type PropertyOperationDef = Extract<
   OperationDef,
   {type: PropertyOperationKind}
 >
-export type PropertyOperationKind = 'attr' | 'data' | 'style' | 'styleVar'
+export type PropertyOperationKind =
+  | 'attr'
+  | 'data'
+  | 'style'
+  | 'styleVar'
+  | 'classList'
 
 export type Env = {
   document: Document
@@ -314,6 +336,7 @@ export type ElementDraft = BindingsDraft & {
   }>
   style: StylePropertyMap[]
   styleVar: PropertyMap[]
+  classList: ClassListProperty[]
   visible?: Store<boolean>
   node: Array<(node: DOMElement) => (() => void) | void>
   handler: HandlerRecord[]

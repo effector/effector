@@ -8,6 +8,8 @@ export type StylePropertyMap = Partial<
     [K in keyof CSSStyleDeclaration]: DOMProperty | AttributeStoreInput
   }
 >
+export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
+export type ClassListArray = Array<Store<string | null> | string>
 
 export type HandlerMap =
   | Partial<{[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}>
@@ -62,6 +64,7 @@ export function spec(spec: {
   visible?: Store<boolean>
   style?: StylePropertyMap
   styleVar?: PropertyMap
+  classList?: ClassListMap | ClassListArray
   handler?: HandlerMap
 }): void
 export function handler(
@@ -93,6 +96,7 @@ export function h(
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
+    classList?: ClassListMap | ClassListArray
     handler?: HandlerMap
     fn?: () => void
   },

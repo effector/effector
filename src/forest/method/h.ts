@@ -1,4 +1,13 @@
-import {Store, Event, is, launch, createEvent, sample, merge} from 'effector'
+import {
+  Store,
+  Event,
+  is,
+  launch,
+  createEvent,
+  sample,
+  merge,
+  combine,
+} from 'effector'
 
 import type {StateRef} from '../../effector/index.h'
 
@@ -16,6 +25,9 @@ import type {
   HandlerRecord,
   PropertyOperationDef,
   PropertyOperationKind,
+  ClassListProperty,
+  ClassListMap,
+  ClassListArray,
 } from '../index.h'
 
 import type {ElementBlock, TextBlock} from '../relation.h'
@@ -29,6 +41,7 @@ import {
   applyAttr,
   applyText,
   applyStaticOps,
+  applyClassList,
 } from '../bindings'
 import {createTemplate, currentTemplate} from '../template'
 import {
@@ -102,9 +115,21 @@ const propertyOperationBinding: Record<
   data: applyDataAttr,
   style: applyStyle,
   styleVar: applyStyleVar,
+  classList: applyClassList,
 }
 
 const readElement = (leaf: Leaf) => (leaf.data as LeafDataElement).block.value
+
+function classListPropertiesToOpDef(
+  draft: ElementDraft,
+  ops: {
+    classList: ClassListProperty[]
+  },
+) {
+  draft.classList.forEach(property => {
+    ops.classList.push(property)
+  })
+}
 
 /** operation family for things represented as <el "thing"="value" /> */
 function propertyMapToOpDef(
@@ -199,6 +224,7 @@ export function h(
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
+    classList?: ClassListMap | ClassListArray
     handler?:
       | {
           config?: {
@@ -267,6 +293,7 @@ export function h(tag: string, opts?: any) {
     text: [],
     style: [],
     styleVar: [],
+    classList: [],
     handler: [],
     stencil,
     seq: [],
@@ -325,6 +352,7 @@ export function h(tag: string, opts?: any) {
       propertyMapToOpDef(draft, 'data', ops)
       propertyMapToOpDef(draft, 'style', ops)
       propertyMapToOpDef(draft, 'styleVar', ops)
+      propertyMapToOpDef(draft, 'classList', ops)
       forIn(ops, (opsMap, type) => {
         forIn(opsMap as unknown as PropertyMap, (value, field) => {
           if (is.unit(value)) {
@@ -334,6 +362,22 @@ export function h(tag: string, opts?: any) {
             draft.staticSeq.push({type, field, value})
           }
         })
+      })
+      draft.classList.forEach(property => {
+        // We know if name is store, enabled also is store
+        if (is.unit(property.name)) {
+          draft.seq.push({
+            type: 'classList',
+            name: property.name,
+            enabled: property.name as unknown as Store<boolean>,
+          })
+        } else {
+          draft.staticSeq.push({
+            type: 'classList',
+            field: property.name,
+            value: true,
+          })
+        }
       })
       draft.text.forEach(item => {
         if (item.value === null) return
@@ -476,6 +520,27 @@ export function h(tag: string, opts?: any) {
                 hooks,
               })
             }
+            break
+          }
+          case 'classList': {
+            const classOperationBinding = propertyOperationBinding.classList
+            const hooks = mutualSample({
+              mount: domElementCreated,
+              state: combine({name: item.name, enabled: item.enabled}),
+              onMount: (value, leaf) => ({leaf, value}),
+              onState: (leaf, value) => ({leaf, value}),
+            })
+            createPropsOp(draft, {
+              initCtx(value, leaf) {
+                const element = readElement(leaf)
+                classOperationBinding(element, value.name, value.enabled)
+                return element
+              },
+              runOp(value, element: DOMElement) {
+                classOperationBinding(element, value.name, value.enabled)
+              },
+              hooks,
+            })
             break
           }
           case 'dynamicText':
