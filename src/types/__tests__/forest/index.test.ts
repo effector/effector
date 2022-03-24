@@ -32,7 +32,7 @@ describe('text', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 5 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Type 'Store<{ value: string; } | null>' is not assignable to type 'DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined'.
             Type 'Store<{ value: string; } | null>' is not assignable to type 'AttributeStoreInput'.
               Types of property 'map' are incompatible.
@@ -87,7 +87,7 @@ describe('dom tag typecheck', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 5 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
