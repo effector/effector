@@ -2985,7 +2985,7 @@ export function serialize(
 ): {[sid: string]: any}
 
 /**
- * Bind event to a scope to be called lated.
+ * Bind event to a scope to be called later.
  *
  * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
  * @param unit event to bind
@@ -2993,7 +2993,7 @@ export function serialize(
  */
 export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T) => void
 /**
- * Bind effect to a scope to be called lated.
+ * Bind effect to a scope to be called later.
  *
  * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
  * @param unit effect to bind
