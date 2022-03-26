@@ -292,11 +292,9 @@ sample({
 effector Halley 22.2.0
 :::
 
-In latest update the `filter` was added in sample. This update is going to give a way to not use [guard](guard.md) or not to meet the issue with nested [guard](guard.md) inside the sample.
+The new variant of the sample works the same but with one extra method `filter`. Whenever `filter` returns `true` continue execution otherwise cancel. Let's see an example below.
 
-The new variant of sample works the same but with one extra method `filter`. Whenever `filter` returns `true` continue execution otherwise cancel. Let's see an example below.
-
-Henry wants to send money to William. Henry - sender and William - recipient. To send money sender should know recipient address, besides sender has to sign transaction. This example shows how exactly sample works with `filter`. The main points are:
+Henry wants to send money to William. Henry - sender and William - recipient. To send money sender should know the recipient address, besides sender has to sign the transaction. This example shows how exactly the sample works with a `filter`. The main points are:
 
 1. Make sure balance is positive and more than sending amount
 2. Having recipient address
