@@ -43,6 +43,8 @@ How to read it:
 For example:
 
 ```ts
+import {sample} from 'effector'
+
 const $store = sample({clock: $store, source: $store})
 // Result will be store, because source and clock are stores.
 
@@ -87,6 +89,8 @@ Array of units in target are supported since effector 21.8.0
 #### Example
 
 ```js
+import {createStore, createEvent, createEffect, sample} from 'effector'
+
 const submitForm = createEvent()
 const signInFx = createEffect(params => {
   console.log(params)
@@ -132,6 +136,8 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Example
 
 ```js
+import {createStore, createEvent, createEffect, sample, forward} from 'effector'
+
 const submitForm = createEvent()
 
 const signInFx = createEffect(params => {
@@ -302,6 +308,8 @@ Henry wants to send money to William. Henry - sender and William - recipient. To
 4. Make sure sender balance has been changed
 
 ```js
+import {createStore, createEvent, createEffect, sample} from 'effector'
+
 const sign = createEvent()
 const sentMoney = createEvent()
 const $recipientAddress = createStore('a23x3xd')
