@@ -32,6 +32,7 @@ it('supports setting static object class without class attr', async () => {
       "
     `)
 })
+
 it('supports setting static object class without class attr', async () => {
   const [s1] = await exec(async () => {
     using(el, () => {
@@ -163,8 +164,8 @@ it('supports setting dynamic object class without class property', async () => {
     `)
 })
 it('supports setting dynamic array class without class property', async () => {
-  const [s1, s2] = await exec(async () => {
-    const setClass = createEvent<string>()
+  const [s1, s2, s3, s4] = await exec(async () => {
+    const setClass = createEvent<string | null>()
     const $class = restore(setClass, null)
     using(el, () => {
       h('div', {
@@ -176,6 +177,12 @@ it('supports setting dynamic array class without class property', async () => {
     await act(() => {
       setClass('example')
     })
+    await act(() => {
+      setClass('another')
+    })
+    await act(() => {
+      setClass(null)
+    })
   })
   expect(s1).toMatchInlineSnapshot(`
       "
@@ -185,6 +192,16 @@ it('supports setting dynamic array class without class property', async () => {
   expect(s2).toMatchInlineSnapshot(`
       "
       <div class='example'>content</div>
+      "
+    `)
+  expect(s3).toMatchInlineSnapshot(`
+      "
+      <div class='another'>content</div>
+      "
+    `)
+  expect(s4).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
       "
     `)
 })
@@ -265,7 +282,7 @@ it('supports merging dynamic spec classList', async () => {
     `)
   expect(s3).toMatchInlineSnapshot(`
       "
-      <div class='third demo'>content</div>
+      <div class='demo third'>content</div>
       "
     `)
 })
