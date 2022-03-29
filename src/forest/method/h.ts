@@ -77,6 +77,7 @@ function createPropsOp<T, S>(
 ) {
   const opID = draft.opsAmount++
   onMount.watch(({value, leaf}) => {
+    const ctx = initCtx(value, leaf)
     const op = createOp({
       value,
       priority: 'props',
@@ -86,7 +87,6 @@ function createPropsOp<T, S>(
       group: leaf.root.leafOps[leaf.fullID].group,
     })
     leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-    const ctx = initCtx(value, leaf)
   })
   onState.watch(({value, leaf}) => {
     pushOpToQueue(value, leaf.root.leafOps[leaf.fullID].group.ops[opID])
@@ -119,17 +119,6 @@ const propertyOperationBinding: Record<
 }
 
 const readElement = (leaf: Leaf) => (leaf.data as LeafDataElement).block.value
-
-function classListPropertiesToOpDef(
-  draft: ElementDraft,
-  ops: {
-    classList: ClassListProperty[]
-  },
-) {
-  draft.classList.forEach(property => {
-    ops.classList.push(property)
-  })
-}
 
 /** operation family for things represented as <el "thing"="value" /> */
 function propertyMapToOpDef(
@@ -352,7 +341,6 @@ export function h(tag: string, opts?: any) {
       propertyMapToOpDef(draft, 'data', ops)
       propertyMapToOpDef(draft, 'style', ops)
       propertyMapToOpDef(draft, 'styleVar', ops)
-      propertyMapToOpDef(draft, 'classList', ops)
       forIn(ops, (opsMap, type) => {
         forIn(opsMap as unknown as PropertyMap, (value, field) => {
           if (is.unit(value)) {
@@ -364,14 +352,16 @@ export function h(tag: string, opts?: any) {
         })
       })
       draft.classList.forEach(property => {
-        // We know if name is store, enabled also is store
-        if (is.unit(property.name)) {
+        // We know if `name` is store, `enabled` also is store
+        if (is.unit(property.name) || is.unit(property.enabled)) {
           draft.seq.push({
             type: 'classList',
-            name: property.name,
-            enabled: property.name as unknown as Store<boolean>,
+            field: property.name,
+            value: property.enabled,
           })
-        } else {
+          if (is.unit(property.name)) processStoreRef(property.name)
+          if (is.unit(property.enabled)) processStoreRef(property.enabled)
+        } else if (!is.unit(property.name)) {
           draft.staticSeq.push({
             type: 'classList',
             field: property.name,
@@ -526,7 +516,7 @@ export function h(tag: string, opts?: any) {
             const classOperationBinding = propertyOperationBinding.classList
             const hooks = mutualSample({
               mount: domElementCreated,
-              state: combine({name: item.name, enabled: item.enabled}),
+              state: combine({name: item.field, enabled: item.value}),
               onMount: (value, leaf) => ({leaf, value}),
               onState: (leaf, value) => ({leaf, value}),
             })

@@ -70,11 +70,17 @@ export function applyStyle(
   }
 }
 
-export function applyClassList(element: DOMElement, field: string, value: string | number | boolean | null) {
-  if (isFalse(value)) {
-    element.classList.remove(field)
-  } else {
-    element.classList.add(field)
+export function applyClassList(
+  element: DOMElement,
+  field: string,
+  value: string | number | boolean | null,
+) {
+  if (field.trim().length > 0) {
+    if (isFalse(value)) {
+      element.classList.remove(field)
+    } else {
+      element.classList.add(field)
+    }
   }
 }
 
