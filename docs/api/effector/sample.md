@@ -292,7 +292,7 @@ sample({
 
 [Try it](https://share.effector.dev/1YEHUFs7)
 
-## Sample with Guard
+## Example with filter
 
 :::note since
 effector Halley 22.2.0
@@ -349,6 +349,8 @@ $isSigned.watch(isSigned => console.log('is signed: ', isSigned))
 sign()
 sentMoney(1000)
 ```
+
+[Try it](https://share.effector.dev/XTxkCYC0)
 
 <!-- ## Other examples
 
