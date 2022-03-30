@@ -75,11 +75,11 @@ export function applyClassList(
   field: string,
   value: string | number | boolean | null,
 ) {
-  if (field.trim().length > 0) {
-    if (isFalse(value)) {
-      element.classList.remove(field)
-    } else {
+  if (field && field.trim().length > 0) {
+    if (value) {
       element.classList.add(field)
+    } else {
+      element.classList.remove(field)
     }
   }
 }

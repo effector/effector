@@ -131,9 +131,9 @@ export type OperationDef =
   | {
       type: 'classList'
       // name
-      field: StoreOrData<string>
+      field: Store<string>
       // enabled
-      value: StoreOrData<boolean>
+      value: Store<boolean>
     }
   | {
       type: 'staticText'

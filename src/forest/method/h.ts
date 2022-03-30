@@ -7,6 +7,7 @@ import {
   sample,
   merge,
   combine,
+  createStore,
 } from 'effector'
 
 import type {StateRef} from '../../effector/index.h'
@@ -356,8 +357,12 @@ export function h(tag: string, opts?: any) {
         if (is.unit(property.name) || is.unit(property.enabled)) {
           draft.seq.push({
             type: 'classList',
-            field: property.name,
-            value: property.enabled,
+            field: is.unit(property.name)
+              ? property.name
+              : createStore(property.name),
+            value: is.unit(property.enabled)
+              ? property.enabled
+              : createStore(property.enabled),
           })
           if (is.unit(property.name)) processStoreRef(property.name)
           if (is.unit(property.enabled)) processStoreRef(property.enabled)
@@ -514,20 +519,28 @@ export function h(tag: string, opts?: any) {
           }
           case 'classList': {
             const classOperationBinding = propertyOperationBinding.classList
+            const fieldTrack = createStore({
+              prev: '',
+              curr: item.field.getState(),
+            }).on(item.field, ({curr: prev}, curr) => ({prev, curr}))
+
             const hooks = mutualSample({
               mount: domElementCreated,
-              state: combine({name: item.field, enabled: item.value}),
+              state: combine({name: fieldTrack, enabled: item.value}),
               onMount: (value, leaf) => ({leaf, value}),
               onState: (leaf, value) => ({leaf, value}),
             })
             createPropsOp(draft, {
               initCtx(value, leaf) {
                 const element = readElement(leaf)
-                classOperationBinding(element, value.name, value.enabled)
+                classOperationBinding(element, value.name.curr, value.enabled)
                 return element
               },
               runOp(value, element: DOMElement) {
-                classOperationBinding(element, value.name, value.enabled)
+                if (value.name.prev !== value.name.curr) {
+                  classOperationBinding(element, value.name.prev, false)
+                }
+                classOperationBinding(element, value.name.curr, value.enabled)
               },
               hooks,
             })
