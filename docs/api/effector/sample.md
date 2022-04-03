@@ -10,12 +10,13 @@ Quite a common case, when you need to handle some event with some store's state.
 ## Formulae
 
 ```ts
-sample({ source?, clock?, fn?, target?}): target
+sample({ source?, clock?, filter?, fn?, target?}): target
 ```
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
 
 - If the `clock` is not passed, sample will be trigged on every `source` update.
+- If the `filter` is not passed, continue as it is. If filter return `false` or contains `Store<false>` cancel execution otherwise continue
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
@@ -42,6 +43,8 @@ How to read it:
 For example:
 
 ```ts
+import {sample} from 'effector'
+
 const $store = sample({clock: $store, source: $store})
 // Result will be store, because source and clock are stores.
 
@@ -49,7 +52,7 @@ const event = sample({clock: event, source: $store})
 // Because not all arguments are stores.
 ```
 
-## `sample({clock?, source, fn?, target?, greedy?})`
+## `sample({clock?, source, filter?, fn?, target?, greedy?})`
 
 **Arguments**
 
@@ -70,7 +73,8 @@ const event = sample({clock: event, source: $store})
   - If store: update given store upon `clock` is triggered
   - If array of units: trigger every given unit upon `clock` is triggered
   - If not passed: new unit will be created under the hood and will be returned as result of the `sample()` call. Type of created target is described [in table beyond](./sample.md#type-of-the-created-target)
-- `fn?` (_(sourceData, clockData) => result_): Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](../../glossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
+- `filter?` _(Function or [Store](Store.md))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
+- `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](../../glossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
 
 :::note
@@ -85,6 +89,8 @@ Array of units in target are supported since effector 21.8.0
 #### Example
 
 ```js
+import {createStore, createEvent, createEffect, sample} from 'effector'
+
 const submitForm = createEvent()
 const signInFx = createEffect(params => {
   console.log(params)
@@ -130,6 +136,7 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Example
 
 ```js
+import {createStore, createEvent, createEffect, sample, forward} from 'effector'
 
 const submitForm = createEvent()
 
@@ -166,7 +173,7 @@ submitForm(12345678)
 effector 20.4.0
 :::
 
-Every [unit](../../glossary.md#unit) in effector may have a name.  
+Every [unit](../../glossary.md#unit) in effector may have a name.
 You now can name sampled entities in the same manner as basic ones.
 
 ```js
@@ -284,6 +291,66 @@ sample({
 ```
 
 [Try it](https://share.effector.dev/1YEHUFs7)
+
+## Example with filter
+
+:::note since
+effector Halley 22.2.0
+:::
+
+The new variant of the sample works the same but with one extra method `filter`. Whenever `filter` returns `true` continue execution otherwise cancel. Let's see an example below.
+
+Henry wants to send money to William. Henry - sender and William - recipient. To send money sender should know the recipient address, besides sender has to sign the transaction. This example shows how exactly the sample works with a `filter`. The main points are:
+
+1. Make sure balance is positive and more than sending amount
+2. Having recipient address
+3. Signed transaction
+4. Make sure sender balance has been changed
+
+```js
+import {createStore, createEvent, createEffect, sample} from 'effector'
+
+const sign = createEvent()
+const sentMoney = createEvent()
+const $recipientAddress = createStore('a23x3xd')
+const $balance = createStore(20000)
+const $isSigned = createStore(false)
+const transactionFx = createEffect(
+  ({amountToSend, recipientAddress}) =>
+    new Promise(res =>
+      setTimeout(res, 3000, {
+        amount: amountToSend,
+        recipientAddress,
+      }),
+    ),
+)
+
+$isSigned.on(sign, () => true).reset(transactionFx)
+$balance.on(transactionFx.doneData, (balance, {amount}) => balance - amount)
+
+sample({
+  source: {
+    recipientAddress: $recipientAddress,
+    isSigned: $isSigned,
+    balance: $balance,
+  },
+  clock: sentMoney,
+  filter: ({isSigned, balance}, amountToSend) =>
+    isSigned && balance > amountToSend,
+  fn({recipientAddress}, amountToSend) {
+    return {recipientAddress, amountToSend}
+  },
+  target: transactionFx,
+})
+
+$balance.watch(balance => console.log('balance: ', balance))
+$isSigned.watch(isSigned => console.log('is signed: ', isSigned))
+
+sign()
+sentMoney(1000)
+```
+
+[Try it](https://share.effector.dev/XTxkCYC0)
 
 <!-- ## Other examples
 
