@@ -50,7 +50,7 @@ export type Node = {
 
 export type NodeUnit = {graphite: Node} | Node
 
-export interface Unit {
+export interface Unit<T = unknown> {
   graphite: Node
 }
 
