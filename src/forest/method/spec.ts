@@ -5,12 +5,16 @@ import type {
   StoreOrData,
   DOMProperty,
   StylePropertyMap,
+  ClassListArray,
+  ClassListMap,
+  ClassListProperty,
 } from '../index.h'
 
 import {escapeTag} from '../bindings'
 import {currentTemplate} from '../template'
 import {assertClosure} from '../assert'
 import {handler} from './handler'
+import {forIn} from '../forIn'
 
 export function spec(config: {
   attr?: PropertyMap
@@ -18,6 +22,7 @@ export function spec(config: {
   text?: StoreOrData<DOMProperty> | Array<StoreOrData<DOMProperty>>
   style?: StylePropertyMap
   styleVar?: PropertyMap
+  classList?: ClassListArray | ClassListMap
   visible?: Store<boolean>
   handler?:
     | {
@@ -78,6 +83,11 @@ export function spec(config: {
     }
     draft.style.push(escaped)
   }
+  if (config.classList) {
+    normalizeClassList(config.classList).forEach(property =>
+      draft.classList.push(property),
+    )
+  }
   if (config.styleVar) draft.styleVar.push(config.styleVar)
   if (config.visible) draft.visible = config.visible
   if (config.handler) {
@@ -94,4 +104,31 @@ export function spec(config: {
   if (config.ɔ) {
     spec(config.ɔ)
   }
+}
+
+function normalizeClassList(
+  classList: ClassListMap | ClassListArray,
+): ClassListProperty[] {
+  const properties: ClassListProperty[] = []
+
+  if (Array.isArray(classList)) {
+    classList.forEach(className => {
+      const name =
+        typeof className === 'string'
+          ? className
+          : className.map(optionalClass => optionalClass || '')
+      const enabled =
+        typeof className === 'string'
+          ? true
+          : className.map(optionalClass => optionalClass !== null)
+
+      properties.push({name, enabled})
+    })
+  } else {
+    forIn(classList, (enabled, name) => {
+      properties.push({name, enabled})
+    })
+  }
+
+  return properties
 }

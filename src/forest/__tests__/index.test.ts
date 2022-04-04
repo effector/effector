@@ -1,18 +1,6 @@
 import type {BrowserObject} from 'webdriverio'
-import {createStore, createEvent, restore, combine, sample} from 'effector'
-import {
-  h,
-  using,
-  list,
-  remap,
-  spec,
-  variant,
-  node,
-  handler,
-  rec,
-  block,
-  text,
-} from 'forest'
+import {createEvent, createStore, restore, sample} from 'effector'
+import {block, h, list, node, rec, remap, spec, text, using} from 'forest'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -104,15 +92,15 @@ it('support reactive style properties', async () => {
     })
   })
   expect(s1).toMatchInlineSnapshot(`
-"
-<div style='justify-self: start'>content</div>
-"
-`)
+    "
+    <div style='justify-self: start'>content</div>
+    "
+  `)
   expect(s2).toMatchInlineSnapshot(`
-"
-<div style='justify-self: center'>content</div>
-"
-`)
+    "
+    <div style='justify-self: center'>content</div>
+    "
+  `)
 })
 
 describe('node(event) + upward store update', () => {
@@ -195,19 +183,19 @@ it('support reactive style variables', async () => {
     })
   })
   expect(s1).toMatchInlineSnapshot(`
-"
-<div style='justify-self: var(--align); --align: start'>
-  content
-</div>
-"
-`)
+    "
+    <div style='justify-self: var(--align); --align: start'>
+      content
+    </div>
+    "
+  `)
   expect(s2).toMatchInlineSnapshot(`
-"
-<div style='justify-self: var(--align); --align: center'>
-  content
-</div>
-"
-`)
+    "
+    <div style='justify-self: var(--align); --align: center'>
+      content
+    </div>
+    "
+  `)
 })
 
 it.skip('remove watch calls after node removal', async () => {

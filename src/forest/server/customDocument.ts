@@ -30,6 +30,7 @@ class DOMNode {
   nodeName = ''
   namespaceURI = 'http://www.w3.org/1999/xhtml' as const
   dataset = Object.create(null)
+  classList = new ClassList()
   style = new CSSStyle()
   value?: string
   firstChild: DOMNode | null = null
@@ -45,6 +46,7 @@ class DOMNode {
     result.namespaceURI = this.namespaceURI
     Object.assign(result.dataset, this.dataset)
     Object.assign(result.style, this.style)
+    result.classList = this.classList._clone()
     result.value = this.value
     result.isFragment = this.isFragment
     Object.assign(result.attributes, this.attributes)
@@ -151,6 +153,23 @@ class DOMNode {
     return node
   }
 }
+class ClassList {
+  classes: Set<string> = new Set()
+  add(className: string) {
+    this.classes.add(className)
+  }
+  remove(className: string) {
+    this.classes.delete(className)
+  }
+  _clone() {
+    const copy = new ClassList()
+    copy.classes = new Set(this.classes)
+    return copy
+  }
+  _toString() {
+    return Array.from(this.classes).join(' ')
+  }
+}
 class CSSStyle {
   setProperty(property: string, value: string): void {
     //@ts-expect-error
@@ -253,8 +272,22 @@ function renderPart(node: DOMNode, parts: string[]) {
     return
   }
   parts.push('<', node.tagName)
+  let classListRendered = false
   for (const key in node.attributes) {
-    parts.push(' ', key, '=', '"', escapeTagValue(node.attributes[key]), '"')
+    const attributeValue = node.attributes[key]
+    let tagValue: string = ''
+    if (key === 'class' && node.classList.classes.size > 0) {
+      const appendClasses = node.classList._toString()
+      tagValue = escapeTagValue(`${attributeValue} ${appendClasses}`)
+      classListRendered = true
+    } else {
+      tagValue = escapeTagValue(attributeValue)
+    }
+    parts.push(' ', key, '=', '"', tagValue, '"')
+  }
+  if (!classListRendered && node.classList.classes.size > 0) {
+    const classes = node.classList._toString()
+    parts.push(' class=', '"', escapeTagValue(classes), '"')
   }
   for (const key in node.dataset) {
     parts.push(

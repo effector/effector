@@ -1,4 +1,14 @@
-import {Store, Event, is, launch, createEvent, sample, merge} from 'effector'
+import {
+  Store,
+  Event,
+  is,
+  launch,
+  createEvent,
+  sample,
+  merge,
+  combine,
+  createStore,
+} from 'effector'
 
 import type {StateRef} from '../../effector/index.h'
 
@@ -16,6 +26,9 @@ import type {
   HandlerRecord,
   PropertyOperationDef,
   PropertyOperationKind,
+  ClassListProperty,
+  ClassListMap,
+  ClassListArray,
 } from '../index.h'
 
 import type {ElementBlock, TextBlock} from '../relation.h'
@@ -29,6 +42,7 @@ import {
   applyAttr,
   applyText,
   applyStaticOps,
+  applyClassList,
 } from '../bindings'
 import {createTemplate, currentTemplate} from '../template'
 import {
@@ -64,6 +78,7 @@ function createPropsOp<T, S>(
 ) {
   const opID = draft.opsAmount++
   onMount.watch(({value, leaf}) => {
+    const ctx = initCtx(value, leaf)
     const op = createOp({
       value,
       priority: 'props',
@@ -73,7 +88,6 @@ function createPropsOp<T, S>(
       group: leaf.root.leafOps[leaf.fullID].group,
     })
     leaf.root.leafOps[leaf.fullID].group.ops[opID] = op
-    const ctx = initCtx(value, leaf)
   })
   onState.watch(({value, leaf}) => {
     pushOpToQueue(value, leaf.root.leafOps[leaf.fullID].group.ops[opID])
@@ -102,6 +116,7 @@ const propertyOperationBinding: Record<
   data: applyDataAttr,
   style: applyStyle,
   styleVar: applyStyleVar,
+  classList: applyClassList,
 }
 
 const readElement = (leaf: Leaf) => (leaf.data as LeafDataElement).block.value
@@ -199,6 +214,7 @@ export function h(
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
+    classList?: ClassListMap | ClassListArray
     handler?:
       | {
           config?: {
@@ -267,6 +283,7 @@ export function h(tag: string, opts?: any) {
     text: [],
     style: [],
     styleVar: [],
+    classList: [],
     handler: [],
     stencil,
     seq: [],
@@ -334,6 +351,32 @@ export function h(tag: string, opts?: any) {
             draft.staticSeq.push({type, field, value})
           }
         })
+      })
+      draft.classList.forEach(property => {
+        // We know if `name` is store, `enabled` also is store
+        if (is.unit(property.name) || is.unit(property.enabled)) {
+          const $name = is.unit(property.name)
+            ? property.name
+            : createStore(property.name)
+          const $enabled = is.unit(property.enabled)
+            ? property.enabled
+            : createStore(property.enabled)
+
+          draft.seq.push({
+            type: 'classList',
+            field: $name,
+            value: $enabled,
+          })
+
+          processStoreRef($name)
+          processStoreRef($enabled)
+        } else if (!is.unit(property.name)) {
+          draft.staticSeq.push({
+            type: 'classList',
+            field: property.name,
+            value: true,
+          })
+        }
       })
       draft.text.forEach(item => {
         if (item.value === null) return
@@ -476,6 +519,35 @@ export function h(tag: string, opts?: any) {
                 hooks,
               })
             }
+            break
+          }
+          case 'classList': {
+            const classOperationBinding = propertyOperationBinding.classList
+            const fieldTrack = createStore({
+              prev: '',
+              curr: item.field.getState(),
+            }).on(item.field, ({curr: prev}, curr) => ({prev, curr}))
+
+            const hooks = mutualSample({
+              mount: domElementCreated,
+              state: combine({name: fieldTrack, enabled: item.value}),
+              onMount: (value, leaf) => ({leaf, value}),
+              onState: (leaf, value) => ({leaf, value}),
+            })
+            createPropsOp(draft, {
+              initCtx(value, leaf) {
+                const element = readElement(leaf)
+                classOperationBinding(element, value.name.curr, value.enabled)
+                return element
+              },
+              runOp(value, element: DOMElement) {
+                if (value.name.prev !== value.name.curr) {
+                  classOperationBinding(element, value.name.prev, false)
+                }
+                classOperationBinding(element, value.name.curr, value.enabled)
+              },
+              hooks,
+            })
             break
           }
           case 'dynamicText':

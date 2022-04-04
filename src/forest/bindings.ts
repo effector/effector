@@ -5,6 +5,7 @@ const defMap = {
   data: applyDataAttr,
   style: applyStyle,
   styleVar: applyStyleVar,
+  classList: applyClassList,
 }
 
 export function escapeTag(value: string) {
@@ -66,6 +67,23 @@ export function applyStyle(
     delete element.style[field as any]
   } else {
     element.style[field as any] = `${value}`
+  }
+}
+
+export function applyClassList(
+  element: DOMElement,
+  field: string,
+  value: string | number | boolean | null,
+) {
+  if (field && field.trim().length > 0) {
+    if (value) {
+      element.classList.add(field)
+    } else {
+      element.classList.remove(field)
+      if (element.classList.length === 0) {
+        element.removeAttribute('class')
+      }
+    }
   }
 }
 
