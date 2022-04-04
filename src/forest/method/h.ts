@@ -355,17 +355,21 @@ export function h(tag: string, opts?: any) {
       draft.classList.forEach(property => {
         // We know if `name` is store, `enabled` also is store
         if (is.unit(property.name) || is.unit(property.enabled)) {
+          const $name = is.unit(property.name)
+            ? property.name
+            : createStore(property.name)
+          const $enabled = is.unit(property.enabled)
+            ? property.enabled
+            : createStore(property.enabled)
+
           draft.seq.push({
             type: 'classList',
-            field: is.unit(property.name)
-              ? property.name
-              : createStore(property.name),
-            value: is.unit(property.enabled)
-              ? property.enabled
-              : createStore(property.enabled),
+            field: $name,
+            value: $enabled,
           })
-          if (is.unit(property.name)) processStoreRef(property.name)
-          if (is.unit(property.enabled)) processStoreRef(property.enabled)
+
+          processStoreRef($name)
+          processStoreRef($enabled)
         } else if (!is.unit(property.name)) {
           draft.staticSeq.push({
             type: 'classList',
