@@ -347,3 +347,24 @@ it('supports merging dynamic and static spec classList', async () => {
       "
     `)
 })
+
+it('example from proposal #599 with overriding false values', async () => {
+  const [s1] = await exec(async () => {
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        fn() {
+          spec({attr: {class: 'zero'}})
+          spec({classList: {first: true, second: false}})
+          spec({classList: ['second', 'third']})
+        },
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div class='zero first second third'>content</div>
+      "
+    `)
+})
