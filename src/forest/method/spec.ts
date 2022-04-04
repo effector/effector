@@ -84,7 +84,7 @@ export function spec(config: {
     draft.style.push(escaped)
   }
   if (config.classList) {
-    normalizeClassList(config.classList).forEach(property =>
+    normalizeClassList(config.classList, property =>
       draft.classList.push(property),
     )
   }
@@ -108,9 +108,8 @@ export function spec(config: {
 
 function normalizeClassList(
   classList: ClassListMap | ClassListArray,
-): ClassListProperty[] {
-  const properties: ClassListProperty[] = []
-
+  cb: (property: ClassListProperty) => void,
+) {
   if (Array.isArray(classList)) {
     classList.forEach(className => {
       const name =
@@ -122,13 +121,11 @@ function normalizeClassList(
           ? true
           : className.map(optionalClass => optionalClass !== null)
 
-      properties.push({name, enabled})
+      cb({name, enabled})
     })
   } else {
     forIn(classList, (enabled, name) => {
-      properties.push({name, enabled})
+      cb({name, enabled})
     })
   }
-
-  return properties
 }
