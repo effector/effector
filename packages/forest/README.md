@@ -33,13 +33,16 @@ using(document.body, () => {
 
       h('input', {
         attr: {type: 'password', placeholder: 'Password'},
+        classList: ['w-full', 'py-2', 'px-4'],
         handler: {input: change('password')},
       })
 
       h('button', {
         text: 'Submit',
         attr: {
-          disabled: $fields.map(fields => !(fields.username && fields.password)),
+          disabled: $fields.map(
+            fields => !(fields.username && fields.password),
+          ),
         },
       })
     })
@@ -56,10 +59,10 @@ function formModel() {
   const changed = createEvent()
   const submit = createEvent()
 
-  const $fields = createStore({})
-    .on(changed, (fields, {name, value}) => ({
-      ...fields, [name]: value
-    }))
+  const $fields = createStore({}).on(changed, (fields, {name, value}) => ({
+    ...fields,
+    [name]: value,
+  }))
 
   const change = name => changed.prepend(e => ({name, value: e.target.value}))
 
@@ -83,7 +86,8 @@ function stringify(values) {
 
 ### using
 
-Start an application from given root dom node. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope). Set `hydrate: true` to reuse `root` html content (useful for ssr)
+Start an application from given root dom node. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope).
+Set `hydrate: true` to reuse `root` html content (useful for ssr)
 
 ```typescript
 function using(root: DOMElement, fn: () => void): void
@@ -111,6 +115,7 @@ function h(
     attr?: PropertyMap
     style?: PropertyMap
     styleVar?: PropertyMap
+    classList?: ClassListMap | ClassListArray
     data?: PropertyMap
     text?: Property | Property[]
     visible?: Store<boolean>
@@ -134,13 +139,21 @@ function h(
 
 **Config fields**:
 
-- **attr**: add HTML attributes, e.g. `class` or input's `value`. `{value: createStore('initial')}` will become `"value"="initial"`
+- **attr**: add HTML attributes, e.g. `class` or input's `value`. `{value: createStore('initial')}` will
+  become `"value"="initial"`
 
-- **style**: add inline styles. All `style` objects will be merged to single `style` html attribute. Object fields in camel case will be converted to dash-style, e.g. `{borderRadius: '3px'}` will become `"style"="border-radius: 3px"`.
+- **style**: add inline styles. All `style` objects will be merged to single `style` html attribute. Object fields in
+  camel case will be converted to dash-style, e.g. `{borderRadius: '3px'}` will become `"style"="border-radius: 3px"`.
 
-- **styleVar**: add css variables to inline styles. `{themeColor: createStore('red')}` will become `"style"="--themeColor: red"`
+- **styleVar**: add css variables to inline styles. `{themeColor: createStore('red')}` will
+  become `"style"="--themeColor: red"`
 
-- **data**: add [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Object fields in camel case will be converted to dash-style, e.g. `{buttonType: 'outline'}` will become `"data-button-type"="outline"` and might be queried in css in this way:
+- **classList**: add class names to `class` attribute. `{active: true}` will become `"class"="active"`
+  , `['active', 'disabled']` will become `"class"="active disabled"` and so on with `Store` support.
+
+- **data**: add [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Object
+  fields in camel case will be converted to dash-style, e.g. `{buttonType: 'outline'}` will
+  become `"data-button-type"="outline"` and might be queried in css in this way:
 
 ```css
 [data-button-type='outline'] {
@@ -151,7 +164,8 @@ function h(
 
 - **visible**: node will be presented in dom tree while store value is `true`. Useful for conditional rendering
 
-- **handler**: add event handlers to dom node. In cases when `preventDefault` or `stopPropagation` is needed, extended form with config object can be used
+- **handler**: add event handlers to dom node. In cases when `preventDefault` or `stopPropagation` is needed, extended
+  form with config object can be used
 
 ```typescript
 const click = createEvent<MouseEvent>()
@@ -181,13 +195,15 @@ h('a', {
 
 ### spec
 
-Add new properties to dom element. Designed to call from [h](#h) callbacks and has the same fields as in `h(tag, config)`. Can be called as many times as needed
+Add new properties to dom element. Designed to call from [h](#h) callbacks and has the same fields as
+in `h(tag, config)`. Can be called as many times as needed
 
 ```typescript
 function spec(config: {
   attr?: PropertyMap
   style?: PropertyMap
   styleVar?: PropertyMap
+  classList?: ClassListMap | ClassListArray
   data?: PropertyMap
   text?: Property | Property[]
   visible?: Store<boolean>
@@ -203,6 +219,41 @@ function spec(config: {
         on: {[domEvent: string]: Event<any>}
       }
 }): void
+```
+
+#### classList
+
+Property `classList` has two forms, each optionally reactive:
+
+- **object map**
+
+```ts
+const $isEnabled = createStore(true)
+spec({classList: {first: true, second: $isEnabled}})
+```
+
+- **array list**
+
+> Be careful, each array item will be treated as a single class name, so it should not have a spaces.
+
+```ts
+const $class = createStore('active')
+spec({classList: ['size-big', $class]})
+```
+
+If spec with classList called twice or more, all enabled classes will be merged in the order of appearance.<br/>
+Also, `classList` will be merged with static `class` attribute:
+
+```ts
+h('div', {
+  attr: {class: 'first second'},
+  classList: ['third'],
+  fn() {
+    spec({classList: {fourth: true}})
+  },
+})
+
+// => <div class="first second third fourth"></div>
 ```
 
 ### list
@@ -224,24 +275,32 @@ function list<T>(config: {
 
 - **source**: store with an array of items
 - **key**: field name which value will be used as key for given item
-- **fn**: function which will be used as a template for every list item. Receive item value and item key as stores and `fields` as array of stores if provided. All fields are strongly typed and inferred from config definition
-- **fields**: array of item field names which will be passed to `fn` as array of separate stores. Useful to avoid `store.map` and [`remap`](#remap) calls
+- **fn**: function which will be used as a template for every list item. Receive item value and item key as stores
+  and `fields` as array of stores if provided. All fields are strongly typed and inferred from config definition
+- **fields**: array of item field names which will be passed to `fn` as array of separate stores. Useful to
+  avoid `store.map` and [`remap`](#remap) calls
 
 ### variant
 
-Mount one of given cases by selecting a specific one by the current value of the `key` field of `source` store value. Type of `store` in `cases` functions will be inferred from a case type. Optional default case - `__` (like in [split](https://effector.dev/docs/api/effector/split))
+Mount one of given cases by selecting a specific one by the current value of the `key` field of `source` store value.
+Type of `store` in `cases` functions will be inferred from a case type. Optional default case - `__` (like
+in [split](https://effector.dev/docs/api/effector/split))
 
 ```typescript
 function variant<T>(config: {
   source: Store<T>
   key: string
-  cases: {[caseName: string]: ({store: Store<T>}) => void}
-}): void
+  cases: {[caseName: string]: ({store: Store<T>}) => void
+}
+}):
+void
 ```
 
 ### route
 
-Generalized route is a combination of state and visibility status. `fn` content will be mounted until `visible` called with `source` value will return `true`. In case of store in `visible` field, content will be mounted while that store contain `true`. [variant](#variant) is shorthand for creating several routes at once
+Generalized route is a combination of state and visibility status. `fn` content will be mounted until `visible` called
+with `source` value will return `true`. In case of store in `visible` field, content will be mounted while that store
+contain `true`. [variant](#variant) is shorthand for creating several routes at once
 
 ```typescript
 function route<T>(config: {
@@ -287,7 +346,9 @@ function block(config: {fn: () => void}): () => void
 
 ### renderStatic
 
-Method from `forest/server` to render given application to string. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope), in which case `fn` children must be wrapped in [block](#block) to ensure that all units are created before [fork](https://effector.dev/docs/api/effector/fork) call
+Method from `forest/server` to render given application to string. Can accept
+forked [Scope](https://effector.dev/docs/api/effector/scope), in which case `fn` children must be wrapped
+in [block](#block) to ensure that all units are created before [fork](https://effector.dev/docs/api/effector/fork) call
 
 ```typescript
 function renderStatic(fn: () => void): Promise<string>
@@ -297,7 +358,9 @@ function renderStatic(config: {scope?: Scope; fn: () => void}): Promise<string>
 
 ### remap
 
-Helper for retrieving value fields from single store. Shorthand for several `store.map(val => val[fieldName])` calls. Infer types when used with either single key or with `as const`: `const [id, name] = remap(user, ['id', 'name'] as const)`
+Helper for retrieving value fields from single store. Shorthand for several `store.map(val => val[fieldName])` calls.
+Infer types when used with either single key or
+with `as const`: `const [id, name] = remap(user, ['id', 'name'] as const)`
 
 ```typescript
 function remap<T>(store: Store<T>, keys: string[]): Store<any>[]
@@ -307,7 +370,8 @@ function remap<T>(store: Store<T>, key: string): Store<any>
 
 ### val
 
-Helper for joining [properties](#property) to single string with template literals. If only [plain values](#plainproperty) are passed, the method returns `string`
+Helper for joining [properties](#property) to single string with template literals. If
+only [plain values](#plainproperty) are passed, the method returns `string`
 
 ```typescript
 function val(words: TemplateStringsArray, ...values: Property[]): Store<string>
@@ -332,7 +396,9 @@ h('g', {
 
 ### PlainProperty
 
-Value types accepted by methods, which write values to dom properties. Strings are written as is, numbers are converted to strings, `null` and `false` mean no value (property deletion), `true` is used when the specific property value is not needed.
+Value types accepted by methods, which write values to dom properties. Strings are written as is, numbers are converted
+to strings, `null` and `false` mean no value (property deletion), `true` is used when the specific property value is not
+needed.
 
 ```typescript
 type PlainProperty = string | number | null | boolean
@@ -353,3 +419,30 @@ Object with [dom properties](#plainproperty), possibly reactive
 ```typescript
 type PropertyMap = {[field: string]: Property}
 ```
+
+### ClassListMap
+
+Object with class names as keys and boolean values, possibly reactive
+
+```typescript
+type ClassListMap = {[className: string]: Store<boolean> | boolean}
+```
+
+```ts
+spec({
+  classList: {
+    'class-name': true,
+    'class-name-2': $booleanStore,
+  },
+})
+```
+
+### ClassListArray
+
+Array with class names, possibly reactive
+
+```typescript
+type ClassListArray = Array<Store<string> | string>
+```
+
+spec({ classList: { classList: ['class-name', $stringStore] } })
