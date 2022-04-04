@@ -286,3 +286,64 @@ it('supports merging dynamic spec classList', async () => {
       "
     `)
 })
+
+it('supports merging dynamic and static spec classList', async () => {
+  const [s1, s2, s3, s4, s5] = await exec(async () => {
+    const cleanup = createEvent()
+    const setClass3 = createEvent<boolean>()
+    const $class3 = restore(setClass3, false).reset(cleanup)
+    const setClass4 = createEvent<string>()
+    const $class4 = restore(setClass4, null).reset(cleanup)
+    const setClass5 = createEvent<boolean>()
+    const $class5 = restore(setClass5, false).reset(cleanup)
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        attr: {class: 'first'},
+        classList: {second: true, third: $class3},
+        fn() {
+          spec({classList: [$class4]})
+          spec({classList: {fifth: $class5}})
+        },
+      })
+    })
+    await act()
+    await act(() => {
+      setClass3(true)
+    })
+    await act(() => {
+      setClass4('fourth')
+    })
+    await act(() => {
+      setClass5(true)
+    })
+    await act(() => {
+      cleanup()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div class='first second'>content</div>
+      "
+    `)
+  expect(s2).toMatchInlineSnapshot(`
+      "
+      <div class='first second third'>content</div>
+      "
+    `)
+  expect(s3).toMatchInlineSnapshot(`
+      "
+      <div class='first second third fourth'>content</div>
+      "
+    `)
+  expect(s4).toMatchInlineSnapshot(`
+      "
+      <div class='first second third fourth fifth'>content</div>
+      "
+    `)
+  expect(s5).toMatchInlineSnapshot(`
+      "
+      <div class='first second'>content</div>
+      "
+    `)
+})
