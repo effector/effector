@@ -80,6 +80,9 @@ export function applyClassList(
       element.classList.add(field)
     } else {
       element.classList.remove(field)
+      if (element.classList.length === 0) {
+        element.removeAttribute('class')
+      }
     }
   }
 }
