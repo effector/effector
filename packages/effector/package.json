@@ -1,7 +1,7 @@
 {
   "name": "effector",
   "version": "22.2.0",
-  "description": "The state manager",
+  "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
   "umd:main": "effector.umd.js",
@@ -55,6 +55,10 @@
     "babel-plugin-react.js"
   ],
   "keywords": [
+    "business",
+    "logic",
+    "data",
+    "flow",
     "state management",
     "state manager",
     "algebraic effects",

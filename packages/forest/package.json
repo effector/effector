@@ -1,6 +1,6 @@
 {
   "name": "forest",
-  "version": "0.20.3",
+  "version": "0.21.0",
   "description": "UI engine for web",
   "main": "forest.cjs.js",
   "module": "forest.mjs",
@@ -26,6 +26,10 @@
     "effector": "^22.2.0"
   },
   "keywords": [
+    "business",
+    "logic",
+    "data",
+    "flow",
     "state management",
     "state manager",
     "algebraic effects",

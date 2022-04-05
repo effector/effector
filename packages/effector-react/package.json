@@ -67,6 +67,10 @@
   "keywords": [
     "react",
     "hooks",
+    "business",
+    "logic",
+    "data",
+    "flow",
     "state management",
     "state manager",
     "algebraic effects",
