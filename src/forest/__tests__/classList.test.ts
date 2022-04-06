@@ -1,5 +1,5 @@
 import type {BrowserObject} from 'webdriverio'
-import {createEvent, restore} from 'effector'
+import {createEvent, createStore, restore} from 'effector'
 import {h, spec, using} from 'forest'
 
 // let addGlobals: Function
@@ -376,6 +376,26 @@ it('do not set static class if value is false', async () => {
         text: 'content',
         fn() {
           spec({classList: {first: false, second: false}})
+        },
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
+      "
+    `)
+})
+
+it('do not set dynamic class if value is false', async () => {
+  const [s1] = await exec(async () => {
+    const $class = createStore(false)
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        fn() {
+          spec({classList: {first: $class, second: false}})
         },
       })
     })
