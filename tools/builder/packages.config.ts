@@ -53,7 +53,7 @@ const version = {
   effector: '22.2.0',
   'effector-react': '22.0.6',
   'effector-vue': '22.1.0',
-  forest: '0.21.0',
+  forest: '0.21.1',
 }
 
 const issueUrl = (tag: string) =>
