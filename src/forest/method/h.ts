@@ -374,7 +374,7 @@ export function h(tag: string, opts?: any) {
           draft.staticSeq.push({
             type: 'classList',
             field: property.name,
-            value: true,
+            value: property.enabled,
           })
         }
       })
