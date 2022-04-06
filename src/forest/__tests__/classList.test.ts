@@ -368,3 +368,22 @@ it('example from proposal #599 with overriding false values', async () => {
       "
     `)
 })
+
+it('do not set static class if value is false', async () => {
+  const [s1] = await exec(async () => {
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        fn() {
+          spec({classList: {first: false, second: false}})
+        },
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
+      "
+    `)
+})
