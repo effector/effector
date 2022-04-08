@@ -18,6 +18,7 @@ describe('createWatch on scope', () => {
     await allSettled(event, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith(undefined)
   })
 
   test('event without scope', async () => {
@@ -42,6 +43,7 @@ describe('createWatch on scope', () => {
     await allSettled(effect, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith(undefined)
   })
 
   test('effect without scope', async () => {
@@ -67,6 +69,7 @@ describe('createWatch on scope', () => {
     await allSettled(event, {scope, params: {}})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith({})
   })
 
   test('store without scope', async () => {
@@ -93,6 +96,7 @@ describe('createWatch without scope', () => {
     event()
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith(undefined)
   })
 
   test('event with scope', async () => {
@@ -105,6 +109,7 @@ describe('createWatch without scope', () => {
     await allSettled(event, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith(undefined)
   })
 
   test('effect', async () => {
@@ -116,6 +121,7 @@ describe('createWatch without scope', () => {
     await effect()
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith(undefined)
   })
 
   test('effect with scope', async () => {
@@ -128,6 +134,7 @@ describe('createWatch without scope', () => {
     await allSettled(effect, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith(undefined)
   })
 
   test('store', async () => {
@@ -140,6 +147,7 @@ describe('createWatch without scope', () => {
     event({})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith({})
   })
 
   test('store with scope', async () => {
@@ -153,5 +161,6 @@ describe('createWatch without scope', () => {
     await allSettled(event, {scope, params: {}})
 
     expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener).toBeCalledWith({})
   })
 })
