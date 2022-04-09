@@ -666,4 +666,37 @@ describe('useStoreMap', () => {
       </div>
     `)
   })
+  test('issue #643: should return the same result as useStore, when used with identity function', async () => {
+    const update = createEvent<number>()
+    const store = createStore(0).on(update, (_, x) => x)
+
+    const View = () => {
+      const baseX = useStore(store);
+      const x = useStoreMap(store, x => x)
+      return <div>{x === baseX ? 'equal' : 'not_equal'}</div>
+    }
+    const App = () => <View />
+    await render(<App />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        equal
+      </div>
+    `)
+    await act(async () => {
+      update(2)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        equal
+      </div>
+    `)
+    await act(async () => {
+      update(3)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        equal
+      </div>
+    `)
+  })
 })
