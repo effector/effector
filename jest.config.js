@@ -172,6 +172,11 @@ module.exports = {
               testEnvironment: 'jsdom',
               testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
               transform,
+              moduleNameMapper: boolean(process.env.REACT_17) && {
+                '(.*)/fixtures/react$': '$1/fixtures/react-17',
+                '^react-dom((\\/.*)?)$': 'react-dom-17$1',
+                '^react((\\/.*)?)$': 'react-17$1',
+              },
             },
             vue: {
               testEnvironment: 'jsdom',
