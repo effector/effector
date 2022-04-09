@@ -177,6 +177,9 @@ module.exports = {
                 '^react-dom((\\/.*)?)$': 'react-dom-17$1',
                 '^react((\\/.*)?)$': 'react-17$1',
               },
+              globals: {
+                IS_REACT_ACT_ENVIRONMENT: !boolean(process.env.REACT_17, false),
+              },
             },
             vue: {
               testEnvironment: 'jsdom',
