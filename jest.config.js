@@ -178,7 +178,7 @@ module.exports = {
                 '^react((\\/.*)?)$': 'react-17$1',
               },
               globals: {
-                IS_REACT_ACT_ENVIRONMENT: !boolean(process.env.REACT_17, false),
+                IS_REACT_ACT_ENVIRONMENT: true,
               },
             },
             vue: {
