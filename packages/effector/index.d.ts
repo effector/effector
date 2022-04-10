@@ -3062,3 +3062,13 @@ export function allSettled(
   unit: Unit<void>,
   config: {scope: Scope},
 ): Promise<void>
+
+export function createWatch<T>({
+  unit,
+  fn,
+  scope,
+}: {
+  unit: Unit<T>
+  fn: (value: T) => any
+  scope?: Scope
+}): Subscription
