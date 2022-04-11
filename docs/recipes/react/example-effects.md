@@ -37,4 +37,4 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/wdI27XSm)
+[Try it](https://share.effector.dev/NBhCiDCN)
