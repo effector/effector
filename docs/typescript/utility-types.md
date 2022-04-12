@@ -3,7 +3,7 @@ id: utility-types
 title: Utility Types
 ---
 
-TypeScript provides several utility types to facilitate getting a type of value from the unit.
+Effector provides several utility types to facilitate getting a type of value from the unit.
 
 ## `UnitValue<Type>`
 
