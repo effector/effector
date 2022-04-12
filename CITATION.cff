@@ -7,5 +7,5 @@ abstract: "Effector is an effective multi-store state manager for Javascript app
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/effector/effector/"
 title: effector
-version: "22.1.2"
+version: "22.2.0"
 url: "https://effector.dev"
