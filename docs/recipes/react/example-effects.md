@@ -7,7 +7,7 @@ title: Effects
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'
-import {useStore} from 'effector-react'
+import {useStore,useEvent} from 'effector-react'
 
 const fetchUserFx = createEffect(url => fetch(url).then(req => req.json()))
 
@@ -23,11 +23,11 @@ const url =
 const App = () => {
   const user = useStore($user)
   const pending = useStore(fetchUserFx.pending)
-  
+  const fetchEvent = useEvent(fetchUserFx)
   return (
     <div>
       {user ? <div>current user: {user}</div> : <div>no current user</div>}
-      <button disable={pending} onClick={() => fetchUserFx(url)}>
+      <button disable={pending} onClick={() => fetchEvent(url)}>
       	load user
       </button>
     </div>
@@ -37,4 +37,4 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/wdI27XSm)
+[Try it](https://share.effector.dev/NBhCiDCN)
