@@ -99,7 +99,7 @@ split({
 ```
 
 :::note
-Case store, case funtion and matcher store are supported since effector 21.8.0
+Case store, case function and matcher store are supported since effector 21.8.0
 :::
 
 ## split with cases
