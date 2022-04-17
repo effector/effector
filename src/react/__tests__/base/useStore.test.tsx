@@ -8,6 +8,7 @@ import {
   createDomain,
   Store,
   Event,
+  restore,
 } from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
@@ -669,10 +670,10 @@ describe('useStoreMap', () => {
   test('issue #643: should return the same result as useStore, when used with the same mapper', async () => {
     const update = createEvent<number>()
     const store = createStore(0).on(update, (_, x) => x)
-    const mapper = (x: number) => x + 1;
+    const mapper = (x: number) => x + 1
 
     const View = () => {
-      const baseX = mapper(useStore(store));
+      const baseX = mapper(useStore(store))
       const x = useStoreMap(store, mapper)
       return <div>{x === baseX ? 'equal' : 'not_equal'}</div>
     }
@@ -699,5 +700,126 @@ describe('useStoreMap', () => {
         equal
       </div>
     `)
+  })
+  test('change in one of the keys should trigger `fn` computation', async () => {
+    const trigger = createEvent<any>()
+    const $trigger = restore(trigger, null)
+
+    const store = createStore(0)
+
+    const fn = jest.fn()
+
+    const View = () => {
+      const someChangingKey = useStore($trigger)
+      const value = useStoreMap({
+        store,
+        keys: [someChangingKey],
+        fn: () => {
+          fn()
+          return 42
+        },
+      })
+
+      return <div>{value}</div>
+    }
+    const App = () => <View />
+
+    await render(<App />)
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(1)
+
+    await act(async () => {
+      trigger(1)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(2)
+
+    // change in the key should not trigger computation
+    await act(async () => {
+      trigger(1)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(2)
+
+    await act(async () => {
+      trigger(2)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(3)
+  })
+  test('re-render by external reason shoud not trigger `fn` computation if it is unaffected', async () => {
+    const trigger = createEvent<any>()
+    const $trigger = restore(trigger, null)
+
+    const store = createStore(0)
+
+    const fn = jest.fn()
+    const rendered = jest.fn()
+
+    const View = () => {
+      useStore($trigger)
+      const value = useStoreMap({
+        store,
+        keys: [],
+        fn: () => {
+          fn()
+          return 42
+        },
+      })
+
+      rendered()
+
+      return <div>{value}</div>
+    }
+    const App = () => <View />
+
+    await render(<App />)
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(1)
+    expect(rendered).toBeCalledTimes(1)
+
+    await act(async () => {
+      trigger(1)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(1)
+    expect(rendered).toBeCalledTimes(2)
+
+    await act(async () => {
+      trigger(2)
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+    expect(fn).toBeCalledTimes(1)
+    expect(rendered).toBeCalledTimes(3)
   })
 })
