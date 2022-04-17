@@ -666,13 +666,14 @@ describe('useStoreMap', () => {
       </div>
     `)
   })
-  test('issue #643: should return the same result as useStore, when used with identity function', async () => {
+  test('issue #643: should return the same result as useStore, when used with the same mapper', async () => {
     const update = createEvent<number>()
     const store = createStore(0).on(update, (_, x) => x)
+    const mapper = (x: number) => x + 1;
 
     const View = () => {
-      const baseX = useStore(store);
-      const x = useStoreMap(store, x => x)
+      const baseX = mapper(useStore(store));
+      const x = useStoreMap(store, mapper)
       return <div>{x === baseX ? 'equal' : 'not_equal'}</div>
     }
     const App = () => <View />
