@@ -1,6 +1,7 @@
 import {Store, is, Scope} from 'effector'
 import React from 'react'
-import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
+import {useSyncExternalStore} from 'use-sync-external-store/shim'
+import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/with-selector'
 import {throwError} from './throw'
 import {createWatch} from './createWatch'
 import {withDisplayName} from './withDisplayName'
@@ -8,44 +9,14 @@ import {withDisplayName} from './withDisplayName'
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
 const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
-const createNotifier = () =>
-  React.useReducer((n: any, action: void) => n + 1, 0)[1]
 
 export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
 
-  const currentValue = stateReader(store, scope)
-  const inc = createNotifier()
-  const currentStore = React.useRef({
-    store,
-    value: currentValue,
-    pending: false,
-  })
-  useIsomorphicLayoutEffect(() => {
-    const stop = createWatch(
-      store,
-      upd => {
-        const ref = currentStore.current
-        if (!ref.pending) {
-          ref.value = upd
-          ref.pending = true
-          inc()
-          ref.pending = false
-        }
-      },
-      scope,
-    )
-    const newValue = stateReader(store, scope)
-    const ref = currentStore.current
-    if (ref.store === store && ref.value !== newValue) {
-      ref.value = newValue
-      ref.pending = true
-      inc()
-      ref.pending = false
-    }
-    ref.store = store
-    return stop
-  }, [store, scope])
+  const subscribe = (cb: () => void) => createWatch(store, cb, scope)
+  const read = () => stateReader(store, scope)
+  const currentValue = useSyncExternalStore(subscribe, read, read)
+
   return currentValue
 }
 
@@ -81,67 +52,21 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   if (!is.store(store)) throwError('useStoreMap expects a store')
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
   if (typeof fn !== 'function') throwError('useStoreMap expects a function')
-  const result = React.useRef<{
-    fn: (state: State, keys: Keys) => Result
-    upd: (update: Result, current: Result) => boolean
-    val: Result
-    init: boolean
-    store: Store<State>
-    active: boolean
-  }>({} as any)
-  const refState = result.current
-  refState.fn = fn
-  refState.upd = updateFilter
-  refState.init = refState.store === store
-  refState.store = store
-  refState.active = true
-  useIsomorphicLayoutEffect(
-    () => () => {
-      if (result.current) {
-        result.current.active = false
-      }
-    },
-    [],
+
+  const subscribe = (cb: () => void) => createWatch(store, cb, scope)
+  const read = () => stateReader(store, scope)
+
+  const value = useSyncExternalStoreWithSelector(
+    subscribe,
+    read,
+    read,
+    state => fn(state, keys),
+    // `updateFilter` always had (next, prev) arguments, but `isEqual` of this hook has (prev, next) order of arguments
+    // this way it is possible to rely on order of elements in filter
+    (a, b) => !updateFilter(b, a),
   )
-  const inc = createNotifier()
-  const deps = [scope, ...keys]
-  const stop = React.useMemo(() => {
-    updateRef(stateReader(store, scope), keys, result.current)
-    return createWatch(
-      store,
-      val => updateRef(val, keys, result.current, inc),
-      scope,
-    )
-  }, deps)
-  useIsomorphicLayoutEffect(() => () => stop(), deps)
-  return refState.val
-}
-function updateRef<State, Keys, Result>(
-  sourceValue: State,
-  keys: Keys,
-  refState: {
-    fn: (state: State, keys: Keys) => Result
-    upd: (update: Result, current: Result) => boolean
-    val: Result
-    init: boolean
-    active: boolean
-  },
-  inc?: React.DispatchWithoutAction,
-) {
-  const newValue = refState.fn(sourceValue, keys)
-  if (!refState.init) {
-    refState.val = newValue
-    refState.init = true
-  } else {
-    if (
-      newValue !== undefined &&
-      basicUpdateFilter(newValue, refState.val) &&
-      refState.upd(newValue, refState.val)
-    ) {
-      refState.val = newValue
-      inc && refState.active && inc()
-    }
-  }
+
+  return value
 }
 export function useListBase<T>(
   list: Store<T[]>,
