@@ -73,15 +73,13 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   const stateRef = React.useRef<State>()
   const valueRef = React.useRef<Result>()
   const keysRef = React.useRef(keys)
-  const needUpdate = (state: State) =>
-    stateRef.current !== state || !keysEqual(keysRef.current, keys)
 
   const value = useSyncExternalStoreWithSelector(
     subscribe,
     read,
     read,
     state => {
-      if (needUpdate(state)) {
+      if (stateRef.current !== state || !keysEqual(keysRef.current, keys)) {
         const result = fn(state, keys)
 
         stateRef.current = state
@@ -91,15 +89,12 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
         // just like original store or previous implementation
         if (result !== undefined) {
           valueRef.current = result
-
-          return result
         }
       }
 
       return valueRef.current as Result
     },
     // `updateFilter` always had (next, prev) arguments, but `isEqual` of this hook has (prev, next) order of arguments
-    // this way it is possible to rely on order of elements in filter
     (a, b) => !updateFilter(b, a),
   )
 
