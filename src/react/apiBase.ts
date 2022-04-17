@@ -9,6 +9,20 @@ import {withDisplayName} from './withDisplayName'
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
 const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
+const keysEqual = (a?: readonly any[], b?: readonly any[]) => {
+  if (!a || !b || a.length !== b.length) return false
+
+  let isEqual = true
+
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      isEqual = false
+      break
+    }
+  }
+
+  return isEqual
+}
 
 export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
@@ -56,11 +70,34 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   const subscribe = (cb: () => void) => createWatch(store, cb, scope)
   const read = () => stateReader(store, scope)
 
+  const stateRef = React.useRef<State>()
+  const valueRef = React.useRef<Result>()
+  const keysRef = React.useRef(keys)
+  const needUpdate = (state: State) =>
+    stateRef.current !== state || !keysEqual(keysRef.current, keys)
+
   const value = useSyncExternalStoreWithSelector(
     subscribe,
     read,
     read,
-    state => fn(state, keys),
+    state => {
+      if (needUpdate(state)) {
+        const result = fn(state, keys)
+
+        stateRef.current = state
+        keysRef.current = keys
+
+        // skip update, if undefined
+        // just like original store or previous implementation
+        if (result !== undefined) {
+          valueRef.current = result
+
+          return result
+        }
+      }
+
+      return valueRef.current as Result
+    },
     // `updateFilter` always had (next, prev) arguments, but `isEqual` of this hook has (prev, next) order of arguments
     // this way it is possible to rely on order of elements in filter
     (a, b) => !updateFilter(b, a),
