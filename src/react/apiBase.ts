@@ -94,8 +94,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
 
       return valueRef.current as Result
     },
-    // `updateFilter` always had (next, prev) arguments, but `isEqual` of this hook has (prev, next) order of arguments
-    (a, b) => !updateFilter(b, a),
+    (current, update) => !updateFilter(update, current),
   )
 
   return value
