@@ -127,6 +127,641 @@ More articles about effector at patreon
 
 ## Contributors
 
+<table>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/zerobias>
+            <img src=https://avatars.githubusercontent.com/u/15912112?v=4 width="100;"  alt=Dmitry/>
+            <br />
+            <sub style="font-size:14px"><b>Dmitry</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/goodmind>
+            <img src=https://avatars.githubusercontent.com/u/3275424?v=4 width="100;"  alt=andretshurotshka/>
+            <br />
+            <sub style="font-size:14px"><b>andretshurotshka</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/sergeysova>
+            <img src=https://avatars.githubusercontent.com/u/5620073?v=4 width="100;"  alt=Sergey Sova/>
+            <br />
+            <sub style="font-size:14px"><b>Sergey Sova</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/popuguytheparrot>
+            <img src=https://avatars.githubusercontent.com/u/19804652?v=4 width="100;"  alt=popuguy/>
+            <br />
+            <sub style="font-size:14px"><b>popuguy</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/egorguscha>
+            <img src=https://avatars.githubusercontent.com/u/22044607?v=4 width="100;"  alt=Egor/>
+            <br />
+            <sub style="font-size:14px"><b>Egor</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/kobzarvs>
+            <img src=https://avatars.githubusercontent.com/u/1615093?v=4 width="100;"  alt=Valeriy Kobzar/>
+            <br />
+            <sub style="font-size:14px"><b>Valeriy Kobzar</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/doasync>
+            <img src=https://avatars.githubusercontent.com/u/29141708?v=4 width="100;"  alt=Ruslan @doasync/>
+            <br />
+            <sub style="font-size:14px"><b>Ruslan @doasync</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/YanLobat>
+            <img src=https://avatars.githubusercontent.com/u/5307423?v=4 width="100;"  alt=Yan/>
+            <br />
+            <sub style="font-size:14px"><b>Yan</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/ilajosmanov>
+            <img src=https://avatars.githubusercontent.com/u/18512404?v=4 width="100;"  alt=Illia Osmanov/>
+            <br />
+            <sub style="font-size:14px"><b>Illia Osmanov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/mg901>
+            <img src=https://avatars.githubusercontent.com/u/7874664?v=4 width="100;"  alt=Maxim/>
+            <br />
+            <sub style="font-size:14px"><b>Maxim</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/AlexandrHoroshih>
+            <img src=https://avatars.githubusercontent.com/u/32790736?v=4 width="100;"  alt=Alexander Khoroshikh/>
+            <br />
+            <sub style="font-size:14px"><b>Alexander Khoroshikh</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/hexagon141>
+            <img src=https://avatars.githubusercontent.com/u/15704394?v=4 width="100;"  alt=Igor Ryzhov/>
+            <br />
+            <sub style="font-size:14px"><b>Igor Ryzhov</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/igorkamyshev>
+            <img src=https://avatars.githubusercontent.com/u/26767722?v=4 width="100;"  alt=Igor Kamyshev/>
+            <br />
+            <sub style="font-size:14px"><b>Igor Kamyshev</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/dpr-dev>
+            <img src=https://avatars.githubusercontent.com/u/23157659?v=4 width="100;"  alt=Arthur Irgashev/>
+            <br />
+            <sub style="font-size:14px"><b>Arthur Irgashev</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/bloadvenro>
+            <img src=https://avatars.githubusercontent.com/u/11679418?v=4 width="100;"  alt=Viktor/>
+            <br />
+            <sub style="font-size:14px"><b>Viktor</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Komar0ff>
+            <img src=https://avatars.githubusercontent.com/u/10588170?v=4 width="100;"  alt=Ilya/>
+            <br />
+            <sub style="font-size:14px"><b>Ilya</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/artalar>
+            <img src=https://avatars.githubusercontent.com/u/27290320?v=4 width="100;"  alt=Arutyunyan Artyom/>
+            <br />
+            <sub style="font-size:14px"><b>Arutyunyan Artyom</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/zarabotaet>
+            <img src=https://avatars.githubusercontent.com/u/15930980?v=4 width="100;"  alt=Dmitrij Shuleshov/>
+            <br />
+            <sub style="font-size:14px"><b>Dmitrij Shuleshov</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/dimensi>
+            <img src=https://avatars.githubusercontent.com/u/11390039?v=4 width="100;"  alt=Nikita Nafranets/>
+            <br />
+            <sub style="font-size:14px"><b>Nikita Nafranets</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/abliarsar>
+            <img src=https://avatars.githubusercontent.com/u/9501504?v=4 width="100;"  alt=Ivan Savichev/>
+            <br />
+            <sub style="font-size:14px"><b>Ivan Savichev</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/oas89>
+            <img src=https://avatars.githubusercontent.com/u/5285065?v=4 width="100;"  alt=Aleksandr Osipov/>
+            <br />
+            <sub style="font-size:14px"><b>Aleksandr Osipov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/bakugod>
+            <img src=https://avatars.githubusercontent.com/u/47696795?v=4 width="100;"  alt=bakugod/>
+            <br />
+            <sub style="font-size:14px"><b>bakugod</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/victordidenko>
+            <img src=https://avatars.githubusercontent.com/u/15016227?v=4 width="100;"  alt=Victor Didenko/>
+            <br />
+            <sub style="font-size:14px"><b>Victor Didenko</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/binjospookie>
+            <img src=https://avatars.githubusercontent.com/u/8722478?v=4 width="100;"  alt=Viktor Pasynok/>
+            <br />
+            <sub style="font-size:14px"><b>Viktor Pasynok</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/tehSLy>
+            <img src=https://avatars.githubusercontent.com/u/25362218?v=4 width="100;"  alt=tehSLy/>
+            <br />
+            <sub style="font-size:14px"><b>tehSLy</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Spoki4>
+            <img src=https://avatars.githubusercontent.com/u/2562688?v=4 width="100;"  alt=Ivan/>
+            <br />
+            <sub style="font-size:14px"><b>Ivan</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/uulaal>
+            <img src=https://avatars.githubusercontent.com/u/38786565?v=4 width="100;"  alt=uulaal/>
+            <br />
+            <sub style="font-size:14px"><b>uulaal</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/belovsandr>
+            <img src=https://avatars.githubusercontent.com/u/16794134?v=4 width="100;"  alt=Aleksandr Belov/>
+            <br />
+            <sub style="font-size:14px"><b>Aleksandr Belov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/yurovant>
+            <img src=https://avatars.githubusercontent.com/u/11337124?v=4 width="100;"  alt=Anton Yurovskykh/>
+            <br />
+            <sub style="font-size:14px"><b>Anton Yurovskykh</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/gamtiq>
+            <img src=https://avatars.githubusercontent.com/u/1177323?v=4 width="100;"  alt=Denis Sikuler/>
+            <br />
+            <sub style="font-size:14px"><b>Denis Sikuler</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/TngSam>
+            <img src=https://avatars.githubusercontent.com/u/25546058?v=4 width="100;"  alt=Samir/>
+            <br />
+            <sub style="font-size:14px"><b>Samir</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Sozonov>
+            <img src=https://avatars.githubusercontent.com/u/1931637?v=4 width="100;"  alt=Sozonov/>
+            <br />
+            <sub style="font-size:14px"><b>Sozonov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/enomado>
+            <img src=https://avatars.githubusercontent.com/u/707007?v=4 width="100;"  alt=Stanislav/>
+            <br />
+            <sub style="font-size:14px"><b>Stanislav</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Tauka>
+            <img src=https://avatars.githubusercontent.com/u/15087247?v=4 width="100;"  alt=Tauyekel Kunzhol/>
+            <br />
+            <sub style="font-size:14px"><b>Tauyekel Kunzhol</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/aldibatyr>
+            <img src=https://avatars.githubusercontent.com/u/47831819?v=4 width="100;"  alt=Aldiyar Batyrbekov/>
+            <br />
+            <sub style="font-size:14px"><b>Aldiyar Batyrbekov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/cqh963852>
+            <img src=https://avatars.githubusercontent.com/u/17702287?v=4 width="100;"  alt=cqh/>
+            <br />
+            <sub style="font-size:14px"><b>cqh</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/ivanov-v>
+            <img src=https://avatars.githubusercontent.com/u/13759065?v=4 width="100;"  alt=Ivanov Vadim/>
+            <br />
+            <sub style="font-size:14px"><b>Ivanov Vadim</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Laiff>
+            <img src=https://avatars.githubusercontent.com/u/575885?v=4 width="100;"  alt=Andrey Antropov/>
+            <br />
+            <sub style="font-size:14px"><b>Andrey Antropov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/0xflotus>
+            <img src=https://avatars.githubusercontent.com/u/26602940?v=4 width="100;"  alt=0xflotus/>
+            <br />
+            <sub style="font-size:14px"><b>0xflotus</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/abelsiqueira>
+            <img src=https://avatars.githubusercontent.com/u/1068752?v=4 width="100;"  alt=Abel Soares Siqueira/>
+            <br />
+            <sub style="font-size:14px"><b>Abel Soares Siqueira</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/sanohin>
+            <img src=https://avatars.githubusercontent.com/u/14825383?v=4 width="100;"  alt=Alek Anokhin/>
+            <br />
+            <sub style="font-size:14px"><b>Alek Anokhin</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/mihasia20008>
+            <img src=https://avatars.githubusercontent.com/u/9918427?v=4 width="100;"  alt=Alexander/>
+            <br />
+            <sub style="font-size:14px"><b>Alexander</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Kelin2025>
+            <img src=https://avatars.githubusercontent.com/u/4208480?v=4 width="100;"  alt=Anton Kosykh/>
+            <br />
+            <sub style="font-size:14px"><b>Anton Kosykh</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/rymarchikbot>
+            <img src=https://avatars.githubusercontent.com/u/43807162?v=4 width="100;"  alt=rymarchikbot/>
+            <br />
+            <sub style="font-size:14px"><b>rymarchikbot</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/hyposlasher>
+            <img src=https://avatars.githubusercontent.com/u/13961762?v=4 width="100;"  alt=Denis Maushov/>
+            <br />
+            <sub style="font-size:14px"><b>Denis Maushov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/dskiba>
+            <img src=https://avatars.githubusercontent.com/u/28356785?v=4 width="100;"  alt=Denis Skiba/>
+            <br />
+            <sub style="font-size:14px"><b>Denis Skiba</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/edprince>
+            <img src=https://avatars.githubusercontent.com/u/7027089?v=4 width="100;"  alt=Ed Prince/>
+            <br />
+            <sub style="font-size:14px"><b>Ed Prince</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/kubk>
+            <img src=https://avatars.githubusercontent.com/u/22447849?v=4 width="100;"  alt=Egor G/>
+            <br />
+            <sub style="font-size:14px"><b>Egor G</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/husek>
+            <img src=https://avatars.githubusercontent.com/u/4630702?v=4 width="100;"  alt=Gabriel Husek/>
+            <br />
+            <sub style="font-size:14px"><b>Gabriel Husek</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/newbornfrontender>
+            <img src=https://avatars.githubusercontent.com/u/34810942?v=4 width="100;"  alt=Infant Frontender/>
+            <br />
+            <sub style="font-size:14px"><b>Infant Frontender</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/vanpav>
+            <img src=https://avatars.githubusercontent.com/u/2944759?v=4 width="100;"  alt=Ivan/>
+            <br />
+            <sub style="font-size:14px"><b>Ivan</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/jankeromnes>
+            <img src=https://avatars.githubusercontent.com/u/599268?v=4 width="100;"  alt=Jan Keromnes/>
+            <br />
+            <sub style="font-size:14px"><b>Jan Keromnes</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/jsejcksn>
+            <img src=https://avatars.githubusercontent.com/u/868251?v=4 width="100;"  alt=Jesse Jackson/>
+            <br />
+            <sub style="font-size:14px"><b>Jesse Jackson</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/joelbandi>
+            <img src=https://avatars.githubusercontent.com/u/15027870?v=4 width="100;"  alt=Joel Bandi/>
+            <br />
+            <sub style="font-size:14px"><b>Joel Bandi</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Kurzdor>
+            <img src=https://avatars.githubusercontent.com/u/19878951?v=4 width="100;"  alt=Paul Ekshmidt/>
+            <br />
+            <sub style="font-size:14px"><b>Paul Ekshmidt</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/RubaXa>
+            <img src=https://avatars.githubusercontent.com/u/1109562?v=4 width="100;"  alt=Lebedev Konstantin/>
+            <br />
+            <sub style="font-size:14px"><b>Lebedev Konstantin</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/mikecann>
+            <img src=https://avatars.githubusercontent.com/u/215033?v=4 width="100;"  alt=Mike Cann/>
+            <br />
+            <sub style="font-size:14px"><b>Mike Cann</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/olejech>
+            <img src=https://avatars.githubusercontent.com/u/64708593?v=4 width="100;"  alt=Oleg/>
+            <br />
+            <sub style="font-size:14px"><b>Oleg</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/OlegBrony>
+            <img src=https://avatars.githubusercontent.com/u/19880334?v=4 width="100;"  alt=Oleh/>
+            <br />
+            <sub style="font-size:14px"><b>Oleh</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/pgrekovich>
+            <img src=https://avatars.githubusercontent.com/u/1001687?v=4 width="100;"  alt=Pasha Grekovich/>
+            <br />
+            <sub style="font-size:14px"><b>Pasha Grekovich</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/bigslycat>
+            <img src=https://avatars.githubusercontent.com/u/1121997?v=4 width="100;"  alt=Pavel Tereschenko/>
+            <br />
+            <sub style="font-size:14px"><b>Pavel Tereschenko</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/romadryud>
+            <img src=https://avatars.githubusercontent.com/u/19193036?v=4 width="100;"  alt=Raman Aktsisiuk/>
+            <br />
+            <sub style="font-size:14px"><b>Raman Aktsisiuk</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/sagdeev>
+            <img src=https://avatars.githubusercontent.com/u/8946162?v=4 width="100;"  alt=Renat Sagdeev/>
+            <br />
+            <sub style="font-size:14px"><b>Renat Sagdeev</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/satyarohith>
+            <img src=https://avatars.githubusercontent.com/u/29819102?v=4 width="100;"  alt=Satya Rohith/>
+            <br />
+            <sub style="font-size:14px"><b>Satya Rohith</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/belozer>
+            <img src=https://avatars.githubusercontent.com/u/1655916?v=4 width="100;"  alt=Sergey Belozyorcev/>
+            <br />
+            <sub style="font-size:14px"><b>Sergey Belozyorcev</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/gitter-badger>
+            <img src=https://avatars.githubusercontent.com/u/8518239?v=4 width="100;"  alt=The Gitter Badger/>
+            <br />
+            <sub style="font-size:14px"><b>The Gitter Badger</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/VadimFilimonov>
+            <img src=https://avatars.githubusercontent.com/u/11225648?v=4 width="100;"  alt=VadimFilimonov/>
+            <br />
+            <sub style="font-size:14px"><b>VadimFilimonov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/vsviridov>
+            <img src=https://avatars.githubusercontent.com/u/221684?v=4 width="100;"  alt=Vasili Sviridov/>
+            <br />
+            <sub style="font-size:14px"><b>Vasili Sviridov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/vsvirydau-cl>
+            <img src=https://avatars.githubusercontent.com/u/55260532?v=4 width="100;"  alt=Vasili Svirydau/>
+            <br />
+            <sub style="font-size:14px"><b>Vasili Svirydau</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/yumauri>
+            <img src=https://avatars.githubusercontent.com/u/6583994?v=4 width="100;"  alt=Victor/>
+            <br />
+            <sub style="font-size:14px"><b>Victor</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/VictorKolb>
+            <img src=https://avatars.githubusercontent.com/u/14196649?v=4 width="100;"  alt=Victor Kolb/>
+            <br />
+            <sub style="font-size:14px"><b>Victor Kolb</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Victor-Nikliaiev>
+            <img src=https://avatars.githubusercontent.com/u/62945733?v=4 width="100;"  alt=Vic/>
+            <br />
+            <sub style="font-size:14px"><b>Vic</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/vladmelnikov>
+            <img src=https://avatars.githubusercontent.com/u/13378944?v=4 width="100;"  alt=Vladislav Melnikov/>
+            <br />
+            <sub style="font-size:14px"><b>Vladislav Melnikov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/darky>
+            <img src=https://avatars.githubusercontent.com/u/1832800?v=4 width="100;"  alt=Vladislav Botvin/>
+            <br />
+            <sub style="font-size:14px"><b>Vladislav Botvin</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/willheslam>
+            <img src=https://avatars.githubusercontent.com/u/5377213?v=4 width="100;"  alt=Will Heslam/>
+            <br />
+            <sub style="font-size:14px"><b>Will Heslam</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/WoodenPC>
+            <img src=https://avatars.githubusercontent.com/u/25397745?v=4 width="100;"  alt=Rasul />
+            <br />
+            <sub style="font-size:14px"><b>Rasul </b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/bonkboykz>
+            <img src=https://avatars.githubusercontent.com/u/4549476?v=4 width="100;"  alt=Yesset/>
+            <br />
+            <sub style="font-size:14px"><b>Yesset</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/c01nd01r>
+            <img src=https://avatars.githubusercontent.com/u/3511312?v=4 width="100;"  alt=Stanislav/>
+            <br />
+            <sub style="font-size:14px"><b>Stanislav</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/dmitryplyaskin>
+            <img src=https://avatars.githubusercontent.com/u/35658668?v=4 width="100;"  alt=dmitryplyaskin/>
+            <br />
+            <sub style="font-size:14px"><b>dmitryplyaskin</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/gzaripov>
+            <img src=https://avatars.githubusercontent.com/u/15311091?v=4 width="100;"  alt=Grigory Zaripov/>
+            <br />
+            <sub style="font-size:14px"><b>Grigory Zaripov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/XeryYue>
+            <img src=https://avatars.githubusercontent.com/u/52351095?v=4 width="100;"  alt=kanno/>
+            <br />
+            <sub style="font-size:14px"><b>kanno</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/leushkin>
+            <img src=https://avatars.githubusercontent.com/u/26031322?v=4 width="100;"  alt=Kirill Leushkin/>
+            <br />
+            <sub style="font-size:14px"><b>Kirill Leushkin</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/miyaokamarina>
+            <img src=https://avatars.githubusercontent.com/u/37388187?v=4 width="100;"  alt=Marina Miyaoka/>
+            <br />
+            <sub style="font-size:14px"><b>Marina Miyaoka</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/nulladdict>
+            <img src=https://avatars.githubusercontent.com/u/26379644?v=4 width="100;"  alt=roman/>
+            <br />
+            <sub style="font-size:14px"><b>roman</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/risenforces>
+            <img src=https://avatars.githubusercontent.com/u/35740512?v=4 width="100;"  alt=Evgeny Zakharov/>
+            <br />
+            <sub style="font-size:14px"><b>Evgeny Zakharov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/vladthelittleone>
+            <img src=https://avatars.githubusercontent.com/u/4215285?v=4 width="100;"  alt=vladthelittleone/>
+            <br />
+            <sub style="font-size:14px"><b>vladthelittleone</b></sub>
+        </a>
+    </td>
+</tr>
+</table>
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
