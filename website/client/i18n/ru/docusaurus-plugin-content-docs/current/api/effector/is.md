@@ -325,3 +325,42 @@ is.attached(null)
 // => false
 ```
 [Запустить пример](https://share.effector.dev/qsdTF7og)
+
+
+### Пример использования
+
+Иногда нужно добавить отображение ошибок на эффекты, но только на те, которые были "локализованы" через `attach`.
+Если оставить `onCreateEffect` как есть, без проверок, то лог ошибки будет задублирован.
+
+```js
+import { createDomain, attach, is } from 'effector'
+
+const logFailuresDomain = createDomain()
+
+logFailuresDomain.onCreateEffect((effect) => {
+  if (is.attached(effect)) {
+    effect.fail.watch(({ params, error }) => {
+      console.warn(`Effect "${effect.compositeName.fullName}" failed`, params, error)
+    })
+  }
+})
+
+const baseRequestFx = logFailuresDomain.createEffect((path) => {
+  throw new Error(`path ${path}`)
+})
+
+const loadDataFx = attach({
+  mapParams: () => '/data',
+  effect: baseRequestFx,
+})
+
+const loadListFx = attach({
+  mapParams: () => '/list',
+  effect: baseRequestFx,
+})
+
+loadDataFx()
+loadListFx()
+```
+
+[Запустить пример](https://share.effector.dev/NxQseHOR)
