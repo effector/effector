@@ -166,7 +166,7 @@ resultFx = attach({
 **Arguments**
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
-- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
 
 **Returns**
 
