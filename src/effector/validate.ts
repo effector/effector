@@ -2,6 +2,7 @@ import {kind} from './index.h'
 import {DOMAIN, STORE, EVENT, EFFECT, SCOPE} from './tag'
 import {isObject, isFunction} from './is'
 import {Domain, Effect, Event, Scope, Store} from './unit.h'
+import {getMeta} from './getter'
 
 export const unit = obj => (isFunction(obj) || isObject(obj)) && 'kind' in obj
 
@@ -14,3 +15,4 @@ export const effect = is(EFFECT) as (
 ) => value is Effect<unknown, unknown, unknown>
 export const domain = is(DOMAIN) as (value) => value is Domain
 export const scope = is(SCOPE) as (value) => value is Scope
+export const attached = (unit) => effect(unit) && getMeta(unit, 'attached') === true

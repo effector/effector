@@ -274,3 +274,54 @@ is.unit(null)
 ```
 
 [Запустить пример](https://share.effector.dev/iOpDvweB)
+
+## `is.attached(value)`
+
+:::note
+Добавлен в effector 22.4.0
+:::
+
+Проверяет, что переданный [_effect_](./Effect.md) был создан с помощью метода [_attach_](./attach.md).
+Если в качестве аргумента был передан не effect, возвращает `false`.
+
+**Возвращает**
+
+boolean
+
+```js
+import {
+  is,
+  createStore,
+  createEvent,
+  createEffect,
+  createDomain,
+  attach,
+} from 'effector'
+
+const $store = createStore(null)
+const event = createEvent()
+const fx = createEffect()
+
+const childFx = attach({
+  effect: fx,
+})
+
+is.attached(childFx)
+// => true
+
+is.attached(fx)
+// => false
+
+is.attached($store)
+// => false
+
+is.attached(event)
+// => false
+
+is.attached(createDomain())
+// => false
+
+is.attached(null)
+// => false
+```
+[Запустить пример](https://share.effector.dev/qsdTF7og)
