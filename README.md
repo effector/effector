@@ -422,12 +422,21 @@ More articles about effector at patreon
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/yialo>
+            <img src=https://avatars.githubusercontent.com/u/38593881?v=4 width="100;"  alt=Alex Arro/>
+            <br />
+            <sub style="font-size:14px"><b>Alex Arro</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/sanohin>
             <img src=https://avatars.githubusercontent.com/u/14825383?v=4 width="100;"  alt=Alek Anokhin/>
             <br />
             <sub style="font-size:14px"><b>Alek Anokhin</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/mihasia20008>
             <img src=https://avatars.githubusercontent.com/u/9918427?v=4 width="100;"  alt=Alexander/>
@@ -435,8 +444,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Alexander</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/Kelin2025>
             <img src=https://avatars.githubusercontent.com/u/4208480?v=4 width="100;"  alt=Anton Kosykh/>
@@ -472,6 +479,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Ed Prince</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/kubk>
             <img src=https://avatars.githubusercontent.com/u/22447849?v=4 width="100;"  alt=Egor G/>
@@ -479,8 +488,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Egor G</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/husek>
             <img src=https://avatars.githubusercontent.com/u/4630702?v=4 width="100;"  alt=Gabriel Husek/>
@@ -516,6 +523,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Jesse Jackson</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/joelbandi>
             <img src=https://avatars.githubusercontent.com/u/15027870?v=4 width="100;"  alt=Joel Bandi/>
@@ -523,8 +532,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Joel Bandi</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/Kurzdor>
             <img src=https://avatars.githubusercontent.com/u/19878951?v=4 width="100;"  alt=Paul Ekshmidt/>
@@ -560,6 +567,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Oleh</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/pgrekovich>
             <img src=https://avatars.githubusercontent.com/u/1001687?v=4 width="100;"  alt=Pasha Grekovich/>
@@ -567,8 +576,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Pasha Grekovich</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/bigslycat>
             <img src=https://avatars.githubusercontent.com/u/1121997?v=4 width="100;"  alt=Pavel Tereschenko/>
@@ -604,6 +611,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Sergey Belozyorcev</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/gitter-badger>
             <img src=https://avatars.githubusercontent.com/u/8518239?v=4 width="100;"  alt=The Gitter Badger/>
@@ -611,8 +620,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>The Gitter Badger</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/VadimFilimonov>
             <img src=https://avatars.githubusercontent.com/u/11225648?v=4 width="100;"  alt=VadimFilimonov/>
@@ -648,6 +655,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Victor Kolb</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/Victor-Nikliaiev>
             <img src=https://avatars.githubusercontent.com/u/62945733?v=4 width="100;"  alt=Vic/>
@@ -655,8 +664,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Vic</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/vladmelnikov>
             <img src=https://avatars.githubusercontent.com/u/13378944?v=4 width="100;"  alt=Vladislav Melnikov/>
@@ -692,6 +699,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Yesset</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/c01nd01r>
             <img src=https://avatars.githubusercontent.com/u/3511312?v=4 width="100;"  alt=Stanislav/>
@@ -699,8 +708,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Stanislav</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/dmitryplyaskin>
             <img src=https://avatars.githubusercontent.com/u/35658668?v=4 width="100;"  alt=dmitryplyaskin/>
@@ -736,6 +743,8 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>Marina Miyaoka</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/nulladdict>
             <img src=https://avatars.githubusercontent.com/u/26379644?v=4 width="100;"  alt=roman/>
@@ -743,8 +752,6 @@ More articles about effector at patreon
             <sub style="font-size:14px"><b>roman</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/risenforces>
             <img src=https://avatars.githubusercontent.com/u/35740512?v=4 width="100;"  alt=Evgeny Zakharov/>
