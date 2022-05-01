@@ -3,7 +3,7 @@ import {render, cleanup, container, act} from 'effector/fixtures/react'
 import {createGate, useGate, useStore} from 'effector-react'
 
 import {argumentHistory} from 'effector/fixtures'
-import {createEvent, createStore, forward} from 'effector'
+import {allSettled, createEvent, createStore, fork, forward, serialize} from 'effector'
 
 test('plain gate', async () => {
   const Gate = createGate('plain gate')
@@ -146,6 +146,21 @@ test('gate properties', async () => {
   await cleanup()
   expect(argumentHistory(fn1)).toEqual([false, true, false])
   expect(argumentHistory(fn2)).toEqual([{}, {foo: 'bar'}, {}])
+})
+
+test('Gate.state should have sid', () => {
+  const Gate = createGate('default')
+  expect(Gate.state.sid).toBeDefined()
+  expect(Gate.state.sid).toBeTruthy()
+})
+
+test('gate should be correctly serialized via fork #672', async () => {
+  const Gate = createGate('default')
+  const scope = fork()
+  await allSettled(Gate.open, { scope, params: 'another' })
+
+  const states = serialize(scope)
+  expect(states[Gate.state.sid!]).toBe('another')
 })
 
 test('gate properties hook', async () => {
