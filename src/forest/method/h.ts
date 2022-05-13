@@ -371,11 +371,13 @@ export function h(tag: string, opts?: any) {
           processStoreRef($name)
           processStoreRef($enabled)
         } else if (!is.unit(property.name)) {
-          draft.staticSeq.push({
-            type: 'classList',
-            field: property.name,
-            value: property.enabled,
-          })
+          property.name.map(name =>
+            draft.staticSeq.push({
+              type: 'classList',
+              field: name,
+              value: property.enabled as boolean,
+            }),
+          )
         }
       })
       draft.text.forEach(item => {
@@ -524,8 +526,8 @@ export function h(tag: string, opts?: any) {
           case 'classList': {
             const classOperationBinding = propertyOperationBinding.classList
             const fieldTrack = createStore({
-              prev: '',
-              curr: item.field.getState(),
+              prev: [] as string[],
+              curr: item.field.getState() ?? [],
             }).on(item.field, ({curr: prev}, curr) => ({prev, curr}))
 
             const hooks = mutualSample({
@@ -537,14 +539,21 @@ export function h(tag: string, opts?: any) {
             createPropsOp(draft, {
               initCtx(value, leaf) {
                 const element = readElement(leaf)
-                classOperationBinding(element, value.name.curr, value.enabled)
+                value.name.curr.forEach(className => {
+                  classOperationBinding(element, className, value.enabled)
+                })
                 return element
               },
               runOp(value, element: DOMElement) {
-                if (value.name.prev !== value.name.curr) {
-                  classOperationBinding(element, value.name.prev, false)
-                }
-                classOperationBinding(element, value.name.curr, value.enabled)
+                const toDelete = value.name.prev.filter(className => {
+                  return !value.name.curr.includes(className)
+                })
+                toDelete.forEach(className => {
+                  classOperationBinding(element, className, false)
+                })
+                value.name.curr.forEach(className => {
+                  classOperationBinding(element, className, value.enabled)
+                })
               },
               hooks,
             })
