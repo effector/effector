@@ -483,9 +483,9 @@ More articles about effector at patreon
 <tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/kubk>
-            <img src=https://avatars.githubusercontent.com/u/22447849?v=4 width="100;"  alt=Egor G/>
+            <img src=https://avatars.githubusercontent.com/u/22447849?v=4 width="100;"  alt=Egor Gorbachev/>
             <br />
-            <sub style="font-size:14px"><b>Egor G</b></sub>
+            <sub style="font-size:14px"><b>Egor Gorbachev</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
@@ -578,9 +578,9 @@ More articles about effector at patreon
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/bigslycat>
-            <img src=https://avatars.githubusercontent.com/u/1121997?v=4 width="100;"  alt=Pavel Tereschenko/>
+            <img src=https://avatars.githubusercontent.com/u/1121997?v=4 width="100;"  alt=bigslycat/>
             <br />
-            <sub style="font-size:14px"><b>Pavel Tereschenko</b></sub>
+            <sub style="font-size:14px"><b>bigslycat</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
@@ -723,7 +723,7 @@ More articles about effector at patreon
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/XeryYue>
+        <a href=https://github.com/nonzzz>
             <img src=https://avatars.githubusercontent.com/u/52351095?v=4 width="100;"  alt=kanno/>
             <br />
             <sub style="font-size:14px"><b>kanno</b></sub>
