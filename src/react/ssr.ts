@@ -22,12 +22,14 @@ export function createGate<Props>(
     defaultState?: Props
     name?: string
   } = {},
+  maybeConfig = {},
 ) {
   return createGateImplementation({
     domain: config.domain,
-    name: config.name,
     defaultState: 'defaultState' in config ? config.defaultState : {},
     hook: useGate,
+    mainConfig: config,
+    maybeConfig,
   })
 }
 

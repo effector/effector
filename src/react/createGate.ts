@@ -3,6 +3,7 @@ import {createStore, launch, Store, Domain, createEvent} from 'effector'
 import {Gate} from './index.h'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {withDisplayName} from './withDisplayName'
+import {flattenConfig} from '../effector/config'
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
@@ -45,27 +46,45 @@ function shallowCompare(a: any, b: any) {
   return false
 }
 export function createGateImplementation<State>({
-  name = 'gate',
   domain,
   defaultState,
   hook: useGateHook,
+  mainConfig,
+  maybeConfig,
 }: {
-  name?: string
   domain?: Domain
   defaultState: State | {}
   hook: typeof useGate
+  mainConfig?: Record<string, any>
+  maybeConfig?: Record<string, any> & {sid?: string}
 }): Gate<State> {
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: mainConfig,
+  }) as {sid: string | undefined; name: string | undefined}
+  const name = config.name || 'gate'
   const fullName = `${domain ? `${domain.compositeName.fullName}/` : ''}${name}`
-  const set = createEvent<State>(`${fullName}.set`)
-  const open = createEvent<State>(`${fullName}.open`)
-  const close = createEvent<State>(`${fullName}.close`)
+  const set = createEvent<State>({
+    name: `${fullName}.set`,
+    sid: config.sid ? `${config.sid}|set` : undefined,
+  })
+  const open = createEvent<State>({
+    name: `${fullName}.open`,
+    sid: config.sid ? `${config.sid}|open` : undefined,
+  })
+  const close = createEvent<State>({
+    name: `${fullName}.close`,
+    sid: config.sid ? `${config.sid}|close` : undefined,
+  })
   const status = createStore(Boolean(false), {
     name: `${fullName}.status`,
+    // doesn't need to have sid, because it is internal store, should not be serialized
   })
     .on(open, () => Boolean(true))
     .on(close, () => Boolean(false))
   const state = createStore(defaultState as State, {
     name: `${fullName}.state`,
+    sid: config.sid,
   })
     .on(set, (_, state) => state)
     .reset(close)
@@ -93,25 +112,58 @@ export function createGateImplementation<State>({
   GateComponent.set = set
   return withDisplayName(`Gate:${fullName}`, GateComponent)
 }
+
+// with plugin
+// {loc,name,sid}
+// name, {loc,name,sid} V
+// {defaultState,domain,name}, {loc,name,sid} V
+
+// without plugin
+// —
+// name V
+// {defaultState,domain, name} V
+
+export function isPluginConfig(config: Record<string, any> | string) {
+  return typeof config === 'object' && config !== null && 'sid' in config
+}
+export function isGateConfig(config: Record<string, any> | string) {
+  return (
+    typeof config === 'object' &&
+    config !== null &&
+    ('domain' in config || 'defaultState' in config || 'name' in config)
+  )
+}
+
 export function createGate<Props>(
-  name: string = 'gate',
-  defaultState: Props = {} as any,
+  nameOrConfig: string | Record<string, any> = 'gate',
+  defaultStateOrConfig: Props | {defaultState: Props} = {} as any,
 ): Gate<Props> {
   let domain
-  if (typeof name === 'object' && name !== null) {
-    if ('defaultState' in name) {
-      //@ts-ignore
-      defaultState = name.defaultState
+  let defaultState = {}
+  let mainConfig = {}
+  let maybeConfig = {}
+
+  if (typeof nameOrConfig === 'string') {
+    mainConfig = {name: nameOrConfig}
+    if (isPluginConfig(defaultStateOrConfig)) {
+      maybeConfig = defaultStateOrConfig
+    } else {
+      defaultState = defaultStateOrConfig
     }
-    //@ts-ignore
-    if (name.domain) domain = name.domain
-    //@ts-ignore
-    name = name.name
+  } else if (isGateConfig(nameOrConfig)) {
+    mainConfig = nameOrConfig
+    defaultState = nameOrConfig.defaultState || {}
+    domain = nameOrConfig.domain
+    maybeConfig = defaultStateOrConfig
+  } else if (isPluginConfig(nameOrConfig)) {
+    maybeConfig = nameOrConfig
   }
-  return createGateImplementation({
-    name,
+
+  return createGateImplementation<Props>({
+    hook: useGate,
     domain,
     defaultState,
-    hook: useGate,
+    mainConfig,
+    maybeConfig,
   })
 }
