@@ -17,6 +17,7 @@ module.exports = function (babel, options = {}) {
     splits,
     apis,
     merges,
+    gates,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -165,6 +166,14 @@ module.exports = function (babel, options = {}) {
         setEventNameAfter(path, state, id, t, smallConfig),
     },
   ]
+  const reactMethodParsers = [
+    {
+      flag: gates,
+      set: reactMethods.createGate,
+      fn: (path, state, name, id) =>
+        setEventNameAfter(path, state, id, t, smallConfig),
+    },
+  ]
   function addImport(path, method) {
     const programPath = path.find(path => path.isProgram())
     const [newPath] = programPath.unshiftContainer(
@@ -252,15 +261,9 @@ module.exports = function (babel, options = {}) {
           if (!s.imported) continue
           const importedName = s.imported.name
           const localName = s.local.name
+          if (importedName === localName) continue
           if (reactMethods.createGate.has(importedName)) {
             reactMethods.createGate.add(localName)
-            this.effector_needFactoryImport = true
-            createFactoryTemplate()
-            this.effector_factoryMap.set(localName, {
-              localName,
-              importedName,
-              source,
-            })
           }
         }
       } else {
@@ -365,6 +368,7 @@ module.exports = function (babel, options = {}) {
           const name = path.node.callee.name
           if (!this.effector_ignoredImports.has(name)) {
             applyMethodParsers(methodParsers, path, state, name)
+            applyMethodParsers(reactMethodParsers, path, state, name)
           }
           if (
             factoriesUsed &&
@@ -523,6 +527,7 @@ const normalizeOptions = options => {
       splits: true,
       apis: true,
       merges: true,
+      gates: true,
     },
     result: {
       importName: new Set(
