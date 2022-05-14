@@ -1133,6 +1133,48 @@ createEvent({
 "
 `;
 
+exports[`babel-plugin should create gate 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/create-gate.js'
+import {createDomain} from 'effector'
+import {createGate} from 'effector-react'
+import {createGate as renamedGate} from 'effector-react/scope'
+const Gate1 = createGate()
+const Gate2 = createGate('gate2')
+const Gate3 = createGate({
+  defaultState: {
+    a: 1,
+  },
+  domain: createDomain({
+    loc: {
+      file: _effectorFileName,
+      line: 9,
+      column: 10,
+    },
+    name: 'domain',
+    sid: 'ny8n5n',
+  }),
+  name: 'gate3',
+})
+const TheGate1 = renamedGate()
+const TheGate2 = renamedGate('gate2')
+const TheGate3 = renamedGate({
+  defaultState: {
+    a: 1,
+  },
+  domain: createDomain({
+    loc: {
+      file: _effectorFileName,
+      line: 17,
+      column: 10,
+    },
+    name: 'domain',
+    sid: '-8tybae',
+  }),
+  name: 'gate3',
+})
+"
+`;
+
 exports[`babel-plugin should create store 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-store.js'
 import {createStore} from 'effector'
