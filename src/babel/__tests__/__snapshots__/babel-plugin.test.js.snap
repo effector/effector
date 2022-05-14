@@ -1138,6 +1138,7 @@ exports[`babel-plugin should create gate 1`] = `
 import {createDomain} from 'effector'
 import {createGate} from 'effector-react'
 import {createGate as renamedGate} from 'effector-react/scope'
+import {createGate as compatGate} from 'effector-react/compat'
 const Gate1 = createGate()
 const Gate2 = createGate('gate2')
 const Gate3 = createGate({
@@ -1147,11 +1148,11 @@ const Gate3 = createGate({
   domain: createDomain({
     loc: {
       file: _effectorFileName,
-      line: 9,
+      line: 10,
       column: 10,
     },
     name: 'domain',
-    sid: 'ny8n5n',
+    sid: '-c59o1r',
   }),
   name: 'gate3',
 })
@@ -1164,11 +1165,28 @@ const TheGate3 = renamedGate({
   domain: createDomain({
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 18,
       column: 10,
     },
     name: 'domain',
-    sid: '-8tybae',
+    sid: '-8cwow7',
+  }),
+  name: 'gate3',
+})
+const CompatGate1 = compatGate()
+const CompatGate2 = compatGate('gate2')
+const CompatGate3 = compatGate({
+  defaultState: {
+    a: 1,
+  },
+  domain: createDomain({
+    loc: {
+      file: _effectorFileName,
+      line: 26,
+      column: 10,
+    },
+    name: 'domain',
+    sid: '5decjg',
   }),
   name: 'gate3',
 })
