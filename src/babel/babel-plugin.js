@@ -181,7 +181,6 @@ module.exports = function (babel, options = {}) {
           name,
           true,
         ),
-      // setEventNameAfter(path, state, id, t, smallConfig),
     },
   ]
   function addImport(path, method) {
