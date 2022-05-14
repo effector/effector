@@ -11,6 +11,8 @@ Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use 
 
 Use cases: declarative way to pass values from stores to effects and argument preprocessing.
 
+Since `effector 22.4.0`, it is available to check whether effect is created via `attach` method — [`is.attached`](./is.md#isattachedvalue).
+
 ## Formulae
 
 ```ts

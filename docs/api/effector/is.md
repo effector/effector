@@ -275,3 +275,95 @@ is.unit(null)
 ```
 
 [Try it](https://share.effector.dev/iOpDvweB)
+
+## `is.attached(value)`
+
+:::note since
+effector 22.4.0
+:::
+
+Checks if given value is [_effect_](./Effect.md) created via [_attach_](./attach.md) method.
+If passed not an effect, returns `false`.
+
+**Returns**
+
+boolean
+
+
+```js
+import {
+  is,
+  createStore,
+  createEvent,
+  createEffect,
+  createDomain,
+  attach,
+} from 'effector'
+
+const $store = createStore(null)
+const event = createEvent()
+const fx = createEffect()
+
+const childFx = attach({
+  effect: fx,
+})
+
+is.attached(childFx)
+// => true
+
+is.attached(fx)
+// => false
+
+is.attached($store)
+// => false
+
+is.attached(event)
+// => false
+
+is.attached(createDomain())
+// => false
+
+is.attached(null)
+// => false
+```
+
+[Try it](https://share.effector.dev/qsdTF7og)
+
+
+### Use case
+
+Sometimes you need to add an error log on effects failures, but only on effects that have been "localized" via `attach`.
+If you leave `onCreateEffect` as it is, without checks, the error log will be duplicated, because it will happen on the parent and the child effect.
+
+```js
+import { createDomain, attach, is } from 'effector'
+
+const logFailuresDomain = createDomain()
+
+logFailuresDomain.onCreateEffect((effect) => {
+  if (is.attached(effect)) {
+    effect.fail.watch(({ params, error }) => {
+      console.warn(`Effect "${effect.compositeName.fullName}" failed`, params, error)
+    })
+  }
+})
+
+const baseRequestFx = logFailuresDomain.createEffect((path) => {
+  throw new Error(`path ${path}`)
+})
+
+const loadDataFx = attach({
+  mapParams: () => '/data',
+  effect: baseRequestFx,
+})
+
+const loadListFx = attach({
+  mapParams: () => '/list',
+  effect: baseRequestFx,
+})
+
+loadDataFx()
+loadListFx()
+```
+
+[Try it](https://share.effector.dev/NxQseHOR)

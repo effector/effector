@@ -11,6 +11,8 @@ Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use 
 
 Use cases: declarative way to pass values from stores to effects and argument preprocessing.
 
+С версии `22.4.0`, можно проверить создан ли эффект с помощью метода `attach` — [`is.attached`](./is.md#isattachedvalue).
+
 ## Formulae
 
 ```ts
@@ -218,3 +220,4 @@ Create effect which will call `effect` with params as it is. That allow to creat
 :::note since
 effector 21.5.0
 :::
+
