@@ -171,7 +171,17 @@ module.exports = function (babel, options = {}) {
       flag: gates,
       set: reactMethods.createGate,
       fn: (path, state, name, id) =>
-        setEventNameAfter(path, state, id, t, smallConfig),
+        setConfigForConfMethod(
+          path,
+          state,
+          null,
+          t,
+          smallConfig,
+          false,
+          name,
+          true,
+        ),
+      // setEventNameAfter(path, state, id, t, smallConfig),
     },
   ]
   function addImport(path, method) {
@@ -781,6 +791,7 @@ function setConfigForConfMethod(
   {addLoc, addNames, debugSids},
   singleArgument,
   checkBindingName,
+  allowEmptyArguments,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   if (isLocalVariable(path, checkBindingName)) return
@@ -794,8 +805,8 @@ function setConfigForConfMethod(
     }
   })
 
-  if (args) {
-    if (!args[0]) return
+  if (args || true) {
+    if (!args[0] && !allowEmptyArguments) return
     const commonArgs = singleArgument
       ? args[0]
       : t.ArrayExpression(args.slice())

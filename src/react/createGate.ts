@@ -3,7 +3,8 @@ import {createStore, launch, Store, Domain, createEvent} from 'effector'
 import {Gate} from './index.h'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {withDisplayName} from './withDisplayName'
-import {flattenConfig} from '../effector/config'
+import {flattenConfig, processArgsToConfig} from '../effector/config'
+import {isObject} from '../effector/is'
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
@@ -87,6 +88,7 @@ export function createGateImplementation<State>({
     sid: config.sid,
   })
     .on(set, (_, state) => state)
+    .on(open, (_, state) => state)
     .reset(close)
   if (domain) {
     const {hooks} = domain as any
@@ -113,16 +115,6 @@ export function createGateImplementation<State>({
   return withDisplayName(`Gate:${fullName}`, GateComponent)
 }
 
-// with plugin
-// {loc,name,sid}
-// name, {loc,name,sid} V
-// {defaultState,domain,name}, {loc,name,sid} V
-
-// without plugin
-// —
-// name V
-// {defaultState,domain, name} V
-
 export function isPluginConfig(config: Record<string, any> | string) {
   return typeof config === 'object' && config !== null && 'sid' in config
 }
@@ -134,29 +126,26 @@ export function isGateConfig(config: Record<string, any> | string) {
   )
 }
 
-export function createGate<Props>(
-  nameOrConfig: string | Record<string, any> = 'gate',
-  defaultStateOrConfig: Props | {defaultState: Props} = {} as any,
-): Gate<Props> {
+export function createGate<Props>(...args: unknown[]): Gate<Props> {
+  const [[nameOrConfig, defaultStateOrConfig], metadata] =
+    processArgsToConfig(args)
+
   let domain
   let defaultState = {}
   let mainConfig = {}
-  let maybeConfig = {}
+  let maybeConfig = metadata
 
   if (typeof nameOrConfig === 'string') {
     mainConfig = {name: nameOrConfig}
     if (isPluginConfig(defaultStateOrConfig)) {
-      maybeConfig = defaultStateOrConfig
+      // maybeConfig = defaultStateOrConfig
     } else {
-      defaultState = defaultStateOrConfig
+      defaultState = defaultStateOrConfig || {}
     }
   } else if (isGateConfig(nameOrConfig)) {
     mainConfig = nameOrConfig
     defaultState = nameOrConfig.defaultState || {}
     domain = nameOrConfig.domain
-    maybeConfig = defaultStateOrConfig
-  } else if (isPluginConfig(nameOrConfig)) {
-    maybeConfig = nameOrConfig
   }
 
   return createGateImplementation<Props>({

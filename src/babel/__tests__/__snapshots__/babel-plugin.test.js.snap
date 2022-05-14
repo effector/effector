@@ -1134,143 +1134,197 @@ createEvent({
 `;
 
 exports[`babel-plugin should create gate 1`] = `
-"var _effectorFileName = '/src/babel/__tests__/fixtures/create-gate.js'
+"var _effectorFileName2 = '/src/babel/__tests__/fixtures/create-gate.js'
 import {createDomain} from 'effector'
 import {createGate} from 'effector-react'
 import {createGate as renamedGate} from 'effector-react/scope'
 import {createGate as compatGate} from 'effector-react/compat'
 const Gate1 = createGate({
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 14,
-  },
-  name: 'Gate1',
-  sid: 'ggz6t4',
-})
-const Gate2 = createGate('gate2', {
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 14,
-  },
-  name: 'Gate2',
-  sid: 'o6svhy',
-})
-const Gate3 = createGate(
-  {
-    defaultState: {
-      a: 1,
-    },
-    domain: createDomain({
-      loc: {
-        file: _effectorFileName,
-        line: 10,
-        column: 10,
-      },
-      name: 'domain',
-      sid: '-c59o1r',
-    }),
-    name: 'gate3',
-  },
-  {
+  and: [],
+  or: {
     loc: {
-      file: _effectorFileName,
+      file: _effectorFileName2,
+      line: 6,
+      column: 14,
+    },
+    sid: '3ziiou',
+  },
+})
+const Gate2 = createGate({
+  and: ['gate2'],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 7,
+      column: 14,
+    },
+    sid: '4gk531',
+  },
+})
+const Gate3 = createGate({
+  and: [
+    {
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName2,
+          line: 10,
+          column: 10,
+        },
+        name: 'domain',
+        sid: '-c59o1r',
+      }),
+      name: 'gate3',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
       line: 8,
       column: 14,
     },
-    name: 'Gate3',
-    sid: 'vwmk6s',
+    sid: '4xlrh8',
   },
-)
-const TheGate1 = renamedGate({
-  loc: {
-    file: _effectorFileName,
-    line: 14,
-    column: 17,
-  },
-  name: 'TheGate1',
-  sid: '-1pbqk9',
 })
-const TheGate2 = renamedGate('gate2', {
-  loc: {
-    file: _effectorFileName,
-    line: 15,
-    column: 17,
-  },
-  name: 'TheGate2',
-  sid: 'a8jp2f',
-})
-const TheGate3 = renamedGate(
-  {
-    defaultState: {
-      a: 1,
+const Gate4 = createGate({
+  and: [
+    'default',
+    {
+      counter: 0,
     },
-    domain: createDomain({
-      loc: {
-        file: _effectorFileName,
-        line: 18,
-        column: 10,
-      },
-      name: 'domain',
-      sid: '-8cwow7',
-    }),
-    name: 'gate3',
-  },
-  {
+  ],
+  or: {
     loc: {
-      file: _effectorFileName,
-      line: 16,
+      file: _effectorFileName2,
+      line: 13,
+      column: 14,
+    },
+    sid: '-hcjfqi',
+  },
+})
+const Gate5 = createGate({
+  and: [
+    {
+      and: ['gate2'],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 7,
+          column: 14,
+        },
+        sid: '4gk531',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 14,
+      column: 14,
+    },
+    sid: '-gvhtcb',
+  },
+})
+const TheGate1 = renamedGate({
+  and: [],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 26,
       column: 17,
     },
-    name: 'TheGate3',
-    sid: 'm6f4p3',
+    sid: '-190a9b',
   },
-)
-const CompatGate1 = compatGate({
-  loc: {
-    file: _effectorFileName,
-    line: 22,
-    column: 20,
-  },
-  name: 'CompatGate1',
-  sid: 'yj8r7l',
 })
-const CompatGate2 = compatGate('gate2', {
-  loc: {
-    file: _effectorFileName,
-    line: 23,
-    column: 20,
-  },
-  name: 'CompatGate2',
-  sid: '-ojzv4v',
-})
-const CompatGate3 = compatGate(
-  {
-    defaultState: {
-      a: 1,
-    },
-    domain: createDomain({
-      loc: {
-        file: _effectorFileName,
-        line: 26,
-        column: 10,
-      },
-      name: 'domain',
-      sid: '5decjg',
-    }),
-    name: 'gate3',
-  },
-  {
+const TheGate2 = renamedGate({
+  and: ['gate2'],
+  or: {
     loc: {
-      file: _effectorFileName,
-      line: 24,
+      file: _effectorFileName2,
+      line: 27,
+      column: 17,
+    },
+    sid: '-rynv4',
+  },
+})
+const TheGate3 = renamedGate({
+  and: [
+    {
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName2,
+          line: 30,
+          column: 10,
+        },
+        name: 'domain',
+        sid: 'h7iweb',
+      }),
+      name: 'gate3',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 28,
+      column: 17,
+    },
+    sid: '-ax1gx',
+  },
+})
+const CompatGate1 = compatGate({
+  and: [],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 34,
       column: 20,
     },
-    name: 'CompatGate3',
-    sid: '-cm4fi7',
+    sid: 'charr0',
   },
-)
+})
+const CompatGate2 = compatGate({
+  and: ['gate2'],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 35,
+      column: 20,
+    },
+    sid: 'cyce57',
+  },
+})
+const CompatGate3 = compatGate({
+  and: [
+    {
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName2,
+          line: 38,
+          column: 10,
+        },
+        name: 'domain',
+        sid: 'kzvvjv',
+      }),
+      name: 'gate3',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 36,
+      column: 20,
+    },
+    sid: 'dfe0je',
+  },
+})
 "
 `;
 

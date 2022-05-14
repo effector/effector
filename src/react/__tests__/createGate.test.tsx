@@ -159,15 +159,24 @@ test('Gate.state should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.state.sid).toBeDefined()
   expect(Gate.state.sid).toBeTruthy()
-  expect(Gate.state.sid).toMatchInlineSnapshot(`"-vrt9f8"`)
+  expect(Gate.state.sid).toMatchInlineSnapshot(`"87yw9j"`)
 })
 
 test('Gate events should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.open.sid).toBeDefined()
   expect(Gate.close.sid).toBeDefined()
-  expect(Gate.open.sid).toMatchInlineSnapshot(`"-iijuds|open"`)
-  expect(Gate.close.sid).toMatchInlineSnapshot(`"-iijuds|close"`)
+  expect(Gate.open.sid).toMatchInlineSnapshot(`"lh8baz|open"`)
+  expect(Gate.close.sid).toMatchInlineSnapshot(`"lh8baz|close"`)
+})
+
+test('allows to pass defaultState with the name', async () => {
+  const Gate = createGate('default', {counter: 0})
+  const scope = fork()
+  await allSettled(Gate.open, {scope, params: {counter: 1}})
+
+  const states = serialize(scope)
+  expect(states[Gate.state.sid!]).toEqual({counter: 1})
 })
 
 test('gate should be correctly serialized via fork #672', async () => {
@@ -176,7 +185,6 @@ test('gate should be correctly serialized via fork #672', async () => {
   await allSettled(Gate.open, {scope, params: 'another'})
 
   const states = serialize(scope)
-  expect(states).toMatchInlineSnapshot(`Object {}`)
   expect(states[Gate.state.sid!]).toBe('another')
 })
 

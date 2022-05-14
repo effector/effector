@@ -1,8 +1,16 @@
-import {computed, ComputedRef, onMounted, onUnmounted, watch, WatchStopHandle} from 'vue-next'
+import {
+  computed,
+  ComputedRef,
+  onMounted,
+  onUnmounted,
+  watch,
+  WatchStopHandle,
+} from 'vue-next'
 import {createApi, launch, createStore} from 'effector'
 import {Gate, GateConfig} from './composition.h'
 import {deepCopy} from './lib/deepCopy'
 import {unwrapProxy} from './lib/unwrapProxy'
+import {processArgsToConfig} from '../effector/config'
 
 export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   let unwatch: WatchStopHandle
@@ -13,14 +21,14 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
 
     unwatch = watch(
       _,
-      (value) => {
+      value => {
         const raw = unwrapProxy(value)
         GateComponent.set(deepCopy(raw))
       },
       {
         deep: true,
         immediate: true,
-      }
+      },
     )
   }
 
@@ -39,9 +47,13 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   })
 }
 
-export function createGate<Props>(config?: GateConfig<Props>): Gate<Props> {
+export function createGate<Props>(...args: [GateConfig<Props>]): Gate<Props> {
+  const [[config], metadata] = processArgsToConfig(args)
   // @ts-ignore
-  const state = createStore(config?.defaultState ?? null, {named: 'state'})
+  const state = createStore(config?.defaultState ?? null, {
+    named: 'state',
+    sid: metadata.sid,
+  })
   // @ts-ignore
   const status = createStore(Boolean(false), {named: 'status'})
 

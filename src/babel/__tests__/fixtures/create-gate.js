@@ -10,6 +10,18 @@ const Gate3 = createGate({
   domain: createDomain(),
   name: 'gate3',
 })
+const Gate4 = createGate('default', {counter: 0})
+const Gate5 = createGate({
+  and: ['gate2'],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 7,
+      column: 14,
+    },
+    sid: '4gk531',
+  },
+})
 
 const TheGate1 = renamedGate()
 const TheGate2 = renamedGate('gate2')

@@ -6,6 +6,7 @@ import {useGate as commonUseGate, createGateImplementation} from './createGate'
 import type {Gate} from './index.h'
 import {throwError} from './throw'
 import {deprecate} from './deprecate'
+import {processArgsToConfig} from '../effector/config'
 
 const ScopeContext = React.createContext(null as Scope | null)
 export const {Provider} = ScopeContext
@@ -17,19 +18,22 @@ function getScope() {
 }
 
 export function createGate<Props>(
-  config: {
-    domain?: Domain
-    defaultState?: Props
-    name?: string
-  } = {},
-  maybeConfig = {},
+  ...args: Array<
+    | {
+        domain?: Domain
+        defaultState?: Props
+        name?: string
+      }
+    | {}
+  >
 ) {
+  const [[config], metadata] = processArgsToConfig(args)
   return createGateImplementation({
     domain: config.domain,
     defaultState: 'defaultState' in config ? config.defaultState : {},
     hook: useGate,
     mainConfig: config,
-    maybeConfig,
+    maybeConfig: metadata,
   })
 }
 
