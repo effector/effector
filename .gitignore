@@ -33,6 +33,7 @@ modules.svg
 stats/**/*.html
 stats/**/*.json
 npm/@effector/**
+npm/effector-solid/**
 npm/effector/**
 npm/effector-react/**
 npm/effector-vue/**
