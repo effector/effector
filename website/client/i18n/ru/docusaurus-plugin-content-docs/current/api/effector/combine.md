@@ -220,7 +220,7 @@ const greeting = combine(balance, username, (balance, username) => {
   return `Hello, ${username}. Your balance is ${balance}`
 })
 
-greeting.watch(data => console.log(data)) // => Hello, zerobias. Your balance is 0
+greeting.watch((data) => console.log(data)) // => Hello, zerobias. Your balance is 0
 
 const arrStores = combine([balance, username])
 arrStores.watch(console.log) // => [0, 'zerobias']
@@ -265,3 +265,37 @@ sum.watch(console.log)
 ```
 
 [Запустить пример](https://share.effector.dev/ch4CKPrX)
+
+## `combine` с примитивами и объектами
+
+Это работает как и раньше. Теперь примитивы и объекты могут быть использованы в `combine`, однако `combine` не будет вызван при их изменении. Эффектор не будет отслеживать изменение объектов и примитивов.
+
+#### Пример
+
+```js
+const $a = createStore('a')
+const b = 2
+const c = [false]
+const d = {value: 1}
+
+const $resultUsingComa = combine($a, b, c, d)
+const $resultUsingArray = combine([$a, b, c, d])
+const $resultUsingObject = combine({$a, b, c, d})
+
+const $withFn = combine($a, b, c, d, (a, b) => ({a, b}))
+
+$resultUsingComa.watch(console.log)
+// => ["a", 2, [false], {value: 1}]
+$resultUsingArray.watch(console.log)
+// => ["a", 2, [false], {value: 1}]
+$resultUsingObject.watch(console.log)
+// => {$a: "a", b: 2, c: [false], d: {value: 1}}
+$withFn.watch(console.log)
+// => {$a: "a", b: 2}
+
+// Раскомментируйте код ниже, чтобы увидеть изменения
+// c.push(true)
+// d.value = 2
+```
+
+[Запустить пример](https://share.effector.dev/XWk1lG4a)
