@@ -21,7 +21,7 @@ We will be going through a simplistic chat application to demonstrate a
 possible approach to include static typing. This chat application will have API mock that load and saves data from localStorage.
 
 The full source code is available on
-[codesandbox here](https://codesandbox.io/s/react-and-ts-and-effector-ng5s1l).
+[github](https://github.com/effector/effector/tree/master/examples/react-and-ts).
 Note that, by going through this example yourself, you will experience some benefits of using TypeScript.
 
 ### Let's create API mock
