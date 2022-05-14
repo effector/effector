@@ -31,9 +31,14 @@ There is a directory structure inherited from the [feature-sliced](https://featu
 Let's define a simple type, that our improvised API will return.
 
 ```ts title=/src/shared/api/message.ts
+interface Author {
+  id: string
+  name: string
+}
+
 export interface Message {
   id: string
-  user: string
+  author: Author
   text: string
   timestamp: number
 }
@@ -83,14 +88,19 @@ export const messagesLoadFx = createEffect<void, Message[], Error>(async () => {
   return history ?? []
 })
 
+interface SendMessage {
+  text: string
+  author: Author
+}
+
 // But we can use type inferring and set arguments types in the handler defintion.
 // Hover your cursor on `messagesLoadFx` to see the inferred types:
-// `Effect<{ text: string; authorId: string }, void, Error>`
+// `Effect<{ text: string; authorId: string; authorName: string }, void, Error>`
 export const messageSendFx = createEffect(
-  async ({text, authorId}: {text: string; authorId: string}) => {
+  async ({text, author}: SendMessage) => {
     const message: Message = {
       id: createOid(),
-      user: authorId,
+      author,
       timestamp: Date.now(),
       text,
     }
@@ -186,4 +196,161 @@ export * as sessionApi from './session'
 // Types reexports made just for convenience
 export {Message} from './message'
 export {Session} from './session'
+```
+
+### Create a page with the logic
+
+Typical structure of the pages:
+
+```
+src/
+  pages/
+    <page-name>/
+      page.tsx — just the View layer
+      model.ts — a business-logic code
+      index.ts — reexports, sometimes there will be a connection code
+```
+
+I recommend to write code in the view layer from the top to bottom, more common code at the top.
+Let's model our view layer. We will have two main sections at the page: messages history and a message form.
+
+```tsx title=/src/pages/chat/page.tsx
+import React from 'react'
+
+export function ChatPage() {
+  return (
+    <div className="parent">
+      <ChatHistory />
+      <MessageForm />
+    </div>
+  )
+}
+
+function ChatHistory() {
+  return (
+    <div className="chat-history">
+      <div>There will be messages list</div>
+    </div>
+  )
+}
+
+function MessageForm() {
+  return (
+    <div className="message-form">
+      <div>There will be message form</div>
+    </div>
+  )
+}
+```
+
+OK. Now we know what kind of structure we have, and we can start to model business-logic processes.
+View layer should do two tasks: render data from stores and report events to the model.
+View layer doesn't know how data is loaded, how it should be converted and sent back.
+
+```ts title=/src/pages/chat/model.ts
+import {createEvent, createStore} from 'effector'
+
+// At the moment, there is just raw data without any knowledge how to load
+export const $loggedIn = createStore<boolean>(false)
+export const $userName = createStore('')
+export const $messages = createStore<Message[]>([])
+export const $messageText = createStore('')
+
+// Page should NOT know where the data came from.
+// That's why we just reexport them.
+// We can rewrite this code to `combine` or independent store,
+// page should NOT be changed, just because we changed the implementation
+export const $messageDeleting = messageApi.messageDeleteFx.pending
+export const $messageSending = messageApi.messageSendFx.pending
+
+// And the events report just what happened
+export const messageDeleteClicked = createEvent<Message>()
+export const messageSendClicked = createEvent()
+export const messageEnterPressed = createEvent()
+export const messageTextChanged = createEvent<string>()
+export const loginClicked = createEvent()
+export const logoutClicked = createEvent()
+```
+
+Now we can implement components.
+
+```tsx title=/src/pages/chat/page.tsx
+import {useEvent, useList, useStore} from 'effector-react'
+import * as model from './model'
+
+// export function ChatPage { ... }
+
+function ChatHistory() {
+  const messageDeleting = useStore(model.$messageDeleting)
+  const onMessageDelete = useEvent(model.messageDeleteClicked)
+
+  // Hook `useList` allows React not rerender messages really doesn't changed
+  const messages = useList(model.$messages, message => (
+    <div className="message-item" key={message.timestamp}>
+      <h3>From: {message.author.name}</h3>
+      <p>{message.text}</p>
+      <button
+        onClick={() => onMessageDelete(message)}
+        disabled={messageDeleting}>
+        {messageDeleting ? 'Deleting' : 'Delete'}
+      </button>
+    </div>
+  ))
+  // We don't need `useCallback` here because we pass function to an HTML-element, not a custom component
+
+  return <div className="chat-history">{messages}</div>
+}
+```
+
+I split `MessageForm` to the different components, to simplify code:
+
+```tsx title=/src/pages/chat/page.tsx
+function MessageForm() {
+  const isLogged = useStore(model.$loggedIn)
+  return isLogged ? <SendMessage /> : <LoginForm />
+}
+
+function SendMessage() {
+  const userName = useStore(model.$userName)
+  const messageText = useStore(model.$messageText)
+  const messageSending = useStore(model.$messageSending)
+
+  const handleLogout = useEvent(model.logoutClicked)
+  const handleTextChange = useEvent(model.messageTextChanged)
+  const handleEnterPress = useEvent(model.messageEnterPressed)
+  const handleSendClick = useEvent(model.messageSendClicked)
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleEnterPress()
+    }
+  }
+
+  return (
+    <div className="message-form">
+      <h3>{userName}</h3>
+      <input
+        value={messageText}
+        onChange={event => handleTextChange(event.target.value)}
+        onKeyPress={handleKeyPress}
+        className="chat-input"
+        placeholder="Type a message..."
+      />
+      <button onClick={() => handleSendClick()} disabled={messageSending}>
+        {messageSending ? 'Sending...' : 'Send'}
+      </button>
+      <button onClick={() => handleLogout()}>Log out</button>
+    </div>
+  )
+}
+
+function LoginForm() {
+  const handleLogin = useEvent(model.loginClicked)
+  return (
+    <div className="message-form">
+      <div>Please, log in to be able to send messages</div>
+      <button onClick={() => handleLogin()}>Login as a random user</button>
+    </div>
+  )
+}
 ```
