@@ -79,6 +79,7 @@ export function createGateImplementation<State>({
   })
   const status = createStore(Boolean(false), {
     name: `${fullName}.status`,
+    serialize: 'ignore',
     // doesn't need to have sid, because it is internal store, should not be serialized
   })
     .on(open, () => Boolean(true))
