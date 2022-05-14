@@ -154,10 +154,10 @@ const LocalStorageKey = 'effector-example-session'
 // Note, that we need explicit types definition in that case, because `JSON.parse()` returns `any`
 export const sessionLoadFx = createEffect<void, Session | null>(async () => {
   const source = localStorage.getItem(LocalStorageKey)
+  await wait()
   if (!source) {
     return null
   }
-  await wait()
   return JSON.parse(source)
 })
 
@@ -194,8 +194,8 @@ export * as messageApi from './message'
 export * as sessionApi from './session'
 
 // Types reexports made just for convenience
-export {Message} from './message'
-export {Session} from './session'
+export type {Message} from './message'
+export type {Session} from './session'
 ```
 
 ### Create a page with the logic
@@ -354,3 +354,130 @@ function LoginForm() {
   )
 }
 ```
+
+### Manage user session like a Pro
+
+Let's create a session entity. An entity is a business unit.
+
+```ts title=/src/entities/session/index.ts
+import {Session} from 'shared/api'
+import {createStore} from 'effector'
+
+// Entity just stores session and some internal knowledge about it
+export const $session = createStore<Session | null>(null)
+// When store `$session` is updated, store `$isLogged` will be updated too
+// They are in sync. Derived store are depends on data from original.
+export const $isLogged = $session.map(session => session !== null)
+```
+
+Now in the page we can implement login or logout features. Why not here?
+If we place login logic here, we will have very implicit scenario,
+when you call `sessionCreateFx` you won't see code called after effect.
+But consequences will be visible in the DevTools and application behaviour.
+
+Try to write the code in as obvious a way as possible in one file,
+so that you and any teammate can trace the sequence of execution.
+
+### Implement logic
+
+OK. Now we can load a user session and the messages lists on the page mount.
+But, we don't have any event when we can start. Let's fix it.
+
+You can use [`Gate`](../recipes/react/gate.md), but I prefer to use explicit events.
+
+```ts title=/src/pages/chat/model.ts
+// Just add a new event
+export const pageMounted = createEvent()
+```
+
+Just add `useEffect` and call bound event inside.
+
+```tsx title=/src/pages/chat/page.tsx
+export function ChatPage() {
+  const handlePageMount = useEvent(model.pageMounted)
+  React.useEffect(() => {
+    handlePageMount()
+  }, [handlePageMount])
+
+  return (
+    <div className="parent">
+      <ChatHistory />
+      <MessageForm />
+    </div>
+  )
+}
+```
+
+> Note: if you don't plan to write tests for effector code and/or implement SSR you can omit any usage of `useEvent`.
+
+At the moment we can load a session and the messages list.
+
+Just add reaction to the event, and any other code should be written in chronological order after each event:
+
+```ts title=/src/pages/chat/model.ts
+// Don't forget to import { sample } from "effector"
+import {Message, messageApi, sessionApi} from 'shared/api'
+import {$session} from 'entities/session'
+
+// export stores
+// export events
+
+// Here the logic place
+
+// You can read this code like:
+// When page mounted, call messages load and session load simultaneously
+sample({
+  clock: pageMounted,
+  target: [messageApi.messagesLoadFx, sessionApi.sessionLoadFx],
+})
+```
+
+After that we need to define reactions on `messagesLoadFx.done` and `messagesLoadFx.fail`, and the same for `sessionLoadFx`.
+
+```ts title=/src/pages/chat/model.ts
+// `.doneData` is a shortcut for `.done`, because `.done` returns `{ params, result }`
+// Do not name your arguments like `state` or `payload`
+// Use explicit names of the content they contain
+$messages.on(messageApi.messagesLoadFx.doneData, (_, messages) => messages)
+
+$session.on(sessionApi.sessionLoadFx.doneData, (_, session) => session)
+```
+
+OK. Session and messages loaded. Let's allow user to log in.
+
+```ts title=/src/pages/chat/model.ts
+// When login clicked we need to create a new session
+sample({
+  clock: loginClicked,
+  target: sessionApi.sessionCreateFx,
+})
+// When session created, just write it to a session store
+sample({
+  clock: sessionApi.sessionCreateFx.doneData,
+  target: $session,
+})
+// If session create is failed, just reset the session
+sample({
+  clock: sessionApi.sessionCreateFx.fail,
+  fn: () => null,
+  target: $session,
+})
+```
+
+Now we'll implement a logout process:
+
+```ts title=/src/pages/chat/model.ts
+// When logout clicked we need to reset session and clear our storage
+sample({
+  clock: logoutClicked,
+  target: sessionApi.sessionDeleteFx,
+})
+// In any case, failed or not, we need to reset session store
+sample({
+  clock: sessionApi.sessionDeleteFx.finally,
+  fn: () => null,
+  target: $session,
+})
+```
+
+> Note: most of the comments wrote just for educational purpose. In the real life application code will be self-describable
