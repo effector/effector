@@ -5,6 +5,10 @@ description: Method for conditional event routing.
 ---
 
 :::note
+since effector 22.2.0 preferably use [sample](sample.md)
+:::
+
+:::note
 since effector 20.4.0
 :::
 
@@ -14,12 +18,17 @@ It provides a way to control one dataflow with the help of another: when the con
 ## Formulae
 
 ```ts
-guard({ clock?, source, filter, target? }): target
+guard({ clock?, source?, filter, target? }): target
 ```
+
+:::note
+Either `clock` or `source` is required
+:::
 
 When `clock` is triggered, check `filter` for [truthy] and call `target` with data from `source` if `true`.
 
-- If the `clock` is not passed, guard will be trigged on every `source` update
+- If `clock` is not passed, guard will be trigged on every `source` update
+- If `source` is not passed, call `target` with data from `clock`
 - If `target` is not passed, create [_Event_](Event.md) with type of `source` and return it from `guard()`
 - If `filter` is [_Store_](Store.md), check it value for [truthy]
 - If `filter` is `Function`, call it with data from `source` and check result for [truthy]
@@ -62,10 +71,10 @@ const $isIdle = fetchRequest.pending.map(pending => !pending)
 4. and call fetchRequest with it
 */
 guard({
-  clock: clickRequest, /* 1 */
-  filter: $isIdle, /* 2 */
-  source: $clicks, /* 3 */
-  target: fetchRequest, /* 4 */
+  clock: clickRequest /* 1 */,
+  filter: $isIdle /* 2 */,
+  source: $clicks /* 3 */,
+  target: fetchRequest /* 4 */,
 })
 ```
 
