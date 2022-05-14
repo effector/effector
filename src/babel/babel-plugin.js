@@ -31,8 +31,10 @@ module.exports = function (babel, options = {}) {
     apiCreators,
     mergeCreators,
     domainMethods,
+    reactMethods,
     factories,
     importName,
+    importReactNames,
     reactSsr,
   } = normalizeOptions(options)
   const factoriesUsed = factories.length > 0
@@ -189,6 +191,21 @@ module.exports = function (babel, options = {}) {
   }
   const importVisitor = {
     ImportDeclaration(path, state) {
+      const createFactoryTemplate = () => {
+        if (!this.effector_factoryMap) {
+          this.effector_factoryMap = new Map()
+          if (!factoryTemplate) {
+            factoryTemplate = template(
+              addLoc
+                ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
+                : addNames
+                ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
+                : 'FACTORY({sid: SID,fn:()=>FN})',
+            )
+          }
+        }
+      }
+
       const source = path.node.source.value
       const specifiers = path.node.specifiers
       if (importName.has(source)) {
@@ -224,6 +241,26 @@ module.exports = function (babel, options = {}) {
             apiCreators.add(localName)
           } else if (mergeCreators.has(importedName)) {
             mergeCreators.add(localName)
+          }
+        }
+      } else if (
+        importReactNames.ssr.has(source) ||
+        importReactNames.nossr.has(source)
+      ) {
+        for (let i = 0; i < specifiers.length; i++) {
+          const s = specifiers[i]
+          if (!s.imported) continue
+          const importedName = s.imported.name
+          const localName = s.local.name
+          if (reactMethods.createGate.has(importedName)) {
+            reactMethods.createGate.add(localName)
+            this.effector_needFactoryImport = true
+            createFactoryTemplate()
+            this.effector_factoryMap.set(localName, {
+              localName,
+              importedName,
+              source,
+            })
           }
         }
       } else {
@@ -269,19 +306,8 @@ module.exports = function (babel, options = {}) {
         normalizedSource = stripExtension(normalizedSource)
         if (this.effector_factoryPaths.includes(normalizedSource)) {
           this.effector_needFactoryImport = true
-          if (!this.effector_factoryMap) {
-            this.effector_factoryMap = new Map()
-            if (!factoryTemplate) {
-              let tpl
-              factoryTemplate = template(
-                addLoc
-                  ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
-                  : addNames
-                  ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
-                  : 'FACTORY({sid: SID,fn:()=>FN})',
-              )
-            }
-          }
+          createFactoryTemplate()
+
           for (let i = 0; i < specifiers.length; i++) {
             const s = specifiers[i]
             const isDefaultImport = t.isImportDefaultSpecifier(s)
@@ -449,6 +475,9 @@ const normalizeOptions = options => {
           effect: [],
           domain: [],
         },
+        reactMethods: {
+          createGate: [],
+        },
         factories: [],
       }
     : {
@@ -470,6 +499,9 @@ const normalizeOptions = options => {
           event: ['event', 'createEvent'],
           effect: ['effect', 'createEffect'],
           domain: ['domain', 'createDomain'],
+        },
+        reactMethods: {
+          createGate: ['createGate'],
         },
         factories: [],
       }
@@ -508,6 +540,20 @@ const normalizeOptions = options => {
               '@effector/effector',
             ],
       ),
+      importReactNames: {
+        ssr: new Set(
+          readReactImportOption(options, 'ssr', [
+            'effector-react/scope',
+            'effector-react/ssr',
+          ]),
+        ),
+        nossr: new Set(
+          readReactImportOption(options, 'nossr', [
+            'effector-react',
+            'effector-react/compat',
+          ]),
+        ),
+      },
       storeCreators: new Set(options.storeCreators || defaults.store),
       eventCreators: new Set(options.eventCreators || defaults.event),
       effectCreators: new Set(options.effectCreators || defaults.effect),
@@ -525,6 +571,10 @@ const normalizeOptions = options => {
         options.domainMethods,
         defaults.domainMethods,
       ),
+      reactMethods: readConfigShape(
+        options.reactMethods,
+        defaults.reactMethods,
+      ),
       factories: (options.factories || defaults.factories).map(stripExtension),
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
@@ -534,6 +584,15 @@ const normalizeOptions = options => {
           : true,
     },
   })
+
+  function readReactImportOption(options, name, defaults) {
+    if (options && options.importReactNames && options.importReactNames[name]) {
+      if (Array.isArray(options.importReactNames[name]))
+        return options.importReactNames[name]
+      else return [options.importReactNames[name]]
+    }
+    return defaults
+  }
 
   function readConfigFlags({options, properties, result}) {
     for (const property in properties) {

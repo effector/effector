@@ -1135,60 +1135,163 @@ createEvent({
 
 exports[`babel-plugin should create gate 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-gate.js'
+import {withFactory as _withFactory} from 'effector'
 import {createDomain} from 'effector'
 import {createGate} from 'effector-react'
 import {createGate as renamedGate} from 'effector-react/scope'
 import {createGate as compatGate} from 'effector-react/compat'
-const Gate1 = createGate()
-const Gate2 = createGate('gate2')
-const Gate3 = createGate({
-  defaultState: {
-    a: 1,
+
+const Gate1 = _withFactory({
+  sid: 'ggz6t4',
+  fn: () => createGate(),
+  name: 'Gate1',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 14,
   },
-  domain: createDomain({
-    loc: {
-      file: _effectorFileName,
-      line: 10,
-      column: 10,
-    },
-    name: 'domain',
-    sid: '-c59o1r',
-  }),
-  name: 'gate3',
 })
-const TheGate1 = renamedGate()
-const TheGate2 = renamedGate('gate2')
-const TheGate3 = renamedGate({
-  defaultState: {
-    a: 1,
+
+const Gate2 = _withFactory({
+  sid: 'o6svhy',
+  fn: () => createGate('gate2'),
+  name: 'Gate2',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 14,
   },
-  domain: createDomain({
-    loc: {
-      file: _effectorFileName,
-      line: 18,
-      column: 10,
-    },
-    name: 'domain',
-    sid: '-8cwow7',
-  }),
-  name: 'gate3',
 })
-const CompatGate1 = compatGate()
-const CompatGate2 = compatGate('gate2')
-const CompatGate3 = compatGate({
-  defaultState: {
-    a: 1,
+
+const Gate3 = _withFactory({
+  sid: 'vwmk6s',
+  fn: () =>
+    createGate({
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName,
+          line: 10,
+          column: 10,
+        },
+        name: 'domain',
+        sid: '-c59o1r',
+      }),
+      name: 'gate3',
+    }),
+  name: 'Gate3',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 14,
   },
-  domain: createDomain({
-    loc: {
-      file: _effectorFileName,
-      line: 26,
-      column: 10,
-    },
-    name: 'domain',
-    sid: '5decjg',
-  }),
-  name: 'gate3',
+})
+
+const TheGate1 = _withFactory({
+  sid: '-1pbqk9',
+  fn: () => renamedGate(),
+  name: 'TheGate1',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 14,
+    column: 17,
+  },
+})
+
+const TheGate2 = _withFactory({
+  sid: 'a8jp2f',
+  fn: () => renamedGate('gate2'),
+  name: 'TheGate2',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 15,
+    column: 17,
+  },
+})
+
+const TheGate3 = _withFactory({
+  sid: 'm6f4p3',
+  fn: () =>
+    renamedGate({
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName,
+          line: 18,
+          column: 10,
+        },
+        name: 'domain',
+        sid: '-8cwow7',
+      }),
+      name: 'gate3',
+    }),
+  name: 'TheGate3',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 16,
+    column: 17,
+  },
+})
+
+const CompatGate1 = _withFactory({
+  sid: 'yj8r7l',
+  fn: () => compatGate(),
+  name: 'CompatGate1',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 22,
+    column: 20,
+  },
+})
+
+const CompatGate2 = _withFactory({
+  sid: '-ojzv4v',
+  fn: () => compatGate('gate2'),
+  name: 'CompatGate2',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 23,
+    column: 20,
+  },
+})
+
+const CompatGate3 = _withFactory({
+  sid: '-cm4fi7',
+  fn: () =>
+    compatGate({
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName,
+          line: 26,
+          column: 10,
+        },
+        name: 'domain',
+        sid: '5decjg',
+      }),
+      name: 'gate3',
+    }),
+  name: 'CompatGate3',
+  method: 'createGate',
+  loc: {
+    file: _effectorFileName,
+    line: 24,
+    column: 20,
+  },
 })
 "
 `;
