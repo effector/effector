@@ -18,232 +18,172 @@ TypeScript has a potential to bring the following benefits to application:
 ## A Practical Example
 
 We will be going through a simplistic chat application to demonstrate a
-possible approach to include static typing. This chat application will have
-two domains. The _Chat domain_ will focus on working with the chat history and
-the _system domain_ will focus on working with session information.
+possible approach to include static typing. This chat application will have API mock that load and saves data from localStorage.
 
 The full source code is available on
-[codesandbox here](https://codesandbox.io/s/github/Laiff/react-ts-effector-example).
-Note that, by going through this example yourself, you will experience some of
-the benefits of using TypeScript.
+[codesandbox here](https://codesandbox.io/s/react-and-ts-and-effector-ng5s1l).
+Note that, by going through this example yourself, you will experience some benefits of using TypeScript.
 
-## Type checking state
+### Let's create API mock
 
-Adding types to each slice of state is a good place to start since it does
-not rely on other types. In this example we start by describing
-the chat store's slice of state:
+There is a directory structure inherited from the [feature-sliced](https://feature-sliced.design) methodology.
 
-```typescript
-// src/effector/chat/types.ts
+Let's define a simple type, that our improvised API will return.
 
+```ts title=/src/shared/api/message.ts
 export interface Message {
   id: string
   user: string
-  message: string
+  text: string
   timestamp: number
 }
+```
 
-export interface ChatState {
-  messages: Message[]
+Our API will load and save data to `localStorage`, and we need some functions to load data:
+
+```ts title=/src/shared/api/message.ts
+const LocalStorageKey = 'effector-example-history'
+
+function loadHistory(): Message[] {
+  const source = localStorage.getItem(LocalStorageKey)
+  if (source) {
+    return JSON.parse(source)
+  }
+}
+function saveHistory(messages: Message[]) {
+  localStorage.setItem(LocalStorageKey, JSON.stringify(messages))
 }
 ```
 
-And then do the same for the system store's slice of state:
+I also created some libraries to generate identifier and wait to simulate network requests.
 
-```typescript
-// src/effector/system/types.ts
+```ts title=/src/shared/lib/oid.ts
+export const createOid = () =>
+  ((new Date().getTime() / 1000) | 0).toString(16) +
+  'xxxxxxxxxxxxxxxx'
+    .replace(/[x]/g, () => ((Math.random() * 16) | 0).toString(16))
+    .toLowerCase()
+```
 
-export interface SystemState {
-  loggedIn: boolean
-  session: string
-  userName: string
+```ts title=/src/shared/lib/wait.ts
+export function wait(timeout = Math.random() * 1500) {
+  return new Promise(resolve => setTimeout(resolve, timeout))
 }
 ```
 
-Note that we are exporting these interfaces to reuse them later in stores and
-events.
+OK. Now we can create effects that will load messages.
 
-## Organize your domains
-
-To effectively structure the project code, you can break the application
-logic into separate domains that combine all the logic of working with this
-part of the application.
-
-```typescript
-// src/effector/chat/domain.ts
-
-export const chatDomain = createDomain()
-```
-
-```typescript
-// src/effector/system/domain.ts
-
-export const systemDomain = createDomain()
-```
-
-## Type checking events and effects
-
-All events can be typed through their payload. Effects used to handle async
-reactions and events for sync reactions.
-
-```typescript
-// src/effector/chat/events.ts
-
-export const sendMessage = chatDomain.createEffect<Message, Message, Error>()
-
-export const deleteMessage = chatDomain.createEffect<Message, Message, Error>()
-```
-
-Each effect must be provided with a handler function that will provide final
-processing. You can connect them at any time, so leave it for further action.
-
-```typescript
-// src/effector/system/events.ts
-
-export const updateSession = systemDomain.createEvent<SystemState>()
-```
-
-## Type checking for stores
-
-Keep yours stores as simple as possible. Let each store be responsible for its
-part of the state in the general state of the application or domain.
-
-```typescript
-// src/effector/chat/store.ts
-
-const initialState: Message[] = [
-  {
-    id: oid(),
-    user: 'system',
-    message: 'this message from initial state',
-    timestamp: new Date().getTime(),
-  },
-]
-
-export const $messageList = chatDomain
-  .createStore<Message[]>(initialState)
-  .on(sendMessage.doneData, (state, message) => [...state, message])
-  .on(deleteMessage.doneData, (state, result) =>
-    state.filter(message => message.id !== result.id),
-  )
-```
-
-The closest comparison for an event handler is a reducer that processes exactly
-one event. In this example, there is no need to declare the types with which
-the handler will be called, since the typescript has enough information to deduce
-all the necessary types, it can also guarantee the correctness of the returned
-value from this handler.
-
-```typescript
-// src/effector/system/store.ts
-
-const initialState: SystemState = {
-  loggedIn: false,
-  session: '',
-  userName: '',
-}
-
-export const $systemStore = systemDomain
-  .createStore<SystemState>(initialState)
-  .on(updateSession, (state, payload) => ({...state, ...payload}))
-```
-
-## Usage with `effector-react`
-
-While `effector-react` is a separate library from effector itself, it is commonly
-used with react. For this reason, we will go through how effector React
-works with TypeScript using the same example used previously in this section.
-
-Events and effects you can use directly in yours components and to get access
-to store data you can use `useStore` hook from `effector-react` package.
-
-Let start with implement effect backend
-
-```typescript
-// src/api/MessageApi.ts
-
-export class MessageApi {
-  public static sendMessage = (message: Message) =>
-    new Promise<Message>(resolve => setTimeout(() => resolve(message), 2000))
-
-  public static deleteMessage = (message: Message) =>
-    new Promise<Message>(resolve => setTimeout(() => resolve(message), 2000))
-}
-```
-
-Then bind created handlers to effects
-
-```typescript
-// src/index.tsx
-
-sendMessageFx.use(MessageApi.sendMessage)
-deleteMessageFx.use(MessageApi.deleteMessage)
-```
-
-Then we can implement components which uses data from stores. And start
-operating with our effects.
-
-```typescript jsx
-// src/ChatHistory.tsx
-
-export const ChatHistory: React.FC = () => {
-  const messages = useStore($messageList)
-
-  return (
-    <div className="chat-history">
-      {messages.map(message => (
-        <div className="message-item" key={message.timestamp}>
-          <h3>From: {message.user}</h3>
-          <p>{message.message}</p>
-          <button onClick={() => deleteMessage(message)}>delete</button>
-        </div>
-      ))}
-    </div>
-  )
-}
-```
-
-Also, close attention should be paid to the moment that the data from the
-local state can be transmitted to the final effect. For these purposes,
-the forward method is used. Here is an example of such use in the component.
-
-```typescript jsx
-// src/ChatInterface.tsx
-
-const onSend = chatDomain.createEvent<string>()
-
-forward({
-  from: onSend.map<Message>(message => ({
-    id: oid(),
-    user: $systemStore.getState().userName,
-    timestamp: new Date().getTime(),
-    message,
-  })),
-  to: sendMessage,
+```ts title=/src/shared/api/message.ts
+// Here effect defined with static types. void defines no arguments.
+// Second type argument defines a successful result type.
+// Third argument is optional and defines a failure result type.
+export const messagesLoadFx = createEffect<void, Message[], Error>(async () => {
+  const history = loadHistory()
+  await wait()
+  return history ?? []
 })
 
-const ChatInterface: React.FC = () => {
-  const {userName} = useStore($systemStore)
-  const [message, updateMessage] = useState('')
-
-  const keyPress = (e: React.KeyboardEvent<any>) => {
-    if (e.key === 'Enter') {
-      send()
+// But we can use type inferring and set arguments types in the handler defintion.
+// Hover your cursor on `messagesLoadFx` to see the inferred types:
+// `Effect<{ text: string; authorId: string }, void, Error>`
+export const messageSendFx = createEffect(
+  async ({text, authorId}: {text: string; authorId: string}) => {
+    const message: Message = {
+      id: createOid(),
+      user: authorId,
+      timestamp: Date.now(),
+      text,
     }
-  }
+    const history = await messagesLoadFx()
+    history.push(message)
+    saveHistory(history)
+    await wait()
+  },
+)
 
-  return (
-    <div className="chat-interface">
-      <h3>User: {userName} </h3>
-      <input
-        value={message}
-        onChange={e => updateMessage(e.target.value)}
-        onKeyPress={keyPress}
-        className="chat-input"
-        placeholder="Type a message..."
-      />
-      <button onClick={() => onSend(message)}>Send</button>
-    </div>
-  )
+// Please, note that we will `wait()` for `messagesLoadFx` and `wait()` in the current effect
+// Also, note that `saveHistory` and `loadHistory` can throw exceptions,
+// in that case effect will trigger `messageDeleteFx.fail` event.
+export const messageDeleteFx = createEffect(async (message: Message) => {
+  const history = await messagesLoadFx()
+  const updated = history.filter(found => found.id !== message.id)
+  await wait()
+  saveHistory(updated)
+})
+```
+
+OK, now we are done with the messages, let's create effects to manage user session.
+
+Really, I prefer to start design code from implementing interfaces:
+
+```ts title=/src/shared/api/session.ts
+// It is called session because it describes current user session, not the User at all.
+export interface Session {
+  id: string
+  name: string
 }
+```
+
+Also, to generate a usernames and don't require to type it by themselves, import `unique-names-generator`:
+
+```ts title=/src/shared/api/session.ts
+import {uniqueNamesGenerator, Config, starWars} from 'unique-names-generator'
+
+const nameGenerator: Config = {dictionaries: [starWars]}
+const createName = () => uniqueNamesGenerator(nameGenerator)
+```
+
+Let's create effects to manage session:
+
+```ts title=/src/shared/api/session.ts
+const LocalStorageKey = 'effector-example-session'
+
+// We need explicitly return `null` because `undefined` is a special value in the effector ecosystem,
+// that defines some "empty" state, and store will skip updates if we try to pass `undefined` inside.
+// Always use `null` for "no value state".
+// Note, that we need explicit types definition in that case, because `JSON.parse()` returns `any`
+export const sessionLoadFx = createEffect<void, Session | null>(async () => {
+  const source = localStorage.getItem(LocalStorageKey)
+  if (!source) {
+    return null
+  }
+  await wait()
+  return JSON.parse(source)
+})
+
+// By default if no aruments, no explicit type arguments, and no return,
+// effect will have type: `Effect<void, void, Error>`
+export const sessionDeleteFx = createEffect(async () => {
+  localStorage.removeItem(LocalStorageKey)
+  await wait()
+})
+
+// Look at the type of the `sessionCreateFx` constant.
+// It will be `Effect<void, Session, Error>` because Typescript can infer type from `session` constant
+export const sessionCreateFx = createEffect(async () => {
+  // I explicitly set type for the next constant, because it allows Typescript help me
+  // If I forgot to set property, I'll see error in the place of definition
+  // Also it allows IDE to autocomplete property names
+  const session: Session = {
+    id: createOid(),
+    name: createName(),
+  }
+  localStorage.setItem(LocalStorageKey, JSON.stringify(session))
+  return session
+})
+```
+
+How we need to import this effects?
+
+I surely recommend to write short imports and use reexports.
+It allows to securely refactor code structure inside `shared/api` and the same slices,
+and don't worry about refactoring another imports and unnecessary changes in the git history.
+
+```ts title=/src/shared/api/index.ts
+export * as messageApi from './message'
+export * as sessionApi from './session'
+
+// Types reexports made just for convenience
+export {Message} from './message'
+export {Session} from './session'
 ```
