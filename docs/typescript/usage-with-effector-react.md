@@ -49,11 +49,12 @@ Our API will load and save data to `localStorage`, and we need some functions to
 ```ts title=/src/shared/api/message.ts
 const LocalStorageKey = 'effector-example-history'
 
-function loadHistory(): Message[] {
+function loadHistory(): Message[] | void {
   const source = localStorage.getItem(LocalStorageKey)
   if (source) {
     return JSON.parse(source)
   }
+  return undefined
 }
 function saveHistory(messages: Message[]) {
   localStorage.setItem(LocalStorageKey, JSON.stringify(messages))
@@ -105,8 +106,7 @@ export const messageSendFx = createEffect(
       text,
     }
     const history = await messagesLoadFx()
-    history.push(message)
-    saveHistory(history)
+    saveHistory([...history, message])
     await wait()
   },
 )
@@ -495,3 +495,131 @@ export const $userName = $session.map(session => session?.name ?? '')
 
 Here we just reexported our custom store from the session entity, but our View layer doesn't change.
 The same situation with `$userName` store. Just reload the page, and you'll see, that session loaded correctly.
+
+### Send message
+
+Now we can log in and log out. I think you want to send message. This is pretty simple:
+
+```ts title=/src/pages/chat/model.ts
+$messageText.on(messageTextChanged, (_, text) => text)
+
+// We have two different events to send message
+// Let event `messageSend` react on any of them
+const messageSend = merge([messageEnterPressed, messageSendClicked])
+
+// We need to take a message text and author info then send it to the effect
+sample({
+  clock: messageSend,
+  source: {author: $session, text: $messageText},
+  target: messageApi.messageSendFx,
+})
+```
+
+But if in the `tsconfig.json` you set `"strictNullChecks": true`, you will see the error there.
+It is because store `$session` contains `Session | null` and `messageSendFx` wants `Author` in the arguments.
+`Author` and `Session` are compatible, but not the `null`.
+
+To fix this strange behaviour we need to use `filter` there:
+
+```ts title=/src/pages/chat/model.ts
+sample({
+  clock: messageSend,
+  source: {author: $session, text: $messageText},
+  filter: (form): form is {author: Session; text: string} => {
+    return form.author !== null
+  },
+  target: messageApi.messageSendFx,
+})
+```
+
+I want to focus your attention on the return type `form is {author: Session; text: string}`.
+This feature called [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)
+and allows Typescript to reduce `Session | null` type to more specific `Session` via condition inside the function.
+
+Now we can read this like: when message should be sent, take session and message text, check that session is exists, and send it.
+
+OK. Now we can write a new message to a server.
+But if we don't call `messagesLoadFx` again we didn't see any changes,
+because `$messages` store didn't update. We can write generic code for this case.
+Easiest way is to return sent message from the effect.
+
+```ts title=/src/shared/api/message.ts
+export const messageSendFx = createEffect(
+  async ({text, author}: SendMessage) => {
+    const message: Message = {
+      id: createOid(),
+      author,
+      timestamp: Date.now(),
+      text,
+    }
+    const history = await messagesLoadFx()
+    await wait()
+    saveHistory([...history, message])
+    return message
+  },
+)
+```
+
+Now we can just append a message to the end of list:
+
+```ts title=/src/pages/chat/model.ts
+$messages.on(messageApi.messageSendFx.doneData, (messages, newMessage) => [
+  ...messages,
+  newMessage,
+])
+```
+
+But at the moment, sent message still left in the input.
+
+```ts title=/src/pages/chat/model.ts
+$messageText.on(messageSendFx, () => '')
+
+// If message sending is failed, just restore the message
+sample({
+  clock: messageSendFx.fail,
+  fn: ({params}) => params.text,
+  target: $messageText,
+})
+```
+
+### Deleting the message
+
+There is pretty simple.
+
+```ts ts title=/src/pages/chat/model.ts
+sample({
+  clock: messageDeleteClicked,
+  target: messageApi.messageDeleteFx,
+})
+
+$messages.on(messageApi.messageDeleteFx.done, (messages, {params: toDelete}) =>
+  messages.filter(message => message.id !== toDelete.id),
+)
+```
+
+But you can see the bug, when "Deleting" state doesn't disable.
+This is because `useList` caches renders, and doesn't know about dependency on `messageDeleting` state.
+To fix it we need to provide `keys`:
+
+```tsx ts title=/src/pages/chat/page.tsx
+const messages = useList(model.$messages, {
+  keys: [messageDeleting],
+  fn: message => (
+    <div className="message-item" key={message.timestamp}>
+      <h3>From: {message.author.name}</h3>
+      <p>{message.text}</p>
+      <button
+        onClick={() => handleMessageDelete(message)}
+        disabled={messageDeleting}>
+        {messageDeleting ? 'Deleting' : 'Delete'}
+      </button>
+    </div>
+  ),
+})
+```
+
+### Conclusion
+
+This is simple example of application on effector with React and TypeScript.
+
+You can clone this [effector/examples/react-and-ts](https://github.com/effector/effector/tree/master/examples/react-and-ts) and run this example on your computer.
