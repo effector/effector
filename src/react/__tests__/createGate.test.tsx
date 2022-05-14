@@ -186,6 +186,27 @@ test('allows to pass defaultState with the name', async () => {
   expect(states[Gate.state.sid!]).toEqual({counter: 1})
 })
 
+test('works without babel plugin', () => {
+  const Gate1 = {_: createGate}._('name')
+  const Gate2 = {_: createGate}._('name', {state: 1})
+  const Gate3 = {_: createGate}._({name: 'name', defaultState: {state: 1}})
+  const Gate4 = {_: createGate}._({
+    name: 'name',
+    defaultState: {state: 1},
+    sid: 'custom-sid',
+  })
+
+  expect(Gate1.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate2.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate2.state.getState()).toEqual({state: 1})
+
+  expect(Gate3.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate3.state.getState()).toEqual({state: 1})
+
+  expect(Gate4.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate4.state.sid).toMatchInlineSnapshot(`"custom-sid"`)
+})
+
 test('gate should be correctly serialized via fork #672', async () => {
   const Gate = createGate('default')
   const scope = fork()

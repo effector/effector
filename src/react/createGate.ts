@@ -117,19 +117,24 @@ export function createGateImplementation<State>({
 }
 
 export function isPluginConfig(config: Record<string, any> | string) {
-  return typeof config === 'object' && config !== null && 'sid' in config
+  return isObject(config) && 'sid' in config
 }
 export function isGateConfig(config: Record<string, any> | string) {
   return (
-    typeof config === 'object' &&
-    config !== null &&
+    isObject(config) &&
     ('domain' in config || 'defaultState' in config || 'name' in config)
   )
 }
 
+export function isStructuredConfig(args: unknown) {
+  return isObject(args) && (args.and || args.or)
+}
+
 export function createGate<Props>(...args: unknown[]): Gate<Props> {
+  const universalConfig =
+    args && isStructuredConfig(args[0]) ? args : [{and: args}]
   const [[nameOrConfig, defaultStateOrConfig], metadata] =
-    processArgsToConfig(args)
+    processArgsToConfig(universalConfig)
 
   let domain
   let defaultState = {}

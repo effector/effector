@@ -56,6 +56,7 @@ export function createGate<Props>(config: {
   defaultState?: Props
   name?: string
   domain?: Domain
+  sid?: string;
 }): Gate<Props>
 export function createGate<Props>(
   name: string,

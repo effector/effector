@@ -5,6 +5,7 @@ type GateConfig<T> = {
   name?: string;
   defaultState?: T;
   domain?: Domain;
+  sid?: string;
 };
 
 type Gate<Props> = {
