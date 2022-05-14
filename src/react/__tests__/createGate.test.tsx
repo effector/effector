@@ -155,13 +155,59 @@ test('gate properties', async () => {
   expect(argumentHistory(fn2)).toEqual([{}, {foo: 'bar'}, {}])
 })
 
-test.skip('Gate.state should have sid', () => {
+test('Gate.state should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.state.sid).toBeDefined()
   expect(Gate.state.sid).toBeTruthy()
+  expect(Gate.state.sid).toMatchInlineSnapshot(`"-vrt9f8"`)
 })
 
-test.skip('gate should be correctly serialized via fork #672', async () => {
+test('Gate events should have sid', () => {
+  const Gate = createGate('default')
+  expect(Gate.open.sid).toBeDefined()
+  expect(Gate.close.sid).toBeDefined()
+  expect(Gate.open.sid).toMatchInlineSnapshot(`"-iijuds|open"`)
+  expect(Gate.close.sid).toMatchInlineSnapshot(`"-iijuds|close"`)
+})
+
+test('Gate name set from variable name', () => {
+  const exampleGate = createGate()
+  expect(exampleGate.state.compositeName.fullName).toMatchInlineSnapshot(
+    `"exampleGate.state"`,
+  )
+})
+
+test('allows to pass defaultState with the name', async () => {
+  const Gate = createGate('default', {counter: 0})
+  const scope = fork()
+  await allSettled(Gate.open, {scope, params: {counter: 1}})
+
+  const states = serialize(scope)
+  expect(states[Gate.state.sid!]).toEqual({counter: 1})
+})
+
+test('works without babel plugin', () => {
+  const Gate1 = {_: createGate}._('name')
+  const Gate2 = {_: createGate}._('name', {state: 1})
+  const Gate3 = {_: createGate}._({name: 'name', defaultState: {state: 1}})
+  const Gate4 = {_: createGate}._({
+    name: 'name',
+    defaultState: {state: 1},
+    sid: 'custom-sid',
+  })
+
+  expect(Gate1.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate2.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate2.state.getState()).toEqual({state: 1})
+
+  expect(Gate3.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate3.state.getState()).toEqual({state: 1})
+
+  expect(Gate4.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate4.state.sid).toMatchInlineSnapshot(`"custom-sid"`)
+})
+
+test('gate should be correctly serialized via fork #672', async () => {
   const Gate = createGate('default')
   const scope = fork()
   await allSettled(Gate.open, {scope, params: 'another'})

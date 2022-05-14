@@ -42,4 +42,5 @@ export function createGate<State>(config: {
   domain?: Domain
   defaultState?: State
   name?: string
+  sid?: string
 }): Gate<State>

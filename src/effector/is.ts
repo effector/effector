@@ -5,7 +5,8 @@ import {arrifyNodes} from './createNode'
 import type {NodeUnit} from './index.h'
 import {getMeta} from './getter'
 
-export const isObject = value => typeof value === 'object' && value !== null
+export const isObject = (value): value is Record<any, any> =>
+  typeof value === 'object' && value !== null
 export const isFunction = value => typeof value === 'function'
 
 export const isVoid = value => value === undefined
