@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "dom",
+            "es2015"
+        ],
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": false,
+        "strict": true,
+        "strictNullChecks": true,
+        "jsx": "react",
+        "baseUrl": "./src"
+    }
+}
