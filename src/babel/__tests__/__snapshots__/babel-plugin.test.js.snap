@@ -1147,7 +1147,8 @@ const Gate1 = createGate({
       line: 6,
       column: 14,
     },
-    sid: '3ziiou',
+    name: 'Gate1',
+    sid: 'ggz6t4',
   },
 })
 const Gate2 = createGate({
@@ -1158,7 +1159,8 @@ const Gate2 = createGate({
       line: 7,
       column: 14,
     },
-    sid: '4gk531',
+    name: 'Gate2',
+    sid: 'o6svhy',
   },
 })
 const Gate3 = createGate({
@@ -1185,7 +1187,8 @@ const Gate3 = createGate({
       line: 8,
       column: 14,
     },
-    sid: '4xlrh8',
+    name: 'Gate3',
+    sid: 'vwmk6s',
   },
 })
 const Gate4 = createGate({
@@ -1201,7 +1204,8 @@ const Gate4 = createGate({
       line: 13,
       column: 14,
     },
-    sid: '-hcjfqi',
+    name: 'Gate4',
+    sid: '-m3dk75',
   },
 })
 const Gate5 = createGate({
@@ -1224,7 +1228,8 @@ const Gate5 = createGate({
       line: 14,
       column: 14,
     },
-    sid: '-gvhtcb',
+    name: 'Gate5',
+    sid: '-a5i4kh',
   },
 })
 const TheGate1 = renamedGate({
@@ -1235,7 +1240,8 @@ const TheGate1 = renamedGate({
       line: 26,
       column: 17,
     },
-    sid: '-190a9b',
+    name: 'TheGate1',
+    sid: 'dx5sg6',
   },
 })
 const TheGate2 = renamedGate({
@@ -1246,7 +1252,8 @@ const TheGate2 = renamedGate({
       line: 27,
       column: 17,
     },
-    sid: '-rynv4',
+    name: 'TheGate2',
+    sid: 'pv182u',
   },
 })
 const TheGate3 = renamedGate({
@@ -1273,7 +1280,8 @@ const TheGate3 = renamedGate({
       line: 28,
       column: 17,
     },
-    sid: '-ax1gx',
+    name: 'TheGate3',
+    sid: '-x87e9m',
   },
 })
 const CompatGate1 = compatGate({
@@ -1284,7 +1292,8 @@ const CompatGate1 = compatGate({
       line: 34,
       column: 20,
     },
-    sid: 'charr0',
+    name: 'CompatGate1',
+    sid: '-kvdrr4',
   },
 })
 const CompatGate2 = compatGate({
@@ -1295,7 +1304,8 @@ const CompatGate2 = compatGate({
       line: 35,
       column: 20,
     },
-    sid: 'cyce57',
+    name: 'CompatGate2',
+    sid: '-8xic4g',
   },
 })
 const CompatGate3 = compatGate({
@@ -1322,7 +1332,8 @@ const CompatGate3 = compatGate({
       line: 36,
       column: 20,
     },
-    sid: 'dfe0je',
+    name: 'CompatGate3',
+    sid: '30d3i8',
   },
 })
 "

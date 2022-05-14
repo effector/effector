@@ -159,15 +159,22 @@ test('Gate.state should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.state.sid).toBeDefined()
   expect(Gate.state.sid).toBeTruthy()
-  expect(Gate.state.sid).toMatchInlineSnapshot(`"87yw9j"`)
+  expect(Gate.state.sid).toMatchInlineSnapshot(`"-vrt9f8"`)
 })
 
 test('Gate events should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.open.sid).toBeDefined()
   expect(Gate.close.sid).toBeDefined()
-  expect(Gate.open.sid).toMatchInlineSnapshot(`"lh8baz|open"`)
-  expect(Gate.close.sid).toMatchInlineSnapshot(`"lh8baz|close"`)
+  expect(Gate.open.sid).toMatchInlineSnapshot(`"-iijuds|open"`)
+  expect(Gate.close.sid).toMatchInlineSnapshot(`"-iijuds|close"`)
+})
+
+test('Gate name set from variable name', () => {
+  const exampleGate = createGate()
+  expect(exampleGate.state.compositeName.fullName).toMatchInlineSnapshot(
+    `"exampleGate.state"`,
+  )
 })
 
 test('allows to pass defaultState with the name', async () => {

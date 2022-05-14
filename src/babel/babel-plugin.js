@@ -174,7 +174,7 @@ module.exports = function (babel, options = {}) {
         setConfigForConfMethod(
           path,
           state,
-          null,
+          id,
           t,
           smallConfig,
           false,
@@ -805,7 +805,7 @@ function setConfigForConfMethod(
     }
   })
 
-  if (args || true) {
+  if (args) {
     if (!args[0] && !allowEmptyArguments) return
     const commonArgs = singleArgument
       ? args[0]
