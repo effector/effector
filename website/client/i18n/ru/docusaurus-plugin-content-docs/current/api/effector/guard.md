@@ -5,6 +5,10 @@ description: Метод для запуска юнитов по условию, 
 ---
 
 :::note
+C effector 22.2.0 предпочтительнее использовать [sample](sample.md)
+:::
+
+:::note
 Добавлен в effector 20.4.0
 :::
 
@@ -17,9 +21,14 @@ description: Метод для запуска юнитов по условию, 
 guard({clock?, source?, filter, target?}): target
 ```
 
+:::note
+`clock` или `source` обязателен
+:::
+
 При срабатывании `clock`, после проверки `filter` на [истинность](https://developer.mozilla.org/ru/docs/Glossary/Truthy), вызывается `target` с данными из `source`
 
 - Если `clock` не передан, guard будет срабатывать при каждом обновлении `source`
+- Если `source` не передан, `target` будет вызван с данными из `clock`
 - Если `target` не передан, будет создано новое [событие](./Event.md) и возвращено в качестве результата
 - Если `filter` это [стор](./Store.md), то его значение будет проверено на [истинность](https://developer.mozilla.org/ru/docs/Glossary/Truthy)
 - Если `filter` это функция-предикат, то она будет вызвана с данными из `source` и `clock`, а результат проверен на [истинность](https://developer.mozilla.org/ru/docs/Glossary/Truthy)
@@ -81,13 +90,13 @@ import {createStore, createEffect, createEvent, guard} from 'effector'
 
 const clickRequest = createEvent()
 const fetchRequest = createEffect(
-  n => new Promise(rs => setTimeout(rs, 2500, n)),
+  (n) => new Promise((rs) => setTimeout(rs, 2500, n)),
 )
 
-const clicks = createStore(0).on(clickRequest, x => x + 1)
-const requests = createStore(0).on(fetchRequest, x => x + 1)
+const clicks = createStore(0).on(clickRequest, (x) => x + 1)
+const requests = createStore(0).on(fetchRequest, (x) => x + 1)
 
-const isIdle = fetchRequest.pending.map(pending => !pending)
+const isIdle = fetchRequest.pending.map((pending) => !pending)
 
 /*
 1. при срабатывании clickRequest
@@ -115,7 +124,7 @@ const submitForm = createEvent()
 
 guard({
   source: submitForm,
-  filter: user => user.length > 0,
+  filter: (user) => user.length > 0,
   target: searchUser,
 })
 
@@ -172,7 +181,7 @@ import {createEvent, guard} from 'effector'
 
 const source = createEvent()
 const target = guard(source, {
-  filter: x => x > 0,
+  filter: (x) => x > 0,
 })
 
 target.watch(() => {
