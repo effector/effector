@@ -481,3 +481,17 @@ sample({
 ```
 
 > Note: most of the comments wrote just for educational purpose. In the real life application code will be self-describable
+
+But if we start the dev server and try to log in, we see nothing changed.
+This is because we created `$loggedIn` store in the model, but don't change it. Let's fix:
+
+```ts title=/src/pages/chat/model.ts
+import {$isLogged, $session} from 'entities/session'
+
+// At the moment, there is just raw data without any knowledge how to load
+export const $loggedIn = $isLogged
+export const $userName = $session.map(session => session?.name ?? '')
+```
+
+Here we just reexported our custom store from the session entity, but our View layer doesn't change.
+The same situation with `$userName` store. Just reload the page, and you'll see, that session loaded correctly.
