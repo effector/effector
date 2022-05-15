@@ -55,7 +55,7 @@ Effector implements business logic with ease for Javascript apps **(React/React 
 ## Installation
 
 ```sh
-npm install effector
+npm add effector
 ```
 
 **React**
@@ -63,13 +63,13 @@ npm install effector
 To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
 
 ```sh
-npm install effector effector-react
+npm add effector effector-react
 ```
 
 **Vue**
 
 ```sh
-npm install effector effector-vue
+npm add effector effector-vue
 ```
 
 **Svelte**
