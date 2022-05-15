@@ -199,6 +199,13 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/AlexandrHoroshih>
+            <img src=https://avatars.githubusercontent.com/u/32790736?v=4 width="100;"  alt=Alexander Khoroshikh/>
+            <br />
+            <sub style="font-size:14px"><b>Alexander Khoroshikh</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/YanLobat>
             <img src=https://avatars.githubusercontent.com/u/5307423?v=4 width="100;"  alt=Yan/>
             <br />
@@ -217,13 +224,6 @@ Your support allows us to improve the developer experience 🧡.
             <img src=https://avatars.githubusercontent.com/u/7874664?v=4 width="100;"  alt=Maxim/>
             <br />
             <sub style="font-size:14px"><b>Maxim</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/AlexandrHoroshih>
-            <img src=https://avatars.githubusercontent.com/u/32790736?v=4 width="100;"  alt=Alexander Khoroshikh/>
-            <br />
-            <sub style="font-size:14px"><b>Alexander Khoroshikh</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
