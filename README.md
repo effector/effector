@@ -60,6 +60,8 @@ npm install effector
 
 **React**
 
+To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
+
 ```sh
 npm install effector effector-react
 ```
