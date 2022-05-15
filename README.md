@@ -1,3 +1,18 @@
+<p align="center">
+  <a href="https://effector.dev" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://raw.githubusercontent.com/effector/effector/master/website/client/static/img/comet.svg" alt="Effector Comet Logo" />
+  </a>
+</p>
+<br />
+<p align="center">
+  <a href="https://gitter.im/effector/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/effector/community.svg" alt="join gitter" /></a>
+  <a href="https://openbase.com/js/effector?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.com/js/rating/effector.svg" alt="rate on openbase" /></a>
+  <a href="https://github.com/effector/effector/actions/workflows/tests.yml"><img src="https://github.com/effector/effector/actions/workflows/tests.yml/badge.svg?branch=master" alt="build status" /></a>  
+  <a href="https://discord.gg/t3KkcQdt"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
+  <a href="https://www.patreon.com/zero_bias/overview"><img src="https://img.shields.io/badge/become-a%20patron-%23f96854" alt="become a patron" /></a>
+</p>
+
+
 # ☄️ effector 
 
 Business logic with ease
@@ -120,10 +135,11 @@ Use [effector-logger](https://github.com/effector/logger) for printing updates t
 
 ## Support us
 
-More articles about effector at patreon
-<a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
+- Read more articles on [a patreon page](https://www.patreon.com/zero_bias/overview)
+- Donate [on OpenCollective](https://opencollective.com/effector)
+- Be a sponsor [on Github Sponsors](https://github.com/sponsors/effector)
 
-[![Rate on Openbase](https://badges.openbase.com/js/rating/effector.svg)](https://openbase.com/js/effector?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge) [![Gitter](https://badges.gitter.im/effector/community.svg)](https://gitter.im/effector/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Discord](https://img.shields.io/discord/837801065368911882?label=discord&logo=discord&style=plastic)](https://discord.com/channels/837801065368911882)
+Your support allows us to improve the developer experience 🧡.
 
 ## Contributors
 
