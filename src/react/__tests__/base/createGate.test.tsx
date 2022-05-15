@@ -159,15 +159,15 @@ test('Gate.state should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.state.sid).toBeDefined()
   expect(Gate.state.sid).toBeTruthy()
-  expect(Gate.state.sid).toMatchInlineSnapshot(`"-vrt9f8"`)
+  expect(Gate.state.sid!.length > 0).toBe(true)
 })
 
 test('Gate events should have sid', () => {
   const Gate = createGate('default')
   expect(Gate.open.sid).toBeDefined()
   expect(Gate.close.sid).toBeDefined()
-  expect(Gate.open.sid).toMatchInlineSnapshot(`"-iijuds|open"`)
-  expect(Gate.close.sid).toMatchInlineSnapshot(`"-iijuds|close"`)
+  expect(Gate.open.sid!.match(/.*\|open/)?.length === 1).toBe(true)
+  expect(Gate.close.sid!.match(/.*\|close/)?.length === 1).toBe(true)
 })
 
 test('Gate name set from variable name', () => {
