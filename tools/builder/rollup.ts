@@ -54,7 +54,7 @@ const externals = [
   '@vue/runtime-core',
   'vue',
   'react',
-  'use-sync-external-store',
+  'use-sync-external-store/shim',
 ]
 
 const getPlugins = (
