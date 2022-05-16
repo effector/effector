@@ -55,6 +55,7 @@ const externals = [
   'vue',
   'react',
   'use-sync-external-store/shim',
+  'use-sync-external-store/shim/with-selector',
 ]
 
 const getPlugins = (
