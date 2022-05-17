@@ -1,5 +1,5 @@
 ---
-id: effector-react
+id: effector-solid
 title: API Reference
 ---
 
@@ -7,7 +7,6 @@ title: API Reference
 
 - [useStore(store)](./useStore.md)
 - [useStoreMap({ store, keys, fn })](./useStoreMap.md)
-- [useList(store, renderItem)](./useList.md)
 
 ## Gate API
 
@@ -15,12 +14,6 @@ title: API Reference
 - [createGate()](./createGate.md)
 - [useGate(GateComponent, props)](./useGate.md)
 
-## Top-Level Exports
-
-- [createComponent(store, render)](./createComponent.md)
-- [createStoreConsumer(store)](./createStoreConsumer.md) render props style
-- [connect(store)(Component)](./connect.md) "connect" style
-
-## effector-react/ssr API
+## effector-solid/scope API
 
 - [useEvent(unit)](./useEvent.md)

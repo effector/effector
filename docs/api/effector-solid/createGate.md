@@ -17,7 +17,7 @@ Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Ga
 
 - `defaultState?`: Optional default state for [Gate.state](./Gate.md#state)
 - `domain?` ([_Domain_](../effector/Domain.md)): Optional domain which will be used to create gate units ([Gate.open](./Gate.md#open) event, [Gate.state](./Gate.md#state) store and so on)
-- `name?` (_string_): Optional name which will be used as name of created react component
+- `name?` (_string_): Optional name which will be used as name of created solid component
 
 **Returns**
 
@@ -29,7 +29,7 @@ Creates a [_`Gate`_](Gate.md)
 
 **Arguments**
 
-1. `name`? (_string_): Optional name which will be used as name of created react component
+1. `name`? (_string_): Optional name which will be used as name of created solid component
 
 **Returns**
 
@@ -38,9 +38,8 @@ Creates a [_`Gate`_](Gate.md)
 #### Example
 
 ```js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {createGate} from 'effector-react'
+import {createGate} from 'effector-solid'
+import {render} from 'solid-js/web'
 
 const Gate = createGate('gate with props')
 
@@ -55,11 +54,9 @@ Gate.state.watch(state => {
 })
 // => current state {}
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const unmount = render(() => <App />, document.getElementById('root'))
 // => current state {foo: 'bar'}
 
-ReactDOM.unmountComponentAtNode(document.getElementById('root'))
+unmount()
 // => current state {}
 ```
-
-[Try it](https://share.effector.dev/mMZSQclh)

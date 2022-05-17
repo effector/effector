@@ -18,9 +18,9 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 ### Example
 
 ```jsx
-import ReactDOM from 'react-dom'
+import {render} from 'solid-js/web'
 import {createEvent, createStore, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/scope'
+import {useStore, useEvent, Provider} from 'effector-solid/scope'
 
 const inc = createEvent()
 const $count = createStore(0)
@@ -40,15 +40,13 @@ const App = () => {
 
 const scope = fork()
 
-ReactDOM.render(
+render(() =>
   <Provider value={scope}>
     <App />
   </Provider>,
   document.getElementById('root'),
 )
 ```
-
-[Try it](https://share.effector.dev/GyiJvLdo)
 
 ## `useEvent(shape)`
 
@@ -63,9 +61,9 @@ ReactDOM.render(
 ### Example
 
 ```jsx
-import ReactDOM from 'react-dom'
+import {render} from 'solid-js/web'
 import {createStore, createEvent, fork} from 'effector'
-import {useStore, useEvent, Provider} from 'effector-react/scope'
+import {useStore, useEvent, Provider} from 'effector-solid/scope'
 
 const inc = createEvent()
 const dec = createEvent()
@@ -91,7 +89,8 @@ const App = () => {
 
 const scope = fork()
 
-ReactDOM.render(
+
+render(() =>
   <Provider value={scope}>
     <App />
   </Provider>,
