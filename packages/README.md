@@ -5,6 +5,7 @@
 |        Package         |                                                 Version                                                 |                                                                       Dependencies                                                                       |
 | :--------------------: | :-----------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [`effector`](effector) | [![npm](https://img.shields.io/npm/v/effector.svg?maxAge=3600)](https://www.npmjs.com/package/effector) | [![Dependency Status](https://david-dm.org/effector/effector.svg?path=packages/effector)](https://david-dm.org/effector/effector?path=packages/effector) |
+|   [`forest`](forest)   |   [![npm](https://img.shields.io/npm/v/forest.svg?maxAge=3600)](https://www.npmjs.com/package/forest)   |   [![Dependency Status](https://david-dm.org/effector/effector.svg?path=packages/forest)](https://david-dm.org/effector/effector?path=packages/forest)   |
 
 ### Bindings for web frameworks
 
