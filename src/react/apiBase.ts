@@ -27,8 +27,14 @@ const keysEqual = (a?: readonly any[], b?: readonly any[]) => {
 export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
 
-  const subscribe = (cb: () => void) => createWatch(store, cb, scope)
-  const read = () => stateReader(store, scope)
+  const subscribe = React.useCallback(
+    (cb: () => void) => createWatch(store, cb, scope),
+    [store, scope],
+  )
+  const read = React.useCallback(
+    () => stateReader(store, scope),
+    [store, scope],
+  )
   const currentValue = useSyncExternalStore(subscribe, read, read)
 
   return currentValue
@@ -67,8 +73,14 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
   if (typeof fn !== 'function') throwError('useStoreMap expects a function')
 
-  const subscribe = (cb: () => void) => createWatch(store, cb, scope)
-  const read = () => stateReader(store, scope)
+  const subscribe = React.useCallback(
+    (cb: () => void) => createWatch(store, cb, scope),
+    [store, scope],
+  )
+  const read = React.useCallback(
+    () => stateReader(store, scope),
+    [store, scope],
+  )
 
   const stateRef = React.useRef<State>()
   const valueRef = React.useRef<Result>()
