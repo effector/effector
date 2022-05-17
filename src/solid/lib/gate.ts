@@ -1,26 +1,6 @@
 import { Gate } from "../index.h";
 import { createEvent, createStore, Domain, launch } from "effector";
-import { createSignal, onCleanup, onMount, Accessor, createEffect, createRenderEffect, on } from "solid-js";
-
-function shallowCompare(a: any, b: any) {
-  if (a === b) return true
-  if (
-    typeof a === 'object' &&
-    a !== null &&
-    typeof b === 'object' &&
-    b !== null
-  ) {
-    const aKeys = Object.keys(a)
-    const bKeys = Object.keys(b)
-    if (aKeys.length !== bKeys.length) return false
-    for (let i = 0; i < aKeys.length; i++) {
-      const key = aKeys[i]
-      if (a[key] !== b[key]) return false
-    }
-    return true
-  }
-  return false
-}
+import { onCleanup, onMount, createEffect } from "solid-js";
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,

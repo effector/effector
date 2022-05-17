@@ -3,7 +3,6 @@ import { throwError } from "./throw";
 import {
   Accessor,
   createMemo,
-  createRenderEffect,
   createSignal,
   onCleanup
 } from "solid-js";
