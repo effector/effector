@@ -3,7 +3,7 @@ id: effector-solid
 title: API Reference
 ---
 
-## Hooks
+## Reactive helpers
 
 - [useStore(store)](./useStore.md)
 - [useStoreMap({ store, keys, fn })](./useStoreMap.md)
