@@ -24,7 +24,7 @@ export function useStoreMap<State, Result>(
   fn: (state: State) => Result,
 ): Accessor<Result>
 
-export function useGate<Props>(Gate: Gate<Props>, props?: Accessor<Props>): void
+export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 export function createGate<Props>(name?: string): Gate<Props>
 export function createGate<Props>(config: {

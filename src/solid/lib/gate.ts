@@ -24,27 +24,19 @@ function shallowCompare(a: any, b: any) {
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  props: Accessor<Props> = (() => {}) as any,
+  props: Props = {} as any,
 ) {
-  const [value, setValue] = createSignal<Props>(null as unknown as Props);
-  const [count, setCount] = createSignal(0);
-
   onMount(() => {
-    GateComponent.open(value());
+    GateComponent.open(props);
 
-    onCleanup(() => GateComponent.close(value()))
+    onCleanup(() => GateComponent.close(props))
   });
 
-  createRenderEffect(() => {
-    if (!shallowCompare(value(), props())) {
-      setValue(() => props());
-      setCount((count) => count + 1);
-    }
-  });
-
-  createEffect(on(count, () => {
-    GateComponent.set(value())
-  }))
+  createEffect(() => {
+    // read every getter in props to subscribe
+    for (const _ of Object.values(props)) {}
+    GateComponent.set(props)
+  })
 }
 
 export function createGateImplementation<State>({
@@ -70,7 +62,10 @@ export function createGateImplementation<State>({
   const state = createStore(defaultState as State, {
     name: `${fullName}.state`,
   })
-    .on(set, (_, state) => state)
+    .on(set, (_, state) => Object.create(
+      Object.getPrototypeOf(state),
+      Object.getOwnPropertyDescriptors(state)
+    ))
     .reset(close)
   if (domain) {
     const {hooks} = domain as any
@@ -86,7 +81,7 @@ export function createGateImplementation<State>({
     })
   }
   function GateComponent(props: State) {
-    useGateHook(GateComponent as any, () => props)
+    useGateHook(GateComponent as any, props)
     return null
   }
   GateComponent.open = open
