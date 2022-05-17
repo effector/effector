@@ -159,6 +159,9 @@ export default {
     'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.mjs',
     typings: 'index.d.ts',
+    dependencies: {
+      "use-sync-external-store": "^1.0.0",
+    },
     peerDependencies: {
       react: '>=16.8.0 <19.0.0',
       effector: '^22.0.2',
