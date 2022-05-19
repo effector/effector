@@ -3,9 +3,9 @@ authors:
 cff-version: "1.2.0"
 date-released: 2018-01-21
 license: MIT
-abstract: "Effector is an effective multi-store state manager for Javascript apps, that allows you to manage data in complex applications"
+abstract: "Effector is an effective business logic manager for Javascript apps"
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/effector/effector/"
 title: effector
-version: "22.2.0"
+version: "22.3.0"
 url: "https://effector.dev"

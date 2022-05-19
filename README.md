@@ -1,4 +1,19 @@
-# ☄️ effector
+<p align="center">
+  <a href="https://effector.dev" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://raw.githubusercontent.com/effector/effector/master/website/client/static/img/comet.svg" alt="Effector Comet Logo" />
+  </a>
+</p>
+<br />
+<p align="center">
+  <a href="https://gitter.im/effector/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/effector/community.svg" alt="join gitter" /></a>
+  <a href="https://openbase.com/js/effector?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.com/js/rating/effector.svg" alt="rate on openbase" /></a>
+  <a href="https://github.com/effector/effector/actions/workflows/tests.yml"><img src="https://github.com/effector/effector/actions/workflows/tests.yml/badge.svg?branch=master" alt="build status" /></a>  
+  <a href="https://discord.gg/t3KkcQdt"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
+  <a href="https://www.patreon.com/zero_bias/overview"><img src="https://img.shields.io/badge/become-a%20patron-%23f96854" alt="become a patron" /></a>
+</p>
+
+
+# ☄️ effector 
 
 Business logic with ease
 
@@ -40,19 +55,21 @@ Effector implements business logic with ease for Javascript apps **(React/React 
 ## Installation
 
 ```sh
-npm install effector
+npm add effector
 ```
 
 **React**
 
+To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
+
 ```sh
-npm install effector effector-react
+npm add effector effector-react
 ```
 
 **Vue**
 
 ```sh
-npm install effector effector-vue
+npm add effector effector-vue
 ```
 
 **Svelte**
@@ -93,7 +110,7 @@ For additional information, guides and api reference visit [our documentation si
 - [Telegram](https://t.me/effector_en) (@effector_en)
 - [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
 - [dev.to](https://dev.to/effector)
-- [Gitter](https://gitter.im/effector-js/community)
+- [Gitter](https://gitter.im/effector/community)
 - [Discord](https://discord.gg/yHcMcuRWeC)
 - Add a [GitHub Topic `effector`](https://github.com/topics/effector) to your project's home page
 
@@ -120,10 +137,11 @@ Use [effector-logger](https://github.com/effector/logger) for printing updates t
 
 ## Support us
 
-More articles about effector at patreon
-<a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
+- Read more articles on [a patreon page](https://www.patreon.com/zero_bias/overview)
+- Donate [on OpenCollective](https://opencollective.com/effector)
+- Be a sponsor [on Github Sponsors](https://github.com/sponsors/effector)
 
-[![Rate on Openbase](https://badges.openbase.com/js/rating/effector.svg)](https://openbase.com/js/effector?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge)
+Your support allows us to improve the developer experience 🧡.
 
 ## Contributors
 
@@ -174,6 +192,13 @@ More articles about effector at patreon
 </tr>
 <tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/AlexandrHoroshih>
+            <img src=https://avatars.githubusercontent.com/u/32790736?v=4 width="100;"  alt=Alexander Khoroshikh/>
+            <br />
+            <sub style="font-size:14px"><b>Alexander Khoroshikh</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/doasync>
             <img src=https://avatars.githubusercontent.com/u/29141708?v=4 width="100;"  alt=Ruslan @doasync/>
             <br />
@@ -199,13 +224,6 @@ More articles about effector at patreon
             <img src=https://avatars.githubusercontent.com/u/7874664?v=4 width="100;"  alt=Maxim/>
             <br />
             <sub style="font-size:14px"><b>Maxim</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/AlexandrHoroshih>
-            <img src=https://avatars.githubusercontent.com/u/32790736?v=4 width="100;"  alt=Alexander Khoroshikh/>
-            <br />
-            <sub style="font-size:14px"><b>Alexander Khoroshikh</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">

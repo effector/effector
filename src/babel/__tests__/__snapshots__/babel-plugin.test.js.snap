@@ -1133,6 +1133,212 @@ createEvent({
 "
 `;
 
+exports[`babel-plugin should create gate 1`] = `
+"var _effectorFileName2 = '/src/babel/__tests__/fixtures/create-gate.js'
+import {createDomain} from 'effector'
+import {createGate} from 'effector-react'
+import {createGate as renamedGate} from 'effector-react/scope'
+import {createGate as compatGate} from 'effector-react/compat'
+const Gate1 = createGate({
+  and: [],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 6,
+      column: 14,
+    },
+    name: 'Gate1',
+    sid: 'ggz6t4',
+  },
+})
+const Gate2 = createGate({
+  and: ['gate2'],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 7,
+      column: 14,
+    },
+    name: 'Gate2',
+    sid: 'o6svhy',
+  },
+})
+const Gate3 = createGate({
+  and: [
+    {
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName2,
+          line: 10,
+          column: 10,
+        },
+        name: 'domain',
+        sid: '-c59o1r',
+      }),
+      name: 'gate3',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 8,
+      column: 14,
+    },
+    name: 'Gate3',
+    sid: 'vwmk6s',
+  },
+})
+const Gate4 = createGate({
+  and: [
+    'default',
+    {
+      counter: 0,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 13,
+      column: 14,
+    },
+    name: 'Gate4',
+    sid: '-m3dk75',
+  },
+})
+const Gate5 = createGate({
+  and: [
+    {
+      and: ['gate2'],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 7,
+          column: 14,
+        },
+        sid: '4gk531',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 14,
+      column: 14,
+    },
+    name: 'Gate5',
+    sid: '-a5i4kh',
+  },
+})
+const TheGate1 = renamedGate({
+  and: [],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 26,
+      column: 17,
+    },
+    name: 'TheGate1',
+    sid: 'dx5sg6',
+  },
+})
+const TheGate2 = renamedGate({
+  and: ['gate2'],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 27,
+      column: 17,
+    },
+    name: 'TheGate2',
+    sid: 'pv182u',
+  },
+})
+const TheGate3 = renamedGate({
+  and: [
+    {
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName2,
+          line: 30,
+          column: 10,
+        },
+        name: 'domain',
+        sid: 'h7iweb',
+      }),
+      name: 'gate3',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 28,
+      column: 17,
+    },
+    name: 'TheGate3',
+    sid: '-x87e9m',
+  },
+})
+const CompatGate1 = compatGate({
+  and: [],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 34,
+      column: 20,
+    },
+    name: 'CompatGate1',
+    sid: '-kvdrr4',
+  },
+})
+const CompatGate2 = compatGate({
+  and: ['gate2'],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 35,
+      column: 20,
+    },
+    name: 'CompatGate2',
+    sid: '-8xic4g',
+  },
+})
+const CompatGate3 = compatGate({
+  and: [
+    {
+      defaultState: {
+        a: 1,
+      },
+      domain: createDomain({
+        loc: {
+          file: _effectorFileName2,
+          line: 38,
+          column: 10,
+        },
+        name: 'domain',
+        sid: 'kzvvjv',
+      }),
+      name: 'gate3',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 36,
+      column: 20,
+    },
+    name: 'CompatGate3',
+    sid: '30d3i8',
+  },
+})
+"
+`;
+
 exports[`babel-plugin should create store 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/create-store.js'
 import {createStore} from 'effector'

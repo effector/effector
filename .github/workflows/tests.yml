@@ -26,6 +26,7 @@ jobs:
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn test
+      - run: yarn test:react-17
   build-packages:
     name: Build packages
     needs: common-tests

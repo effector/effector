@@ -7,7 +7,7 @@ import {
   createGate,
 } from 'effector-vue/composition'
 import {reactive, ref, nextTick} from 'vue-next'
-import {createEvent, createStore} from 'effector'
+import {allSettled, createEvent, createStore, fork} from 'effector'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -23,6 +23,21 @@ it('plain gate', async () => {
   expect(Gate.status.getState()).toBeTruthy()
   wrapper.unmount()
   expect(Gate.status.getState()).toBeFalsy()
+})
+
+test('works without babel plugin', () => {
+  const Gate3 = {_: createGate}._({name: 'name', defaultState: {state: 1}})
+  const Gate4 = {_: createGate}._({
+    name: 'name',
+    defaultState: {state: 1},
+    sid: 'custom-sid',
+  })
+
+  expect(Gate3.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate3.state.getState()).toEqual({state: 1})
+
+  expect(Gate4.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate4.state.sid).toMatchInlineSnapshot(`"custom-sid"`)
 })
 
 it('gate with props', () => {
