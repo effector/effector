@@ -29,11 +29,9 @@ import {useStore} from 'effector-solid'
 
 const inputText = createEvent()
 
-const $text = createStore('')
-  .on(inputText, (_, text) => text)
-  
-const $size = createStore(0)
-  .on(inputText, (_, text) => text.length)
+const $text = createStore('').on(inputText, (_, text) => text)
+
+const $size = createStore(0).on(inputText, (_, text) => text.length)
 
 const Form = () => {
   const size = useStore($size)

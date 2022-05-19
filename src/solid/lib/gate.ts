@@ -1,20 +1,21 @@
-import { Gate } from "../index.h";
-import { createEvent, createStore, Domain, launch } from "effector";
-import { onCleanup, onMount, createEffect } from "solid-js";
+import {Gate} from '../index.h'
+import {createEvent, createStore, Domain, launch} from 'effector'
+import {onCleanup, onMount, createEffect} from 'solid-js'
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
 ) {
   onMount(() => {
-    GateComponent.open(props);
+    GateComponent.open(props)
 
     onCleanup(() => GateComponent.close(props))
-  });
+  })
 
   createEffect(() => {
     // read every getter in props to subscribe
-    for (const _ of Object.values(props)) {}
+    for (const _ of Object.values(props)) {
+    }
     GateComponent.set(props)
   })
 }
@@ -42,10 +43,12 @@ export function createGateImplementation<State>({
   const state = createStore(defaultState as State, {
     name: `${fullName}.state`,
   })
-    .on(set, (_, state) => Object.create(
-      Object.getPrototypeOf(state),
-      Object.getOwnPropertyDescriptors(state)
-    ))
+    .on(set, (_, state) =>
+      Object.create(
+        Object.getPrototypeOf(state),
+        Object.getOwnPropertyDescriptors(state),
+      ),
+    )
     .reset(close)
   if (domain) {
     const {hooks} = domain as any
@@ -69,9 +72,9 @@ export function createGateImplementation<State>({
   GateComponent.status = status
   GateComponent.state = state
   GateComponent.set = set
-  GateComponent.displayName = `Gate:${fullName}`;
+  GateComponent.displayName = `Gate:${fullName}`
 
-  return GateComponent;
+  return GateComponent
 }
 
 export function createGate<Props>(

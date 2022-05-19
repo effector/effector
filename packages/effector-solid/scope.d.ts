@@ -1,11 +1,11 @@
-import { Accessor, Component, FlowComponent } from "solid-js";
-import { Store, Event, Effect, Domain, Scope } from "effector";
+import {Accessor, Component, FlowComponent} from 'solid-js'
+import {Store, Event, Effect, Domain, Scope} from 'effector'
 import {Gate} from 'effector-solid'
 
 export {useStore, useStoreMap, useGate} from 'effector-solid'
 
 export const Provider: FlowComponent<{
-  value: Scope;
+  value: Scope
 }>
 
 export function createGate<State>(config: {
@@ -26,17 +26,17 @@ export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
   [Key in keyof List]: List[Key] extends Event<infer T>
     ? (payload: T) => T
     : List[Key] extends Effect<infer P, infer D, any>
-      ? (payload: P) => Promise<D>
-      : never
+    ? (payload: P) => Promise<D>
+    : never
 }
 export function useEvent<
   Shape extends Record<string, Event<any> | Effect<any, any, any>>,
-  >(
+>(
   shape: Shape,
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
     ? (payload: T) => T
     : Shape[Key] extends Effect<infer P, infer D, any>
-      ? (payload: P) => Promise<D>
-      : never
+    ? (payload: P) => Promise<D>
+    : never
 }

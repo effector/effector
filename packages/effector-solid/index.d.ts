@@ -1,4 +1,4 @@
-import { Accessor, Component } from "solid-js";
+import {Accessor, Component} from 'solid-js'
 import {Store, Event, Effect, Domain} from 'effector'
 
 export type Gate<Props = {}> = Component<Props> & {
@@ -12,8 +12,8 @@ export function useStore<State>(store: Store<State>): Accessor<State>
 export function useStoreMap<
   State,
   Result,
-  Keys extends [any] | ReadonlyArray<any> | any[]
-  >(opts: {
+  Keys extends [any] | ReadonlyArray<any> | any[],
+>(opts: {
   readonly store: Store<State>
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
@@ -49,17 +49,17 @@ export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
   [Key in keyof List]: List[Key] extends Event<infer T>
     ? (payload: T) => T
     : List[Key] extends Effect<infer P, infer D, any>
-      ? (payload: P) => Promise<D>
-      : never
+    ? (payload: P) => Promise<D>
+    : never
 }
 export function useEvent<
-  Shape extends Record<string, Event<any> | Effect<any, any, any>>
-  >(
+  Shape extends Record<string, Event<any> | Effect<any, any, any>>,
+>(
   shape: Shape,
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
     ? (payload: T) => T
     : Shape[Key] extends Effect<infer P, infer D, any>
-      ? (payload: P) => Promise<D>
-      : never
+    ? (payload: P) => Promise<D>
+    : never
 }

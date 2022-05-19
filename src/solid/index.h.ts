@@ -1,5 +1,5 @@
-import type { Event, Store } from "effector";
-import type { Component } from "solid-js";
+import type {Event, Store} from 'effector'
+import type {Component} from 'solid-js'
 
 export type Gate<Props = {}> = Component<Props> & {
   open: Event<Props>

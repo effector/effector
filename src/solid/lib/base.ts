@@ -1,42 +1,37 @@
-import { createWatch, is, Scope, Store } from "effector";
-import { throwError } from "./throw";
-import {
-  Accessor,
-  createMemo,
-  createSignal,
-  onCleanup
-} from "solid-js";
+import {createWatch, is, Scope, Store} from 'effector'
+import {throwError} from './throw'
+import {Accessor, createMemo, createSignal, onCleanup} from 'solid-js'
 
-const stateReader = <T,>(store: Store<T>, scope?: Scope) =>
+const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
-const basicUpdateFilter = <T,>(upd: T, oldValue: T) => upd !== oldValue
+const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
 
 export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
 
-  const value = stateReader(store, scope);
-  const [currentValue, setCurrentValue] = createSignal(value);
+  const value = stateReader(store, scope)
+  const [currentValue, setCurrentValue] = createSignal(value)
 
   const stop = createWatch({
     unit: store,
     fn: upd => setCurrentValue(() => upd),
-    scope
-  });
+    scope,
+  })
 
   onCleanup(stop)
 
-  return currentValue;
+  return currentValue
 }
 
 export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   [configOrStore, separateFn]: [
     configOrStore:
       | {
-      store: Store<State>
-      keys: Keys
-      fn(state: State, keys: Keys): Result
-      updateFilter?: (update: Result, current: Result) => boolean
-    }
+          store: Store<State>
+          keys: Keys
+          fn(state: State, keys: Keys): Result
+          updateFilter?: (update: Result, current: Result) => boolean
+        }
       | Store<State>,
     separateFn?: (state: State, keys: Keys) => Result,
   ],
@@ -67,8 +62,8 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     init: boolean
     store: Store<State>
     active: boolean
-  }>({} as any, { equals: false });
-  const refState = result();
+  }>({} as any, {equals: false})
+  const refState = result()
   refState.fn = fn
   refState.upd = updateFilter
   refState.init = refState.store === store
@@ -78,17 +73,17 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     if (refState) {
       refState.active = false
     }
-  });
-  const inc = () => setResult(refState);
+  })
+  const inc = () => setResult(refState)
 
   updateRef(stateReader(store, scope), keys, refState)
   const stop = createWatch({
     unit: store,
     fn: val => updateRef(val, keys, refState, inc),
-    scope: scope
-  });
+    scope: scope,
+  })
 
-  onCleanup(stop);
+  onCleanup(stop)
 
   return createMemo(() => result().val)
 }
