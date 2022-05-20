@@ -15,7 +15,16 @@ type Gate<Props> = {
   set: Event<Props>;
 };
 
+type ExtractStore<T extends Record<string, Store<unknown>>> = {
+  [Key in keyof T]: T[Key] extends Store<infer U> ? Ref<UnwrapRef<U>> : never
+ }
+
+ export interface UseVModel {
+   <T>(vm: Store<T>): Ref<T>
+   <T extends Record<string, Store<any>>>(vm: T): ExtractStore<T>
+ }
+export function useVModel<T>(vm: Store<T>): Ref<UnwrapRef<T>>
+export function useVModel<T extends Record<string, Store<any>>>(vm: T): ExtractStore<T>
 export function useStore<T>(store: Store<T>): DeepReadonly<Ref<T>>
-export function useVModel<T>(store: Store<T>): Ref<UnwrapRef<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props): void
