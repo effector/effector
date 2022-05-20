@@ -1,0 +1,16 @@
+name: Add contributors
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  add-contributors:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: BobAnkh/add-contributors@v0.2.2
+      with:
+        CONTRIBUTOR: '## Contributors'
+        ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        COMMIT_MESSAGE: 'docs(README): update contributors'

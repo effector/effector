@@ -229,6 +229,7 @@ export const is: {
   effect(obj: unknown): obj is Effect<any, any, any>
   domain(obj: unknown): obj is Domain
   scope(obj: unknown): obj is Scope
+  attached(obj: unknown): obj is Effect<any, any, any>
 }
 
 interface InternalStore<State> extends Store<State> {
@@ -3062,3 +3063,13 @@ export function allSettled(
   unit: Unit<void>,
   config: {scope: Scope},
 ): Promise<void>
+
+export function createWatch<T>({
+  unit,
+  fn,
+  scope,
+}: {
+  unit: Unit<T>
+  fn: (value: T) => any
+  scope?: Scope
+}): Subscription

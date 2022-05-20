@@ -77,7 +77,7 @@ const firstNameUppercaseReceived = firstNameReceived.map(
 )
 
 firstNameReceived.watch(firstName => console.log('First name', firstName))
-lastNameReceived.watch(firstName => console.log('Last name', firstName))
+lastNameReceived.watch(lastName => console.log('Last name', lastName))
 firstNameUppercaseReceived.watch(firstName =>
   console.log('Upper case', firstName)
 )

@@ -11,18 +11,45 @@ description: Метод для связывания юнитов связью в
 ## Формула
 
 ```ts
-sample({source?, clock?, fn?, target?}): target
+sample({ source?, clock?, filter?, fn?, target?}): target
 ```
 
 При срабатывании `clock` прочитать значение из `source` и передать в `target`
 
 - Если `clock` не передан, sample будет срабатывать при каждом обновлении `source`.
+- Если не передан, продолжить выполнение как есть. Если `filter` возвращает `false` или его значение `Store<false>`, то отменить выполнение, а иначе продолжить
 - Если передан `fn`, то при срабатывании передать значения из `source` и `clock` в эту функцию, а в `target` передать результат вычисления
 - Если `target` не передан, то sample создаст и вернёт новый [юнит](../../glossary.md#common-unit)
 
 ## Иллюстрация принципа работы
 
 ![Иллюстрация принципа работы](https://s9.gifyu.com/images/sample-visualization.gif)
+
+## Тип создаваемого `target`
+
+Если `target` не передан, то он будет создан при вызове. Тип создаваемого юнита описан в данной таблице:
+
+| clock\source          | [_Store_](Store.md) | [_Event_](Event.md) | [_Effect_](Effect.md) |
+| --------------------- | ------------------- | ------------------- | --------------------- |
+| [_Store_](Store.md)   | `Store`             | `Event`             | `Event`               |
+| [_Event_](Event.md)   | `Event`             | `Event`             | `Event`               |
+| [_Effect_](Effect.md) | `Event`             | `Event`             | `Event`               |
+
+Использование таблицы:
+
+1. Выбираем тип источника `source`, это столбец
+2. Тип `clock` - это строка
+3. Устанавливаем соответствие между столбцом и строкой
+
+Например:
+
+```ts
+const $store = sample({clock: $store, source: $store})
+// Результатом будет стор, так как source и clock являются сторами
+
+const event = sample({clock: event, source: $store})
+// Результатом будет эвент, так как clock - не стор
+```
 
 ## `sample({clock?, source?, fn?, target?, greedy?})`
 
@@ -80,7 +107,7 @@ sample({source?, clock?, fn?, target?}): target
 
 ```js
 const $userName = createStore('john')
-const signIn = createEffect(params => {
+const signIn = createEffect((params) => {
   console.log(params)
 })
 const submitForm = createEvent()
@@ -135,7 +162,7 @@ submitForm(12345678)
 
 ```js
 const $userName = createStore('john')
-const signIn = createEffect(params => {
+const signIn = createEffect((params) => {
   console.log(params)
 })
 const submitForm = createEvent()
@@ -160,6 +187,27 @@ submitForm(12345678)
 
 [Запустить пример](https://share.effector.dev/nln8pwfj)
 
+## `sample({name?})`
+
+:::note
+Добавлено в effector 20.4.0
+:::
+
+Любой [юнит](../../glossary.md#unit) в эффекторе может иметь имя, поле `name` в sample позволяет указать имя создаваемому `target`
+
+```js
+import {createStore, sample} from 'effector'
+
+const foo = createStore(null)
+
+const sampled = sample({
+  source: foo,
+  name: 'sampled foo',
+})
+
+console.log(sampled.shortName) // 'sampled foo'
+```
+
 ## Объекты и массивы в `source`
 
 ### Объект со сторами
@@ -167,7 +215,7 @@ submitForm(12345678)
 :::note
 Добавлено в effector 20.8.0
 :::
-sample может быть вызван с объектом со [сторами](./Store.md) в `source`:
+sample может быть вызван с объектом [сторов](./Store.md) в `source`:
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
@@ -182,7 +230,7 @@ const target = sample({
   source: {a, b},
 })
 
-target.watch(obj => {
+target.watch((obj) => {
   console.log('sampled object', obj)
 })
 
@@ -212,7 +260,7 @@ const target = sample({
   source: [a, b],
 })
 
-target.watch(obj => {
+target.watch((obj) => {
   console.log('sampled array', obj)
 })
 
@@ -261,49 +309,57 @@ sample({
 
 [Запустить пример](https://share.effector.dev/1YEHUFs7)
 
-## Тип создаваемого `target`
+## Пример с filter
 
-Если `target` не передан, то он будет создан при вызове. Тип создаваемого юнита описан в данной таблице:
-
-| clock\source          | [_Store_](Store.md) | [_Event_](Event.md) | [_Effect_](Effect.md) |
-| --------------------- | ------------------- | ------------------- | --------------------- |
-| [_Store_](Store.md)   | `Store`             | `Event`             | `Event`               |
-| [_Event_](Event.md)   | `Event`             | `Event`             | `Event`               |
-| [_Effect_](Effect.md) | `Event`             | `Event`             | `Event`               |
-
-Использование таблицы:
-
-1. Выбираем тип источника `source`, это столбец
-2. Тип `clock` - это строка
-3. Устанавливаем соответствие между столбцом и строкой
-
-Например:
-
-```ts
-const $store = sample({clock: $store, source: $store})
-// Результатом будет стор, так как source и clock являются сторами
-
-const event = sample({clock: event, source: $store})
-// Результатом будет эвент, так как clock - не стор
-```
-
-## Поле `name`
-
-:::note
-Добавлено в effector 20.4.0
+:::note since
+effector Halley 22.2.0
 :::
 
-Любой [юнит](../../glossary.md#unit) в эффекторе может иметь имя, поле `name` в sample позволяет указать имя создаваемому `target`
+Новый вариант использования `sample` работает так же, но с одним дополнительным методом `filter`. Когда `filter` возвращает `true` продолжить выполнение, иначе отменить. Взглянем на пример ниже.
+
+Вася хочет отправить Пете деньги. Вася - отправитель, а Петя - получатель. Чтобы отправить деньги, отправитель должен знать адрес получателя, кроме того транзакция должна быть подписана. Пример показывает как работает `sample` с `filter`. Основные моменты, которые необходимо учесть:
+
+1. Убедиться, что баланс положительный и больше чем отправляемая сумма.
+2. Наличие адреса получателя
+3. Подписанная транзакция
+4. Убедиться, что баланс отправителя изменился
 
 ```js
-import {createStore, sample} from 'effector'
-
-const foo = createStore(null)
-
-const sampled = sample({
-  source: foo,
-  name: 'sampled foo',
+import {createStore, createEvent, createEffect, sample} from 'effector'
+const sign = createEvent()
+const sentMoney = createEvent()
+const $recipientAddress = createStore('a23x3xd')
+const $balance = createStore(20000)
+const $isSigned = createStore(false)
+const transactionFx = createEffect(
+  ({amountToSend, recipientAddress}) =>
+    new Promise((res) =>
+      setTimeout(res, 3000, {
+        amount: amountToSend,
+        recipientAddress,
+      }),
+    ),
+)
+$isSigned.on(sign, () => true).reset(transactionFx)
+$balance.on(transactionFx.doneData, (balance, {amount}) => balance - amount)
+sample({
+  source: {
+    recipientAddress: $recipientAddress,
+    isSigned: $isSigned,
+    balance: $balance,
+  },
+  clock: sentMoney,
+  filter: ({isSigned, balance}, amountToSend) =>
+    isSigned && balance > amountToSend,
+  fn({recipientAddress}, amountToSend) {
+    return {recipientAddress, amountToSend}
+  },
+  target: transactionFx,
 })
-
-console.log(sampled.shortName) // 'sampled foo'
+$balance.watch((balance) => console.log('balance: ', balance))
+$isSigned.watch((isSigned) => console.log('is signed: ', isSigned))
+sign()
+sentMoney(1000)
 ```
+
+[Запустить пример](https://share.effector.dev/XTxkCYC0)

@@ -114,8 +114,8 @@ function normalizeClassList(
     classList.forEach(className => {
       const name =
         typeof className === 'string'
-          ? className
-          : className.map(optionalClass => optionalClass || '')
+          ? classListArray(className)
+          : className.map(optionalClass => classListArray(optionalClass || ''))
       const enabled =
         typeof className === 'string'
           ? true
@@ -124,8 +124,16 @@ function normalizeClassList(
       cb({name, enabled})
     })
   } else {
-    forIn(classList, (enabled, name) => {
+    forIn(classList, (enabled, names) => {
+      const name = classListArray(names)
       cb({name, enabled})
     })
   }
+}
+
+function classListArray(classNames: string): string[] {
+  return classNames
+    .split(' ')
+    .map(name => name.trim())
+    .filter(name => name.length > 0)
 }

@@ -70,4 +70,4 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/9v1FdQus)
+[Try it](https://share.effector.dev/u6YeYVaM)

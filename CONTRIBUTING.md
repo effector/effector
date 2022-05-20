@@ -82,6 +82,7 @@ Change version in [packages.config.js](https://github.com/effector/effector/blob
 - Fork the repo.
 - Create a new feature branch based on the `master` branch.
 - Make sure all tests pass and there are no linting errors.
+- Please, write [a good commit message](https://cbea.ms/git-commit/), explaining why not how.
 - Submit a pull request, referencing any issues it addresses.
 
 Please try to keep your pull request focused in scope and avoid including unrelated commits.

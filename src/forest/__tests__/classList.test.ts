@@ -1,5 +1,5 @@
 import type {BrowserObject} from 'webdriverio'
-import {createEvent, restore} from 'effector'
+import {createEvent, createStore, restore} from 'effector'
 import {h, spec, using} from 'forest'
 
 // let addGlobals: Function
@@ -82,6 +82,25 @@ it('supports setting static object class with class attr', async () => {
       <div class='foreign example another'>content</div>
       "
     `)
+})
+it('supports setting static list of classes in a single string', async () => {
+  const [s1] = await exec(async () => {
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        classList: ['example another', 'first second'],
+        attr: {class: 'foreign'},
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div class='foreign example another first second'>
+      content
+    </div>
+    "
+  `)
 })
 it('supports setting dynamic object class', async () => {
   const [s1, s2] = await exec(async () => {
@@ -247,6 +266,26 @@ it('supports merging static classList h with spec of different types', async () 
     `)
 })
 
+it('allows to set many classes at the same property', async () => {
+  const [s1] = await exec(async () => {
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        classList: ['first'],
+        fn() {
+          spec({classList: {'second third': true}})
+        },
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div class='second third first'>content</div>
+      "
+    `)
+})
+
 it('supports merging dynamic spec classList', async () => {
   const [s1, s2, s3] = await exec(async () => {
     const setClassA = createEvent<string>()
@@ -283,6 +322,62 @@ it('supports merging dynamic spec classList', async () => {
   expect(s3).toMatchInlineSnapshot(`
       "
       <div class='demo third'>content</div>
+      "
+    `)
+})
+
+it('allows to dynamically set many classes at the one property', async () => {
+  const [s1, s2, s3, s4, s5] = await exec(async () => {
+    const setClassA = createEvent<string | null>()
+    const $classA = restore(setClassA, null)
+    const setClassB = createEvent<boolean>()
+    const $classB = restore(setClassB, false)
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        fn() {
+          spec({classList: [$classA]})
+          spec({classList: {'first second third': $classB}})
+        },
+      })
+    })
+    await act()
+    await act(() => {
+      setClassA('demo foo bar')
+    })
+    await act(() => {
+      setClassB(true)
+    })
+    await act(() => {
+      setClassA(null)
+    })
+    await act(() => {
+      setClassB(false)
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
+      "
+    `)
+  expect(s2).toMatchInlineSnapshot(`
+      "
+      <div class='demo foo bar'>content</div>
+      "
+    `)
+  expect(s3).toMatchInlineSnapshot(`
+      "
+      <div class='demo foo bar first second third'>content</div>
+      "
+    `)
+  expect(s4).toMatchInlineSnapshot(`
+      "
+      <div class='first second third'>content</div>
+      "
+    `)
+  expect(s5).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
       "
     `)
 })
@@ -365,6 +460,45 @@ it('example from proposal #599 with overriding false values', async () => {
   expect(s1).toMatchInlineSnapshot(`
       "
       <div class='zero first second third'>content</div>
+      "
+    `)
+})
+
+it('do not set static class if value is false', async () => {
+  const [s1] = await exec(async () => {
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        fn() {
+          spec({classList: {first: false, second: false}})
+        },
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
+      "
+    `)
+})
+
+it('do not set dynamic class if value is false', async () => {
+  const [s1] = await exec(async () => {
+    const $class = createStore(false)
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        fn() {
+          spec({classList: {first: $class, second: false}})
+        },
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>content</div>
       "
     `)
 })

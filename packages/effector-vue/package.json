@@ -73,6 +73,10 @@
   "keywords": [
     "vue",
     "composition api",
+    "business",
+    "logic",
+    "data",
+    "flow",
     "state management",
     "state manager",
     "algebraic effects",

@@ -11,6 +11,8 @@ Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use 
 
 Use cases: declarative way to pass values from stores to effects and argument preprocessing.
 
+Since `effector 22.4.0`, it is available to check whether effect is created via `attach` method — [`is.attached`](./is.md#isattachedvalue).
+
 ## Formulae
 
 ```ts
@@ -166,7 +168,7 @@ resultFx = attach({
 **Arguments**
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
-- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
 
 **Returns**
 

@@ -1,11 +1,13 @@
 import type {DOMElement} from 'react'
-import {render as renderDom, unmountComponentAtNode} from 'react-dom'
+import {Root, createRoot} from 'react-dom/client'
+
 import {act} from 'react-dom/test-utils'
 
 export {act}
 
 export let container = null as unknown as HTMLDivElement
 let dom: typeof globalThis
+let root: Root | null
 beforeEach(() => {
   if (typeof document === 'undefined') {
     if (!dom) {
@@ -21,16 +23,20 @@ beforeEach(() => {
 })
 export const cleanup = async () =>
   act(async () => {
-    if (!container) return
-    unmountComponentAtNode(container)
-    container.remove()
+    if (!container && !root) return
+    root?.unmount()
+    root = null
+    container?.remove()
     container = null as unknown as HTMLDivElement
   })
 afterEach(cleanup)
 
 export const render = async (node: DOMElement<any, any>) =>
   act(async () => {
-    renderDom(node, container)
+    if (!root) {
+      root = createRoot(container)
+    }
+    root.render(node)
   })
 export async function renderHTML(node: DOMElement<any, any>) {
   await render(node)

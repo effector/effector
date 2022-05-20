@@ -139,6 +139,7 @@ const sidebar = {
   'TypeScript guide': [
     'typescript/typing-effector',
     'typescript/usage-with-effector-react',
+    'typescript/utility-types',
   ],
   Recipes: [
     'recipes/recipes',

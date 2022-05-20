@@ -50,10 +50,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '22.2.0',
+  effector: '22.3.0',
   'effector-react': '22.0.6',
   'effector-vue': '22.1.0',
-  forest: '0.20.3',
+  forest: '0.21.1',
 }
 
 const issueUrl = (tag: string) =>
@@ -159,6 +159,9 @@ export default {
     'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.mjs',
     typings: 'index.d.ts',
+    dependencies: {
+      'use-sync-external-store': '^1.0.0',
+    },
     peerDependencies: {
       react: '>=16.8.0 <19.0.0',
       effector: '^22.0.2',
