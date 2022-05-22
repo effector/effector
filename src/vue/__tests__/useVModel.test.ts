@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {useVModel} from 'effector-vue/composition'
-import {createEvent, createStore} from 'effector'
+import {createEvent, createStore, restore} from 'effector'
 import {shallowMount} from 'vue-test-utils-next'
 
 jest.mock('vue', () => require('vue-next'))
-
 
 it('updated value of input if store changed from outside', async () => {
   const updated = createEvent()
@@ -13,8 +12,9 @@ it('updated value of input if store changed from outside', async () => {
       {name: 'HTML', points: 10}
     ]
   })
+
   $user
-  .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
+    .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
 
   const wrapper = shallowMount({
     template: `
@@ -24,6 +24,7 @@ it('updated value of input if store changed from outside', async () => {
     `,
     setup() {
       const user = useVModel($user)
+      user.value.skills
       return {user}
     }
   })
@@ -145,4 +146,118 @@ it('[v-model] works correct with radio (like vue-3 way)', async () => {
 
   await wrapper.find('[data-test="gender"]').setValue()
   expect($gender.getState()).toEqual('female')
+})
+
+it('[v-model] default values rendered correct when passing object with Store values', async () => {
+  const $user = {
+    name: createStore('John'),
+    surname: createStore('Doe'),
+  }
+
+  const wrapper = shallowMount({
+    template: `
+      <div>
+        <input v-model="user.name" data-test="name">
+        <input v-model="user.surname" data-test="surname">
+      </div>
+    `,
+    setup() {
+      const user = useVModel($user)
+
+      return {user}
+    }
+  })
+
+  const nameInput = wrapper.find('[data-test="name"]').element as any
+  const surnameInput = wrapper.find('[data-test="surname"]').element as any
+
+  expect(nameInput.value).toBe('John')
+  expect(surnameInput.value).toBe('Doe')
+})
+
+it('[v-model] changed deep value', async () => {
+  const updated = createEvent()
+  const $user = createStore({
+    skills: [
+      {name: 'HTML', points: 10}
+    ]
+  })
+
+  $user
+    .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
+
+  const userForm = {
+    base: $user
+  }
+
+  const wrapper = shallowMount({
+    template: `
+      <div>
+        <input v-model="user.base.skills[0].points" data-test="skills.points">
+      </div>
+    `,
+    setup() {
+      const user = useVModel(userForm)
+
+      return {user}
+    }
+  })
+  await wrapper.find('[data-test="skills.points"]').setValue(15)
+
+  expect($user.getState()).toEqual({
+    skills: [{name: 'HTML', points: '15'}]
+  })
+
+  updated()
+
+  await wrapper.vm.$nextTick()
+  // @ts-ignore
+  expect(wrapper.find('[data-test="skills.points"]').element.value).toBe('20')
+})
+
+it('[v-model] change each store value separately', async () => {
+  const nameChanged = createEvent<string>()
+  const surnameChanged = createEvent<string>()
+
+  const $name = restore(nameChanged, 'John')
+  const $surname = restore(surnameChanged, 'Doe')
+
+  const $user = {
+    name: $name,
+    surname: $surname,
+  }
+
+  const wrapper = shallowMount({
+    template: `
+      <div>
+        <input v-model="user.name" data-test="name">
+        <input v-model="user.surname" data-test="surname">
+      </div>
+    `,
+    setup() {
+      const user = useVModel($user)
+
+      return {user}
+    }
+  })
+
+  const nameInput = wrapper.find('[data-test="name"]').element as any
+  const surnameInput = wrapper.find('[data-test="surname"]').element as any
+
+  expect(nameInput.value).toBe('John')
+  expect(surnameInput.value).toBe('Doe')
+
+  await wrapper.find('[data-test="name"]').setValue('Alan')
+  await wrapper.find('[data-test="surname"]').setValue('Boe')
+
+  expect($name.getState()).toEqual('Alan')
+  expect($surname.getState()).toEqual('Boe')
+
+  nameChanged('John')
+  surnameChanged('Doe')
+
+  await wrapper.vm.$nextTick()
+
+  expect(nameInput.value).toBe('John')
+  expect(surnameInput.value).toBe('Doe')
 })
