@@ -78,6 +78,7 @@ it('allows calls without scope, if called in safe mode', async () => {
     fn = scopeBind(inc, {safe: true})
   })
 
+  trigger()
   await Promise.resolve()
   fn!()
   expect($count.getState()).toBe(1)
