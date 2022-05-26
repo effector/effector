@@ -2999,7 +2999,7 @@ export function serialize(
  * @param unit event to bind
  * @returns function which will trigger an event in a given scope
  */
-export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T) => void
+export function scopeBind<T>(unit: Event<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
 /**
  * Bind effect to a scope to be called later.
  *
@@ -3007,7 +3007,7 @@ export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T
  * @param unit effect to bind
  * @returns function which will trigger an effect in a given scope and returns a promise with a result
  */
-export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope: Scope}): (params: P) => Promise<D>
+export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
 
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
