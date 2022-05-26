@@ -6,9 +6,12 @@ import type {Scope} from '../unit.h'
 import type {Unit} from '../index.h'
 
 /** bind event to scope */
-export function scopeBind(unit: Unit, {scope}: {scope?: Scope} = {}) {
+export function scopeBind(
+  unit: Unit,
+  {scope, safe}: {scope?: Scope; safe?: true} = {},
+) {
   assert(
-    scope || forkPage,
+    scope || forkPage || safe,
     'scopeBind cannot be called outside of forked .watch',
   )
   const savedForkPage = scope || forkPage!
