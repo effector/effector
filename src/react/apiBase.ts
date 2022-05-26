@@ -1,4 +1,13 @@
-import {Store, is, Scope} from 'effector'
+import {
+  Store,
+  is,
+  createNode,
+  step,
+  clearNode,
+  scopeBind,
+  Scope,
+  Unit,
+} from 'effector'
 import React from 'react'
 import {useSyncExternalStore} from 'use-sync-external-store/shim'
 import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/with-selector'
@@ -38,6 +47,95 @@ export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   const currentValue = useSyncExternalStore(subscribe, read, read)
 
   return currentValue
+}
+
+export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
+  shape: Shape,
+  scope?: Scope,
+) {
+  const isShape = !is.unit(shape) && typeof shape === 'object'
+  const normShape = isShape ? shape : {unit: shape}
+  const entries = Object.entries(normShape)
+  const [current, clone, storeMap, stores] = React.useMemo(() => {
+    const [initial, clone] = Array.isArray(normShape)
+      ? [[], val => [...val]]
+      : [{}, val => ({...val})]
+    const stores = []
+    const storeIdMap = {}
+    for (const [key, value] of entries) {
+      if (is.store(value)) {
+        stores.push(value)
+        /** note that this allows only one occurence of the store */
+        storeMap[value.graphite.id] = key
+        initial[key] = stateReader(value, scope)
+      } else {
+        if (!is.unit(value)) throwError('expect useUnit argument to be a unit')
+        initial[key] = scope ? scopeBind(value, {scope}) : value
+      }
+    }
+    return [{ref: initial}, clone, storeMap, stores]
+  }, [...entries.flat(), scope])
+  const subscribe = React.useCallback(
+    (cb: () => void) => {
+      const seq = [
+        step.compute({
+          fn(value, _, stack) {
+            const storeId = stack.parent.node.id
+            const storeKey = storeMap[storeId]
+            current.ref = clone(current.ref)
+            current.ref[storeKey] = value
+          },
+        }),
+        /**
+         * 'effect' priority cannot be batched
+         * so we wait other effects to finish and then run batching
+         * this is not an essential to work
+         * just a fine tuning of a really low priority (ui) update
+         *
+         * also note that step.run({fn}) is an alias for
+         * step.compute({fn, priority: 'effect'})
+         * and since 22 version fn might be ommited if not used
+         * */
+        step.compute({priority: 'effect'}),
+        step.compute({priority: 'sampler', batch: true}),
+        step.run({fn: () => cb()}),
+      ]
+      if (scope) {
+        const node = createNode({node: seq})
+        const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
+        const storeLinks = []
+        stores.forEach(store => {
+          const id = store.graphite.id
+          const links = scopeLinks[id] || []
+          scopeLinks[id] = links
+          links.push(node)
+          storeLinks.push(links)
+        })
+        return () => {
+          storeLinks.forEach(links => {
+            const idx = links.indexOf(node)
+            if (idx !== -1) links.splice(idx, 1)
+          })
+          clearNode(node)
+        }
+      } else {
+        const node = createNode({
+          node: seq,
+          parent: stores,
+          family: {owners: stores},
+        })
+        return () => {
+          clearNode(node)
+        }
+      }
+    },
+    [current],
+  )
+  const read = React.useCallback(
+    () => (isShape ? current.ref : current.ref.unit),
+    [current],
+  )
+  return useSyncExternalStore(subscribe, read, read)
 }
 
 export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(

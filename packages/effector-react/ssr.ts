@@ -11,4 +11,5 @@ export {
   useList,
   useStoreMap,
   useEvent,
+  useUnit,
 } from 'effector-react/scope'
