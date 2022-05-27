@@ -63,6 +63,9 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
     const storeIdMap = {}
     for (const [key, value] of entries) {
       if (is.store(value)) {
+        if (stores.includes(value)) {
+          throwError(`useUnit store at key "${key}" is already exists in shape`)
+        }
         stores.push(value)
         /** note that this allows only one occurence of the store */
         storeMap[value.graphite.id] = key
