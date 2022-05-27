@@ -55,11 +55,10 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
 ) {
   const isShape = !is.unit(shape) && typeof shape === 'object'
   const normShape = isShape ? shape : {unit: shape}
+  const isList = Array.isArray(normShape)
   const entries = Object.entries(normShape)
-  const [current, clone, storeMap, stores] = React.useMemo(() => {
-    const [initial, clone] = Array.isArray(normShape)
-      ? [[], val => [...val]]
-      : [{}, val => ({...val})]
+  const [current, storeMap, stores] = React.useMemo(() => {
+    const initial = isList ? [] : {}
     const stores = []
     const storeIdMap = {}
     for (const [key, value] of entries) {
@@ -73,7 +72,7 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
         initial[key] = scope ? scopeBind(value, {scope}) : value
       }
     }
-    return [{ref: initial}, clone, storeMap, stores]
+    return [{ref: initial}, storeMap, stores]
   }, [...entries.flat(), scope])
   const subscribe = React.useCallback(
     (cb: () => void) => {
@@ -82,7 +81,7 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
           fn(value, _, stack) {
             const storeId = stack.parent.node.id
             const storeKey = storeMap[storeId]
-            current.ref = clone(current.ref)
+            current.ref = isList ? [...current.ref] : {...current.ref}
             current.ref[storeKey] = value
           },
         }),
