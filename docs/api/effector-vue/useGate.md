@@ -9,11 +9,11 @@ description: Using a gate to consume data from view. Designed for vue 3
 
 ## `useGate(GateComponent, props)`
 
-Using a [_`Gate`_](Gate.md) to consume data from view. Designed for vue 3
+Using a [_`Gate`_](./Gate.md) to consume data from view. Designed for vue 3
 
 **Arguments**
 
-1. `GateComponent` (_Gate_)
+1. `GateComponent` ([_Gate_](./Gate.md))
 2. `props` (_Props_)
 
 **Returns**

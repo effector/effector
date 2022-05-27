@@ -226,6 +226,7 @@ export function createStore<State>(
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
       assertNodeSet(nodeSet, '.on', 'first argument')
+      assert(isFunction(fn), 'second argument should be a function')
       deprecate(
         !getMeta(store, 'derived'),
         '.on in derived store',

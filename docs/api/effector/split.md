@@ -12,8 +12,9 @@ Choose one of cases by given conditions. It "splits" source unit into several ev
 Mode in which target case is selected by name of it's field. Case could be selected from data in `source` by [case function](./split.md#case-function) or from external [case store](./split.md#case-store) which keept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
 
 **See also**:
-* [case store](./split.md#case-store)
-* [case function](./split.md#case-function)
+
+- [case store](./split.md#case-store)
+- [case function](./split.md#case-function)
 
 ### Matching mode
 
@@ -21,8 +22,9 @@ Mode in which each case sequentially matched by stores and functions in fields o
 If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
 
 **See also**:
-* [matching store](./split.md#matcher-store)
-* [matching function](./split.md#matcher-function)
+
+- [matching store](./split.md#matcher-store)
+- [matching function](./split.md#matcher-function)
 
 ### Case store
 
@@ -332,3 +334,45 @@ message('Hi!')
 ```
 
 [Try it](https://share.effector.dev/ke2tM78I)
+
+## split with clock
+
+:::note
+Since effector 22.2.0
+:::
+
+It works the same like [split with cases](./split.md#split-with-cases), however computations in `split` will be started after `clock` is triggered.
+
+```js
+split({source, clock?, match, cases})
+```
+
+#### Example
+
+```js
+const options = ['save', 'delete', 'forward']
+const $message = createStore({id: 1, text: 'Bring me a cup of coffee, please!'})
+const $mode = createStore('')
+const selectedMessageOption = createEvent()
+const saveMessageFx = createEffect(() => 'save')
+const forwardMessageFx = createEffect(() => 'forward')
+const deleteMessageFx = createEffect(() => 'delete')
+
+$mode.on(selectedMessageOption, (_, opt) => options.find(item => item === opt))
+
+split({
+  source: $message,
+  clock: selectedMessageOption,
+  match: $mode,
+  cases: {
+    save: saveMessageFx,
+    delete: deleteMessageFx,
+    forward: forwardMessageFx,
+  },
+})
+
+selectedMessageOption('delet') // nothing happens
+selectedMessageOption('delete')
+```
+
+[Try it](https://share.effector.dev/VJmD5KdN)
