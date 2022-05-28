@@ -1,4 +1,14 @@
-import {clearNode, createNode, createWatch, is, Scope, scopeBind, step, Store, Unit} from 'effector'
+import {
+  clearNode,
+  createNode,
+  createWatch,
+  is,
+  Scope,
+  scopeBind,
+  step,
+  Store,
+  Unit,
+} from 'effector'
 import {throwError} from './throw'
 import {Accessor, batch, createMemo, createSignal, onCleanup} from 'solid-js'
 
@@ -8,7 +18,7 @@ const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
 
 export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
   shape: Shape,
-  scope?: Scope
+  scope?: Scope,
 ) {
   const isShape = !is.unit(shape) && typeof shape === 'object'
   const normShape = isShape ? shape : {unit: shape}
@@ -32,7 +42,7 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
       storeSetterMap[key] = set
     } else {
       if (!is.unit(value)) throwError('expected useUnit argument to be a unit')
-      initial[key] = scope ? scopeBind(value, { scope }) : value
+      initial[key] = scope ? scopeBind(value, {scope}) : value
     }
   }
 
@@ -47,8 +57,8 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
             storeSetterMap[key](() => store.getState())
           }
         })
-      }
-    })
+      },
+    }),
   ]
 
   if (scope) {
