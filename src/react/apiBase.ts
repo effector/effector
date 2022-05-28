@@ -60,7 +60,7 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
   const [current, storeMap, stores] = React.useMemo(() => {
     const initial = isList ? [] : {}
     const stores = []
-    const storeIdMap = {}
+    const storeMap = {}
     for (const [key, value] of entries) {
       if (is.store(value)) {
         if (stores.includes(value)) {
