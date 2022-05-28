@@ -5,7 +5,7 @@ title: API Reference
 
 ## Reactive helpers
 
-- [useStore(store)](./useStore.md)
+- [useUnit(store)](./useUnit.md)
 - [useStoreMap({ store, keys, fn })](./useStoreMap.md)
 
 ## Gate API
@@ -14,6 +14,3 @@ title: API Reference
 - [createGate()](./createGate.md)
 - [useGate(GateComponent, props)](./useGate.md)
 
-## effector-solid/scope API
-
-- [useEvent(unit)](./useEvent.md)
