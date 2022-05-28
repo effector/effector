@@ -45,7 +45,7 @@ This hook is very useful for working with lists, especially with large ones
 
 ```js
 import {createStore} from 'effector'
-import {useStore, useStoreMap} from 'effector-solid'
+import {useUnit, useStoreMap} from 'effector-solid'
 import {For} from 'solid-js/web'
 
 const data = [
@@ -85,7 +85,7 @@ const User = ({id}) => {
 }
 
 const UserList = () => {
-  const ids = useStore($ids)
+  const ids = useUnit($ids)
   
   return (
     <For each={ids()}>
