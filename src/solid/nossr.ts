@@ -1,14 +1,6 @@
-import {Event, Store} from 'effector'
-import {useStoreBase, useStoreMapBase} from './lib/base'
+import {Store} from 'effector'
+import {useStoreMapBase, useUnitBase} from './lib/base'
 import {Accessor} from 'solid-js'
-
-export function useEvent<T>(event: Event<T>): (payload: T) => T {
-  return event
-}
-
-export function useStore<State>(store: Store<State>): Accessor<State> {
-  return useStoreBase(store)
-}
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
   configOrStore:
@@ -22,4 +14,7 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
   separateFn?: (state: State, keys: Keys) => Result,
 ): Accessor<Result> {
   return useStoreMapBase([configOrStore, separateFn])
+}
+export function useUnit(shape) {
+  return useUnitBase(shape)
 }

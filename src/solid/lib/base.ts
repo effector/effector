@@ -1,26 +1,86 @@
-import {createWatch, is, Scope, Store} from 'effector'
+import {clearNode, createNode, createWatch, is, Scope, scopeBind, step, Store, Unit} from 'effector'
 import {throwError} from './throw'
-import {Accessor, createMemo, createSignal, onCleanup} from 'solid-js'
+import {Accessor, batch, createMemo, createSignal, onCleanup} from 'solid-js'
 
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
 const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
 
-export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
-  if (!is.store(store)) throwError('expect useStore argument to be a store')
+export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
+  shape: Shape,
+  scope?: Scope
+) {
+  const isShape = !is.unit(shape) && typeof shape === 'object'
+  const normShape = isShape ? shape : {unit: shape}
+  const isList = Array.isArray(normShape)
+  const entries = Object.entries(normShape)
 
-  const value = stateReader(store, scope)
-  const [currentValue, setCurrentValue] = createSignal(value)
+  const initial = isList ? [] : {}
+  const stores = []
+  const storeIdMap = {}
+  const storeSetterMap = {}
 
-  const stop = createWatch({
-    unit: store,
-    fn: upd => setCurrentValue(() => upd),
-    scope,
-  })
+  for (const [key, value] of entries) {
+    if (is.store(value)) {
+      if (stores.includes(value)) {
+        throwError(`useUnit store at key "${key}" is already exists in shape`)
+      }
+      stores.push(value)
+      storeIdMap[value.graphite.id] = key
+      const [get, set] = createSignal(stateReader(value, scope))
+      initial[key] = get
+      storeSetterMap[key] = set
+    } else {
+      if (!is.unit(value)) throwError('expected useUnit argument to be a unit')
+      initial[key] = scope ? scopeBind(value, { scope }) : value
+    }
+  }
 
-  onCleanup(stop)
+  const seq = [
+    step.compute({priority: 'effect'}),
+    step.compute({priority: 'sampler', batch: true}),
+    step.run({
+      fn: () => {
+        batch(() => {
+          for (const store of stores) {
+            const key = storeIdMap[store.graphite.id]
+            storeSetterMap[key](() => store.getState())
+          }
+        })
+      }
+    })
+  ]
 
-  return currentValue
+  if (scope) {
+    const node = createNode({node: seq})
+    const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
+    const storeLinks = []
+    stores.forEach(store => {
+      const id = store.graphite.id
+      const links = scopeLinks[id] || []
+      scopeLinks[id] = links
+      links.push(node)
+      storeLinks.push(links)
+    })
+    onCleanup(() => {
+      storeLinks.forEach(links => {
+        const idx = links.indexOf(node)
+        if (idx !== -1) links.splice(idx, 1)
+      })
+      clearNode(node)
+    })
+  } else {
+    const node = createNode({
+      node: seq,
+      parent: stores,
+      family: {owners: stores},
+    })
+    onCleanup(() => {
+      clearNode(node)
+    })
+  }
+
+  return isShape ? initial : initial.unit
 }
 
 export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(

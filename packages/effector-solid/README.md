@@ -25,7 +25,7 @@ pnpm add effector effector-solid
 ```js
 import {createStore, combine, createEvent} from 'effector'
 
-import {useStore} from 'effector-solid'
+import {useUnit} from 'effector-solid'
 
 const inputText = createEvent()
 
@@ -34,14 +34,19 @@ const $text = createStore('').on(inputText, (_, text) => text)
 const $size = createStore(0).on(inputText, (_, text) => text.length)
 
 const Form = () => {
-  const size = useStore($size)
-  const text = useStore($text)
+  const {
+    text,
+    size
+  } = useUnit({
+    size: $size,
+    text: $text
+  })
 
   return (
     <form>
       <input
         type="text"
-        onChange={e => inputText(e.currentTarget.value)}
+        onInput={e => inputText(e.currentTarget.value)}
         value={text()}
       />
       <p>Length: {size}</p>
@@ -50,7 +55,7 @@ const Form = () => {
 }
 ```
 
-[useStore](https://effector.dev/docs/api/effector-solid/useStore) in docs
+[useUnit](https://effector.dev/docs/api/effector-solid/useUnit) in docs
 [createStore](https://effector.dev/docs/api/effector/createStore) in docs
 [combine](https://effector.dev/docs/api/effector/combine) in docs
 [createEvent](https://effector.dev/docs/api/effector/createEvent) in docs
