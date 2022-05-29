@@ -1,1 +1,1 @@
-export * from '../../src/solid/ssr'
+export * from '../../src/solid/scope'

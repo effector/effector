@@ -54,7 +54,7 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
         batch(() => {
           for (const store of stores) {
             const key = storeIdMap[store.graphite.id]
-            storeSetterMap[key](() => store.getState())
+            storeSetterMap[key](() => stateReader(store, scope))
           }
         })
       },
