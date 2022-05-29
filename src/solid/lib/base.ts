@@ -32,14 +32,18 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
 
   for (const [key, value] of entries) {
     if (is.store(value)) {
-      if (stores.includes(value)) {
-        throwError(`useUnit store at key "${key}" is already exists in shape`)
+      const hasStore = Boolean(storeIdMap[value.graphite.id])
+      if (!hasStore) {
+        stores.push(value)
+        storeIdMap[value.graphite.id] = key
+        const [get, set] = createSignal(stateReader(value, scope))
+        initial[key] = get
+        storeSetterMap[key] = set
+      } else {
+        const origKey = storeIdMap[value.graphite.id]
+        initial[key] = initial[origKey]
+        storeSetterMap[key] = initial[origKey]
       }
-      stores.push(value)
-      storeIdMap[value.graphite.id] = key
-      const [get, set] = createSignal(stateReader(value, scope))
-      initial[key] = get
-      storeSetterMap[key] = set
     } else {
       if (!is.unit(value)) throwError('expected useUnit argument to be a unit')
       initial[key] = scope ? scopeBind(value, {scope}) : value
