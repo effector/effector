@@ -58,6 +58,8 @@ async function runTypeScript(testFiles: string[]) {
         effector: '../../../packages/effector/index.d.ts',
         'effector-react/scope': '../../../packages/effector-react/scope.d.ts',
         'effector-react': '../../../packages/effector-react/index.d.ts',
+        'effector-solid/scope': '../../../packages/effector-solid/scope.d.ts',
+        'effector-solid': '../../../packages/effector-solid/index.d.ts',
         'effector-vue': '../../../packages/effector-vue/index.d.ts',
         'forest/server': '../../../packages/forest/server.d.ts',
         forest: '../../../packages/forest/index.d.ts',

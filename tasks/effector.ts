@@ -8,6 +8,7 @@ import {
   rollupEffectorReact,
   rollupEffectorVue,
   rollupEffectorDom,
+  rollupEffectorSolid
 } from 'Builder/rollup'
 import {copyLicense, generatePackageJSON} from './common'
 
@@ -81,6 +82,27 @@ export default {
       ]),
     rollupEffectorReact,
     publishScript('effector-react'),
+  ],
+  'effector-solid': [
+    generatePackageJSON('effector-solid'),
+    copyLicense('effector-solid'),
+    () =>
+      massCopy('packages/effector-solid', 'npm/effector-solid', [
+        [
+          'index.d.ts',
+          [
+            'index.d.ts',
+            'effector-solid.cjs.d.ts',
+            'effector-solid.mjs.d.ts',
+            'effector-solid.umd.d.ts'
+          ],
+        ],
+        'README.md',
+        'package.json',
+        'scope.d.ts'
+      ]),
+    rollupEffectorSolid,
+    publishScript('effector-solid')
   ],
   'effector-vue': [
     generatePackageJSON('effector-vue'),

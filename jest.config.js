@@ -1,3 +1,5 @@
+const { resolve: resolvePath } = require('path')
+
 const watchPathIgnorePatterns = [
   '<rootDir>/.effector/',
   '<rootDir>/.github/',
@@ -20,6 +22,11 @@ const watchPathIgnorePatterns = [
 const transform = {
   '^.+\\.jsx?$': 'babel-jest',
   '^.+\\.tsx?$': 'babel-jest',
+}
+
+const solidTransform = {
+  '^.+\\.jsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
+  '^.+\\.tsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
 }
 
 const createDefaultConfig = () => ({
@@ -116,6 +123,7 @@ module.exports = {
   collectCoverageFrom: [
     '<rootDir>/src/effector/**/*.ts',
     '<rootDir>/src/react/**/*.ts',
+    '<rootDir>/src/solid/**/*.ts',
     '<rootDir>/src/forest/**/*.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
@@ -180,6 +188,13 @@ module.exports = {
               globals: {
                 IS_REACT_ACT_ENVIRONMENT: true,
               },
+            },
+            solid: {
+              testEnvironment: 'jsdom',
+              testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
+              resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
+              transform: solidTransform,
+              setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts']
             },
             vue: {
               testEnvironment: 'jsdom',

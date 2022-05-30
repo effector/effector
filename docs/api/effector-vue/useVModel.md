@@ -16,13 +16,14 @@ Designed for vue 3
 
 **Arguments**
 
-1. `store` (_Store_)
+1. `store` ([_Store_](../effector/Store.md))
+2. `shape of Stores` ([_Store_](../effector/Store.md))
 
 **Returns**
 
-(_State_)
+(State)
 
-### Example
+### Example 1 (Single Store)
 
 ```js
 import {createStore, createApi} from 'effector'
@@ -37,6 +38,45 @@ const $user = createStore({
 export default {
   setup() {
     const user = useVModel($user);
+
+    return {
+      user
+    }
+  }
+}
+```
+
+```html
+<div id="app">
+  <input type="text" v-model="user.name" />
+  <input type="text" v-model="user.surname" />
+
+  <div>
+    <input type="checkbox" v-model="user.skills" value="HTML" />
+    <input type="checkbox" v-model="user.skills" value="CSS" />
+    <input type="checkbox" v-model="user.skills" value="JS" />
+  </div>
+</div>
+```
+### Example 2 (Store Shape)
+
+```js
+import {createStore, createApi} from 'effector'
+import {useVModel} from 'effector-vue/composition'
+
+const $name = createStore('')
+const $surname = createStore('')
+const $skills = createStore([])
+
+const model = {
+  name: $name,
+  surname: $surname
+  skills: $skills
+}
+
+export default {
+  setup() {
+    const user = useVModel(model);
 
     return {
       user

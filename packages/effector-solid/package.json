@@ -1,0 +1,105 @@
+{
+  "name": "effector-solid",
+  "version": "0.22.0",
+  "description": "SolidJS bindings for effector",
+  "main": "effector-solid.cjs.js",
+  "module": "effector-solid.mjs",
+  "exports": {
+    ".": {
+      "import": "./effector-solid.mjs",
+      "require": "./effector-solid.cjs.js",
+      "default": "./effector-solid.mjs"
+    },
+    "./package.json": "./package.json",
+    "./effector-solid.mjs": "./effector-solid.mjs",
+    "./scope.mjs": "./scope.mjs",
+    "./scope": {
+      "import": "./scope.mjs",
+      "require": "./scope.js",
+      "default": "./scope.mjs"
+    },
+    "./effector-solid.umd": "./effector-solid.umd.js"
+  },
+  "umd:main": "effector-solid.umd.js",
+  "jsnext:main": "effector-solid.mjs",
+  "typings": "index.d.ts",
+  "peerDependencies": {
+    "solid-js": ">= 1.3.0",
+    "effector": "^22.0.2"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "index.d.ts",
+    "index.js.flow",
+    "effector-solid.mjs",
+    "effector-solid.mjs.map",
+    "effector-solid.cjs.js",
+    "effector-solid.cjs.js.map",
+    "effector-solid.umd.js",
+    "effector-solid.umd.js.map",
+    "compat.js",
+    "compat.js.map",
+    "effector-solid.cjs.js.flow",
+    "effector-solid.umd.js.flow",
+    "compat.js.flow",
+    "effector-solid.cjs.d.ts",
+    "effector-solid.mjs.d.ts",
+    "effector-solid.umd.d.ts",
+    "compat.d.ts",
+    "scope.js",
+    "scope.js.map",
+    "scope.mjs",
+    "scope.mjs.map",
+    "scope.d.ts"
+  ],
+  "keywords": [
+    "solid",
+    "solid-js",
+    "business",
+    "logic",
+    "data",
+    "flow",
+    "state management",
+    "state manager",
+    "algebraic effects",
+    "model",
+    "reactive",
+    "state",
+    "frp",
+    "event",
+    "effect",
+    "functional",
+    "store"
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": "https://github.com/effector/effector",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-solid,effector-solid%2Fscope",
+  "homepage": "https://effector.dev",
+  "engines": {
+    "node": ">=11.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "funding": [
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/zero_bias"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/effector"
+    }
+  ]
+}

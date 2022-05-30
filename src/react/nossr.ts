@@ -1,5 +1,10 @@
 import {Event, Store} from 'effector'
-import {useStoreBase, useStoreMapBase, useListBase} from './apiBase'
+import {
+  useStoreBase,
+  useStoreMapBase,
+  useListBase,
+  useUnitBase,
+} from './apiBase'
 
 /**
 bind event to scope
@@ -12,6 +17,10 @@ export function useEvent<T>(event: Event<T>): (payload: T) => T {
 
 export function useStore<State>(store: Store<State>): State {
   return useStoreBase(store)
+}
+
+export function useUnit(shape) {
+  return useUnitBase(shape)
 }
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
