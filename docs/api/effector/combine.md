@@ -166,7 +166,7 @@ $resultUsingArray.watch(console.log)
 $resultUsingObject.watch(console.log)
 // => {$a: "a", b: 2, c: [false], d: {value: 1}}
 $withFn.watch(console.log)
-// => {$a: "a", b: 2}
+// => {a: "a", b: 2}
 
 // will not trigger combine, but object and array will be changed because of reference
 // uncomment the code below to see changes
