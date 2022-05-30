@@ -107,6 +107,30 @@ const sidebar = {
     },
     {
       type: 'category',
+      label: 'effector-solid',
+      items: [
+        'api/effector-solid/effector-solid',
+        {
+          type: 'category',
+          label: 'Reactivity helpers',
+          items: [
+            'api/effector-solid/useUnit',
+            'api/effector-solid/useStoreMap',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Gate',
+          items: [
+            'api/effector-solid/gate',
+            'api/effector-solid/createGate',
+            'api/effector-solid/useGate',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'effector-vue',
       items: [
         'api/effector-vue/effector-vue',
