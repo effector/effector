@@ -37,7 +37,7 @@ useStoreMap({store, keys, fn, updateFilter?})
 
 **Returns**
 
-(_Accessor\<Result\>_)
+(_Accessor<Result\>_)
 
 #### Example
 
