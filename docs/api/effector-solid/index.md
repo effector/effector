@@ -5,7 +5,7 @@ title: API Reference
 
 ## Reactive helpers
 
-- [useUnit(store)](./useUnit.md)
+- [useUnit(unit)](./useUnit.md)
 - [useStoreMap({ store, keys, fn })](./useStoreMap.md)
 
 ## Gate API
