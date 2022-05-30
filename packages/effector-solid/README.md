@@ -55,7 +55,7 @@ const Form = () => {
 }
 ```
 
-[useUnit](https://effector.dev/docs/api/effector-solid/useUnit) in docs
-[createStore](https://effector.dev/docs/api/effector/createStore) in docs
-[combine](https://effector.dev/docs/api/effector/combine) in docs
-[createEvent](https://effector.dev/docs/api/effector/createEvent) in docs
+- [useUnit](https://effector.dev/docs/api/effector-solid/useUnit) in docs
+- [createStore](https://effector.dev/docs/api/effector/createStore) in docs
+- [combine](https://effector.dev/docs/api/effector/combine) in docs
+- [createEvent](https://effector.dev/docs/api/effector/createEvent) in docs
