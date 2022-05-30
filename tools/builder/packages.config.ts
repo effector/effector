@@ -53,6 +53,7 @@ const version = {
   effector: '22.3.0',
   'effector-react': '22.0.6',
   'effector-vue': '22.1.0',
+  'effector-solid': '0.22.0',
   forest: '0.21.1',
 }
 
@@ -178,6 +179,45 @@ export default {
     keywords: ['react', 'hooks', ...keywords],
     ...common,
     bugs: issueUrl('effector-react,effector-react%2Fscope'),
+  },
+  'effector-solid': {
+    name: 'effector-solid',
+    version: version['effector-solid'],
+    description: 'SolidJS bindings for effector',
+    main: 'effector-solid.cjs.js',
+    module: 'effector-solid.mjs',
+    exports: {
+      '.': {
+        import: './effector-solid.mjs',
+        require: './effector-solid.cjs.js',
+        default: './effector-solid.mjs',
+      },
+      './package.json': './package.json',
+      './effector-solid.mjs': './effector-solid.mjs',
+      './scope.mjs': './scope.mjs',
+      './scope': {
+        import: './scope.mjs',
+        require: './scope.js',
+        default: './scope.mjs',
+      },
+      './effector-solid.umd': './effector-solid.umd.js'
+    },
+    'umd:main': 'effector-solid.umd.js',
+    'jsnext:main': 'effector-solid.mjs',
+    typings: 'index.d.ts',
+    peerDependencies: {
+      "solid-js": ">= 1.3.0",
+      effector: '^22.0.2',
+    },
+    files: [
+      ...getFiles('effector-solid'),
+      ...compiledFile('scope'),
+      ...esmFile('scope'),
+      'scope.d.ts',
+    ],
+    keywords: ['solid', 'solid-js', ...keywords],
+    ...common,
+    bugs: issueUrl('effector-solid,effector-solid%2Fscope'),
   },
   'effector-vue': {
     name: 'effector-vue',
