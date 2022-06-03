@@ -91,6 +91,47 @@ nextPost()
 // => Загрузка поста... 
 // => Пост 2 имеет 5 комментариев 
 `,
+  "zh-cn": `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
+
+const nextPost = createEvent()
+
+const getCommentsFx = createEffect(async postId => {
+  const url = \`posts/\${postId}/comments\`
+  const base = 'https://jsonplaceholder.typicode.com'
+  const req = await fetch(\`\${base}\/\${url}\`)
+  return req.json()
+})
+
+const $postComments = createStore([])
+  .on(getCommentsFx.doneData, (_, comments) => comments)
+
+const $currentPost = createStore(1)
+  .on(getCommentsFx.done, (_, {params: postId}) => postId)
+
+const $status = combine(
+  $currentPost, $postComments, getCommentsFx.pending,
+  (postId, comments, isLoading) => isLoading
+    ? 'Loading post...'
+    : \`Post \${postId} has \${comments.length} comments\`
+)
+
+sample({
+  source: $currentPost,
+  clock: nextPost,
+  fn: postId => postId + 1,
+  target: getCommentsFx,
+})
+
+$status.watch(status => {
+  console.log(status)
+})
+// => Post 1 has 0 comments
+
+nextPost()
+
+// => Loading post... 
+// => Post 2 has 5 comments 
+`
 }
 
 const features = [
@@ -105,6 +146,10 @@ const features = [
         title: 'Типизация',
         description: 'Поддержка TypeScript в комплекте поставки',
       },
+      "zh-cn": {
+        title: '类型安全',
+        description: '开箱即用的 TypeScript 支持',
+      }
     },
   },
   {
@@ -118,6 +163,10 @@ const features = [
         title: 'Независимость от фреймворков',
         description: 'Работает с любыми UI и серверными фреймворками',
       },
+       "zh-cn": {
+        title: '与框架无关',
+        description: '可以使用任何 UI 或 服务器框架',
+      }
     },
   },
   {
@@ -131,6 +180,10 @@ const features = [
         title: 'Удобство в разработке',
         description: 'Логичный API и отзывчивое сообщество',
       },
+      "zh-cn": {
+        title: '开发人员友好',
+        description: '简单的API 和 有用的社区',
+      }
     },
   },
   {
@@ -145,6 +198,11 @@ const features = [
         title: 'Производительность',
         description: 'Статическая инициализация улучшает производительность',
       },
+      'zh-cn': {
+        title: '极致的性能',
+        description:
+          '静态初始化可提高运行时的性能',
+      }
     },
   },
   {
@@ -159,6 +217,10 @@ const features = [
         description:
           'Эффектор - компактная библиотека и поддерживает tree-shaking',
       },
+      "zh-cn": {
+        title: '非常小的 bundle size',
+        description: 'Effector 提供 small builds 和 支持 tree-shaking',
+      }
     },
   },
   {
@@ -172,6 +234,10 @@ const features = [
         title: 'Чистый, предсказуемый javascript',
         description: 'Никаких прокси и классов',
       },
+      "zh-cn": {
+        title: '简单、可预测的 JavaScript',
+        description: '没有代理，不需要类。只有您和您的数据',
+      }
     },
   },
 ]
@@ -181,6 +247,10 @@ const headings = {
     title: 'эффектор',
     tagline: 'Менеджер состояний',
   },
+  "zh-cn": {
+    title: 'effector',
+    tagline: '轻松实现业务逻辑',
+  }
 }
 
 const users = [
