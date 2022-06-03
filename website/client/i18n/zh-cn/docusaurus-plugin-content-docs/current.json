@@ -1,0 +1,50 @@
+{
+  "sidebar.docs.category.Introduction": {
+    "message": "介绍",
+    "description": "The label for category Introduction in sidebar docs"
+  },
+  "sidebar.docs.category.API": {
+    "message": "API文档",
+    "description": "The label for category API in sidebar docs"
+  },
+  "sidebar.docs.category.Top-level exports": {
+    "message": "其他功能",
+    "description": "The label for category Top-level exports in sidebar docs"
+  },
+  "sidebar.docs.category.Conventions": {
+    "message": "约定",
+    "description": "The label for category Conventions in sidebar docs"
+  },
+  "sidebar.docs.category.TypeScript guide": {
+    "message": "TypeScript 指南",
+    "description": "The label for category TypeScript guide in sidebar docs"
+  },
+  "sidebar.docs.category.Recipes": {
+    "message": "示例",
+    "description": "The label for category Recipes in sidebar docs"
+  },
+  "sidebar.docs.category.Advanced guide": {
+    "message": "高级指南",
+    "description": "The label for category Advanced guide in sidebar docs"
+  },
+  "sidebar.api.category.Introduction": {
+    "message": "介绍",
+    "description": "The label for category Introduction in sidebar api"
+  },
+  "sidebar.api.category.Conventions": {
+    "message": "约定",
+    "description": "The label for category Conventions in sidebar api"
+  },
+  "sidebar.api.category.TypeScript guide": {
+    "message": "TypeScript 指南",
+    "description": "The label for category TypeScript guide in sidebar api"
+  },
+  "sidebar.api.category.Recipes": {
+    "message": "示例",
+    "description": "The label for category Recipes in sidebar api"
+  },
+  "sidebar.api.category.Advanced guide": {
+    "message": "高级指南",
+    "description": "The label for category Advanced guide in sidebar api"
+  }
+}
