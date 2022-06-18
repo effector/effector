@@ -1,17 +1,8 @@
 import * as React from 'react'
 //@ts-ignore
 import {render, container, act} from 'effector/fixtures/react'
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  createDomain,
-  Store,
-  Event,
-  restore,
-} from 'effector'
+import {createStore, createEvent, createEffect, combine, Store} from 'effector'
 import {useUnit} from 'effector-react'
-import {argumentHistory} from 'effector/fixtures'
 
 describe('useUnit', () => {
   it('should bind single store', async () => {
@@ -101,13 +92,15 @@ describe('useUnit', () => {
     })
     expect($a.getState()).toEqual(initialValue + 1)
   })
-  it('should bind shape with store', async () => {
-    const $a = createStore(42)
+  it('should bind stores shape', async () => {
+    const $a = createStore(30)
+    const $b = createStore(10)
+    const $c = createStore(2)
 
     const View = () => {
-      const a = useUnit({a: $a})
+      const state = useUnit({a: $a, b: $b, c: $c})
 
-      return <div>{a.a}</div>
+      return <div>{state.a + state.b + state.c}</div>
     }
     await render(<View />)
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -116,55 +109,41 @@ describe('useUnit', () => {
       </div>
     `)
   })
-  it('should bind shape with event', async () => {
-    const initialValue = 42
-    const inc = createEvent()
-    const $a = createStore(initialValue).on(inc, s => s + 1)
+  it('should bind stores array shape', async () => {
+    const $a = createStore(30)
+    const $b = createStore(10)
+    const $c = createStore(2)
 
     const View = () => {
-      const up = useUnit({inc})
+      const [a, b, c] = useUnit([$a, $b, $c])
 
-      return (
-        <div>
-          <button id="btn" onClick={up.inc}>
-            up!
-          </button>
-        </div>
-      )
+      return <div>{a + b + c}</div>
     }
-
     await render(<View />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
-        <button
-          id="btn"
-        >
-          up!
-        </button>
+        42
       </div>
     `)
-
-    await act(async () => {
-      container.firstChild.querySelector('#btn').click()
-    })
-    expect($a.getState()).toEqual(initialValue + 1)
   })
-  it('should bind shape with effect', async () => {
+  it('should bind events shape', async () => {
     const initialValue = 42
-    const incFx = createEffect(() => {})
-    const $a = createStore(initialValue).on(incFx.done, s => s + 1)
+    const inc = createEvent()
+    const dec = createEvent()
+    const $a = createStore(initialValue)
+      .on(inc, s => s + 1)
+      .on(dec, s => s - 1)
 
     const View = () => {
-      const up = useUnit({ incFx })
+      const up = useUnit({inc, dec})
 
       return (
         <div>
           <button
             id="btn"
             onClick={() => {
-              const promise = up.incFx()
-
-              expect(promise).toBeInstanceOf(Promise)
+              up.inc()
+              up.dec()
             }}>
             up!
           </button>
@@ -186,6 +165,278 @@ describe('useUnit', () => {
     await act(async () => {
       container.firstChild.querySelector('#btn').click()
     })
-    expect($a.getState()).toEqual(initialValue + 1)
+    expect($a.getState()).toEqual(initialValue)
+  })
+  it('should bind effects shape', async () => {
+    const initialValue = 42
+    const incFx = createEffect(() => {})
+    const decFx = createEffect(() => {})
+    const $a = createStore(initialValue)
+      .on(incFx.done, s => s + 1)
+      .on(decFx.done, s => s - 1)
+
+    const View = () => {
+      const up = useUnit({incFx, decFx})
+
+      return (
+        <div>
+          <button
+            id="btn"
+            onClick={() => {
+              expect(up.incFx()).toBeInstanceOf(Promise)
+              expect(up.decFx()).toBeInstanceOf(Promise)
+            }}>
+            up!
+          </button>
+        </div>
+      )
+    }
+
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          up!
+        </button>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect($a.getState()).toEqual(initialValue)
+  })
+  it('should bind mixed shape', async () => {
+    const initialValue = 42
+    const inc = createEvent()
+    const decFx = createEffect(() => {})
+    const $a = createStore(initialValue)
+      .on(inc, s => s + 1)
+      .on(decFx.done, s => s - 1)
+
+    const View = () => {
+      const {a, b, c} = useUnit({a: $a, b: inc, c: decFx})
+
+      return (
+        <div>
+          {a}
+          <button
+            id="btn"
+            onClick={() => {
+              b()
+              expect(c()).toBeInstanceOf(Promise)
+            }}>
+            up
+          </button>
+        </div>
+      )
+    }
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+        <button
+          id="btn"
+        >
+          up
+        </button>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+        <button
+          id="btn"
+        >
+          up
+        </button>
+      </div>
+    `)
+  })
+  it('should bind mixed array', async () => {
+    const initialValue = 42
+    const inc = createEvent()
+    const decFx = createEffect(() => {})
+    const $a = createStore(initialValue)
+      .on(inc, s => s + 1)
+      .on(decFx.done, s => s - 1)
+
+    const View = () => {
+      const [a, b, c] = useUnit([$a, inc, decFx])
+
+      return (
+        <div>
+          {a}
+          <button
+            id="btn"
+            onClick={() => {
+              b()
+              expect(c()).toBeInstanceOf(Promise)
+            }}>
+            up
+          </button>
+        </div>
+      )
+    }
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+        <button
+          id="btn"
+        >
+          up
+        </button>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          42
+          <button
+            id="btn"
+          >
+            up
+          </button>
+        </div>
+      `)
+  })
+  it('should batch multiple updates', async () => {
+    const up = createEvent()
+    const $a = createStore(29).on(up, s => s + 1)
+    const $b = createStore(9).on(up, s => s + 1)
+    const $c = createStore(1).on(up, s => s + 1)
+    const $d = combine($b, $c, (b, c) => b + c)
+
+    const rendered = jest.fn()
+
+    const View = () => {
+      const state = useUnit({a: $a, d: $d})
+
+      rendered()
+
+      return <div>{state.a + state.d}</div>
+    }
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        39
+      </div>
+    `)
+
+    act(() => {
+      up()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+          <div>
+            42
+          </div>
+      `)
+    expect(rendered).toBeCalledTimes(2)
+  })
+  it('should support dynamic change of store', async () => {
+    const upA = createEvent()
+    const upB = createEvent()
+    const $a = createStore(42).on(upA, s => s + 1)
+    const $b = createStore(37).on(upB, s => s - 1)
+
+    const rendered = jest.fn()
+
+    const StoreRenderer: React.FC<{store: Store<number>}> = props => {
+      const {a} = useUnit({a: props.store})
+      rendered()
+      return <div>{a}</div>
+    }
+    const View = () => {
+      const [left, setLeft] = React.useState(true)
+
+      return (
+        <div>
+          <button
+            id="btn"
+            onClick={() => {
+              setLeft(s => !s)
+            }}>
+            switch
+          </button>
+          <StoreRenderer store={left ? $a : $b} />
+        </div>
+      )
+    }
+
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          42
+        </div>
+      </div>
+    `)
+
+    act(() => {
+      upB()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <button
+        id="btn"
+      >
+        switch
+      </button>
+      <div>
+        42
+      </div>
+    </div>
+  `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          36
+        </div>
+      </div>
+    `)
+
+    act(() => {
+      upB()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <button
+        id="btn"
+      >
+        switch
+      </button>
+      <div>
+        35
+      </div>
+    </div>
+  `)
+
+    expect(rendered).toBeCalledTimes(3)
   })
 })
