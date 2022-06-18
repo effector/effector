@@ -101,4 +101,91 @@ describe('useUnit', () => {
     })
     expect($a.getState()).toEqual(initialValue + 1)
   })
+  it('should bind shape with store', async () => {
+    const $a = createStore(42)
+
+    const View = () => {
+      const a = useUnit({a: $a})
+
+      return <div>{a.a}</div>
+    }
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        42
+      </div>
+    `)
+  })
+  it('should bind shape with event', async () => {
+    const initialValue = 42
+    const inc = createEvent()
+    const $a = createStore(initialValue).on(inc, s => s + 1)
+
+    const View = () => {
+      const up = useUnit({inc})
+
+      return (
+        <div>
+          <button id="btn" onClick={up.inc}>
+            up!
+          </button>
+        </div>
+      )
+    }
+
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          up!
+        </button>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect($a.getState()).toEqual(initialValue + 1)
+  })
+  it('should bind shape with effect', async () => {
+    const initialValue = 42
+    const incFx = createEffect(() => {})
+    const $a = createStore(initialValue).on(incFx.done, s => s + 1)
+
+    const View = () => {
+      const up = useUnit({ incFx })
+
+      return (
+        <div>
+          <button
+            id="btn"
+            onClick={() => {
+              const promise = up.incFx()
+
+              expect(promise).toBeInstanceOf(Promise)
+            }}>
+            up!
+          </button>
+        </div>
+      )
+    }
+
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          up!
+        </button>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect($a.getState()).toEqual(initialValue + 1)
+  })
 })
