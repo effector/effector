@@ -2,6 +2,7 @@
   "scripts": {
     "start": "docusaurus start",
     "start:ru": "docusaurus start --locale ru",
+    "start:zh-cn": "docusaurus start --locale zh-cn",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

@@ -22,6 +22,7 @@ const meta = {
   isTest: process.env.NODE_ENV === 'test',
   isCompat: false,
   isEsm: false,
+  isSolid: false
 }
 
 const isBrowserstackDomTest = !!process.env.DOM
@@ -54,6 +55,14 @@ const aliases = {
     default: resolveFromSources('../npm/effector-react'),
   },
   'effector-vue': resolveFromSources('vue'),
+  'effector-solid/scope': {
+    esm: 'effector-solid/scope.mjs',
+    compat: null,
+    build: null,
+    test: null,
+    default: null,
+  },
+  'effector-solid': resolveFromSources('solid'),
   Builder: resolveFromSources('../tools/builder'),
   effector: {
     esm: 'effector/effector.mjs',
@@ -74,28 +83,32 @@ const locationPlugin = resolvePath(
 )
 
 const babelConfig = {
-  presets: [
-    ['@babel/preset-react', {useBuiltIns: true}],
-    [
-      '@babel/preset-env',
-      {
-        loose: true,
-        useBuiltIns: 'entry',
-        corejs: 3,
-        modules: false,
-        shippedProposals: true,
-        targets: {
-          node: '10',
-          browsers: [
-            'last 2 Chrome versions',
-            'last 2 Firefox versions',
-            'last 2 Safari versions',
-            'last 1 Edge versions',
-          ],
+  presets(meta) {
+    const jsxPreset = meta.isSolid ? ['babel-preset-solid'] : ['@babel/preset-react', {useBuiltIns: true}]
+
+    return [
+      jsxPreset,
+      [
+        '@babel/preset-env',
+        {
+          loose: true,
+          useBuiltIns: 'entry',
+          corejs: 3,
+          modules: false,
+          shippedProposals: true,
+          targets: {
+            node: '10',
+            browsers: [
+              'last 2 Chrome versions',
+              'last 2 Firefox versions',
+              'last 2 Safari versions',
+              'last 1 Edge versions',
+            ],
+          },
         },
-      },
-    ],
-  ],
+      ],
+    ]
+  },
   plugins(meta) {
     const alias = parseAliases(meta, aliases)
     if (meta.replaceVueNext) {

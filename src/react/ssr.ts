@@ -1,6 +1,11 @@
 import React from 'react'
 import {Domain, is, Scope, Store, scopeBind} from 'effector'
-import {useStoreBase, useStoreMapBase, useListBase} from './apiBase'
+import {
+  useStoreBase,
+  useUnitBase,
+  useStoreMapBase,
+  useListBase,
+} from './apiBase'
 import {withDisplayName} from './withDisplayName'
 import {useGate as commonUseGate, createGateImplementation} from './createGate'
 import type {Gate} from './index.h'
@@ -100,6 +105,9 @@ export const connect = (Component: any) => (store: any) => {
 /** useStore wrapper for scopes */
 export function useStore<T>(store: Store<T>): T {
   return useStoreBase(store, getScope())
+}
+export function useUnit(shape) {
+  return useUnitBase(shape, getScope())
 }
 /** useList wrapper for scopes */
 export function useList(store: any, opts: any) {

@@ -64,6 +64,10 @@ $second = $first.map(/*fn*/ (state: T, lastState?: S) => S)
 
 При обновлении исходного стора `$first`, функция-обработчик `fn` будет вызвана с новым состоянием `$first` и последним состоянием `$second`, результат вычислений будет сохранён в производном сторе `$second`, то есть реактивно обновит его значение
 
+:::note
+С версии [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) второй аргумент функции `fn` и `firstState` были депрекейтнуты, вместо этого используйте [`updateFilter`](./createStore.md) или создание нового стора с помощью `createStore`.
+:::
+
 #### Аргументы {#map-args}
 
 1.  **`fn`**: `(state: T, lastState?: S) => S`
@@ -92,9 +96,9 @@ import {createEvent, createStore} from 'effector'
 
 const changed = createEvent()
 const title = createStore('').on(changed, (_, newTitle) => newTitle)
-const length = title.map(title => title.length)
+const length = title.map((title) => title.length)
 
-length.watch(length => {
+length.watch((length) => {
   console.log('длина строки', length)
 })
 // => длина строки 0
@@ -181,7 +185,7 @@ const trigger = createEvent()
 
 store.on(trigger, (state, data) => state + data)
 
-store.watch(value => {
+store.watch((value) => {
   console.log(value)
 })
 // => 0
@@ -206,7 +210,7 @@ const triggerB = createEvent()
 
 store.on([triggerA, triggerB], (state, data) => state + data)
 
-store.watch(value => {
+store.watch((value) => {
   console.log(value)
 })
 // => 0
@@ -271,10 +275,10 @@ const store = createStore(0)
 const increment = createEvent()
 const resetTrigger = createEvent()
 
-store.on(increment, state => state + 1)
+store.on(increment, (state) => state + 1)
 store.reset(resetTrigger)
 
-store.watch(state => {
+store.watch((state) => {
   console.log(state)
 })
 // => 0
@@ -304,10 +308,10 @@ const increment = createEvent()
 const triggerA = createEvent()
 const triggerB = createEvent()
 
-store.on(increment, state => state + 1)
+store.on(increment, (state) => state + 1)
 store.reset([triggerA, triggerB])
 
-store.watch(state => {
+store.watch((state) => {
   console.log(state)
 })
 // => 0
@@ -362,7 +366,7 @@ $store.watch(/*watcher*/ (state: T) => any)
 const add = createEvent()
 const store = createStore(0).on(add, (state, payload) => state + payload)
 
-store.watch(value => {
+store.watch((value) => {
   console.log(`текущее значение: ${value}`)
 })
 // => текущее значение: 0
@@ -411,15 +415,15 @@ import {createStore, createEvent} from 'effector'
 const click = createEvent()
 const clicksAmount = createStore(0)
 
-clicksAmount.on(click, n => n + 1)
+clicksAmount.on(click, (n) => n + 1)
 
-clicksAmount.watch(amount => {
+clicksAmount.watch((amount) => {
   console.log('вызов с текущим состоянием, включая исходное', amount)
 })
 
 // => вызов с текущим состоянием, включая исходное 0
 
-clicksAmount.updates.watch(amount => {
+clicksAmount.updates.watch((amount) => {
   console.log(
     'вызов с текущим состоянием, начиная с первого обновления',
     amount,
@@ -459,9 +463,9 @@ const increment = createEvent()
 
 const storesDomain = createDomain()
 
-storesDomain.onCreateStore(store => {
+storesDomain.onCreateStore((store) => {
   console.log(`создан стор '${store.shortName}'`)
-  store.watch(value => {
+  store.watch((value) => {
     console.log(`значение стора '${store.shortName}':`, value)
   })
 })
@@ -472,7 +476,7 @@ const $foo = storesDomain.createStore(0, {name: 'foo'})
 const $bar = storesDomain.createStore(0, {name: 'bar'})
 // => создан стор 'bar'
 // => значение стора 'bar': 0
-$foo.on(increment, n => n + 1)
+$foo.on(increment, (n) => n + 1)
 
 increment()
 // => значение стора 'foo': 1
@@ -555,7 +559,7 @@ const $number = createStore(0)
 
 $number.on(add, (state, data) => state + data)
 
-$number.watch(n => {
+$number.watch((n) => {
   console.log(n)
 })
 // => 0
@@ -667,9 +671,9 @@ import {createEvent, createStore} from 'effector'
 const click = createEvent()
 const $clicks = createStore(0)
 
-$clicks.on(click, n => n + 1)
+$clicks.on(click, (n) => n + 1)
 
-$clicks.watch(n => {
+$clicks.watch((n) => {
   console.log(n)
 })
 // => 0
@@ -714,24 +718,24 @@ const result: S = $store.thru(/*fn*/ (store: Store<T>) => S)
 ```js
 import {createStore, createEvent} from 'effector'
 
-const enhance = fn => store => store.map(fn)
+const enhance = (fn) => (store) => store.map(fn)
 
 const inc = createEvent()
 const $num = createStore(1)
 
-$num.on(inc, n => n + 1)
+$num.on(inc, (n) => n + 1)
 
 //prettier-ignore
 const $result = $num
   .thru(enhance(x => x + 1))
   .thru(enhance(x => x * 10))
 
-$num.watch(n => {
+$num.watch((n) => {
   console.log('num', n)
 })
 // => num 1
 
-$result.watch(n => {
+$result.watch((n) => {
   console.log('result', n)
 })
 // => result 20
