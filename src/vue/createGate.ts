@@ -1,5 +1,5 @@
 import {computed, ComputedRef, onMounted, onUnmounted, watch, WatchStopHandle} from 'vue-next'
-import {createApi, launch, createStore} from 'effector'
+import {createApi, launch, createStore, sample} from 'effector'
 import {Gate, GateConfig} from './composition.h'
 import {deepCopy} from './lib/deepCopy'
 import {unwrapProxy} from './lib/unwrapProxy'
@@ -25,13 +25,21 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   }
 
   onMounted(() => {
-    const raw = unwrapProxy(_)
-    GateComponent.open(deepCopy(raw))
+    if (typeof _ !== "undefined") {
+      const raw = unwrapProxy(_.value)
+      GateComponent.open(deepCopy(raw))
+    } else {
+      GateComponent.open()
+    }
   })
 
   onUnmounted(() => {
-    const raw = unwrapProxy(_)
-    GateComponent.close(deepCopy(raw))
+    if (typeof _ !== "undefined") {
+      const raw = unwrapProxy(_.value)
+      GateComponent.close(deepCopy(raw))
+    } else {
+      GateComponent.close()
+    }
 
     if (unwatch) {
       unwatch()
@@ -63,6 +71,8 @@ export function createGate<Props>(config?: GateConfig<Props>): Gate<Props> {
   GateComponent.status = status
   GateComponent.state = state
   GateComponent.set = set
+
+  sample({ clock: open, target: set })
 
   state.reset(close)
 
