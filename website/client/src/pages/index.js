@@ -288,6 +288,14 @@ const users = [
     url: 'semrush.png',
     alt: 'Semrush',
   },
+  {
+    url: 'joom.svg',
+    alt: 'Joom Group',
+  },
+  {
+    url: 'intouchHealth.png',
+    alt: 'Intouch Health, a Teladoc company',
+  },
 ]
 
 function CompaniesUsingEffector() {

@@ -1,10 +1,7 @@
 ---
 id: combine
 title: combine
-hide_title: true
 ---
-
-# combine
 
 This method allows you to get state from each passed store and **combine** it to single value and save to single store, that updates every time like each passed store.
 
@@ -143,3 +140,38 @@ $sum.watch(console.log)
 ```
 
 [Try it](https://share.effector.dev/ch4CKPrX)
+
+## `combine` with primitives and objects
+
+It works the same as before. Now primitives and objects can be used in `combine`, and `combine` will not be triggered. Effector will not track mutations of objects and primitives.
+
+#### Example
+
+```js
+const $a = createStore('a')
+const b = 2
+const c = [false]
+const d = {value: 1}
+
+const $resultUsingComa = combine($a, b, c, d)
+const $resultUsingArray = combine([$a, b, c, d])
+const $resultUsingObject = combine({$a, b, c, d})
+
+const $withFn = combine($a, b, c, d, (a, b) => ({a, b}))
+
+$resultUsingComa.watch(console.log)
+// => ["a", 2, [false], {value: 1}]
+$resultUsingArray.watch(console.log)
+// => ["a", 2, [false], {value: 1}]
+$resultUsingObject.watch(console.log)
+// => {$a: "a", b: 2, c: [false], d: {value: 1}}
+$withFn.watch(console.log)
+// => {$a: "a", b: 2}
+
+// will not trigger combine, but object and array will be changed because of reference
+// uncomment the code below to see changes
+// c.push(true)
+// d.value = 2
+```
+
+[Try it](https://share.effector.dev/XWk1lG4a)

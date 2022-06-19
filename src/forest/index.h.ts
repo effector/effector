@@ -46,7 +46,7 @@ export type Template = {
 export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
 export type ClassListArray = Array<Store<string | null> | string>
 export type ClassListProperty = {
-  name: StoreOrData<string>
+  name: StoreOrData<string[]>
   enabled: StoreOrData<boolean>
 }
 
@@ -131,7 +131,7 @@ export type OperationDef =
   | {
       type: 'classList'
       // name
-      field: Store<string>
+      field: Store<string[]>
       // enabled
       value: Store<boolean>
     }

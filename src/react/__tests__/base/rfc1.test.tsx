@@ -6,7 +6,7 @@ import {useStore} from 'effector-react'
 
 import {render, act, renderHTML} from 'effector/fixtures/react'
 
-test('rfc1 example implementation', async() => {
+test('rfc1 example implementation', async () => {
   const fnWait = jest.fn()
   const fnClick = jest.fn()
   const clickEpicFn = jest.fn()
@@ -44,7 +44,7 @@ test('rfc1 example implementation', async() => {
   const click$ = from(click).tap(clickEpicFn)
 
   click$.observe(() => {})
-  click$.observe(async() => {
+  click$.observe(async () => {
     await new Promise(rs => setTimeout(rs, 500))
     fnClick()
     increment()
@@ -61,9 +61,10 @@ test('rfc1 example implementation', async() => {
   const CurrentText = ({prefix}) => {
     const {text} = useStore(store)
     return (
-      <p>
-        {prefix} {text}
-      </p>
+      <div>
+        <p>{prefix}</p>
+        <p>{text}</p>
+      </div>
     )
   }
 
@@ -74,7 +75,7 @@ test('rfc1 example implementation', async() => {
     </>
   )
   await expect(
-    (async() => {
+    (async () => {
       await render(<ClickedTimes />)
       await render(<CurrentText prefix="Current text: " />)
       await render(<App />)
@@ -87,11 +88,12 @@ test('rfc1 example implementation', async() => {
   `)
   expect(await renderHTML(<CurrentText prefix="Current text: " />))
     .toMatchInlineSnapshot(`
-    <p>
-      Current text: 
-       
-      
-    </p>
+    <div>
+      <p>
+        Current text: 
+      </p>
+      <p />
+    </div>
   `)
   expect(await renderHTML(<App />)).toMatchInlineSnapshot(`
     <span>
@@ -100,7 +102,7 @@ test('rfc1 example implementation', async() => {
   `)
   expect(fnWait).not.toHaveBeenCalled()
   expect(fnClick).not.toHaveBeenCalled()
-  await act(async() => {
+  await act(async () => {
     click()
     click()
     expect(fnWait).not.toHaveBeenCalled()

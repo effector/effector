@@ -73,8 +73,8 @@ it('works', async () => {
     to: fetchUser,
   })
 
-  const user = createStore('guest')
-  const friends = createStore<string[]>([])
+  const user = createStore('guest', {sid: 'user'})
+  const friends = createStore<string[]>([], {sid: 'friends'})
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)
@@ -135,19 +135,19 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-k8j0rc": Array [
+      "friends": Array [
         "bob",
         "carol",
       ],
-      "cs3r4y": "alice",
+      "user": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-k8j0rc": Array [
+      "friends": Array [
         "alice",
       ],
-      "cs3r4y": "bob",
+      "user": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -181,8 +181,8 @@ test('attach support', async () => {
     to: fetchUser,
   })
 
-  const user = createStore('guest')
-  const friends = createStore([])
+  const user = createStore('guest', {sid: 'user'})
+  const friends = createStore([], {sid: 'friends'})
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)
@@ -242,19 +242,19 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-rjikx0": "alice",
-      "67hxq": Array [
+      "friends": Array [
         "bob",
         "carol",
       ],
+      "user": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-rjikx0": "bob",
-      "67hxq": Array [
+      "friends": Array [
         "alice",
       ],
+      "user": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()

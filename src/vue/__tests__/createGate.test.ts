@@ -44,6 +44,21 @@ it('close event should be called without arguments to Gate', async () => {
   expect(spyClose).toHaveBeenCalled()
 })
 
+test('works without babel plugin', () => {
+  const Gate3 = {_: createGate}._({name: 'name', defaultState: {state: 1}})
+  const Gate4 = {_: createGate}._({
+    name: 'name',
+    defaultState: {state: 1},
+    sid: 'custom-sid',
+  })
+
+  expect(Gate3.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate3.state.getState()).toEqual({state: 1})
+
+  expect(Gate4.state.shortName).toMatchInlineSnapshot(`"name.state"`)
+  expect(Gate4.state.sid).toMatchInlineSnapshot(`"custom-sid"`)
+})
+
 it('gate with props', () => {
   const Gate = createGate({
     defaultState: {

@@ -17,6 +17,7 @@ module.exports = function (babel, options = {}) {
     splits,
     apis,
     merges,
+    gates,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -31,8 +32,10 @@ module.exports = function (babel, options = {}) {
     apiCreators,
     mergeCreators,
     domainMethods,
+    reactMethods,
     factories,
     importName,
+    importReactNames,
     reactSsr,
   } = normalizeOptions(options)
   const factoriesUsed = factories.length > 0
@@ -163,6 +166,23 @@ module.exports = function (babel, options = {}) {
         setEventNameAfter(path, state, id, t, smallConfig),
     },
   ]
+  const reactMethodParsers = [
+    {
+      flag: gates,
+      set: reactMethods.createGate,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(
+          path,
+          state,
+          id,
+          t,
+          smallConfig,
+          false,
+          name,
+          true,
+        ),
+    },
+  ]
   function addImport(path, method) {
     const programPath = path.find(path => path.isProgram())
     const [newPath] = programPath.unshiftContainer(
@@ -189,6 +209,21 @@ module.exports = function (babel, options = {}) {
   }
   const importVisitor = {
     ImportDeclaration(path, state) {
+      const createFactoryTemplate = () => {
+        if (!this.effector_factoryMap) {
+          this.effector_factoryMap = new Map()
+          if (!factoryTemplate) {
+            factoryTemplate = template(
+              addLoc
+                ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
+                : addNames
+                ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
+                : 'FACTORY({sid: SID,fn:()=>FN})',
+            )
+          }
+        }
+      }
+
       const source = path.node.source.value
       const specifiers = path.node.specifiers
       if (importName.has(source)) {
@@ -224,6 +259,20 @@ module.exports = function (babel, options = {}) {
             apiCreators.add(localName)
           } else if (mergeCreators.has(importedName)) {
             mergeCreators.add(localName)
+          }
+        }
+      } else if (
+        importReactNames.ssr.has(source) ||
+        importReactNames.nossr.has(source)
+      ) {
+        for (let i = 0; i < specifiers.length; i++) {
+          const s = specifiers[i]
+          if (!s.imported) continue
+          const importedName = s.imported.name
+          const localName = s.local.name
+          if (importedName === localName) continue
+          if (reactMethods.createGate.has(importedName)) {
+            reactMethods.createGate.add(localName)
           }
         }
       } else {
@@ -269,19 +318,8 @@ module.exports = function (babel, options = {}) {
         normalizedSource = stripExtension(normalizedSource)
         if (this.effector_factoryPaths.includes(normalizedSource)) {
           this.effector_needFactoryImport = true
-          if (!this.effector_factoryMap) {
-            this.effector_factoryMap = new Map()
-            if (!factoryTemplate) {
-              let tpl
-              factoryTemplate = template(
-                addLoc
-                  ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
-                  : addNames
-                  ? 'FACTORY({sid: SID,fn:()=>FN,name:NAME,method:METHOD})'
-                  : 'FACTORY({sid: SID,fn:()=>FN})',
-              )
-            }
-          }
+          createFactoryTemplate()
+
           for (let i = 0; i < specifiers.length; i++) {
             const s = specifiers[i]
             const isDefaultImport = t.isImportDefaultSpecifier(s)
@@ -339,6 +377,7 @@ module.exports = function (babel, options = {}) {
           const name = path.node.callee.name
           if (!this.effector_ignoredImports.has(name)) {
             applyMethodParsers(methodParsers, path, state, name)
+            applyMethodParsers(reactMethodParsers, path, state, name)
           }
           if (
             factoriesUsed &&
@@ -449,6 +488,9 @@ const normalizeOptions = options => {
           effect: [],
           domain: [],
         },
+        reactMethods: {
+          createGate: [],
+        },
         factories: [],
       }
     : {
@@ -471,6 +513,9 @@ const normalizeOptions = options => {
           effect: ['effect', 'createEffect'],
           domain: ['domain', 'createDomain'],
         },
+        reactMethods: {
+          createGate: ['createGate'],
+        },
         factories: [],
       }
   return readConfigFlags({
@@ -491,6 +536,7 @@ const normalizeOptions = options => {
       splits: true,
       apis: true,
       merges: true,
+      gates: true,
     },
     result: {
       importName: new Set(
@@ -508,6 +554,20 @@ const normalizeOptions = options => {
               '@effector/effector',
             ],
       ),
+      importReactNames: {
+        ssr: new Set(
+          readReactImportOption(options, 'ssr', [
+            'effector-react/scope',
+            'effector-react/ssr',
+          ]),
+        ),
+        nossr: new Set(
+          readReactImportOption(options, 'nossr', [
+            'effector-react',
+            'effector-react/compat',
+          ]),
+        ),
+      },
       storeCreators: new Set(options.storeCreators || defaults.store),
       eventCreators: new Set(options.eventCreators || defaults.event),
       effectCreators: new Set(options.effectCreators || defaults.effect),
@@ -525,6 +585,10 @@ const normalizeOptions = options => {
         options.domainMethods,
         defaults.domainMethods,
       ),
+      reactMethods: readConfigShape(
+        options.reactMethods,
+        defaults.reactMethods,
+      ),
       factories: (options.factories || defaults.factories).map(stripExtension),
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
@@ -534,6 +598,15 @@ const normalizeOptions = options => {
           : true,
     },
   })
+
+  function readReactImportOption(options, name, defaults) {
+    if (options && options.importReactNames && options.importReactNames[name]) {
+      if (Array.isArray(options.importReactNames[name]))
+        return options.importReactNames[name]
+      else return [options.importReactNames[name]]
+    }
+    return defaults
+  }
 
   function readConfigFlags({options, properties, result}) {
     for (const property in properties) {
@@ -717,6 +790,7 @@ function setConfigForConfMethod(
   {addLoc, addNames, debugSids},
   singleArgument,
   checkBindingName,
+  allowEmptyArguments,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   if (isLocalVariable(path, checkBindingName)) return
@@ -731,7 +805,7 @@ function setConfigForConfMethod(
   })
 
   if (args) {
-    if (!args[0]) return
+    if (!args[0] && !allowEmptyArguments) return
     const commonArgs = singleArgument
       ? args[0]
       : t.ArrayExpression(args.slice())
