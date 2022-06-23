@@ -131,9 +131,11 @@ test('useUnit should support single units', () => {
   const $b = createStore(0)
   const cFx = createEffect((p: number) => p.toString())
 
-  const aEv: (p: number) => number = useUnit(a)
-  const b: number = useUnit($b)
-  const cEff: (p: number) => Promise<string> = useUnit(cFx)
+  const Comp = () => {
+    const aEv: (p: number) => number = useUnit(a)
+    const b: number = useUnit($b)
+    const cEff: (p: number) => Promise<string> = useUnit(cFx)
+  }
 
   expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -142,15 +144,17 @@ test('useUnit should support single units', () => {
   `)
 })
 test('useUnit should support array shape', () => {
-  const handlers: [
-    number,
-    (payload: number) => number,
-    (payload: number) => Promise<string>,
-  ] = useUnit([
-    createStore(0),
-    createEvent<number>(),
-    createEffect<number, string, Error>(),
-  ])
+  const Comp = () => {
+    const handlers: [
+      number,
+      (payload: number) => number,
+      (payload: number) => Promise<string>,
+    ] = useUnit([
+      createStore(0),
+      createEvent<number>(),
+      createEffect<number, string, Error>(),
+    ])
+  }
 
   expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -159,15 +163,18 @@ test('useUnit should support array shape', () => {
   `)
 })
 test('useUnit should support object shape', () => {
-  const handlers: {
-    foo: (payload: number) => number
-    bar: (payload: number) => Promise<string>
-    baz: string
-  } = useUnit({
-    baz: createStore(''),
-    foo: createEvent<number>(),
-    bar: createEffect<number, string, Error>(),
-  })
+  const Comp = () => {
+    const handlers: {
+      foo: (payload: number) => number
+      bar: (payload: number) => Promise<string>
+      baz: string
+    } = useUnit({
+      baz: createStore(''),
+      foo: createEvent<number>(),
+      bar: createEffect<number, string, Error>(),
+    })
+  }
+
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -175,7 +182,7 @@ test('useUnit should support object shape', () => {
   `)
 })
 test('useUnit should not allow non-unit values', () => {
-  try {
+  const Comp = () => {
     const handlers: {
       foo: (payload: number) => number
       bar: (payload: number) => Promise<string>
@@ -187,7 +194,7 @@ test('useUnit should not allow non-unit values', () => {
       bar: createEffect<number, string, Error>(),
       wrong: 'plain string',
     })
-  } catch (e: unknown) {}
+  }
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
