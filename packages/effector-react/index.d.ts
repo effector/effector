@@ -20,7 +20,7 @@ export function useStore<State>(store: Store<State>): State
 export function useStoreMap<
   State,
   Result,
-  Keys extends [any] | ReadonlyArray<any> | any[]
+  Keys extends [any] | ReadonlyArray<any> | any[],
 >(opts: {
   readonly store: Store<State>
   readonly keys: Keys
@@ -56,7 +56,7 @@ export function createGate<Props>(config: {
   defaultState?: Props
   name?: string
   domain?: Domain
-  sid?: string;
+  sid?: string
 }): Gate<Props>
 export function createGate<Props>(
   name: string,
@@ -89,11 +89,11 @@ export function createContextComponent<Props, State, Context>(
 
 export function connect<
   State extends object,
-  Com extends React.ComponentType<any>
+  Com extends React.ComponentType<any>,
 >(store: Store<State>): (Component: Com) => React.ComponentType<State>
 export function connect<
   State extends object,
-  Com extends React.ComponentType<any>
+  Com extends React.ComponentType<any>,
 >(Component: Com): (store: Store<State>) => React.ComponentType<State>
 
 export function createStoreConsumer<State>(
@@ -105,7 +105,7 @@ export function createStoreConsumer<State>(
  */
 export function createReactState<
   State extends object,
-  Com extends React.ComponentType<any>
+  Com extends React.ComponentType<any>,
 >(store: Store<State>, Component: Com): React.ComponentType<State>
 
 export function useEvent(event: Event<void>): () => void
@@ -124,7 +124,7 @@ export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
     : never
 }
 export function useEvent<
-  Shape extends Record<string, Event<any> | Effect<any, any, any>>
+  Shape extends Record<string, Event<any> | Effect<any, any, any>>,
 >(
   shape: Shape,
 ): {
@@ -132,5 +132,37 @@ export function useEvent<
     ? (payload: T) => T
     : Shape[Key] extends Effect<infer P, infer D, any>
     ? (payload: P) => Promise<D>
+    : never
+}
+
+export function useUnit<State>(store: Store<State>): State
+export function useUnit(event: Event<void>): () => void
+export function useUnit<T>(event: Event<T>): (payload: T) => T
+export function useUnit<R>(fx: Effect<void, R, any>): () => Promise<R>
+export function useUnit<T, R>(fx: Effect<T, R, any>): (payload: T) => Promise<R>
+export function useUnit<
+  List extends (Event<any> | Effect<any, any> | Store<any>)[],
+>(
+  list: [...List],
+): {
+  [Key in keyof List]: List[Key] extends Event<infer T>
+    ? (payload: T) => T
+    : List[Key] extends Effect<infer P, infer D, any>
+    ? (payload: P) => Promise<D>
+    : List[Key] extends Store<infer V>
+    ? V
+    : never
+}
+export function useUnit<
+  Shape extends Record<string, Event<any> | Effect<any, any, any> | Store<any>>,
+>(
+  shape: Shape,
+): {
+  [Key in keyof Shape]: Shape[Key] extends Event<infer T>
+    ? (payload: T) => T
+    : Shape[Key] extends Effect<infer P, infer D, any>
+    ? (payload: P) => Promise<D>
+    : Shape[Key] extends Store<infer V>
+    ? V
     : never
 }

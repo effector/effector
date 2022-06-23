@@ -1,9 +1,16 @@
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
 import {createStore, createEvent, createEffect} from 'effector'
-import {createComponent, createGate, useGate, useEvent} from 'effector-react'
+import {
+  createComponent,
+  createGate,
+  useGate,
+  useEvent,
+  useUnit,
+} from 'effector-react'
 
 const typecheck = '{global}'
+
 
 test('createComponent', () => {
   const ImplicitObject = createComponent(
@@ -115,6 +122,85 @@ test('useEvent of array', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
+    "
+  `)
+})
+
+test('useUnit should support single units', () => {
+  const a = createEvent<number>()
+  const $b = createStore(0)
+  const cFx = createEffect((p: number) => p.toString())
+
+  const Comp = () => {
+    const aEv: (p: number) => number = useUnit(a)
+    const b: number = useUnit($b)
+    const cEff: (p: number) => Promise<string> = useUnit(cFx)
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+  `)
+})
+test('useUnit should support array shape', () => {
+  const Comp = () => {
+    const handlers: [
+      number,
+      (payload: number) => number,
+      (payload: number) => Promise<string>,
+    ] = useUnit([
+      createStore(0),
+      createEvent<number>(),
+      createEffect<number, string, Error>(),
+    ])
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+  `)
+})
+test('useUnit should support object shape', () => {
+  const Comp = () => {
+    const handlers: {
+      foo: (payload: number) => number
+      bar: (payload: number) => Promise<string>
+      baz: string
+    } = useUnit({
+      baz: createStore(''),
+      foo: createEvent<number>(),
+      bar: createEffect<number, string, Error>(),
+    })
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+test('useUnit should not allow non-unit values', () => {
+  const Comp = () => {
+    const handlers: {
+      foo: (payload: number) => number
+      bar: (payload: number) => Promise<string>
+      baz: string
+      wrong: string
+    } = useUnit({
+      baz: createStore(''),
+      foo: createEvent<number>(),
+      bar: createEffect<number, string, Error>(),
+      wrong: 'plain string',
+    })
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'string' is not assignable to type 'Store<any> | Effect<any, any, any> | Event<any>'.
     "
   `)
 })
