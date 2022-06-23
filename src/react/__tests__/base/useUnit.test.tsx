@@ -393,17 +393,17 @@ describe('useUnit', () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
-    <div>
-      <button
-        id="btn"
-      >
-        switch
-      </button>
-      <div>
-        42
-      </div>
-    </div>
-  `)
+          <div>
+            <button
+              id="btn"
+            >
+              switch
+            </button>
+            <div>
+              42
+            </div>
+          </div>
+      `)
 
     await act(async () => {
       container.firstChild.querySelector('#btn').click()
@@ -425,18 +425,121 @@ describe('useUnit', () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
-    <div>
-      <button
-        id="btn"
-      >
-        switch
-      </button>
-      <div>
-        35
-      </div>
-    </div>
-  `)
+          <div>
+            <button
+              id="btn"
+            >
+              switch
+            </button>
+            <div>
+              35
+            </div>
+          </div>
+      `)
 
     expect(rendered).toBeCalledTimes(3)
+  })
+  it('should support dynamic change of store positions', async () => {
+    const upA = createEvent()
+    const upB = createEvent()
+    const $a = createStore(42).on(upA, s => s + 1)
+    const $b = createStore(37).on(upB, s => s - 1)
+
+    const rendered = jest.fn()
+
+    const StoreRenderer: React.FC<{leftFirst: boolean}> = props => {
+      const [a, b] = useUnit(props.leftFirst ? [$a, $b] : [$b, $a])
+      rendered()
+      return (
+        <div>
+          {a}
+          {b}
+        </div>
+      )
+    }
+    const View = () => {
+      const [left, setLeft] = React.useState(true)
+
+      return (
+        <div>
+          <button
+            id="btn"
+            onClick={() => {
+              setLeft(s => !s)
+            }}>
+            switch
+          </button>
+          <StoreRenderer leftFirst={left} />
+        </div>
+      )
+    }
+
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          42
+          37
+        </div>
+      </div>
+    `)
+
+    act(() => {
+      upB()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          42
+          36
+        </div>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          36
+          42
+        </div>
+      </div>
+    `)
+
+    act(() => {
+      upB()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          35
+          42
+        </div>
+      </div>
+    `)
+
+    expect(rendered).toBeCalledTimes(4)
   })
 })
