@@ -167,26 +167,25 @@ export const createSampling = (
     clockState,
     method,
   )
-  own(source, [
-    createLinkNode(
-      clock,
-      target,
-      [
-        applyTemplate('sampleSourceLoader'),
-        mov({from: STACK, target: clockState}),
-        ...readAndFilter(hasSource),
-        read(sourceRef, true, batched),
-        ...filterNodes,
-        read(clockState),
-        filterType === 'fn' &&
-          userFnCall((src, _, {a}) => filter(src, a), true),
-        fn && userFnCall(callStackAReg),
-        applyTemplate('sampleSourceUpward', isUpward),
-      ],
-      method,
-      fn,
-    ),
-  ])
+  const jointNode = createLinkNode(
+    clock,
+    target,
+    [
+      applyTemplate('sampleSourceLoader'),
+      mov({from: STACK, target: clockState}),
+      ...readAndFilter(hasSource),
+      read(sourceRef, true, batched),
+      ...filterNodes,
+      read(clockState),
+      filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),
+      fn && userFnCall(callStackAReg),
+      applyTemplate('sampleSourceUpward', isUpward),
+    ],
+    method,
+    fn,
+  )
+  own(source, [jointNode])
+  Object.assign(jointNode.meta, metadata, {joint: true})
   return target
 }
 
