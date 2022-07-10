@@ -11,6 +11,7 @@ description: Перечень основных методов API, по груп
 - [useStore(store)](./useStore.md)
 - [useStoreMap({ store, keys, fn })](./useStoreMap.md)
 - [useList(store, renderItem)](./useList.md)
+- [useUnit(units)](./useUnit.md)
 
 ## Gate API
 

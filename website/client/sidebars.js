@@ -78,6 +78,7 @@ const sidebar = {
             'api/effector-react/useStore',
             'api/effector-react/useStoreMap',
             'api/effector-react/useList',
+            'api/effector-react/useUnit',
           ],
         },
         {
