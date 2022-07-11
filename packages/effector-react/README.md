@@ -23,9 +23,8 @@ import {useUnit} from 'effector-react'
 
 const inputText = createEvent()
 
-const $text = createStore('')
-  .on(inputText, (_, text) => text)
-  
+const $text = createStore('').on(inputText, (_, text) => text)
+
 const $size = $text.map(text => text.length)
 
 const Form = () => {
@@ -33,7 +32,7 @@ const Form = () => {
     text: $text,
     size: $size,
   })
-  const [handleTextChange] = useUnit([inputText])
+  const handleTextChange = useUnit(inputText)
 
   return (
     <form>
