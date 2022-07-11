@@ -50,7 +50,6 @@ const Form = () => {
 
 [Try it](https://share.effector.dev/gjsgk6oh)
 
-[useStore](https://effector.dev/docs/api/effector-react/useStore) in docs
+[useUnit](https://effector.dev/docs/api/effector-react/useUnit) in docs
 [createStore](https://effector.dev/docs/api/effector/createStore) in docs
-[combine](https://effector.dev/docs/api/effector/combine) in docs
 [createEvent](https://effector.dev/docs/api/effector/createEvent) in docs
