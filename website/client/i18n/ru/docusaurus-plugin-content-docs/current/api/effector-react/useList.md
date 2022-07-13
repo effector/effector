@@ -15,14 +15,14 @@ React-хук для эффективного рендеринга сторов �
 ```ts
 function useList(
   store: Store<T[]>,
-  fn: (item: T, key: number) => React.Node,
-): React.Node
+  fn: (item: T, key: number) => React.ReactNode,
+): React.ReactNode
 ```
 
 ### Аргументы {#useList-short-args}
 
 1. **`store`**: [Стор](../effector/Store.md) с массивом данных
-2. **`fn`**: `(item: T, key: number) => React.Node`
+2. **`fn`**: `(item: T, key: number) => React.ReactNode`
 
    Рендер-функция для отображения в ui отдельного элемента массива. Явная простановка `key` реакт-элементам внутри рендер-функции не требуется, ключ элемента проставляется автоматически
 
@@ -31,11 +31,11 @@ function useList(
    - **`item`**: Элемент массива
    - **`key`**: Индекс элемента, выступает как ключ для react
 
-   **Возвращает**: `React.Node`
+   **Возвращает**: `React.ReactNode`
 
 ### Возвращает {#useList-short-return}
 
-`React.Node`
+`React.ReactNode`
 
 ## Полная запись {#useList-full}
 
@@ -52,10 +52,10 @@ function useList(
   store: Store<T[]>,
   config: {
     keys: any[]
-    fn: (item: T, key: React.Key) => React.Node
+    fn: (item: T, key: React.Key) => React.ReactNode
     getKey?: (item: T) => React.Key
   },
-): React.Node
+): React.ReactNode
 ```
 
 ### Аргументы {#useList-full-args}
@@ -64,7 +64,7 @@ function useList(
 2. **`config`**: Объект конфигурации
 
    - **`keys`**: Массив зависимостей, которые будут переданы в react
-   - **`fn`**: `(item: T, key: React.Key) => React.Node`
+   - **`fn`**: `(item: T, key: React.Key) => React.ReactNode`
 
      Рендер-функция для отображения в ui отдельного элемента массива. Явная простановка `key` реакт-элементам внутри рендер-функции не требуется, ключ элемента проставляется автоматически
 
@@ -73,7 +73,7 @@ function useList(
      - **`item`**: Элемент массива
      - **`key`**: Ключ элемента, вычисляется с помощью `getKey`, если есть, в противном случае используется индекс элемента
 
-     **Возвращает**: `React.Node`
+     **Возвращает**: `React.ReactNode`
 
    - **`getKey?`**: `(item: T) => React.Key`
 
@@ -85,12 +85,18 @@ function useList(
 
      **Возвращает**: `React.Key`
 
+   - **`placeholder?`**: `React.ReactNode` Опциональный реакт-элемент который будет использован в случае пустого массива
+
 ### Возвращает {#useList-full-return}
 
-`React.Node`
+`React.ReactNode`
 
 :::note
 Опция `getKey` добавлена в effector-react 21.3.0
+:::
+
+:::note
+Опция `placeholder` добавлена в effector-react 22.1.0
 :::
 
 ## Примеры
@@ -152,7 +158,7 @@ const $todoList = createStore([
     },
   ])
 
-addTodo.watch(e => {
+addTodo.watch((e) => {
   e.preventDefault()
 })
 
@@ -199,7 +205,7 @@ const App = () => {
   const user = useStore($user)
   return useList($friends, {
     keys: [user],
-    fn: friend => (
+    fn: (friend) => (
       <div>
         {friend} is a friend of {user}
       </div>

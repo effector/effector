@@ -44,6 +44,7 @@ export function useList<T>(
         keys?: any[]
         fn(item: T, index: number): React.ReactNode
         getKey?: (item: T) => string
+        placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
 ): React.ReactNode {

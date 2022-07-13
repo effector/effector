@@ -222,17 +222,18 @@ export function useListBase<T>(
         keys?: any[]
         fn(item: T, index: number): React.ReactNode
         getKey?: (item: T) => string
+        placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
   scope?: Scope,
 ): React.ReactNode {
   let keys = [] as any[]
   let fn
-  let getKey: (item: T) => string
+  let getKey: ((item: T) => string) | void
+  let placeholder: React.ReactNode | void
   if (typeof renderItem === 'object' && renderItem !== null) {
     if (renderItem.keys) keys = renderItem.keys
-    fn = renderItem.fn
-    if (renderItem.getKey) getKey = renderItem.getKey
+    ;({fn, getKey, placeholder} = renderItem)
   } else {
     fn = renderItem
   }
@@ -272,7 +273,9 @@ export function useListBase<T>(
   fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
   if (getKey!) {
-    return useStoreBase(list, scope).map(value => {
+    const listItems = useStoreBase(list, scope)
+    if (listItems.length === 0 && placeholder) return placeholder
+    return listItems.map(value => {
       const key = fnRef.current[1](value)
       return React.createElement(Item, {
         keyVal: key,
@@ -292,6 +295,7 @@ export function useListBase<T>(
       ],
       scope,
     )
+    if (length === 0 && placeholder) return placeholder
     return Array.from({length}, (_, i) =>
       React.createElement(Item, {
         index: i,

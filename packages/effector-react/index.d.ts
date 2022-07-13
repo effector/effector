@@ -37,6 +37,7 @@ export function useList<T, Key extends React.Key>(
     readonly keys?: any[]
     readonly fn: (item: T, key: Key) => React.ReactNode
     readonly getKey: (item: T) => Key
+    readonly placeholder?: React.ReactNode
   },
 ): JSX.Element
 export function useList<T>(
@@ -45,6 +46,7 @@ export function useList<T>(
     | {
         readonly keys?: any[]
         readonly fn: (item: T, index: number) => React.ReactNode
+        readonly placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
 ): JSX.Element
