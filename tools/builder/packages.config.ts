@@ -51,7 +51,7 @@ const keywords = [
 
 const version = {
   effector: '22.3.0',
-  'effector-react': '22.1.1',
+  'effector-react': '22.1.2',
   'effector-vue': '22.1.0',
   'effector-solid': '0.22.0',
   forest: '0.21.1',
