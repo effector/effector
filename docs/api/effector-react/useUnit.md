@@ -10,6 +10,10 @@ In case of [stores](../effector/Store.md) it subscribes component to provided [s
 In the case of [events](../effector/Event.md)/[effects](../effector/Effect.md) - bind to current [_scope_](../effector/Scope.md) to use in dom event handlers.
 Only `effector-react/scope` version works this way, `useUnit` of `effector-react` is no-op for events and does not require `Provider` with scope.
 
+:::note
+`useUnit` introduced in effector-react 22.1.0
+:::
+
 ## `useUnit(unit)`
 
 **Arguments**
