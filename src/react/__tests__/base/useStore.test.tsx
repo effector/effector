@@ -1,5 +1,5 @@
 import * as React from 'react'
-//@ts-ignore
+//@ts-expect-error
 import {render, container, act} from 'effector/fixtures/react'
 import {
   createStore,
@@ -49,7 +49,7 @@ describe('useStore', () => {
         //@ts-expect-error
         useStore(undefined)
       } catch (error) {
-        fn(error.message)
+        fn((error as any).message)
       }
       return <span>Store text</span>
     }
@@ -821,5 +821,36 @@ describe('useStoreMap', () => {
     `)
     expect(fn).toBeCalledTimes(1)
     expect(rendered).toBeCalledTimes(3)
+  })
+  test('defaultValue support', async () => {
+    const addItem = createEvent<{id: string; value: string}>()
+    const $items = createStore([{id: 'user1', value: 'Alice'}])
+    $items.on(addItem, (items, item) => [...items, item])
+
+    const App = ({id}: {id: string}) => {
+      const {value} = useStoreMap({
+        store: $items,
+        keys: [id],
+        fn: items => items.find(e => e.id === id),
+        defaultValue: {id: 'guest', value: 'Guest'},
+      })
+      return <div>Hello {value}</div>
+    }
+    await render(<App id="user2" />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        Hello 
+        Guest
+      </div>
+    `)
+    await act(() => {
+      addItem({id: 'user2', value: 'Bob'})
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        Hello 
+        Bob
+      </div>
+    `)
   })
 })

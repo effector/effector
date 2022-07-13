@@ -24,6 +24,17 @@ export function useStoreMap<
 >(opts: {
   readonly store: Store<State>
   readonly keys: Keys
+  readonly fn: (state: State, keys: Keys) => Result | undefined
+  readonly updateFilter?: (update: Result, current: Result) => boolean
+  readonly defaultValue: Result
+}): Result
+export function useStoreMap<
+  State,
+  Result,
+  Keys extends [any] | ReadonlyArray<any> | any[],
+>(opts: {
+  readonly store: Store<State>
+  readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
 }): Result

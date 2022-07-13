@@ -152,6 +152,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
           keys: Keys
           fn(state: State, keys: Keys): Result
           updateFilter?: (update: Result, current: Result) => boolean
+          defaultValue?: Result
         }
       | Store<State>,
     separateFn?: (state: State, keys: Keys) => Result,
@@ -161,6 +162,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   let fn: (state: State, keys: Keys) => Result
   let updateFilter: (update: Result, current: Result) => boolean =
     basicUpdateFilter
+  let defaultValue: Result | undefined
   let store: Store<State>
   let keys: Keys
   if (separateFn) {
@@ -168,10 +170,13 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     store = configOrStore as Store<State>
     keys = [] as unknown as Keys
   } else {
-    fn = (configOrStore as any).fn
-    store = (configOrStore as any).store
-    keys = (configOrStore as any).keys
-    updateFilter = (configOrStore as any).updateFilter || basicUpdateFilter
+    ;({
+      fn,
+      store,
+      keys,
+      defaultValue,
+      updateFilter = basicUpdateFilter,
+    } = configOrStore as any)
   }
   if (!is.store(store)) throwError('useStoreMap expects a store')
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
@@ -196,13 +201,17 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     read,
     state => {
       if (stateRef.current !== state || !keysEqual(keysRef.current, keys)) {
-        const result = fn(state, keys)
-
+        let result = fn(state, keys)
+        if (result === undefined && defaultValue !== undefined) {
+          result = defaultValue
+        }
         stateRef.current = state
         keysRef.current = keys
 
-        // skip update, if undefined
-        // just like original store or previous implementation
+        /**
+         * skip update, if undefined
+         * just like original store or previous implementation
+         */
         if (result !== undefined) {
           valueRef.current = result
         }
