@@ -7,6 +7,8 @@ import {
   scopeBind,
   Scope,
   Unit,
+  Event,
+  Node,
 } from 'effector'
 import React from 'react'
 import {useSyncExternalStore} from 'use-sync-external-store/shim'
@@ -49,7 +51,7 @@ export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   return currentValue
 }
 
-export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
+export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   shape: Shape,
   scope?: Scope,
 ) {
@@ -58,9 +60,9 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
   const isList = Array.isArray(normShape)
   const entries = Object.entries(normShape)
   const [current, storeMap, stores] = React.useMemo(() => {
-    const initial = isList ? [] : {}
-    const stores = []
-    const storeMap = {}
+    const initial: Record<string, any> = isList ? [] : {}
+    const stores: Store<any>[] = []
+    const storeMap: Record<string, string> = {}
     for (const [key, value] of entries) {
       if (is.store(value)) {
         if (stores.includes(value)) {
@@ -68,11 +70,11 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
         }
         stores.push(value)
         /** note that this allows only one occurence of the store */
-        storeMap[value.graphite.id] = key
+        storeMap[(value as any).graphite.id] = key
         initial[key] = stateReader(value, scope)
       } else {
         if (!is.unit(value)) throwError('expect useUnit argument to be a unit')
-        initial[key] = scope ? scopeBind(value, {scope}) : value
+        initial[key] = scope ? scopeBind(value as Event<any>, {scope}) : value
       }
     }
     return [{ref: initial}, storeMap, stores]
@@ -82,9 +84,11 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
       const seq = [
         step.compute({
           fn(value, _, stack) {
-            const storeId = stack.parent.node.id
+            const storeId = stack.parent!.node.id
             const storeKey = storeMap[storeId]
-            current.ref = isList ? [...current.ref] : {...current.ref}
+            current.ref = isList
+              ? [...(current.ref as any[])]
+              : {...current.ref}
             current.ref[storeKey] = value
           },
         }),
@@ -105,9 +109,9 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
       if (scope) {
         const node = createNode({node: seq})
         const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
-        const storeLinks = []
+        const storeLinks: Node[][] = []
         stores.forEach(store => {
-          const id = store.graphite.id
+          const id = (store as any).graphite.id
           const links = scopeLinks[id] || []
           scopeLinks[id] = links
           links.push(node)
