@@ -51,7 +51,7 @@ const keywords = [
 
 const version = {
   effector: '22.3.0',
-  'effector-react': '22.0.6',
+  'effector-react': '22.1.0',
   'effector-vue': '22.1.0',
   'effector-solid': '0.22.0',
   forest: '0.21.1',
@@ -200,13 +200,13 @@ export default {
         require: './scope.js',
         default: './scope.mjs',
       },
-      './effector-solid.umd': './effector-solid.umd.js'
+      './effector-solid.umd': './effector-solid.umd.js',
     },
     'umd:main': 'effector-solid.umd.js',
     'jsnext:main': 'effector-solid.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
-      "solid-js": ">= 1.3.0",
+      'solid-js': '>= 1.3.0',
       effector: '^22.0.2',
     },
     files: [

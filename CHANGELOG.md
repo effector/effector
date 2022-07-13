@@ -2,6 +2,68 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.1.0
+
+- Added support for react 18 (PR [#655](https://github.com/effector/effector/pull/655))
+- Added `useUnit` method to read multiple stores and bind events or effects to scope in a single batched call (PR [#733](https://github.com/effector/effector/pull/733), [#738](https://github.com/effector/effector/pull/738))
+```tsx
+import {createEvent, createStore, fork} from 'effector'
+import {useUnit, Provider} from 'effector-react/scope'
+
+const inc = createEvent()
+const $count = createStore(0)
+const $title = createStore('useStore example')
+
+$count.on(inc, x => x + 1)
+
+const App = () => {
+  const [count, title, incFn] = useUnit([$count, $title, inc])
+  return (
+    <>
+      <h1>{title}</h1>
+      <p>Count: {count}</p>
+      <button onClick={() => incFn()}>increment</button>
+    </>
+  )
+}
+
+const scope = fork()
+
+render(
+  () => (
+    <Provider value={scope}>
+      <App />
+    </Provider>
+  ),
+  document.getElementById('root'),
+)
+```
+- Added `placeholder` option to `useList` to render in cases of empty list
+```tsx
+const ChatList = () => (
+  <div>
+    {useList($chats, {
+      fn: (chat) => <div>Chat {chat.name}</div>,
+      keys: [],
+      placeholder: <div>You have no chats yet. Add first one?</div>
+    })}
+  </div>
+)
+```
+- Added `defaultValue` option to `useStoreMap` to return in cases when `fn` returns undefined
+```tsx
+const ChatName = ({id}) => {
+  const chat = useStoreMap({
+    store: $chats,
+    keys: [id],
+    fn: (chats) => chats.find((chat) => chat.id === id),
+    defaultValue: {id: 'default', name: 'Default chat'},
+  })
+  return <span>{chat.name}</span>
+}
+```
+- Fixed `Gate.status` store being serialized (PR [#683](https://github.com/effector/effector/pull/683))
+
 ## effector 22.2.0
 
 - Added `filter` option to `sample`, thereby making `guard` an alias (issue [#521](https://github.com/effector/effector/issues/521))
