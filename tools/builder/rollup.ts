@@ -60,12 +60,19 @@ const externals = [
   'react',
   'use-sync-external-store/shim',
   'use-sync-external-store/shim/with-selector',
-  'solid-js'
+  'use-sync-external-store/shim/index.js',
+  'use-sync-external-store/shim/with-selector.js',
+  'solid-js',
 ]
 
 const getPlugins = (
   name: string,
-  {isEsm = false, replaceVueReactivity = false, replaceVueNext = false} = {},
+  {
+    isEsm = false,
+    replaceVueReactivity = false,
+    replaceReactShim = false,
+    replaceVueNext = false,
+  } = {},
 ) => ({
   babel: isEsm
     ? babel({
@@ -81,6 +88,7 @@ const getPlugins = (
           isEsm: true,
           replaceVueReactivity,
           replaceVueNext,
+          replaceReactShim,
         }),
       })
     : babel({
@@ -96,6 +104,7 @@ const getPlugins = (
           isEsm: false,
           replaceVueReactivity,
           replaceVueNext,
+          replaceReactShim: false,
         }),
       }),
   commonjs: commonjs({extensions}),
@@ -205,6 +214,7 @@ export async function rollupEffectorReact() {
         es: dir(`npm/${name}/${name}.mjs`),
       },
       inputExtension: 'ts',
+      replaceReactShim: true,
     }),
     createSSR({
       file: {
@@ -219,6 +229,9 @@ export async function rollupEffectorReact() {
       globals: {
         effector: 'effector',
         react: 'React',
+        'use-sync-external-store/shim/index.js': 'useSyncExternalStoreShim',
+        'use-sync-external-store/shim/with-selector.js':
+          'useSyncExternalStoreWithSelectorShim',
       },
       extension: 'ts',
     }),
@@ -240,10 +253,15 @@ export async function rollupEffectorReact() {
         },
         input: 'ssr',
         inputExtension: 'ts',
+        replaceReactShim: true,
       }),
     ])
     async function runBuild(file: string, format: 'cjs' | 'es') {
-      const plugins = getPlugins(name, {isEsm: format === 'es'})
+      const isEsm = format === 'es'
+      const plugins = getPlugins(name, {
+        isEsm,
+        replaceReactShim: isEsm,
+      })
       const pluginList = [
         plugins.resolve,
         plugins.json,
@@ -266,7 +284,7 @@ export async function rollupEffectorReact() {
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
-        externalLiveBindings: format === 'es',
+        externalLiveBindings: isEsm,
       })
     }
   }
@@ -298,18 +316,15 @@ export async function rollupEffectorSolid() {
         'solid-js': 'SolidJS',
       },
       extension: 'ts',
-    })
+    }),
   ])
 
   async function createSSR({
-   file: {cjs, es},
+    file: {cjs, es},
   }: {
     file: {cjs: string; es: string}
   }) {
-    await Promise.all([
-      runBuild(cjs, 'cjs'),
-      runBuild(es, 'es'),
-    ])
+    await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
     async function runBuild(file: string, format: 'cjs' | 'es') {
       const plugins = getPlugins(name, {isEsm: format === 'es'})
       const pluginList = [
@@ -524,16 +539,19 @@ async function createEsCjs(
     input = 'index',
     inputExtension = 'js',
     replaceVueReactivity = false,
+    replaceReactShim = false,
   }: {
     file: {es?: string; cjs: string}
     renderModuleGraph?: boolean
     input?: string
     inputExtension?: string
     replaceVueReactivity?: boolean
+    replaceReactShim?: boolean
   },
 ) {
   const pluginsCjs = getPlugins(input === 'index' ? name : input, {
     replaceVueNext: true,
+    replaceReactShim: false,
   })
   const pluginListCjs = [
     pluginsCjs.resolve,
@@ -548,6 +566,7 @@ async function createEsCjs(
     isEsm: true,
     replaceVueReactivity,
     replaceVueNext: true,
+    replaceReactShim,
   })
   const pluginListEsm = [
     pluginsEsm.resolve,

@@ -22,7 +22,7 @@ const meta = {
   isTest: process.env.NODE_ENV === 'test',
   isCompat: false,
   isEsm: false,
-  isSolid: false
+  isSolid: false,
 }
 
 const isBrowserstackDomTest = !!process.env.DOM
@@ -71,6 +71,20 @@ const aliases = {
     test: null,
     default: resolveFromSources('../npm/effector'),
   },
+  '^use-sync-external-store/shim/with-selector$': {
+    esm: 'use-sync-external-store/shim/with-selector.js',
+    compat: 'use-sync-external-store/shim/with-selector.js',
+    build: 'use-sync-external-store/shim/with-selector.js',
+    test: null,
+    default: null,
+  },
+  '^use-sync-external-store/shim$': {
+    esm: 'use-sync-external-store/shim/index.js',
+    compat: 'use-sync-external-store/shim/index.js',
+    build: 'use-sync-external-store/shim/index.js',
+    test: null,
+    default: null,
+  },
 }
 
 const babelPlugin = resolvePath(__dirname, 'src', 'babel', 'babel-plugin.js')
@@ -84,7 +98,9 @@ const locationPlugin = resolvePath(
 
 const babelConfig = {
   presets(meta) {
-    const jsxPreset = meta.isSolid ? ['babel-preset-solid'] : ['@babel/preset-react', {useBuiltIns: true}]
+    const jsxPreset = meta.isSolid
+      ? ['babel-preset-solid']
+      : ['@babel/preset-react', {useBuiltIns: true}]
 
     return [
       jsxPreset,
@@ -127,27 +143,17 @@ const babelConfig = {
         },
       ],
     ]
+    function addSrcPlugin(condition, fileName) {
+      if (!condition) return
+      const pluginPath = resolvePath(__dirname, 'src', 'babel', fileName)
+      result.unshift(pluginPath)
+    }
     if (meta.isTest) {
       result.push('@babel/plugin-transform-modules-commonjs')
     }
-    if (meta.isBuild) {
-      const constToLetPlugin = resolvePath(
-        __dirname,
-        'src',
-        'babel',
-        'constToLet.js',
-      )
-      result.unshift(constToLetPlugin)
-    }
-    if (meta.replaceVueReactivity) {
-      const replaceVuePlugin = resolvePath(
-        __dirname,
-        'src',
-        'babel',
-        'vueImports.js',
-      )
-      result.unshift(replaceVuePlugin)
-    }
+    addSrcPlugin(meta.isBuild, 'constToLet.js')
+    addSrcPlugin(meta.replaceVueReactivity, 'vueImports.js')
+    addSrcPlugin(meta.replaceReactShim, 'reactShimImports.js')
     return result
   },
   overrides: [

@@ -19,29 +19,26 @@ yarn add effector effector-react
 ```js
 import {createStore, combine, createEvent} from 'effector'
 
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 
 const inputText = createEvent()
 
-const $text = createStore('')
-  .on(inputText, (_, text) => text)
-  
-const $size = createStore(0)
-  .on(inputText, (_, text) => text.length)
+const $text = createStore('').on(inputText, (_, text) => text)
 
-const $form = combine({
-  text: $text,
-  size: $size,
-})
+const $size = $text.map(text => text.length)
 
 const Form = () => {
-  const {text, size} = useStore($form)
+  const {text, size} = useUnit({
+    text: $text,
+    size: $size,
+  })
+  const handleTextChange = useUnit(inputText)
 
   return (
     <form>
       <input
         type="text"
-        onChange={e => inputText(e.currentTarget.value)}
+        onChange={e => handleTextChange(e.currentTarget.value)}
         value={text}
       />
       <p>Length: {size}</p>
@@ -50,9 +47,9 @@ const Form = () => {
 }
 ```
 
-[Try it](https://share.effector.dev/vwTDZXOA)
+[Try it](https://share.effector.dev/gjsgk6oh)
 
-[useStore](https://effector.dev/docs/api/effector-react/useStore) in docs
+[useUnit](https://effector.dev/docs/api/effector-react/useUnit) in docs
+[Units](https://effector.dev/docs/glossary#unit) in docs
 [createStore](https://effector.dev/docs/api/effector/createStore) in docs
-[combine](https://effector.dev/docs/api/effector/combine) in docs
 [createEvent](https://effector.dev/docs/api/effector/createEvent) in docs

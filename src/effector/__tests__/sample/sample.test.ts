@@ -5,6 +5,8 @@ import {
   createStore,
   createEffect,
   is,
+  Node,
+  Event,
 } from 'effector'
 
 import {argumentHistory} from 'effector/fixtures'
@@ -14,6 +16,52 @@ test('sid support', () => {
   const sampled = sample({source, sid: 'foo'})
 
   expect(sampled.sid).toBe('foo')
+})
+
+describe('loc support', () => {
+  function getNode(value: Event<any>): Node {
+    // @ts-expect-error graphite property is not in public typings yet
+    return value.graphite
+  }
+  function getLoc({meta}: Node): void | {line: number; column: number} {
+    return 'config' in meta ? meta.config.loc : meta.loc
+  }
+  function findJointLoc(targetNode: Node) {
+    if (targetNode.family.links.length === 0)
+      throw Error(`this node didn't used in sample`)
+    let jointNode: Node
+    for (let i = targetNode.family.links.length - 1; i >= 0; i--) {
+      const node = targetNode.family.links[i]
+      if (node.meta.joint) {
+        jointNode = node
+        break
+      }
+    }
+    if (!jointNode!) throw Error(`this node didn't used in sample`)
+    return getLoc(jointNode)
+  }
+  test('sample without target', () => {
+    const clock = createEvent()
+    const result = sample({clock})
+    const loc = getLoc(getNode(result))
+    expect(loc).toHaveProperty('line')
+  })
+  describe('sample with target', () => {
+    test('basic case', () => {
+      const clock = createEvent()
+      const target = createEvent()
+      sample({clock: [clock], target: [target]})
+      const loc = findJointLoc(getNode(target))
+      expect(loc).toHaveProperty('line')
+    })
+    test('target-clock feedback loop', () => {
+      const trigger = createEvent()
+      sample({clock: trigger, target: trigger})
+      const loc = findJointLoc(getNode(trigger))
+      expect(loc).toHaveProperty('line')
+      expect(loc!.line).toBe(getLoc(getNode(trigger))!.line + 1)
+    })
+  })
 })
 
 describe('temporal consistency', () => {

@@ -28,7 +28,13 @@ useStoreMap<State, Result>(
 (_Result_)
 
 ```ts
-useStoreMap({store, keys, fn, updateFilter})
+useStoreMap<Source, Result>({
+  store: Store<Source>;
+  keys: any[];
+  fn: (state: Source, keys: any[]) => Result;
+  updateFilter?: (newResult: Result, oldResult: Result) => boolean;
+  defaultValue?: Result;
+}): Result
 ```
 
 Перегрузка для случаев, когда требуется передать зависимости в react (для обновления элементов при изменении этих зависимостей)
@@ -40,6 +46,7 @@ useStoreMap({store, keys, fn, updateFilter})
    - `keys` (_Array_): Массив, который будет передан в React.useMemo
    - `fn` (_(state, keys) => result_): Функция-селектор
    - `updateFilter` (_(newResult, oldResult) => boolean_): _Опционально_ функция, используемая для сравнения старого и нового результата работы хука, предназначено для избежания лишних ререндеров. Реализация опции для работы использует [createStore updateFilter](../effector/createStore.md)
+   - `defaultValue`: Опциональное значение по умолчанию, используется когда `fn` возвращает undefined
 
 **Возвращает**
 
@@ -47,6 +54,10 @@ useStoreMap({store, keys, fn, updateFilter})
 
 :::note
 Опция `updateFilter` добавлена в `effector-react@21.3.0`
+:::
+
+:::note
+Опция `defaultValue` добавлена в `effector-react@22.1.0`
 :::
 
 #### Пример
@@ -95,7 +106,7 @@ const User = ({id}) => {
 
 const UserList = () => {
   const ids = useStore($ids)
-  return ids.map(id => <User key={id} id={id} />)
+  return ids.map((id) => <User key={id} id={id} />)
 }
 ```
 

@@ -116,21 +116,26 @@ export function createGateImplementation<State>({
   return withDisplayName(`Gate:${fullName}`, GateComponent)
 }
 
-export function isPluginConfig(config: Record<string, any> | string) {
-  return isObject(config) && 'sid' in config
-}
-export function isGateConfig(config: Record<string, any> | string) {
-  return (
-    isObject(config) &&
-    ('domain' in config || 'defaultState' in config || 'name' in config)
-  )
-}
+const isPluginConfig = (config: Record<string, any> | string) =>
+  isObject(config) && 'sid' in config
 
-export function isStructuredConfig(args: unknown) {
-  return isObject(args) && (args.and || args.or)
-}
+const isGateConfig = (config: Record<string, any> | string) =>
+  isObject(config) &&
+  ('domain' in config || 'defaultState' in config || 'name' in config)
 
-export function createGate<Props>(...args: unknown[]): Gate<Props> {
+const isStructuredConfig = (arg: unknown) =>
+  isObject(arg) && (arg.and || arg.or)
+
+export function processCreateGateConfig<State>(
+  hook: typeof useGate,
+  args: unknown[],
+): {
+  domain?: Domain
+  defaultState: State | {}
+  hook: typeof useGate
+  mainConfig?: Record<string, any>
+  maybeConfig?: Record<string, any> & {sid?: string}
+} {
   const universalConfig =
     args && isStructuredConfig(args[0]) ? args : [{and: args}]
   const [[nameOrConfig, defaultStateOrConfig], metadata] =
@@ -153,12 +158,15 @@ export function createGate<Props>(...args: unknown[]): Gate<Props> {
     defaultState = nameOrConfig.defaultState || {}
     domain = nameOrConfig.domain
   }
-
-  return createGateImplementation<Props>({
-    hook: useGate,
+  return {
+    hook,
     domain,
     defaultState,
     mainConfig,
     maybeConfig,
-  })
+  }
+}
+
+export function createGate<Props>(...args: unknown[]): Gate<Props> {
+  return createGateImplementation<Props>(processCreateGateConfig(useGate, args))
 }

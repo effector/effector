@@ -7,6 +7,8 @@ import {
   scopeBind,
   Scope,
   Unit,
+  Event,
+  Node,
 } from 'effector'
 import React from 'react'
 import {useSyncExternalStore} from 'use-sync-external-store/shim'
@@ -49,7 +51,7 @@ export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   return currentValue
 }
 
-export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
+export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   shape: Shape,
   scope?: Scope,
 ) {
@@ -58,9 +60,9 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
   const isList = Array.isArray(normShape)
   const entries = Object.entries(normShape)
   const [current, storeMap, stores] = React.useMemo(() => {
-    const initial = isList ? [] : {}
-    const stores = []
-    const storeMap = {}
+    const initial: Record<string, any> = isList ? [] : {}
+    const stores: Store<any>[] = []
+    const storeMap: Record<string, string> = {}
     for (const [key, value] of entries) {
       if (is.store(value)) {
         if (stores.includes(value)) {
@@ -68,11 +70,11 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
         }
         stores.push(value)
         /** note that this allows only one occurence of the store */
-        storeMap[value.graphite.id] = key
+        storeMap[(value as any).graphite.id] = key
         initial[key] = stateReader(value, scope)
       } else {
         if (!is.unit(value)) throwError('expect useUnit argument to be a unit')
-        initial[key] = scope ? scopeBind(value, {scope}) : value
+        initial[key] = scope ? scopeBind(value as Event<any>, {scope}) : value
       }
     }
     return [{ref: initial}, storeMap, stores]
@@ -82,9 +84,11 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
       const seq = [
         step.compute({
           fn(value, _, stack) {
-            const storeId = stack.parent.node.id
+            const storeId = stack.parent!.node.id
             const storeKey = storeMap[storeId]
-            current.ref = isList ? [...current.ref] : {...current.ref}
+            current.ref = isList
+              ? [...(current.ref as any[])]
+              : {...current.ref}
             current.ref[storeKey] = value
           },
         }),
@@ -105,9 +109,9 @@ export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
       if (scope) {
         const node = createNode({node: seq})
         const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
-        const storeLinks = []
+        const storeLinks: Node[][] = []
         stores.forEach(store => {
-          const id = store.graphite.id
+          const id = (store as any).graphite.id
           const links = scopeLinks[id] || []
           scopeLinks[id] = links
           links.push(node)
@@ -148,6 +152,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
           keys: Keys
           fn(state: State, keys: Keys): Result
           updateFilter?: (update: Result, current: Result) => boolean
+          defaultValue?: Result
         }
       | Store<State>,
     separateFn?: (state: State, keys: Keys) => Result,
@@ -157,6 +162,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   let fn: (state: State, keys: Keys) => Result
   let updateFilter: (update: Result, current: Result) => boolean =
     basicUpdateFilter
+  let defaultValue: Result | undefined
   let store: Store<State>
   let keys: Keys
   if (separateFn) {
@@ -164,10 +170,13 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     store = configOrStore as Store<State>
     keys = [] as unknown as Keys
   } else {
-    fn = (configOrStore as any).fn
-    store = (configOrStore as any).store
-    keys = (configOrStore as any).keys
-    updateFilter = (configOrStore as any).updateFilter || basicUpdateFilter
+    ;({
+      fn,
+      store,
+      keys,
+      defaultValue,
+      updateFilter = basicUpdateFilter,
+    } = configOrStore as any)
   }
   if (!is.store(store)) throwError('useStoreMap expects a store')
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
@@ -192,13 +201,17 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     read,
     state => {
       if (stateRef.current !== state || !keysEqual(keysRef.current, keys)) {
-        const result = fn(state, keys)
-
+        let result = fn(state, keys)
+        if (result === undefined && defaultValue !== undefined) {
+          result = defaultValue
+        }
         stateRef.current = state
         keysRef.current = keys
 
-        // skip update, if undefined
-        // just like original store or previous implementation
+        /**
+         * skip update, if undefined
+         * just like original store or previous implementation
+         */
         if (result !== undefined) {
           valueRef.current = result
         }
@@ -218,17 +231,18 @@ export function useListBase<T>(
         keys?: any[]
         fn(item: T, index: number): React.ReactNode
         getKey?: (item: T) => string
+        placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
   scope?: Scope,
 ): React.ReactNode {
   let keys = [] as any[]
   let fn
-  let getKey: (item: T) => string
+  let getKey: ((item: T) => string) | void
+  let placeholder: React.ReactNode | void
   if (typeof renderItem === 'object' && renderItem !== null) {
     if (renderItem.keys) keys = renderItem.keys
-    fn = renderItem.fn
-    if (renderItem.getKey) getKey = renderItem.getKey
+    ;({fn, getKey, placeholder} = renderItem)
   } else {
     fn = renderItem
   }
@@ -268,7 +282,9 @@ export function useListBase<T>(
   fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
   if (getKey!) {
-    return useStoreBase(list, scope).map(value => {
+    const listItems = useStoreBase(list, scope)
+    if (listItems.length === 0 && placeholder) return placeholder
+    return listItems.map(value => {
       const key = fnRef.current[1](value)
       return React.createElement(Item, {
         keyVal: key,
@@ -288,6 +304,7 @@ export function useListBase<T>(
       ],
       scope,
     )
+    if (length === 0 && placeholder) return placeholder
     return Array.from({length}, (_, i) =>
       React.createElement(Item, {
         index: i,
