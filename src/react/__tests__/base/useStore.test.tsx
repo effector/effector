@@ -853,4 +853,43 @@ describe('useStoreMap', () => {
       </div>
     `)
   })
+  test('defaultValue rerendering', async () => {
+    const fn = jest.fn()
+    const addItem = createEvent<{id: string; value: string}>()
+    const removeItem = createEvent<string>()
+    const $items = createStore([{id: 'user1', value: 'Alice'}])
+    $items.on(addItem, (items, item) => [...items, item])
+    $items.on(removeItem, (items, id) => {
+      const idx = items.findIndex(e => e.id === id)
+      if (idx === -1) return
+      items = [...items]
+      items.splice(idx, 1)
+      return items
+    })
+
+    const App = ({id}: {id: string}) => {
+      const {value} = useStoreMap({
+        store: $items,
+        keys: [id],
+        fn: items => items.find(e => e.id === id),
+        defaultValue: {id: 'guest', value: 'Guest'},
+      })
+      fn(value)
+      return <div>Hello {value}</div>
+    }
+    await render(<App id="user2" />)
+    await act(() => {
+      addItem({id: 'user3', value: 'Carol'})
+    })
+    await act(() => {
+      removeItem('user3')
+    })
+    await act(() => {
+      addItem({id: 'user2', value: 'Bob'})
+    })
+    await act(() => {
+      removeItem('user2')
+    })
+    expect(argumentHistory(fn)).toEqual(['Guest', 'Bob', 'Guest'])
+  })
 })
