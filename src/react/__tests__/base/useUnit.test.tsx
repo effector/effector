@@ -1,8 +1,26 @@
 import * as React from 'react'
 //@ts-expect-error
 import {render, container, act} from 'effector/fixtures/react'
-import {createStore, createEvent, createEffect, combine, Store} from 'effector'
+import {
+  createStore,
+  createEvent,
+  createEffect,
+  combine,
+  sample,
+  attach,
+  Store,
+  fork,
+  allSettled,
+} from 'effector'
 import {useUnit} from 'effector-react'
+import {
+  useUnit as useUnitScope,
+  createGate,
+  useGate,
+  useEvent,
+  useStore,
+  Provider,
+} from 'effector-react/scope'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('useUnit', () => {
@@ -574,5 +592,139 @@ describe('useUnit', () => {
         },
       ]
     `)
+  })
+  describe('useUnit + useGate edge case', () => {
+    const getDataRawFx = createEffect(
+      () =>
+        new Promise<{id: number}[]>(rs => {
+          setTimeout(() => rs([{id: 1}]), 1000)
+        }),
+    )
+    test('useUnit + useGate', async () => {
+      const event = createEvent()
+      const getDataFx = attach({effect: getDataRawFx})
+      const $data = createStore<{id: number}[]>([])
+
+      const Gate = createGate({defaultState: 0})
+
+      sample({clock: Gate.open, target: getDataFx})
+
+      $data.on(getDataFx.doneData, (_, upd) => upd)
+
+      const Component = () => {
+        useGate(Gate, 0)
+        const [data, pending] = useUnitScope([$data, getDataFx.pending])
+        if (pending) return <div>Loading....</div>
+        return <div>{JSON.stringify(data)}</div>
+      }
+
+      const scope = fork()
+
+      await render(
+        <React.StrictMode>
+          <Provider value={scope}>
+            <Component />
+          </Provider>
+        </React.StrictMode>,
+      )
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          Loading....
+        </div>
+      `)
+      await act(async () => {
+        await allSettled(event, {scope})
+      })
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          [{"id":1}]
+        </div>
+      `)
+    })
+    test('useStore + useGate', async () => {
+      const event = createEvent()
+      const getDataFx = attach({effect: getDataRawFx})
+      const $data = createStore<{id: number}[]>([])
+
+      const Gate = createGate({defaultState: 0})
+
+      sample({clock: Gate.open, target: getDataFx})
+
+      $data.on(getDataFx.doneData, (_, upd) => upd)
+
+      const Component = () => {
+        useGate(Gate, 0)
+        const data = useStore($data)
+        const pending = useStore(getDataFx.pending)
+        if (pending) return <div>Loading....</div>
+        return <div>{JSON.stringify(data)}</div>
+      }
+
+      const scope = fork()
+
+      await render(
+        <React.StrictMode>
+          <Provider value={scope}>
+            <Component />
+          </Provider>
+        </React.StrictMode>,
+      )
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          Loading....
+        </div>
+      `)
+      await act(async () => {
+        await allSettled(event, {scope})
+      })
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          [{"id":1}]
+        </div>
+      `)
+    })
+    test('useUnit + useEffect', async () => {
+      const event = createEvent()
+      const getData = createEvent()
+      const getDataFx = attach({effect: getDataRawFx})
+      const $data = createStore<{id: number}[]>([])
+
+      sample({clock: getData, target: getDataFx})
+
+      $data.on(getDataFx.doneData, (_, upd) => upd)
+
+      const Component = () => {
+        const run = useEvent(getData)
+        const [data, pending] = useUnitScope([$data, getDataFx.pending])
+        React.useEffect(() => {
+          run()
+        }, [])
+        if (pending) return <div>Loading....</div>
+        return <div>{JSON.stringify(data)}</div>
+      }
+
+      const scope = fork()
+
+      await render(
+        <React.StrictMode>
+          <Provider value={scope}>
+            <Component />
+          </Provider>
+        </React.StrictMode>,
+      )
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          Loading....
+        </div>
+      `)
+      await act(async () => {
+        await allSettled(event, {scope})
+      })
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          [{"id":1}]
+        </div>
+      `)
+    })
   })
 })
