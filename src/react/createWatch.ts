@@ -1,11 +1,13 @@
-import {Store, clearNode, step, createNode, Scope, Node} from 'effector'
+import {Store, clearNode, step, createNode, Scope, Node, Cmd} from 'effector'
 
 export function createWatch<T>(
   store: Store<T>,
   fn: (value: T) => any,
   scope?: Scope,
+  batchStep?: Cmd,
 ) {
-  const seq = [step.run({fn: value => fn(value)})]
+  const seq: Cmd[] = [step.run({fn: value => fn(value)})]
+  if (batchStep) seq.unshift(batchStep)
   if (scope) {
     const node = createNode({node: seq})
     const id = (store as any).graphite.id
