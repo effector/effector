@@ -593,6 +593,131 @@ describe('useUnit', () => {
       ]
     `)
   })
+  it('should support dynamic change of store keys', async () => {
+    const upA = createEvent()
+    const upB = createEvent()
+    const $a = createStore(42).on(upA, s => s + 1)
+    const $b = createStore(37).on(upB, s => s - 1)
+
+    const fn = jest.fn()
+
+    const StoreRenderer: React.FC<{leftFirst: boolean}> = props => {
+      const {a, b, c, d} = useUnit(
+        props.leftFirst ? {a: $a, b: $b} : {c: $b, d: $a},
+      )
+      const x = a ?? c
+      const y = b ?? d
+      fn(a ? {a, b} : {c, d})
+      return (
+        <div>
+          {a ?? c}
+          {b ?? d}
+        </div>
+      )
+    }
+    const View = () => {
+      const [left, setLeft] = React.useState(true)
+
+      return (
+        <div>
+          <button
+            id="btn"
+            onClick={() => {
+              setLeft(s => !s)
+            }}>
+            switch
+          </button>
+          <StoreRenderer leftFirst={left} />
+        </div>
+      )
+    }
+
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          42
+          37
+        </div>
+      </div>
+    `)
+
+    await act(() => {
+      upB()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          42
+          36
+        </div>
+      </div>
+    `)
+
+    await act(async () => {
+      container.firstChild.querySelector('#btn').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          36
+          42
+        </div>
+      </div>
+    `)
+
+    await act(() => {
+      upB()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          35
+          42
+        </div>
+      </div>
+    `)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "a": 42,
+          "b": 37,
+        },
+        Object {
+          "a": 42,
+          "b": 36,
+        },
+        Object {
+          "c": 36,
+          "d": 42,
+        },
+        Object {
+          "c": 35,
+          "d": 42,
+        },
+      ]
+    `)
+  })
   describe('useUnit + useGate edge case', () => {
     const getDataRawFx = createEffect(
       () =>
