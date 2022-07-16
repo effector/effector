@@ -25,6 +25,25 @@ it('plain gate', async () => {
   expect(Gate.status.getState()).toBeFalsy()
 })
 
+it('close event should be called without arguments to Gate', async () => {
+  const spyClose = jest.fn()
+
+  const Gate = createGate()
+
+  Gate.close.watch(spyClose);
+
+  const wrapper = shallowMount({
+    template: `<div></div>`,
+    setup() {
+      useGate(Gate)
+    },
+  })
+
+  wrapper.unmount()
+
+  expect(spyClose).toHaveBeenCalled()
+})
+
 test('works without babel plugin', () => {
   const Gate3 = {_: createGate}._({name: 'name', defaultState: {state: 1}})
   const Gate4 = {_: createGate}._({
@@ -208,4 +227,13 @@ it('gate used before useStore hook', async () => {
   await nextTick()
   // @ts-ignore
   expect(wrapper.find('[data-test="checkbox"]').element.checked).toBeTruthy()
+})
+
+it('State should be updated if open event triggered manually', async () => {
+  const Gate = createGate({defaultState: 'empty'})
+  const scope = fork()
+
+  await allSettled(Gate.open, {scope, params: 'data'})
+
+  expect(scope.getState(Gate.state)).toBe('data')
 })
