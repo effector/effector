@@ -1,8 +1,9 @@
 import * as React from 'react'
-//@ts-ignore
+//@ts-expect-error
 import {render, container, act} from 'effector/fixtures/react'
 import {createStore, createEvent, createEffect, combine, Store} from 'effector'
 import {useUnit} from 'effector-react'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('useUnit', () => {
   it('should bind single store', async () => {
@@ -348,14 +349,17 @@ describe('useUnit', () => {
   it('should support dynamic change of store', async () => {
     const upA = createEvent()
     const upB = createEvent()
-    const $a = createStore(42).on(upA, s => s + 1)
-    const $b = createStore(37).on(upB, s => s - 1)
+    const $a = createStore(42)
+    const $b = createStore(37)
 
-    const rendered = jest.fn()
+    $a.on(upA, s => s + 1)
+    $b.on(upB, s => s - 1)
+
+    const fn = jest.fn()
 
     const StoreRenderer: React.FC<{store: Store<number>}> = props => {
       const {a} = useUnit({a: props.store})
-      rendered()
+      fn({a})
       return <div>{a}</div>
     }
     const View = () => {
@@ -389,21 +393,21 @@ describe('useUnit', () => {
       </div>
     `)
 
-    act(() => {
+    await act(() => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
-          <div>
-            <button
-              id="btn"
-            >
-              switch
-            </button>
-            <div>
-              42
-            </div>
-          </div>
-      `)
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          42
+        </div>
+      </div>
+    `)
 
     await act(async () => {
       container.firstChild.querySelector('#btn').click()
@@ -421,23 +425,34 @@ describe('useUnit', () => {
       </div>
     `)
 
-    act(() => {
+    await act(() => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
-          <div>
-            <button
-              id="btn"
-            >
-              switch
-            </button>
-            <div>
-              35
-            </div>
-          </div>
-      `)
-
-    expect(rendered).toBeCalledTimes(3)
+      <div>
+        <button
+          id="btn"
+        >
+          switch
+        </button>
+        <div>
+          35
+        </div>
+      </div>
+    `)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "a": 42,
+        },
+        Object {
+          "a": 36,
+        },
+        Object {
+          "a": 35,
+        },
+      ]
+    `)
   })
   it('should support dynamic change of store positions', async () => {
     const upA = createEvent()
@@ -445,11 +460,11 @@ describe('useUnit', () => {
     const $a = createStore(42).on(upA, s => s + 1)
     const $b = createStore(37).on(upB, s => s - 1)
 
-    const rendered = jest.fn()
+    const fn = jest.fn()
 
     const StoreRenderer: React.FC<{leftFirst: boolean}> = props => {
       const [a, b] = useUnit(props.leftFirst ? [$a, $b] : [$b, $a])
-      rendered()
+      fn({a, b})
       return (
         <div>
           {a}
@@ -489,7 +504,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    act(() => {
+    await act(() => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -523,7 +538,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    act(() => {
+    await act(() => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -539,7 +554,25 @@ describe('useUnit', () => {
         </div>
       </div>
     `)
-
-    expect(rendered).toBeCalledTimes(4)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "a": 42,
+          "b": 37,
+        },
+        Object {
+          "a": 42,
+          "b": 36,
+        },
+        Object {
+          "a": 36,
+          "b": 42,
+        },
+        Object {
+          "a": 35,
+          "b": 42,
+        },
+      ]
+    `)
   })
 })
