@@ -187,6 +187,7 @@ module.exports = {
               },
               globals: {
                 IS_REACT_ACT_ENVIRONMENT: true,
+                REACT_17: boolean(process.env.REACT_17),
               },
             },
             solid: {

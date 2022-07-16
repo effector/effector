@@ -411,7 +411,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    await act(() => {
+    await act(async () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -443,7 +443,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    await act(() => {
+    await act(async () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -522,7 +522,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    await act(() => {
+    await act(async () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -556,7 +556,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    await act(() => {
+    await act(async () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -647,7 +647,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    await act(() => {
+    await act(async () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -681,7 +681,7 @@ describe('useUnit', () => {
       </div>
     `)
 
-    await act(() => {
+    await act(async () => {
       upB()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -752,11 +752,20 @@ describe('useUnit', () => {
           </Provider>
         </React.StrictMode>,
       )
-      expect(container.firstChild).toMatchInlineSnapshot(`
-        <div>
-          Loading....
-        </div>
-      `)
+      // @ts-expect-error
+      if (globalThis.REACT_17) {
+        expect(container.firstChild).toMatchInlineSnapshot(`
+          <div>
+            []
+          </div>
+        `)
+      } else {
+        expect(container.firstChild).toMatchInlineSnapshot(`
+          <div>
+            Loading....
+          </div>
+        `)
+      }
       await act(async () => {
         await allSettled(event, {scope})
       })
