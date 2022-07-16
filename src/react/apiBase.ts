@@ -89,8 +89,6 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
       )
       flags.wasSubscribed = true
       return () => {
-        /** looks like it works without this write */
-        flags.stale = true
         subs.forEach(fn => fn())
       }
     },
