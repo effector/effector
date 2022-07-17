@@ -70,6 +70,7 @@ test('serialize: ignore', async () => {
 })
 
 describe('serialize: custom', () => {
+  test('base case', async () => {
     expect.assertions(4)
     let currentScope: Scope
     const aToStr = (v: number) => `${v}`
