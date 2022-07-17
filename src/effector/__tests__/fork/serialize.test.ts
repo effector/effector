@@ -1,4 +1,5 @@
 import {
+  Scope,
   createStore,
   createEvent,
   createDomain,
@@ -66,6 +67,44 @@ test('serialize: ignore', async () => {
   await allSettled(inc, {scope})
 
   expect(serialize(scope)).toEqual({b: 1})
+})
+
+describe('serialize: custom', () => {
+    expect.assertions(4)
+    let currentScope: Scope
+    const aToStr = (v: number) => `${v}`
+    const inc = createEvent()
+    const $a = createStore(0, {
+      sid: 'a',
+      serialize: {
+        to: value => {
+          expect(currentScope.getState($a)).toEqual(value)
+          return aToStr(value)
+        },
+        from: json => {
+          expect(aToStr(currentScope.getState($a))).toEqual(json)
+          return Number(json)
+        },
+      },
+    })
+    const $b = createStore(0, {sid: 'b'})
+    $a.on(inc, x => x + 1)
+    $b.on(inc, x => x + 1)
+
+    const scope = fork()
+
+    await allSettled(inc, {scope})
+
+    currentScope = scope
+    const values = serialize(scope)
+
+    expect(values).toEqual({a: '1', b: 1})
+
+    const clientScope = fork({
+      values,
+    })
+    expect(clientScope.getState($a)).toEqual(1)
+  })
 })
 
 it('serialize stores in nested domain', () => {
