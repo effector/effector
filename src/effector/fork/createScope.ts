@@ -62,6 +62,11 @@ export function createScope(unit?: Domain): Scope {
             const sid = getMeta(storeNode, 'sid')
             forkPage.sidIdMap[sid] = id
             forkPage.sidValuesMap[sid] = value
+
+            const serialize = getMeta(storeNode, 'serialize')
+            if (serialize && serialize !== 'ignore') {
+              forkPage.sidSerializeMap[sid] = serialize.to
+            }
           }
         }
       }),
@@ -92,6 +97,7 @@ export function createScope(unit?: Domain): Scope {
     reg: page,
     sidValuesMap: {},
     sidIdMap: {},
+    sidSerializeMap: {},
     getState(store) {
       if ('current' in store) {
         return getPageRef(currentPage, resultScope, null, store).current

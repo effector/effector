@@ -4,6 +4,7 @@ import {assert} from '../throw'
 import {traverseStores} from './util'
 import {getGraph, getMeta} from '../getter'
 
+const noopSerializer = (x: any) => x
 /**
  serialize state on server
  */
@@ -21,11 +22,12 @@ export function serialize(
   forIn(scope.sidValuesMap, (value, sid) => {
     if (includes(ignoredStores, sid)) return
     const id = scope.sidIdMap[sid]
+    const serializer = scope.sidSerializeMap[sid] || noopSerializer
     // if (!scope.changedStores.has(id)) return
     if (id && id in scope.reg) {
-      result[sid] = scope.reg[id].current
+      result[sid] = serializer(scope.reg[id].current)
     } else {
-      result[sid] = value
+      result[sid] = serializer(value)
     }
   })
   if ('onlyChanges' in config && !config.onlyChanges) {
