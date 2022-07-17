@@ -474,6 +474,8 @@ export function launch(unit, payload?, upsert?: boolean) {
   forkPage = getForkPage(lastStartedState)
 }
 
+const noopParser = (x: any) => x
+
 export const initRefInScope = (
   scope: {
     reg: Record<string, StateRef>
@@ -487,6 +489,9 @@ export const initRefInScope = (
 ) => {
   const refsMap = scope.reg
   const sid = sourceRef.sid
+  const serialize = sourceRef?.meta?.serialize
+  const parser =
+    serialize !== 'ignore' ? serialize?.from || noopParser : noopParser
   if (refsMap[sourceRef.id]) return
   const ref: StateRef = {
     id: sourceRef.id,
@@ -494,7 +499,7 @@ export const initRefInScope = (
   }
 
   if (sid && sid in scope.sidValuesMap && !(sid in scope.sidIdMap)) {
-    ref.current = scope.sidValuesMap[sid]
+    ref.current = parser(scope.sidValuesMap[sid])
   } else {
     if (sourceRef.before && !softRead) {
       let isFresh = false

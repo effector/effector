@@ -318,12 +318,21 @@ export function createStore<State>(
     meta,
     regional: true,
   })
+  const serializeMeta = getMeta(store, 'serialize')
   const derived = getMeta(store, 'derived')
-  const ignored = getMeta(store, 'serialize') === 'ignore'
+  const ignored = serializeMeta === 'ignore'
+  const customSerialize = !serializeMeta || ignored ? false : serializeMeta
   const sid: string | null = getMeta(store, 'sid')
   if (sid) {
     if (!ignored) setMeta(store, 'storeChange', true)
     plainState.sid = sid
+
+    if (customSerialize) {
+      plainState.meta = {
+        ...plainState?.meta,
+        serialize: customSerialize,
+      }
+    }
   }
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)

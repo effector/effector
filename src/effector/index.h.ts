@@ -16,6 +16,9 @@ export type StateRef = {
   before?: StateRefOp[]
   noInit?: boolean
   sid?: string
+  meta?: {
+    serialize?: 'ignore' | {from: (p: any) => any; to: (p: any) => any}
+  }
 }
 
 export type Config = {
