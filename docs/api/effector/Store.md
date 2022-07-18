@@ -7,11 +7,15 @@ keywords:
 description: Store, its methods and properties
 ---
 
-_Store_ is an object that holds the state value. Store is updated when it receives a value that is not equal (`!==`) to current one and to `undefined`
+_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](../../glossary.md#common-unit).
 
 ## Store Methods
 
-### `map(fn: (state: State, lastState?: T) => T)`
+### `map(fn: (state: State, lastState?: T) => T, firstState: T)`
+
+:::note
+Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn` and `firstState` are deprecated, use [`updateFilter`](./createStore.md) or explicit `createStore` instead.
+:::
 
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
 
@@ -43,8 +47,7 @@ import {createEvent, createStore} from 'effector'
 
 const changed = createEvent()
 
-const $title = createStore('')
-  .on(changed, (_, newTitle) => newTitle)
+const $title = createStore('').on(changed, (_, newTitle) => newTitle)
 
 const $length = $title.map(title => title.length)
 
@@ -390,7 +393,6 @@ const changedB = createEvent()
 
 const $store = createStore(0)
 
-
 // If you want to unsubscribe from all triggers simultaneously, better to manually merge
 const changed = merge([changedA, changedB])
 
@@ -546,8 +548,7 @@ import {createEvent, createStore} from 'effector'
 
 const add = createEvent()
 
-const $number = createStore(0)
-  .on(add, (state, data) => state + data)
+const $number = createStore(0).on(add, (state, data) => state + data)
 
 $number.watch(n => {
   console.log(n)

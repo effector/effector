@@ -30,6 +30,7 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
         keys: Keys
         fn(state: State, keys: Keys): Result
         updateFilter?: (update: Result, current: Result) => boolean
+        defaultValue?: Result
       }
     | Store<State>,
   separateFn?: (state: State, keys: Keys) => Result,
@@ -44,6 +45,7 @@ export function useList<T>(
         keys?: any[]
         fn(item: T, index: number): React.ReactNode
         getKey?: (item: T) => string
+        placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
 ): React.ReactNode {

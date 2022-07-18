@@ -1,6 +1,6 @@
 import {Domain, Event, Store} from 'effector'
 
-type Gate<Props> = {
+type Gate<Props = void> = {
   open: Event<Props>;
   close: Event<Props>;
   status: Store<boolean>;

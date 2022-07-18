@@ -5,11 +5,11 @@ description: Method for conditional event routing.
 ---
 
 :::note
-since effector 22.2.0 preferably use [sample](sample.md)
+Since effector 22.2.0 preferably use [sample](sample.md)
 :::
 
 :::note
-since effector 20.4.0
+Since effector 20.4.0
 :::
 
 Method for conditional event routing.

@@ -78,6 +78,7 @@ const sidebar = {
             'api/effector-react/useStore',
             'api/effector-react/useStoreMap',
             'api/effector-react/useList',
+            'api/effector-react/useUnit',
           ],
         },
         {
@@ -101,6 +102,30 @@ const sidebar = {
             'api/effector-react/createComponent',
             'api/effector-react/createStoreConsumer',
             'api/effector-react/connect',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'effector-solid',
+      items: [
+        'api/effector-solid/effector-solid',
+        {
+          type: 'category',
+          label: 'Reactivity helpers',
+          items: [
+            'api/effector-solid/useUnit',
+            'api/effector-solid/useStoreMap',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Gate',
+          items: [
+            'api/effector-solid/gate',
+            'api/effector-solid/createGate',
+            'api/effector-solid/useGate',
           ],
         },
       ],

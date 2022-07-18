@@ -549,3 +549,43 @@ test('getKey', async () => {
     ]
   `)
 })
+
+test('placeholder', async () => {
+  const addItem = createEvent<string>()
+  const $items = createStore<string[]>([])
+  $items.on(addItem, (list, item) => [...list, item])
+  const Placeholder = () => <div>No items in list</div>
+  const List = () => (
+    <div>
+      {useList($items, {
+        fn: item => <div>Item {item}</div>,
+        placeholder: <Placeholder />,
+      })}
+    </div>
+  )
+  const App = () => (
+    <>
+      <List />
+    </>
+  )
+
+  await render(<App />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <div>
+        No items in list
+      </div>
+    </div>
+  `)
+  await act(() => {
+    addItem('foo')
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <div>
+        Item 
+        foo
+      </div>
+    </div>
+  `)
+})

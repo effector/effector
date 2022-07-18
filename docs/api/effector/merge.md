@@ -3,14 +3,16 @@ id: merge
 title: merge
 description: merge is a method for creating an event triggered by given units
 ---
+
 :::note
-since effector 20.0.0
-:::  
+Since effector 20.0.0
+:::
 Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
 
 ```ts
 merge(units: Unit[]): Event
 ```
+
 **Arguments**
 
 1. `units`: Array of [units](../../glossary.md#common-unit) to be merged

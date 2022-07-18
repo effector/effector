@@ -25,6 +25,7 @@ import {
   useEvent,
   useStoreMap,
   createGate,
+  useUnit,
 } from 'effector-react/scope'
 
 async function request(url: string) {
@@ -1015,4 +1016,111 @@ describe('behavior on scope changes', () => {
       </div>
     `)
   })
+})
+
+test('useUnit should bind stores to scope', async () => {
+  const $a = createStore(0)
+
+  const A = () => {
+    const {a} = useUnit({a: $a})
+    return a
+  }
+  const App = ({scope}: {scope: Scope}) => (
+    <Provider value={scope}>
+      <div>
+        <A />
+      </div>
+    </Provider>
+  )
+
+  const scopeA = fork({
+    values: [[$a, 42]],
+  })
+  const scopeB = fork()
+
+  await render(<App scope={scopeA} />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      42
+    </div>
+  `)
+
+  await render(<App scope={scopeB} />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      0
+    </div>
+  `)
+})
+
+test('useUnit should bind units to scope', async () => {
+  const up = createEvent()
+  const $a = createStore(0).on(up, s => s + 1)
+
+  const A = ({id}: {id: string}) => {
+    const {a, inc} = useUnit({a: $a, inc: up})
+
+    return (
+      <button id={id} onClick={() => inc()}>
+        {a}
+      </button>
+    )
+  }
+  const App = ({scope, id}: {scope: Scope; id: string}) => (
+    <Provider value={scope}>
+      <A id={id} />
+    </Provider>
+  )
+  const Page = ({A, B}: {A: Scope; B: Scope}) => {
+    return (
+      <div>
+        <App scope={A} id="a" />
+        <App scope={B} id="b" />
+      </div>
+    )
+  }
+
+  const VALUE = 42
+
+  const scopeA = fork({
+    values: [[$a, VALUE]],
+  })
+  const scopeB = fork()
+
+  await render(<Page A={scopeA} B={scopeB} />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <button
+        id="a"
+      >
+        42
+      </button>
+      <button
+        id="b"
+      >
+        0
+      </button>
+    </div>
+  `)
+
+  await act(async () => {
+    container.firstChild.querySelector('#a').click()
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <button
+        id="a"
+      >
+        43
+      </button>
+      <button
+        id="b"
+      >
+        0
+      </button>
+    </div>
+  `)
+  expect(scopeA.getState($a)).toEqual(VALUE + 1)
+  expect(scopeB.getState($a)).toEqual(0)
+  expect($a.getState()).toEqual(0)
 })

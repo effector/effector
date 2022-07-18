@@ -9,8 +9,8 @@ Every item will be memoized and updated only when their data changes.
 ```ts
 useList<T>(
   store: Store<T[]>,
-  fn: (value: T, index: number) => React.Node
-): React.Node
+  fn: (value: T, index: number) => React.ReactNode
+): React.ReactNode
 ```
 
 **Arguments**
@@ -27,10 +27,11 @@ useList<T>(
   store: Store<T[]>,
   config: {
     keys: any[]
-    fn: (value: T, index: number) => React.Node
+    fn: (value: T, index: number) => React.ReactNode
     getKey?: (value: T) => React.Key
+    placeholder?: React.ReactNode
   }
-): React.Node
+): React.ReactNode
 ```
 
 Used when you need to pass dependencies to react (to update items when some of its dependencies are changed).
@@ -45,9 +46,14 @@ In such case, we need to tell react about our dependencies and pass keys explici
 2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useList`
 3. `fn` (_Function_): Render function which will be called for every item in list
 4. `getKey` (_(value) => React.Key_): Optional function to compute key for every item of list
+5. `placeholder` (_ReactNode_): Optional react node to render instead of empty list
 
 :::note
 `getKey` option introduced in `effector-react@21.3.0`
+:::
+
+:::note
+`placeholder` option introduced in `effector-react@22.1.0`
 :::
 
 ## Examples
@@ -156,7 +162,7 @@ const $friends = createStore(['bob'])
 
 const App = () => {
   const user = useStore($user)
-  
+
   return useList($friends, {
     keys: [user],
     fn: friend => (

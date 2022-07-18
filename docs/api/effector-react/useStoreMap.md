@@ -28,7 +28,13 @@ Short version of `useStoreMap` introduced in `effector-react@21.3.0`
 (_Result_)
 
 ```ts
-useStoreMap({store, keys, fn, updateFilter?})
+useStoreMap<Source, Result>({
+  store: Store<Source>;
+  keys: any[];
+  fn: (state: Source, keys: any[]) => Result;
+  updateFilter?: (newResult: Result, oldResult: Result) => boolean;
+  defaultValue?: Result;
+}): Result
 ```
 
 Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
@@ -40,6 +46,7 @@ Overload used when you need to pass dependencies to react (to update items when 
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
    - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](../effector/createStore.md) option under the hood
+   - `defaultValue`: Optional default value, used whenever `fn` returns undefined
 
 **Returns**
 
@@ -49,9 +56,13 @@ Overload used when you need to pass dependencies to react (to update items when 
 `updateFilter` option introduced in `effector-react@21.3.0`
 :::
 
+:::note
+`defaultValue` option introduced in `effector-react@22.1.0`
+:::
+
 #### Example
 
-This hook is very useful for working with lists, especially with large ones
+This hook is useful for working with lists, especially with large ones
 
 ```js
 import {createStore} from 'effector'
@@ -95,7 +106,7 @@ const User = ({id}) => {
 
 const UserList = () => {
   const ids = useStore($ids)
-  
+
   return ids.map(id => <User key={id} id={id} />)
 }
 ```

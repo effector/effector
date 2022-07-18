@@ -290,10 +290,10 @@ in [split](https://effector.dev/docs/api/effector/split))
 function variant<T>(config: {
   source: Store<T>
   key: string
-  cases: {[caseName: string]: ({store: Store<T>}) => void
-}
-}):
-void
+  cases: {
+    [caseName: string]: ({store: Store<T>}) => void
+  }
+}): void
 ```
 
 ### route
@@ -428,7 +428,7 @@ Object with class names as keys and boolean values, possibly reactive
 type ClassListMap = {[className: string]: Store<boolean> | boolean}
 ```
 
-```ts
+```typescript
 spec({
   classList: {
     'class-name': true,
@@ -445,4 +445,8 @@ Array with class names, possibly reactive
 type ClassListArray = Array<Store<string> | string>
 ```
 
-spec({ classList: { classList: ['class-name', $stringStore] } })
+```typescript
+spec({
+  classList: ['class-name', $stringStore],
+})
+```

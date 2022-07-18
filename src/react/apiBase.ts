@@ -1,13 +1,4 @@
-import {
-  Store,
-  is,
-  createNode,
-  step,
-  clearNode,
-  scopeBind,
-  Scope,
-  Unit,
-} from 'effector'
+import {Store, is, step, scopeBind, Scope, Unit, Event} from 'effector'
 import React from 'react'
 import {useSyncExternalStore} from 'use-sync-external-store/shim'
 import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/with-selector'
@@ -49,94 +40,97 @@ export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
   return currentValue
 }
 
-export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
+export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   shape: Shape,
   scope?: Scope,
 ) {
-  const isShape = !is.unit(shape) && typeof shape === 'object'
-  const normShape = isShape ? shape : {unit: shape}
+  const isSingleUnit = is.unit(shape)
+  const normShape: {[key: string]: Unit<any>} = isSingleUnit
+    ? {unit: shape}
+    : shape
   const isList = Array.isArray(normShape)
-  const entries = Object.entries(normShape)
-  const [current, storeMap, stores] = React.useMemo(() => {
-    const initial = isList ? [] : {}
-    const stores = []
-    const storeMap = {}
-    for (const [key, value] of entries) {
-      if (is.store(value)) {
-        if (stores.includes(value)) {
-          throwError(`useUnit store at key "${key}" is already exists in shape`)
-        }
-        stores.push(value)
-        /** note that this allows only one occurence of the store */
-        storeMap[value.graphite.id] = key
-        initial[key] = stateReader(value, scope)
+  const flagsRef = React.useRef({
+    stale: true,
+    wasSubscribed: false,
+    justSubscribed: false,
+  })
+  const [eventsShape, storeKeys, storeValues] = React.useMemo(() => {
+    flagsRef.current.stale = true
+    const shape = Array.isArray(normShape) ? [] : ({} as any)
+    const storeKeys: string[] = []
+    const storeValues: Array<Store<any>> = []
+    for (const key in normShape) {
+      const unit = normShape[key]
+      if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
+      if (is.event(unit) || is.effect(unit)) {
+        shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
       } else {
-        if (!is.unit(value)) throwError('expect useUnit argument to be a unit')
-        initial[key] = scope ? scopeBind(value, {scope}) : value
+        shape[key] = null
+        storeKeys.push(key)
+        storeValues.push(unit as Store<any>)
       }
     }
-    return [{ref: initial}, storeMap, stores]
-  }, [...entries.flat(), scope])
+    return [shape, storeKeys, storeValues]
+  }, [flagsRef, scope, ...Object.keys(normShape), ...Object.values(normShape)])
+  const stateRef = React.useRef({value: eventsShape, storeKeys})
   const subscribe = React.useCallback(
     (cb: () => void) => {
-      const seq = [
-        step.compute({
-          fn(value, _, stack) {
-            const storeId = stack.parent.node.id
-            const storeKey = storeMap[storeId]
-            current.ref = isList ? [...current.ref] : {...current.ref}
-            current.ref[storeKey] = value
-          },
-        }),
-        /**
-         * 'effect' priority cannot be batched
-         * so we wait other effects to finish and then run batching
-         * this is not an essential to work
-         * just a fine tuning of a really low priority (ui) update
-         *
-         * also note that step.run({fn}) is an alias for
-         * step.compute({fn, priority: 'effect'})
-         * and since 22 version fn might be ommited if not used
-         * */
-        step.compute({priority: 'effect'}),
-        step.compute({priority: 'sampler', batch: true}),
-        step.run({fn: () => cb()}),
-      ]
-      if (scope) {
-        const node = createNode({node: seq})
-        const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
-        const storeLinks = []
-        stores.forEach(store => {
-          const id = store.graphite.id
-          const links = scopeLinks[id] || []
-          scopeLinks[id] = links
-          links.push(node)
-          storeLinks.push(links)
-        })
-        return () => {
-          storeLinks.forEach(links => {
-            const idx = links.indexOf(node)
-            if (idx !== -1) links.splice(idx, 1)
-          })
-          clearNode(node)
-        }
-      } else {
-        const node = createNode({
-          node: seq,
-          parent: stores,
-          family: {owners: stores},
-        })
-        return () => {
-          clearNode(node)
+      const flags = flagsRef.current
+      if (flags.wasSubscribed) flags.justSubscribed = true
+      const cbCaller = () => {
+        if (!flags.stale) {
+          flags.stale = true
+          cb()
         }
       }
+      const batchStep = step.compute({priority: 'sampler', batch: true})
+      const subs = storeValues.map(store =>
+        createWatch(store, cbCaller, scope, batchStep),
+      )
+      flags.wasSubscribed = true
+      return () => {
+        subs.forEach(fn => fn())
+      }
     },
-    [current],
+    [storeValues, scope, stateRef, flagsRef],
   )
-  const read = React.useCallback(
-    () => (isShape ? current.ref : current.ref.unit),
-    [current],
-  )
+  const read = React.useCallback(() => {
+    const state = stateRef.current
+    const flags = flagsRef.current
+    let resultValue
+    let changed = false
+    const oldVal = state.value
+    const oldKeys = state.storeKeys
+    if (
+      (storeKeys.length > 0 || oldKeys.length > 0) &&
+      (flags.stale || flags.justSubscribed)
+    ) {
+      changed = !flags.justSubscribed
+      resultValue = isList ? [...eventsShape] : {...eventsShape}
+      if (oldKeys.length !== storeKeys.length) {
+        changed = true
+      }
+      for (let i = 0; i < storeKeys.length; i++) {
+        const updatedValue = stateReader(storeValues[i], scope)
+        const key = storeKeys[i]
+        if (!changed) {
+          if (!oldKeys.includes(key)) {
+            changed = true
+          } else {
+            changed = oldVal[key] !== updatedValue
+          }
+        }
+        resultValue[key] = updatedValue
+      }
+    }
+    if (changed) {
+      state.value = resultValue
+    }
+    state.storeKeys = storeKeys
+    flags.stale = false
+    flags.justSubscribed = false
+    return isSingleUnit ? state.value.unit : state.value
+  }, [subscribe, flagsRef])
   return useSyncExternalStore(subscribe, read, read)
 }
 
@@ -148,6 +142,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
           keys: Keys
           fn(state: State, keys: Keys): Result
           updateFilter?: (update: Result, current: Result) => boolean
+          defaultValue?: Result
         }
       | Store<State>,
     separateFn?: (state: State, keys: Keys) => Result,
@@ -157,6 +152,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   let fn: (state: State, keys: Keys) => Result
   let updateFilter: (update: Result, current: Result) => boolean =
     basicUpdateFilter
+  let defaultValue: Result | undefined
   let store: Store<State>
   let keys: Keys
   if (separateFn) {
@@ -164,10 +160,13 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     store = configOrStore as Store<State>
     keys = [] as unknown as Keys
   } else {
-    fn = (configOrStore as any).fn
-    store = (configOrStore as any).store
-    keys = (configOrStore as any).keys
-    updateFilter = (configOrStore as any).updateFilter || basicUpdateFilter
+    ;({
+      fn,
+      store,
+      keys,
+      defaultValue,
+      updateFilter = basicUpdateFilter,
+    } = configOrStore as any)
   }
   if (!is.store(store)) throwError('useStoreMap expects a store')
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
@@ -192,13 +191,17 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
     read,
     state => {
       if (stateRef.current !== state || !keysEqual(keysRef.current, keys)) {
-        const result = fn(state, keys)
-
+        let result = fn(state, keys)
+        if (result === undefined && defaultValue !== undefined) {
+          result = defaultValue
+        }
         stateRef.current = state
         keysRef.current = keys
 
-        // skip update, if undefined
-        // just like original store or previous implementation
+        /**
+         * skip update, if undefined
+         * just like original store or previous implementation
+         */
         if (result !== undefined) {
           valueRef.current = result
         }
@@ -218,17 +221,18 @@ export function useListBase<T>(
         keys?: any[]
         fn(item: T, index: number): React.ReactNode
         getKey?: (item: T) => string
+        placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
   scope?: Scope,
 ): React.ReactNode {
   let keys = [] as any[]
   let fn
-  let getKey: (item: T) => string
+  let getKey: ((item: T) => string) | void
+  let placeholder: React.ReactNode | void
   if (typeof renderItem === 'object' && renderItem !== null) {
     if (renderItem.keys) keys = renderItem.keys
-    fn = renderItem.fn
-    if (renderItem.getKey) getKey = renderItem.getKey
+    ;({fn, getKey, placeholder} = renderItem)
   } else {
     fn = renderItem
   }
@@ -268,7 +272,9 @@ export function useListBase<T>(
   fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
   if (getKey!) {
-    return useStoreBase(list, scope).map(value => {
+    const listItems = useStoreBase(list, scope)
+    if (listItems.length === 0 && placeholder) return placeholder
+    return listItems.map(value => {
       const key = fnRef.current[1](value)
       return React.createElement(Item, {
         keyVal: key,
@@ -288,6 +294,7 @@ export function useListBase<T>(
       ],
       scope,
     )
+    if (length === 0 && placeholder) return placeholder
     return Array.from({length}, (_, i) =>
       React.createElement(Item, {
         index: i,

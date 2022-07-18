@@ -1,6 +1,8 @@
 import * as React from 'react'
+//@ts-expect-error
 import {render, cleanup, container, act} from 'effector/fixtures/react'
 import {createGate, useGate, useStore} from 'effector-react'
+import {createGate as createGateScope} from 'effector-react/scope'
 
 import {argumentHistory} from 'effector/fixtures'
 import {
@@ -282,4 +284,32 @@ test('setState warning', async () => {
   })
   console.error = oldConsoleError
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+})
+
+describe('createGate without arguments', () => {
+  test('common createGate', () => {
+    expect(() => {
+      ;({_: createGate}._())
+    }).not.toThrow()
+  })
+
+  test('common createGate with babel-plugin', () => {
+    expect(() => {
+      createGate()
+    }).not.toThrow()
+  })
+
+  test('scope createGate', () => {
+    expect(() => {
+      //@ts-expect-error
+      ;({_: createGateScope}._())
+    }).not.toThrow()
+  })
+
+  test('scope createGate with babel-plugin', () => {
+    expect(() => {
+      //@ts-expect-error
+      createGateScope()
+    }).not.toThrow()
+  })
 })

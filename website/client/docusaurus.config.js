@@ -1,7 +1,7 @@
 module.exports = {
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'ru'],
+    locales: ['en', 'ru', 'zh-cn'],
   },
   title: 'effector',
   tagline: 'Business logic with ease',
