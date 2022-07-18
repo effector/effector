@@ -106,6 +106,59 @@ describe('serialize: custom', () => {
     })
     expect(clientScope.getState($a)).toEqual(1)
   })
+
+  test('Map usecase', () => {
+    const $map = createStore(new Map<number, number>(), {
+      sid: 'map',
+      serialize: {
+        to: map => [...map.entries()],
+        from: jsonMap => new Map(jsonMap),
+      },
+    })
+
+    const scope = fork()
+
+    allSettled($map, {scope, params: new Map().set(1, 2).set(2, 3)})
+
+    const values = serialize(scope)
+
+    expect(values).toEqual({
+      map: [...new Map().set(1, 2).set(2, 3)],
+    })
+
+    const clientScope = fork({
+      values,
+    })
+
+    expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
+  })
+
+  test('hydrate case', () => {
+    const domain = createDomain()
+    const $map = domain.createStore(new Map<number, number>(), {
+      sid: 'map',
+      serialize: {
+        to: map => [...map.entries()],
+        from: jsonMap => new Map(jsonMap),
+      },
+    })
+
+    const scope = fork(domain)
+
+    allSettled($map, {scope, params: new Map().set(1, 2).set(2, 3)})
+
+    const values = serialize(scope)
+
+    expect(values).toEqual({
+      map: [...new Map().set(1, 2).set(2, 3)],
+    })
+
+    const clientScope = fork(domain)
+
+    hydrate(clientScope, {values})
+
+    expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
+  })
 })
 
 it('serialize stores in nested domain', () => {
