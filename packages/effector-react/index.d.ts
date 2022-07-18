@@ -159,9 +159,13 @@ export function useUnit<
   list: [...List],
 ): {
   [Key in keyof List]: List[Key] extends Event<infer T>
-    ? (payload: T) => T
+    ? T extends void
+      ? () => void
+      : (payload: T) => T
     : List[Key] extends Effect<infer P, infer D, any>
-    ? (payload: P) => Promise<D>
+    ? P extends void
+      ? () => Promise<D>
+      : (payload: P) => Promise<D>
     : List[Key] extends Store<infer V>
     ? V
     : never
@@ -172,9 +176,13 @@ export function useUnit<
   shape: Shape,
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
-    ? (payload: T) => T
+    ? T extends void
+      ? () => void
+      : (payload: T) => T
     : Shape[Key] extends Effect<infer P, infer D, any>
-    ? (payload: P) => Promise<D>
+    ? P extends void
+      ? () => Promise<D>
+      : (payload: P) => Promise<D>
     : Shape[Key] extends Store<infer V>
     ? V
     : never

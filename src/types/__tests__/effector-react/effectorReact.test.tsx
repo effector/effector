@@ -204,3 +204,30 @@ test('useUnit should not allow non-unit values', () => {
     "
   `)
 })
+
+test('useUnit should correctly resolve void events and effects in shape mode', () => {
+  const event = createEvent<void>()
+  const effect = createEffect(() => {})
+
+  function x(callback: (e: unknown) => void | Promise<void>) {
+
+  }
+
+  const Comp = () => {
+    const {runEvent} = useUnit({runEvent: event})
+    const {runEffect} = useUnit({runEffect: effect})
+    const [runEvent1] = useUnit([event])
+    const [runEffect1] = useUnit([effect])
+
+    x(runEvent)
+    x(runEffect)
+    x(runEvent1)
+    x(runEffect1)
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
