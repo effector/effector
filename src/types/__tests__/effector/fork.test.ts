@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createDomain, Store, fork, serialize, allSettled} from 'effector'
+import {createDomain, Store, fork, serialize, allSettled, Json} from 'effector'
 
 const typecheck = '{global}'
 
@@ -46,6 +46,73 @@ describe('serialize cases (should fail)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<void>' is missing the following properties from type 'Store<any>': reset, getState, on, off, and 2 more.
+      "
+    `)
+  })
+})
+
+describe('custom serialize for stores', () => {
+  test('Correct case', () => {
+    const d = createDomain()
+    const $map = d.createStore<Map<number, number>, [number, number][]>(
+      new Map<number, number>(),
+      {
+        serialize: {
+          to: map => {
+            const result = [...map.entries()]
+
+            return result
+          },
+          from: jsonMap => {
+            return new Map(jsonMap)
+          },
+        },
+      },
+    )
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('Incorrect case', () => {
+    const d = createDomain()
+    const $map = d.createStore<Map<number, number>>(new Map<number, number>(), {
+      serialize: {
+        // @ts-expect-error
+        to: map => {
+          return map // non-Json value
+        },
+        // @ts-expect-error
+        from: jsonMap => {
+          const serializedValue: typeof jsonMap extends Json
+            ? typeof jsonMap
+            : never = jsonMap
+
+          // @ts-expect-error
+          return new Map(serializedValue)
+        },
+      },
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type '(map: Map<number, number>) => Map<number, number>' is not assignable to type '(state: Map<number, number>) => Json'.
+        Type 'Map<number, number>' is not assignable to type 'Json'.
+          Type 'Map<number, number>' is not assignable to type '{ [k: string]: Json; }'.
+            Index signature for type 'string' is missing in type 'Map<number, number>'.
+      Type '(jsonMap: Json) => Map<string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined>' is not assignable to type '(json: Json) => Map<number, number>'.
+        Type 'Map<string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined>' is not assignable to type 'Map<number, number>'.
+          Type 'string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined' is not assignable to type 'number'.
+            Type 'undefined' is not assignable to type 'number'.
+      No overload matches this call.
+        Overload 1 of 3, '(iterable: Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>): Map<...>', gave the following error.
+          Argument of type 'Json' is not assignable to parameter of type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>'.
+            Type 'undefined' is not assignable to type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>'.
+        Overload 2 of 3, '(entries?: readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined): Map<...>', gave the following error.
+          Argument of type 'Json' is not assignable to parameter of type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined'.
+            Type 'string' is not assignable to type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined'.
       "
     `)
   })
