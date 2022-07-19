@@ -159,6 +159,33 @@ describe('serialize: custom', () => {
 
     expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
   })
+  test('does not affect normal ref initialization', () => {
+    const parser = jest.fn()
+    const up = createEvent()
+    const $a = createStore(0, {
+      serialize: {
+        to: value => {
+          return `${value}`
+        },
+        from: _json => {
+          parser()
+          return 42
+        },
+      },
+    }).on(up, s => s + 1)
+
+    const scopeA = fork()
+    allSettled(up, {scope: scopeA})
+    expect(scopeA.getState($a)).toEqual(1)
+
+    const scopeB = fork({
+      values: [[$a, 6]],
+    })
+    allSettled(up, {scope: scopeB})
+    expect(scopeB.getState($a)).toEqual(7)
+
+    expect(parser).toBeCalledTimes(0)
+  })
 })
 
 it('serialize stores in nested domain', () => {
