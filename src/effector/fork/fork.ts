@@ -23,6 +23,8 @@ export function fork(
         assert(is.store(unit), 'Values map can contain only stores as keys'),
       )
       Object.assign(scope.sidValuesMap, valuesSidMap)
+      scope.fromSerialize =
+        !Array.isArray(config.values) && !(config.values instanceof Map)
     }
     if (config.handlers) {
       scope.handlers = normalizeValues(config.handlers, unit =>

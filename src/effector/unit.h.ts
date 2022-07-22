@@ -148,6 +148,7 @@ export interface Domain extends Unit {
 }
 
 export interface Scope extends Unit {
+  fromSerialize?: boolean
   kind: kind
   graphite: Node
   // changedStores: Set<string>

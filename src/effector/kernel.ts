@@ -416,14 +416,7 @@ export function launch(unit, payload?, upsert?: boolean) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
       forEach(node.next, nextNode => {
-        pushFirstHeapItem(
-          'child',
-          page,
-          nextNode,
-          stack,
-          finalValue,
-          forkPage,
-        )
+        pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
       })
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
@@ -481,6 +474,7 @@ export const initRefInScope = (
     reg: Record<string, StateRef>
     sidValuesMap: Record<string, any>
     sidIdMap: Record<string, string>
+    fromSerialize?: boolean
   },
   sourceRef: StateRef,
   isGetState?: boolean,
@@ -491,7 +485,9 @@ export const initRefInScope = (
   const sid = sourceRef.sid
   const serialize = sourceRef?.meta?.serialize
   const parser =
-    serialize !== 'ignore' ? serialize?.from || noopParser : noopParser
+    scope.fromSerialize && serialize !== 'ignore'
+      ? serialize?.from || noopParser
+      : noopParser
   if (refsMap[sourceRef.id]) return
   const ref: StateRef = {
     id: sourceRef.id,
