@@ -14,6 +14,18 @@ type Tuple<T = unknown> = [T?, ...T[]]
  */
 type NoInfer<T> = [T][T extends any ? 0 : never]
 
+/**
+ * Generic Json type
+ */
+ type Json =
+ | null
+ | undefined
+ | boolean
+ | string
+ | number
+ | Json[]
+ | {[k: string]: Json}
+
 // Type for extention purpose. Represents combinable sample source.
 export type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
 // Helper type, which unwraps combinable sample source value.
@@ -299,22 +311,32 @@ export class Domain implements Unit<any> {
   }): Effect<Params, Done, Fail>
   domain(name?: string): Domain
   createDomain(name?: string): Domain
-  store<State>(
+  store<State, SerializedState extends Json = Json>(
     defaultState: State,
     config?: {
       name?: string
       sid?: string
       updateFilter?: (update: State, current: State) => boolean
-      serialize?: 'ignore'
+      serialize?:
+      | 'ignore'
+      | {
+          to: (state: State) => SerializedState
+          from: (json: SerializedState) => State
+        }
     },
   ): Store<State>
-  createStore<State>(
+  createStore<State, SerializedState extends Json = Json>(
     defaultState: State,
     config?: {
       name?: string
       sid?: string
       updateFilter?: (update: State, current: State) => boolean
-      serialize?: 'ignore'
+      serialize?:
+        | 'ignore'
+        | {
+            to: (state: State) => SerializedState
+            from: (json: SerializedState) => State
+          }
     },
   ): Store<State>
   sid: string | null
@@ -654,13 +676,18 @@ export function createEffect<Params, Done, Fail = Error>(config: {
  * @param defaultState default state
  * @param config optional configuration object
  */
-export function createStore<State>(
+export function createStore<State, SerializedState extends Json = Json>(
   defaultState: State,
   config?: {
     name?: string;
     sid?: string
     updateFilter?: (update: State, current: State) => boolean
-    serialize?: 'ignore'
+    serialize?:
+    | 'ignore'
+    | {
+        to: (state: State) => SerializedState
+        from: (json: SerializedState) => State
+      }
   },
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
