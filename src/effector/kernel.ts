@@ -496,6 +496,7 @@ export const initRefInScope = (
   const ref: StateRef = {
     id: sourceRef.id,
     current: sourceRef.current,
+    meta: sourceRef.meta,
   }
 
   if (sid && sid in scope.sidValuesMap && !(sid in scope.sidIdMap)) {
