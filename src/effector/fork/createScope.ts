@@ -65,7 +65,7 @@ export function createScope(unit?: Domain): Scope {
 
             const serialize = getMeta(storeNode, 'serialize')
             if (serialize && serialize !== 'ignore') {
-              forkPage.sidSerializeMap[sid] = serialize.to
+              forkPage.sidSerializeMap[sid] = serialize.write
             }
           }
         }

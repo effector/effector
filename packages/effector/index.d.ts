@@ -320,8 +320,8 @@ export class Domain implements Unit<any> {
       serialize?:
       | 'ignore'
       | {
-          to: (state: State) => SerializedState
-          from: (json: SerializedState) => State
+          write: (state: State) => SerializedState
+          read: (json: SerializedState) => State
         }
     },
   ): Store<State>
@@ -334,8 +334,8 @@ export class Domain implements Unit<any> {
       serialize?:
         | 'ignore'
         | {
-            to: (state: State) => SerializedState
-            from: (json: SerializedState) => State
+            write: (state: State) => SerializedState
+            read: (json: SerializedState) => State
           }
     },
   ): Store<State>
@@ -685,8 +685,8 @@ export function createStore<State, SerializedState extends Json = Json>(
     serialize?:
     | 'ignore'
     | {
-        to: (state: State) => SerializedState
-        from: (json: SerializedState) => State
+        write: (state: State) => SerializedState
+        read: (json: SerializedState) => State
       }
   },
 ): Store<State>

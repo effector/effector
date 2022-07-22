@@ -17,7 +17,7 @@ export type StateRef = {
   noInit?: boolean
   sid?: string
   meta?: {
-    serialize?: 'ignore' | {from: (p: any) => any; to: (p: any) => any}
+    serialize?: 'ignore' | {read: (p: any) => any; write: (p: any) => any}
   }
 }
 

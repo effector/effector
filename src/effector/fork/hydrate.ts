@@ -41,7 +41,7 @@ export function hydrate(domain: Domain | Scope, {values}: {values}) {
       add(storeNodes, node)
       const serializer = getMeta(node, 'serialize')
       if (serializer && serializer !== 'ignore') {
-        normalizedValues[sid] = serializer.from(normalizedValues[sid])
+        normalizedValues[sid] = serializer.read(normalizedValues[sid])
       }
       add(storeValues, normalizedValues[sid])
     }

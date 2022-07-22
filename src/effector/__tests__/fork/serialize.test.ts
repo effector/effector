@@ -78,11 +78,11 @@ describe('serialize: custom', () => {
     const $a = createStore(0, {
       sid: 'a',
       serialize: {
-        to: value => {
+        write: value => {
           expect(currentScope.getState($a)).toEqual(value)
           return aToStr(value)
         },
-        from: json => {
+        read: json => {
           expect(aToStr(currentScope.getState($a))).toEqual(json)
           return Number(json)
         },
@@ -111,8 +111,8 @@ describe('serialize: custom', () => {
     const $map = createStore(new Map<number, number>(), {
       sid: 'map',
       serialize: {
-        to: map => [...map.entries()],
-        from: jsonMap => new Map(jsonMap),
+        write: map => [...map.entries()],
+        read: jsonMap => new Map(jsonMap),
       },
     })
 
@@ -138,8 +138,8 @@ describe('serialize: custom', () => {
     const $map = domain.createStore(new Map<number, number>(), {
       sid: 'map',
       serialize: {
-        to: map => [...map.entries()],
-        from: jsonMap => new Map(jsonMap),
+        write: map => [...map.entries()],
+        read: jsonMap => new Map(jsonMap),
       },
     })
 
@@ -164,10 +164,10 @@ describe('serialize: custom', () => {
     const up = createEvent()
     const $a = createStore(0, {
       serialize: {
-        to: value => {
+        write: value => {
           return `${value}`
         },
-        from: _json => {
+        read: _json => {
           parser()
           return 42
         },

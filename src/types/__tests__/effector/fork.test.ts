@@ -58,12 +58,12 @@ describe('custom serialize for stores', () => {
       new Map<number, number>(),
       {
         serialize: {
-          to: map => {
+          write: map => {
             const result = [...map.entries()]
 
             return result
           },
-          from: jsonMap => {
+          read: jsonMap => {
             return new Map(jsonMap)
           },
         },
@@ -81,11 +81,11 @@ describe('custom serialize for stores', () => {
     const $map = d.createStore<Map<number, number>>(new Map<number, number>(), {
       serialize: {
         // @ts-expect-error
-        to: map => {
+        write: map => {
           return map // non-Json value
         },
         // @ts-expect-error
-        from: jsonMap => {
+        read: jsonMap => {
           const serializedValue: typeof jsonMap extends Json
             ? typeof jsonMap
             : never = jsonMap

@@ -486,7 +486,7 @@ export const initRefInScope = (
   const serialize = sourceRef?.meta?.serialize
   const parser =
     scope.fromSerialize && serialize !== 'ignore'
-      ? serialize?.from || noopParser
+      ? serialize?.read || noopParser
       : noopParser
   if (refsMap[sourceRef.id]) return
   const ref: StateRef = {
