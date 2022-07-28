@@ -1,14 +1,16 @@
 import {is} from '../is'
 import {assert} from '../throw'
 import type {Domain} from '../unit.h'
+import type {ValuesMap, HandlersMap} from '../unit.h'
 import {normalizeValues} from './util'
 import {createScope} from './createScope'
 
 export function fork(
-  domainOrConfig?: Domain | {values?; handlers?},
-  optiionalConfig?: {values?; handlers?},
+  domainOrConfig?: Domain | {values?: ValuesMap; handlers?: HandlersMap},
+  optiionalConfig?: {values?: ValuesMap; handlers?: HandlersMap},
 ) {
-  let config: {values?; handlers?} | void = domainOrConfig as any
+  let config: {values?: ValuesMap; handlers?: HandlersMap} | void =
+    domainOrConfig as any
   let domain: Domain
   if (is.domain(domainOrConfig)) {
     domain = domainOrConfig

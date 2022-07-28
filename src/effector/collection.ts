@@ -1,6 +1,6 @@
-export function forIn<T>(
-  obj: Record<string, T>,
-  cb: (value: T, key: string) => void,
+export function forIn<T, Key extends string = string>(
+  obj: Record<Key, T>,
+  cb: (value: T, key: Key) => void,
 ) {
   for (const key in obj) {
     cb(obj[key], key)
@@ -27,6 +27,6 @@ export function forEach<K, T>(
   fn: (item: T, key: K) => void,
 ): void
 export function forEach<T>(list: Set<T>, fn: (item: T) => void): void
-export function forEach(list, fn: Function) {
+export function forEach(list: any, fn: Function) {
   list.forEach(fn)
 }

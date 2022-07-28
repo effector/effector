@@ -12,14 +12,14 @@ import {assert} from './throw'
 import {EFFECT} from './tag'
 import {add} from './collection'
 
-export function createEffect<Payload, Done, Fail = Error>(
-  nameOrConfig,
-  maybeConfig?,
-): Effect<Payload, Done, Fail> {
+export function createEffect<Params, Done, Fail = Error>(
+  nameOrConfig: any,
+  maybeConfig?: any,
+): Effect<Params, Done, Fail> {
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
-  ) as unknown as Effect<Payload, Done, Fail>
+  ) as unknown as Effect<Params, Done, Fail>
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
   //@ts-expect-error
@@ -35,23 +35,41 @@ export function createEffect<Payload, Done, Fail = Error>(
   }))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
-    fn({status, params, result}) {
+    fn({
+      status,
+      params,
+      result,
+    }: {
+      status: 'done' | 'fail'
+      params: Params
+      result: Done
+      error: Fail
+    }) {
       if (status === 'done') return {params, result}
     },
   }))
   const fail = (instance.fail = (anyway as any).filterMap({
     named: 'fail',
-    fn({status, params, error}) {
+    fn({
+      status,
+      params,
+      error,
+    }: {
+      status: 'done' | 'fail'
+      params: Params
+      result: Done
+      error: Fail
+    }) {
       if (status === 'fail') return {params, error}
     },
   }))
   const doneData = (instance.doneData = done.map({
     named: 'doneData',
-    fn: ({result}) => result,
+    fn: ({result}: {result: Done}) => result,
   }))
   const failData = (instance.failData = fail.map({
     named: 'failData',
-    fn: ({error}) => error,
+    fn: ({error}: {error: Fail}) => error,
   }))
 
   const runner = createNode({
@@ -101,7 +119,7 @@ export function createEffect<Payload, Done, Fail = Error>(
     calc(
       (params, {runner}, stack) => {
         const upd = getParent(stack)
-          ? {params, req: {rs(data) {}, rj(data) {}}}
+          ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
           : /** empty stack means that this node was launched directly */
             params
         launch({
@@ -117,7 +135,7 @@ export function createEffect<Payload, Done, Fail = Error>(
     ),
   )
   //@ts-expect-error
-  instance.create = (params: Payload) => {
+  instance.create = (params: Params) => {
     const req = createDefer()
     const payload = {params, req}
     if (forkPage) {
@@ -137,7 +155,6 @@ export function createEffect<Payload, Done, Fail = Error>(
   }
 
   const inFlight = (instance.inFlight = createStore(0, {
-    // @ts-expect-error
     serialize: 'ignore',
   })
     .on(instance, x => x + 1)
@@ -160,8 +177,8 @@ export function createEffect<Payload, Done, Fail = Error>(
 }
 export const runFn = (
   fn: Function,
-  onReject: (data) => void,
-  args,
+  onReject: (data: any) => void,
+  args: any[],
 ): [boolean, any] => {
   try {
     return [true, fn(...args)]
@@ -173,16 +190,16 @@ export const runFn = (
 
 export const onSettled =
   (
-    params,
+    params: any,
     req: {
-      rs(_)
-      rj(_)
+      rs(_: any): void
+      rj(_: any): void
     },
     ok: boolean,
     anyway: Unit,
     stack: Stack,
   ) =>
-  data =>
+  (data: any) =>
     launch({
       target: [anyway, sidechain],
       params: [

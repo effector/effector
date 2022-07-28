@@ -31,7 +31,7 @@ const launchCase = (
   }
 }
 
-export function split(...args) {
+export function split(...args: any[]) {
   const METHOD = 'split'
   let targets: Record<string, DataCarrier>
   let clock: void | DataCarrier | DataCarrier[]
@@ -98,6 +98,7 @@ export function split(...args) {
       if (is.unit(storeOrFn)) {
         needBarrier = true
         add(units, key)
+        // @ts-expect-error
         owners.add(storeOrFn)
         const updater = createLinkNode(
           storeOrFn,

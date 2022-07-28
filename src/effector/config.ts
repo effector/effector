@@ -2,12 +2,12 @@ import {forIn} from './collection'
 import {assertObject, isObject, isVoid} from './is'
 
 export function processArgsToConfig(
-  arg,
+  arg: any,
   singleArgument: true,
 ): [any, any | void]
-export function processArgsToConfig(args): [any[], any | void]
+export function processArgsToConfig(args: any[]): [any[], any | void]
 export function processArgsToConfig(
-  args,
+  args: any[],
   singleArgument?: boolean,
 ): [any[], any | void] {
   const rawConfig = singleArgument ? args : args[0]
@@ -48,7 +48,7 @@ processed fields:
 'named',
 'derived',
 */
-export const flattenConfig = (part, config = {}) => {
+export const flattenConfig = (part: any, config: Record<string, any> = {}) => {
   if (isObject(part)) {
     flattenConfig(part.or, config)
     forIn(part, (value, field) => {

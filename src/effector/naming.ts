@@ -3,7 +3,7 @@ import {is} from './is'
 import {getParent, getCompositeName} from './getter'
 import {forIn} from './collection'
 
-export function unitObjectName(objOrArr, method: string = 'combine') {
+export function unitObjectName(objOrArr: any, method: string = 'combine') {
   let name = method + '('
   let comma = ''
   let i = 0
@@ -14,7 +14,7 @@ export function unitObjectName(objOrArr, method: string = 'combine') {
         name += comma
         name += is.unit(unit)
           ? getCompositeName(unit as CommonUnit | Domain).fullName
-          : unit.toString()
+          : (unit as any).toString()
       }
       i += 1
       comma = ', '

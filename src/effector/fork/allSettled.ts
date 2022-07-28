@@ -2,7 +2,7 @@ import {add} from '../collection'
 import {createDefer} from '../defer'
 import {is} from '../is'
 import {launch, forkPage} from '../kernel'
-import type {Scope, Event, Effect, DataCarrier} from '../unit.h'
+import type {Scope, Event, Effect, DataCarrier, SettledDefer} from '../unit.h'
 
 export function allSettled<T>(
   start: Event<T> | Effect<T, any, any>,
@@ -11,9 +11,10 @@ export function allSettled<T>(
   if (!is.unit(start))
     return Promise.reject(new Error('first argument should be unit'))
   if (!is.effect(start) && !is.event(start) && !is.store(start))
-    return Promise.reject(new Error('first argument accepts only effects, events and stores'))
-  const defer = createDefer()
-  //@ts-expect-error
+    return Promise.reject(
+      new Error('first argument accepts only effects, events and stores'),
+    )
+  const defer = createDefer() as SettledDefer
   defer.parentFork = forkPage
   const {fxCount} = scope
   add(fxCount.scope.defers, defer)
@@ -27,11 +28,9 @@ export function allSettled<T>(
           params: ctx,
           req: {
             rs(value: unknown) {
-              //@ts-expect-error
               defer.value = {status: 'done', value}
             },
             rj(value: unknown) {
-              //@ts-expect-error
               defer.value = {status: 'fail', value}
             },
           },

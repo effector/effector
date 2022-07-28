@@ -10,6 +10,7 @@ export function applyTemplate<K extends keyof TemplateHandlers>(
   const template = readTemplate()
   if (template) {
     const fn = template.handlers[method]
+    // @ts-expect-error
     if (fn) return fn(template, ...args)
   }
 }

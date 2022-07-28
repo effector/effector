@@ -1,7 +1,7 @@
 import {processArgsToConfig} from './config'
 import {validateSampleConfig, createSampling} from './sample'
 
-export function guard(...args) {
+export function guard(...args: any[]) {
   let [[source, config], metadata] = processArgsToConfig(args)
   if (!config) {
     config = source

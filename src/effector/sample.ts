@@ -30,7 +30,7 @@ const sampleConfigFields = ['source', 'clock', 'target']
 const fieldErrorMessage = (method: string, field: string) =>
   method + `: ${field} should be defined`
 
-export function validateSampleConfig(config, method: string) {
+export function validateSampleConfig(config: any, method: string) {
   let atLeastOneFieldExists = false
   forEach(sampleConfigFields, field => {
     if (field in config) {
@@ -41,7 +41,7 @@ export function validateSampleConfig(config, method: string) {
   return atLeastOneFieldExists
 }
 
-export function sample(...args) {
+export function sample(...args: any[]) {
   let target
   let name
   let [[source, clock, fn], metadata] = processArgsToConfig(args)
@@ -117,6 +117,7 @@ export const createSampling = (
   if (sourceIsClock) {
     source = clock
   }
+  // @ts-expect-error
   if (!metadata && !name) name = source.shortName
   let filterType: 'none' | 'unit' | 'fn' = 'none'
   if (filterRequired || filter) {
@@ -140,6 +141,7 @@ export const createSampling = (
       const initialState = fn
         ? fn(readRef(getStoreState(source)), readRef(getStoreState(clock)))
         : readRef(getStoreState(source))
+      // @ts-expect-error
       target = createStore(initialState, {name, sid, or: metadata})
     } else {
       target = createEvent({name, derived: true, or: metadata})
@@ -154,6 +156,7 @@ export const createSampling = (
     const [filterRef, hasFilter] = syncSourceState(
       filter as DataCarrier,
       target,
+      // @ts-expect-error
       clock,
       clockState,
       method,
@@ -161,6 +164,7 @@ export const createSampling = (
     filterNodes = [...readAndFilter(hasFilter), ...readAndFilter(filterRef)]
   }
   const [sourceRef, hasSource] = syncSourceState(
+    // @ts-expect-error
     source,
     target,
     clock,
@@ -168,6 +172,7 @@ export const createSampling = (
     method,
   )
   const jointNode = createLinkNode(
+    // @ts-expect-error
     clock,
     target,
     [
@@ -184,6 +189,7 @@ export const createSampling = (
     method,
     fn,
   )
+  // @ts-expect-error
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true})
   return target

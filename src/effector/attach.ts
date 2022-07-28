@@ -17,7 +17,7 @@ import {launch} from './kernel'
 import {EFFECT} from './tag'
 import {createName} from './naming'
 
-export function attach(config) {
+export function attach(config: any) {
   let injected
   ;[config, injected] = processArgsToConfig(config, true)
   let {source, effect, mapParams} = config
@@ -80,7 +80,6 @@ export function attach(config) {
       getCompositeName(attached),
       createName(attached.shortName, parentDomain),
     )
-    //@ts-expect-error
     attached.defaultConfig.parent = parentDomain
   }
   applyParentHook(effect, attached, EFFECT)

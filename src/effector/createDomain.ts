@@ -16,14 +16,14 @@ import {DOMAIN} from './tag'
 import {launch} from './kernel'
 import {calc} from './step'
 
-export function createDomain(nameOrConfig, maybeConfig?): Domain {
+export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const node = createNode({family: {type: DOMAIN}, regional: true})
 
   const result = {
     history: {},
     graphite: node,
     hooks: {},
-  }
+  } as Domain
 
   node.meta = initUnit(DOMAIN, result, nameOrConfig, maybeConfig)
 
@@ -35,7 +35,11 @@ export function createDomain(nameOrConfig, maybeConfig?): Domain {
       Domain: createDomain,
     },
     (factory, tag) => {
-      const lowerCaseTag = tag.toLowerCase()
+      const lowerCaseTag = tag.toLowerCase() as
+        | 'event'
+        | 'effect'
+        | 'store'
+        | 'domain'
 
       const trigger = createNamedEvent(`on${tag}`)
       result.hooks[lowerCaseTag] = trigger
@@ -62,13 +66,14 @@ export function createDomain(nameOrConfig, maybeConfig?): Domain {
       })
       own(result, [trigger])
 
-      result[`onCreate${tag}`] = (hook: (data) => any) => {
+      result[`onCreate${tag}`] = (hook: (data: any) => any) => {
         forEach(acc, hook)
         return trigger.watch(hook)
       }
       result[`create${tag}`] = result[lowerCaseTag] = (
-        nameOrConfig,
+        nameOrConfig: any,
         config?: Config,
+        // @ts-expect-error complicated factory type
       ) => trigger(factory(nameOrConfig, {parent: result, or: config}))
     },
   )

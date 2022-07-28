@@ -1,7 +1,7 @@
 import {getMeta, getOwners, getLinks} from '../getter'
 import {is} from '../is'
 import {assert} from '../throw'
-import type {Store} from '../unit.h'
+import type {Store, Effect, ValuesMap, HandlersMap} from '../unit.h'
 import type {Node} from '../index.h'
 import {add, forEach, includes} from '../collection'
 import {STORE} from '../tag'
@@ -23,15 +23,21 @@ export function traverseStores(
   })(root)
 }
 
+type StoreOrEffect = Store<any> | Effect<any, any, any>
+
 export function normalizeValues(
-  values: Map<Store<any>, any> | Array<[any, any]> | Record<string, any>,
-  assertEach?: (key, value) => void,
+  values: ValuesMap | HandlersMap,
+  assertEach?: (key: StoreOrEffect, value: any) => void,
 ) {
-  if (Array.isArray(values)) values = new Map(values)
-  if (values instanceof Map) {
+  const mapOrRecordValues: Map<StoreOrEffect, any> | Record<string, any> =
+    Array.isArray(values) ? new Map(values as [StoreOrEffect, any][]) : values
+  if (mapOrRecordValues instanceof Map) {
     const result = {} as Record<string, any>
-    forEach(values, (value, key) => {
-      assert(is.unit(key), 'Map key should be a unit')
+    forEach(mapOrRecordValues, (value, key) => {
+      assert(
+        (is.unit as (val: unknown) => val is StoreOrEffect)(key),
+        'Map key should be a unit',
+      )
       if (assertEach) assertEach(key, value)
       assert(key.sid, 'unit should have a sid')
       assert(!(key.sid! in result), 'duplicate sid found')
@@ -39,5 +45,5 @@ export function normalizeValues(
     })
     return result
   }
-  return values
+  return mapOrRecordValues
 }

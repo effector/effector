@@ -2,7 +2,7 @@ import {getForkPage, getGraph, getMeta, getParent} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {calc, compute} from '../step'
-import type {Domain, Scope} from '../unit.h'
+import type {Domain, Scope, SettledDefer, Store} from '../unit.h'
 import type {StateRef} from '../index.h'
 import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, SCOPE} from '../tag'
@@ -29,7 +29,14 @@ export function createScope(unit?: Domain): Scope {
       }),
       compute({priority: SAMPLER, batch: true}),
       calc(
-        (_, scope) => {
+        (
+          _,
+          scope: {
+            inFlight: number
+            fxID: number
+            defers: SettledDefer[]
+          },
+        ) => {
           const {defers, fxID} = scope
           if (scope.inFlight > 0 || defers.length === 0) return
           Promise.resolve().then(() => {
@@ -92,7 +99,7 @@ export function createScope(unit?: Domain): Scope {
     reg: page,
     sidValuesMap: {},
     sidIdMap: {},
-    getState(store) {
+    getState(store: StateRef | Store<any>) {
       if ('current' in store) {
         return getPageRef(currentPage, resultScope, null, store).current
       }

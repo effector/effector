@@ -205,7 +205,7 @@ export let isWatch = false
 export let isPure = false
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
-export const setForkPage = (newForkPage: Scope) => {
+export const setForkPage = (newForkPage: Scope | void | null) => {
   forkPage = newForkPage
 }
 export const setCurrentPage = (newPage: Leaf | null) => {

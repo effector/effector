@@ -3,26 +3,28 @@ import {forEach} from './collection'
 import {assert, deprecate} from './throw'
 import {arrifyNodes} from './createNode'
 import type {NodeUnit} from './index.h'
+import type {DataCarrier} from './unit.h'
 import {getMeta} from './getter'
 
-export const isObject = (value): value is Record<any, any> =>
+export const isObject = (value: unknown): value is Record<any, any> =>
   typeof value === 'object' && value !== null
-export const isFunction = value => typeof value === 'function'
+export const isFunction = (value: unknown): value is Function =>
+  typeof value === 'function'
 
-export const isVoid = value => value === undefined
+export const isVoid = (value: unknown): value is void => value === undefined
 
-export const assertObject = value =>
+export const assertObject = (value: unknown) =>
   assert(
     isObject(value) || isFunction(value),
     'expect first argument be an object',
   ) // or function
 
 const assertNodeSetItem = (
-  value,
+  value: unknown,
   method: string,
   valueName: string,
   reason: string,
-) =>
+): asserts value is DataCarrier =>
   assert(
     !(
       (!isObject(value) && !isFunction(value)) ||
@@ -31,12 +33,17 @@ const assertNodeSetItem = (
     `${method}: expect ${valueName} to be a unit (store, event or effect)${reason}`,
   )
 
-export const assertNodeSet = (value, method: string, valueName: string) => {
+export const assertNodeSet = (
+  value: unknown,
+  method: string,
+  valueName: string,
+) => {
   if (Array.isArray(value)) {
     forEach(value, (item, i) =>
       assertNodeSetItem(item, method, `${i} item of ${valueName}`, ''),
     )
   } else {
+    //@ts-expect-error some ts assertion edge case
     assertNodeSetItem(value, method, valueName, ' or array of units')
   }
 }

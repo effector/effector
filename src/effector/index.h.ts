@@ -2,16 +2,16 @@ import type {Stack, BarrierPriorityTag} from './kernel'
 
 export type ID = string
 
-export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
+export type Kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
 export type StateRefOp =
-  | {type: 'map'; from?: StateRef; fn?: (value) => any}
+  | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
   | {type: 'field'; from: StateRef; field: string}
   | {type: 'closure'; of: StateRef}
 
 export type StateRef = {
   id: ID
-  current
+  current: any
   type?: 'list' | 'shape'
   before?: StateRefOp[]
   noInit?: boolean
@@ -29,18 +29,19 @@ export type Config = {
   name?: string
   and?: Config
   or?: Config
-  parent?
+  parent?: any
   handler?: Function
   derived?: boolean
+  serialize?: 'ignore'
 }
 
 export type Node = {
   id: ID
   next: Array<Node>
   seq: Array<Cmd>
-  scope: {[key: string]}
+  scope: {[key: string]: any}
   // reg: {[id: string]: StateRef}
-  meta: {[tag: string]}
+  meta: {[tag: string]: any}
   family: {
     type: 'regular' | 'crosslink' | 'domain'
     links: Node[]
@@ -52,6 +53,7 @@ export type NodeUnit = {graphite: Node} | Node
 
 export interface Unit<T = unknown> {
   graphite: Node
+  kind: string
 }
 
 export type Subscriber<A> = {
@@ -114,7 +116,7 @@ export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn?: (data, scope: {[key: string]}, reg: Stack) => any
+    fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
     safe: boolean
     filter: boolean
     pure: boolean
