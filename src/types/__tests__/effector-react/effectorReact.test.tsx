@@ -231,3 +231,30 @@ test('useUnit should correctly resolve void events and effects in shape mode', (
     "
   `)
 })
+
+test('useUnit should correctly resolve any type except void events and effects in shape mode', () => {
+  const event = createEvent<boolean>()
+  const effect = createEffect((_: boolean) => _)
+
+  function x(callback: (e: boolean) => boolean | Promise<boolean>) {
+
+  }
+
+  const Comp = () => {
+    const {runEvent} = useUnit({runEvent: event})
+    const {runEffect} = useUnit({runEffect: effect})
+    const [runEvent1] = useUnit([event])
+    const [runEffect1] = useUnit([effect])
+
+    x(runEvent)
+    x(runEffect)
+    x(runEvent1)
+    x(runEffect1)
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
