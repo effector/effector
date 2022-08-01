@@ -56,7 +56,7 @@
     "description": "The label of footer link with label=Hosted by Netlify linking to https://netlify.com"
   },
   "copyright": {
-    "message": "Copyright © 2018-2021 zerobias",
+    "message": "Copyright © 2018-2022 zerobias",
     "description": "The footer copyright"
   }
 }
