@@ -148,6 +148,12 @@ export function useEvent<
     : never
 }
 
+type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
+  ? 1
+  : 2
+  ? true
+  : false
+
 export function useUnit<State>(store: Store<State>): State
 export function useUnit(event: Event<void>): () => void
 export function useUnit<T>(event: Event<T>): (payload: T) => T
@@ -159,11 +165,11 @@ export function useUnit<
   list: [...List],
 ): {
   [Key in keyof List]: List[Key] extends Event<infer T>
-    ? T extends void
+    ? Equal<T, void> extends true
       ? () => void
       : (payload: T) => T
     : List[Key] extends Effect<infer P, infer D, any>
-    ? P extends void
+    ? Equal<P, void> extends true
       ? () => Promise<D>
       : (payload: P) => Promise<D>
     : List[Key] extends Store<infer V>
@@ -176,11 +182,11 @@ export function useUnit<
   shape: Shape,
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
-    ? T extends void
+    ? Equal<T, void> extends true
       ? () => void
       : (payload: T) => T
     : Shape[Key] extends Effect<infer P, infer D, any>
-    ? P extends void
+    ? Equal<P, void> extends true
       ? () => Promise<D>
       : (payload: P) => Promise<D>
     : Shape[Key] extends Store<infer V>

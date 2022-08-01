@@ -231,3 +231,104 @@ test('useUnit should correctly resolve void events and effects in shape mode', (
     "
   `)
 })
+
+test('useUnit should correctly resolve any type except void events and effects in shape mode', () => {
+  const event = createEvent<boolean>()
+  const effect = createEffect((_: boolean) => _)
+
+  function x(callback: (e: boolean) => boolean | Promise<boolean>) {
+
+  }
+
+  const Comp = () => {
+    const {runEvent} = useUnit({runEvent: event})
+    const {runEffect} = useUnit({runEffect: effect})
+    const [runEvent1] = useUnit([event])
+    const [runEffect1] = useUnit([effect])
+
+    x(runEvent)
+    x(runEffect)
+    x(runEvent1)
+    x(runEffect1)
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+test('useUnit should not allow to call void events with arguments', () => {
+  const event = createEvent()
+
+  const Comp = () => {
+    const {runEvent} = useUnit({runEvent: event})
+    const [runEvent1] = useUnit([event])
+
+    runEvent(1)
+    runEvent1('')
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Expected 0 arguments, but got 1.
+    Expected 0 arguments, but got 1.
+    "
+  `)
+})
+
+test('useUnit should not allow to call void effects with arguments', () => {
+  const effect = createEffect(() => {})
+
+  const Comp = () => {
+    const {runEffect} = useUnit({runEffect: effect})
+    const [runEffect1] = useUnit([effect])
+
+    runEffect(1)
+    runEffect1('')
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Expected 0 arguments, but got 1.
+    Expected 0 arguments, but got 1.
+    "
+  `)
+})
+
+test('useUnit should not allow wrong types for events or effects with arguments', () => {
+  const event = createEvent<number>()
+  const effect = createEffect((_: string) => _)
+
+  const constEvent = createEvent<42>()
+  const constEffect = createEffect((_: 42) => _)
+
+  const Comp = () => {
+    const {runEvent} = useUnit({runEvent: event})
+    const {runEffect} = useUnit({runEffect: effect})
+    const [runEvent1] = useUnit([event])
+    const [runEffect1] = useUnit([effect])
+    const {runConstEvent} = useUnit({runConstEvent: constEvent})
+    const {runConstEffect} = useUnit({runConstEffect: constEffect})
+
+    runEvent('')
+    runEffect(1)
+    runEvent1('')
+    runEffect1(1)
+    runConstEvent(0)
+    runConstEffect({})
+  }
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+    Argument of type '0' is not assignable to parameter of type '42'.
+    Argument of type '{}' is not assignable to parameter of type '42'.
+    "
+  `)
+})
+
