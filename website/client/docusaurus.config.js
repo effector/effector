@@ -38,7 +38,7 @@ module.exports = {
         },
         {
           href: 'https://share.effector.dev',
-          label: 'REPL',
+          label: 'Playground',
           position: 'left',
         },
         {
