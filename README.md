@@ -326,9 +326,9 @@ Your support allows us to improve the developer experience 🧡.
 <tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/tehSLy>
-            <img src=https://avatars.githubusercontent.com/u/25362218?v=4 width="100;"  alt=tehSLy/>
+            <img src=https://avatars.githubusercontent.com/u/25362218?v=4 width="100;"  alt=Andrei/>
             <br />
-            <sub style="font-size:14px"><b>tehSLy</b></sub>
+            <sub style="font-size:14px"><b>Andrei</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
