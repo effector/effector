@@ -7,13 +7,13 @@
 <p align="center">
   <a href="https://gitter.im/effector/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/effector/community.svg" alt="join gitter" /></a>
   <a href="https://openbase.com/js/effector?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.com/js/rating/effector.svg" alt="rate on openbase" /></a>
-  <a href="https://github.com/effector/effector/actions/workflows/tests.yml"><img src="https://github.com/effector/effector/actions/workflows/tests.yml/badge.svg?branch=master" alt="build status" /></a>  
+  <a href="https://github.com/effector/effector/actions/workflows/tests.yml"><img src="https://github.com/effector/effector/actions/workflows/tests.yml/badge.svg?branch=master" alt="build status" /></a>
   <a href="https://discord.gg/t3KkcQdt"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
   <a href="https://www.patreon.com/zero_bias/overview"><img src="https://img.shields.io/badge/become-a%20patron-%23f96854" alt="become a patron" /></a>
 </p>
 
 
-# ☄️ effector 
+# ☄️ effector
 
 Business logic with ease
 
@@ -117,9 +117,9 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Online playground
 
-You can try effector in [our repl](https://share.effector.dev)
+You can try effector with [online playground](https://share.effector.dev)
 
-Code sharing, Typescript and react supported out of the box. [REPL repository](https://github.com/effector/repl)
+Code sharing, Typescript and react supported out of the box. [Playground repository](https://github.com/effector/repl)
 
 ## DevTools
 

@@ -15,9 +15,9 @@
     "message": "博客",
     "description": "Navbar item with label Blog"
   },
-  "item.label.REPL": {
-    "message": "REPL",
-    "description": "Navbar item with label REPL"
+  "item.label.Playground": {
+    "message": "在线试用",
+    "description": "Navbar item with label Playground"
   },
   "item.label.Changelog": {
     "message": "更新日志",
