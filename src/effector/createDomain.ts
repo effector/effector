@@ -15,6 +15,7 @@ import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
 import {launch} from './kernel'
 import {calc} from './step'
+import {flattenConfig} from './config'
 
 export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const node = createNode({family: {type: DOMAIN}, regional: true})
@@ -25,7 +26,11 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     hooks: {},
   } as Domain
 
-  node.meta = initUnit(DOMAIN, result, nameOrConfig, maybeConfig)
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
+  }) as any
+  node.meta = initUnit(DOMAIN, result, config)
 
   forIn(
     {
