@@ -1,5 +1,5 @@
 import type {Template} from '../forest/index.h'
-import type {Store, Event, CommonUnit, Effect} from './unit.h'
+import type {Store, Event, CommonUnit, Effect, Domain} from './unit.h'
 import type {Subscriber, Config, Cmd, Kind} from './index.h'
 
 import {observableSymbol} from './observable'
@@ -139,6 +139,11 @@ export function createEvent<Payload = any>(
   nameOrConfig?: any,
   maybeConfig?: any,
 ): Event<Payload> {
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
+  }) as any
+  if (config.domain) return config.domain.createEvent({...config, domain: null})
   const event = ((payload: Payload, ...args: unknown[]) => {
     deprecate(
       !getMeta(event, 'derived'),
@@ -152,10 +157,6 @@ export function createEvent<Payload = any>(
     return event.create(payload, args)
   }) as Event<Payload>
   const template = readTemplate()
-  const config = flattenConfig({
-    or: maybeConfig,
-    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
-  }) as any
   return Object.assign(event, {
     graphite: createNode({
       meta: initUnit(EVENT, event, config),
@@ -193,6 +194,9 @@ export function createStore<State>(
   defaultState: State,
   props?: Config,
 ): Store<State> {
+  const config = flattenConfig(props)
+  if (config.domain)
+    config.domain.createStore(defaultState, {...config, domain: null})
   const plainState = createStateRef(defaultState)
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
@@ -307,7 +311,7 @@ export function createStore<State>(
       )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, flattenConfig(props))
+  const meta = initUnit(STORE, store, config)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},

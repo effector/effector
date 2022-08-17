@@ -11,11 +11,18 @@ import {isObject, isFunction} from './is'
 import {assert} from './throw'
 import {EFFECT} from './tag'
 import {add} from './collection'
+import {flattenConfig} from './config'
 
 export function createEffect<Params, Done, Fail = Error>(
   nameOrConfig: any,
   maybeConfig?: any,
 ): Effect<Params, Done, Fail> {
+  const config = flattenConfig(
+    isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
+    maybeConfig,
+  )
+  if (config.domain)
+    return config.domain.createEffect({...config, domain: null})
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,

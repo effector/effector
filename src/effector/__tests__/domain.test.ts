@@ -268,3 +268,46 @@ test('parent assignment', () => {
   const store = restore(fx.doneData, {})
   expect(argumentHistory(fn)).toEqual(['store'])
 })
+
+describe('pass domain into creator', () => {
+  test('createStore is the same instance', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateStore(fn)
+
+    const $store = createStore(0, {domain})
+
+    expect(fn).toBeCalledWith($store)
+  })
+  test('createStore correctly passed into hook', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateStore(store => store.updates.watch(fn))
+
+    const run = createEvent<number>()
+    const $store = createStore(0, {domain})
+    $store.on(run, (_, i) => i)
+    run(2)
+
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toBeCalledWith(2)
+  })
+  test('createEvent', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEvent(fn)
+
+    const event = createEvent({domain})
+
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+  test('createEffect', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEffect(fn)
+
+    const effect = createEffect({domain})
+
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+})
