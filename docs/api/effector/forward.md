@@ -4,7 +4,7 @@ title: forward
 description: Method to create connection between units in a declarative way. Sends updates from one set of units to another
 ---
 
-:::note since effector 22.0.0 core team recommends [sample](../sample.md) instead:::
+:::info since effector 22.0.0 core team recommends [sample](./sample.md) instead :::
 
 Method to create connection between units in a declarative way. Sends updates from one set of units to another
 
