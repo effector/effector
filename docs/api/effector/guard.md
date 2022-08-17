@@ -4,8 +4,8 @@ title: guard
 description: Method for conditional event routing.
 ---
 
-:::note
-Since effector 22.2.0 preferably use [sample](sample.md)
+:::info since effector 22.0.0
+core team recommends use [sample](sample.md) instead
 :::
 
 :::note
