@@ -1,6 +1,6 @@
 import type {Template} from '../forest/index.h'
 import type {Store, Event, CommonUnit, Effect} from './unit.h'
-import type {Subscriber, Config, Cmd} from './index.h'
+import type {Subscriber, Config, Cmd, Kind} from './index.h'
 
 import {observableSymbol} from './observable'
 
