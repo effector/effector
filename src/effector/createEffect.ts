@@ -21,8 +21,8 @@ export function createEffect<Params, Done, Fail = Error>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
   )
-  if (config.domain)
-    return config.domain.createEffect({...config, domain: null})
+  // if (config.domain)
+  //   return config.domain.createEffect({...config, domain: null})
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
@@ -180,6 +180,9 @@ export function createEffect<Params, Done, Fail = Error>(
   }))
 
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
+  if (config?.domain) {
+    config.domain.hooks.effect(instance)
+  }
   return instance
 }
 export const runFn = (

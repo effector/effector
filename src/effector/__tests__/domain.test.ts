@@ -292,7 +292,7 @@ describe('pass domain into creator', () => {
     expect(fn).toHaveBeenCalledTimes(1)
     expect(fn).toBeCalledWith(2)
   })
-  test('createEvent', () => {
+  test('createEvent correctly passed into hook', () => {
     const fn = jest.fn()
     const domain = createDomain()
     domain.onCreateEvent(fn)
@@ -301,7 +301,7 @@ describe('pass domain into creator', () => {
 
     expect(fn).toHaveBeenCalledTimes(1)
   })
-  test('createEffect', () => {
+  test('createEffect correctly passed into hook', () => {
     const fn = jest.fn()
     const domain = createDomain()
     domain.onCreateEffect(fn)
@@ -309,5 +309,39 @@ describe('pass domain into creator', () => {
     const effect = createEffect({domain})
 
     expect(fn).toHaveBeenCalledTimes(1)
+  })
+  test('createDomain correctly passed into hook', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateDomain(fn)
+
+    const another = createDomain({domain})
+
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+  test('unit in nested domains triggers correctly', () => {
+    const fn = jest.fn()
+    const d1 = createDomain()
+    d1.onCreateStore(fn)
+    const d2 = createDomain({domain: d1})
+    d2.onCreateStore(fn)
+    const d3 = createDomain({domain: d2})
+    d3.onCreateStore(fn)
+
+    const $store = createStore(0, {domain: d3})
+
+    expect(fn).toHaveBeenCalledTimes(3)
+  })
+
+  test('domain made from two parents should throw', () => {
+    const direct = createDomain()
+    const indirect = createDomain()
+
+    expect(() => {
+      // @ts-ignore check for runtime error
+      direct.createDomain({domain: indirect})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Domain cannot be created with two domains as parent. Please, remove {domain} argument."`,
+    )
   })
 })

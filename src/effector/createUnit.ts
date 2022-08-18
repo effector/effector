@@ -57,7 +57,7 @@ export const applyParentHook = (
 export const initUnit = (kind: Kind, unit: any, config: any) => {
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
-  const {parent = null, sid = null, named = null} = config
+  const {sid = null, named = null, domain = null, parent = domain} = config
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
   const meta: Record<string, any> = {
@@ -143,7 +143,6 @@ export function createEvent<Payload = any>(
     or: maybeConfig,
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
-  if (config.domain) return config.domain.createEvent({...config, domain: null})
   const event = ((payload: Payload, ...args: unknown[]) => {
     deprecate(
       !getMeta(event, 'derived'),
@@ -157,7 +156,7 @@ export function createEvent<Payload = any>(
     return event.create(payload, args)
   }) as Event<Payload>
   const template = readTemplate()
-  return Object.assign(event, {
+  const finalEvent = Object.assign(event, {
     graphite: createNode({
       meta: initUnit(EVENT, event, config),
       regional: true,
@@ -188,6 +187,10 @@ export function createEvent<Payload = any>(
       return contramapped
     },
   })
+  if (config?.domain) {
+    config.domain.hooks.event(finalEvent)
+  }
+  return finalEvent
 }
 
 export function createStore<State>(
@@ -195,8 +198,6 @@ export function createStore<State>(
   props?: Config,
 ): Store<State> {
   const config = flattenConfig(props)
-  if (config.domain)
-    config.domain.createStore(defaultState, {...config, domain: null})
   const plainState = createStateRef(defaultState)
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
@@ -346,6 +347,9 @@ export function createStore<State>(
     "current state can't be undefined, use null instead",
   )
   own(store, [updates])
+  if (config?.domain) {
+    config.domain.hooks.store(store)
+  }
   return store
 }
 

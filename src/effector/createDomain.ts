@@ -16,9 +16,23 @@ import {DOMAIN} from './tag'
 import {launch} from './kernel'
 import {calc} from './step'
 import {flattenConfig} from './config'
+import {assert} from './throw'
 
 export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
-  const node = createNode({family: {type: DOMAIN}, regional: true})
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
+  }) as any
+
+  assert(
+    !(config?.domain && config?.parent),
+    'Domain cannot be created with two domains as parent. Please, remove {domain} argument.',
+  )
+  const node = createNode({
+    family: {type: DOMAIN},
+    regional: true,
+    parent: config?.domain,
+  })
 
   const domain = {
     history: {},
@@ -26,11 +40,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     hooks: {},
   } as Domain
 
-  const config = flattenConfig({
-    or: maybeConfig,
-    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
-  }) as any
-  node.meta = initUnit(DOMAIN, domain, config)
+  node.meta = initUnit(DOMAIN, domain, {parent: config?.domain, or: config})
 
   forIn(
     {
@@ -88,6 +98,9 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     forIn(domain.hooks, (from: NodeUnit, key) =>
       createLinkNode(from, parent.hooks[key]),
     )
+  }
+  if (config?.domain) {
+    config.domain.hooks.domain(domain)
   }
   return domain
 }

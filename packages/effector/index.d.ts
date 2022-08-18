@@ -890,7 +890,8 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 /**
  * Creates a domain
  */
-export function createDomain(domainName?: string): Domain
+export function createDomain(domainName?: string, config?: { domain?: Domain }): Domain
+export function createDomain(config?: { name?: string; domain?: Domain }): Domain
 
 type WhichTypeKind =
   | 'never'

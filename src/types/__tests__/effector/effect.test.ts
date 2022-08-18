@@ -126,7 +126,7 @@ describe('single generic', () => {
             Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => Promise<number>; }' is not assignable to parameter of type 'SyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-            Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
                 Type 'Promise<number>' is not assignable to type 'number'.
           "
@@ -142,7 +142,7 @@ describe('single generic', () => {
             Overload 1 of 7, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => number; }' is not assignable to parameter of type 'AsyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
-            Overload 2 of 7, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 7, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => number' is not assignable to type 'AsyncFn'.
                 Type 'number' is not assignable to type 'Promise<number>'.
           "
@@ -171,7 +171,7 @@ describe('single generic', () => {
           Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
             Argument of type '{ handler(_: string): Promise<string>; }' is not assignable to parameter of type 'SyncFn'.
               Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-          Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+          Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
             Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
               Type 'Promise<string>' is not assignable to type 'number'.
         "
