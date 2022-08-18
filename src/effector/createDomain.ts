@@ -20,7 +20,7 @@ import {flattenConfig} from './config'
 export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const node = createNode({family: {type: DOMAIN}, regional: true})
 
-  const result = {
+  const domain = {
     history: {},
     graphite: node,
     hooks: {},
@@ -30,7 +30,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     or: maybeConfig,
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
-  node.meta = initUnit(DOMAIN, result, config)
+  node.meta = initUnit(DOMAIN, domain, config)
 
   forIn(
     {
@@ -46,48 +46,48 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
         | 'store'
         | 'domain'
 
-      const trigger = createNamedEvent(`on${tag}`)
-      result.hooks[lowerCaseTag] = trigger
+      const onCreateUnit = createNamedEvent(`on${tag}`)
+      domain.hooks[lowerCaseTag] = onCreateUnit
 
-      const acc = new Set<any>()
-      result.history[`${lowerCaseTag}s`] = acc
+      const history = new Set<any>()
+      domain.history[`${lowerCaseTag}s`] = history
 
-      trigger.create = res => {
-        launch(trigger, res)
-        return res
+      onCreateUnit.create = unit => {
+        launch(onCreateUnit, unit)
+        return unit
       }
       add(
-        getGraph(trigger).seq,
+        getGraph(onCreateUnit).seq,
         calc((upd, _, stack) => {
           stack.scope = null
           return upd
         }),
       )
-      trigger.watch(data => {
-        own(result, [data])
-        acc.add(data)
-        if (!data.ownerSet) data.ownerSet = acc
-        if (!getParent(data)) data.parent = result
+      onCreateUnit.watch(unit => {
+        own(domain, [unit])
+        history.add(unit)
+        if (!unit.ownerSet) unit.ownerSet = history
+        if (!getParent(unit)) unit.parent = domain
       })
-      own(result, [trigger])
+      own(domain, [onCreateUnit])
 
-      result[`onCreate${tag}`] = (hook: (data: any) => any) => {
-        forEach(acc, hook)
-        return trigger.watch(hook)
+      domain[`onCreate${tag}`] = (hook: (unit: any) => any) => {
+        forEach(history, hook)
+        return onCreateUnit.watch(hook)
       }
-      result[`create${tag}`] = result[lowerCaseTag] = (
+      domain[`create${tag}`] = domain[lowerCaseTag] = (
         nameOrConfig: any,
         config?: Config,
         // @ts-expect-error complicated factory type
-      ) => trigger(factory(nameOrConfig, {parent: result, or: config}))
+      ) => onCreateUnit(factory(nameOrConfig, {parent: domain, or: config}))
     },
   )
 
-  const parent = getParent(result)
+  const parent = getParent(domain)
   if (parent) {
-    forIn(result.hooks, (from: NodeUnit, key) =>
+    forIn(domain.hooks, (from: NodeUnit, key) =>
       createLinkNode(from, parent.hooks[key]),
     )
   }
-  return result
+  return domain
 }
