@@ -31,7 +31,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const node = createNode({
     family: {type: DOMAIN},
     regional: true,
-    parent: config?.domain,
+    parent: config?.domain || config?.parent,
   })
 
   const domain = {
@@ -40,7 +40,10 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     hooks: {},
   } as Domain
 
-  node.meta = initUnit(DOMAIN, domain, {parent: config?.domain, or: config})
+  node.meta = initUnit(DOMAIN, domain, {
+    parent: config?.domain || config?.parent,
+    or: config,
+  })
 
   forIn(
     {

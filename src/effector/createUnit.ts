@@ -54,7 +54,8 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (kind: Kind, unit: any, config: any) => {
+export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
+  const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
   const {sid = null, named = null, domain = null, parent = domain} = config
