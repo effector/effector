@@ -4,8 +4,8 @@ import {createNode} from './createNode'
 import type {Config, NodeUnit} from './index.h'
 import {
   createEvent,
-  createStore,
   createNamedEvent,
+  createStore,
   initUnit,
 } from './createUnit'
 import {createEffect} from './createEffect'
@@ -16,7 +16,6 @@ import {DOMAIN} from './tag'
 import {launch} from './kernel'
 import {calc} from './step'
 import {flattenConfig} from './config'
-import {assert} from './throw'
 
 export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const config = flattenConfig({
@@ -24,10 +23,6 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
 
-  assert(
-    !(config?.domain && config?.parent),
-    'Domain cannot be created with two domains as parent. Please, remove {domain} argument.',
-  )
   const node = createNode({
     family: {type: DOMAIN},
     regional: true,
@@ -90,9 +85,16 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
       }
       domain[`create${tag}`] = domain[lowerCaseTag] = (
         nameOrConfig: any,
-        config?: Config,
+        rawConfig?: Config,
+      ) => {
+        const config = flattenConfig({and: rawConfig, or: nameOrConfig})
+        if (config?.domain) {
+          // @ts-expect-error complicated factory type
+          return factory(nameOrConfig, rawConfig)
+        }
         // @ts-expect-error complicated factory type
-      ) => onCreateUnit(factory(nameOrConfig, {parent: domain, or: config}))
+        return onCreateUnit(factory(nameOrConfig, {parent: domain, or: config}))
+      }
     },
   )
 

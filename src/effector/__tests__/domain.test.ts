@@ -333,15 +333,19 @@ describe('pass domain into creator', () => {
     expect(fn).toHaveBeenCalledTimes(3)
   })
 
-  test('domain made from two parents should throw', () => {
+  test('unit made from two domains should select indirect one', () => {
+    const directFn = jest.fn()
     const direct = createDomain()
-    const indirect = createDomain()
+    direct.onCreateStore(directFn)
 
-    expect(() => {
-      // @ts-ignore check for runtime error
-      direct.createDomain({domain: indirect})
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"Domain cannot be created with two domains as parent. Please, remove {domain} argument."`,
-    )
+    const indirectFn = jest.fn()
+    const indirect = createDomain()
+    indirect.onCreateStore(indirectFn)
+
+    // @ts-expect-error There is no types for case, just runtime check
+    const $unit = direct.createStore(0, {domain: indirect})
+
+    expect(directFn).not.toHaveBeenCalled()
+    expect(indirectFn).toHaveBeenCalledTimes(1)
   })
 })
