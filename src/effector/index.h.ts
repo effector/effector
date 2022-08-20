@@ -1,4 +1,5 @@
 import type {Stack, BarrierPriorityTag} from './kernel'
+import {Domain} from './unit.h'
 
 export type ID = string
 
@@ -30,6 +31,7 @@ export type Config = {
   and?: Config
   or?: Config
   parent?: any
+  domain?: Domain
   handler?: Function
   derived?: boolean
   serialize?: 'ignore'

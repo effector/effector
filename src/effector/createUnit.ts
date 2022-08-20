@@ -1,5 +1,5 @@
 import type {Template} from '../forest/index.h'
-import type {Store, Event, CommonUnit, Effect} from './unit.h'
+import type {Store, Event, CommonUnit, Effect, Domain} from './unit.h'
 import type {Subscriber, Config, Cmd, Kind} from './index.h'
 
 import {observableSymbol} from './observable'
@@ -54,19 +54,11 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (
-  kind: Kind,
-  unit: any,
-  configA: any,
-  configB?: any,
-) => {
+export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
+  const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
-  const config = flattenConfig({
-    or: configB,
-    and: typeof configA === 'string' ? {name: configA} : configA,
-  }) as any
-  const {parent = null, sid = null, named = null} = config
+  const {sid = null, named = null, domain = null, parent = domain} = config
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
   const meta: Record<string, any> = {
@@ -148,6 +140,10 @@ export function createEvent<Payload = any>(
   nameOrConfig?: any,
   maybeConfig?: any,
 ): Event<Payload> {
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
+  }) as any
   const event = ((payload: Payload, ...args: unknown[]) => {
     deprecate(
       !getMeta(event, 'derived'),
@@ -161,9 +157,9 @@ export function createEvent<Payload = any>(
     return event.create(payload, args)
   }) as Event<Payload>
   const template = readTemplate()
-  return Object.assign(event, {
+  const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(EVENT, event, nameOrConfig, maybeConfig),
+      meta: initUnit(EVENT, event, config),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -192,12 +188,17 @@ export function createEvent<Payload = any>(
       return contramapped
     },
   })
+  if (config?.domain) {
+    config.domain.hooks.event(finalEvent)
+  }
+  return finalEvent
 }
 
 export function createStore<State>(
   defaultState: State,
   props?: Config,
 ): Store<State> {
+  const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
@@ -312,7 +313,7 @@ export function createStore<State>(
       )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, props)
+  const meta = initUnit(STORE, store, config)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
@@ -347,6 +348,9 @@ export function createStore<State>(
     "current state can't be undefined, use null instead",
   )
   own(store, [updates])
+  if (config?.domain) {
+    config.domain.hooks.store(store)
+  }
   return store
 }
 

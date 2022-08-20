@@ -596,6 +596,7 @@ export function createEvent<E = void>(eventName?: string): Event<E>
 export function createEvent<E = void>(config: {
   name?: string
   sid?: string
+  domain?: Domain
 }): Event<E>
 
 /**
@@ -621,6 +622,7 @@ export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHa
 export function createEffect<FN extends Function>(name: string, config: {
   handler: FN
   sid?: string
+  domain?: Domain
 }): EffectByHandler<FN, Error>
 /**
  * Creates an effect
@@ -630,6 +632,7 @@ export function createEffect<Params, Done, Fail = Error>(
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
     sid?: string
+    domain?: Domain
   },
 ): Effect<Params, Done, Fail>
 /**
@@ -639,6 +642,7 @@ export function createEffect<FN extends Function>(config: {
   name?: string
   handler: FN
   sid?: string
+  domain?: Domain
 }): EffectByHandler<FN, Error>
 /**
  * Creates an effect
@@ -647,6 +651,7 @@ export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
   sid?: string
+  domain?: Domain
 }): Effect<Params, Done, Fail>
 
 /**
@@ -661,6 +666,7 @@ export function createStore<State>(
     sid?: string
     updateFilter?: (update: State, current: State) => boolean
     serialize?: 'ignore'
+    domain?: Domain;
   },
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
@@ -884,7 +890,8 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 /**
  * Creates a domain
  */
-export function createDomain(domainName?: string): Domain
+export function createDomain(domainName?: string, config?: { domain?: Domain }): Domain
+export function createDomain(config?: { name?: string; domain?: Domain }): Domain
 
 type WhichTypeKind =
   | 'never'
