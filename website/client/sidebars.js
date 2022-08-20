@@ -24,9 +24,9 @@ const sidebar = {
         'recipes/react/dynamic-form-schema',
         'recipes/react/todo-with-validation',
         'recipes/react/slots',
-        'recipes/react-native/example',
       ],
     },
+    'recipes/react-native/example',
   ],
   Explanation: [
     'glossary',

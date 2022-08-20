@@ -43,3 +43,12 @@ body {
   padding-top: 1rem;
   padding-bottom: 0;
 }
+
+.theme-doc-sidebar-item-category:not(:first-child) {
+  margin-top: 1rem;
+}
+
+a.menu__link:not([href]) {
+  font-weight: bold;
+  cursor: default;
+}
