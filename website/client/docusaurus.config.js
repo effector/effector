@@ -18,6 +18,7 @@ module.exports = {
       darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
     algolia: {
+      appId: '9e35095b0a1f29ec11a726baae76b915',
       apiKey: process.env.ALGOLIA_API_KEY,
       indexName: 'effector',
     },
