@@ -12,7 +12,6 @@ module.exports = {
   projectName: 'effector', // Usually your repo name.
   onBrokenLinks: 'ignore', // Temporal option for smoother transition to multilang docs
   themeConfig: {
-    sidebarCollapsible: false,
     image: 'img/comet.png',
     prism: {
       theme: require('prism-react-renderer/themes/github'),
@@ -145,6 +144,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          sidebarCollapsible: false,
           path: '../../docs',
           // Equivalent to `enableUpdateBy`.
           showLastUpdateAuthor: false,
