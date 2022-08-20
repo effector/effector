@@ -5,6 +5,35 @@ const sidebar = {
     'glossary',
     'introduction/examples',
   ],
+  Conventions: ['conventions/naming', 'conventions/best-practices'],
+  'TypeScript guide': [
+    'typescript/typing-effector',
+    'typescript/usage-with-effector-react',
+    'typescript/utility-types',
+  ],
+  Recipes: [
+    'recipes/recipes',
+    'recipes/countdown',
+    {
+      type: 'category',
+      label: 'React',
+      items: [
+        'recipes/react/counter',
+        'recipes/react/example-effects',
+        'recipes/react/example-forms',
+        'recipes/react/gate',
+        'recipes/react/todo-creator',
+        'recipes/react/dynamic-form-schema',
+        'recipes/react/todo-with-validation',
+        'recipes/react/slots',
+        'recipes/react-native/example',
+      ],
+    },
+  ],
+  'Advanced guide': [
+    'advanced-guide/computation-priority',
+    'advanced-guide/prior-art',
+  ],
   API: [
     {
       type: 'category',
@@ -159,35 +188,6 @@ const sidebar = {
         'api/effector-vue/vue',
       ],
     },
-  ],
-  Conventions: ['conventions/naming', 'conventions/best-practices'],
-  'TypeScript guide': [
-    'typescript/typing-effector',
-    'typescript/usage-with-effector-react',
-    'typescript/utility-types',
-  ],
-  Recipes: [
-    'recipes/recipes',
-    'recipes/countdown',
-    {
-      type: 'category',
-      label: 'React',
-      items: [
-        'recipes/react/counter',
-        'recipes/react/example-effects',
-        'recipes/react/example-forms',
-        'recipes/react/gate',
-        'recipes/react/todo-creator',
-        'recipes/react/dynamic-form-schema',
-        'recipes/react/todo-with-validation',
-        'recipes/react/slots',
-        'recipes/react-native/example',
-      ],
-    },
-  ],
-  'Advanced guide': [
-    'advanced-guide/computation-priority',
-    'advanced-guide/prior-art',
   ],
 }
 
