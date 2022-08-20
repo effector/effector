@@ -2,17 +2,15 @@ const sidebar = {
   Introduction: [
     'introduction/installation',
     'ecosystem',
-    'glossary',
     'introduction/examples',
   ],
-  Conventions: ['conventions/naming', 'conventions/best-practices'],
+  Conventions: ['conventions/naming'],
   'TypeScript guide': [
     'typescript/typing-effector',
     'typescript/usage-with-effector-react',
     'typescript/utility-types',
   ],
   Recipes: [
-    'recipes/recipes',
     'recipes/countdown',
     {
       type: 'category',
@@ -30,7 +28,8 @@ const sidebar = {
       ],
     },
   ],
-  'Advanced guide': [
+  Explanation: [
+    'glossary',
     'advanced-guide/computation-priority',
     'advanced-guide/prior-art',
   ],
@@ -38,18 +37,11 @@ const sidebar = {
     {
       type: 'category',
       label: 'effector',
+      link: {
+        type: 'doc',
+        id: 'api/effector/effector',
+      },
       items: [
-        'api/effector/effector',
-        {
-          type: 'category',
-          label: 'Unit creators',
-          items: [
-            'api/effector/createStore',
-            'api/effector/createEvent',
-            'api/effector/createEffect',
-            'api/effector/createDomain',
-          ],
-        },
         {
           type: 'category',
           label: 'Unit types',
@@ -60,17 +52,21 @@ const sidebar = {
             'api/effector/domain',
           ],
         },
-        'api/effector/combine',
-        'api/effector/restore',
-        'api/effector/createApi',
-        'api/effector/sample',
-        'api/effector/guard',
+        'api/effector/createStore',
+        'api/effector/createEvent',
+        'api/effector/createEffect',
+        'api/effector/createDomain',
         'api/effector/attach',
-        'api/effector/merge',
-        'api/effector/split',
+        'api/effector/combine',
+        'api/effector/createApi',
         'api/effector/forward',
-        'api/effector/is',
         'api/effector/fromObservable',
+        'api/effector/guard',
+        'api/effector/is',
+        'api/effector/merge',
+        'api/effector/restore',
+        'api/effector/sample',
+        'api/effector/split',
         {
           type: 'category',
           label: 'Fork',
@@ -83,7 +79,6 @@ const sidebar = {
             'api/effector/scopeBind',
           ],
         },
-        'api/effector/babel-plugin',
         {
           type: 'category',
           label: 'Low level api',
@@ -95,95 +90,67 @@ const sidebar = {
         },
       ],
     },
+    'api/effector/babel-plugin',
     {
       type: 'category',
       label: 'effector-react',
+      link: {
+        type: 'doc',
+        id: 'api/effector-react/effector-react',
+      },
       items: [
-        'api/effector-react/effector-react',
+        'api/effector-react/useStore',
+        'api/effector-react/useStoreMap',
+        'api/effector-react/useList',
+        'api/effector-react/useUnit',
+        'api/effector-react/createGate',
+        'api/effector-react/useGate',
+        'api/effector-react/gate',
+        'api/effector-react/createComponent',
+        'api/effector-react/createStoreConsumer',
+        'api/effector-react/connect',
         {
           type: 'category',
-          label: 'Hooks',
-          items: [
-            'api/effector-react/useStore',
-            'api/effector-react/useStoreMap',
-            'api/effector-react/useList',
-            'api/effector-react/useUnit',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Gate',
-          items: [
-            'api/effector-react/gate',
-            'api/effector-react/createGate',
-            'api/effector-react/useGate',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'SSR',
+          label: 'Scoped (SSR)',
           items: ['api/effector-react/useEvent'],
-        },
-        {
-          type: 'category',
-          label: 'Top-level exports',
-          items: [
-            'api/effector-react/createComponent',
-            'api/effector-react/createStoreConsumer',
-            'api/effector-react/connect',
-          ],
         },
       ],
     },
     {
       type: 'category',
       label: 'effector-solid',
+      link: {
+        type: 'doc',
+        id: 'api/effector-solid/effector-solid',
+      },
       items: [
-        'api/effector-solid/effector-solid',
-        {
-          type: 'category',
-          label: 'Reactivity helpers',
-          items: [
-            'api/effector-solid/useUnit',
-            'api/effector-solid/useStoreMap',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Gate',
-          items: [
-            'api/effector-solid/gate',
-            'api/effector-solid/createGate',
-            'api/effector-solid/useGate',
-          ],
-        },
+        'api/effector-solid/useUnit',
+        'api/effector-solid/useStoreMap',
+        'api/effector-solid/gate',
+        'api/effector-solid/createGate',
+        'api/effector-solid/useGate',
       ],
     },
     {
       type: 'category',
       label: 'effector-vue',
+      link: {
+        type: 'doc',
+        id: 'api/effector-vue/effector-vue',
+      },
       items: [
-        'api/effector-vue/effector-vue',
         'api/effector-vue/vue-effector',
         'api/effector-vue/component-options',
+        'api/effector-vue/gate',
+        'api/effector-vue/createGate',
+        'api/effector-vue/useGate',
+        'api/effector-vue/useStore',
+        'api/effector-vue/useVModel',
+
         {
           type: 'category',
-          label: 'Gate',
-          items: [
-            'api/effector-vue/gate',
-            'api/effector-vue/createGate',
-            'api/effector-vue/useGate',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'SSR',
+          label: 'Scoped (SSR)',
           items: ['api/effector-vue/useEvent', 'api/effector-vue/VueSSRPlugin'],
-        },
-        {
-          type: 'category',
-          label: 'Hooks',
-          items: ['api/effector-vue/useStore', 'api/effector-vue/useVModel'],
         },
         'api/effector-vue/vue',
       ],
