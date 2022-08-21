@@ -18,7 +18,7 @@ module.exports = {
       darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
     algolia: {
-      appId: '9e35095b0a1f29ec11a726baae76b915',
+      appId: 'BH4D9OD16A',
       apiKey: process.env.ALGOLIA_API_KEY,
       indexName: 'effector',
     },
@@ -30,7 +30,7 @@ module.exports = {
       },
       items: [
         {to: 'docs/introduction/installation', label: 'Docs', position: 'left'},
-        {to: 'docs/api/effector/effector', label: 'API', position: 'left'},
+        {to: 'docs/api/effector', label: 'API', position: 'left'},
         {
           href: 'https://www.patreon.com/zero_bias',
           label: 'Blog',
