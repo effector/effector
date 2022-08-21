@@ -47,11 +47,6 @@ module.exports = {
           position: 'right',
         },
         {
-          href: 'https://twitter.com/effectorjs',
-          label: 'Twitter',
-          position: 'right',
-        },
-        {
           href: 'https://github.com/effector/effector',
           label: 'GitHub',
           position: 'right',
