@@ -90,9 +90,9 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Packages
 
-- [effector](https://effector.dev/docs/api/effector/effector)
-- [effector-react](https://effector.dev/docs/api/effector-react/effector-react)
-- [effector-vue](https://effector.dev/docs/api/effector-vue/effector-vue)
+- [effector](https://effector.dev/docs/api/effector)
+- [effector-react](https://effector.dev/docs/api/effector-react)
+- [effector-vue](https://effector.dev/docs/api/effector-vue)
 
 ## Articles
 
