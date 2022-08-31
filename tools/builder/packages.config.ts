@@ -99,6 +99,15 @@ function extensionlessExport(path: string) {
   }
 }
 
+/** usage: umdExport('./effector') */
+function umdExport(path: string) {
+  return {
+    types: `${path}.umd.d.ts`,
+    require: `${path}.umd.js`,
+    default: `${path}.umd.js`,
+  }
+}
+
 const compatExport = {
   types: './compat.d.ts',
   require: './compat.js',
@@ -130,10 +139,7 @@ export default {
       },
       './fork': extensionlessExport('./fork'),
       './compat': compatExport,
-      './effector.umd': {
-        types: './effector.umd.d.ts',
-        default: './effector.umd.js',
-      },
+      './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
       './babel-plugin-react': './babel-plugin-react.js',
       './package.json': './package.json',
@@ -176,11 +182,7 @@ export default {
       './scope': extensionlessExport('./scope'),
       './ssr': extensionlessExport('./ssr'),
       './compat': compatExport,
-      './effector-react.umd': {
-        types: './effector-react.umd.d.ts',
-        require: './effector-react.umd.js',
-        default: './effector-react.umd.js',
-      },
+      './effector-react.umd': umdExport('./effector-react'),
     },
     'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.mjs',
@@ -230,11 +232,7 @@ export default {
         default: './scope.mjs',
       },
       './scope': extensionlessExport('./scope'),
-      './effector-solid.umd': {
-        types: './effector-solid.umd.d.ts',
-        require: './effector-solid.umd.js',
-        default: './effector-solid.umd.js',
-      },
+      './effector-solid.umd': umdExport('./effector-solid'),
     },
     'umd:main': 'effector-solid.umd.js',
     'jsnext:main': 'effector-solid.mjs',
@@ -294,11 +292,7 @@ export default {
         default: './ssr.mjs',
       },
       './compat': compatExport,
-      './effector-vue.umd': {
-        types: './effector-vue.umd.d.ts',
-        require: './effector-vue.umd.js',
-        default: './effector-vue.umd.js',
-      },
+      './effector-vue.umd': umdExport('./effector-vue'),
     },
     'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.mjs',
@@ -346,11 +340,7 @@ export default {
         default: './forest.mjs',
       },
       './server': extensionlessExport('./server'),
-      './forest.umd': {
-        types: './forest.umd.d.ts',
-        require: './forest.umd.js',
-        default: './forest.umd.js',
-      },
+      './forest.umd': umdExport('./forest'),
     },
     'umd:main': 'forest.umd.js',
     'jsnext:main': 'forest.mjs',
