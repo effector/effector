@@ -108,6 +108,16 @@ function umdExport(path: string) {
   }
 }
 
+/** usage: rootExport('./effector-react') */
+function rootExport(path: string) {
+  return {
+    types: `./index.d.ts`,
+    import: `${path}.mjs`,
+    require: `${path}.cjs.js`,
+    default: `${path}.mjs`,
+  }
+}
+
 const compatExport = {
   types: './compat.d.ts',
   require: './compat.js',
@@ -126,12 +136,7 @@ export default {
     typings: 'index.d.ts',
     dependencies: {},
     exports: {
-      '.': {
-        types: './index.d.ts',
-        import: './effector.mjs',
-        require: './effector.cjs.js',
-        default: './effector.mjs',
-      },
+      '.': rootExport('./effector'),
       './effector.mjs': {
         types: './effector.mjs.d.ts',
         import: './effector.mjs',
@@ -162,12 +167,7 @@ export default {
     main: 'effector-react.cjs.js',
     module: 'effector-react.mjs',
     exports: {
-      '.': {
-        types: './index.d.ts',
-        import: './effector-react.mjs',
-        require: './effector-react.cjs.js',
-        default: './effector-react.mjs',
-      },
+      '.': rootExport('./effector-react'),
       './package.json': './package.json',
       './effector-react.mjs': {
         types: './effector-react.mjs.d.ts',
@@ -214,12 +214,7 @@ export default {
     main: 'effector-solid.cjs.js',
     module: 'effector-solid.mjs',
     exports: {
-      '.': {
-        types: './index.d.ts',
-        import: './effector-solid.mjs',
-        require: './effector-solid.cjs.js',
-        default: './effector-solid.mjs',
-      },
+      '.': rootExport('./effector-solid'),
       './package.json': './package.json',
       './effector-solid.mjs': {
         types: './effector-solid.mjs.d.ts',
@@ -258,12 +253,7 @@ export default {
     main: 'effector-vue.cjs.js',
     module: 'effector-vue.mjs',
     exports: {
-      '.': {
-        types: './index.d.ts',
-        import: './effector-vue.mjs',
-        require: './effector-vue.cjs.js',
-        default: './effector-vue.mjs',
-      },
+      '.': rootExport('./effector-vue'),
       './composition': {
         types: './composition.d.ts',
         import: './composition.mjs',
@@ -328,12 +318,7 @@ export default {
     module: 'forest.mjs',
     exports: {
       './package.json': './package.json',
-      '.': {
-        types: './index.d.ts',
-        import: './forest.mjs',
-        require: './forest.cjs.js',
-        default: './forest.mjs',
-      },
+      '.': rootExport('./forest'),
       './forest.mjs': {
         types: './forest.mjs.d.ts',
         import: './forest.mjs',
