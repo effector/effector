@@ -1,6 +1,6 @@
 {
   "name": "effector-solid",
-  "version": "0.22.2",
+  "version": "0.22.3",
   "description": "SolidJS bindings for effector",
   "main": "effector-solid.cjs.js",
   "module": "effector-solid.mjs",

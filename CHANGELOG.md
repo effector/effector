@@ -2,6 +2,18 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 22.1.2
+
+- Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
+
+## effector-solid 0.22.3
+
+- Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
+
+## forest 0.21.2
+
+- Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
+
 ## effector-react 22.1.0
 
 - Added support for react 18 (PR [#655](https://github.com/effector/effector/pull/655))
