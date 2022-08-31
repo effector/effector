@@ -33,6 +33,7 @@
     },
     "./effector.umd": {
       "types": "./effector.umd.d.ts",
+      "require": "./effector.umd.js",
       "default": "./effector.umd.js"
     },
     "./babel-plugin": "./babel-plugin.js",
