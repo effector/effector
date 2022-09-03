@@ -1,5 +1,6 @@
 const sidebar = {
   Introduction: [
+    'introduction/motivation',
     'introduction/installation',
     'ecosystem',
     'introduction/examples',
