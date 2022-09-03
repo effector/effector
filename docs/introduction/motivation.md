@@ -10,9 +10,10 @@ In order for the user to benefit from the logic described above it is necessary 
 and implement the logic for it, we call it **UI-logic**.
 
 The easiest way to figure out what is what — is to remember what tasks your project manager comes to you with,
-or what the product tasks look like. There's no description of how buttons, dropdowns, and form fields should work.
-There is a description of how the user interacts with the application.
-The users don't care what technologies and frameworks are used under the hood.
+or what the product tasks look like.
+There's no description of how buttons, dropdowns, and form fields should work internally or which api's should be used.
+There is only a description of how the user interacts with the application.
+The users don't care what technologies and frameworks are used under the hood - it is up to the developers to decide, which tools to use to achieve required quality.
 
 In most cases, the product requirements team doesn't think in terms of UI components, it thinks through user behavior scenarios.
 More importantly for developers, the way frameworks like React, Angular, or Vue work often doesn't allow
