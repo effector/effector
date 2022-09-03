@@ -83,7 +83,7 @@ He reviewed contributions and improved the DX of the core functionality.
 Kirill made the [swc-plugin](https://github.com/effector/swc-plugin), the [bindings for SolidJS](https://github.com/effector/effector/tree/master/packages/effector-solid),
 and now improves ecosystem and core functionality.
 
-## Igor Kamyshev
+## Igor Kamyşev
 
 <img width="256" src="https://avatars.githubusercontent.com/u/26767722?v=4" />
 
