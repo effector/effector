@@ -1,6 +1,7 @@
 const sidebar = {
-  Introduction: [
+  'Getting started': [
     'introduction/motivation',
+    'introduction/community',
     'introduction/installation',
     'ecosystem',
     'introduction/examples',
