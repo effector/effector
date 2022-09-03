@@ -1,6 +1,7 @@
 ---
 id: community
 title: Community
+description: Articles and the team behind the project
 ---
 
 ## Articles
