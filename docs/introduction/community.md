@@ -101,6 +101,8 @@ Igor made [eslint-plugin-effector](https://github.com/effector/eslint-plugin) an
 Yan made many contributions with fixes and improvements to all effector repositories.
 Yan helps us to write explanations and reference documentation. You may hear about the workshop Yan made about effector.
 
+<br /><br />
+
 # Acknowledgments
 
 ## Ilya Lesik
@@ -147,6 +149,8 @@ Andrei was at the origin of the effector. He wrote all the first documentation, 
 Roman promotes effector among the front-end community and works on documentation.
 
 _This list is not exhaustive._
+
+<br /><br />
 
 # Contributors
 
