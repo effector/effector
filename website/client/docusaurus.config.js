@@ -64,7 +64,7 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Docs',
+              label: 'Getting started',
               to: 'docs/introduction/installation',
             },
             {
