@@ -132,10 +132,13 @@ Valeriy developed server-side code for [REPL](https://share.effector.dev) and wr
 
 ## Anton Kosykh
 
-[Github](https://github.com/Kelin2025) • [Twitter](https://twitter.com/kelin2025)
+<img width="256" src="https://i.imgur.com/GD0zWpH.jpg" />
 
-Anton made many useful packages for the effector ecosystem.
-Such as [factorio](https://github.com/Kelin2025/effector-factorio), [history](https://www.notion.so/Community-52e1763b8b37469694189bc431cbeb83), [atomic-router](https://www.notion.so/Community-52e1763b8b37469694189bc431cbeb83).
+[Github](https://github.com/Kelin2025) • [Telegram](https://t.me/kelin2025)
+
+One of the earliest users of Effector, working on [Atomic Router](https://atomic-router.github.io/) and ecosystem packages like [effector-history](https://github.com/kelin2025/effector-history),
+[effector-pagination](https://github.com/kelin2025/effector-pagination) and [effector-factorio](https://github.com/Kelin2025/effector-factorio)
+
 
 ## Andrei Tshurotshkin
 
