@@ -102,6 +102,14 @@ Igor made [eslint-plugin-effector](https://github.com/effector/eslint-plugin) an
 Yan made many contributions with fixes and improvements to all effector repositories.
 Yan helps us to write explanations and reference documentation. You may hear about the workshop Yan made about effector.
 
+## Egor Guscha
+
+<img width="256" src="https://avatars.githubusercontent.com/u/22044607?v=4" />
+
+[Github](https://github.com/egorguscha) • [Twitter](https://twitter.com/simpleigich)
+
+Since 2019 working in the effector core team on documentation, learning materials, and ecosystem improving.
+
 <br /><br />
 
 # Acknowledgments
