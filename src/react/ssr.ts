@@ -18,7 +18,7 @@ import {deprecate} from './deprecate'
 
 const ScopeContext = React.createContext(null as Scope | null)
 export const {Provider} = ScopeContext
-function getScope() {
+export function getScope() {
   const scope = React.useContext(ScopeContext)
   if (!scope)
     throwError('No scope found, consider adding <Provider> to app root')

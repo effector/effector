@@ -861,4 +861,75 @@ describe('useUnit', () => {
       `)
     })
   })
+  describe('useUnit with force scope', () => {
+    let consoleError: any
+    beforeEach(() => {
+      consoleError = console.error
+      console.error = () => {}
+    })
+    afterEach(() => {
+      console.error = consoleError
+    })
+    it('Should throw error if no scope', async () => {
+      const $a = createStore(42)
+
+      const View = () => {
+        const a = useUnit($a, {forceScope: true})
+
+        return <div>{a}</div>
+      }
+
+      expect(() => render(<View />)).rejects.toThrow(
+        'No scope found, consider adding <Provider> to app root',
+      )
+    })
+    test('Should get value from scope', async () => {
+      const $value = createStore('value')
+
+      const Component = () => {
+        const value = useUnit($value, {forceScope: true})
+        return <div>{value}</div>
+      }
+
+      const scope = fork({values: [[$value, 'scoped value']]})
+
+      await render(
+        <React.StrictMode>
+          <Provider value={scope}>
+            <Component />
+          </Provider>
+        </React.StrictMode>,
+      )
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+          <div>
+            scoped value
+          </div>
+        `)
+    })
+    test('Should get value not from scope', async () => {
+      const $value = createStore('value')
+
+      const Component = () => {
+        const value = useUnit($value, {forceScope: false})
+        return <div>{value}</div>
+      }
+
+      const scope = fork({values: [[$value, 'scoped value']]})
+
+      await render(
+        <React.StrictMode>
+          <Provider value={scope}>
+            <Component />
+          </Provider>
+        </React.StrictMode>,
+      )
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+          <div>
+            value
+          </div>
+        `)
+    })
+  })
 })
