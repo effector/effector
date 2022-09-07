@@ -3062,7 +3062,7 @@ export function allSettled<T>(
   config: {scope: Scope; params: T},
 ): Promise<void>
 /**
- * Run event withot arguments in scope and wait for all triggered effects to settle. This method never throw an error
+ * Run event without arguments in scope and wait for all triggered effects to settle. This method never throw an error
  * @param unit event to run
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
