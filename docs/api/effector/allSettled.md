@@ -10,6 +10,7 @@ allSettled<T>(unit: Effect<T, Done, Fail>, {scope: Scope, params?: T}): Promise<
   | {status: 'done'; value: Done}
   | {status: 'fail'; value: Fail}
 >
+allSettled<T>(unit: Store<T>, {scope: Scope, params?: T}): Promise<void>
 ```
 
 Call provided unit in scope and wait for finishing all the triggered effects.
