@@ -27,7 +27,7 @@ createWatch<T>(config: {
 #### Example (scope)
 
 ```js
-import {createWatch, createEvent, fork, allSetteld} from 'effector'
+import {createWatch, createEvent, fork, allSettled} from 'effector'
 
 const changeName = createEvent()
 
@@ -42,7 +42,7 @@ changeName('John') // no output
 #### Example (no scope)
 
 ```js
-import {createWatch, createEvent, fork, allSetteld} from 'effector'
+import {createWatch, createEvent, fork, allSettled} from 'effector'
 
 const changeName = createEvent()
 
