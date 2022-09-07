@@ -3053,8 +3053,8 @@ export function allSettled<FX extends Effect<void, any, any>>(
   config: {scope: Scope},
 ): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
 /**
- * Run event in scope and wait for all triggered effects to settle. This method never throw an error
- * @param unit event to run
+ * Run unit in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit event or store to run
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled<T>(
@@ -3062,8 +3062,8 @@ export function allSettled<T>(
   config: {scope: Scope; params: T},
 ): Promise<void>
 /**
- * Run event without arguments in scope and wait for all triggered effects to settle. This method never throw an error
- * @param unit event to run
+ * Run unit without arguments in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit event or store to run
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled(
