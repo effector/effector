@@ -185,11 +185,11 @@ const userMessage = createEvent<UserMessage>()
 
 sample({
   clock: message,
-  // type error here, because this type doesn't match with `Message`
   filter: (msg: {kind: 'user' | 'wrong'; text: number}): msg is UserMessage => msg.kind === 'user',
   fn: (msg) => msg.text,
   target: userMessage
 })
+// Type error here: Type 'Message' is not assignable to type '{ kind: "user" | "wrong"; text: number; }'.
 ```
 
 
