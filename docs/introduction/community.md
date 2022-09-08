@@ -43,12 +43,12 @@ description: Articles and the team behind the project
 
 <br /><br />
 
-# Meet the Effector Team
+## Meet the Effector Team
 
 The Effector team members work full time on the projects which use Effector to solve business tasks.
 Each member uses the library every day as a user and tries to improve the user experience as a core team member.
 
-## Dmitry Boldyrev
+### Dmitry Boldyrev
 
 <img width="256" src="https://avatars.githubusercontent.com/u/15912112?v=4" />
 
@@ -57,7 +57,7 @@ Each member uses the library every day as a user and tries to improve the user e
 Dmitry made the first version of effector in 2018 to solve reactive event-driver architecture in the messenger.
 Now his main focus is to improve UX in the effector itself and speed up the kernel.
 
-## Sergey Sova
+### Sergey Sova
 
 <img width="256" src="https://avatars.githubusercontent.com/u/5620073?v=4" />
 
@@ -66,7 +66,7 @@ Now his main focus is to improve UX in the effector itself and speed up the kern
 Since 2018 Sergey has made some ecosystem packages: [patronum](https://github.com/effector/patronum), [logger](https://github.com/effector/logger), [inspector](https://github.com/effector/inspector).
 His main task is to improve the UX through the ecosystem and documentation.
 
-## Alexandr Horoshih
+### Alexandr Horoshih
 
 <img width="256" src="https://avatars.githubusercontent.com/u/32790736?v=4" />
 
@@ -75,7 +75,7 @@ His main task is to improve the UX through the ecosystem and documentation.
 Alexander contributed to each package of effector core and org repository.
 He reviewed contributions and improved the DX of the core functionality.
 
-## Kirill Mironov
+### Kirill Mironov
 
 <img width="256" src="https://i.imgur.com/JFaZkm9.jpg" />
 
@@ -84,7 +84,7 @@ He reviewed contributions and improved the DX of the core functionality.
 Kirill made the [swc-plugin](https://github.com/effector/swc-plugin), the [bindings for SolidJS](https://github.com/effector/effector/tree/master/packages/effector-solid),
 and now improves ecosystem and core functionality.
 
-## Igor Kamyşev
+### Igor Kamyşev
 
 <img width="256" src="https://avatars.githubusercontent.com/u/26767722?v=4" />
 
@@ -93,7 +93,7 @@ and now improves ecosystem and core functionality.
 Igor is working on [Farfetched](https://farfetched.pages.dev) is the advanced data fetching tool.
 Igor made [eslint-plugin-effector](https://github.com/effector/eslint-plugin) and reviewed many of PRs and issues of the effector and ecosystem packages.
 
-## Yan Lobaty
+### Yan Lobaty
 
 <img width="256" src="https://i.imgur.com/DomL22D.jpg" />
 
@@ -102,7 +102,7 @@ Igor made [eslint-plugin-effector](https://github.com/effector/eslint-plugin) an
 Yan made many contributions with fixes and improvements to all effector repositories.
 Yan helps us to write explanations and reference documentation. You may hear about the workshop Yan made about effector.
 
-## Egor Guscha
+### Egor Guscha
 
 <img width="256" src="https://avatars.githubusercontent.com/u/22044607?v=4" />
 
@@ -112,9 +112,9 @@ Since 2019 working in the effector core team on documentation, learning material
 
 <br /><br />
 
-# Acknowledgments
+## Acknowledgments
 
-## Ilya Lesik
+### Ilya Lesik
 
 <img width="256" src="https://avatars.githubusercontent.com/u/1270648?v=4" />
 
@@ -122,7 +122,7 @@ Since 2019 working in the effector core team on documentation, learning material
 
 Ilya made the list of awesome packages of effector ecosystem.
 
-## Evgeniy Fedotov 
+### Evgeniy Fedotov 
 
 <img width="256" src="https://avatars.githubusercontent.com/u/18236014?v=4" />
 
@@ -130,7 +130,7 @@ Ilya made the list of awesome packages of effector ecosystem.
 
 Evgeniy made [effector-reflect](https://github.com/effector/reflect) and helps us write documentation.
 
-## Valeriy Kobzar
+### Valeriy Kobzar
 
 <img width="256" src="https://avatars.githubusercontent.com/u/1615093?v=4" />
 
@@ -138,7 +138,7 @@ Evgeniy made [effector-reflect](https://github.com/effector/reflect) and helps u
 
 Valeriy developed server-side code for [REPL](https://share.effector.dev) and wrote many documentation pages.
 
-## Anton Kosykh
+### Anton Kosykh
 
 <img width="256" src="https://i.imgur.com/GD0zWpH.jpg" />
 
@@ -148,13 +148,13 @@ One of the earliest users of Effector, working on [Atomic Router](https://atomic
 [effector-pagination](https://github.com/kelin2025/effector-pagination) and [effector-factorio](https://github.com/Kelin2025/effector-factorio)
 
 
-## Andrei Tshurotshkin
+### Andrei Tshurotshkin
 
 [Github](https://github.com/goodmind)
 
 Andrei was at the origin of the effector. He wrote all the first documentation, implemented the first REPL version, and featured many core methods.
 
-## Roman Titov 
+### Roman Titov 
 
 [Github](https://github.com/popuguytheparrot) • [Telegram](https://t.me/popuguy)
 
@@ -164,7 +164,7 @@ _This list is not exhaustive._
 
 <br /><br />
 
-# Contributors
+## Contributors
 
 Please, open [README.md](https://github.com/effector/effector#contributors) to see the full list of our contributors.
 We have the [github action](https://github.com/effector/effector/blob/master/.github/workflows/contributors.yml) to regenerate this list.
