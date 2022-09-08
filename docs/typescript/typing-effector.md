@@ -135,6 +135,60 @@ const userMessage = guard(message, {
 // userMessage has type Event<UserMessage>
 ```
 
+## sample
+Since `effector@22.2.0` update `sample` also supports a `filter` field, which can also be a [Typescript type predicate](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates).
+
+```typescript
+type UserMessage = {kind: 'user'; text: string}
+type WarnMessage = {kind: 'warn'; warn: string}
+
+const message = createEvent<UserMessage | WarnMessage>()
+
+const userMessage = sample({
+  clock: message,
+  filter: (msg): msg is UserMessage => msg.kind === 'user',
+})
+
+// userMessage has type Event<UserMessage>
+```
+
+### filter + fn
+
+However, `sample` also has a `fn` field to apply custom transformations.
+There is a caveat with Typescript type inference mechanic, which requires user to explicitly type `filter` arguments for type inference to work
+
+```typescript
+type UserMessage = {kind: 'user'; text: string}
+type WarnMessage = {kind: 'warn'; warn: string}
+type Message = UserMessage | WarnMessage
+
+const message = createEvent<Message>()
+
+const userMessage = sample({
+  clock: message,
+  // need to explicitly type `msg` as `Message` there
+  filter: (msg: Message): msg is UserMessage => msg.kind === 'user',
+  // to get correct type inference here
+  fn: (msg) => msg.text,
+})
+
+// userMessage has type Event<string>
+```
+Otherwise Typescrit will fallback to `any`.
+
+However, Typescript will not allow you to set incorrect filter type
+```typescript
+const message = createEvent<Message>()
+
+const userMessage = sample({
+  clock: message,
+  // type error here, because this type doesn't match with `Message`
+  filter: (msg: {kind: 'user' | 'wrong'; text: number}): msg is UserMessage => msg.kind === 'user',
+  fn: (msg) => msg.text,
+})
+```
+
+
 ## createApi
 
 To allow typescript to infer types of created events, add type to second argument of given reducers
