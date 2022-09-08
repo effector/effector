@@ -2,6 +2,7 @@ import { createWatch, is, Scope, Store } from "effector";
 import { computed, onUnmounted, shallowReactive, shallowRef } from "vue-next";
 import { getScope } from "./lib/get-scope";
 import { stateReader } from "./lib/state-reader";
+import { throwError } from "./lib/throw";
 
 export function useStoreMap<State, Result, Keys = unknown>(
   {
@@ -17,9 +18,9 @@ export function useStoreMap<State, Result, Keys = unknown>(
   },
   scope?: Scope
 ) {
-  if (!is.store(store)) throw Error('useStoreMap expects a store')
-  if (typeof keys !== 'function') throw Error('useStoreMap expects a function')
-  if (typeof fn !== 'function') throw Error('useStoreMap expects a function')
+  if (!is.store(store)) throwError('useStoreMap expects a store')
+  if (typeof keys !== 'function') throwError('useStoreMap expects a function')
+  if (typeof fn !== 'function') throwError('useStoreMap expects a function')
 
 
   let _scope = scope || getScope().scope
