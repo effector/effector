@@ -1,5 +1,7 @@
 import React from 'react'
-import {Store, Event, Effect, Domain} from 'effector'
+import {Store, Event, Effect, Domain, Scope} from 'effector'
+
+export const Provider: React.Provider<Scope>
 
 export type StoreConsumer<State> = React.ComponentType<{
   children: (state: State) => React.ReactNode

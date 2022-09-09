@@ -1,5 +1,5 @@
 import React from 'react'
-import {Domain, is, Scope, Store, scopeBind} from 'effector'
+import {Domain, is, Store, scopeBind} from 'effector'
 import {
   useStoreBase,
   useUnitBase,
@@ -15,15 +15,7 @@ import {
 import type {Gate} from './index.h'
 import {throwError} from './throw'
 import {deprecate} from './deprecate'
-
-const ScopeContext = React.createContext(null as Scope | null)
-export const {Provider} = ScopeContext
-export function getScope() {
-  const scope = React.useContext(ScopeContext)
-  if (!scope)
-    throwError('No scope found, consider adding <Provider> to app root')
-  return scope as Scope
-}
+import {getScope} from './scope'
 
 export function createGate<Props>(
   ...args: Array<
