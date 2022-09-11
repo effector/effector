@@ -29,8 +29,9 @@ type ExtractStore<T extends Record<string, Store<unknown>>> = {
 export function useStoreMap<State, Result, Keys = unknown>(
   config: {
     store: Store<State>;
-    keys: () => Keys;
+    keys?: () => Keys;
     fn: (state: State, keys: Keys) => Result;
+    updateFilter?: (update: Result, current: Result) => boolean;
     defaultValue?: Result;
   },
   scope?: Scope

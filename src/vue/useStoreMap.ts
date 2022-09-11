@@ -4,42 +4,43 @@ import { getScope } from "./lib/get-scope";
 import { stateReader } from "./lib/state-reader";
 import { throwError } from "./lib/throw";
 
+const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
+
 export function useStoreMap<State, Result, Keys = unknown>(
-  {
-    store,
-    keys,
-    fn,
-    defaultValue,
-  }: {
+  config: {
     store: Store<State>;
-    keys: () => Keys;
+    keys?: () => Keys;
     fn: (state: State, keys: Keys) => Result;
+    updateFilter?: (update: Result, current: Result) => boolean;
     defaultValue?: Result;
   },
   scope?: Scope
 ) {
-  if (!is.store(store)) throwError('useStoreMap expects a store')
-  if (typeof keys !== 'function') throwError('useStoreMap expects a function')
-  if (typeof fn !== 'function') throwError('useStoreMap expects a function')
+  if (!is.store(config.store)) throwError('useStoreMap expects a store')
+  if (config.keys !== undefined && typeof config.keys !== 'function') throwError('useStoreMap expects keys as a function')
+  if (typeof config.fn !== 'function') throwError('useStoreMap expects fn as a function')
 
 
   let _scope = scope || getScope().scope
-  let _keys = computed(keys)
+  let keys = config.keys ? computed(config.keys) : computed(() => undefined as Keys)
+  let updateFilter = config.updateFilter || basicUpdateFilter;
 
-  let state = stateReader(store, _scope)
+  let state = stateReader(config.store, _scope)
   let isShape = typeof state === "object" && Array.isArray(state) === false
 
   let _ = isShape ? shallowReactive(state as any) : shallowRef(state)
 
   let stop = createWatch({
-    unit: store,
+    unit: config.store,
     fn: (value) => {
       if (isShape) {
         for (let key in value) {
-          _[key] = value[key]
+          if (updateFilter(value[key] as Result, _[key])) {
+            _[key] = value[key]
+          }
         }
       } else {
-        if (_.value !== value) {
+        if (value !== undefined && updateFilter(value as unknown as Result, _.value)) {
           _.value = value
         }
       }
@@ -52,7 +53,7 @@ export function useStoreMap<State, Result, Keys = unknown>(
   })
 
   return computed(() => {
-    let result = fn(isShape ? _ : _.value, _keys.value)
-    return result !== undefined ? result : defaultValue
+    let result = config.fn(isShape ? _ : _.value, keys.value)
+    return result !== undefined ? result : config.defaultValue
   })
 }

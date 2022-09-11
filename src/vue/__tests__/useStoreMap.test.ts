@@ -1,8 +1,7 @@
 import {useStoreMap, useStore} from 'effector-vue/composition'
-import {allSettled, createEvent, createStore, restore} from 'effector'
+import {createEvent, createStore} from 'effector'
 import {mount, shallowMount} from 'vue-test-utils-next'
 import { defineComponent, nextTick, ref } from 'vue-next'
-import { await } from 'most'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -109,4 +108,46 @@ it('defaultValue support', async () => {
   await nextTick()
 
   expect(wrapper.text()).toBe('Solid')
+})
+
+test('updateFilter support', async () => {
+  const update = createEvent<number>()
+  const store = createStore(0).on(update, (_, x) => x)
+
+  const wrapper = shallowMount({
+    setup() {
+      const n = useStoreMap({
+        store,
+        fn: state => state,
+        updateFilter: (x) => x % 2 === 0,
+      })
+
+      return {n}
+    },
+    template: `
+      <div>
+        {{n}}
+      </div>
+    `
+  })
+
+  expect(wrapper.text()).toBe('0')
+
+  update(1)
+
+  await nextTick()
+
+  expect(wrapper.text()).toBe('0')
+
+  update(2)
+
+  await nextTick()
+
+  expect(wrapper.text()).toBe('2')
+
+  update(3)
+
+  await nextTick()
+
+  expect(wrapper.text()).toBe('2')
 })
