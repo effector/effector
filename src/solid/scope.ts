@@ -1,25 +1,13 @@
-import {
-  Accessor,
-  createContext,
-  createEffect,
-  createMemo,
-  useContext,
-} from 'solid-js'
-import {Domain, Scope} from 'effector'
-import {throwError} from './lib/throw'
-import {useStoreMapBase, useUnitBase} from './lib/base'
-import {useGate as commonUseGate, createGateImplementation} from './lib/gate'
+import {Accessor, createEffect, createMemo} from 'solid-js'
+import {Domain} from 'effector'
+
 import type {Gate} from './index.h'
 
-const ScopeContext = createContext<Scope | null>(null)
-export const {Provider} = ScopeContext
+import {useGate as commonUseGate, createGateImplementation} from './lib/gate'
+import {useStoreMapBase, useUnitBase} from './lib/base'
+import {getScope, ScopeContext} from './lib/get-scope'
 
-function getScope() {
-  const scope = useContext(ScopeContext)
-  if (!scope)
-    throwError('No scope found, consider adding <Provider> to app root')
-  return scope as Scope
-}
+export const {Provider} = ScopeContext
 
 export function createGate<Props>(
   config: {
@@ -59,7 +47,8 @@ export function useGate<Props>(
   createEffect(() => commonUseGate(ForkedGate(), props))
 }
 export function useUnit(shape) {
-  return useUnitBase(shape, getScope())
+  const scope = getScope()
+  return useUnitBase(shape, scope)
 }
 /** useStoreMap wrapper for scopes */
 export function useStoreMap(configOrStore: any, separateFn: any) {

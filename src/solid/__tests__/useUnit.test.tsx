@@ -1,13 +1,8 @@
 import {render} from 'solid-testing-library'
-import {
-  createStore,
-  createEvent,
-  createDomain,
-  Store,
-  restore,
-} from 'effector'
+import {createStore, createEvent, createDomain, fork} from 'effector'
 import {useUnit, useStoreMap} from 'effector-solid'
-import {createEffect as createSolidEffect, createMemo, createSignal, For} from 'solid-js'
+import {Provider} from 'effector-solid/scope'
+import {createEffect as createSolidEffect, createMemo, For} from 'solid-js'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('useUnit', () => {
@@ -21,7 +16,7 @@ describe('useUnit', () => {
       return <span>Store text: {state}</span>
     }
 
-    const { container } = await render(Display)
+    const {container} = await render(Display)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <span>
         Store text: 
@@ -69,7 +64,7 @@ describe('useUnit', () => {
       return <>{store()('key')}</>
     }
 
-    const { container } = await render(Display)
+    const {container} = await render(Display)
 
     expect(container.firstChild).toMatchInlineSnapshot(`initial`)
     changeStore({key: 'value'})
@@ -92,11 +87,11 @@ describe('useUnit', () => {
     const b = domain.createStore(20).on(inc, x => x + 1)
     const View = () => {
       const current = useUnit(show)
-      const selectedStore = createMemo(() => current() === 'A' ? a : b)
+      const selectedStore = createMemo(() => (current() === 'A' ? a : b))
       const value = createMemo(() => useUnit(selectedStore()))
       return <div>{value}</div>
     }
-    const { container } = await render(View)
+    const {container} = await render(View)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         10
@@ -167,15 +162,11 @@ describe('useStoreMap', () => {
       const userList = useUnit(userNames)
       return (
         <ul>
-          <For each={userList()}>
-            {(name) => (
-              <Card nickname={name} />
-            )}
-          </For>
+          <For each={userList()}>{name => <Card nickname={name} />}</For>
         </ul>
       )
     }
-    const { container } = await render(Cards)
+    const {container} = await render(Cards)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <ul>
         <li>
@@ -232,7 +223,7 @@ describe('useStoreMap', () => {
       return <div>{x}</div>
     }
     const App = () => <View />
-    const { container } = await render(App)
+    const {container} = await render(App)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         0
@@ -262,7 +253,7 @@ describe('useStoreMap', () => {
       return <div>{x() === baseX() ? 'equal' : 'not_equal'}</div>
     }
     const App = () => <View />
-    const { container } = await render(App)
+    const {container} = await render(App)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         equal
@@ -280,5 +271,137 @@ describe('useStoreMap', () => {
         equal
       </div>
     `)
+  })
+})
+describe('useUnit with force scope', () => {
+  let consoleError: any
+  beforeEach(() => {
+    consoleError = console.error
+    console.error = () => {}
+  })
+  afterEach(() => {
+    console.error = consoleError
+  })
+  describe('forceScope options not set', () => {
+    it('without context', async () => {
+      const $a = createStore(42)
+
+      const View = () => {
+        const a = useUnit($a)
+
+        return <div>{a}</div>
+      }
+
+      const {container} = await render(View)
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          42
+        </div>
+      `)
+    })
+    test('with context', async () => {
+      const $value = createStore('value')
+
+      const Component = () => {
+        const value = useUnit($value)
+
+        return <div>{value}</div>
+      }
+
+      const scope = fork({values: [[$value, 'scoped value']]})
+
+      const {container} = await render(() => (
+        <Provider value={scope}>
+          <Component />
+        </Provider>
+      ))
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          scoped value
+        </div>
+      `)
+    })
+  })
+  describe('forceScope disabled', () => {
+    it('without context', async () => {
+      const $a = createStore(42)
+
+      const View = () => {
+        const a = useUnit($a, {forceScope: false})
+
+        return <div>{a}</div>
+      }
+
+      const {container} = await render(View)
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          42
+        </div>
+      `)
+    })
+    test('with context', async () => {
+      const $value = createStore('value')
+
+      const Component = () => {
+        const value = useUnit($value, {forceScope: false})
+
+        return <div>{value}</div>
+      }
+
+      const scope = fork({values: [[$value, 'scoped value']]})
+
+      const {container} = await render(() => (
+        <Provider value={scope}>
+          <Component />
+        </Provider>
+      ))
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          scoped value
+        </div>
+      `)
+    })
+  })
+  describe('forceScope enabled', () => {
+    it('without context', async () => {
+      const $a = createStore(42)
+
+      const View = () => {
+        const a = useUnit($a, {forceScope: true})
+
+        return <div>{a}</div>
+      }
+
+      expect(async () => await render(View)).rejects.toThrow(
+        'No scope found, consider adding <Provider> to app root',
+      )
+    })
+    test('with context', async () => {
+      const $value = createStore('value')
+
+      const Component = () => {
+        const value = useUnit($value, {forceScope: true})
+
+        return <div>{value}</div>
+      }
+
+      const scope = fork({values: [[$value, 'scoped value']]})
+
+      const {container} = await render(() => (
+        <Provider value={scope}>
+          <Component />
+        </Provider>
+      ))
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          scoped value
+        </div>
+      `)
+    })
   })
 })
