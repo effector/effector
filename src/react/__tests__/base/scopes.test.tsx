@@ -1124,3 +1124,82 @@ test('useUnit should bind units to scope', async () => {
   expect(scopeB.getState($a)).toEqual(0)
   expect($a.getState()).toEqual(0)
 })
+
+describe('hooks throw errors, if Provider is not found', () => {
+  test('useUnit from `effector-react/scope` throws error, if no Provider', () => {
+    const $a = createStore(42)
+
+    const View = () => {
+      const a = useUnit($a)
+
+      return <div>{a}</div>
+    }
+
+    expect(() => render(<View />)).rejects.toThrow(
+      'No scope found, consider adding <Provider> to app root',
+    )
+  })
+
+  test('useStore from `effector-react/scope` throws error, if no Provider', () => {
+    const $a = createStore(42)
+
+    const View = () => {
+      const a = useStore($a)
+
+      return <div>{a}</div>
+    }
+
+    expect(() => render(<View />)).rejects.toThrow(
+      'No scope found, consider adding <Provider> to app root',
+    )
+  })
+
+  test('useEvent from `effector-react/scope` throws error, if no Provider', () => {
+    const ev = createEvent()
+
+    const View = () => {
+      const a = useEvent(ev)
+
+      return <div onClick={a}></div>
+    }
+
+    expect(() => render(<View />)).rejects.toThrow(
+      'No scope found, consider adding <Provider> to app root',
+    )
+  })
+
+  test('useStoreMap from `effector-react/scope` throws error, if no Provider', () => {
+    const $a = createStore(42)
+
+    const View = () => {
+      const a = useStoreMap({
+        store: $a,
+        keys: [],
+        fn: () => 42,
+        defaultValue: 77,
+      })
+
+      return <div>{a}</div>
+    }
+
+    expect(() => render(<View />)).rejects.toThrow(
+      'No scope found, consider adding <Provider> to app root',
+    )
+  })
+
+  test('useList from `effector-react/scope` throws error, if no Provider', () => {
+    const $a = createStore([42])
+
+    const View = () => {
+      const a = useList($a, {
+        fn: () => <div>42</div>,
+      })
+
+      return <div>{a}</div>
+    }
+
+    expect(() => render(<View />)).rejects.toThrow(
+      'No scope found, consider adding <Provider> to app root',
+    )
+  })
+})
