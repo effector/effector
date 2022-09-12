@@ -92,18 +92,18 @@ export const connect = (Component: any) => (store: any) => {
 
 /** useStore wrapper for scopes */
 export function useStore<T>(store: Store<T>): T {
-  return useStoreBase(store, getScope())
+  return useStoreBase(store, getScope(true))
 }
 export function useUnit(shape) {
-  return useUnitBase(shape, getScope())
+  return useUnitBase(shape, getScope(true))
 }
 /** useList wrapper for scopes */
 export function useList(store: any, opts: any) {
-  return useListBase(store, opts, getScope())
+  return useListBase(store, opts, getScope(true))
 }
 /** useStoreMap wrapper for scopes */
 export function useStoreMap(configOrStore: any, separateFn: any) {
-  const scope = getScope()
+  const scope = getScope(true)
   if (separateFn) return useStoreMapBase([configOrStore, separateFn], scope)
   return useStoreMapBase(
     [
@@ -124,7 +124,7 @@ bind event to scope
 works like React.useCallback, but for scopes
 */
 export function useEvent(eventObject: any) {
-  const scope = getScope()
+  const scope = getScope(true)
   const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
   const events = isShape ? eventObject : {event: eventObject}
 
