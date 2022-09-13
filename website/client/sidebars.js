@@ -148,7 +148,7 @@ const sidebar = {
         'api/effector-vue/useGate',
         'api/effector-vue/useStore',
         'api/effector-vue/useVModel',
-
+        'api/effector-vue/useStoreMap',
         {
           type: 'category',
           label: 'Scoped (SSR)',
