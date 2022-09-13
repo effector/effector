@@ -5,6 +5,7 @@ import {
   useListBase,
   useUnitBase,
 } from './apiBase'
+import {getScope} from './scope'
 
 /**
 bind event to scope
@@ -19,8 +20,8 @@ export function useStore<State>(store: Store<State>): State {
   return useStoreBase(store)
 }
 
-export function useUnit(shape) {
-  return useUnitBase(shape)
+export function useUnit(shape, opts?: {forceScope?: boolean}) {
+  return useUnitBase(shape, getScope(opts?.forceScope))
 }
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
