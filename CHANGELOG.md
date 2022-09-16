@@ -5,12 +5,12 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 ## effector-react 22.2.0
 
 - Made hooks (`useUnit`/`useEvent`/`useStore`/`useStoreMap`/`useList`) isomorphic, now it would use `scope` from the `Provider` if it is available and scope-less mode otherwise (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785))
-- Added parameter `forceScope` to all hooks to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785))
+- Added parameter `forceScope` to all hooks to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785)), `/scope` module sets `forceScope` to `true` by default
 
 ## effector-solid 0.22.4
 
 - Made `useUnit` isomorphic, now it would use `scope` from the `Provider` if it is available and scope-less mode otherwise (PR [#782](https://github.com/effector/effector/pull/782))
-- Added parameter `forceScope` to `useUnit` to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#782](https://github.com/effector/effector/pull/782))
+- Added parameter `forceScope` to `useUnit` to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#782](https://github.com/effector/effector/pull/782)), `/scope` module sets `forceScope` to `true` by default
 
 ## effector-vue 22.1.2
 
