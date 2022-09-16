@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-solid 0.22.5
+
+- Add export of `Provider` from main module
+
 ## effector-react 22.2.0
 
 - Made hooks (`useUnit`/`useEvent`/`useStore`/`useStoreMap`/`useList`) isomorphic, now it would use `scope` from the `Provider` if it is available and scope-less mode otherwise (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785))
