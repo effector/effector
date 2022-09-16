@@ -22,6 +22,10 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
 
+## effector-solid 0.22.2
+
+- Fixed typing in `useUnit` (PR [#747](https://github.com/effector/effector/pull/747))
+
 ## forest 0.21.2
 
 - Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
