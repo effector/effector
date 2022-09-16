@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-solid 0.22.6
+
+- Add type of `Provider` to main module
+
 ## effector-solid 0.22.5
 
 - Add export of `Provider` from main module
