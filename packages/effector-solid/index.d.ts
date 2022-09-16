@@ -1,5 +1,9 @@
-import {Store, Event, Effect, Domain} from 'effector'
-import {Accessor, Component} from 'solid-js'
+import {Store, Event, Effect, Domain, Scope} from 'effector'
+import {Accessor, Component, FlowComponent} from 'solid-js'
+
+export const Provider: FlowComponent<{
+  value: Scope
+}>
 
 export type Gate<Props = {}> = Component<Props> & {
   open: Event<Props>
