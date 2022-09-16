@@ -16,8 +16,11 @@ export function useEvent<T>(event: Event<T>): (payload: T) => T {
   return event
 }
 
-export function useStore<State>(store: Store<State>): State {
-  return useStoreBase(store)
+export function useStore<State>(
+  store: Store<State>,
+  opts?: {forceScope?: boolean},
+): State {
+  return useStoreBase(store, getScope(opts?.forceScope))
 }
 
 export function useUnit(shape, opts?: {forceScope?: boolean}) {

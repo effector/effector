@@ -18,7 +18,10 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
   unmounted: Event<{props: Props; state: State}>
 }
 
-export function useStore<State>(store: Store<State>): State
+export function useStore<State>(
+  store: Store<State>,
+  opts?: {forceScope?: boolean},
+): State
 export function useStoreMap<
   State,
   Result,

@@ -9,8 +9,9 @@ import {
   Store,
   Event,
   restore,
+  fork,
 } from 'effector'
-import {useStore, useStoreMap} from 'effector-react'
+import {Provider, useStore, useStoreMap} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('useStore', () => {
@@ -423,6 +424,44 @@ describe('useStore', () => {
         </div>
       `)
     })
+  })
+
+  test('get value from scope if it is available', async () => {
+    const $store = createStore('original')
+
+    const scope = fork({values: [[$store, 'scoped']]})
+
+    function App() {
+      const value = useStore($store)
+
+      return <p>{value}</p>
+    }
+
+    await render(
+      <Provider value={scope}>
+        <App />
+      </Provider>,
+    )
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <p>
+        scoped
+      </p>
+    `)
+  })
+
+  test('throw error on forceScope if it is not available', async () => {
+    const $store = createStore('original')
+
+    function App() {
+      const value = useStore($store, {forceScope: true})
+
+      return <p>{value}</p>
+    }
+
+    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+      `[Error: No scope found, consider adding <Provider> to app root]`,
+    )
   })
 })
 describe('useStoreMap', () => {
