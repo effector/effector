@@ -6,6 +6,8 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Made hooks (`useUnit`/`useEvent`/`useStore`/`useStoreMap`/`useList`) isomorphic, now it would use `scope` from the `Provider` if it is available and scope-less mode otherwise (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785))
 - Added parameter `forceScope` to all hooks to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785)), `/scope` module sets `forceScope` to `true` by default
+- Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
+- Fixed typing in `useUnit` (PR [#747](https://github.com/effector/effector/pull/747))
 
 ## effector-solid 0.22.4
 
