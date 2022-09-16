@@ -63,7 +63,7 @@ const version = {
   effector: '22.3.0',
   'effector-react': '22.2.0',
   'effector-vue': '22.1.2',
-  'effector-solid': '0.22.4',
+  'effector-solid': '0.22.5',
   forest: '0.21.2',
 }
 
