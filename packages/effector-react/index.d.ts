@@ -130,14 +130,25 @@ export function createReactState<
   Com extends React.ComponentType<any>,
 >(store: Store<State>, Component: Com): React.ComponentType<State>
 
-export function useEvent(event: Event<void>): () => void
-export function useEvent<T>(event: Event<T>): (payload: T) => T
-export function useEvent<R>(fx: Effect<void, R, any>): () => Promise<R>
+export function useEvent(
+  event: Event<void>,
+  opts?: {forceScope?: boolean},
+): () => void
+export function useEvent<T>(
+  event: Event<T>,
+  opts?: {forceScope?: boolean},
+): (payload: T) => T
+export function useEvent<R>(
+  fx: Effect<void, R, any>,
+  opts?: {forceScope?: boolean},
+): () => Promise<R>
 export function useEvent<T, R>(
   fx: Effect<T, R, any>,
+  opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
 export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
   list: [...List],
+  opts?: {forceScope?: boolean},
 ): {
   [Key in keyof List]: List[Key] extends Event<infer T>
     ? (payload: T) => T
@@ -149,6 +160,7 @@ export function useEvent<
   Shape extends Record<string, Event<any> | Effect<any, any, any>>,
 >(
   shape: Shape,
+  opts?: {forceScope?: boolean},
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
     ? (payload: T) => T

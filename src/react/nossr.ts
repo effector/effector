@@ -1,4 +1,4 @@
-import {Event, Store} from 'effector'
+import {Event, scopeBind, Store} from 'effector'
 import {
   useStoreBase,
   useStoreMapBase,
@@ -12,7 +12,14 @@ bind event to scope
 
 works like React.useCallback, but for scopes
 */
-export function useEvent<T>(event: Event<T>): (payload: T) => T {
+export function useEvent<T>(
+  event: Event<T>,
+  opts?: {forceScope?: boolean},
+): (payload: T) => T {
+  const scope = getScope(opts?.forceScope)
+  if (scope) {
+    return scopeBind(event, {scope})
+  }
   return event
 }
 
