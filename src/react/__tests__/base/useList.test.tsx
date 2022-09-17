@@ -8,9 +8,10 @@ import {
   restore,
   createApi,
   createEffect,
+  fork,
 } from 'effector'
 
-import {useList, useStore} from 'effector-react'
+import {Provider, useList, useStore} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
 
 it('should render store items', async () => {
@@ -588,4 +589,44 @@ test('placeholder', async () => {
       </div>
     </div>
   `)
+})
+
+test('get value from scope if it is available', async () => {
+  const $store = createStore(['original'])
+
+  const scope = fork({values: [[$store, ['scoped']]]})
+
+  function App() {
+    const value = useList($store, t => <li>{t}</li>)
+
+    return <ol>{value}</ol>
+  }
+
+  await render(
+    <Provider value={scope}>
+      <App />
+    </Provider>,
+  )
+
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ol>
+      <li>
+        scoped
+      </li>
+    </ol>
+  `)
+})
+
+test('throw error on forceScope if it is not available', async () => {
+  const $store = createStore(['original'])
+
+  function App() {
+    const value = useList($store, t => <li>{t}</li>, {forceScope: true})
+
+    return <ol>{value}</ol>
+  }
+
+  expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+    `[Error: No scope found, consider adding <Provider> to app root]`,
+  )
 })

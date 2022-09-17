@@ -56,6 +56,7 @@ export function useList<T>(
         placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
+  opts?: {forceScope?: boolean},
 ): React.ReactNode {
-  return useListBase(list, renderItem)
+  return useListBase(list, renderItem, getScope(opts?.forceScope))
 }
