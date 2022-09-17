@@ -5,6 +5,7 @@ import {
   useUnitBase,
   useStoreMapBase,
   useListBase,
+  useEventBase,
 } from './apiBase'
 import {withDisplayName} from './withDisplayName'
 import {
@@ -124,19 +125,5 @@ bind event to scope
 works like React.useCallback, but for scopes
 */
 export function useEvent(eventObject: any) {
-  const scope = getScope(true)
-  const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
-  const events = isShape ? eventObject : {event: eventObject}
-
-  return React.useMemo(() => {
-    if (is.unit(eventObject)) {
-      //@ts-expect-error
-      return scopeBind(eventObject, {scope})
-    }
-    const shape = Array.isArray(eventObject) ? [] : ({} as any)
-    for (const key in eventObject) {
-      shape[key] = scopeBind(eventObject[key], {scope})
-    }
-    return shape
-  }, [scope, ...Object.keys(events), ...Object.values(events)])
+  return useEventBase(eventObject, getScope(true))
 }

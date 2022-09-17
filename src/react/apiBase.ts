@@ -304,3 +304,23 @@ export function useListBase<T>(
     )
   }
 }
+
+export function useEventBase(eventObject: any, scope?: Scope) {
+  if (!scope) {
+    return eventObject
+  }
+  const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
+  const events = isShape ? eventObject : {event: eventObject}
+
+  return React.useMemo(() => {
+    if (is.unit(eventObject)) {
+      //@ts-expect-error
+      return scopeBind(eventObject, {scope})
+    }
+    const shape = Array.isArray(eventObject) ? [] : ({} as any)
+    for (const key in eventObject) {
+      shape[key] = scopeBind(eventObject[key], {scope})
+    }
+    return shape
+  }, [scope, ...Object.keys(events), ...Object.values(events)])
+}

@@ -4,6 +4,7 @@ import {
   useStoreMapBase,
   useListBase,
   useUnitBase,
+  useEventBase,
 } from './apiBase'
 import {getScope} from './scope'
 
@@ -17,10 +18,8 @@ export function useEvent<T>(
   opts?: {forceScope?: boolean},
 ): (payload: T) => T {
   const scope = getScope(opts?.forceScope)
-  if (scope) {
-    return scopeBind(event, {scope})
-  }
-  return event
+
+  return useEventBase(event, scope)
 }
 
 export function useStore<State>(
