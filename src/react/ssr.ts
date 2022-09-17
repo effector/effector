@@ -1,5 +1,5 @@
 import React from 'react'
-import {Domain, is, Store, scopeBind} from 'effector'
+import {Domain, Store} from 'effector'
 import {
   useStoreBase,
   useUnitBase,

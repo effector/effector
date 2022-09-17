@@ -1,4 +1,4 @@
-import {Event, scopeBind, Store} from 'effector'
+import {Event, Store} from 'effector'
 import {
   useStoreBase,
   useStoreMapBase,
