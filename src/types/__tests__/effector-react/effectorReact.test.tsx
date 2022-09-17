@@ -11,7 +11,6 @@ import {
 
 const typecheck = '{global}'
 
-
 test('createComponent', () => {
   const ImplicitObject = createComponent(
     {
@@ -60,7 +59,8 @@ test('createGate', () => {
 })
 
 test('useEvent of Event', () => {
-  const runEvent: (payload: number) => number = useEvent(createEvent<number>())
+  const runEvent: () => (payload: number) => number = () =>
+    useEvent(createEvent<number>())
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -69,7 +69,7 @@ test('useEvent of Event', () => {
 })
 
 test('useEvent of Event<void>', () => {
-  const runEvent: () => void = useEvent(createEvent<void>())
+  const runEvent: () => () => void = () => useEvent(createEvent<void>())
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -78,9 +78,8 @@ test('useEvent of Event<void>', () => {
 })
 
 test('useEvent of Effect', () => {
-  const runEffect: (payload: number) => Promise<string> = useEvent(
-    createEffect<number, string, Error>(),
-  )
+  const runEffect: () => (payload: number) => Promise<string> = () =>
+    useEvent(createEffect<number, string, Error>())
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -89,9 +88,8 @@ test('useEvent of Effect', () => {
 })
 
 test('useEvent of Effect<void, unknown, Error>', () => {
-  const runEffect: () => Promise<unknown> = useEvent(
-    createEffect<void, unknown, Error>(),
-  )
+  const runEffect: () => () => Promise<unknown> = () =>
+    useEvent(createEffect<void, unknown, Error>())
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -100,13 +98,14 @@ test('useEvent of Effect<void, unknown, Error>', () => {
 })
 
 test('useEvent of object', () => {
-  const handlers: {
+  const handlers: () => {
     foo: (payload: number) => number
     bar: (payload: number) => Promise<string>
-  } = useEvent({
-    foo: createEvent<number>(),
-    bar: createEffect<number, string, Error>(),
-  })
+  } = () =>
+    useEvent({
+      foo: createEvent<number>(),
+      bar: createEffect<number, string, Error>(),
+    })
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -115,10 +114,11 @@ test('useEvent of object', () => {
 })
 
 test('useEvent of array', () => {
-  const handlers: [
+  const handlers: () => [
     (payload: number) => number,
     (payload: number) => Promise<string>,
-  ] = useEvent([createEvent<number>(), createEffect<number, string, Error>()])
+  ] = () =>
+    useEvent([createEvent<number>(), createEffect<number, string, Error>()])
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -209,9 +209,7 @@ test('useUnit should correctly resolve void events and effects in shape mode', (
   const event = createEvent<void>()
   const effect = createEffect(() => {})
 
-  function x(callback: (e: unknown) => void | Promise<void>) {
-
-  }
+  function x(callback: (e: unknown) => void | Promise<void>) {}
 
   const Comp = () => {
     const {runEvent} = useUnit({runEvent: event})
@@ -236,9 +234,7 @@ test('useUnit should correctly resolve any type except void events and effects i
   const event = createEvent<boolean>()
   const effect = createEffect((_: boolean) => _)
 
-  function x(callback: (e: boolean) => boolean | Promise<boolean>) {
-
-  }
+  function x(callback: (e: boolean) => boolean | Promise<boolean>) {}
 
   const Comp = () => {
     const {runEvent} = useUnit({runEvent: event})
@@ -331,4 +327,3 @@ test('useUnit should not allow wrong types for events or effects with arguments'
     "
   `)
 })
-
