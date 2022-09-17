@@ -931,4 +931,51 @@ describe('useStoreMap', () => {
     })
     expect(argumentHistory(fn)).toEqual(['Guest', 'Bob', 'Guest'])
   })
+
+  test('get value from scope if it is available', async () => {
+    const $store = createStore('original')
+
+    const scope = fork({values: [[$store, 'scoped']]})
+
+    function App() {
+      const value = useStoreMap({
+        store: $store,
+        fn: t => t + 'mapped',
+        keys: [],
+      })
+
+      return <p>{value}</p>
+    }
+
+    await render(
+      <Provider value={scope}>
+        <App />
+      </Provider>,
+    )
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <p>
+        scopedmapped
+      </p>
+    `)
+  })
+
+  test('throw error on forceScope if it is not available', async () => {
+    const $store = createStore('original')
+
+    function App() {
+      const value = useStoreMap({
+        store: $store,
+        fn: t => t + 'mapped',
+        keys: [],
+        forceScope: true,
+      })
+
+      return <p>{value}</p>
+    }
+
+    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+      `[Error: No scope found, consider adding <Provider> to app root]`,
+    )
+  })
 })

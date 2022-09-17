@@ -32,6 +32,7 @@ export function useStoreMap<
   readonly fn: (state: State, keys: Keys) => Result | undefined
   readonly updateFilter?: (update: Result, current: Result) => boolean
   readonly defaultValue: Result
+  readonly forceScope?: boolean
 }): Result
 export function useStoreMap<
   State,
@@ -42,6 +43,7 @@ export function useStoreMap<
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
+  readonly forceScope?: boolean
 }): Result
 export function useStoreMap<State, Result>(
   store: Store<State>,

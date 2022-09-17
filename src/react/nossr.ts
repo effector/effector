@@ -35,11 +35,15 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
         fn(state: State, keys: Keys): Result
         updateFilter?: (update: Result, current: Result) => boolean
         defaultValue?: Result
+        forceScope?: boolean
       }
     | Store<State>,
   separateFn?: (state: State, keys: Keys) => Result,
 ): Result {
-  return useStoreMapBase([configOrStore, separateFn])
+  return useStoreMapBase(
+    [configOrStore, separateFn],
+    getScope(configOrStore?.forceScope),
+  )
 }
 
 export function useList<T>(
