@@ -2,6 +2,11 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.3.0
+
+- Made hooks `useEvent`, `useStore`, `useStoreMap` and `useList` isomorphic, now they would use `scope` from the `Provider` if it is available and scope-less mode otherwise. For `useUnit` it was done in 22.2.0.
+- Added parameter `forceScope` to `useEvent`, `useStore`, `useStoreMap` and `useList` to force usage of scope from `Provider`, it would throw an error if `Provider` is not available, `/scope` module sets `forceScope` to `true` by default
+
 ## effector-solid 0.22.6
 
 - Add type of `Provider` to main module
@@ -13,7 +18,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 ## effector-react 22.2.0
 
 - Made hook `useUnit` isomorphic, now it would use `scope` from the `Provider` if it is available and scope-less mode otherwise (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785))
-- Added parameter `forceScope` to all hooks to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785)), `/scope` module sets `forceScope` to `true` by default
+- Added parameter `forceScope` to `useUnit` to force usage of scope from `Provider`, it would throw an error if `Provider` is not available (PR [#776](https://github.com/effector/effector/pull/776) and PR [#785](https://github.com/effector/effector/pull/785)), `/scope` module sets `forceScope` to `true` by default
 - Added "type" entry for package exports (PR [#759](https://github.com/effector/effector/pull/759))
 - Fixed typing in `useUnit` (PR [#747](https://github.com/effector/effector/pull/747))
 
@@ -42,6 +47,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Added support for react 18 (PR [#655](https://github.com/effector/effector/pull/655))
 - Added `useUnit` method to read multiple stores and bind events or effects to scope in a single batched call (PR [#733](https://github.com/effector/effector/pull/733), [#738](https://github.com/effector/effector/pull/738))
+
 ```tsx
 import {createEvent, createStore, fork} from 'effector'
 import {useUnit, Provider} from 'effector-react/scope'
@@ -74,35 +80,41 @@ render(
   document.getElementById('root'),
 )
 ```
+
 - Added `placeholder` option to `useList` to render in cases of empty list
+
 ```tsx
 const ChatList = () => (
   <div>
     {useList($chats, {
-      fn: (chat) => <div>Chat {chat.name}</div>,
+      fn: chat => <div>Chat {chat.name}</div>,
       keys: [],
-      placeholder: <div>You have no chats yet. Add first one?</div>
+      placeholder: <div>You have no chats yet. Add first one?</div>,
     })}
   </div>
 )
 ```
+
 - Added `defaultValue` option to `useStoreMap` to return in cases when `fn` returns undefined
+
 ```tsx
 const ChatName = ({id}) => {
   const chat = useStoreMap({
     store: $chats,
     keys: [id],
-    fn: (chats) => chats.find((chat) => chat.id === id),
+    fn: chats => chats.find(chat => chat.id === id),
     defaultValue: {id: 'default', name: 'Default chat'},
   })
   return <span>{chat.name}</span>
 }
 ```
+
 - Fixed `Gate.status` store being serialized (PR [#683](https://github.com/effector/effector/pull/683))
 
 ## effector 22.2.0
 
 - Added `filter` option to `sample`, thereby making `guard` an alias (issue [#521](https://github.com/effector/effector/issues/521))
+
 ```ts
 sample({
   clock: submitPasswordEvent,
@@ -112,7 +124,9 @@ sample({
   target: submitPassowrdFx,
 })
 ```
+
 - Added `clock` option to `split` (issue [#537](https://github.com/effector/effector/issues/537))
+
 ```ts
 split({
   clock: submit,
@@ -121,9 +135,10 @@ split({
   cases: {
     draft: saveFormDraftFx,
     send: sendFormToBackendFx,
-  }
+  },
 })
 ```
+
 - Improved `sample` type checking:
   - Fixed cases when target units becomes compatible with any type (issue [#600](https://github.com/effector/effector/issues/600))
   - Fixed cases when method call being marked as error when it perfectly correct
@@ -158,7 +173,7 @@ split({
 
 ## effector 22.1.2
 
-- Allow to use `effector/babel-plugin` in `patronum/macro` 
+- Allow to use `effector/babel-plugin` in `patronum/macro`
 
 ## effector 22.1.1
 
@@ -836,8 +851,7 @@ import {fork, allSettled} from 'effector/fork'
 const app = createDomain()
 const addFx = app.createEffect({handler: _ => _})
 
-const $count = app.createStore(2)
-  .on(addFx.doneData, (x, y) => x + y)
+const $count = app.createStore(2).on(addFx.doneData, (x, y) => x + y)
 
 const addWithCurrent = attach({
   source: $count,
@@ -1110,7 +1124,6 @@ const saveUserFx = app.createEffect({
 
 const $username = app.createStore('guest')
 
-
 forward({
   from: $username,
   to: saveUserFx,
@@ -1140,8 +1153,10 @@ import {createEvent, createStore} from 'effector'
 const changedA = createEvent()
 const changedB = createEvent()
 
-const $store = createStore(0)
-  .on([changedA, changedB], (state, params) => state + params)
+const $store = createStore(0).on(
+  [changedA, changedB],
+  (state, params) => state + params,
+)
 
 $store.watch(value => {
   console.log('updated', value)
@@ -2063,7 +2078,8 @@ const processItemsFx = createEffect({
 const $items = createStore([
   {id: 0, status: 'NEW'},
   {id: 1, status: 'NEW'},
-]).on(updateItem, (items, {id, status}) =>
+])
+  .on(updateItem, (items, {id, status}) =>
     items.map(item => (item.id === id ? {...item, status} : item)),
   )
   .on(processItemsFx, items => items.map(({id}) => ({id, status: 'WAIT'})))
@@ -2595,7 +2611,7 @@ const User = ({id}) => {
     keys: [id],
     fn: (users, [id]) => users[id],
   })
-  
+
   return (
     <div>
       {user.name} ({user.age})
@@ -2731,7 +2747,6 @@ import React from 'react'
 import {createStore, createEvent, sample} from 'effector'
 import {createComponent} from 'effector-react'
 
-
 const tickEvent = createEvent()
 const $tick = createStore(0).on(tickEvent, n => n + 1)
 
@@ -2775,7 +2790,6 @@ import React from 'react'
 import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
 
-
 const $title = createStore('welcome')
 
 console.log('store.shortName', $title.shortName)
@@ -2786,7 +2800,9 @@ const clickTitle = createEvent()
 console.log('event.shortName', clickTitle.shortName)
 // store.shortName clickTitle
 
-const Title = createComponent({title: $title}, (props, title) => <h1>{title}</h1>)
+const Title = createComponent({title: $title}, (props, title) => (
+  <h1>{title}</h1>
+))
 
 console.log('Component.displayName', Title.displayName)
 // Component.displayName Title
@@ -2895,8 +2911,7 @@ import {createStore, createEvent, createStoreObject, combine} from 'effector'
 
 const updateField = createEvent('update $field value')
 
-const $field = createStore('')
-  .on(updateField, (state, upd) => upd.trim())
+const $field = createStore('').on(updateField, (state, upd) => upd.trim())
 
 const $isEmpty = $field.map(value => value.length === 0)
 const $isTooLong = $field.map(value => value.length > 12)
