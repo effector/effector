@@ -18,7 +18,10 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
   unmounted: Event<{props: Props; state: State}>
 }
 
-export function useStore<State>(store: Store<State>): State
+export function useStore<State>(
+  store: Store<State>,
+  opts?: {forceScope?: boolean},
+): State
 export function useStoreMap<
   State,
   Result,
@@ -29,6 +32,7 @@ export function useStoreMap<
   readonly fn: (state: State, keys: Keys) => Result | undefined
   readonly updateFilter?: (update: Result, current: Result) => boolean
   readonly defaultValue: Result
+  readonly forceScope?: boolean
 }): Result
 export function useStoreMap<
   State,
@@ -39,6 +43,7 @@ export function useStoreMap<
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
+  readonly forceScope?: boolean
 }): Result
 export function useStoreMap<State, Result>(
   store: Store<State>,
@@ -52,6 +57,7 @@ export function useList<T, Key extends React.Key>(
     readonly getKey: (item: T) => Key
     readonly placeholder?: React.ReactNode
   },
+  {forceScope}?: {forceScope?: boolean},
 ): JSX.Element
 export function useList<T>(
   list: Store<T[]> | Store<ReadonlyArray<T>>,
@@ -62,6 +68,7 @@ export function useList<T>(
         readonly placeholder?: React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
+  {forceScope}?: {forceScope?: boolean},
 ): JSX.Element
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
@@ -123,14 +130,25 @@ export function createReactState<
   Com extends React.ComponentType<any>,
 >(store: Store<State>, Component: Com): React.ComponentType<State>
 
-export function useEvent(event: Event<void>): () => void
-export function useEvent<T>(event: Event<T>): (payload: T) => T
-export function useEvent<R>(fx: Effect<void, R, any>): () => Promise<R>
+export function useEvent(
+  event: Event<void>,
+  opts?: {forceScope?: boolean},
+): () => void
+export function useEvent<T>(
+  event: Event<T>,
+  opts?: {forceScope?: boolean},
+): (payload: T) => T
+export function useEvent<R>(
+  fx: Effect<void, R, any>,
+  opts?: {forceScope?: boolean},
+): () => Promise<R>
 export function useEvent<T, R>(
   fx: Effect<T, R, any>,
+  opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
 export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
   list: [...List],
+  opts?: {forceScope?: boolean},
 ): {
   [Key in keyof List]: List[Key] extends Event<infer T>
     ? (payload: T) => T
@@ -142,6 +160,7 @@ export function useEvent<
   Shape extends Record<string, Event<any> | Effect<any, any, any>>,
 >(
   shape: Shape,
+  opts?: {forceScope?: boolean},
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
     ? (payload: T) => T
