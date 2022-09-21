@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 22.2.0
+
+- Add `useStoreMap` hook for Vue 3 composition API to select part from a store ((PR #780)[https://github.com/effector/effector/pull/780]) by @ilajosmanov
+
 ## effector-react 22.3.0
 
 - Made hooks `useEvent`, `useStore`, `useStoreMap` and `useList` isomorphic, now they would use `scope` from the `Provider` if it is available and scope-less mode otherwise. For `useUnit` it was done in 22.2.0.
