@@ -161,7 +161,7 @@ describe('#prepend', () => {
         Overload 1 of 2, '(payload: void): void', gave the following error.
           Argument of type 'string' is not assignable to parameter of type 'void'.
         Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
-          Argument of type '\\"\\"' is not assignable to parameter of type 'void | undefined'.
+          Argument of type 'string' is not assignable to parameter of type 'void'.
       "
     `)
   })

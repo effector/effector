@@ -104,7 +104,6 @@ describe('useStoreMap', () => {
           Overload 2 of 3, '(opts: { readonly store: Store<User[]>; readonly keys: [number, number]; readonly fn: (state: User[], keys: [number, number]) => null; readonly updateFilter?: ((update: null, current: null) => boolean) | undefined; readonly forceScope?: boolean | undefined; }): null', gave the following error.
             Type '[number, keyof User]' is not assignable to type '[number, number]'.
         Type 'unknown' is not assignable to type 'ReactNode'.
-          Type 'unknown' is not assignable to type 'ReactPortal'.
         "
       `)
     })

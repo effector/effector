@@ -195,7 +195,6 @@ describe('guard(source, config)', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
-              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
     })
@@ -427,7 +426,6 @@ describe('guard(config)', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
-              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
     })

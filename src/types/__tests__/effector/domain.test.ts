@@ -14,9 +14,9 @@ test('createDomain', () => {
     "
     No overload matches this call.
       Overload 1 of 2, '(domainName?: string | undefined, config?: { domain?: Domain | undefined; } | undefined): Domain', gave the following error.
-        Argument of type '234' is not assignable to parameter of type 'string | undefined'.
+        Argument of type 'number' is not assignable to parameter of type 'string'.
       Overload 2 of 2, '(config?: { name?: string | undefined; domain?: Domain | undefined; } | undefined): Domain', gave the following error.
-        Argument of type '234' is not assignable to parameter of type '{ name?: string | undefined; domain?: Domain | undefined; } | undefined'.
+        Type '234' has no properties in common with type '{ name?: string | undefined; domain?: Domain | undefined; }'.
     No overload matches this call.
       Overload 1 of 2, '(domainName?: string | undefined, config?: { domain?: Domain | undefined; } | undefined): Domain', gave the following error.
         Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.

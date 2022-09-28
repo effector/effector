@@ -51,7 +51,7 @@ test('createGate', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
+    Argument of type 'number' is not assignable to parameter of type '{ a: number; }'.
     Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
       Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
     "
