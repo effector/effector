@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.3.1
+
+- Fix useUnit skipping updates in react 16-17
+
 ## effector-vue 22.2.0
 
 - Add `useStoreMap` hook for Vue 3 composition API to select part from a store ((PR #780)[https://github.com/effector/effector/pull/780]) by @ilajosmanov
