@@ -24,12 +24,13 @@ describe('text', () => {
     const store = createStore<{value: string} | null>(null)
     function run() {
       using(document.body, () => {
+        //@ts-expect-error
         h('div', {
           text: store.map(data => data),
         })
       })
     }
-    expect(typecheck).toMatchInlineSnapshot(`
+    expect(dropInconsistentLine(typecheck)).toMatchInlineSnapshot(`
       "
       No overload matches this call.
         Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 5 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
@@ -41,12 +42,17 @@ describe('text', () => {
                     Types of parameters 'state' and 'state' are incompatible.
                       Type '{ value: string; } | null' is not assignable to type 'string | number | boolean | null'.
                         Type '{ value: string; }' is not assignable to type 'string | number | boolean | null'.
-                          Type '{ value: string; }' is not assignable to type 'true'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '{ text: Store<{ value: string; } | null>; }' is not assignable to parameter of type '() => void'.
             Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
       "
     `)
+    function dropInconsistentLine(text: string) {
+      return text
+        .split(`\n`)
+        .filter(line => !line.includes(`to type 'true'`))
+        .join(`\n`)
+    }
   })
   test('value subtyping (should pass)', () => {
     const store = createStore<'foo' | 'bar'>('foo')
