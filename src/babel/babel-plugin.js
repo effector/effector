@@ -553,6 +553,9 @@ const normalizeOptions = options => {
               'trail/runtime',
               '@effector/effector',
               '@farfetched/core',
+              '@effector/reflect',
+              '@effector/reflect/ssr',
+              'atomic-router',
             ],
       ),
       importReactNames: {
