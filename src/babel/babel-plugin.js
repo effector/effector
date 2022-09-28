@@ -552,6 +552,7 @@ const normalizeOptions = options => {
               'effector-logger',
               'trail/runtime',
               '@effector/effector',
+              '@farfetched/core',
             ],
       ),
       importReactNames: {
