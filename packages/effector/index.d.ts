@@ -582,6 +582,10 @@ export function launch(config: {
   scope?: Scope
 }): void
 
+type Subscribable<T> = {
+  subscribe: (fn: (v: T) => void) => (() => void) | { unsubscribe: () => void };
+}
+
 /**
  * Method to create an event subscribed to given observable. Explicit `start` trigger is needed for Fork API support.
  * @param config configuration object. Accepts `source` with store which may contain an instance of special object, `start` and (optional) `stop` triggers and `setup` function which provides effector's listener to subscribe and returns (optional) cleanup function
@@ -598,28 +602,34 @@ export function launch(config: {
  *  },
  * })
  */
-export function fromObservable<T, S>(config: {
-  source: Store<S> | Combinable
+export function fromObservable<T>(config: {
+  source: Store<unknown>
   start: Unit<any> | Unit<any>[]
   stop?: Unit<any> | Unit<any>[]
   setup: (
     scopedTrigger: (
       value: T,
-      src: typeof config['source'] extends Combinable
-        ? GetCombinedValue<typeof config['source']>
-        : StoreValue<typeof config['source']>,
     ) => void,
-  ) => typeof config['stop'] extends undefined ? void : () => void
+    src: StoreValue<typeof config[
+      'source'
+    ]>,
+  ) => () => void
 }): Event<T>
 /**
- * Method to create an event subscribed to given observable. Explicit `start` trigger is needed for Fork API support.
- * @param config configuration object. Accepts `start` and (optional) `stop` triggers and `setup` function which provides effector's listener to subscribe and returns (optional) cleanup function
- *
+ * Method to create an event subscribed to given observable
+ * @param observable object with `subscribe` method, e.g. rxjs stream or redux store or configuration object
+ * 
  * @example
- * const intervalStream = rxjs.interval(1000)
- *
+ * const event = fromObservable(rxjs.interval(1000))
+ * // or
+ * const event = fromObservable({
+ *  start: appStarted,
+ *  stop: appStopped,
+ *  setup: rxjs.interval(1000),
+ * })
+ * // or
  * const event = fromObservable<number>({
- *  clock: appStarted,
+ *  start: appStarted,
  *  stop: appStopped,
  *  setup: (listener) => {
  *    const unsubsribe = intervalStream.subscribe(listener)
@@ -627,38 +637,16 @@ export function fromObservable<T, S>(config: {
  *    return () => unsubsribe()
  *  },
  * })
+ * 
  */
-export function fromObservable<T>(config: {
-  start: Unit<any> | Unit<any>[]
-  stop?: Unit<any> | Unit<any>[]
-  setup: (
-    scopedTrigger: (value: T) => void,
-  ) => typeof config['stop'] extends undefined ? void : () => void
-}): Event<T>
-/**
- * Method to create an event subscribed to given observable. Explicit `start` trigger is needed for Fork API support.
- * @param config configuration object. Accepts `start` and (optional) `stop` triggers and `setup` field with any object that has `subscribe` method, e.g. rxjs stream or redux store
- *
- * @example
- * const event = fromObservable({
- *  clock: appStarted,
- *  stop: appStopped,
- *  setup: rxjs.interval(1000),
- * })
- */
-export function fromObservable<T>(config: {
-  start: Unit<any> | Unit<any>[]
-  stop?: Unit<any> | Unit<any>[]
-  setup: unknown
-}): Event<T>
-/**
- * Method to create an event subscribed to given observable
- * @param observable object with `subscribe` method, e.g. rxjs stream or redux store
- */
-export function fromObservable<T, O>(
-  observable: O extends {start: Unit<any> | Unit<any>[]; setup: unknown}
-    ? never
-    : unknown,
+export function fromObservable<T>(
+  observable: Subscribable<T> | {
+    start: Unit<any> | Unit<any>[]
+    stop?: Unit<any> | Unit<any>[]
+    setup: Subscribable<T> | ((
+      scopedTrigger: (value: T) => void,
+    ) => () => void)
+  },
 ): Event<T>
 /**
  * Creates an event
