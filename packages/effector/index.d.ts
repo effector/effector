@@ -603,7 +603,12 @@ export function fromObservable<T, S>(config: {
   start: Unit<any> | Unit<any>[]
   stop?: Unit<any> | Unit<any>[]
   setup: (
-    scopedTrigger: (value: T, source: (typeof config)["source"] extends Combinable ? GetCombinedValue<(typeof config)["source"]> : S) => void,
+    scopedTrigger: (
+      value: T,
+      src: typeof config['source'] extends Combinable
+        ? GetCombinedValue<typeof config['source']>
+        : StoreValue<typeof config['source']>,
+    ) => void,
   ) => typeof config['stop'] extends undefined ? void : () => void
 }): Event<T>
 /**
@@ -650,7 +655,11 @@ export function fromObservable<T>(config: {
  * Method to create an event subscribed to given observable
  * @param observable object with `subscribe` method, e.g. rxjs stream or redux store
  */
-export function fromObservable<T>(observable: unknown): Event<T>
+export function fromObservable<T, O>(
+  observable: O extends {start: Unit<any> | Unit<any>[]; setup: unknown}
+    ? never
+    : unknown,
+): Event<T>
 /**
  * Creates an event
  */
