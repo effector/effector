@@ -351,6 +351,12 @@ export function createStore<State>(
   if (config?.domain) {
     config.domain.hooks.store(store)
   }
+
+  if (!derived) {
+    store.reinit = createEvent<void>();
+    store.reset(store.reinit);
+  }
+
   return store
 }
 
