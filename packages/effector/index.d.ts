@@ -220,6 +220,7 @@ export interface Store<State> extends Unit<State> {
   compositeName: CompositeName
   shortName: string
   sid: string | null
+  reinit?: Event<void>
 }
 
 export const is: {

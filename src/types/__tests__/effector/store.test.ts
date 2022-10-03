@@ -149,6 +149,30 @@ describe('#reset', () => {
   })
 })
 
+describe("#reinit", () => {
+  test("simple case", () => {
+    const $store = createStore<Array<number>>([]);
+    const eventPush = createEvent<number>();
+    $store.on(eventPush, (store, item) => [...store, item]);
+    eventPush(1);
+    eventPush(2);
+    eventPush(3);
+    const before = $store.getState().length;
+    expect(before).toBe(3);
+    $store.reinit?.();
+
+    const after = $store.getState().length;
+    expect(after).toBe(0);
+
+    $store.off(eventPush);
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `);
+  })
+});
+
 test('#on', () => {
   const event = createEvent()
   const store = createStore(0)
