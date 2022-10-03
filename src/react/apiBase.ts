@@ -130,7 +130,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     flags.stale = false
     flags.justSubscribed = !changed
     return isSingleUnit ? state.value.unit : state.value
-  }, [subscribe, flagsRef])
+  }, [subscribe, storeValues, scope, stateRef, flagsRef])
   return useSyncExternalStore(subscribe, read, read)
 }
 
