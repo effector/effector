@@ -74,6 +74,7 @@ export interface Store<State> extends Unit {
   graphite: Node
   updates: Event<State>
   compositeName: CompositeName
+  reinit?: Event<void>
 }
 
 export interface Effect<Params, Done, Fail = Error> extends Unit {
