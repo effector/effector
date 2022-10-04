@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.3.3
+
+- Fix useUnit skipping updates during scope changes (often happens in next.js apps). Big thanks to [@AlexandrHoroshih](https://github.com/AlexandrHoroshih) for investigation
+
 ## effector-react 22.3.1
 
 - Fix useUnit skipping updates in react 16-17
