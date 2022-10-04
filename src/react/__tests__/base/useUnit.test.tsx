@@ -11,6 +11,7 @@ import {
   Store,
   fork,
   allSettled,
+  serialize,
 } from 'effector'
 import {useUnit} from 'effector-react'
 import {
@@ -716,6 +717,159 @@ describe('useUnit', () => {
           "d": 42,
         },
       ]
+    `)
+  })
+  it('should support dynamic change of scope', async () => {
+    const activeChanged = createEvent<'a' | 'b'>()
+    const $active = createStore<'a' | 'b'>('a').on(
+      activeChanged,
+      (_, upd) => upd,
+    )
+    let clientScope = fork()
+
+    const ref: {fn(): any} = {
+      fn() {
+        throw Error('noop fn')
+      },
+    }
+    const triggerTopRender = () => {
+      ref.fn()
+    }
+
+    function Page() {
+      const {acive, changeActive} = useUnitScope({
+        acive: $active,
+        changeActive: activeChanged,
+      })
+
+      return (
+        <div>
+          <button id="a" disabled={acive !== 'a'}>
+            a
+          </button>
+          <button id="b" disabled={acive !== 'b'}>
+            b
+          </button>
+          <button
+            id="value"
+            onClick={() => {
+              changeActive(acive === 'a' ? 'b' : 'a')
+            }}>
+            Val
+          </button>
+          <button id="scope" onClick={triggerTopRender}>
+            Scp
+          </button>
+        </div>
+      )
+    }
+
+    function AppBase({page, data}: {data: any; page: JSX.Element}) {
+      const scope = React.useMemo(() => {
+        const scope = fork({
+          values: {
+            ...serialize(clientScope),
+            ...data,
+          },
+        })
+        clientScope = scope
+
+        return scope
+      }, [data])
+      return <Provider value={scope}>{page}</Provider>
+    }
+
+    function App() {
+      const [s, setS] = React.useState({})
+      ref.fn = () => setS({})
+
+      return <AppBase data={s} page={<Page />} />
+    }
+
+    await render(<App />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="a"
+        >
+          a
+        </button>
+        <button
+          disabled=""
+          id="b"
+        >
+          b
+        </button>
+        <button
+          id="value"
+        >
+          Val
+        </button>
+        <button
+          id="scope"
+        >
+          Scp
+        </button>
+      </div>
+    `)
+    await act(async () => {
+      container.firstChild.querySelector('#value').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          disabled=""
+          id="a"
+        >
+          a
+        </button>
+        <button
+          id="b"
+        >
+          b
+        </button>
+        <button
+          id="value"
+        >
+          Val
+        </button>
+        <button
+          id="scope"
+        >
+          Scp
+        </button>
+      </div>
+    `)
+    await act(async () => {
+      container.firstChild.querySelector('#scope').click()
+    })
+    await act(async () => {
+      container.firstChild.querySelector('#value').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="a"
+        >
+          a
+        </button>
+        <button
+          disabled=""
+          id="b"
+        >
+          b
+        </button>
+        <button
+          id="value"
+        >
+          Val
+        </button>
+        <button
+          id="scope"
+        >
+          Scp
+        </button>
+      </div>
     `)
   })
   describe('useUnit + useGate edge case', () => {
