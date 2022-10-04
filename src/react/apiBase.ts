@@ -53,6 +53,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     stale: true,
     wasSubscribed: false,
     justSubscribed: false,
+    scope,
   })
   const [eventsShape, storeKeys, storeValues] = React.useMemo(() => {
     flagsRef.current.stale = true
@@ -101,11 +102,12 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     let changed = false
     const oldVal = state.value
     const oldKeys = state.storeKeys
+    const scopeChanged = scope !== flags.scope
     if (
       (storeKeys.length > 0 || oldKeys.length > 0) &&
-      (flags.stale || flags.justSubscribed)
+      (flags.stale || flags.justSubscribed || scopeChanged)
     ) {
-      changed = !flags.justSubscribed
+      changed = !flags.justSubscribed || scopeChanged
       resultValue = isList ? [...eventsShape] : {...eventsShape}
       if (oldKeys.length !== storeKeys.length) {
         changed = true
@@ -129,6 +131,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     state.storeKeys = storeKeys
     flags.stale = false
     flags.justSubscribed = !changed
+    flags.scope = scope
     return isSingleUnit ? state.value.unit : state.value
   }, [subscribe, storeValues, scope, stateRef, flagsRef])
   return useSyncExternalStore(subscribe, read, read)
