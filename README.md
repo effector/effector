@@ -54,6 +54,17 @@ Effector implements business logic with ease for Javascript apps **(React/React 
 
 ## Installation
 
+with **pnpm**
+```sh
+pnpm add effector
+```
+
+with **yarn**
+```sh
+yarn add effector
+```
+
+with **npm**
 ```sh
 npm add effector
 ```
@@ -62,12 +73,34 @@ npm add effector
 
 To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
 
+with **pnpm**
+```sh
+pnpm add effector effector-react
+```
+
+with **yarn**
+```sh
+yarn add effector effector-react
+```
+
+with **npm**
 ```sh
 npm add effector effector-react
 ```
 
 **Vue**
 
+with **pnpm**
+```sh
+pnpm add effector effector-vue
+```
+
+with **yarn**
+```sh
+yarn add effector effector-vue
+```
+
+with **npm**
 ```sh
 npm add effector effector-vue
 ```
