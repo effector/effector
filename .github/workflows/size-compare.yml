@@ -3,7 +3,7 @@ name: SizeCompare CI
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
