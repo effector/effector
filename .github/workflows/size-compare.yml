@@ -31,9 +31,9 @@ jobs:
       - name: 🚛 Size compare
         uses: effector/size-compare@v1.0.0
         with:
-          gist_id: 092e8b0b28659243eed0af73a4a3687b
-          gist_token: ${{ secrets.SIZE_COMPARE_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gist_id: "092e8b0b28659243eed0af73a4a3687b"
+          gist_token: "${{ secrets.SIZE_COMPARE_TOKEN }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
           files: |
             npm/**/*.js
             npm/**/*.mjs
