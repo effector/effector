@@ -1,0 +1,39 @@
+name: SizeCompare CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+
+jobs:
+  test-package:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: 🚛 Size compare
+        uses: effector/size-compare@v1.0.0
+        with:
+          gist_id: 092e8b0b28659243eed0af73a4a3687b
+          gist_token: ${{ secrets.SIZE_COMPARE_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            npm/**/*.js
+            npm/**/*.mjs
