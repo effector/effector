@@ -282,6 +282,47 @@ it('doesn`t leak internal variables to transform function', () => {
   `)
 })
 
+describe('doesn`t leak internal objects to transform function', () => {
+  test('array', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, x => x + 1)
+    const combined = combine([$a], (array: any) => {
+      if (array[1] === "injected") {
+        fn(array[1])
+      }
+      array[1] = "injected"
+      const mainSlice = array.slice
+      array.slice = (...args: any[]) => {
+        fn('slice')
+        return mainSlice.apply(array, args)
+      }
+      return array[0] + 1
+    })
+    inc()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+  })
+
+  test('object', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, x => x + 1)
+    const combined = combine({a: $a}, (obj: any) => {
+      if (obj.injectedProp) {
+        fn(obj.injectedProp)
+      }
+
+      obj.injectedProp = 'injected'
+
+      return obj.a + 1
+    })
+    inc()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+  })
+})
+
 describe('don`t reuse values from user', () => {
   test('with sample (more convenient)', () => {
     const triggerA = createEvent()
