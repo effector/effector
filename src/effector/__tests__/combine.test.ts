@@ -288,10 +288,10 @@ describe('doesn`t leak internal objects to transform function', () => {
     const inc = createEvent()
     const $a = createStore(0).on(inc, x => x + 1)
     const combined = combine([$a], (array: any) => {
-      if (array[1] === "injected") {
+      if (array[1] === 'injected') {
         fn(array[1])
       }
-      array[1] = "injected"
+      array[1] = 'injected'
       const mainSlice = array.slice
       array.slice = (...args: any[]) => {
         fn('slice')
@@ -317,6 +317,30 @@ describe('doesn`t leak internal objects to transform function', () => {
 
       return obj.a + 1
     })
+    inc()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+  })
+
+  test('combine + map', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, x => x + 1)
+    const $b = createStore(0).on(inc, x => x + 1)
+    const combined = combine([$a, $b]).map((array: any) => {
+      if (array[2] === 'injected') {
+        fn(array[2])
+      }
+      array[2] = 'injected'
+      const mainSlice = array.slice
+      array.slice = (...args: any[]) => {
+        fn('slice')
+        return mainSlice.apply(array, args)
+      }
+      return array[0] + 1
+    })
+    inc()
+    inc()
     inc()
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
