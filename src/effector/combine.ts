@@ -125,6 +125,9 @@ const storeCombination = (
     mov({store: isFresh, to: 'b'}),
     calc((upd, {key}, reg) => {
       if (reg.c || upd !== reg.a[key]) {
+        if (needSpread && reg.b) {
+          reg.a = clone(reg.a)
+        }
         reg.a[key] = upd
         return true
       }
