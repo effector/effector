@@ -88,6 +88,11 @@ const storeCombination = (
   const clone = isArray ? (list: any) => list.slice() : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
+  if (fn && needSpread) {
+    const handler = fn
+    fn = (list: any[]) => handler(clone(list))
+  }
+
   const stateNew = clone(defaultState)
   const rawShape = createStateRef(stateNew)
   const isFresh = createStateRef(true)
@@ -120,9 +125,6 @@ const storeCombination = (
     mov({store: isFresh, to: 'b'}),
     calc((upd, {key}, reg) => {
       if (reg.c || upd !== reg.a[key]) {
-        if (needSpread && reg.b) {
-          reg.a = clone(reg.a)
-        }
         reg.a[key] = upd
         return true
       }
