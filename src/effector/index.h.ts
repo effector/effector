@@ -1,5 +1,7 @@
-import type {Stack, BarrierPriorityTag} from './kernel'
-import {Domain} from './unit.h'
+import type {Leaf} from '../forest/index.h'
+
+import type {BarrierPriorityTag} from './kernel'
+import type {Domain, Scope} from './unit.h'
 
 export type ID = string
 
@@ -127,4 +129,16 @@ export type Compute = {
     priority: BarrierPriorityTag
     barrierID?: number
   }
+}
+
+/** Call stack */
+export type Stack = {
+  value: any
+  a: any
+  b: any
+  c?: any
+  parent: Stack | null
+  node: Node
+  page: Leaf | null
+  scope?: Scope | null | void
 }

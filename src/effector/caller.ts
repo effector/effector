@@ -1,4 +1,4 @@
-import type {Stack} from './kernel'
+import type {Stack} from './index.h'
 
 export const callStackAReg = (
   stack: any,

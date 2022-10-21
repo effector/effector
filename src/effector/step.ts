@@ -6,10 +6,11 @@ import type {
   MovStoreToRegister,
   MovStoreToStore,
   MovRegisterToStore,
+  Stack,
 } from './index.h'
 import {nextStepID} from './id'
 import {EFFECT, REG_A, SAMPLER, STACK, STORE} from './tag'
-import type {BarrierPriorityTag, Stack} from './kernel'
+import type {BarrierPriorityTag} from './kernel'
 import {callStack} from './caller'
 
 const cmd = <Type extends 'compute' | 'mov'>(

@@ -1,6 +1,6 @@
 import type {Leaf} from '../forest/index.h'
 
-import type {Node, NodeUnit, StateRef} from './index.h'
+import type {Node, NodeUnit, StateRef, Stack} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
 import {STORE, EFFECT, SAMPLER, STACK, BARRIER, VALUE, REG_A, MAP} from './tag'
@@ -22,18 +22,6 @@ type Layer = {
   stack: Stack
   type: PriorityTag
   id: number
-}
-
-/** Call stack */
-export type Stack = {
-  value: any
-  a: any
-  b: any
-  c?: any
-  parent: Stack | null
-  node: Node
-  page: Leaf | null
-  scope?: Scope | null | void
 }
 
 /** Queue as linked list or skew heap */
