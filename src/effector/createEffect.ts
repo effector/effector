@@ -13,6 +13,16 @@ import {EFFECT} from './tag'
 import {add} from './collection'
 import {flattenConfig} from './config'
 
+type RunnerData<Params, Done, Fail> = {
+  params: Params
+  req: {
+    rs(data: Done): void
+    rj(data: Fail): void
+  }
+  args?: [params: Params, computedParams: any] | [params: Params]
+  handler?: Function
+}
+
 export function createEffect<Params, Done, Fail = Error>(
   nameOrConfig: any,
   maybeConfig?: any,
@@ -86,7 +96,7 @@ export function createEffect<Params, Done, Fail = Error>(
     },
     node: [
       calc(
-        (upd, scope_, stack) => {
+        (upd: RunnerData<Params, Done, Fail>, scope_, stack) => {
           const scope: {handlerId: string; handler: Function} = scope_ as any
           let handler = scope.handler
           if (getForkPage(stack)) {
@@ -100,7 +110,16 @@ export function createEffect<Params, Done, Fail = Error>(
         true,
       ),
       calc(
-        ({params, req, handler, args = [params]}, _, stack) => {
+        (
+          {
+            params,
+            req,
+            handler,
+            args = [params],
+          }: RunnerData<Params, Done, Fail> & {handler: Function},
+          _,
+          stack,
+        ) => {
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
           const [ok, result] = runFn(handler, onReject, args)
@@ -123,7 +142,7 @@ export function createEffect<Params, Done, Fail = Error>(
     node.seq,
     calc(
       (params, {runner}, stack) => {
-        const upd = getParent(stack)
+        const upd: RunnerData<Params, Done, Fail> = getParent(stack)
           ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
           : /** empty stack means that this node was launched directly */
             params
