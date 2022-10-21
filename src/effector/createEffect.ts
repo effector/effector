@@ -1,5 +1,5 @@
 import type {Unit, Stack} from './index.h'
-import type {Effect} from './unit.h'
+import type {Effect, Scope} from './unit.h'
 import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
@@ -120,8 +120,23 @@ export function createEffect<Params, Done, Fail = Error>(
           _,
           stack,
         ) => {
-          const onResolve = onSettled(params, req, true, anyway, stack)
-          const onReject = onSettled(params, req, false, anyway, stack)
+          const scopeRef = createScopeRef(stack)
+          const onResolve = onSettled(
+            params,
+            req,
+            true,
+            anyway,
+            stack,
+            scopeRef,
+          )
+          const onReject = onSettled(
+            params,
+            req,
+            false,
+            anyway,
+            stack,
+            scopeRef,
+          )
           const [ok, result] = runFn(handler, onReject, args)
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
@@ -215,6 +230,13 @@ export const runFn = (
   }
 }
 
+export const createScopeRef = (stack: Stack) => {
+  const scope = getForkPage(stack)
+  const scopeRef = {ref: scope}
+  if (scope) add(scope.activeEffects, scopeRef)
+  return scopeRef
+}
+
 export const onSettled =
   (
     params: any,
@@ -225,8 +247,10 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
+    scopeRef: {ref: Scope | void},
   ) =>
-  (data: any) =>
+  (data: any) => {
+    if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
     launch({
       target: [anyway, sidechain],
       params: [
@@ -236,10 +260,11 @@ export const onSettled =
         {value: data, fn: ok ? req.rs : req.rj},
       ],
       defer: true,
+      // WARN! Will broke forest pages as they arent moved to new scope
       page: stack.page,
-      scope: getForkPage(stack),
+      scope: scopeRef.ref,
     })
-
+  }
 const sidechain = createNode({
   node: [run({fn: ({fn, value}) => fn(value)})],
   meta: {op: 'fx', fx: 'sidechain'},
