@@ -10,7 +10,7 @@ import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
 import {EFFECT} from './tag'
-import {add} from './collection'
+import {add, removeItem} from './collection'
 import {flattenConfig} from './config'
 
 type RunnerData<Params, Done, Fail> = {
