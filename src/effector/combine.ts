@@ -85,7 +85,7 @@ const storeCombination = (
   config?: Config,
   fn?: (upd: any) => any,
 ) => {
-  const clone = isArray ? (list: any) => list.slice() : (obj: any) => ({...obj})
+  const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
   const stateNew = clone(defaultState)

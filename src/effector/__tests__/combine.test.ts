@@ -282,6 +282,45 @@ it('doesn`t leak internal variables to transform function', () => {
   `)
 })
 
+describe('doesn`t fail with slice is not a function', () => {
+  test('array', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, x => x + 1)
+    const combined = combine([$a], (array: any) => {
+      const mainSlice = array.slice
+      array.slice = (...args: any[]) => {
+        fn('slice')
+        return mainSlice.apply(array, args)
+      }
+      return array[0] + 1
+    })
+    inc()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+  })
+
+  test('combine + map', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, x => x + 1)
+    const $b = createStore(0).on(inc, x => x + 1)
+    const combined = combine([$a, $b]).map((array: any) => {
+      const mainSlice = array.slice
+      array.slice = (...args: any[]) => {
+        fn('slice')
+        return mainSlice.apply(array, args)
+      }
+      return array[0] + 1
+    })
+    inc()
+    inc()
+    inc()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+  })
+})
+
 describe('don`t reuse values from user', () => {
   test('with sample (more convenient)', () => {
     const triggerA = createEvent()
