@@ -282,16 +282,12 @@ it('doesn`t leak internal variables to transform function', () => {
   `)
 })
 
-describe('doesn`t leak internal objects to transform function', () => {
+describe('doesn`t fail with slice is not a function', () => {
   test('array', () => {
     const fn = jest.fn()
     const inc = createEvent()
     const $a = createStore(0).on(inc, x => x + 1)
     const combined = combine([$a], (array: any) => {
-      if (array[1] === 'injected') {
-        fn(array[1])
-      }
-      array[1] = 'injected'
       const mainSlice = array.slice
       array.slice = (...args: any[]) => {
         fn('slice')
@@ -304,34 +300,12 @@ describe('doesn`t leak internal objects to transform function', () => {
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
   })
 
-  test('object', () => {
-    const fn = jest.fn()
-    const inc = createEvent()
-    const $a = createStore(0).on(inc, x => x + 1)
-    const combined = combine({a: $a}, (obj: any) => {
-      if (obj.injectedProp) {
-        fn(obj.injectedProp)
-      }
-
-      obj.injectedProp = 'injected'
-
-      return obj.a + 1
-    })
-    inc()
-
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
-  })
-
   test('combine + map', () => {
     const fn = jest.fn()
     const inc = createEvent()
     const $a = createStore(0).on(inc, x => x + 1)
     const $b = createStore(0).on(inc, x => x + 1)
     const combined = combine([$a, $b]).map((array: any) => {
-      if (array[2] === 'injected') {
-        fn(array[2])
-      }
-      array[2] = 'injected'
       const mainSlice = array.slice
       array.slice = (...args: any[]) => {
         fn('slice')

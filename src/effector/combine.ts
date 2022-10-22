@@ -83,15 +83,10 @@ const storeCombination = (
   needSpread: boolean,
   obj: any,
   config?: Config,
-  fn: (upd: any) => any = defaultFn,
+  fn?: (upd: any) => any,
 ) => {
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
-
-  if (needSpread) {
-    const handler = fn
-    fn = (list: any[]) => handler(clone(list))
-  }
 
   const stateNew = clone(defaultState)
   const rawShape = createStateRef(stateNew)
@@ -142,7 +137,7 @@ const storeCombination = (
       batch: true,
     }),
     read(rawShape, true),
-    userFnCall(),
+    fn && userFnCall(),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
@@ -179,8 +174,4 @@ const storeCombination = (
 export function createStoreObject(...args: any[]) {
   deprecate(false, 'createStoreObject', 'combine')
   return combine(...args)
-}
-
-function defaultFn(x: any) {
-  return x
 }
