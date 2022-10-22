@@ -182,7 +182,7 @@ export interface Scope extends Unit {
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
   warnSerialize?: boolean
   warnSerializeNode: Node
-  activeEffects: Array<{ref: Scope}>
+  scopeRef: {ref: Scope}
 }
 
 export type CommonUnit<T = any> = Event<T> | Effect<T, any, any> | Store<T>
