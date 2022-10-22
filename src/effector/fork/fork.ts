@@ -27,10 +27,13 @@ export function fork(
   if (config) {
     const oldScope = config.scope
     if (oldScope) {
-      const activeEffects = oldScope.activeEffects
-      oldScope.activeEffects = []
-      scope.activeEffects = activeEffects
-      forEach(activeEffects, scopeRef => (scopeRef.ref = scope))
+      // Update old scope scopeRef
+      // to redirect all effect.finally and scope-binded events to new scope
+      oldScope.scopeRef.ref = scope
+
+      // transfer old scope scopeRef to the new scope,
+      // so any further fork(scope) calls will also redirect any effect.finally and scope-binded events to new scope
+      scope.scopeRef = oldScope.scopeRef
     }
     if (config.values) {
       const valuesSidMap = normalizeValues(config.values, unit =>
