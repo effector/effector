@@ -120,7 +120,7 @@ export function createEffect<Params, Done, Fail = Error>(
           _,
           stack,
         ) => {
-          const scopeRef = createScopeRef(stack)
+          const scopeRef = getScopeRef(stack)
           const onResolve = onSettled(
             params,
             req,
@@ -230,10 +230,10 @@ export const runFn = (
   }
 }
 
-export const createScopeRef = (stack: Stack) => {
+export const getScopeRef = (stack: Stack) => {
   const scope = getForkPage(stack)
-  const scopeRef = {ref: scope}
-  if (scope) add(scope.activeEffects, scopeRef)
+  const scopeRef = scope?.scopeRef ?? {ref: undefined as void}
+
   return scopeRef
 }
 
@@ -250,7 +250,6 @@ export const onSettled =
     scopeRef: {ref: Scope | void},
   ) =>
   (data: any) => {
-    if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
     launch({
       target: [anyway, sidechain],
       params: [
