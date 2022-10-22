@@ -14,7 +14,7 @@ export function scopeBind(
     scope || forkPage || safe,
     'scopeBind cannot be called outside of forked .watch',
   )
-  const savedScopeRef = (scope || forkPage)!.scopeRef
+  const savedScopeRef = (scope || forkPage)?.scopeRef
   return is.effect(unit)
     ? (params: any) => {
         const req = createDefer()
@@ -24,12 +24,12 @@ export function scopeBind(
             params,
             req,
           },
-          scope: savedScopeRef.ref,
+          scope: savedScopeRef?.ref,
         })
         return req.req
       }
     : (params: any) => {
-        launch({target: unit, params, scope: savedScopeRef.ref})
+        launch({target: unit, params, scope: savedScopeRef?.ref})
         return params
       }
 }
