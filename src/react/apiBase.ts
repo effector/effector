@@ -51,7 +51,6 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   const isList = Array.isArray(normShape)
   const flagsRef = React.useRef({
     stale: true,
-    wasSubscribed: false,
     justSubscribed: false,
     scope,
   })
@@ -77,7 +76,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   const subscribe = React.useCallback(
     (cb: () => void) => {
       const flags = flagsRef.current
-      if (flags.wasSubscribed) flags.justSubscribed = true
+      flags.justSubscribed = true
       const cbCaller = () => {
         if (!flags.stale) {
           flags.stale = true
@@ -88,7 +87,6 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
       const subs = storeValues.map(store =>
         createWatch(store, cbCaller, scope, batchStep),
       )
-      flags.wasSubscribed = true
       return () => {
         subs.forEach(fn => fn())
       }
