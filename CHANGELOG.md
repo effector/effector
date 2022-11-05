@@ -2,7 +2,7 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## effector 22.4.0
+## effector Encke 22.4.0
 
 - Add custom serializers for Store ([PR #744](https://github.com/effector/effector/pull/744/))
 - Allow to pass domain as an argument for createEvent and similar methods ([PR #763](https://github.com/effector/effector/pull/763))
