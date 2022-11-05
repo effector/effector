@@ -40,6 +40,8 @@ createStore<T>(defaultState: T, config: {
 
      Опция, запрещающая сериализацию стора при вызовах [serialize](./serialize.md)
 
+   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](./serialize.md) и приводит состояние стора к JSON-значению - примитив или простой объект/массив. `read` вызывается при [fork](./fork.md), если предоставленные `values` - результат вызова [serialize](./serialize.md)
+
 ### Возвращает {#createStore-return}
 
 Новый [стор](./Store.md)
@@ -73,3 +75,44 @@ $todos.watch((state) => {
 ```
 
 [Запустить пример](https://share.effector.dev/tquiUgdq)
+
+#### Пример с кастомной конфигурацией `serialize`
+
+```ts
+import {createEvent, createStore, serialize, fork, allSettled} from 'effector'
+
+const saveDate = createEvent()
+const $date = createStore<null | Date>(null, {
+  // Объект Date автоматически приводится в строку ISO-даты при вызове JSON.stringify
+  // но не приводится обратно к Date при вызове JSON.parse - результатом будет та же строка ISO-даты
+  // Это приведет к расхождению состояния стора при гидрации состояния на клиенте при серверном рендеринге
+  //
+  // Кастомная конфигурация `serialize` решает эту проблему
+  serialize: {
+    write: (dateOrNull) => (dateOrNull ? dateOrNull.toISOString() : dateOrNull),
+    read: (isoStringOrNull) =>
+      isoStringOrNull ? new Date(isoStringOrNull) : isoStringOrNull,
+  },
+}).on(saveDate, (_, p) => p)
+
+const serverScope = fork()
+
+await allSettled(saveDate, {scope: serverScope, params: new Date()})
+
+const serverValues = serialize(serverScope)
+// `serialize.write` стора `$date` был вызван
+
+console.log(serverValues)
+// => { nq1e2rb: "2022-11-05T15:38:53.108Z" }
+// Объект Date из стора сохранен как ISO-дата
+
+const clientScope = fork({values: serverValues})
+// `serialize.read` стора `$date` был вызван
+
+const currentValue = clientScope.getState($date)
+console.log(currentValue)
+// => Date 11/5/2022, 10:40:13 PM
+// Строка ISO-даты приведена обратно к объекту Date
+```
+
+[Запустить пример](https://share.effector.dev/YFkUlqPv)

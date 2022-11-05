@@ -8,10 +8,13 @@ Method for creating a [store](./Store.md)
 
 ```ts
 createStore<T>(defaultState: T): Store<T>
-createStore<T>(defaultState: T, config: {
+createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
   name?: string
   updateFilter?: (update: T, current: T) => boolean
-  serialize?: 'ignore'
+  serialize?: 'ignore' | {
+          write: (state: State) => SerializedState
+          read: (json: SerializedState) => State
+        }
 }): Store<T>
 ```
 
@@ -22,6 +25,7 @@ createStore<T>(defaultState: T, config: {
    - `name` (_String_): Name for the store. Babel plugin can set it from the variable name, if not passed explicitly in config.
    - `updateFilter` (_Function_): Function that prevents store from updating when it returns `false`. Accepts updated state as the first argument and current state as the second argument. Redundant for most cases since store already ensures that update is not `undefined` and not equal (`!==`) to current state _(since `effector 21.8.0`)_
    - `serialize: 'ignore'`: Option to disable store serialization when [serialize](./serialize.md) is called _(since `effector 22.0.0`)_
+   - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` - called on [serialize](./serialize.md), transforms value to JSON value - primitive type or plain object/array. `read` - parse store state from JSON value, called on [fork](./fork.md), if provided `values` is result of `serialize` call.
 
 **Returns**
 
@@ -60,7 +64,6 @@ addTodo('go to the gym')
 
 clearTodoList()
 // => todos []
-
 ```
 
 [Try it](https://share.effector.dev/MNibrAFC)
@@ -102,23 +105,29 @@ punch(100) // Also nothing
 
 [Try it](https://share.effector.dev/rtxfqObf)
 
-
-#### Example with `serialize`
+#### Example with `serialize: ignore`
 
 ```js
-import {createEvent, createStore, forward, serialize, fork, allSettled} from 'effector'
+import {
+  createEvent,
+  createStore,
+  forward,
+  serialize,
+  fork,
+  allSettled,
+} from 'effector'
 
-const readPackage = createEvent();
+const readPackage = createEvent()
 
 const $name = createStore('')
-const $version = createStore(0, { serialize: 'ignore' })
+const $version = createStore(0, {serialize: 'ignore'})
 
-$name.on(readPackage, (_, { name }) => name)
-$version.on(readPackage, (_, { version }) => version)
+$name.on(readPackage, (_, {name}) => name)
+$version.on(readPackage, (_, {version}) => version)
 
 // Watchers always called for scoped changes
 $name.watch(name => console.log("name '%s'", name))
-$version.watch(version => console.log("version %s", version))
+$version.watch(version => console.log('version %s', version))
 // => name ''
 // => version 0
 
@@ -128,22 +137,63 @@ const scope = fork()
 
 // By default serialize saves value only for the changed stores
 // Review `onlyChanges` option https://effector.dev/docs/api/effector/serialize
-const values = serialize(scope);
+const values = serialize(scope)
 console.log(values)
 // => {}
 
 // Let's change our stores
 await allSettled(readPackage, {
   scope,
-  params: { name: 'effector', version: 22 },
+  params: {name: 'effector', version: 22},
 })
 // => name 'effector'
 // => version 22
 
-const actualValues = serialize(scope);
+const actualValues = serialize(scope)
 console.log(actualValues)
 // => {n74m6b: "effector"}
 // This is because `$version` store has `serialize: ignore`
 ```
 
 [Try it](https://share.effector.dev/aLKAHDOM)
+
+#### Example with custom `serialize` configuration
+
+```ts
+import {createEvent, createStore, serialize, fork, allSettled} from 'effector'
+
+const saveDate = createEvent()
+const $date = createStore<null | Date>(null, {
+  // Date object is automatically serialized to ISO date string by JSON.stringify
+  // but it is not parsed to Date object by JSON.parse
+  // which will lead to a mismatch during server side rendering
+  //
+  // Custom `serialize` config solves this issue
+  serialize: {
+    write: dateOrNull => (dateOrNull ? dateOrNull.toISOString() : dateOrNull),
+    read: isoStringOrNull =>
+      isoStringOrNull ? new Date(isoStringOrNull) : isoStringOrNull,
+  },
+}).on(saveDate, (_, p) => p)
+
+const serverScope = fork()
+
+await allSettled(saveDate, {scope: serverScope, params: new Date()})
+
+const serverValues = serialize(serverScope)
+// `serialize.write` of `$date` store is called
+
+console.log(serverValues)
+// => { nq1e2rb: "2022-11-05T15:38:53.108Z" }
+// Date object saved as ISO string
+
+const clientScope = fork({values: serverValues})
+// `serialize.read` of `$date` store is called
+
+const currentValue = clientScope.getState($date)
+console.log(currentValue)
+// => Date 11/5/2022, 10:40:13 PM
+// ISO date string is parsed back to Date object
+```
+
+[Try it](https://share.effector.dev/YFkUlqPv)
