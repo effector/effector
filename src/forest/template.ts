@@ -9,8 +9,7 @@ import {
   createEvent,
 } from 'effector'
 import type {Scope} from '../effector/unit.h'
-import type {StateRef} from '../effector/index.h'
-import type {Stack} from '../effector/kernel'
+import type {StateRef, Stack} from '../effector/index.h'
 import type {
   Leaf,
   NSType,
@@ -144,28 +143,26 @@ export function createTemplate<Api extends {[method: string]: any}>({
           if (targetTemplate) {
             if (stackTemplates.includes(targetTemplate)) {
               const page = stackPages[stackTemplates.indexOf(targetTemplate)]
+              //@ts-expect-error
               launch({
-                //@ts-expect-error
                 target: node,
                 params: upd,
                 defer: true,
                 page,
                 stack,
-                //@ts-expect-error
                 scope: stack.scope,
               })
             } else {
               console.error('context drift', {stack, node})
             }
           } else {
+            //@ts-expect-error
             launch({
-              //@ts-expect-error
               target: node,
               params: upd,
               defer: true,
               page: stack.page,
               stack,
-              //@ts-expect-error
               scope: stack.scope,
             })
           }
@@ -197,13 +194,12 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   )
                     return
                 }
+                //@ts-expect-error
                 launch({
                   params: upd,
-                  //@ts-expect-error
                   target: stack.node,
                   page,
                   defer: true,
-                  //@ts-expect-error
                   scope: stack.scope,
                 })
               })
@@ -239,25 +235,23 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     }
                   }
                   if (validTarget) {
+                    //@ts-expect-error
                     launch({
                       params: upd,
-                      //@ts-expect-error
                       target: stack.node,
                       page,
                       defer: true,
-                      //@ts-expect-error
                       scope: stack.scope,
                     })
                   }
                 } else {
                   if (fullID.startsWith(`${page.fullID}_`)) {
+                    //@ts-expect-error
                     launch({
                       params: upd,
-                      //@ts-expect-error
                       target: stack.node,
                       page: stack.page,
                       defer: true,
-                      //@ts-expect-error
                       scope: stack.scope,
                     })
                   } else {
@@ -272,13 +266,12 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 if (!page.root.scope || forkId !== page.root.scope.graphite.id)
                   return
               }
+              //@ts-expect-error
               launch({
                 params: upd,
-                //@ts-expect-error
                 target: stack.node,
                 page,
                 defer: true,
-                //@ts-expect-error
                 scope: stack.scope,
               })
             })

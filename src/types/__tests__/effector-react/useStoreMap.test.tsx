@@ -96,15 +96,14 @@ describe('useStoreMap', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
-          Overload 1 of 3, '(opts: { readonly store: Store<User[]>; readonly keys: [number, number]; readonly fn: (state: User[], keys: [number, number]) => null | undefined; readonly updateFilter?: ((update: null, current: null) => boolean) | undefined; readonly defaultValue: null; }): null', gave the following error.
+          Overload 1 of 3, '(opts: { readonly store: Store<User[]>; readonly keys: [number, number]; readonly fn: (state: User[], keys: [number, number]) => null | undefined; readonly updateFilter?: ((update: null, current: null) => boolean) | undefined; readonly defaultValue: null; readonly forceScope?: boolean | undefined; }): null', gave the following error.
             Type '[number, keyof User]' is not assignable to type '[number, number]'.
               Type at position 1 in source is not compatible with type at position 1 in target.
                 Type 'string' is not assignable to type 'number'.
                   Type 'string' is not assignable to type 'number'.
-          Overload 2 of 3, '(opts: { readonly store: Store<User[]>; readonly keys: [number, number]; readonly fn: (state: User[], keys: [number, number]) => null; readonly updateFilter?: ((update: null, current: null) => boolean) | undefined; }): null', gave the following error.
+          Overload 2 of 3, '(opts: { readonly store: Store<User[]>; readonly keys: [number, number]; readonly fn: (state: User[], keys: [number, number]) => null; readonly updateFilter?: ((update: null, current: null) => boolean) | undefined; readonly forceScope?: boolean | undefined; }): null', gave the following error.
             Type '[number, keyof User]' is not assignable to type '[number, number]'.
         Type 'unknown' is not assignable to type 'ReactNode'.
-          Type 'unknown' is not assignable to type 'ReactPortal'.
         "
       `)
     })

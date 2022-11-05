@@ -1,6 +1,6 @@
 import type {Domain} from './unit.h'
 import {combine} from './combine'
-import {createEffect, onSettled, runFn} from './createEffect'
+import {createEffect, createScopeRef, onSettled, runFn} from './createEffect'
 import {applyParentHook} from './createUnit'
 import {processArgsToConfig} from './config'
 import {
@@ -17,7 +17,7 @@ import {launch} from './kernel'
 import {EFFECT} from './tag'
 import {createName} from './naming'
 
-export function attach(config) {
+export function attach(config: any) {
   let injected
   ;[config, injected] = processArgsToConfig(config, true)
   let {source, effect, mapParams} = config
@@ -29,7 +29,8 @@ export function attach(config) {
     (upd, _, stack) => {
       const {params, req, handler} = upd
       const anyway = attached.finally
-      const rj = onSettled(params, req, false, anyway, stack)
+      const scopeRef = createScopeRef(stack)
+      const rj = onSettled(params, req, false, anyway, stack, scopeRef)
       const sourceData = stack.a
       const isEffectHandler = is.effect(handler)
       let ok = true
@@ -45,7 +46,10 @@ export function attach(config) {
             target: handler as any,
             params: {
               params: computedParams,
-              req: {rs: onSettled(params, req, true, anyway, stack), rj},
+              req: {
+                rs: onSettled(params, req, true, anyway, stack, scopeRef),
+                rj,
+              },
             },
             page: stack.page,
             defer: true,
@@ -80,7 +84,6 @@ export function attach(config) {
       getCompositeName(attached),
       createName(attached.shortName, parentDomain),
     )
-    //@ts-expect-error
     attached.defaultConfig.parent = parentDomain
   }
   applyParentHook(effect, attached, EFFECT)

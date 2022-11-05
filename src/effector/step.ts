@@ -6,19 +6,28 @@ import type {
   MovStoreToRegister,
   MovStoreToStore,
   MovRegisterToStore,
+  Stack,
 } from './index.h'
 import {nextStepID} from './id'
 import {EFFECT, REG_A, SAMPLER, STACK, STORE} from './tag'
-import type {BarrierPriorityTag, Stack} from './kernel'
+import type {BarrierPriorityTag} from './kernel'
 import {callStack} from './caller'
 
-const cmd = (
-  type: 'compute' | 'mov',
-  data,
+const cmd = <Type extends 'compute' | 'mov'>(
+  type: Type,
+  data: any,
   priority?: BarrierPriorityTag | false,
   batch?: boolean,
 ) => {
-  const result = {
+  const result: {
+    id: string
+    type: Type
+    data: any
+    order?: {
+      priority: BarrierPriorityTag
+      barrierID?: number
+    }
+  } = {
     id: nextStepID(),
     type,
     data,
@@ -98,7 +107,9 @@ export const mov: {
   priority?: BarrierPriorityTag | false
 }) => cmd('mov', {from, store, to, target}, priority, batch)
 
-export const compute = ({
+export const compute = <
+  LocalValues extends {[key: string]: any} = {[key: string]: any},
+>({
   fn,
   batch,
   priority,
@@ -106,7 +117,7 @@ export const compute = ({
   filter = false,
   pure = false,
 }: {
-  fn?: (data, scope: {[key: string]}, stack: Stack) => any
+  fn?: (data: any, scope: LocalValues, stack: Stack) => any
   batch?: boolean
   priority?: BarrierPriorityTag | false
   safe?: boolean
@@ -118,15 +129,20 @@ export const filter = ({
   fn,
   pure,
 }: {
-  fn(data, scope: {[key: string]}, stack: Stack)
+  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
   pure?: boolean
 }) => compute({fn, filter: true, pure})
 
-export const run = ({fn}: {fn(data, scope: {[key: string]}, stack: Stack)}) =>
-  compute({fn, priority: EFFECT})
+export const run = ({
+  fn,
+}: {
+  fn(data: any, scope: {[key: string]: any}, stack: Stack): any
+}) => compute({fn, priority: EFFECT})
 
-export const calc = (
-  fn: (data, scope: {[key: string]}, stack: Stack) => any,
+export const calc = <
+  LocalValues extends {[key: string]: any} = {[key: string]: any},
+>(
+  fn: (data: any, scope: LocalValues, stack: Stack) => any,
   filter?: boolean,
   isEffect?: boolean,
 ) => compute({fn, safe: true, filter, priority: isEffect && EFFECT})
@@ -154,7 +170,7 @@ export const read = (
   })
 
 export const userFnCall = (
-  fn: (data, scope: {[key: string]}, stack: Stack) => any = callStack,
+  fn: (data: any, scope: {[key: string]: any}, stack: Stack) => any = callStack,
   isFilter?: boolean,
 ) => compute({fn, pure: true, filter: isFilter})
 

@@ -1,10 +1,8 @@
 ---
 id: scopeBind
 title: scopeBind
-hide_title: true
+description: scopeBind is a method to bind unit to scope
 ---
-
-# scopeBind
 
 ```ts
 scopeBind<T>(event: Event<T>): (payload: T) => void

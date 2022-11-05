@@ -135,7 +135,7 @@ describe('fork values', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
-          Overload 1 of 3, '(iterable: Iterable<readonly [Store<number>, number]>): Map<Store<number>, number>', gave the following error.
+          Overload 1 of 4, '(iterable?: Iterable<readonly [Store<number>, number]> | null | undefined): Map<Store<number>, number>', gave the following error.
             Argument of type '([Store<number>, number] | [Store<string>, string])[]' is not assignable to parameter of type 'Iterable<readonly [Store<number>, number]>'.
               The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
                 Type 'IteratorResult<[Store<number>, number] | [Store<string>, string], any>' is not assignable to type 'IteratorResult<readonly [Store<number>, number], any>'.

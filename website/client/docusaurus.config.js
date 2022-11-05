@@ -12,13 +12,13 @@ module.exports = {
   projectName: 'effector', // Usually your repo name.
   onBrokenLinks: 'ignore', // Temporal option for smoother transition to multilang docs
   themeConfig: {
-    sidebarCollapsible: false,
     image: 'img/comet.png',
     prism: {
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
     algolia: {
+      appId: 'BH4D9OD16A',
       apiKey: process.env.ALGOLIA_API_KEY,
       indexName: 'effector',
     },
@@ -30,7 +30,7 @@ module.exports = {
       },
       items: [
         {to: 'docs/introduction/installation', label: 'Docs', position: 'left'},
-        {to: 'docs/api/effector/effector', label: 'API', position: 'left'},
+        {to: 'docs/api/effector', label: 'API', position: 'left'},
         {
           href: 'https://www.patreon.com/zero_bias',
           label: 'Blog',
@@ -38,17 +38,12 @@ module.exports = {
         },
         {
           href: 'https://share.effector.dev',
-          label: 'REPL',
+          label: 'Playground',
           position: 'left',
         },
         {
           href: 'https://changelog.effector.dev',
           label: 'Changelog',
-          position: 'right',
-        },
-        {
-          href: 'https://twitter.com/effectorjs',
-          label: 'Twitter',
           position: 'right',
         },
         {
@@ -69,12 +64,12 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Docs',
+              label: 'Getting started',
               to: 'docs/introduction/installation',
             },
             {
               label: 'API',
-              to: 'docs/api/effector/effector',
+              to: 'docs/api/effector',
             },
             {
               label: 'Changelog',
@@ -145,6 +140,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          sidebarCollapsible: false,
           path: '../../docs',
           // Equivalent to `enableUpdateBy`.
           showLastUpdateAuthor: false,

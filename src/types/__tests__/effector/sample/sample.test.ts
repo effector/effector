@@ -288,7 +288,7 @@ test('event by event', () => {
   const sample_ee_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<number>' is not assignable to type 'Event<string>'.
+    Expected 1 arguments, but got 2.
     "
   `)
 })
@@ -302,12 +302,9 @@ test('event by event with handler', () => {
   const sample_eeh_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+    Expected 1 arguments, but got 3.
+    Parameter 'a' implicitly has an 'any' type.
+    Parameter 'b' implicitly has an 'any' type.
     "
   `)
 })
@@ -322,7 +319,7 @@ test('store by event', () => {
   const sample_se_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<number>' is not assignable to type 'Event<string>'.
+    Expected 1 arguments, but got 2.
     "
   `)
 })
@@ -336,12 +333,9 @@ test('store by event with handler', () => {
   const sample_seh_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+    Expected 1 arguments, but got 3.
+    Parameter 'a' implicitly has an 'any' type.
+    Parameter 'b' implicitly has an 'any' type.
     "
   `)
 })
@@ -356,7 +350,7 @@ test('effect by event', () => {
   const sample_efe_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<string>' is not assignable to type 'Event<number>'.
+    Expected 1 arguments, but got 2.
     "
   `)
 })
@@ -370,12 +364,9 @@ test('effect by event with handler', () => {
   const sample_efeh_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
+    Expected 1 arguments, but got 3.
+    Parameter 'a' implicitly has an 'any' type.
+    Parameter 'b' implicitly has an 'any' type.
     "
   `)
 })
@@ -390,9 +381,7 @@ test('store by store', () => {
   const sample_ss_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Store<boolean>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type 'boolean' is not assignable to type 'string'.
+    Expected 1 arguments, but got 2.
     "
   `)
 })
@@ -406,9 +395,9 @@ test('store by store with handler', () => {
   const sample_ssh_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+    Expected 1 arguments, but got 3.
+    Parameter 'a' implicitly has an 'any' type.
+    Parameter 'b' implicitly has an 'any' type.
     "
   `)
 })
@@ -418,7 +407,8 @@ describe('sample(Store<T>):Store<T>', () => {
     const sample_s_correct: Store<string> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Argument of type 'Store<string>' is not assignable to parameter of type '{ error: \\"either target, clock or source should exists\\"; }'.
+        Property 'error' is missing in type 'Store<string>' but required in type '{ error: \\"either target, clock or source should exists\\"; }'.
       "
     `)
   })
@@ -428,7 +418,7 @@ describe('sample(Store<T>):Store<T>', () => {
     const sample_s_incorrect: Store<number> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<string>' is not assignable to type 'Store<number>'.
+      Argument of type 'Store<string>' is not assignable to parameter of type '{ error: \\"either target, clock or source should exists\\"; }'.
       "
     `)
   })
@@ -439,7 +429,7 @@ describe('sample(Store<T>):Store<T>', () => {
       const sample_s_edge_correct: Event<string> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Expected 1 arguments, but got 2.
         "
       `)
     })
@@ -450,7 +440,7 @@ describe('sample(Store<T>):Store<T>', () => {
       const sample_s_edge_incorrect: Event<number> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<string>' is not assignable to type 'Event<number>'.
+        Expected 1 arguments, but got 2.
         "
       `)
     })
@@ -514,6 +504,11 @@ describe('sample + guard (should pass)', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (number | boolean)[], clk: number) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
+        Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (number | boolean)[], clk: number) => any'.
+          Types of parameters '__0' and 'src' are incompatible.
+            Type '(number | boolean)[]' is not assignable to type '[any, any]'.
+              Target requires 2 element(s) but source may have fewer.
       Binding element 'isAble' implicitly has an 'any' type.
       Binding element 'field' implicitly has an 'any' type.
       Parameter 'data' implicitly has an 'any' type.

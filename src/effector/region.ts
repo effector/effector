@@ -1,11 +1,12 @@
+import type {Template} from '../forest/index.h'
+import type {NodeUnit} from './index.h'
 import {getParent, getMeta} from './getter'
 import {createNode} from './createNode'
-import type {Template} from '../forest/index.h'
 
 type RegionStack = {
   parent: RegionStack | null
-  value
-  template
+  value: any
+  template: Template | null
   sidRoot?: string
 }
 
@@ -19,7 +20,7 @@ export const readSidRoot = (sid?: string | null) => {
   return sid
 }
 
-export function withRegion(unit, cb: () => void) {
+export function withRegion(unit: NodeUnit, cb: () => void) {
   regionStack = {
     parent: regionStack,
     value: unit,
@@ -42,7 +43,7 @@ export const withFactory = ({
 }: {
   sid: string
   name?: string
-  loc?
+  loc?: any
   method?: string
   fn: () => any
 }) => {

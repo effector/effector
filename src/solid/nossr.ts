@@ -1,6 +1,8 @@
-import {Store} from 'effector'
-import {useStoreMapBase, useUnitBase} from './lib/base'
 import {Accessor} from 'solid-js'
+import {Store} from 'effector'
+
+import {useStoreMapBase, useUnitBase} from './lib/base'
+import {getScope} from './lib/get-scope'
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
   configOrStore:
@@ -15,6 +17,7 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
 ): Accessor<Result> {
   return useStoreMapBase([configOrStore, separateFn])
 }
-export function useUnit(shape) {
-  return useUnitBase(shape)
+export function useUnit(shape, opts?: {forceScope?: boolean}) {
+  const scope = getScope(opts?.forceScope ?? false)
+  return useUnitBase(shape, scope)
 }

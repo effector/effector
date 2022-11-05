@@ -268,3 +268,84 @@ test('parent assignment', () => {
   const store = restore(fx.doneData, {})
   expect(argumentHistory(fn)).toEqual(['store'])
 })
+
+describe('pass domain into creator', () => {
+  test('createStore is the same instance', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateStore(fn)
+
+    const $store = createStore(0, {domain})
+
+    expect(fn).toBeCalledWith($store)
+  })
+  test('createStore correctly passed into hook', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateStore(store => store.updates.watch(fn))
+
+    const run = createEvent<number>()
+    const $store = createStore(0, {domain})
+    $store.on(run, (_, i) => i)
+    run(2)
+
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toBeCalledWith(2)
+  })
+  test('createEvent correctly passed into hook', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEvent(fn)
+
+    const event = createEvent({domain})
+
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+  test('createEffect correctly passed into hook', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEffect(fn)
+
+    const effect = createEffect({domain})
+
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+  test('createDomain correctly passed into hook', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateDomain(fn)
+
+    const another = createDomain({domain})
+
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+  test('unit in nested domains triggers correctly', () => {
+    const fn = jest.fn()
+    const d1 = createDomain()
+    d1.onCreateStore(fn)
+    const d2 = createDomain({domain: d1})
+    d2.onCreateStore(fn)
+    const d3 = createDomain({domain: d2})
+    d3.onCreateStore(fn)
+
+    const $store = createStore(0, {domain: d3})
+
+    expect(fn).toHaveBeenCalledTimes(3)
+  })
+
+  test('unit made from two domains should select indirect one', () => {
+    const directFn = jest.fn()
+    const direct = createDomain()
+    direct.onCreateStore(directFn)
+
+    const indirectFn = jest.fn()
+    const indirect = createDomain()
+    indirect.onCreateStore(indirectFn)
+
+    // @ts-expect-error There is no types for case, just runtime check
+    const $unit = direct.createStore(0, {domain: indirect})
+
+    expect(directFn).not.toHaveBeenCalled()
+    expect(indirectFn).toHaveBeenCalledTimes(1)
+  })
+})

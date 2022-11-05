@@ -232,6 +232,7 @@ export interface Store<State> extends Unit<State> {
   compositeName: CompositeName
   shortName: string
   sid: string | null
+  reinit?: Event<void>
 }
 
 export const is: {
@@ -618,6 +619,7 @@ export function createEvent<E = void>(eventName?: string): Event<E>
 export function createEvent<E = void>(config: {
   name?: string
   sid?: string
+  domain?: Domain
 }): Event<E>
 
 /**
@@ -643,6 +645,7 @@ export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHa
 export function createEffect<FN extends Function>(name: string, config: {
   handler: FN
   sid?: string
+  domain?: Domain
 }): EffectByHandler<FN, Error>
 /**
  * Creates an effect
@@ -652,6 +655,7 @@ export function createEffect<Params, Done, Fail = Error>(
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
     sid?: string
+    domain?: Domain
   },
 ): Effect<Params, Done, Fail>
 /**
@@ -661,6 +665,7 @@ export function createEffect<FN extends Function>(config: {
   name?: string
   handler: FN
   sid?: string
+  domain?: Domain
 }): EffectByHandler<FN, Error>
 /**
  * Creates an effect
@@ -669,6 +674,7 @@ export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
   sid?: string
+  domain?: Domain
 }): Effect<Params, Done, Fail>
 
 /**
@@ -688,6 +694,7 @@ export function createStore<State, SerializedState extends Json = Json>(
         write: (state: State) => SerializedState
         read: (json: SerializedState) => State
       }
+    domain?: Domain;
   },
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
@@ -911,7 +918,8 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 /**
  * Creates a domain
  */
-export function createDomain(domainName?: string): Domain
+export function createDomain(domainName?: string, config?: { domain?: Domain }): Domain
+export function createDomain(config?: { name?: string; domain?: Domain }): Domain
 
 type WhichTypeKind =
   | 'never'
@@ -3019,7 +3027,7 @@ export function serialize(
  * @param unit event to bind
  * @returns function which will trigger an event in a given scope
  */
-export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T) => void
+export function scopeBind<T>(unit: Event<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
 /**
  * Bind effect to a scope to be called later.
  *
@@ -3027,7 +3035,7 @@ export function scopeBind<T>(unit: Event<T>, opts?: {scope: Scope}): (payload: T
  * @param unit effect to bind
  * @returns function which will trigger an effect in a given scope and returns a promise with a result
  */
-export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope: Scope}): (params: P) => Promise<D>
+export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
 
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
@@ -3073,8 +3081,8 @@ export function allSettled<FX extends Effect<void, any, any>>(
   config: {scope: Scope},
 ): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
 /**
- * Run event in scope and wait for all triggered effects to settle. This method never throw an error
- * @param unit event to run
+ * Run unit in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit event or store to run
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled<T>(
@@ -3082,8 +3090,8 @@ export function allSettled<T>(
   config: {scope: Scope; params: T},
 ): Promise<void>
 /**
- * Run event withot arguments in scope and wait for all triggered effects to settle. This method never throw an error
- * @param unit event to run
+ * Run unit without arguments in scope and wait for all triggered effects to settle. This method never throw an error
+ * @param unit event or store to run
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled(

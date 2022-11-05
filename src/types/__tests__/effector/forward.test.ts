@@ -133,11 +133,7 @@ describe('forward with subtyping', () => {
     forward<string>({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string & {}'.
-            Type 'number' is not assignable to type 'string & {}'.
-              Type 'number' is not assignable to type 'string'.
+      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
       "
     `)
   })
@@ -338,12 +334,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<number>'.
-                Type 'Event<string>' is not assignable to type 'Unit<number>'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<number>'.
-                Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type 'Event<number>' is not assignable to type 'Unit<string>'.
           "
         `)
       })
@@ -395,7 +386,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type '(Event<number> | Event<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
+              Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<string>': kind, __
           "
         `)
       })

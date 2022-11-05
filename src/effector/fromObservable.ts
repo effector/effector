@@ -5,7 +5,7 @@ import {assertObject} from './is'
 import {assert} from './throw'
 import {createSubscription} from './subscription'
 
-export function fromObservable<T>(observable): Event<T> {
+export function fromObservable<T>(observable: any): Event<T> {
   assertObject(observable)
   const observableItem =
     observableSymbol in observable ? observable[observableSymbol]() : observable

@@ -36,7 +36,7 @@ $store.watch(x => console.log('store state: ', x))
 inc()
 // => inc called
 // => store state: 1
-clearNode(store)
+clearNode($store)
 inc()
 // => inc called
 ```

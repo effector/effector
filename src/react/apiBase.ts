@@ -51,8 +51,8 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   const isList = Array.isArray(normShape)
   const flagsRef = React.useRef({
     stale: true,
-    wasSubscribed: false,
     justSubscribed: false,
+    scope,
   })
   const [eventsShape, storeKeys, storeValues] = React.useMemo(() => {
     flagsRef.current.stale = true
@@ -76,7 +76,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   const subscribe = React.useCallback(
     (cb: () => void) => {
       const flags = flagsRef.current
-      if (flags.wasSubscribed) flags.justSubscribed = true
+      flags.justSubscribed = true
       const cbCaller = () => {
         if (!flags.stale) {
           flags.stale = true
@@ -87,7 +87,6 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
       const subs = storeValues.map(store =>
         createWatch(store, cbCaller, scope, batchStep),
       )
-      flags.wasSubscribed = true
       return () => {
         subs.forEach(fn => fn())
       }
@@ -101,11 +100,12 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     let changed = false
     const oldVal = state.value
     const oldKeys = state.storeKeys
+    const scopeChanged = scope !== flags.scope
     if (
       (storeKeys.length > 0 || oldKeys.length > 0) &&
-      (flags.stale || flags.justSubscribed)
+      (flags.stale || flags.justSubscribed || scopeChanged)
     ) {
-      changed = !flags.justSubscribed
+      changed = !flags.justSubscribed || scopeChanged
       resultValue = isList ? [...eventsShape] : {...eventsShape}
       if (oldKeys.length !== storeKeys.length) {
         changed = true
@@ -128,9 +128,10 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     }
     state.storeKeys = storeKeys
     flags.stale = false
-    flags.justSubscribed = false
+    flags.justSubscribed = !changed
+    flags.scope = scope
     return isSingleUnit ? state.value.unit : state.value
-  }, [subscribe, flagsRef])
+  }, [subscribe, storeValues, scope, stateRef, flagsRef])
   return useSyncExternalStore(subscribe, read, read)
 }
 
@@ -303,4 +304,24 @@ export function useListBase<T>(
       }),
     )
   }
+}
+
+export function useEventBase(eventObject: any, scope?: Scope) {
+  if (!scope) {
+    return eventObject
+  }
+  const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
+  const events = isShape ? eventObject : {event: eventObject}
+
+  return React.useMemo(() => {
+    if (is.unit(eventObject)) {
+      //@ts-expect-error
+      return scopeBind(eventObject, {scope})
+    }
+    const shape = Array.isArray(eventObject) ? [] : ({} as any)
+    for (const key in eventObject) {
+      shape[key] = scopeBind(eventObject[key], {scope})
+    }
+    return shape
+  }, [scope, ...Object.keys(events), ...Object.values(events)])
 }

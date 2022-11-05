@@ -1,3 +1,7 @@
+import type {Template} from '../forest/index.h'
+import type {Store, Event, CommonUnit, Effect, Domain} from './unit.h'
+import type {Subscriber, Config, Cmd, Kind} from './index.h'
+
 import {observableSymbol} from './observable'
 
 import {
@@ -8,8 +12,6 @@ import {
   assertNodeSet,
   isVoid,
 } from './is'
-import type {Store, Event, CommonUnit, Effect} from './unit.h'
-
 import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
@@ -25,7 +27,6 @@ import {
   isPure,
 } from './kernel'
 
-import type {Subscriber, Config} from './index.h'
 import {createName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
@@ -44,24 +45,20 @@ import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
-import type {Template} from '../forest/index.h'
 
 export const applyParentHook = (
-  source,
-  target,
+  source: CommonUnit,
+  target: CommonUnit,
   hookType: 'event' | 'effect' = EVENT,
 ) => {
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (kind, unit, configA, configB?) => {
+export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
+  const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
-  const config = flattenConfig({
-    or: configB,
-    and: typeof configA === 'string' ? {name: configA} : configA,
-  })
-  const {parent = null, sid = null, named = null} = config
+  const {sid = null, named = null, domain = null, parent = domain} = config
   const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
   const meta: Record<string, any> = {
@@ -88,7 +85,7 @@ export const initUnit = (kind, unit, configA, configB?) => {
       return unit.watch(
         isFunction(observer)
           ? observer
-          : upd => observer.next && observer.next(upd),
+          : (upd: any) => observer.next && observer.next(upd),
       )
     }
     unit[observableSymbol] = () => unit
@@ -99,11 +96,16 @@ export const initUnit = (kind, unit, configA, configB?) => {
 }
 export const createNamedEvent = (named: string) => createEvent({named})
 
-const deriveEvent = (event, op: string, fn, node) => {
+const deriveEvent = (
+  event: Event<any>,
+  op: 'map' | 'filterMap' | 'filter',
+  fn: Function,
+  node: Cmd[],
+) => {
   let config
   if (isObject(fn)) {
     config = fn
-    fn = fn.fn
+    fn = (fn as unknown as {fn: Function}).fn
   }
   const mapped = createEvent({
     name: `${event.shortName} → *`,
@@ -135,9 +137,13 @@ function callCreate<T>(
 }
 
 export function createEvent<Payload = any>(
-  nameOrConfig?,
-  maybeConfig?,
+  nameOrConfig?: any,
+  maybeConfig?: any,
 ): Event<Payload> {
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
+  }) as any
   const event = ((payload: Payload, ...args: unknown[]) => {
     deprecate(
       !getMeta(event, 'derived'),
@@ -151,9 +157,9 @@ export function createEvent<Payload = any>(
     return event.create(payload, args)
   }) as Event<Payload>
   const template = readTemplate()
-  return Object.assign(event, {
+  const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(EVENT, event, nameOrConfig, maybeConfig),
+      meta: initUnit(EVENT, event, config),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -163,6 +169,7 @@ export function createEvent<Payload = any>(
     watch: (fn: (payload: Payload) => any) => watchUnit(event, fn),
     map: (fn: Function) => deriveEvent(event, MAP, fn, [userFnCall()]),
     filter: (fn: {fn: Function}) =>
+      //@ts-expect-error
       deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
         userFnCall(callStack, true),
       ]),
@@ -181,12 +188,17 @@ export function createEvent<Payload = any>(
       return contramapped
     },
   })
+  if (config?.domain) {
+    config.domain.hooks.event(finalEvent)
+  }
+  return finalEvent
 }
 
 export function createStore<State>(
   defaultState: State,
   props?: Config,
 ): Store<State> {
+  const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
@@ -274,6 +286,7 @@ export function createStore<State>(
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
         derived: true,
+        // @ts-expect-error some mismatch in config types
         and: config,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
@@ -286,7 +299,7 @@ export function createStore<State>(
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },
-    watch(eventOrFn, fn?: Function) {
+    watch(eventOrFn: any, fn?: Function) {
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -295,10 +308,12 @@ export function createStore<State>(
         return subscription
       }
       assert(isFunction(fn), 'second argument should be a function')
-      return eventOrFn.watch(payload => fn(store.getState(), payload))
+      return (eventOrFn as CommonUnit).watch((payload: any) =>
+        fn(store.getState(), payload),
+      )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, props)
+  const meta = initUnit(STORE, store, config)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
@@ -342,6 +357,15 @@ export function createStore<State>(
     "current state can't be undefined, use null instead",
   )
   own(store, [updates])
+  if (config?.domain) {
+    config.domain.hooks.store(store)
+  }
+
+  if (!derived) {
+    store.reinit = createEvent<void>();
+    store.reset(store.reinit);
+  }
+
   return store
 }
 

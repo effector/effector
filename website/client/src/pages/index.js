@@ -47,8 +47,8 @@ $status.watch(status => {
 
 nextPost()
 
-// => Loading post... 
-// => Post 2 has 5 comments 
+// => Loading post...
+// => Post 2 has 5 comments
 `,
   ru: `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
 
@@ -88,8 +88,8 @@ $status.watch(status => {
 
 nextPost()
 
-// => Загрузка поста... 
-// => Пост 2 имеет 5 комментариев 
+// => Загрузка поста...
+// => Пост 2 имеет 5 комментариев
 `,
   "zh-cn": `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
 
@@ -129,8 +129,8 @@ $status.watch(status => {
 
 nextPost()
 
-// => Loading post... 
-// => Post 2 has 5 comments 
+// => Loading post...
+// => Post 2 has 5 comments
 `
 }
 
@@ -468,8 +468,8 @@ function Hero() {
               <Link
                 className="button button--outline button--secondary button--lg"
                 to="https://share.effector.dev">
-                <Translate id="landing.try_it" description="Try it out">
-                  Try it out
+                <Translate id="landing.try_it" description="Playground">
+                  Playground
                 </Translate>
               </Link>
             </div>

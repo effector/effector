@@ -1,6 +1,6 @@
 import type {Leaf} from '../forest/index.h'
 
-import type {Node, NodeUnit, StateRef} from './index.h'
+import type {Node, NodeUnit, StateRef, Stack} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
 import {STORE, EFFECT, SAMPLER, STACK, BARRIER, VALUE, REG_A, MAP} from './tag'
@@ -24,18 +24,6 @@ type Layer = {
   id: number
 }
 
-/** Call stack */
-export type Stack = {
-  value
-  a
-  b
-  c?
-  parent: Stack | null
-  node: Node
-  page: Leaf | null
-  scope?: Scope | null | void
-}
-
 /** Queue as linked list or skew heap */
 type QueueItem = {
   /** node value */
@@ -54,7 +42,7 @@ type QueueBucket = {
 /** Dedicated local metadata */
 type Local = {
   fail: boolean
-  scope: {[key: string]}
+  scope: {[key: string]: any}
 }
 
 let heap: QueueItem | null = null
@@ -128,7 +116,7 @@ const pushFirstHeapItem = (
   page: Leaf | null,
   node: Node,
   parent: Stack | null,
-  value,
+  value: any,
   scope?: Scope | null | void,
 ) =>
   pushHeap(
@@ -205,7 +193,7 @@ export let isWatch = false
 export let isPure = false
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
-export const setForkPage = (newForkPage: Scope) => {
+export const setForkPage = (newForkPage: Scope | void | null) => {
   forkPage = newForkPage
 }
 export const setCurrentPage = (newPage: Leaf | null) => {
@@ -239,14 +227,14 @@ export const getPageRef = (
 
 export function launch(config: {
   target: NodeUnit | NodeUnit[]
-  params?
+  params?: any
   defer?: boolean
   page?: Leaf | void | null
   scope?: Scope | void
   stack?: Stack | void
 }): void
-export function launch(unit: NodeUnit, payload?, upsert?: boolean): void
-export function launch(unit, payload?, upsert?: boolean) {
+export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
+export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage

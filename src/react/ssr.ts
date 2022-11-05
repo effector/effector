@@ -1,10 +1,11 @@
 import React from 'react'
-import {Domain, is, Scope, Store, scopeBind} from 'effector'
+import {Domain, Store} from 'effector'
 import {
   useStoreBase,
   useUnitBase,
   useStoreMapBase,
   useListBase,
+  useEventBase,
 } from './apiBase'
 import {withDisplayName} from './withDisplayName'
 import {
@@ -15,15 +16,7 @@ import {
 import type {Gate} from './index.h'
 import {throwError} from './throw'
 import {deprecate} from './deprecate'
-
-const ScopeContext = React.createContext(null as Scope | null)
-export const {Provider} = ScopeContext
-function getScope() {
-  const scope = React.useContext(ScopeContext)
-  if (!scope)
-    throwError('No scope found, consider adding <Provider> to app root')
-  return scope as Scope
-}
+import {getScope} from './scope'
 
 export function createGate<Props>(
   ...args: Array<
@@ -100,18 +93,18 @@ export const connect = (Component: any) => (store: any) => {
 
 /** useStore wrapper for scopes */
 export function useStore<T>(store: Store<T>): T {
-  return useStoreBase(store, getScope())
+  return useStoreBase(store, getScope(true))
 }
 export function useUnit(shape) {
-  return useUnitBase(shape, getScope())
+  return useUnitBase(shape, getScope(true))
 }
 /** useList wrapper for scopes */
 export function useList(store: any, opts: any) {
-  return useListBase(store, opts, getScope())
+  return useListBase(store, opts, getScope(true))
 }
 /** useStoreMap wrapper for scopes */
 export function useStoreMap(configOrStore: any, separateFn: any) {
-  const scope = getScope()
+  const scope = getScope(true)
   if (separateFn) return useStoreMapBase([configOrStore, separateFn], scope)
   return useStoreMapBase(
     [
@@ -132,19 +125,5 @@ bind event to scope
 works like React.useCallback, but for scopes
 */
 export function useEvent(eventObject: any) {
-  const scope = getScope()
-  const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
-  const events = isShape ? eventObject : {event: eventObject}
-
-  return React.useMemo(() => {
-    if (is.unit(eventObject)) {
-      //@ts-expect-error
-      return scopeBind(eventObject, {scope})
-    }
-    const shape = Array.isArray(eventObject) ? [] : ({} as any)
-    for (const key in eventObject) {
-      shape[key] = scopeBind(eventObject[key], {scope})
-    }
-    return shape
-  }, [scope, ...Object.keys(events), ...Object.values(events)])
+  return useEventBase(eventObject, getScope(true))
 }

@@ -5,7 +5,7 @@ import {getParent} from './getter'
 import {createLinkNode} from './forward'
 import {deprecate} from './throw'
 
-export function restore(obj, defaultState, config?) {
+export function restore(obj: any, defaultState: any, config?: any) {
   if (is.store(obj)) {
     deprecate(false, 'restore($store)')
     return obj

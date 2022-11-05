@@ -4,8 +4,8 @@ import {createNode} from './createNode'
 import type {Config, NodeUnit} from './index.h'
 import {
   createEvent,
-  createStore,
   createNamedEvent,
+  createStore,
   initUnit,
 } from './createUnit'
 import {createEffect} from './createEffect'
@@ -15,17 +15,30 @@ import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
 import {launch} from './kernel'
 import {calc} from './step'
+import {flattenConfig} from './config'
 
-export function createDomain(nameOrConfig, maybeConfig?): Domain {
-  const node = createNode({family: {type: DOMAIN}, regional: true})
+export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
+  const config = flattenConfig({
+    or: maybeConfig,
+    and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
+  }) as any
 
-  const result = {
+  const node = createNode({
+    family: {type: DOMAIN},
+    regional: true,
+    parent: config?.domain || config?.parent,
+  })
+
+  const domain = {
     history: {},
     graphite: node,
     hooks: {},
-  }
+  } as Domain
 
-  node.meta = initUnit(DOMAIN, result, nameOrConfig, maybeConfig)
+  node.meta = initUnit(DOMAIN, domain, {
+    parent: config?.domain || config?.parent,
+    or: config,
+  })
 
   forIn(
     {
@@ -35,49 +48,64 @@ export function createDomain(nameOrConfig, maybeConfig?): Domain {
       Domain: createDomain,
     },
     (factory, tag) => {
-      const lowerCaseTag = tag.toLowerCase()
+      const lowerCaseTag = tag.toLowerCase() as
+        | 'event'
+        | 'effect'
+        | 'store'
+        | 'domain'
 
-      const trigger = createNamedEvent(`on${tag}`)
-      result.hooks[lowerCaseTag] = trigger
+      const onCreateUnit = createNamedEvent(`on${tag}`)
+      domain.hooks[lowerCaseTag] = onCreateUnit
 
-      const acc = new Set<any>()
-      result.history[`${lowerCaseTag}s`] = acc
+      const history = new Set<any>()
+      domain.history[`${lowerCaseTag}s`] = history
 
-      trigger.create = res => {
-        launch(trigger, res)
-        return res
+      onCreateUnit.create = unit => {
+        launch(onCreateUnit, unit)
+        return unit
       }
       add(
-        getGraph(trigger).seq,
+        getGraph(onCreateUnit).seq,
         calc((upd, _, stack) => {
           stack.scope = null
           return upd
         }),
       )
-      trigger.watch(data => {
-        own(result, [data])
-        acc.add(data)
-        if (!data.ownerSet) data.ownerSet = acc
-        if (!getParent(data)) data.parent = result
+      onCreateUnit.watch(unit => {
+        own(domain, [unit])
+        history.add(unit)
+        if (!unit.ownerSet) unit.ownerSet = history
+        if (!getParent(unit)) unit.parent = domain
       })
-      own(result, [trigger])
+      own(domain, [onCreateUnit])
 
-      result[`onCreate${tag}`] = (hook: (data) => any) => {
-        forEach(acc, hook)
-        return trigger.watch(hook)
+      domain[`onCreate${tag}`] = (hook: (unit: any) => any) => {
+        forEach(history, hook)
+        return onCreateUnit.watch(hook)
       }
-      result[`create${tag}`] = result[lowerCaseTag] = (
-        nameOrConfig,
-        config?: Config,
-      ) => trigger(factory(nameOrConfig, {parent: result, or: config}))
+      domain[`create${tag}`] = domain[lowerCaseTag] = (
+        nameOrConfig: any,
+        rawConfig?: Config,
+      ) => {
+        const config = flattenConfig({and: rawConfig, or: nameOrConfig})
+        if (config?.domain) {
+          // @ts-expect-error complicated factory type
+          return factory(nameOrConfig, rawConfig)
+        }
+        // @ts-expect-error complicated factory type
+        return onCreateUnit(factory(nameOrConfig, {parent: domain, or: config}))
+      }
     },
   )
 
-  const parent = getParent(result)
+  const parent = getParent(domain)
   if (parent) {
-    forIn(result.hooks, (from: NodeUnit, key) =>
+    forIn(domain.hooks, (from: NodeUnit, key) =>
       createLinkNode(from, parent.hooks[key]),
     )
   }
-  return result
+  if (config?.domain) {
+    config.domain.hooks.domain(domain)
+  }
+  return domain
 }

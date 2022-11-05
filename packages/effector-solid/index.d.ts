@@ -1,5 +1,9 @@
-import {Accessor, Component} from 'solid-js'
-import {Store, Event, Effect, Domain} from 'effector'
+import {Store, Event, Effect, Domain, Scope} from 'effector'
+import {Accessor, Component, FlowComponent} from 'solid-js'
+
+export const Provider: FlowComponent<{
+  value: Scope
+}>
 
 export type Gate<Props = {}> = Component<Props> & {
   open: Event<Props>
@@ -37,22 +41,44 @@ export function createGate<Props>(
   defaultState: Props,
 ): Gate<Props>
 
-export function useUnit<State>(store: Store<State>): Accessor<State>
-export function useUnit(event: Event<void>): () => void
-export function useUnit<T>(event: Event<T>): (payload: T) => T
-export function useUnit<R>(fx: Effect<void, R, any>): () => Promise<R>
-export function useUnit<T, R>(fx: Effect<T, R, any>): (payload: T) => Promise<R>
+type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
+  ? 1
+  : 2
+  ? true
+  : false
+
+export function useUnit<State>(
+  store: Store<State>,
+  opts?: {forceScope?: boolean},
+): Accessor<State>
+export function useUnit(
+  event: Event<void>,
+  opts?: {forceScope?: boolean},
+): () => void
+export function useUnit<T>(
+  event: Event<T>,
+  opts?: {forceScope?: boolean},
+): (payload: T) => T
+export function useUnit<R>(
+  fx: Effect<void, R, any>,
+  opts?: {forceScope?: boolean},
+): () => Promise<R>
+export function useUnit<T, R>(
+  fx: Effect<T, R, any>,
+  opts?: {forceScope?: boolean},
+): (payload: T) => Promise<R>
 export function useUnit<
   List extends (Event<any> | Effect<any, any> | Store<any>)[],
 >(
   list: [...List],
+  opts?: {forceScope?: boolean},
 ): {
   [Key in keyof List]: List[Key] extends Event<infer T>
-    ? T extends void
+    ? Equal<T, void> extends true
       ? () => void
       : (payload: T) => T
     : List[Key] extends Effect<infer P, infer D, any>
-    ? P extends void
+    ? Equal<P, void> extends true
       ? () => Promise<D>
       : (payload: P) => Promise<D>
     : List[Key] extends Store<infer V>
@@ -63,13 +89,14 @@ export function useUnit<
   Shape extends Record<string, Event<any> | Effect<any, any, any> | Store<any>>,
 >(
   shape: Shape,
+  opts?: {forceScope?: boolean},
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>
-    ? T extends void
+    ? Equal<T, void> extends true
       ? () => void
       : (payload: T) => T
     : Shape[Key] extends Effect<infer P, infer D, any>
-    ? P extends void
+    ? Equal<P, void> extends true
       ? () => Promise<D>
       : (payload: P) => Promise<D>
     : Shape[Key] extends Store<infer V>

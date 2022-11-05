@@ -11,6 +11,7 @@ import {
   Store,
   fork,
   allSettled,
+  serialize,
 } from 'effector'
 import {useUnit} from 'effector-react'
 import {
@@ -718,6 +719,159 @@ describe('useUnit', () => {
       ]
     `)
   })
+  it('should support dynamic change of scope', async () => {
+    const activeChanged = createEvent<'a' | 'b'>()
+    const $active = createStore<'a' | 'b'>('a').on(
+      activeChanged,
+      (_, upd) => upd,
+    )
+    let clientScope = fork()
+
+    const ref: {fn(): any} = {
+      fn() {
+        throw Error('noop fn')
+      },
+    }
+    const triggerTopRender = () => {
+      ref.fn()
+    }
+
+    function Page() {
+      const {acive, changeActive} = useUnitScope({
+        acive: $active,
+        changeActive: activeChanged,
+      })
+
+      return (
+        <div>
+          <button id="a" disabled={acive !== 'a'}>
+            a
+          </button>
+          <button id="b" disabled={acive !== 'b'}>
+            b
+          </button>
+          <button
+            id="value"
+            onClick={() => {
+              changeActive(acive === 'a' ? 'b' : 'a')
+            }}>
+            Val
+          </button>
+          <button id="scope" onClick={triggerTopRender}>
+            Scp
+          </button>
+        </div>
+      )
+    }
+
+    function AppBase({page, data}: {data: any; page: JSX.Element}) {
+      const scope = React.useMemo(() => {
+        const scope = fork({
+          values: {
+            ...serialize(clientScope),
+            ...data,
+          },
+        })
+        clientScope = scope
+
+        return scope
+      }, [data])
+      return <Provider value={scope}>{page}</Provider>
+    }
+
+    function App() {
+      const [s, setS] = React.useState({})
+      ref.fn = () => setS({})
+
+      return <AppBase data={s} page={<Page />} />
+    }
+
+    await render(<App />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="a"
+        >
+          a
+        </button>
+        <button
+          disabled=""
+          id="b"
+        >
+          b
+        </button>
+        <button
+          id="value"
+        >
+          Val
+        </button>
+        <button
+          id="scope"
+        >
+          Scp
+        </button>
+      </div>
+    `)
+    await act(async () => {
+      container.firstChild.querySelector('#value').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          disabled=""
+          id="a"
+        >
+          a
+        </button>
+        <button
+          id="b"
+        >
+          b
+        </button>
+        <button
+          id="value"
+        >
+          Val
+        </button>
+        <button
+          id="scope"
+        >
+          Scp
+        </button>
+      </div>
+    `)
+    await act(async () => {
+      container.firstChild.querySelector('#scope').click()
+    })
+    await act(async () => {
+      container.firstChild.querySelector('#value').click()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <button
+          id="a"
+        >
+          a
+        </button>
+        <button
+          disabled=""
+          id="b"
+        >
+          b
+        </button>
+        <button
+          id="value"
+        >
+          Val
+        </button>
+        <button
+          id="scope"
+        >
+          Scp
+        </button>
+      </div>
+    `)
+  })
   describe('useUnit + useGate edge case', () => {
     const getDataRawFx = createEffect(
       () =>
@@ -752,20 +906,20 @@ describe('useUnit', () => {
           </Provider>
         </React.StrictMode>,
       )
-      // @ts-expect-error
-      if (globalThis.REACT_17) {
-        expect(container.firstChild).toMatchInlineSnapshot(`
-          <div>
-            []
-          </div>
-        `)
-      } else {
-        expect(container.firstChild).toMatchInlineSnapshot(`
-          <div>
-            Loading....
-          </div>
-        `)
-      }
+      // @ ts-expect-error
+      // if (globalThis.REACT_17) {
+      //   expect(container.firstChild).toMatchInlineSnapshot(`
+      //     <div>
+      //       []
+      //     </div>
+      //   `)
+      // } else {
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          Loading....
+        </div>
+      `)
+      // }
       await act(async () => {
         await allSettled(event, {scope})
       })
@@ -859,6 +1013,141 @@ describe('useUnit', () => {
           [{"id":1}]
         </div>
       `)
+    })
+  })
+  describe('useUnit with force scope', () => {
+    let consoleError: any
+    beforeEach(() => {
+      consoleError = console.error
+      console.error = () => {}
+    })
+    afterEach(() => {
+      console.error = consoleError
+    })
+    describe('forceScope options not set', () => {
+      it('without context', async () => {
+        const $a = createStore(42)
+
+        const View = () => {
+          const a = useUnit($a)
+
+          return <div>{a}</div>
+        }
+
+        expect(() =>
+          render(<View />).toMatchInlineSnapshot(`
+            <div>
+              42
+            </div>
+          `),
+        )
+      })
+      test('with context', async () => {
+        const $value = createStore('value')
+
+        const Component = () => {
+          const value = useUnit($value)
+          return <div>{value}</div>
+        }
+
+        const scope = fork({values: [[$value, 'scoped value']]})
+
+        await render(
+          <React.StrictMode>
+            <Provider value={scope}>
+              <Component />
+            </Provider>
+          </React.StrictMode>,
+        )
+
+        expect(container.firstChild).toMatchInlineSnapshot(`
+            <div>
+              scoped value
+            </div>
+          `)
+      })
+    })
+    describe('forceScope disabled', () => {
+      it('without context', async () => {
+        const $a = createStore(42)
+
+        const View = () => {
+          const a = useUnit($a, {forceScope: false})
+
+          return <div>{a}</div>
+        }
+
+        expect(() =>
+          render(<View />).toMatchInlineSnapshot(`
+            <div>
+              42
+            </div>
+          `),
+        )
+      })
+      test('with context', async () => {
+        const $value = createStore('value')
+
+        const Component = () => {
+          const value = useUnit($value, {forceScope: false})
+          return <div>{value}</div>
+        }
+
+        const scope = fork({values: [[$value, 'scoped value']]})
+
+        await render(
+          <React.StrictMode>
+            <Provider value={scope}>
+              <Component />
+            </Provider>
+          </React.StrictMode>,
+        )
+
+        expect(container.firstChild).toMatchInlineSnapshot(`
+            <div>
+              scoped value
+            </div>
+          `)
+      })
+    })
+    describe('forceScope enabled', () => {
+      it('without context', async () => {
+        const $a = createStore(42)
+
+        const View = () => {
+          const a = useUnit($a, {forceScope: true})
+
+          return <div>{a}</div>
+        }
+
+        expect(() => render(<View />)).rejects.toThrow(
+          'No scope found, consider adding <Provider> to app root',
+        )
+      })
+      test('with context', async () => {
+        const $value = createStore('value')
+
+        const Component = () => {
+          const value = useUnit($value, {forceScope: true})
+          return <div>{value}</div>
+        }
+
+        const scope = fork({values: [[$value, 'scoped value']]})
+
+        await render(
+          <React.StrictMode>
+            <Provider value={scope}>
+              <Component />
+            </Provider>
+          </React.StrictMode>,
+        )
+
+        expect(container.firstChild).toMatchInlineSnapshot(`
+            <div>
+              scoped value
+            </div>
+          `)
+      })
     })
   })
 })

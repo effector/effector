@@ -1,30 +1,49 @@
 {
   "name": "effector-react",
-  "version": "22.1.4",
+  "version": "22.3.4",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.mjs",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./effector-react.mjs",
       "require": "./effector-react.cjs.js",
       "default": "./effector-react.mjs"
     },
     "./package.json": "./package.json",
-    "./effector-react.mjs": "./effector-react.mjs",
-    "./scope.mjs": "./scope.mjs",
+    "./effector-react.mjs": {
+      "types": "./effector-react.mjs.d.ts",
+      "import": "./effector-react.mjs",
+      "default": "./effector-react.mjs"
+    },
+    "./scope.mjs": {
+      "types": "./scope.d.ts",
+      "import": "./scope.mjs",
+      "default": "./scope.mjs"
+    },
     "./scope": {
+      "types": "./scope.d.ts",
       "import": "./scope.mjs",
       "require": "./scope.js",
       "default": "./scope.mjs"
     },
     "./ssr": {
+      "types": "./ssr.d.ts",
       "import": "./ssr.mjs",
       "require": "./ssr.js",
       "default": "./ssr.mjs"
     },
-    "./compat": "./compat.js",
-    "./effector-react.umd": "./effector-react.umd.js"
+    "./compat": {
+      "types": "./compat.d.ts",
+      "require": "./compat.js",
+      "default": "./compat.js"
+    },
+    "./effector-react.umd": {
+      "types": "./effector-react.umd.d.ts",
+      "require": "./effector-react.umd.js",
+      "default": "./effector-react.umd.js"
+    }
   },
   "umd:main": "effector-react.umd.js",
   "jsnext:main": "effector-react.mjs",
