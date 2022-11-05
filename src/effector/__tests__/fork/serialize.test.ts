@@ -1,4 +1,5 @@
 import {
+  Scope,
   createStore,
   createEvent,
   createDomain,
@@ -66,6 +67,125 @@ test('serialize: ignore', async () => {
   await allSettled(inc, {scope})
 
   expect(serialize(scope)).toEqual({b: 1})
+})
+
+describe('serialize: custom', () => {
+  test('base case', async () => {
+    expect.assertions(4)
+    let currentScope: Scope
+    const aToStr = (v: number) => `${v}`
+    const inc = createEvent()
+    const $a = createStore(0, {
+      sid: 'a',
+      serialize: {
+        write: value => {
+          expect(currentScope.getState($a)).toEqual(value)
+          return aToStr(value)
+        },
+        read: json => {
+          expect(aToStr(currentScope.getState($a))).toEqual(json)
+          return Number(json)
+        },
+      },
+    })
+    const $b = createStore(0, {sid: 'b'})
+    $a.on(inc, x => x + 1)
+    $b.on(inc, x => x + 1)
+
+    const scope = fork()
+
+    await allSettled(inc, {scope})
+
+    currentScope = scope
+    const values = serialize(scope)
+
+    expect(values).toEqual({a: '1', b: 1})
+
+    const clientScope = fork({
+      values,
+    })
+    expect(clientScope.getState($a)).toEqual(1)
+  })
+
+  test('Map usecase', () => {
+    const $map = createStore(new Map<number, number>(), {
+      sid: 'map',
+      serialize: {
+        write: map => [...map.entries()],
+        read: jsonMap => new Map(jsonMap),
+      },
+    })
+
+    const scope = fork()
+
+    allSettled($map, {scope, params: new Map().set(1, 2).set(2, 3)})
+
+    const values = serialize(scope)
+
+    expect(values).toEqual({
+      map: [...new Map().set(1, 2).set(2, 3)],
+    })
+
+    const clientScope = fork({
+      values,
+    })
+
+    expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
+  })
+
+  test('hydrate case', () => {
+    const domain = createDomain()
+    const $map = domain.createStore(new Map<number, number>(), {
+      sid: 'map',
+      serialize: {
+        write: map => [...map.entries()],
+        read: jsonMap => new Map(jsonMap),
+      },
+    })
+
+    const scope = fork(domain)
+
+    allSettled($map, {scope, params: new Map().set(1, 2).set(2, 3)})
+
+    const values = serialize(scope)
+
+    expect(values).toEqual({
+      map: [...new Map().set(1, 2).set(2, 3)],
+    })
+
+    const clientScope = fork(domain)
+
+    hydrate(clientScope, {values})
+
+    expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
+  })
+  test('does not affect normal ref initialization', () => {
+    const parser = jest.fn()
+    const up = createEvent()
+    const $a = createStore(0, {
+      serialize: {
+        write: value => {
+          return `${value}`
+        },
+        read: _json => {
+          parser()
+          return 42
+        },
+      },
+    }).on(up, s => s + 1)
+
+    const scopeA = fork()
+    allSettled(up, {scope: scopeA})
+    expect(scopeA.getState($a)).toEqual(1)
+
+    const scopeB = fork({
+      values: [[$a, 6]],
+    })
+    allSettled(up, {scope: scopeB})
+    expect(scopeB.getState($a)).toEqual(7)
+
+    expect(parser).toBeCalledTimes(0)
+  })
 })
 
 it('serialize stores in nested domain', () => {

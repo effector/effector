@@ -5,7 +5,7 @@ import type {Domain, Scope, ValuesMap} from '../unit.h'
 import type {Node} from '../index.h'
 import {add, includes} from '../collection'
 import {normalizeValues, traverseStores} from './util'
-import {getGraph} from '../getter'
+import {getGraph, getMeta} from '../getter'
 
 /**
  hydrate state on client
@@ -39,6 +39,10 @@ export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
     // forkPage.sidIdMap[sid] = node.scope.state.id
     if (includes(valuesSidList, sid)) {
       add(storeNodes, node)
+      const serializer = getMeta(node, 'serialize')
+      if (serializer && serializer !== 'ignore') {
+        normalizedValues[sid] = serializer.read(normalizedValues[sid])
+      }
       add(storeValues, normalizedValues[sid])
     }
   })

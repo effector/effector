@@ -19,6 +19,9 @@ export type StateRef = {
   before?: StateRefOp[]
   noInit?: boolean
   sid?: string
+  meta?: {
+    serialize?: 'ignore' | {read: (p: any) => any; write: (p: any) => any}
+  }
 }
 
 export type Config = {

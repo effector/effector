@@ -164,6 +164,7 @@ export interface Domain extends Unit {
 }
 
 export interface Scope extends Unit {
+  fromSerialize?: boolean
   kind: Kind
   graphite: Node
   reg: Record<string, StateRef>
@@ -173,6 +174,7 @@ export interface Scope extends Unit {
   /** value could be set only for stores with sid (they can be created by createStore, restore and combine) */
   sidValuesMap: Record<string, any>
   sidIdMap: Record<string, string>
+  sidSerializeMap: Record<string, (p: any) => any>
   additionalLinks: Record<string, Node[]>
   handlers: Record<string, (params: unknown) => any>
   fxCount: Node
