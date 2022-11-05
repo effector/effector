@@ -107,12 +107,12 @@ describe('custom serialize for stores', () => {
           Type 'string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined' is not assignable to type 'number'.
             Type 'undefined' is not assignable to type 'number'.
       No overload matches this call.
-        Overload 1 of 3, '(iterable: Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>): Map<...>', gave the following error.
-          Argument of type 'Json' is not assignable to parameter of type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>'.
-            Type 'undefined' is not assignable to type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>'.
-        Overload 2 of 3, '(entries?: readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined): Map<...>', gave the following error.
+        Overload 1 of 4, '(iterable?: Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]> | null | undefined): Map<...>', gave the following error.
+          Argument of type 'Json' is not assignable to parameter of type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]> | null | undefined'.
+            Type 'string' is not assignable to type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>'.
+        Overload 2 of 4, '(entries?: readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined): Map<...>', gave the following error.
           Argument of type 'Json' is not assignable to parameter of type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined'.
-            Type 'string' is not assignable to type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined'.
+            Type 'string' is not assignable to type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[]'.
       "
     `)
   })
