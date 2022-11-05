@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "22.3.0",
+  "version": "22.4.0",
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
