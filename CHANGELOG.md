@@ -4,9 +4,9 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 22.4.0
 
-- Add custom serializers for Store ((PR #744)[https://github.com/effector/effector/pull/744/])
-- Allow to pass domain as an argument for createEvent and similar methods ((PR #763)[https://github.com/effector/effector/pull/763])
-- Add `store.reinit` event to set default value into store ((PR #797)[https://github.com/effector/effector/pull/797])
+- Add custom serializers for Store ([PR #744](https://github.com/effector/effector/pull/744/))
+- Allow to pass domain as an argument for createEvent and similar methods ([PR #763](https://github.com/effector/effector/pull/763))
+- Add `store.reinit` event to set default value into store ([PR #797](https://github.com/effector/effector/pull/797))
 
 ```ts
 const $store = createStore<Array<number>>([]);
@@ -23,12 +23,12 @@ sample({
 });
 ```
 
-- Add safe mode for scopeBind ((PR #688)[https://github.com/effector/effector/pull/688])
-- Add `is.attached` method to detect effects created via `attach` ((PR #670)[https://github.com/effector/effector/pull/670])
+- Add safe mode for scopeBind ([PR #688](https://github.com/effector/effector/pull/688))
+- Add `is.attached` method to detect effects created via `attach` ([PR #670](https://github.com/effector/effector/pull/670))
 - Add @farfetched/core and atomic-router to default factories so the one not needed to describe them explicitly
-- Protect against combine argument being broken via Array.slice ((PR #801)[https://github.com/effector/effector/pull/801])
-- Add "type" entry for package exports ((PR #759)[https://github.com/effector/effector/pull/759])
-- Finally allow `Gate` to be serialized (as this requires changes in babel plugin) ((PR #683)[https://github.com/effector/effector/pull/683])
+- Protect against combine argument being broken via Array.slice ([PR #801](https://github.com/effector/effector/pull/801))
+- Add "type" entry for package exports ([PR #759](https://github.com/effector/effector/pull/759))
+- Finally allow `Gate` to be serialized (as this requires changes in babel plugin) ([PR #683](https://github.com/effector/effector/pull/683))
 
 ## effector-react 22.3.4
 
