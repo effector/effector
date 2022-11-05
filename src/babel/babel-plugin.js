@@ -555,6 +555,7 @@ const normalizeOptions = options => {
               '@farfetched/core',
               '@effector/reflect',
               '@effector/reflect/ssr',
+              '@effector/reflect/scope',
               'atomic-router',
             ],
       ),
