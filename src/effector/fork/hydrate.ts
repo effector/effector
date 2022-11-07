@@ -1,5 +1,5 @@
 import {is, isObject} from '../is'
-import {assert} from '../throw'
+import {assert, deprecate} from '../throw'
 import {launch} from '../kernel'
 import type {Domain, Scope, ValuesMap} from '../unit.h'
 import type {Node} from '../index.h'
@@ -17,6 +17,7 @@ import {getGraph, getMeta} from '../getter'
 
  */
 export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
+  deprecate(true, 'hydrate', 'Fork API')
   assert(isObject(values), 'values property should be an object')
   const normalizedValues = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(normalizedValues)

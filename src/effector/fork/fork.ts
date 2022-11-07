@@ -1,5 +1,5 @@
 import {is} from '../is'
-import {assert} from '../throw'
+import {assert, deprecate} from '../throw'
 import type {Domain, ValuesMap, HandlersMap, Scope} from '../unit.h'
 import {normalizeValues} from './util'
 import {createScope} from './createScope'
@@ -20,6 +20,8 @@ export function fork(
   let config: ForkConfig | undefined = hasTarget
     ? optionalConfig
     : targetOrConfig
+
+  deprecate(!is.domain(target), 'fork(domain)', 'fork()')
 
   const scope = createScope(target)
 
