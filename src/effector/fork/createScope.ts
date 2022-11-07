@@ -1,5 +1,6 @@
 import {getForkPage, getGraph, getMeta, getParent} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
+import {is} from '../is'
 import {createNode} from '../createNode'
 import {calc, compute} from '../step'
 import type {Domain, Scope, SettledDefer, Store} from '../unit.h'
@@ -7,7 +8,7 @@ import type {StateRef} from '../index.h'
 import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, SCOPE} from '../tag'
 
-export function createScope(unit?: Domain): Scope {
+export function createScope(baseUnit?: Domain | Scope): Scope {
   const forkInFlightCounter = createNode({
     scope: {
       defers: [],
@@ -100,7 +101,7 @@ export function createScope(unit?: Domain): Scope {
     ],
   })
   const resultScope: Scope = {
-    cloneOf: unit,
+    cloneOf: is.domain(baseUnit) ? baseUnit : undefined,
     reg: page,
     sidValuesMap: {},
     sidIdMap: {},
@@ -129,6 +130,36 @@ export function createScope(unit?: Domain): Scope {
     warnSerializeNode,
     scopeRef: {ref: null as unknown as Scope},
   }
+  // set initial scope ref to the scope itself
   resultScope.scopeRef.ref = resultScope
+
+  if (is.scope(baseUnit)) {
+    const oldScope = baseUnit
+    // Update old scope scopeRef
+    // to redirect all effect.finally and scope-binded events to new scope
+    oldScope.scopeRef.ref = resultScope
+
+    // transfer old scope scopeRef to the new scope,
+    // so any further fork(scope) calls will also redirect any effect.finally and scope-binded events to new scope
+    resultScope.scopeRef = oldScope.scopeRef
+
+    // transfer old scope state to the new one
+    resultScope.sidValuesMap = Object.assign({}, oldScope.sidValuesMap)
+    resultScope.sidIdMap = oldScope.sidIdMap
+    resultScope.sidSerializeMap = oldScope.sidSerializeMap
+
+    // transfer old scope handlers to the new one
+    resultScope.handlers = oldScope.handlers
+
+    // transfer old scope additionalLinks to the new one
+    resultScope.additionalLinks = oldScope.additionalLinks
+
+    // transfer old reg to the new one
+    resultScope.reg = {}
+    for (const key in oldScope.reg) {
+      resultScope.reg[key] = {...oldScope.reg[key]}
+    }
+  }
+
   return resultScope
 }
