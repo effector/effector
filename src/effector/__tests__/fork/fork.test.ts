@@ -12,6 +12,7 @@ import {
   combine,
   Store,
   Scope,
+  scopeBind,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -771,4 +772,113 @@ describe('scope watch calls', () => {
     })
     store.updates.watch(upd => fnB(upd))
   }
+})
+
+describe('fork another scope', () => {
+  test('new scope contains values of the old one', async () => {
+    const changeValues = createEvent<{a: number; b: number}>()
+    const $a = createStore(0).on(changeValues, (_, {a}) => a)
+    const $b = createStore(0).on(changeValues, (_, {b}) => b)
+
+    const oldScope = fork()
+
+    await allSettled(changeValues, {scope: oldScope, params: {a: 1, b: 2}})
+
+    const newScope = fork(oldScope)
+
+    const oldState = serialize(oldScope)
+    const newState = serialize(newScope)
+
+    expect(oldState).toEqual(newState)
+    expect(oldScope.getState($a)).toEqual(newScope.getState($a))
+    expect(oldScope.getState($b)).toEqual(newScope.getState($b))
+  })
+
+  test.skip('new scope allows to add new values on top of old ones', async () => {
+    const changeValues = createEvent<{a: number; b: number}>()
+    const $a = createStore(0, {sid: '$a'}).on(changeValues, (_, {a}) => a)
+    const $b = createStore(0).on(changeValues, (_, {b}) => b)
+
+    const oldScope = fork()
+
+    await allSettled(changeValues, {scope: oldScope, params: {a: 1, b: 2}})
+
+    const newScope = fork(oldScope, {
+      values: {
+        $a: 3,
+      },
+    })
+
+    const oldState = serialize(oldScope)
+    const newState = serialize(newScope)
+
+    expect(oldState).toEqual(newState)
+    expect(oldScope.getState($b)).toEqual(newScope.getState($b))
+    expect(newScope.getState($a)).toEqual(3)
+  })
+
+  test.todo('new scope contains handlers of the old scope')
+  test.todo('new scope allows to add new handlers on top of old ones')
+
+  test('new scope owns scopeBind of the old one', async () => {
+    const changeValues = createEvent<{a: number; b: number}>()
+    const $a = createStore(0).on(changeValues, (_, {a}) => a)
+    const $b = createStore(0).on(changeValues, (_, {b}) => b)
+
+    const oldScope = fork()
+
+    const changeValuesOldScope = scopeBind(changeValues, {scope: oldScope})
+
+    changeValuesOldScope({a: 1, b: 2})
+
+    expect(oldScope.getState($a)).toEqual(1)
+    expect(oldScope.getState($b)).toEqual(2)
+
+    const newScope = fork(oldScope)
+
+    changeValuesOldScope({a: 3, b: 4})
+
+    expect(newScope.getState($a)).toEqual(3)
+    expect(newScope.getState($b)).toEqual(4)
+    // should stay unchanged
+    expect(oldScope.getState($a)).toEqual(1)
+    expect(oldScope.getState($b)).toEqual(2)
+  })
+
+  test.todo('scopeBind to old scope after fork should not be allowed')
+
+  test('new scope owns running effects of the old one', async () => {
+    const anFx = createEffect(async () => new Promise(r => setTimeout(r, 10)))
+    const anotherFx = createEffect(
+      async () => new Promise(r => setTimeout(r, 5)),
+    )
+
+    const $fxStart = createStore(0).on([anFx, anotherFx], n => n + 1)
+    const $fxEnd = createStore(0).on([anFx.done, anotherFx.done], n => n + 1)
+
+    const oldScope = fork()
+
+    allSettled(anFx, {scope: oldScope})
+    allSettled(anotherFx, {scope: oldScope})
+    expect(oldScope.getState($fxStart)).toEqual(2)
+    expect(oldScope.getState($fxEnd)).toEqual(0)
+
+    const newScope = fork(oldScope)
+
+    await new Promise(r => setTimeout(r, 15))
+
+    expect(newScope.getState($fxStart)).toEqual(2)
+    expect(newScope.getState($fxEnd)).toEqual(2)
+
+    // should remain unchanged
+    expect(oldScope.getState($fxStart)).toEqual(2)
+    expect(oldScope.getState($fxEnd)).toEqual(0)
+  })
+
+  test.todo('allSettled to old scope after fork should not be allowed')
+
+  test.todo('allSettled of the old scope is immediatly resolved after fork')
+
+  test.todo('new scope owns createWatch of the old scope')
+  test.todo('createWatch to old scope after fork should not be allowed')
 })
