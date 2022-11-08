@@ -13,6 +13,7 @@ import {
   Store,
   Scope,
   scopeBind,
+  sample,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -818,8 +819,62 @@ describe('fork another scope', () => {
     expect(newScope.getState($a)).toEqual(3)
   })
 
-  test.todo('new scope contains handlers of the old scope')
-  test.todo('new scope allows to add new handlers on top of old ones')
+  test('new scope contains handlers of the old scope', async () => {
+    const mockOriginal = jest.fn()
+    const mockForked = jest.fn()
+    const myFx = createEffect(() => mockOriginal())
+
+    const oldScope = fork({
+      handlers: [[myFx, mockForked]],
+    })
+
+    await allSettled(myFx, {scope: oldScope})
+
+    expect(mockOriginal).not.toHaveBeenCalled()
+    expect(mockForked).toBeCalledTimes(1)
+
+    const newScope = fork(oldScope)
+
+    await allSettled(myFx, {scope: newScope})
+
+    expect(mockOriginal).not.toHaveBeenCalled()
+    expect(mockForked).toBeCalledTimes(2)
+  })
+
+  test('new scope allows to add new handlers on top of old ones', async () => {
+    const mockOriginal = jest.fn()
+    const mockForked = jest.fn()
+    const aFx = createEffect(() => mockOriginal())
+    const bFx = createEffect(() => mockOriginal())
+
+    const start = createEvent()
+
+    sample({
+      clock: start,
+      target: [aFx, bFx],
+    })
+
+    const oldScope = fork({
+      handlers: [[aFx, mockForked]],
+    })
+
+    await allSettled(start, {scope: oldScope})
+
+    expect(mockOriginal).toBeCalledTimes(1)
+    expect(mockForked).toBeCalledTimes(1)
+
+    const newScope = fork(oldScope, {
+      handlers: [
+        [aFx, mockForked],
+        [bFx, mockForked],
+      ],
+    })
+
+    await allSettled(start, {scope: newScope})
+
+    expect(mockOriginal).toBeCalledTimes(1)
+    expect(mockForked).toBeCalledTimes(3)
+  })
 
   test('new scope owns scopeBind of the old one', async () => {
     const changeValues = createEvent<{a: number; b: number}>()
