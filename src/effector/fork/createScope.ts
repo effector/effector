@@ -144,7 +144,7 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
     resultScope.scopeRef = oldScope.scopeRef
 
     // transfer old scope state to the new one
-    resultScope.sidValuesMap = Object.assign({}, oldScope.sidValuesMap)
+    resultScope.sidValuesMap = {...oldScope.sidValuesMap}
     resultScope.sidSerializeMap = oldScope.sidSerializeMap
 
     // transfer old scope handlers to the new one
