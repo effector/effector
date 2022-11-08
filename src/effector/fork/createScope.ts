@@ -145,7 +145,6 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
 
     // transfer old scope state to the new one
     resultScope.sidValuesMap = Object.assign({}, oldScope.sidValuesMap)
-    resultScope.sidIdMap = oldScope.sidIdMap
     resultScope.sidSerializeMap = oldScope.sidSerializeMap
 
     // transfer old scope handlers to the new one
@@ -153,12 +152,6 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
 
     // transfer old scope additionalLinks to the new one
     resultScope.additionalLinks = oldScope.additionalLinks
-
-    // transfer old reg to the new one
-    resultScope.reg = {}
-    for (const key in oldScope.reg) {
-      resultScope.reg[key] = {...oldScope.reg[key]}
-    }
   }
 
   return resultScope
