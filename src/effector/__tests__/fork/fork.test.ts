@@ -794,7 +794,7 @@ describe('fork another scope', () => {
     expect(oldScope.getState($b)).toEqual(newScope.getState($b))
   })
 
-  test.skip('new scope allows to add new values on top of old ones', async () => {
+  test('new scope allows to add new values on top of old ones', async () => {
     const changeValues = createEvent<{a: number; b: number}>()
     const $a = createStore(0, {sid: '$a'}).on(changeValues, (_, {a}) => a)
     const $b = createStore(0).on(changeValues, (_, {b}) => b)
@@ -812,8 +812,9 @@ describe('fork another scope', () => {
     const oldState = serialize(oldScope)
     const newState = serialize(newScope)
 
-    expect(oldState).toEqual(newState)
+    expect(oldState).not.toEqual(newState)
     expect(oldScope.getState($b)).toEqual(newScope.getState($b))
+    expect(oldScope.getState($a)).toEqual(1)
     expect(newScope.getState($a)).toEqual(3)
   })
 
