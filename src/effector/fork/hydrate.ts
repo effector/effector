@@ -17,7 +17,8 @@ import {getGraph, getMeta} from '../getter'
 
  */
 export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
-  deprecate(true, 'hydrate', 'Fork API')
+  // TODO: deprecate once major release is ready
+  // deprecate(true, 'hydrate', 'Fork API')
   assert(isObject(values), 'values property should be an object')
   const normalizedValues = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(normalizedValues)

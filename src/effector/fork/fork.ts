@@ -21,7 +21,8 @@ export function fork(
     ? optionalConfig
     : targetOrConfig
 
-  deprecate(!is.domain(target), 'fork(domain)', 'fork()')
+  // TODO: deprecate once major release is ready
+  // deprecate(!is.domain(target), 'fork(domain)', 'fork()')
 
   const scope = createScope(target)
 
