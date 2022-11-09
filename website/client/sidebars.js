@@ -32,8 +32,8 @@ const sidebar = {
   ],
   Explanation: [
     'glossary',
-    'advanced-guide/computation-priority',
-    'advanced-guide/prior-art',
+    'explanation/computation-priority',
+    'explanation/prior-art',
   ],
   API: [
     {

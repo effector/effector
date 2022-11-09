@@ -755,9 +755,9 @@ Your support allows us to improve the developer experience 🧡.
 <tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/VadimFilimonov>
-            <img src=https://avatars.githubusercontent.com/u/11225648?v=4 width="100;"  alt=VadimFilimonov/>
+            <img src=https://avatars.githubusercontent.com/u/11225648?v=4 width="100;"  alt=Vadim Filimonov/>
             <br />
-            <sub style="font-size:14px"><b>VadimFilimonov</b></sub>
+            <sub style="font-size:14px"><b>Vadim Filimonov</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
