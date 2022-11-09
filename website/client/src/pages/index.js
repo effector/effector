@@ -319,6 +319,11 @@ const users = [
     alt: 'Global CTO Forum',
   },
   {
+    url: 'express24.svg',
+    alt: 'Express24',
+    scale: 1.6,
+  },
+  {
     url: 'stellarX.svg',
     alt: 'StellarX',
   },
