@@ -3095,7 +3095,7 @@ export function fork(config?: {
 export function allSettled<FX extends Effect<any, any, any>>(
   unit: FX,
   config: {scope: Scope; params: EffectParams<FX>},
-): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
+): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>} | {status: 'forked'}>
 /**
  * Run effect withot arguments in scope and wait for all triggered effects to settle. This method never throw an error
  * @param unit effect to run
@@ -3104,7 +3104,7 @@ export function allSettled<FX extends Effect<any, any, any>>(
 export function allSettled<FX extends Effect<void, any, any>>(
   unit: FX,
   config: {scope: Scope},
-): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
+): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>} | {status: 'forked'}>
 /**
  * Run unit in scope and wait for all triggered effects to settle. This method never throw an error
  * @param unit event or store to run
@@ -3113,7 +3113,7 @@ export function allSettled<FX extends Effect<void, any, any>>(
 export function allSettled<T>(
   unit: Unit<T>,
   config: {scope: Scope; params: T},
-): Promise<void>
+): Promise<void | {status: 'forked'}>
 /**
  * Run unit without arguments in scope and wait for all triggered effects to settle. This method never throw an error
  * @param unit event or store to run
@@ -3122,7 +3122,7 @@ export function allSettled<T>(
 export function allSettled(
   unit: Unit<void>,
   config: {scope: Scope},
-): Promise<void>
+): Promise<void | {status: 'forked'}>
 
 export function createWatch<T>({
   unit,

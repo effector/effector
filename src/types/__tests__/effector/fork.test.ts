@@ -212,7 +212,7 @@ describe('allSettled', () => {
   test('event', () => {
     const app = createDomain()
     const event = app.createEvent<number>()
-    const req: Promise<void> = allSettled(event, {
+    const req: Promise<void | {status: 'forked'}> = allSettled(event, {
       scope: fork(app),
       params: 0,
     })
@@ -225,7 +225,7 @@ describe('allSettled', () => {
   test('void event', () => {
     const app = createDomain()
     const event = app.createEvent()
-    const req: Promise<void> = allSettled(event, {
+    const req: Promise<void | {status: 'forked'}> = allSettled(event, {
       scope: fork(app),
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -238,7 +238,7 @@ describe('allSettled', () => {
     const app = createDomain()
     const fx = app.createEffect((x: number) => x.toString())
     const req: Promise<
-      {status: 'done'; value: string} | {status: 'fail'; value: Error}
+      {status: 'done'; value: string} | {status: 'fail'; value: Error} | {status: 'forked'}
     > = allSettled(fx, {
       scope: fork(app),
       params: 0,
@@ -253,7 +253,7 @@ describe('allSettled', () => {
     const app = createDomain()
     const fx = app.createEffect(() => 'ok')
     const req: Promise<
-      {status: 'done'; value: string} | {status: 'fail'; value: Error}
+      {status: 'done'; value: string} | {status: 'fail'; value: Error} | {status: 'forked'}
     > = allSettled(fx, {
       scope: fork(app),
     })
