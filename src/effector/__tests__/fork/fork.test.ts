@@ -1033,12 +1033,12 @@ describe('fork another scope', () => {
       `"createWatch cannot be called on a dead scope"`,
     )
   })
-})
 
-test('Live scope can be distinguished from the forked one', () => {
-  const scope = fork()
-  const newScope = fork(scope)
+  test('Live scope can be distinguished from the forked one', () => {
+    const scope = fork()
+    const newScope = fork(scope)
 
-  expect(scope.live).toEqual(false)
-  expect(newScope.live).toEqual(true)
+    expect(scope.live).toEqual(false)
+    expect(newScope.live).toEqual(true)
+  })
 })
