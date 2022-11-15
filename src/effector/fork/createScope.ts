@@ -42,10 +42,7 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
           if (scope.inFlight > 0 || defers.length === 0) return
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
-            forEach(defers.splice(0, defers.length), defer => {
-              setForkPage(defer.parentFork)
-              defer.rs(defer.value)
-            })
+            resolveDefers(defers)
           })
         },
         false,
@@ -157,7 +154,21 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
 
     // mark old scope as not "live" anymore
     oldScope.live = false
+
+    // resolve all allSettled calls of old scope
+    resolveDefers(oldScope.fxCount.scope.defers, {status: 'forked'})
+    oldScope.fxCount.scope.inFlight = 0
   }
 
   return resultScope
+}
+
+function resolveDefers(
+  defers: SettledDefer[],
+  overrideValue?: {status: 'forked'},
+) {
+  forEach(defers.splice(0, defers.length), defer => {
+    setForkPage(defer.parentFork)
+    defer.rs(overrideValue || defer.value)
+  })
 }
