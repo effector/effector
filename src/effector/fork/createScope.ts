@@ -101,6 +101,7 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
     ],
   })
   const resultScope: Scope = {
+    live: true,
     cloneOf: is.domain(baseUnit) ? baseUnit : undefined,
     reg: page,
     sidValuesMap: {},
@@ -152,6 +153,9 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
 
     // transfer old scope additionalLinks to the new one
     resultScope.additionalLinks = oldScope.additionalLinks
+
+    // mark old scope as not "live" anymore
+    oldScope.live = false
   }
 
   return resultScope

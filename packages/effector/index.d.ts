@@ -3001,6 +3001,7 @@ export function combine<T extends Tuple<Store<any>>>(
  * Fully isolated instance of application. The primary purpose of scope includes SSR and testing
  */
 export interface Scope extends Unit<any> {
+  live: boolean;
   getState<T>(store: Store<T>): T
 }
 

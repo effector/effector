@@ -164,6 +164,7 @@ export interface Domain extends Unit {
 }
 
 export interface Scope extends Unit {
+  live: boolean;
   fromSerialize?: boolean
   kind: Kind
   graphite: Node
