@@ -9,7 +9,7 @@ export const getStoreState = (store: Store<any>): StateRef => store.stateRef
 export const getValue = (stack: any) => stack.value
 export const getSubscribers = (store: Store<any>) => store.subscribers
 export const getParent = (unit: any) => unit.parent
-export const getForkPage = (val: any): Scope | void => val.scope
+export const getForkPage = (val: any): Scope | void => val.scope?.scopeRef.ref
 export const getMeta = (unit: NodeUnit, field: string) =>
   getGraph(unit).meta[field]
 export const setMeta = (unit: NodeUnit, field: string, value: unknown) =>
