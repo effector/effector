@@ -958,7 +958,21 @@ describe('fork another scope', () => {
     }).toThrow()
   })
 
-  test.todo('allSettled of the old scope is immediatly resolved after fork')
+  test('allSettled of the old scope is immediatly resolved after fork', async () => {
+    const fx = createEffect(async () => await new Promise(r => setTimeout(r, 10)))
+
+    const scope = fork()
+
+    const promise = allSettled(fx, {scope});
+
+    fork(scope);
+
+    const final = await promise;
+
+    expect(final).toEqual({
+      status: "forked"
+    })
+  })
 
   test('new scope owns createWatch of the old scope', async () => {
     const $source = createStore('a')
