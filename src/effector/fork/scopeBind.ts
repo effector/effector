@@ -14,7 +14,11 @@ export function scopeBind(
     scope || forkPage || safe,
     'scopeBind cannot be called outside of forked .watch',
   )
-  const savedScopeRef = (scope || forkPage)?.scopeRef
+  const forkRoot = scope || forkPage;
+
+  assert(!forkRoot || forkRoot.live, 'scopeBind cannot be called on dead scope')
+
+  const savedScopeRef = forkRoot?.scopeRef
   return is.effect(unit)
     ? (params: any) => {
         const req = createDefer()

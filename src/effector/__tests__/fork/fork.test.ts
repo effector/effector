@@ -913,7 +913,9 @@ describe('fork another scope', () => {
     }).not.toThrow()
     expect(() => {
       scopeBind(event, {scope})
-    }).toThrow()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"scopeBind cannot be called on dead scope"`,
+    )
   })
 
   test('new scope owns running effects of the old one', async () => {
@@ -955,22 +957,26 @@ describe('fork another scope', () => {
     }).not.toThrow()
     expect(() => {
       allSettled(event, {scope})
-    }).toThrow()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"allSettled cannot be called on dead scope"`,
+    )
   })
 
   test('allSettled of the old scope is immediatly resolved after fork', async () => {
-    const fx = createEffect(async () => await new Promise(r => setTimeout(r, 10)))
+    const fx = createEffect(
+      async () => await new Promise(r => setTimeout(r, 10)),
+    )
 
     const scope = fork()
 
-    const promise = allSettled(fx, {scope});
+    const promise = allSettled(fx, {scope})
 
-    fork(scope);
+    fork(scope)
 
-    const final = await promise;
+    const final = await promise
 
     expect(final).toEqual({
-      status: "forked"
+      status: 'forked',
     })
   })
 
@@ -1023,14 +1029,16 @@ describe('fork another scope', () => {
         scope,
         fn: () => {},
       })
-    }).toThrow()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"createWatch cannot be called on a dead scope"`,
+    )
   })
 })
 
 test('Live scope can be distinguished from the forked one', () => {
-  const scope = fork();
-  const newScope = fork(scope);
+  const scope = fork()
+  const newScope = fork(scope)
 
-  expect(scope.live).toEqual(false);
-  expect(newScope.live).toEqual(true);
+  expect(scope.live).toEqual(false)
+  expect(newScope.live).toEqual(true)
 })

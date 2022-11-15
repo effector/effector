@@ -1,5 +1,6 @@
 import {add} from '../collection'
 import {createDefer} from '../defer'
+import {assert} from '../throw'
 import {is} from '../is'
 import {launch, forkPage} from '../kernel'
 import type {Scope, Event, Effect, DataCarrier, SettledDefer} from '../unit.h'
@@ -14,6 +15,9 @@ export function allSettled<T>(
     return Promise.reject(
       new Error('first argument accepts only effects, events and stores'),
     )
+  assert(scope, 'scope is required')
+  assert(scope.live, 'allSettled cannot be called on dead scope')
+
   const defer = createDefer() as SettledDefer
   defer.parentFork = forkPage
   const {fxCount} = scope

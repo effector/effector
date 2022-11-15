@@ -1,5 +1,6 @@
 import {clearNode} from './clearNode'
 import {createNode} from './createNode'
+import {assert} from './throw'
 import type {Node, Subscription, Unit} from './index.h'
 import {step} from './step'
 import {Scope} from './unit.h'
@@ -15,6 +16,7 @@ export function createWatch<T>({
 }): Subscription {
   const seq = [step.run({fn: value => fn(value)})]
   if (scope) {
+    assert(scope.live, 'createWatch cannot be called on a dead scope')
     const node = createNode({node: seq})
     const id = (unit as any).graphite.id
     const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
