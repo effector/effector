@@ -1026,3 +1026,11 @@ describe('fork another scope', () => {
     }).toThrow()
   })
 })
+
+test('Live scope can be distinguished from the forked one', () => {
+  const scope = fork();
+  const newScope = fork(scope);
+
+  expect(scope.live).toEqual(false);
+  expect(newScope.live).toEqual(true);
+})
