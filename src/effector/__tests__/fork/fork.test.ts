@@ -14,6 +14,7 @@ import {
   Scope,
   scopeBind,
   sample,
+  createWatch,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -901,7 +902,19 @@ describe('fork another scope', () => {
     expect(oldScope.getState($b)).toEqual(2)
   })
 
-  test.todo('scopeBind to old scope after fork should not be allowed')
+  test('scopeBind to old scope after fork should not be allowed', () => {
+    const event = createEvent()
+
+    const scope = fork()
+    const newScope = fork(scope)
+
+    expect(() => {
+      scopeBind(event, {scope: newScope})
+    }).not.toThrow()
+    expect(() => {
+      scopeBind(event, {scope})
+    }).toThrow()
+  })
 
   test('new scope owns running effects of the old one', async () => {
     const anFx = createEffect(async () => new Promise(r => setTimeout(r, 10)))
@@ -931,10 +944,71 @@ describe('fork another scope', () => {
     expect(oldScope.getState($fxEnd)).toEqual(0)
   })
 
-  test.todo('allSettled to old scope after fork should not be allowed')
+  test('allSettled to old scope after fork should not be allowed', () => {
+    const event = createEvent()
+
+    const scope = fork()
+    const newScope = fork(scope)
+
+    expect(() => {
+      allSettled(event, {scope: newScope})
+    }).not.toThrow()
+    expect(() => {
+      allSettled(event, {scope})
+    }).toThrow()
+  })
 
   test.todo('allSettled of the old scope is immediatly resolved after fork')
 
-  test.todo('new scope owns createWatch of the old scope')
-  test.todo('createWatch to old scope after fork should not be allowed')
+  test('new scope owns createWatch of the old scope', async () => {
+    const $source = createStore('a')
+    const event = createEvent()
+
+    const watch = jest.fn()
+    const scopeA = fork()
+
+    createWatch({
+      unit: sample({
+        source: $source,
+        clock: event,
+      }),
+      scope: scopeA,
+      fn: watch,
+    })
+
+    await allSettled(event, {scope: scopeA})
+
+    expect(watch).toBeCalledTimes(1)
+    expect(argumentHistory(watch)).toEqual(['a'])
+
+    const scopeB = fork({
+      values: [[$source, 'b']],
+    })
+
+    await allSettled(event, {scope: scopeB})
+
+    expect(watch).toBeCalledTimes(2)
+    expect(argumentHistory(watch)).toEqual(['a', 'b'])
+  })
+  test('createWatch to old scope after fork should not be allowed', () => {
+    const event = createEvent()
+
+    const scope = fork()
+    const newScope = fork(scope)
+
+    expect(() => {
+      createWatch({
+        unit: event,
+        scope: newScope,
+        fn: () => {},
+      })
+    }).not.toThrow()
+    expect(() => {
+      createWatch({
+        unit: event,
+        scope,
+        fn: () => {},
+      })
+    }).toThrow()
+  })
 })
