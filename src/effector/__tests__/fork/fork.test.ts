@@ -1001,7 +1001,7 @@ describe('fork another scope', () => {
     expect(watch).toBeCalledTimes(1)
     expect(argumentHistory(watch)).toEqual(['a'])
 
-    const scopeB = fork({
+    const scopeB = fork(scopeA, {
       values: [[$source, 'b']],
     })
 

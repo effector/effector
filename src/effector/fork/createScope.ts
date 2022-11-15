@@ -153,6 +153,7 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
 
     // transfer old scope additionalLinks to the new one
     resultScope.additionalLinks = oldScope.additionalLinks
+    oldScope.additionalLinks = {}
 
     // mark old scope as not "live" anymore
     oldScope.live = false
