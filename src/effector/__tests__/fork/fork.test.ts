@@ -1041,4 +1041,68 @@ describe('fork another scope', () => {
     expect(scope.live).toEqual(false)
     expect(newScope.live).toEqual(true)
   })
+
+  test('edge case: scopeBind inside effect catches correct scope', async () => {
+    const $source = createStore("a")
+    const event = createEvent()
+    const watch = jest.fn();
+    sample({
+      source: $source,
+      clock: event,
+    }).watch(watch)
+
+    const waitFx = createEffect(async () => new Promise(r => setTimeout(r, 0)))
+    const effect = createEffect(async () => {
+      scopeBind(event)()
+    })
+
+    sample({
+      clock: waitFx.done,
+      target: effect
+    })
+
+    const scope = fork();
+    allSettled(waitFx, {scope})
+
+    expect(watch).toBeCalledTimes(0)
+
+    const scopeB = fork(scope, {
+      values: [[$source, "b"]]
+    })
+
+    await new Promise(r => setTimeout(r, 0))
+
+    expect(watch).toBeCalledTimes(1)
+    expect(watch).toBeCalledWith("b")
+  })
+
+  test('edge case: controller effect resets to correct scope', async () => {
+    const $source = createStore("a")
+    const event = createEvent()
+    const watch = jest.fn();
+    sample({
+      source: $source,
+      clock: event,
+    }).watch(watch)
+
+    const waitFx = createEffect(async () => new Promise(r => setTimeout(r, 5)))
+    const effect = createEffect(async () => {
+      await waitFx()
+      event()
+    })
+
+    const scope = fork();
+    allSettled(effect, {scope})
+
+    expect(watch).toBeCalledTimes(0)
+
+    const scopeB = fork(scope, {
+      values: [[$source, "b"]]
+    })
+
+    await new Promise(r => setTimeout(r, 5))
+
+    expect(watch).toBeCalledTimes(1)
+    expect(watch).toBeCalledWith("b")
+  })
 })
