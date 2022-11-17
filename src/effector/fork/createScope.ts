@@ -98,7 +98,7 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
     ],
   })
   const resultScope: Scope = {
-    live: true,
+    alive: true,
     cloneOf: is.domain(baseUnit) ? baseUnit : undefined,
     reg: page,
     sidValuesMap: {},
@@ -152,8 +152,8 @@ export function createScope(baseUnit?: Domain | Scope): Scope {
     resultScope.additionalLinks = oldScope.additionalLinks
     oldScope.additionalLinks = {}
 
-    // mark old scope as not "live" anymore
-    oldScope.live = false
+    // mark old scope as not "alive" anymore
+    oldScope.alive = false
 
     // resolve all allSettled calls of old scope
     resolveDefers(oldScope.fxCount.scope.defers, {status: 'forked'})

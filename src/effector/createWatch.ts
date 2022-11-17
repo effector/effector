@@ -16,7 +16,7 @@ export function createWatch<T>({
 }): Subscription {
   const seq = [step.run({fn: value => fn(value)})]
   if (scope) {
-    assert(scope.live, 'createWatch cannot be called on a dead scope')
+    assert(scope.alive, 'createWatch cannot be called on a dead scope')
     const node = createNode({node: seq})
     const id = (unit as any).graphite.id
     const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks

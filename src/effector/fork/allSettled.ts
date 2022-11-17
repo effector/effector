@@ -16,7 +16,7 @@ export function allSettled<T>(
       new Error('first argument accepts only effects, events and stores'),
     )
   assert(scope, 'scope is required')
-  assert(scope.live, 'allSettled cannot be called on dead scope')
+  assert(scope.alive, 'allSettled cannot be called on dead scope')
 
   const defer = createDefer() as SettledDefer
   defer.parentFork = forkPage

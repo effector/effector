@@ -16,7 +16,7 @@ export function scopeBind(
   )
   const forkRoot = scope || forkPage;
 
-  assert(!forkRoot || forkRoot.live, 'scopeBind cannot be called on dead scope')
+  assert(!forkRoot || forkRoot.alive, 'scopeBind cannot be called on dead scope')
 
   const savedScopeRef = forkRoot?.scopeRef
   return is.effect(unit)

@@ -1034,12 +1034,12 @@ describe('fork another scope', () => {
     )
   })
 
-  test('Live scope can be distinguished from the forked one', () => {
+  test('Alive scope can be distinguished from the forked one', () => {
     const scope = fork()
     const newScope = fork(scope)
 
-    expect(scope.live).toEqual(false)
-    expect(newScope.live).toEqual(true)
+    expect(scope.alive).toEqual(false)
+    expect(newScope.alive).toEqual(true)
   })
 
   test('edge case: scopeBind inside effect catches correct scope', async () => {
