@@ -91,7 +91,7 @@ and now improves ecosystem and core functionality.
 [Github](https://github.com/igorkamyshev) • [Telegram](https://t.me/igorkamyshev) • [Commits](https://github.com/effector/effector/commits?author=igorkamyshev)
 
 Igor is working on [Farfetched](https://farfetched.pages.dev) is the advanced data fetching tool.
-Igor made [eslint-plugin-effector](https://github.com/effector/eslint-plugin) and reviewed many of PRs and issues of the effector and ecosystem packages.
+Igor made [eslint-plugin-effector](https://eslint.effector.dev) and reviewed many of PRs and issues of the effector and ecosystem packages.
 
 ### Yan Lobaty
 
