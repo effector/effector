@@ -208,6 +208,25 @@ describe('fork values', () => {
   })
 })
 
+describe('fork handlers', () => {
+  test('effect with custom error', () => {
+    const app = createDomain()
+    const fooFx = app.createEffect<void, void, {message: string}>(() => {})
+
+    const scope = fork(app, {
+      handlers: [
+        [fooFx, () => {}],
+      ],
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
+
 describe('allSettled', () => {
   test('event', () => {
     const app = createDomain()
