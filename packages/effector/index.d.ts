@@ -3047,7 +3047,7 @@ export function fork(
   domain: Domain,
   config?: {
     values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any>, Function]> | {[sid: string]: Function}
+    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function}
   },
 ): Scope
 /**
@@ -3058,7 +3058,7 @@ export function fork(
 export function fork(
   config?: {
     values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any>, Function]> | {[sid: string]: Function}
+    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function}
   },
 ): Scope
 
