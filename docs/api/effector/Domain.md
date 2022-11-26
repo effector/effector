@@ -24,13 +24,13 @@ effector 20.7.0
 
 **Returns**
 
-[_Event_](Event.md): New event
+[_Event_](./Event.md): New event
 
 <hr />
 
 ### `createEffect(handler?)`
 
-Creates an [effect](Effect.md) with given handler
+Creates an [effect](./Effect.md) with given handler
 
 **Arguments**
 
@@ -38,7 +38,7 @@ Creates an [effect](Effect.md) with given handler
 
 **Returns**
 
-[_Effect_](Effect.md): A container for async function.
+[_Effect_](./Effect.md): A container for async function.
 
 :::note since
 effector 21.3.0
@@ -54,7 +54,7 @@ effector 21.3.0
 
 **Returns**
 
-[_Effect_](Effect.md): A container for async function.
+[_Effect_](./Effect.md): A container for async function.
 
 <hr />
 
@@ -66,7 +66,7 @@ effector 21.3.0
 
 **Returns**
 
-[_Store_](Store.md): New store
+[_Store_](./Store.md): New store
 
 <hr />
 
@@ -78,7 +78,7 @@ effector 21.3.0
 
 **Returns**
 
-[_Domain_](Domain.md): New domain
+[_Domain_](./Domain.md): New domain
 
 <hr />
 
@@ -304,5 +304,5 @@ const b = domain.createDomain()
 
 <hr />
 
-[_watcher_]: ../../glossary.md#watcher
-[_subscription_]: ../../glossary.md#subscription
+[_watcher_]: ../../explanation/glossary.md#watcher
+[_subscription_]: ../../explanation/glossary.md#subscription

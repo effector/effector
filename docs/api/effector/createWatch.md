@@ -22,7 +22,7 @@ createWatch<T>(config: {
 
 **Returns**
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function
+[_Subscription_](../../explanation/glossary.md#subscription): Unsubscribe function
 
 #### Example (scope)
 

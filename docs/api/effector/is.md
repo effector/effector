@@ -225,7 +225,7 @@ is.scope(null)
 
 ## `is.unit(value)`
 
-Checks if given value is [unit](../../glossary.md#unit): [store](./Store.md), [event](./Event.md), [effect](./Effect.md), [domain](./Domain.md) or [scope](./Scope.md)
+Checks if given value is [unit](../../explanation/glossary.md#unit): [store](./Store.md), [event](./Event.md), [effect](./Effect.md), [domain](./Domain.md) or [scope](./Scope.md)
 
 **Returns**
 
@@ -289,7 +289,6 @@ If passed not an effect, returns `false`.
 
 boolean
 
-
 ```js
 import {
   is,
@@ -329,26 +328,29 @@ is.attached(null)
 
 [Try it](https://share.effector.dev/qsdTF7og)
 
-
 ### Use case
 
 Sometimes you need to add an error log on effects failures, but only on effects that have been "localized" via `attach`.
 If you leave `onCreateEffect` as it is, without checks, the error log will be duplicated, because it will happen on the parent and the child effect.
 
 ```js
-import { createDomain, attach, is } from 'effector'
+import {createDomain, attach, is} from 'effector'
 
 const logFailuresDomain = createDomain()
 
-logFailuresDomain.onCreateEffect((effect) => {
+logFailuresDomain.onCreateEffect(effect => {
   if (is.attached(effect)) {
-    effect.fail.watch(({ params, error }) => {
-      console.warn(`Effect "${effect.compositeName.fullName}" failed`, params, error)
+    effect.fail.watch(({params, error}) => {
+      console.warn(
+        `Effect "${effect.compositeName.fullName}" failed`,
+        params,
+        error,
+      )
     })
   }
 })
 
-const baseRequestFx = logFailuresDomain.createEffect((path) => {
+const baseRequestFx = logFailuresDomain.createEffect(path => {
   throw new Error(`path ${path}`)
 })
 

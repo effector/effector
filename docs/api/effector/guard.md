@@ -141,7 +141,7 @@ trigger('C')
 **Arguments**
 
 1. `source` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)): Source unit. Will trigger given guard on updates
-2. `filter` (_(payload) => Boolean_): Predicate function, [should be **pure**](../../glossary.md#purity)
+2. `filter` (_(payload) => Boolean_): Predicate function, [should be **pure**](../../explanation/glossary.md#purity)
 
 #### Example 2
 

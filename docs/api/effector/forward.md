@@ -1,14 +1,14 @@
 ---
 id: forward
 title: forward
-description: Method to create connection between units in a declarative way. Sends updates from one set of units to another
+description: Method to create connection between units in a declarative way. Send updates from one set of units to another
 ---
 
 :::info since effector 22.0.0
 core team recommends [sample](sample.md) instead
 :::
 
-Method to create connection between units in a declarative way. Sends updates from one set of units to another
+Method to create connection between units in a declarative way. Send updates from one set of units to another
 
 ## Formulae
 
@@ -21,22 +21,22 @@ forward({
 
 **Arguments**
 
-1. `from` ([Unit | Unit\[\]](../../glossary.md#common-unit)): Source of updates. Forward will listen for changes of these units
+1. `from` ([Unit | Unit\[\]](../../explanation/glossary.md#common-unit)): Source of updates. Forward will listen for changes of these units
 
    - if an [_Event_] is passed, `to` will be triggered on each event trigger and receives event argument
    - if a [_Store_] is passed, `to` will be triggered on each store **change** and receives new value of the store
    - if an [_Effect_] is passed, `to` will be triggered on each effect call and receives effect parameter
-   - if an array of [units](../../glossary.md#common-unit) is passed, `to` will be triggered when any unit in `from` array is triggered
+   - if an array of [units](../../explanation/glossary.md#common-unit) is passed, `to` will be triggered when any unit in `from` array is triggered
 
-2. `to` ([Unit | Unit\[\]](../../glossary.md#common-unit)): Target for updates. `forward` will trigger these units with data from `from`
+2. `to` ([Unit | Unit\[\]](../../explanation/glossary.md#common-unit)): Target for updates. `forward` will trigger these units with data from `from`
    - if passed an [_Event_], it will be triggered with data from `from` unit
    - if passed a [_Store_], data from `from` unit will be written to store and **trigger its update**
    - if passed an [_Effect_], it will be called with data from `from` unit as parameter
-   - if `to` is an array of [units](../../glossary.md#common-unit), each unit in that array will be triggered
+   - if `to` is an array of [units](../../explanation/glossary.md#common-unit), each unit in that array will be triggered
 
 **Returns**
 
-[Subscription](../../glossary.md#subscription): Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
+[Subscription](../../explanation/glossary.md#subscription): Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
 
 :::note since
 Arrays of units are supported since [effector 20.6.0](https://changelog.effector.dev/#effector-20-6-0)
@@ -100,6 +100,6 @@ secondSource('B')
 
 [Try it](https://share.effector.dev/8aVpg8nU)
 
-[_effect_]: Effect.md
-[_store_]: Store.md
-[_event_]: Event.md
+[_effect_]: ./Effect.md
+[_store_]: ./Store.md
+[_event_]: ./Event.md

@@ -3,7 +3,7 @@ id: babel-plugin
 title: Babel plugin
 ---
 
-Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](../../glossary#unit), inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
+Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](../../explanation/glossary.md#unit), inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
 
 For example, in case [effects without handlers](./Effect.md#usehandler), it improves error message by clearly showing in which effect error happened.
 
@@ -134,7 +134,7 @@ export function createEffectStatus(fx) {
   const $status = rootDomain
     .createStore('init')
     .on(fx.finally, (_, {status}) => status)
-    
+
   return $status
 }
 ```
@@ -246,7 +246,6 @@ To use with `effector/babel-plugin`, you have to following next steps:
 
 1. Install `@vitejs/plugin-react` package.
 1. `vite.js.config` should be follows:
-
 
 > Note: `effector/babel-plugin` is not a package, it is bundled with `effector`
 

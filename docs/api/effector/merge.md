@@ -15,7 +15,7 @@ merge(units: Unit[]): Event
 
 **Arguments**
 
-1. `units`: Array of [units](../../glossary.md#common-unit) to be merged
+1. `units`: Array of [units](../../explanation/glossary.md#common-unit) to be merged
 
 **Returns**
 

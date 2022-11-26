@@ -45,7 +45,7 @@ split({
 
 ### Case function
 
-String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](../../glossary.md#purity)
+String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](../../explanation/glossary.md#purity)
 
 ```ts
 split({
@@ -82,7 +82,7 @@ split({
 
 ### Matcher function
 
-Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](./split.md#matcher-store), [should be **pure**](../../glossary.md#purity)
+Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](./split.md#matcher-store), [should be **pure**](../../explanation/glossary.md#purity)
 
 ```ts
 split({
@@ -149,9 +149,9 @@ split({
 
 **Arguments**
 
-- `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
+- `source`: [Unit](../../explanation/glossary.md#common-unit) which will trigger computation in `split`
 - `match`: Single [store with string](./split.md#case-store), single [function which returns string](./split.md#case-function) or object with [boolean stores](./split.md#matching-store) and [functions which returns boolean](./split.md#matching-function)
-- `cases`: Object with [units](../../glossary.md#common-unit) to which data will be passed from `source` after case selection
+- `cases`: Object with [units](../../explanation/glossary.md#common-unit) to which data will be passed from `source` after case selection
 
 **Returns**
 
@@ -260,7 +260,7 @@ split(source, match)
 
 **Arguments**
 
-1. `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
+1. `source`: [Unit](../../explanation/glossary.md#common-unit) which will trigger computation in `split`
 2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
 
 **Returns**

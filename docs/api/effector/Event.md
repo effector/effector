@@ -43,11 +43,11 @@ const unwatch = event.watch(fn)
 
 **Arguments**
 
-1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
+1. `watcher` ([_Watcher_](../../explanation/glossary.md#watcher)): A function that receives `payload`.
 
 **Returns**
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+[_Subscription_](../../explanation/glossary.md#subscription): Unsubscribe function.
 
 #### Example
 
@@ -82,7 +82,7 @@ const second = first.map(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../explanation/glossary.md#purity).
 
 **Returns**
 
@@ -127,7 +127,7 @@ const second = first.prepend(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../explanation/glossary.md#purity).
 
 **Returns**
 
@@ -146,21 +146,21 @@ userPropertyChanged.watch(({field, value}) => {
 
 const changeName = userPropertyChanged.prepend(name => ({
   field: 'name',
-  value: name
+  value: name,
 }))
 const changeRole = userPropertyChanged.prepend(role => ({
   field: 'role',
-  value: role.toUpperCase()
+  value: role.toUpperCase(),
 }))
 
 changeName('john')
-// => User property "name" changed to john 
+// => User property "name" changed to john
 
 changeRole('admin')
-// => User property "role" changed to ADMIN 
+// => User property "role" changed to ADMIN
 
 changeName('alice')
-// => User property "name" changed to alice 
+// => User property "name" changed to alice
 ```
 
 [Try it](https://share.effector.dev/XGxlG4LD)
@@ -203,7 +203,7 @@ const second = first.filterMap(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../explanation/glossary.md#purity).
 
 **Returns**
 
@@ -241,7 +241,7 @@ const second = first.filter({fn})
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../explanation/glossary.md#purity).
 
 **Returns**
 

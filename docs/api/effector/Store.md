@@ -7,7 +7,7 @@ keywords:
 description: Store, its methods and properties
 ---
 
-_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](../../glossary.md#common-unit).
+_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](../../explanation/glossary.md#common-unit).
 
 ## Store Methods
 
@@ -34,7 +34,7 @@ const $second = $first.map(fn)
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
-[Should be **pure**](../../glossary.md#purity)
+[Should be **pure**](../../explanation/glossary.md#purity)
 
 **Returns**
 
@@ -72,7 +72,7 @@ changed('hello world')
 
 ### `on(trigger, reducer)`
 
-Updates state when `trigger` is triggered by using [`reducer`](../../glossary.md#reducer). For each trigger, last installed reducer will override previous reducers (useful for dynamic behavior).
+Updates state when `trigger` is triggered by using [`reducer`](../../explanation/glossary.md#reducer). For each trigger, last installed reducer will override previous reducers (useful for dynamic behavior).
 
 #### Formulae
 
@@ -86,7 +86,7 @@ $store.on(trigger, reducer)
 **Arguments**
 
 1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or another [_Store_](./Store.md)
-2. `reducer` [_Reducer_](../../glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
+2. `reducer` [_Reducer_](../../explanation/glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](../../explanation/glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `params`: Parameters passed to event call
@@ -126,7 +126,7 @@ changed(2)
 :::note since
 effector 20.15.0
 :::
-Updates state when any from `triggers` is triggered by using [`reducer`](../../glossary.md#reducer).
+Updates state when any from `triggers` is triggered by using [`reducer`](../../explanation/glossary.md#reducer).
 
 #### Formulae
 
@@ -141,7 +141,7 @@ $store.on([triggerA, triggerB, ...], reducer)
 **Arguments**
 
 1. `triggers` array of [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
-2. `reducer` [_Reducer_](../../glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
+2. `reducer` [_Reducer_](../../explanation/glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](../../explanation/glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `payload`: Value passed to event/effect call, or source if it passed as trigger
@@ -195,11 +195,11 @@ const unwatch = $store.watch(watcher)
 
 **Arguments**
 
-1. `watcher` ([_Watcher_](../../glossary.md#watcher)): Watcher function that receives current store state as the first argument
+1. `watcher` ([_Watcher_](../../explanation/glossary.md#watcher)): Watcher function that receives current store state as the first argument
 
 **Returns**
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function
+[_Subscription_](../../explanation/glossary.md#subscription): Unsubscribe function
 
 #### Example
 
@@ -237,7 +237,7 @@ const unwatch = $store.watch(trigger, watcher)
 
 **Returns**
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function
+[_Subscription_](../../explanation/glossary.md#subscription): Unsubscribe function
 
 #### Example 1
 
@@ -420,7 +420,7 @@ const result = $store.thru(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure**](../../glossary.md#purity)
+1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure**](../../explanation/glossary.md#purity)
 
 **Returns**
 

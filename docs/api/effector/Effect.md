@@ -71,7 +71,7 @@ effect.use(fn)
 - Hint: current handler can be extracted with [`effect.use.getCurrent()`](#usegetcurrent)
 
 :::note
-You must provide a handler either through [`.use`](Effect.md#usehandler) method or `handler` property in [createEffect](createEffect.md), otherwise effect will throw with "no handler used in _%effect name%_" error when effect will be called
+You must provide a handler either through [`.use`](./Effect.md#usehandler) method or `handler` property in [createEffect](./createEffect.md), otherwise effect will throw with "no handler used in _%effect name%_" error when effect will be called
 :::
 
 :::tip See also
@@ -84,7 +84,7 @@ You must provide a handler either through [`.use`](Effect.md#usehandler) method 
 
 **Returns**
 
-([_Effect_](Effect.md)): The same effect
+([_Effect_](./Effect.md)): The same effect
 
 #### Example
 
@@ -122,11 +122,11 @@ const unwatch = effect.watch(fn)
 
 **Arguments**
 
-1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
+1. `watcher` ([_Watcher_](../../explanation/glossary.md#watcher)): A function that receives `payload`.
 
 **Returns**
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+[_Subscription_](../../explanation/glossary.md#subscription): Unsubscribe function.
 
 #### Example
 
@@ -161,7 +161,7 @@ const event = effect.prepend(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../explanation/glossary.md#purity).
 
 **Returns**
 
@@ -184,7 +184,7 @@ const second = first.map(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../explanation/glossary.md#purity).
 
 **Returns**
 
@@ -361,10 +361,7 @@ import {createEffect} from 'effector'
 const fx = createEffect(value => value + 1)
 
 fx.done.watch(({params, result}) => {
-  console.log(
-    'Call with params', params, 
-    'resolved with value', result,
-	)
+  console.log('Call with params', params, 'resolved with value', result)
 })
 
 await fx(2)
@@ -398,10 +395,7 @@ const fx = createEffect(async value => {
 })
 
 fx.fail.watch(({params, error}) => {
-  console.log(
-    'Call with params', params,
-    'rejected with error', error.message
-  )
+  console.log('Call with params', params, 'rejected with error', error.message)
 })
 
 fx(2)
@@ -445,19 +439,19 @@ const fetchApiFx = createEffect(async ({time, ok}) => {
 fetchApiFx.finally.watch(value => {
   switch (value.status) {
     case 'done':
-  		console.log(
+      console.log(
         'Call with params',
         value.params,
         'resolved with value',
-        value.result
+        value.result,
       )
       break
     case 'fail':
-  		console.log(
+      console.log(
         'Call with params',
         value.params,
         'rejected with error',
-        value.error.message
+        value.error.message,
       )
       break
   }
@@ -504,7 +498,7 @@ fetchApiFx.pending.watch(console.log)
 
 const Loading = () => {
   const loading = useStore(fetchApiFx.pending)
-  
+
   return <div>{loading ? 'Loading...' : 'Load complete'}</div>
 }
 

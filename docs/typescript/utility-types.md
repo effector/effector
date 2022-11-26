@@ -7,7 +7,7 @@ Effector provides several utility types to facilitate getting a type of value fr
 
 ## `UnitValue<Type>`
 
-Taking out of [Unit](../glossary.md#common-unit) value type.
+Taking out of [Unit](../explanation/glossary.md#common-unit) value type.
 
 ### Example
 

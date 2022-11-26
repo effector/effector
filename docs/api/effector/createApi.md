@@ -3,7 +3,7 @@ id: createApi
 title: createApi
 ---
 
-`createApi` is a shorthand for creating [events](./Event.md) attached to [store](./Store.md) by providing object with [_reducers_](../../glossary.md#reducer) for them. If source `store` belongs to some [domain](./Domain.md) then new events will also belong to it
+`createApi` is a shorthand for creating [events](./Event.md) attached to [store](./Store.md) by providing object with [_reducers_](../../explanation/glossary.md#reducer) for them. If source `store` belongs to some [domain](./Domain.md) then new events will also belong to it
 
 ## Formulae
 
@@ -13,12 +13,12 @@ createApi(store, api): objectWithEvents
 
 **Arguments**
 
-1. `store` [_Store_](Store.md)
-2. `api` (_Object_) Object with [_reducers_](../../glossary.md#reducer)
+1. `store` [_Store_](./Store.md)
+2. `api` (_Object_) Object with [_reducers_](../../explanation/glossary.md#reducer)
 
 **Returns**
 
-(_`Object`_) Object with [events](Event.md)
+(_`Object`_) Object with [events](./Event.md)
 
 ### Example
 

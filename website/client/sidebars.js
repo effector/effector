@@ -31,7 +31,7 @@ const sidebar = {
     'recipes/react-native/example',
   ],
   Explanation: [
-    'glossary',
+    'explanation/glossary',
     'explanation/computation-priority',
     'explanation/prior-art',
   ],

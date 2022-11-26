@@ -58,23 +58,23 @@ const event = sample({clock: event, source: $store})
 
 `params` (_Object_): Configuration object
 
-- `clock?`: [Unit](../../glossary.md#common-unit) or array of units
+- `clock?`: [Unit](../../explanation/glossary.md#common-unit) or array of units
   - If event or effect: trigger `target` upon event or effect is called
   - If store: trigger `target` upon store is updated
   - If array of units: trigger `target` upon any given unit is called or updated. Shorthand for inline [merge](./merge.md) call
   - If not passed: `source` is used as `clock`
-- `source?`: [Unit](../../glossary.md#common-unit) or object/array with stores
+- `source?`: [Unit](../../explanation/glossary.md#common-unit) or object/array with stores
   - If event or effect: take last invocation argument value. That event or effect must be invoked at least once
   - If store: take current state of given store
   - If array or object with stores: take values from given stores combined to object or array. Shorthand for inline [combine](./combine.md) call
   - If not passed: `clock` is used as `source`
-- `target?`: [Unit](../../glossary.md#common-unit) or array of units
+- `target?`: [Unit](../../explanation/glossary.md#common-unit) or array of units
   - If event or effect: call given event or effect upon `clock` is triggered
   - If store: update given store upon `clock` is triggered
   - If array of units: trigger every given unit upon `clock` is triggered
   - If not passed: new unit will be created under the hood and will be returned as result of the `sample()` call. Type of created target is described [in table beyond](./sample.md#type-of-the-created-target)
 - `filter?` _(Function or [Store](Store.md))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
-- `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](../../glossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
+- `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](../../explanation/glossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
 
 :::note
@@ -120,13 +120,13 @@ It is just another form of the `sample` invocation, with the same sense.
 
 **Arguments**
 
-- `sourceUnit`: Source [unit](../../glossary.md#common-unit)
+- `sourceUnit`: Source [unit](../../explanation/glossary.md#common-unit)
   - If event or effect. Take last invocation argument value. That event or effect must be invoked at least once
   - If store. Take current store`s state
-- `clockUnit`: Clock [unit](../../glossary.md#common-unit). If not passed, `source` is used as clock
+- `clockUnit`: Clock [unit](../../explanation/glossary.md#common-unit). If not passed, `source` is used as clock
   - If event or effect. Trigger sampled unit, upon event or effect is called
   - If store. Trigger sampled unit, upon store is updated
-- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../explanation/glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 **Returns**
 
@@ -173,7 +173,7 @@ submitForm(12345678)
 effector 20.4.0
 :::
 
-Every [unit](../../glossary.md#unit) in effector may have a name.
+Every [unit](../../explanation/glossary.md#unit) in effector may have a name.
 You now can name sampled entities in the same manner as basic ones.
 
 ```js
