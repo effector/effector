@@ -540,6 +540,25 @@ describe('split(config)', () => {
       ]
     `)
   })
+  test('source with object', () => {
+    const $a = createStore(0)
+    const $b = createStore(1)
+    const $matcher = createStore<'a' | 'b'>('a')
+    const whenA = createEvent<{a: number; b: number}>()
+    const whenB = createEvent<{a: number; b: number}>()
+
+    expect(() => {
+      split({
+        // @ts-expect-error
+        source: {a: $a, b: $b},
+        match: $matcher,
+        target: {
+          a: whenA,
+          b: whenB,
+        },
+      })
+    }).toThrowError(/source must be a unit/)
+  })
 })
 
 type Message = Text | Image | Audio | System
