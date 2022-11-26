@@ -46,6 +46,7 @@ export function split(...args: any[]) {
   const matchIsUnit = is.store(match)
   const matchIsFunction = !is.unit(match) && isFunction(match)
   const matchIsShape = !matchIsUnit && !matchIsFunction && isObject(match)
+  assert(is.unit(source), 'source must be a unit')
   if (!targets!) targets = {}
   if (!configForm) {
     assert(matchIsShape, 'match should be an object')
