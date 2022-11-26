@@ -1,7 +1,8 @@
 ---
 id: createStore
-title: createStore
+title: Создание стора
 description: Метод для создания независимого стора
+sidebar_label: createStore
 ---
 
 Метод для создания независимого [стора](./Store.md)

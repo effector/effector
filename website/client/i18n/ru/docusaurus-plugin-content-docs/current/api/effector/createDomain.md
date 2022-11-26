@@ -1,35 +1,36 @@
 ---
 id: createDomain
-title: createDomain
+title: Создание домена
 description: createDomain is a method for creating a domain
+sidebar_label: createDomain
 ---
 
-Creates a [domain](./Domain.md)
+Метод для создания [доменов](./Domain.md)
 
 ```typescript
 createDomain(name?)
 ```
 
-**Arguments**
+**Аргументы**
 
-1. `name`? (_string_): domain name
+1. `name`? (_string_): название домена
 
-**Returns**
+**Возвращает**
 
-[_Domain_](./Domain.md): New domain
+[_Domain_](./Domain.md): Новый домен
 
-#### Example
+#### Пример
 
 ```js
 import {createDomain} from 'effector'
 
-const domain = createDomain() // Unnamed domain
-const httpDomain = createDomain('http') // Named domain
+const domain = createDomain() // неименованный домен
+const httpDomain = createDomain('http') // именованный домен
 
 const statusCodeChanged = httpDomain.createEvent()
 const downloadFx = httpDomain.createEffect()
-const apiDomain = httpDomain.createDomain() // nested domain
+const apiDomain = httpDomain.createDomain() // вложенный домен
 const $data = httpDomain.createStore({status: -1})
 ```
 
-[Try it](https://share.effector.dev/GMpjINHa)
+[Попробовать](https://share.effector.dev/GMpjINHa)

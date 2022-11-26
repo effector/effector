@@ -1,31 +1,32 @@
 ---
 id: attach
-title: attach
+title: Attach
 description: Wrapper for effect, which allows to map effect arguments and use data from stores.
+sidebar_label: attach
 ---
 
-:::note since
+:::note Начиная с
 effector 20.13.0
 :::
-Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use data from [_stores_](Store.md).
+Обертка для [_effect_](Effect.md), которая позволяет преобразовывать аргументы эффектов и использовать данные из [_stores_](Store.md).
 
-Use cases: declarative way to pass values from stores to effects and argument preprocessing.
+Примеры использования: декларативный способ передачи значений из магазинов в эффекты и предварительная обработка аргументов.
 
 С версии `22.4.0`, можно проверить создан ли эффект с помощью метода `attach` — [`is.attached`](./is.md#isattachedvalue).
 
-## Formulae
+## Формула
 
 ```ts
-attach({ effect, mapParams?, source?, name? }): newEffect
+attach({ effect, mapParams?, source?, name? }): Новый эффект
 ```
 
-When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
+Когда вызывается `Новый эффект`, вызовите `mapParams` с параметрами `Новый эффект` и данными из `source`, затем вызовите исходный `effect`.
 
-- If `attach` called without `source`, `mapParams` will be called only with params of the `newEffect`
-- `attach` always returns new [effect](Effect.md)
-- If original `effect` belongs to some [domain](./Domain.md) then `newEffect` will belong to it as well
+- Если `attach` вызывается без `source`, `mapParams` будет вызываться только с параметрами `Новый эффект`.
+- `attach` всегда возвращает новый [эффект](Effect.md)
+- Если исходный `effect` принадлежит некоторому [домену](./Domain.md), то `Новый эффект` также будет принадлежать ему
 
-### Short example
+### Короткий пример
 
 ```js
 import {createEffect, attach} from 'effector'
@@ -44,13 +45,13 @@ const createdFx = attach({
 
 await createdFx('HELLO')
 
-// => Created effect called with "HELLO"
-// => Original effect called with { wrapped: "HELLO" }
+// => Созданный эффект будет вызван с параметром "HELLO"
+// => Оригинальный эффект будет вызван с параметром { wrapped: "HELLO" }
 ```
 
-[Try it](https://share.effector.dev/MpAfRBRi)
+[Попробовать](https://share.effector.dev/MpAfRBRi)
 
-### Short example with source
+### Короткий пример с источником
 
 ```js
 import {createEffect, attach} from 'effector'
@@ -72,13 +73,13 @@ const createdFx = attach({
 
 await createdFx('HELLO')
 
-// => Created effect called with "HELLO" and data 8900
-// => Original effect called with {wrapped: "HELLO", data: 8900}
+// => Созданный эффект будет вызван с параметром "HELLO" и данными 8900
+// => Оригинальный эффект будет вызван с параметром {wrapped: "HELLO", data: 8900}
 ```
 
-[Try it](https://share.effector.dev/3y20Z4I3)
+[Попробовать](https://share.effector.dev/3y20Z4I3)
 
-### Long example
+### Длинный пример
 
 ```js
 import {createEffect, attach, createStore} from 'effector'
@@ -138,24 +139,24 @@ Authorization: Bearer guest_token
 
 ## `attach({effect, source})`
 
-Create effect which will trigger given one with values from `source` stores
+Создайте эффект, который будет вызывать заданный эффект со значениями из хранилищ `source`.
 
-**Arguments**
+**Аргументы**
 
-- `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+- `effect` ([_Effect_](Effect.md)):  Обернутый эффект
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Стор или объект с сторами, значения которых будут переданы во второй аргумент `mapParams`.
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): New effect
+[_Effect_](Effect.md): Новый эффект
 
-## attach with plain function
+## attach с помощью простой функции
 
-:::note since
+:::note Начиная с
 effector 22.0.0
 :::
 
-Create effect which will call async function with values from `source` stores
+Создайте эффект, который будет вызывать асинхронную функцию со значениями из хранилищ `source`.
 
 ```ts
 let resultFx: Effect<Params, Result>
@@ -165,59 +166,59 @@ resultFx = attach({
 })
 ```
 
-**Arguments**
+**Аргументы**
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
-- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Магазин или объект с магазинами, значения которых будут переданы в первый аргумент `effect`.
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): New effect
+[_Effect_](Effect.md): Новый эффект
 
 ## `attach({effect, mapParams})`
 
-Create effect which will trigger given one by transforming params by `mapParams` function
+Создайте эффект, который вызовет заданный эффект, преобразовав параметры с помощью функции `mapParams`.
 
-**Arguments**
+**Аргументы**
 
-- `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works like [event.prepend](Event.md#prependfn). Errors happened in `mapParams` function will force attached effect to fail
+- `effect` ([_Effect_](Effect.md)): Обернутый эффект
+- `mapParams` (`(newParams) => effectParams`): Функция, которая получает новые параметры и сопоставляет их с параметрами обернутого `эффекта`. Работает как [event.prepend](Event.md#prependfn). Ошибки, произошедшие в функции `mapParams`, приведут к тому, что присоединенный эффект не сработает
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): New effect
+[_Effect_](Effect.md): Новый эффект
 
 ## `attach({effect, mapParams, source})`
 
-Create effect which will read values from `source` stores, pass them with params to `mapParams` function and call `effect` with result
+Создайте эффект, который будет читать значения из хранилищ `source`, передавать их с параметрами в функцию `mapParams` и вызывать `effect` с результатом
 
-**Arguments**
+**Аргументы**
 
-- `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
-- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+- `effect` ([_Effect_](Effect.md)): Обернутый эффект
+- `mapParams` (`(newParams, values) => effectParams`): Функция, которая получает новые параметры и текущее значение `source` и объединяет их с параметрами обернутого `effect`. Ошибки, произошедшие в функции `mapParams`, приведут к тому, что присоединенный эффект не сработает
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Магазин или объект с магазинами, значения которых будут переданы во второй аргумент `mapParams`.
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): New effect
+[_Effect_](Effect.md): Новый эффект
 
 :::note
-If `mapParams` throw an error, it will trigger `fail` event and nested `effect` will not be called at all
+Если `mapParams` выдаст ошибку, это вызовет событие `fail` и вложенный `effect` не будет вызван вообще
 :::
 
 ## `attach({effect})`
 
-Create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior.
+Создайте эффект, который будет вызывать `effect` с параметрами как есть. Это позволяет создавать отдельные эффекты с общим поведением.
 
-**Arguments**
+**Аргументы**
 
-- `effect` ([_Effect_](Effect.md)): Wrapped effect
+- `effect` ([_Effect_](Effect.md)): Обернутый эффект
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): New effect
+[_Effect_](Effect.md): Новый эффект
 
-:::note since
+:::note Начиная с
 effector 21.5.0
 :::
 

@@ -1,34 +1,35 @@
 ---
 id: split
 title: split
+hide_title: true
 ---
 
-Choose one of cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions. Works like pattern matching for payload values and external stores
+Выбирает один из случаев по заданным условиям. Он "разбивает" исходный блок на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление шаблонов для значений полезной нагрузки и внешних хранилищ
 
-## Concepts
+## Концепции
 
 ### Case mode
 
-Mode in which target case is selected by name of it's field. Case could be selected from data in `source` by [case function](./split.md#case-function) or from external [case store](./split.md#case-store) which keept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+Режим, в котором целевой случай выбирается по имени его поля. Кейс может быть выбран из данных в `source` с помощью [case function](./split.md#case-function) или из внешнего [case store](./split.md#case-store), который хранит текущее имя кейса. После выбора данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если таковой имеется), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если таковой имеется).
 
-**See also**:
+**Смотрите так-же**:
 
 - [case store](./split.md#case-store)
 - [case function](./split.md#case-function)
 
 ### Matching mode
 
-Mode in which each case sequentially matched by stores and functions in fields of `match` object.
-If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+Режим, в котором каждый случай последовательно сопоставляется сторами и функциями в полях объекта `match`.
+Если одно из полей получило `true` от значения стора или возврата функции, то данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если таковой имеется), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если таковой имеется).
 
-**See also**:
+**Смотрите так-же**:
 
 - [matching store](./split.md#matcher-store)
 - [matching function](./split.md#matcher-function)
 
 ### Case store
 
-Store with string which will be used to choose case by it's name. Placed directly in `match` field
+Хранить со строкой, которая будет использоваться для выбора случая по его имени. Размещается непосредственно в поле `match`
 
 ```ts
 split({
@@ -45,7 +46,7 @@ split({
 
 ### Case function
 
-String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](../../glossary.md#purity)
+Строка-возвращающая функция, которая будет вызвана со значением из `source` для выбора случая по его имени. Размещается непосредственно в поле `match`, [должно быть **чистым**](../../glossary.md#purity)
 
 ```ts
 split({
@@ -62,7 +63,7 @@ split({
 
 ### Matcher store
 
-Boolean store which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher functions](./split.md#matcher-function)
+Булево хранилище, указывающее, следует ли выбрать конкретный случай или попробовать следующий. Размещается в полях объекта `match`, может смешиваться с [matcher functions](./split.md#matcher-function)
 
 ```ts
 split({
@@ -82,7 +83,7 @@ split({
 
 ### Matcher function
 
-Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](./split.md#matcher-store), [should be **pure**](../../glossary.md#purity)
+Функция с булевым возвратом, указывающая, следует ли выбрать конкретный случай или попробовать следующий. Размещается в полях объекта `match`, может смешиваться с [matcher stores](./split.md#matcher-store), [должны быть **чистыми**](../../glossary.md#purity)
 
 ```ts
 split({
@@ -101,10 +102,10 @@ split({
 ```
 
 :::note
-Case store, case funtion and matcher store are supported since effector 21.8.0
+Case store, case function и matcher store поддерживаются начиная с версии effector 21.8.0
 :::
 
-## split with cases
+## split со случаями
 
 ```ts
 split({source, match, cases})
@@ -147,23 +148,23 @@ split({
 })
 ```
 
-**Arguments**
+**Аргументы**
 
-- `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
-- `match`: Single [store with string](./split.md#case-store), single [function which returns string](./split.md#case-function) or object with [boolean stores](./split.md#matching-store) and [functions which returns boolean](./split.md#matching-function)
-- `cases`: Object with [units](../../glossary.md#common-unit) to which data will be passed from `source` after case selection
+- `source`: [Unit](../../glossary.md#common-unit) что вызовет вычисления в `split`.
+- `match`: Single [store with string](./split.md#case-store), одна [функция, возвращающая строку](./split.md#case-function) или объект с [булевыми хранилищами](./split.md#matching-store) и [функциями, возвращающими булевое значение](./split.md#matching-function)
+- `cases`: Объект с [юнитами](../../glossary.md#common-unit) куда будут передаваться данные из `source` после выбора случая
 
-**Returns**
+**Возвращает**
 
 ```ts
 void
 ```
 
-:::note since
+:::note Начиная с
 effector 21.0.0
 :::
 
-#### Example 1
+#### Пример 1
 
 ```js
 import {split, createEffect, createEvent} from 'effector'
@@ -203,11 +204,11 @@ messageReceived({
 // => unknown message: image
 ```
 
-[Try it](https://share.effector.dev/W6VYZbfH)
+[Попробовать](https://share.effector.dev/W6VYZbfH)
 
-#### Example 2
+#### Пример 2
 
-You can match directly to store api as well:
+Вы также можете напрямую обращаться к стору api:
 
 ```js
 import {split, createStore, createEvent, createApi} from 'effector'
@@ -250,28 +251,28 @@ messageReceived({
 // => ['Hello', 'unknown message', 'audio 500 ms']
 ```
 
-[Try it](https://share.effector.dev/32FNNk8H)
+[Попробовать](https://share.effector.dev/32FNNk8H)
 
-## split without explicit cases
+## split без явных случаев
 
 ```ts
 split(source, match)
 ```
 
-**Arguments**
+**Аргументы**
 
-1. `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
-2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
+1. `source`: [Unit](../../glossary.md#common-unit) что вызовет вычисления в `split`.
+2. `match` (_Object_): Схема случаев, в которой в качестве ключей используются имена результирующих событий, а в качестве функции соответствия*((value) => Boolean)*.
 
-**Returns**
+**Возвращает**
 
-(Object) - Object, having keys, defined in `match` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
+(Object) - Объект, имеющий ключи, определенные в аргументе `match`, плюс `__` (два подчеркивания) - который обозначает случай `default` (нет совпадений).
 
-:::note since
+:::note Начиная с
 effector 20.0.0
 :::
 
-#### Example 1
+#### Пример 1
 
 ```js
 import {createEvent, split} from 'effector'
@@ -303,13 +304,13 @@ message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 
-[Try it](https://share.effector.dev/QXZsR5yM)
+[Попробовать](https://share.effector.dev/QXZsR5yM)
 
 :::note
-Only the first met match will trigger resulting event
+Только первое встреченное совпадение вызовет результирующее событие
 :::
 
-#### Example 2
+#### Пример 2
 
 ```js
 import {createEvent, split} from 'effector'
@@ -333,21 +334,21 @@ message('Hi!')
 // => short message 'Hi!'
 ```
 
-[Try it](https://share.effector.dev/ke2tM78I)
+[Попробовать](https://share.effector.dev/ke2tM78I)
 
-## split with clock
+## split с clock
 
-:::note
-Since effector 22.2.0
+:::note Начиная с
+effector 22.2.0
 :::
 
-It works the same like [split with cases](./split.md#split-with-cases), however computations in `split` will be started after `clock` is triggered.
+Он работает так же, как [split with cases](./split.md#split-with-cases), однако вычисления в `split` будут запущены после срабатывания `clock`.
 
 ```js
 split({source, clock?, match, cases})
 ```
 
-#### Example
+#### Пример
 
 ```js
 const options = ['save', 'delete', 'forward']
@@ -377,4 +378,4 @@ selectedMessageOption('delet') // nothing happens
 selectedMessageOption('delete')
 ```
 
-[Try it](https://share.effector.dev/VJmD5KdN)
+[Попробовать](https://share.effector.dev/VJmD5KdN)

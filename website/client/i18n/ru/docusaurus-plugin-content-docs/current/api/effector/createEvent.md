@@ -1,7 +1,8 @@
 ---
 id: createEvent
-title: createEvent
+title: Создание события
 description: Метод для создания событий
+sidebar_label: createEvent
 ---
 
 Метод для создания [событий](./Event.md)

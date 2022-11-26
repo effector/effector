@@ -1,7 +1,8 @@
 ---
 id: createEffect
-title: createEffect
+title: Создание эффекта
 description: метод для создания эффекта
+sidebar_label: createEffect
 ---
 
 Метод для создания [эффектов](./Effect.md).

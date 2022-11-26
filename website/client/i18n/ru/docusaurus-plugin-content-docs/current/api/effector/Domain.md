@@ -1,16 +1,16 @@
 ---
 id: domain
 title: Domain
-description: Domain, its methods and properties
+description: Domain, iего методы и свойства
 ---
 
-Domain is a namespace for your events, stores and effects.
+Домен - это пространство имен для ваших событий, магазинов и эффектов.
 
-Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
+Домен может подписаться на создание события, эффекта, стора или вложенного домена с помощью методов `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain`.
 
-It is useful for logging or other side effects.
+Он полезен при логировании или других побочных эффектах.
 
-## Unit creators
+## Создание Unit-а
 
 :::note since
 effector 20.7.0
@@ -18,27 +18,27 @@ effector 20.7.0
 
 ### `createEvent(name?)`
 
-**Arguments**
+**Аргументы**
 
-1. `name`? (_string_): event name
+1. `name`? (_string_): имя события
 
-**Returns**
+**Возвращает**
 
-[_Event_](Event.md): New event
+[_Event_](Event.md): новое событие
 
 <hr />
 
 ### `createEffect(handler?)`
 
-Creates an [effect](Effect.md) with given handler
+Создает новый [effect](Effect.md) с заданным обработчиком
 
-**Arguments**
+**Аргументы**
 
-1. `handler`? (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
+1. `handler`? (_Function_): функция для обработки вызовов эффектов, также может быть установлена с помощью [`use(handler)`](#use)
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): A container for async function.
+[_Effect_](Effect.md): Контейнер для асинхронной функции.
 
 :::note since
 effector 21.3.0
@@ -48,51 +48,51 @@ effector 21.3.0
 
 ### `createEffect(name?)`
 
-**Arguments**
+**Аргументы**
 
-1. `name`? (_string_): effect name
+1. `name`? (_string_): имя эффекта
 
-**Returns**
+**Возвращает**
 
-[_Effect_](Effect.md): A container for async function.
+[_Effect_](Effect.md): Контейнер для асинхронной функции.
 
 <hr />
 
 ### `createStore(defaultState)`
 
-**Arguments**
+**Аргументы**
 
-1. `defaultState` (_State_): store default state
+1. `defaultState` (_State_): начальное состояние стора
 
-**Returns**
+**Возвращает**
 
-[_Store_](Store.md): New store
+[_Store_](Store.md): Новый стор
 
 <hr />
 
 ### `createDomain(name?)`
 
-**Arguments**
+**Аргументы**
 
-1. `name`? (_string_): domain name
+1. `name`? (_string_): название домена
 
-**Returns**
+**Возвращает**
 
-[_Domain_](Domain.md): New domain
+[_Domain_](Domain.md): новый домен
 
 <hr />
 
 ### `history`
 
-Contains mutable read-only sets of units inside domain.
+Содержит изменяемые только для чтения наборы единиц внутри домена.
 
-#### Formulae
+#### Формула
 
 ```ts
 const {stores, events, domains, effects} = domain.history
 ```
 
-- When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
+- Когда внутри домена создаются юниты любого типа, они появляются в наборе с именем типа (магазины, события, домены, эффекты) в том же порядке, в котором создавались
 
 :::note since
 effector 20.3.0
@@ -111,55 +111,55 @@ console.log(domain.history)
 
 <hr />
 
-### Aliases
+### Псевдонимы
 
 #### `event(name?)`
 
-An alias for [domain.createEvent](./Domain.md#createeventname)
+Псевдоним для [domain.createEvent](./Domain.md#createeventname)
 
 <hr />
 
 #### `effect(name?)`
 
-An alias for [domain.createEffect](./Domain.md#createeffectname)
+Псевдоним для [domain.createEffect](./Domain.md#createeffectname)
 
 <hr />
 
 #### `store(defaultState)`
 
-An alias for [domain.createStore](./Domain.md#createstoredefaultstate)
+Псевдоним для [domain.createStore](./Domain.md#createstoredefaultstate)
 
 <hr />
 
 #### `domain(name?)`
 
-An alias for [domain.createDomain](./Domain.md#createdomainname)
+Псевдоним для [domain.createDomain](./Domain.md#createdomainname)
 
 <hr />
 
-## Domain hooks
+## Хуки
 
 ### `onCreateEvent(hook)`
 
-#### Formulae
+#### Формула
 
 ```ts
 domain.onCreateEvent(event => {})
 ```
 
-- Function passed to `onCreateEvent` called every time, as new event created in `domain`
-- Function called with `event` as first argument
-- Result of function call is ignored
+- Функция, переданная в `onCreateEvent`, вызывается каждый раз, когда в `домене` создается новое событие
+- Функция вызывается с `event` в качестве первого аргумента
+- Результат вызова функции игнорируется
 
-**Arguments**
+**Аргументы**
 
-1. `hook` ([_Watcher_]): A function that receives [Event](./Event.md) and will be called during every [domain.createEvent](./Domain.md#createeventname) call
+1. `hook` ([_Watcher_]): Функция, которая получает [Event](./Event.md) и будет вызываться во время каждого вызова [domain.createEvent](./Domain.md#createeventname)
 
-**Returns**
+**Возвращает**
 
-[_Subscription_]: Unsubscribe function.
+[_Subscription_]: Функция отписки.
 
-#### Example
+#### Пример
 
 ```js
 import {createDomain} from 'effector'
@@ -171,37 +171,37 @@ domain.onCreateEvent(event => {
 })
 
 const a = domain.createEvent()
-// => new event created
+// => Новое событие создано
 
 const b = domain.createEvent()
-// => new event created
+// => Новое событие создано
 ```
 
-[Try it](https://share.effector.dev/QCQpga6u)
+[Попробовать](https://share.effector.dev/QCQpga6u)
 
 <hr />
 
 ### `onCreateEffect(hook)`
 
-#### Formulae
+#### Формула
 
 ```ts
 domain.onCreateEffect(effect => {})
 ```
 
-- Function passed to `onCreateEffect` called every time, as new effect created in `domain`
-- Function called with `effect` as first argument
-- Result of function call is ignored
+- Функция, переданная в `onCreateEffect`, вызывается каждый раз, когда в `домене` создается новый эффект
+- Функция вызывается с `effect` в качестве первого аргумента
+- Результат вызова функции игнорируется
 
-**Arguments**
+**Аргументы**
 
-1. `hook` ([_Watcher_]): A function that receives [Effect](./Effect.md) and will be called during every [domain.createEffect](./Domain.md#createeffectname) call
+1. `hook` ([_Watcher_]): Функция, которая получает [Effect](./Effect.md) и будет вызываться во время каждого вызова [domain.createEffect](./Domain.md#createeffectname)
 
-**Returns**
+**Возвращает**
 
-[_Subscription_]: Unsubscribe function.
+[_Subscription_]: Функция отписки.
 
-#### Example
+#### Пример
 
 ```js
 import {createDomain} from 'effector'
@@ -213,10 +213,10 @@ domain.onCreateEffect(effect => {
 })
 
 const fooFx = domain.createEffect()
-// => new effect created
+// => новый эффект создан
 
 const barFx = domain.createEffect()
-// => new effect created
+// => новый эффект создан
 ```
 
 [Try it](https://share.effector.dev/uT6f8vv9)
@@ -225,25 +225,25 @@ const barFx = domain.createEffect()
 
 ### `onCreateStore(hook)`
 
-#### Formulae
+#### Формула
 
 ```ts
 domain.onCreateStore($store => {})
 ```
 
-- Function passed to `onCreateStore` called every time, as new store created in `domain`
-- Function called with `$store` as first argument
-- Result of function call is ignored
+- Функция, переданная в `onCreateStore`, вызывается каждый раз, когда в `домене` создается новый магазин
+- Функция вызывается с `$store` в качестве первого аргумента
+- Результат вызова функции игнорируется
 
-**Arguments**
+**Аргументы**
 
 1. `hook` ([_Watcher_]): A function that receives [Store](./Store.md) and will be called during every [domain.createStore](./Domain.md#createstoredefaultstate) call
 
-**Returns**
+**Возвращает**
 
-[_Subscription_]: Unsubscribe function.
+[_Subscription_]: Функция отписки.
 
-#### Example
+#### Пример
 
 ```js
 import {createDomain} from 'effector'
@@ -255,34 +255,34 @@ domain.onCreateStore(store => {
 })
 
 const $a = domain.createStore(null)
-// => new store created
+// => новый стор создан
 ```
 
-[Try it](https://share.effector.dev/OGlYOtfz)
+[Попробовать](https://share.effector.dev/OGlYOtfz)
 
 <hr />
 
 ### `onCreateDomain(hook)`
 
-#### Formulae
+#### Формула
 
 ```ts
 domain.onCreateDomain(domain => {})
 ```
 
-- Function passed to `onCreateDomain` called every time, as sub domain created in `domain`
-- Function called with `domain` as first argument
-- Result of function call is ignored
+- Функция, переданная в `onCreateDomain`, вызывается каждый раз, по мере создания поддомена в `domain`.
+- Функция вызывается с `доменом` в качестве первого аргумента
+- Результат вызова функции игнорируется
 
-**Arguments**
+**Аргументы**
 
-1. `hook` ([_Watcher_]): A function that receives [Domain](./Domain.md) and will be called during every [domain.createDomain](./Domain.md#createdomainname) call
+1. `hook` ([_Watcher_]): Функция, которая получает [Domain](./Domain.md) и будет вызываться во время каждого вызова [domain.createDomain](./Domain.md#createdomainname)
 
-**Returns**
+**Возвращает**
 
-[_Subscription_]: Unsubscribe function.
+[_Subscription_]: Функция отписки.
 
-#### Example
+#### Пример
 
 ```js
 import {createDomain} from 'effector'
@@ -294,13 +294,13 @@ domain.onCreateDomain(domain => {
 })
 
 const a = domain.createDomain()
-// => new domain created
+// => новый домен создан
 
 const b = domain.createDomain()
-// => new domain created
+// => новый домен создан
 ```
 
-[Try it](https://share.effector.dev/dvBLiwHf)
+[Попробовать](https://share.effector.dev/dvBLiwHf)
 
 <hr />
 

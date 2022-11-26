@@ -67,6 +67,10 @@
     "message": "Примеры",
     "description": "The label for category Recipes in sidebar docs"
   },
+  "sidebar.docs.category.Explanation": {
+    "message": "Объяснение",
+    "description": "The label for category Explanation in sidebar docs"
+  },
   "sidebar.docs.category.React": {
     "message": "React",
     "description": "The label for category React in sidebar docs"
@@ -138,6 +142,10 @@
   "sidebar.api.category.Recipes": {
     "message": "Примеры",
     "description": "The label for category Recipes in sidebar api"
+  },
+  "sidebar.api.category.Explanation": {
+    "message": "Объяснение",
+    "description": "The label for category Explanation in sidebar docs"
   },
   "sidebar.api.category.React": {
     "message": "React",
