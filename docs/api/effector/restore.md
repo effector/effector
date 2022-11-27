@@ -1,27 +1,26 @@
 ---
 id: restore
-title: Restore
+title: restore
 hide_title: true
-sidebar_label: restore
 ---
 
 # restore
 
 ## `restore(event, defaultState)`
 
-Создает [_Store_](Store.md) из [_Event_](Event.md).
-Это работает как сокращение для `createStore(defaultState).on(event, (_, payload) => payload)`.
+Creates a [_Store_](Store.md) from [_Event_](Event.md).
+It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
-**Аргументы**
+**Arguments**
 
 1. `event` [_Event_](Event.md)
 2. `defaultState` (_Payload_)
 
-**Возвращает**
+**Returns**
 
-[_Store_](Store.md): Новый стор
+[_Store_](Store.md): New store
 
-#### Пример
+#### Example
 
 ```js
 import {createEvent, restore} from 'effector'
@@ -36,23 +35,23 @@ event('foo')
 // state: foo
 ```
 
-[Попробовать](https://share.effector.dev/MGGQnTlQ)
+[Try it](https://share.effector.dev/MGGQnTlQ)
 
 ## `restore(effect, defaultState)`
 
-Создает [_Store_](Store.md) из успешных результатов [_Effect_](Effect.md).
-Это работает как сокращение для `createStore(defaultState).on(effect.done, (_, {result}) => result)`.
+Creates a [_Store_](Store.md) out of successful results of [_Effect_](Effect.md).
+It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
-**Аргументы**
+**Arguments**
 
 1. `effect` [_Effect_](Effect.md)
 2. `defaultState` (_Done_)
 
-**Возвращает**
+**Returns**
 
-[_Store_](Store.md): Новый стор
+[_Store_](Store.md): New store
 
-#### Пример
+#### Example
 
 ```js
 import {createEffect, restore} from 'effector'
@@ -67,21 +66,21 @@ await fx()
 // => state: foo
 ```
 
-[Попробовать](https://share.effector.dev/tP6RQsri)
+[Try it](https://share.effector.dev/tP6RQsri)
 
 ## `restore(obj)`
 
-Создает объект со сторами из объекта со значениями
+Creates an object with stores from object with values
 
-**Аргументы**
+**Arguments**
 
 1. `obj` (_State_)
 
-**Возвращает**
+**Returns**
 
-[_Store_](Store.md): Новый стор
+[_Store_](Store.md): New store
 
-#### Пример
+#### Example
 
 ```js
 import {restore} from 'effector'
@@ -101,4 +100,4 @@ $bar.watch(bar => {
 // => bar 0
 ```
 
-[Попробовать](https://share.effector.dev/NQX0kotI)
+[Try it](https://share.effector.dev/NQX0kotI)
