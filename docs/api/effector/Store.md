@@ -567,3 +567,56 @@ add(3)
 ```
 
 [Try it](https://share.effector.dev/YrnlMuRj)
+
+## Derived store
+
+_DerivedStore_ has no specific interface in TypeScript, but it has different implementation in the effector kernel.
+
+Some methods like [`combine`](./combine.md), [`.map`](#mapfn-state-state-laststate-t--t-firststate-t), [`sample`](./sample.md), [`.pending`](./Effect.md#pending) returns `Store` instance.
+The store updates by specific rules defined in the method above. That's why we have different type of stores.
+
+Derived stores is not allowed to modify from the outside. For example, user cannot add new triggers on the derived store:
+
+```ts
+const update = createEvent()
+const $a = createStore(1)
+const $b = createStore(2)
+
+const $derived = combine({a: $a, b: $b})
+$derived.on(update, (_, value) => ({a: value, b: value}))
+// => .on in derived store is deprecated, use createStore instead
+```
+
+Derived store only allows methods that do not modify state. It means, that DerivedStore cannot be used as `target` in `sample`:
+
+```ts
+const update = createEvent()
+const $a = createStore(1)
+const $b = createStore('foo')
+
+const $derived = combine({a: $a, b: $b})
+
+sample({
+  clock: update,
+  fn: value => ({a: value, b: value}),
+  target: $derived,
+})
+// => sample: derived unit in "target" is deprecated, use createEvent/createStore instead
+```
+
+These methods are <u>allowed</u> for DerivedStore:
+
+- `.map`
+- `.watch`
+- using DerivedStore as a `source` and/or `clock` in `sample` and so on
+- using DerivedStore in `combine` sources
+
+:::caution deprecation
+since 23.0.0 banned methods will throw an exception
+:::
+
+These methods are _banned_ for DerivedStore:
+
+- `.on`
+- `.reset`
+- using DerivedStore as a `target` in `sample`, `guard` and so on
