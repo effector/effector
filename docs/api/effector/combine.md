@@ -5,6 +5,10 @@ title: combine
 
 This method allows you to get state from each passed store and **combine** it to single value and save to single store, that updates every time like each passed store.
 
+:::info Caution
+Combine returns not just a common store. Instead, it returns [DerivedStore](./Store.md#derived-store), it cannot be modified by the events or used as `target` in [`sample`](./sample.md).
+:::
+
 ## `combine(...stores, fn)`
 
 #### Formulae
@@ -23,7 +27,7 @@ $result = combine(
 
 **Returns**
 
-[_Store_](Store.md): New store
+[_DerivedStore_](Store.md#derived-store): New derived store
 
 #### Example
 
@@ -46,6 +50,10 @@ $arrStores.watch(console.log) // => [0, 'zerobias']
 [Try it](https://share.effector.dev/jyX3NCLt)
 
 ## `combine({ A, B, C }, fn?)`
+
+:::note
+Formerly known as `createStoreObject`
+:::
 
 #### Formulae
 
@@ -70,11 +78,7 @@ $result = combine({a: $first, b: $second, c: $third}, ({a, b, c}) => result)
 
 **Returns**
 
-[_Store_](Store.md): New store
-
-:::note
-Formerly known as `createStoreObject`
-:::
+[_DerivedStore_](Store.md#derived-store): New derived store
 
 #### Example
 
@@ -119,7 +123,7 @@ $result = combine([$first, $second, $third])
 
 **Returns**
 
-[_Store_](Store.md): New store
+[_DerivedStore_](Store.md#derived-store): New derived store
 
 #### Example
 

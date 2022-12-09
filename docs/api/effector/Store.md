@@ -7,7 +7,7 @@ keywords:
 description: Store, its methods and properties
 ---
 
-_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](../../explanation/glossary.md#common-unit).
+_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](../../explanation/glossary.md#common-unit). Some stores can be [derived](#derived-store).
 
 ## Store Methods
 
@@ -38,7 +38,7 @@ If the function returns an old state or if it returns `undefined`, the new store
 
 **Returns**
 
-[_Store_](Store.md): New store
+[_DerivedStore_](Store.md#derived-store): New derived store
 
 #### Example
 
@@ -482,11 +482,11 @@ $store.updates
 
 [_Event_](Event.md): Event that represents updates of the given store.
 
-Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
-
 :::caution Important
 Do not manually call this event. It is event that depends on a store.
 :::
+
+Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
 
 ```js
 import {createStore, is} from 'effector'
@@ -620,3 +620,5 @@ These methods are _banned_ for DerivedStore:
 - `.on`
 - `.reset`
 - using DerivedStore as a `target` in `sample`, `guard` and so on
+
+Any kind of store can be used as a `clock` or `source` in methods like [`sample`](./sample.md).

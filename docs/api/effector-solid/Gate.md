@@ -14,46 +14,20 @@ Gate can have two states:
 - **Open**, which means mounted
 - **Closed**, which means unmounted
 
-<hr />
-
 ## Gate Properties
 
-### `state`
+## `state`
 
-Store with current state of given gate. State came from second argument of [useGate](./useGate.md) and from props when rendering gate as component
+`Store<Props>`: [`DerivedStore`](../effector/Store.md#derived-store) with current state of given gate. State came from second argument of [useGate](./useGate.md) and from props when rendering gate as component
 
-**Returns**
+## `open`
 
-(`Store<Props>`)
+[`Event<Props>`](../effector/Event.md): Event which will be called during gate mounting
 
-<hr />
+## `close`
 
-### `open`
+[`Event<Props>`](../effector/Event.md): Event which will be called during gate unmounting.
 
-**Returns**
+## `status`
 
-Event which will be called during gate mounting
-
-(`Event<Props>`)
-
-<hr />
-
-### `close`
-
-**Returns**
-
-Event which will be called during gate unmounting.
-
-(`Event<Props>`)
-
-<hr />
-
-### `status`
-
-Boolean store which show if given gate is mounted.
-
-**Returns**
-
-(`Store<boolean>`)
-
-<hr />
+`Store<boolean>`: Boolean [`DerivedStore`](../effector/Store.md#derived-store) which show if given gate is mounted.

@@ -11,6 +11,10 @@ hide_title: true
 Creates a [_Store_](Store.md) from [_Event_](Event.md).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
+:::info It is not a derived store
+Restore creates a new store. It is not [DerivedStore](./Store.md#derived-store). That means you can modify it's state via events, and use it as `target` in [`sample`](./sample.md).
+:::
+
 **Arguments**
 
 1. `event` [_Event_](Event.md)

@@ -28,17 +28,21 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of the unit is described in the table below:
 
-| clock\source          | [_Store_](Store.md) | [_Event_](Event.md) | [_Effect_](Effect.md) |
-| --------------------- | ------------------- | ------------------- | --------------------- |
-| [_Store_](Store.md)   | `Store`             | `Event`             | `Event`               |
-| [_Event_](Event.md)   | `Event`             | `Event`             | `Event`               |
-| [_Effect_](Effect.md) | `Event`             | `Event`             | `Event`               |
+| clock\source          | [_Store_](Store.md)                      | [_Event_](Event.md) | [_Effect_](Effect.md) |
+| --------------------- | ---------------------------------------- | ------------------- | --------------------- |
+| [_Store_](Store.md)   | [`DerivedStore`](Store.md#derived-store) | `Event`             | `Event`               |
+| [_Event_](Event.md)   | `Event`                                  | `Event`             | `Event`               |
+| [_Effect_](Effect.md) | `Event`                                  | `Event`             | `Event`               |
 
 How to read it:
 
 1. You need to know type of the `source`, it is a column
 2. Type of the `clock` in the rows
 3. Match the column and the row
+
+:::info Caution
+When clock and source contains Store type, `sample` returns not the simple store. It returns [`DerivedStore`](Store.md#derived-store), it cannot be modified via events, or cannot be used as target in another `sample`.
+:::
 
 For example:
 
