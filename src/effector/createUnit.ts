@@ -193,7 +193,25 @@ export function createEvent<Payload = any>(
   }
   return finalEvent
 }
-
+function on(store: Store<State>, methodName: string, nodeSet: CommonUnit | CommonUnit[], fn: Function) {
+  assertNodeSet(nodeSet, methodName, 'first argument')
+  assert(isFunction(fn), 'second argument should be a function')
+  deprecate(
+    !getMeta(store, 'derived'),
+    `${methodName} in derived store`,
+    `${methodName} in store created via createStore`,
+  )
+  forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
+    store.off(trigger)
+    getSubscribers(store).set(
+      trigger,
+      createSubscription(
+        updateStore(trigger, store, 'on', callARegStack, fn),
+      ),
+    )
+  })
+  return store
+}
 export function createStore<State>(
   defaultState: State,
   props?: Config,
@@ -233,27 +251,11 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
-      forEach(units, unit => store.on(unit, () => store.defaultState))
+      forEach(units, unit => on(store, '.on', unit, () => store.defaultState))
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
-      assertNodeSet(nodeSet, '.on', 'first argument')
-      assert(isFunction(fn), 'second argument should be a function')
-      deprecate(
-        !getMeta(store, 'derived'),
-        '.on in derived store',
-        'createStore',
-      )
-      forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
-        store.off(trigger)
-        getSubscribers(store).set(
-          trigger,
-          createSubscription(
-            updateStore(trigger, store, 'on', callARegStack, fn),
-          ),
-        )
-      })
-      return store
+      return on (store, '.on', nodeSet, fn)
     },
     off(unit: CommonUnit) {
       const currentSubscription = getSubscribers(store).get(unit)
