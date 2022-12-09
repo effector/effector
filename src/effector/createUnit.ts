@@ -362,8 +362,8 @@ export function createStore<State>(
   }
 
   if (!derived) {
-    store.reinit = createEvent<void>();
-    store.reset(store.reinit);
+    store.reinit = createEvent<void>()
+    store.reset(store.reinit)
   }
 
   return store
