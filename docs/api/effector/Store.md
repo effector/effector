@@ -407,6 +407,10 @@ $store.off(changed)
 
 ### `thru(fn)`
 
+:::caution deprecated
+since 22.0.0
+:::
+
 Call function with the given store and return result as it is.
 
 #### Formulae
