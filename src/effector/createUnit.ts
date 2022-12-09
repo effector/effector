@@ -255,7 +255,7 @@ export function createStore<State>(
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
-      return on (store, '.on', nodeSet, fn)
+      return on(store, '.on', nodeSet, fn)
     },
     off(unit: CommonUnit) {
       const currentSubscription = getSubscribers(store).get(unit)
