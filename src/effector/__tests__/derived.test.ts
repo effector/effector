@@ -143,7 +143,7 @@ test('createApi', () => {
   )
 })
 
-describe('.on with derived stores', () => {
+describe('.on/.reset with derived stores', () => {
   test('usage with .map is deprecated', () => {
     const trigger = createEvent()
     const $a = createStore(0)
@@ -160,6 +160,15 @@ describe('.on with derived stores', () => {
     $b.on(trigger, x => x)
     expect(getWarning()).toMatchInlineSnapshot(
       `".on in derived store is deprecated, use createStore instead"`,
+    )
+  })
+  test('reset with combine is deprecated', () => {
+    const trigger = createEvent()
+    const $a = createStore(0)
+    const $b = combine({a: $a})
+    $b.reset(trigger, x => x)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `".reset in derived store is deprecated, use createStore instead"`,
     )
   })
   describe('internal stores', () => {
