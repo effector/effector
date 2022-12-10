@@ -575,7 +575,7 @@ _DerivedStore_ has no specific interface in TypeScript, but it has different imp
 Some methods like [`combine`](./combine.md), [`.map`](#mapfn-state-state-laststate-t--t-firststate-t), [`sample`](./sample.md), [`.pending`](./Effect.md#pending) returns `Store` instance.
 The store updates by specific rules defined in the method above. That's why we have different type of stores.
 
-Derived stores is not allowed to modify from the outside. For example, user cannot add new triggers on the derived store:
+Derived stores are not allowed to be modified from the outside. For example, you shall not add new triggers on the derived store:
 
 ```ts
 const update = createEvent()

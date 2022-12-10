@@ -41,7 +41,7 @@ How to read it:
 3. Match the column and the row
 
 :::info Caution
-When clock and source contains Store type, `sample` returns not the simple store. It returns [`DerivedStore`](Store.md#derived-store), it cannot be modified via events, or cannot be used as target in another `sample`.
+When clock and source contains Store type, `sample` returns not the simple store. It returns [`DerivedStore`](Store.md#derived-store), it cannot be modified via events, and cannot be used as target in another `sample`.
 :::
 
 For example:

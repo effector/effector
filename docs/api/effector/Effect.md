@@ -253,7 +253,7 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ## Effect Properties
 
-You are not supposed to [sample](./sample.md) to parts of effect (even though it consists of events and stores), since it's a complete entity on its own. This behavior will not be supported.
+You are not supposed to use parts of effect (like `.done` and `.pending`) as a target in [sample](./sample.md) or [forward](./forward.md) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
 ### `doneData`
 
