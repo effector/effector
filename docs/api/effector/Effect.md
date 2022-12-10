@@ -68,11 +68,10 @@ effect.use(fn)
 
 - Set handler `fn` for `effect`
 - If effect already had an implementation at the time of the call, it will be replaced by a new one
-- Hint: current handler can be extracted with [`effect.use.getCurrent()`](#usegetcurrent)
 
-:::note
-You must provide a handler either through [`.use`](./Effect.md#usehandler) method or `handler` property in [createEffect](./createEffect.md), otherwise effect will throw with "no handler used in _%effect name%_" error when effect will be called
-:::
+Hint: current handler can be extracted with [`effect.use.getCurrent()`](#usegetcurrent).
+
+You must provide a handler either through [`.use`](./Effect.md#usehandler) method or `handler` property in [createEffect](./createEffect.md), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
 
 :::tip See also
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
@@ -254,11 +253,13 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ## Effect Properties
 
-:::note
-You are not supposed to [forward](./forward.md) to parts of effect (even though it consists of events and stores), since it's a complete entity on its own. This behavior will not be supported
-:::
+You are not supposed to use parts of effect (like `.done` and `.pending`) as a target in [sample](./sample.md) or [forward](./forward.md) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
 ### `doneData`
+
+:::note since
+effector 20.12.0
+:::
 
 Event, which is triggered with result of the effect execution:
 
@@ -272,10 +273,6 @@ event = effect.doneData
 
 :::caution Important
 Do not manually call this event. It is event that depends on effect.
-:::
-
-:::note since
-effector 20.12.0
 :::
 
 [_Event_](Event.md) triggered when _handler_ is _resolved_.
@@ -299,6 +296,10 @@ await fx(2)
 
 ### `failData`
 
+:::note since
+effector 20.12.0
+:::
+
 Event, which is triggered with error thrown by the effect
 
 #### Formulae
@@ -311,10 +312,6 @@ event = effect.failData
 
 :::caution Important
 Do not manually call this event. It is event that depends on effect.
-:::
-
-:::note since
-effector 20.12.0
 :::
 
 [_Event_](Event.md) triggered when handler is rejected or throws error.
@@ -480,8 +477,12 @@ $store = effect.pending
 - [`$store`](Store.md) contains `true` value until the effect is resolved or rejected
 
 :::caution Important
-Do not modify `$store` value! It is derived store and should be in predictable state.
+Do not modify `$store` value! It is [derived store](./Store.md#derived-store) and should be in predictable state.
 :::
+
+**Returns**
+
+[_DerivedStore_](./Store.md#derived-store): Store that represents current state of the effect
 
 #### Example
 
@@ -525,6 +526,12 @@ const $isLoading = createStore(false)
 
 ### `inFlight`
 
+:::note since
+effector 20.11.0
+:::
+
+Shows how many effect calls aren't settled yet. Useful for rate limiting.
+
 #### Formulae
 
 ```ts
@@ -536,13 +543,12 @@ $count = effect.inFlight
 - When effect resolves to any state(done or fail) state in `$count` store will be decreased
 
 :::caution Important
-Do not modify `$count` value! It is derived store and should be in predictable state.
+Do not modify `$count` value! It is [derived store](./Store.md#derived-store) and should be in predictable state.
 :::
 
-:::note since
-effector 20.11.0
-:::
-[_Store_](Store.md) which show how many effect calls aren't settled yet. Useful for rate limiting.
+**Returns**
+
+[_DerivedStore_](./Store.md#derived-store): Store that represents count of the ran effects
 
 #### Example
 
