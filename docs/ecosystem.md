@@ -19,8 +19,10 @@ More content in [awesome-effector repository](https://github.com/effector/awesom
 - [effector-utils](https://github.com/Kelin2025/effector-utils) - effector utilities library.
 - [effector-next](https://github.com/weyheyhey/effector-next) - effector wrappers for Next.js.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) - UI engine for web based on effector.
+- [farfetched](https://farfetched.pages.dev) — the advanced data fetching tool for web applications.
 
 ### Form management
+
 - [effector-forms](https://github.com/aanation/effector-forms) - Form manager for effector.
 - [efform](https://github.com/tehSLy/efform) - Form manager, based on effector state manager, designed to deliver high-quality DX.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form)
