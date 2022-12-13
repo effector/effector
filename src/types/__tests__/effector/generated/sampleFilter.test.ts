@@ -1509,7 +1509,7 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
         "
       `)
     })
@@ -1537,7 +1537,7 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }) => any) & ((val: AB) => { a: number; b: string; })'.
           Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
             Types of parameters 'val' and 'src' are incompatible.
@@ -1548,7 +1548,7 @@ describe('object source', () => {
         Argument of type '{ source: { a: Store<number | null>; b: Store<string>; }; target: Event<{ a: number; }>; filter: (val: any) => boolean; fn: () => string; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
         Parameter 'val' implicitly has an 'any' type.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }) => any) & ((val: AB) => { a: number; b: string; })'.
           Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
             Types of parameters 'val' and 'src' are incompatible.
@@ -1593,8 +1593,8 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
+        'val.a' is possibly 'null'.
         "
       `)
     })
@@ -1634,8 +1634,8 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
+        'val.a' is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
           Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
             Types of parameters 'val' and 'src' are incompatible.
@@ -1657,7 +1657,7 @@ describe('object source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
         Parameter 'val' implicitly has an 'any' type.
         Parameter 'n' implicitly has an 'any' type.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
           Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
             Types of parameters 'val' and 'src' are incompatible.
@@ -1717,8 +1717,8 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
+        'val.a' is possibly 'null'.
         "
       `)
     })
@@ -1758,8 +1758,8 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
+        'val.a' is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
           Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
             Types of parameters 'val' and 'src' are incompatible.
@@ -1781,7 +1781,7 @@ describe('object source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
         Parameter 'val' implicitly has an 'any' type.
         Parameter 'n' implicitly has an 'any' type.
-        Object is possibly 'null'.
+        'val.a' is possibly 'null'.
         Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
           Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
             Types of parameters 'val' and 'src' are incompatible.
@@ -2233,7 +2233,7 @@ describe('no source', () => {
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Argument of type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
@@ -2261,8 +2261,8 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
         "
       `)
     })
@@ -2322,7 +2322,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }]'.
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }'.
@@ -2336,7 +2336,7 @@ describe('no source', () => {
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((val: AB | null) => { ...; }) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }]'.
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }'.
@@ -2352,16 +2352,16 @@ describe('no source', () => {
               Type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'clk' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }]'.
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }'.
@@ -2370,17 +2370,17 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }]'.
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }]'.
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }'.
@@ -2404,7 +2404,7 @@ describe('no source', () => {
                   Types of parameters 'val' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'ABN'.
                       Type 'null' is not assignable to type 'ABN'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; } & { ...; }]'.
@@ -2423,9 +2423,9 @@ describe('no source', () => {
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
           Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
             Types of parameters 'val' and 'clk' are incompatible.
@@ -2440,9 +2440,9 @@ describe('no source', () => {
                 Types of property 'b' are incompatible.
                   Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }]'.
             Type '{ clock: Event<AB | null>; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<AB>; greedy?: boolean | undefined; }'.
@@ -2501,7 +2501,7 @@ describe('no source', () => {
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
           Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Argument of type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
@@ -2529,8 +2529,8 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
         "
       `)
     })
@@ -2590,7 +2590,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
@@ -2604,7 +2604,7 @@ describe('no source', () => {
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((val: AB | null) => { ...; }) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }...'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }'.
@@ -2620,16 +2620,16 @@ describe('no source', () => {
               Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'clk' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
@@ -2638,17 +2638,17 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
@@ -2672,7 +2672,7 @@ describe('no source', () => {
                   Types of parameters 'val' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'ABN'.
                       Type 'null' is not assignable to type 'ABN'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }] | [...'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }]'.
@@ -2691,9 +2691,9 @@ describe('no source', () => {
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
           Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
             Types of parameters 'val' and 'clk' are incompatible.
@@ -2706,9 +2706,9 @@ describe('no source', () => {
             Types of parameters 'val' and 'clk' are incompatible.
               Type 'AB' is not assignable to type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: Store<...>; greedy?: boolean | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; target: Store<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: Store<...>; greedy?: boolean | undefined; }'.
@@ -2758,7 +2758,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
             Type '{ clock: Event<AB | null>; filter: (clk: AB) => boolean; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { clock: Event<...>; filter: (clk: AB) => boolean; }'.
@@ -2843,7 +2843,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
@@ -2857,7 +2857,7 @@ describe('no source', () => {
             Type '{ clock: Event<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
             Type '{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -2873,16 +2873,16 @@ describe('no source', () => {
               Type '{ clock: Event<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'clk' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
@@ -2891,17 +2891,17 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: Event<AB | null>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: Event<AB | null>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: Event<AB | null>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
@@ -2925,7 +2925,7 @@ describe('no source', () => {
                   Types of parameters 'val' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'ABN'.
                       Type 'null' is not assignable to type 'ABN'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Argument of type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: Event<AB | null>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: Event<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
@@ -2944,9 +2944,9 @@ describe('no source', () => {
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
           Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
             Types of parameters 'val' and 'clk' are incompatible.
@@ -2991,7 +2991,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -3076,7 +3076,7 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
@@ -3090,7 +3090,7 @@ describe('no source', () => {
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -3106,16 +3106,16 @@ describe('no source', () => {
               Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
+        'clk' is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
@@ -3124,17 +3124,17 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }]'.
             Type '{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
@@ -3158,7 +3158,7 @@ describe('no source', () => {
                   Types of parameters 'val' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'ABN'.
                       Type 'null' is not assignable to type 'ABN'.
-        Object is possibly 'null'.
+        'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Argument of type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
           Type '[{ clock: (Event<AB> | Event<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (Event<AB> | Event<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
@@ -3177,9 +3177,9 @@ describe('no source', () => {
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         Property 'c' does not exist on type 'ABN'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Object is possibly 'null'.
+        'val' is possibly 'null'.
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
           Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
             Types of parameters 'val' and 'clk' are incompatible.
