@@ -606,15 +606,18 @@ export default () => {
       },
     },
   })
+  const asConst = flag()
   const sourceCode = separate({
-    source: {sourceType, sourceSubtype, filterType, inferByFilter},
+    source: {sourceType, sourceSubtype, filterType, inferByFilter, asConst},
     variant: {
       AsourceSubtype: {
         fullObject: {sourceSubtype: 'fullObject'},
         nullableField: {sourceSubtype: 'nullableField'},
         smallObject: {sourceSubtype: 'smallObject'},
-        fullTuple: {sourceSubtype: 'fullTuple'},
-        smallTuple: {sourceSubtype: 'smallTuple'},
+        fullTuple: {sourceSubtype: 'fullTuple', asConst: false},
+        fullTupleConst: {sourceSubtype: 'fullTuple', asConst: true},
+        smallTuple: {sourceSubtype: 'smallTuple', asConst: false},
+        smallTupleConst: {sourceSubtype: 'smallTuple', asConst: true},
       } as const,
       Bsource: {
         none: {sourceType: 'no'},
@@ -637,7 +640,9 @@ export default () => {
       nullableField: value('{a:aOpt,b}'),
       smallObject: value('{a}'),
       fullTuple: value('[a,b]'),
+      fullTupleConst: value('[a,b] as const'),
       smallTuple: value('[a]'),
+      smallTupleConst: value('[a] as const'),
       __: {
         none: value<string | null>(null),
         unit: {
