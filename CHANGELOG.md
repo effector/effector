@@ -2,6 +2,25 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.4.1
+
+- Add type support for read only arrays in sample `source`. This case now supported and typechecked correctly:
+
+```ts
+const profileFormSubmitted = createEvent()
+const $name = createStore('alice')
+const $age = createStore(0)
+const saveProfileFx = createEffect(async ([name, age]: [string, number]) => {})
+
+sample({
+  clock: profileFormSubmitted,
+  source: [$name, $age] as const,
+  target: saveProfileFx,
+})
+```
+
+Note that the one need to use "as const" in that case to got correct typechecking because without it typescript cannot infer the type `[Store<string>, Store<number>]`. We are working to avoid that limitation, stay tuned!
+
 ## effector Encke 22.4.0
 
 - Add custom serializers for Store ([PR #744](https://github.com/effector/effector/pull/744/))
