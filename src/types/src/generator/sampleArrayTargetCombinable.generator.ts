@@ -227,19 +227,24 @@ export default () => {
     } as const,
     sort: 'string',
   })
+  const asConst = flag()
   const sourceCode = computeVariant({
-    source: {sourceType, source},
+    source: {sourceType, source, asConst},
     variant: {
       objectSolo: {sourceType: 'object', source: 'a'},
       objectPair: {sourceType: 'object', source: 'ab'},
-      tupleSolo: {sourceType: 'tuple', source: 'tuple_a'},
-      tuplePair: {sourceType: 'tuple', source: 'tuple_aa'},
+      tupleSolo: {sourceType: 'tuple', source: 'tuple_a', asConst: false},
+      tupleSoloConst: {sourceType: 'tuple', source: 'tuple_a', asConst: true},
+      tuplePair: {sourceType: 'tuple', source: 'tuple_aa', asConst: false},
+      tuplePairConst: {sourceType: 'tuple', source: 'tuple_aa', asConst: true},
     },
     cases: {
       objectSolo: '{a:$num}',
       objectPair: '{a:$num,b:$str}',
       tupleSolo: '[$num]',
+      tupleSoloConst: '[$num] as const',
       tuplePair: '[$num,$str]',
+      tuplePairConst: '[$num,$str] as const',
     },
   })
   const target = separate({

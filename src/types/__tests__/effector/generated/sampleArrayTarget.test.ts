@@ -1040,18 +1040,24 @@ const typecheck = '{global}'
     test('source:wide (should pass)', () => {
       //prettier-ignore
       {
-        sample({source:{a:$num,b:$str}, target:[a_num]          })
-        sample({source:{a:$num,b:$str}, target:[ab]             })
-        sample({source:{a:$num,b:$str}, target:[a_num,ab]       })
-        sample({source:[$num,$str]    , target:[l_num]          })
-        sample({source:[$num,$str]    , target:[l_num_str]      })
-        sample({source:[$num,$str]    , target:[l_num,l_num_str]})
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num]          })
-        sample({source:{a:$num,b:$str}, clock:num, target:[ab]             })
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,ab]       })
-        sample({source:[$num,$str]    , clock:num, target:[l_num]          })
-        sample({source:[$num,$str]    , clock:num, target:[l_num_str]      })
-        sample({source:[$num,$str]    , clock:num, target:[l_num,l_num_str]})
+        sample({source:{a:$num,b:$str}     , target:[a_num]          })
+        sample({source:{a:$num,b:$str}     , target:[ab]             })
+        sample({source:{a:$num,b:$str}     , target:[a_num,ab]       })
+        sample({source:[$num,$str]         , target:[l_num]          })
+        sample({source:[$num,$str]         , target:[l_num_str]      })
+        sample({source:[$num,$str]         , target:[l_num,l_num_str]})
+        sample({source:[$num,$str] as const, target:[l_num]          })
+        sample({source:[$num,$str] as const, target:[l_num_str]      })
+        sample({source:[$num,$str] as const, target:[l_num,l_num_str]})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num]          })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[ab]             })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,ab]       })
+        sample({source:[$num,$str]         , clock:num, target:[l_num]          })
+        sample({source:[$num,$str]         , clock:num, target:[l_num_str]      })
+        sample({source:[$num,$str]         , clock:num, target:[l_num,l_num_str]})
+        sample({source:[$num,$str] as const, clock:num, target:[l_num]          })
+        sample({source:[$num,$str] as const, clock:num, target:[l_num_str]      })
+        sample({source:[$num,$str] as const, clock:num, target:[l_num,l_num_str]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1061,12 +1067,24 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number]; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         "
       `)
     })
@@ -1074,69 +1092,101 @@ const typecheck = '{global}'
       //prettier-ignore
       {
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_str]              })
+        sample({source:{a:$num,b:$str}     , target:[a_str]              })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[abn]                })
+        sample({source:{a:$num,b:$str}     , target:[abn]                })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_num,a_str]        })
+        sample({source:{a:$num,b:$str}     , target:[a_num,a_str]        })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_num,abn]          })
+        sample({source:{a:$num,b:$str}     , target:[a_num,abn]          })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_str,ab]           })
+        sample({source:{a:$num,b:$str}     , target:[a_str,ab]           })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[abn,a_str]          })
+        sample({source:{a:$num,b:$str}     , target:[abn,a_str]          })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[abn,ab]             })
+        sample({source:{a:$num,b:$str}     , target:[abn,ab]             })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[ab,a_str]           })
+        sample({source:{a:$num,b:$str}     , target:[ab,a_str]           })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_str]              })
+        sample({source:[$num,$str]         , target:[l_str]              })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num_num]          })
+        sample({source:[$num,$str]         , target:[l_num_num]          })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num,l_str]        })
+        sample({source:[$num,$str]         , target:[l_num,l_str]        })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num,l_num_num]    })
+        sample({source:[$num,$str]         , target:[l_num,l_num_num]    })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_str,l_num_num]    })
+        sample({source:[$num,$str]         , target:[l_str,l_num_num]    })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num_str,l_str]    })
+        sample({source:[$num,$str]         , target:[l_num_str,l_str]    })
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num_str,l_num_num]})
+        sample({source:[$num,$str]         , target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[l_num_num,l_str]    })
+        sample({source:[$num,$str]         , target:[l_num_num,l_str]    })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_str]              })
+        sample({source:[$num,$str] as const, target:[l_str]              })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[abn]                })
+        sample({source:[$num,$str] as const, target:[l_num_num]          })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,a_str]        })
+        sample({source:[$num,$str] as const, target:[l_num,l_str]        })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,abn]          })
+        sample({source:[$num,$str] as const, target:[l_num,l_num_num]    })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_str,ab]           })
+        sample({source:[$num,$str] as const, target:[l_str,l_num_num]    })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[abn,a_str]          })
+        sample({source:[$num,$str] as const, target:[l_num_str,l_str]    })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[abn,ab]             })
+        sample({source:[$num,$str] as const, target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[ab,a_str]           })
+        sample({source:[$num,$str] as const, target:[l_num_num,l_str]    })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_str]              })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str]              })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num_num]          })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[abn]                })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num,l_str]        })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,a_str]        })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num,l_num_num]    })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,abn]          })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_str,l_num_num]    })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str,ab]           })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num_str,l_str]    })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,a_str]          })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num_str,l_num_num]})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,ab]             })
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[l_num_num,l_str]    })
+        sample({source:{a:$num,b:$str}     , clock:num, target:[ab,a_str]           })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_str]              })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_num_num]          })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_num,l_str]        })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_num,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_str,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_num_str,l_str]    })
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_num_str,l_num_num]})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[l_num_num,l_str]    })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_str]              })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_num_num]          })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_num,l_str]        })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_num,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_str,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_num_str,l_str]    })
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_num_str,l_num_num]})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[l_num_num,l_str]    })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1162,6 +1212,22 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number, string]; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<AS>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS; }[]; }'.
         Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<ABN>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
@@ -1184,6 +1250,22 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number, string]; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         "
       `)
     })
@@ -1192,18 +1274,24 @@ const typecheck = '{global}'
     test('source:wide, fn:untyped (should pass)', () => {
       //prettier-ignore
       {
-        sample({source:{a:$num,b:$str}, target:[a_num]   , fn:({a,b}) => ({a,b})})
-        sample({source:{a:$num,b:$str}, target:[ab]      , fn:({a,b}) => ({a,b})})
-        sample({source:{a:$num,b:$str}, target:[a_num,ab], fn:({a,b}) => ({a,b})})
-        sample({source:[$num,$str]    , target:[a_num]   , fn:([a,b]) => ({a,b})})
-        sample({source:[$num,$str]    , target:[ab]      , fn:([a,b]) => ({a,b})})
-        sample({source:[$num,$str]    , target:[a_num,ab], fn:([a,b]) => ({a,b})})
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num]   , fn:({a,b}) => ({a,b})})
-        sample({source:{a:$num,b:$str}, clock:num, target:[ab]      , fn:({a,b}) => ({a,b})})
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,ab], fn:({a,b}) => ({a,b})})
-        sample({source:[$num,$str]    , clock:num, target:[a_num]   , fn:([a,b]) => ({a,b})})
-        sample({source:[$num,$str]    , clock:num, target:[ab]      , fn:([a,b]) => ({a,b})})
-        sample({source:[$num,$str]    , clock:num, target:[a_num,ab], fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[a_num]   , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[ab]      , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[a_num,ab], fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str]         , target:[a_num]   , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[ab]      , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[a_num,ab], fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[a_num]   , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[ab]      , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[a_num,ab], fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num]   , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[ab]      , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,ab], fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str]         , clock:num, target:[a_num]   , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , clock:num, target:[ab]      , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , clock:num, target:[a_num,ab], fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str] as const, clock:num, target:[a_num]   , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str] as const, clock:num, target:[ab]      , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str] as const, clock:num, target:[a_num,ab], fn:([a,b]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1213,12 +1301,36 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AN> | Event<AB>)[]; fn: ([a, b]: (string | number)[]) => { a: string | number; b: string | number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<AN>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<AB>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AN> | Event<AB>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<AN>[]; fn: ([a, b]: (string | number)[]) => { a: string | number; b: string | number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<AB>[]; fn: ([a, b]: (string | number)[]) => { a: string | number; b: string | number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AN> | Event<AB>)[]; fn: ([a, b]: (string | number)[]) => { a: string | number; b: string | number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<AN>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<AB>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AN> | Event<AB>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
         "
       `)
     })
@@ -1226,69 +1338,101 @@ const typecheck = '{global}'
       //prettier-ignore
       {
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_str]      , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[a_str]      , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[abn]        , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[abn]        , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_num,a_str], fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[a_num,a_str], fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_num,abn]  , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[a_num,abn]  , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[a_str,ab]   , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[a_str,ab]   , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[abn,ab]     , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[abn,ab]     , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, target:[ab,a_str]   , fn:({a,b}) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , target:[ab,a_str]   , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[a_str]      , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[a_str]      , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[abn]        , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[abn]        , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[a_num,a_str], fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[a_num,a_str], fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[abn,ab]     , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[abn,ab]     , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
+        sample({source:[$num,$str]         , target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_str]      , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[a_str]      , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[abn]        , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[abn]        , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,a_str], fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_num,abn]  , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[a_str,ab]   , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[abn,ab]     , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}, clock:num, target:[ab,a_str]   , fn:({a,b}) => ({a,b})})
+        sample({source:[$num,$str] as const, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str]      , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[abn]        , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[abn]        , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,a_str], fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,abn]  , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str,ab]   , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,ab]     , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]    , clock:num, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
+        sample({source:{a:$num,b:$str}     , clock:num, target:[ab,a_str]   , fn:({a,b}) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[abn]        , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str]         , clock:num, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[abn]        , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
+        //@ts-expect-error
+        sample({source:[$num,$str] as const, clock:num, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1314,6 +1458,38 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB | ABN; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: (string | number)[]) => { a: string | number; b: string | number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<AS>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<ABN>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AN> | Event<AS>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AN> | Event<ABN>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AS> | Event<ABN>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AB> | Event<ABN>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
         Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<AS>[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
         Argument of type '{ source: { a: Store<number>; b: Store<string>; }; clock: Event<number>; target: Event<ABN>[]; fn: ({ a, b }: { a: number; b: string; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
@@ -1336,6 +1512,38 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB | ABN; }[]; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: (string | number)[]) => { a: string | number; b: string | number; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<AS>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<ABN>[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a, b]: [any, any]) => { a: any; b: any; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Binding element 'b' implicitly has an 'any' type.
         "
       `)
     })
@@ -1344,17 +1552,23 @@ const typecheck = '{global}'
     test('source:same (should pass)', () => {
       //prettier-ignore
       {
-        sample({source:{a:$num}, target:[a_num]})
-        sample({source:[$num]  , target:[l_num]})
-        sample({source:{a:$num}, clock:num, target:[a_num]})
-        sample({source:[$num]  , clock:num, target:[l_num]})
+        sample({source:{a:$num}       , target:[a_num]})
+        sample({source:[$num]         , target:[l_num]})
+        sample({source:[$num] as const, target:[l_num]})
+        sample({source:{a:$num}       , clock:num, target:[a_num]})
+        sample({source:[$num]         , clock:num, target:[l_num]})
+        sample({source:[$num] as const, clock:num, target:[l_num]})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Argument of type '{ source: Store<number>[]; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<[number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         "
       `)
     })
@@ -1362,85 +1576,125 @@ const typecheck = '{global}'
       //prettier-ignore
       {
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_str]              })
+        sample({source:{a:$num}       , target:[a_str]              })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[abn]                })
+        sample({source:{a:$num}       , target:[abn]                })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[ab]                 })
+        sample({source:{a:$num}       , target:[ab]                 })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_num,a_str]        })
+        sample({source:{a:$num}       , target:[a_num,a_str]        })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_num,abn]          })
+        sample({source:{a:$num}       , target:[a_num,abn]          })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_num,ab]           })
+        sample({source:{a:$num}       , target:[a_num,ab]           })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_str,ab]           })
+        sample({source:{a:$num}       , target:[a_str,ab]           })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[abn,a_str]          })
+        sample({source:{a:$num}       , target:[abn,a_str]          })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[abn,ab]             })
+        sample({source:{a:$num}       , target:[abn,ab]             })
         //@ts-expect-error
-        sample({source:{a:$num}, target:[ab,a_str]           })
+        sample({source:{a:$num}       , target:[ab,a_str]           })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_str]              })
+        sample({source:[$num]         , target:[l_str]              })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num_str]          })
+        sample({source:[$num]         , target:[l_num_str]          })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num_num]          })
+        sample({source:[$num]         , target:[l_num_num]          })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num,l_str]        })
+        sample({source:[$num]         , target:[l_num,l_str]        })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num,l_num_str]    })
+        sample({source:[$num]         , target:[l_num,l_num_str]    })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num,l_num_num]    })
+        sample({source:[$num]         , target:[l_num,l_num_num]    })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_str,l_num_num]    })
+        sample({source:[$num]         , target:[l_str,l_num_num]    })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num_str,l_str]    })
+        sample({source:[$num]         , target:[l_num_str,l_str]    })
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num_str,l_num_num]})
+        sample({source:[$num]         , target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:[$num]  , target:[l_num_num,l_str]    })
+        sample({source:[$num]         , target:[l_num_num,l_str]    })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_str]              })
+        sample({source:[$num] as const, target:[l_str]              })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[abn]                })
+        sample({source:[$num] as const, target:[l_num_str]          })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[ab]                 })
+        sample({source:[$num] as const, target:[l_num_num]          })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_num,a_str]        })
+        sample({source:[$num] as const, target:[l_num,l_str]        })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_num,abn]          })
+        sample({source:[$num] as const, target:[l_num,l_num_str]    })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_num,ab]           })
+        sample({source:[$num] as const, target:[l_num,l_num_num]    })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_str,ab]           })
+        sample({source:[$num] as const, target:[l_str,l_num_num]    })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[abn,a_str]          })
+        sample({source:[$num] as const, target:[l_num_str,l_str]    })
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[abn,ab]             })
+        sample({source:[$num] as const, target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[ab,a_str]           })
+        sample({source:[$num] as const, target:[l_num_num,l_str]    })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_str]              })
+        sample({source:{a:$num}       , clock:num, target:[a_str]              })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num_str]          })
+        sample({source:{a:$num}       , clock:num, target:[abn]                })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num_num]          })
+        sample({source:{a:$num}       , clock:num, target:[ab]                 })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num,l_str]        })
+        sample({source:{a:$num}       , clock:num, target:[a_num,a_str]        })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num,l_num_str]    })
+        sample({source:{a:$num}       , clock:num, target:[a_num,abn]          })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num,l_num_num]    })
+        sample({source:{a:$num}       , clock:num, target:[a_num,ab]           })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_str,l_num_num]    })
+        sample({source:{a:$num}       , clock:num, target:[a_str,ab]           })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num_str,l_str]    })
+        sample({source:{a:$num}       , clock:num, target:[abn,a_str]          })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num_str,l_num_num]})
+        sample({source:{a:$num}       , clock:num, target:[abn,ab]             })
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[l_num_num,l_str]    })
+        sample({source:{a:$num}       , clock:num, target:[ab,a_str]           })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_str]              })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num_str]          })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num_num]          })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num,l_str]        })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num,l_num_str]    })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_str,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num_str,l_str]    })
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num_str,l_num_num]})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[l_num_num,l_str]    })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_str]              })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num_str]          })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num_num]          })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num,l_str]        })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num,l_num_str]    })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_str,l_num_num]    })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num_str,l_str]    })
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num_str,l_num_num]})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[l_num_num,l_str]    })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1478,6 +1732,26 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number, string]; }[]; }'.
         Argument of type '{ source: Store<number>[]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<AS>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS; }[]; }'.
         Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<ABN>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: ABN; }[]; }'.
@@ -1512,6 +1786,26 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number, string]; }[]; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<[string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<[number, string]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<[number, number]>[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[number]> | Event<[string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[number]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[number]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[string]> | Event<[number, string]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[number, string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<[string]> | Event<[number, number]>)[]; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         "
       `)
     })
@@ -1520,22 +1814,45 @@ const typecheck = '{global}'
     test('source:same, fn:untyped (should pass)', () => {
       //prettier-ignore
       {
-        sample({source:{a:$num}, target:[a_num]   , fn:({a}) => ({a,b:''})})
-        sample({source:{a:$num}, target:[ab]      , fn:({a}) => ({a,b:''})})
-        sample({source:{a:$num}, target:[a_num,ab], fn:({a}) => ({a,b:''})})
-        sample({source:[$num]  , target:[a_num]   , fn:([a]) => ({a,b:''})})
-        sample({source:[$num]  , target:[ab]      , fn:([a]) => ({a,b:''})})
-        sample({source:[$num]  , target:[a_num,ab], fn:([a]) => ({a,b:''})})
-        sample({source:{a:$num}, clock:num, target:[a_num]   , fn:({a}) => ({a,b:''})})
-        sample({source:{a:$num}, clock:num, target:[ab]      , fn:({a}) => ({a,b:''})})
-        sample({source:{a:$num}, clock:num, target:[a_num,ab], fn:({a}) => ({a,b:''})})
-        sample({source:[$num]  , clock:num, target:[a_num]   , fn:([a]) => ({a,b:''})})
-        sample({source:[$num]  , clock:num, target:[ab]      , fn:([a]) => ({a,b:''})})
-        sample({source:[$num]  , clock:num, target:[a_num,ab], fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[a_num]   , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[ab]      , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[a_num,ab], fn:({a}) => ({a,b:''})})
+        sample({source:[$num]         , target:[a_num]   , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[ab]      , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[a_num,ab], fn:([a]) => ({a,b:''})})
+        sample({source:[$num] as const, target:[a_num]   , fn:([a]) => ({a,b:''})})
+        sample({source:[$num] as const, target:[ab]      , fn:([a]) => ({a,b:''})})
+        sample({source:[$num] as const, target:[a_num,ab], fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[a_num]   , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[ab]      , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[a_num,ab], fn:({a}) => ({a,b:''})})
+        sample({source:[$num]         , clock:num, target:[a_num]   , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , clock:num, target:[ab]      , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , clock:num, target:[a_num,ab], fn:([a]) => ({a,b:''})})
+        sample({source:[$num] as const, clock:num, target:[a_num]   , fn:([a]) => ({a,b:''})})
+        sample({source:[$num] as const, clock:num, target:[ab]      , fn:([a]) => ({a,b:''})})
+        sample({source:[$num] as const, clock:num, target:[a_num,ab], fn:([a]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Argument of type '{ source: readonly [Store<number>]; target: Event<AN>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<AB>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AN> | Event<AB>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<AN>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<AB>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AN> | Event<AB>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
         "
       `)
     })
@@ -1543,69 +1860,101 @@ const typecheck = '{global}'
       //prettier-ignore
       {
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_str]      , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[a_str]      , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[abn]        , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[abn]        , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_num,a_str], fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[a_num,a_str], fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_num,abn]  , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[a_num,abn]  , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[a_str,ab]   , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[a_str,ab]   , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[abn,ab]     , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[abn,ab]     , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, target:[ab,a_str]   , fn:({a}) => ({a,b:''})})
+        sample({source:{a:$num}       , target:[ab,a_str]   , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[a_str]      , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[a_str]      , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[abn]        , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[abn]        , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[a_num,a_str], fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[a_num,a_str], fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[abn,ab]     , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[abn,ab]     , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
+        sample({source:[$num]         , target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_str]      , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[a_str]      , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[abn]        , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[abn]        , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_num,a_str], fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_num,abn]  , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[a_str,ab]   , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[abn,ab]     , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}, clock:num, target:[ab,a_str]   , fn:({a}) => ({a,b:''})})
+        sample({source:[$num] as const, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[a_str]      , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[abn]        , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[abn]        , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[a_num,a_str], fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[a_num,abn]  , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[a_str,ab]   , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[abn,ab]     , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]  , clock:num, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
+        sample({source:{a:$num}       , clock:num, target:[ab,a_str]   , fn:({a}) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[abn]        , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num]         , clock:num, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[abn]        , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
+        //@ts-expect-error
+        sample({source:[$num] as const, clock:num, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1621,6 +1970,30 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
         Argument of type '{ source: Store<number>[]; target: (Event<AS> | Event<ABN>)[]; fn: ([a]: number[]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<AS>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<ABN>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AN> | Event<AS>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AN> | Event<ABN>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AS> | Event<ABN>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AB> | Event<ABN>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
         Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<AS>[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
         Argument of type '{ source: { a: Store<number>; }; clock: Event<number>; target: Event<ABN>[]; fn: ({ a }: { a: number; }) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
@@ -1633,6 +2006,30 @@ const typecheck = '{global}'
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ([a]: number[]) => { a: number; b: string; }; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<AS>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<ABN>[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AN> | Event<AS>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AN> | Event<ABN>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AS> | Event<ABN>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AB> | Event<ABN>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: (Event<AS> | Event<AB>)[]; fn: ([a]: [any]) => { a: any; b: string; }; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Binding element 'a' implicitly has an 'any' type.
         "
       `)
     })
