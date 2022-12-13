@@ -2047,32 +2047,12 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[number, string]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, string]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<any>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<void>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[number, string]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, string]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<void>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         Argument of type '{ source: Store<number>[]; target: Event<[number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; target: Event<[number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
         Argument of type '{ source: Store<number>[]; target: Event<[number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; target: Event<[number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         "
       `)
     })
@@ -2100,22 +2080,20 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[number, number]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, number]>; filter: (val: readonly [number, string]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: Store<number>[]; target: Event<[number, number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; target: Event<[number, number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<[number, number]>; filter: (val: readonly [number]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
         Argument of type '{ source: Store<number>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
         "
       `)
     })
@@ -2155,50 +2133,14 @@ describe('tuple source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<[number, string]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<any>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<void>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<[number, string]>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<any>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<number>; target: Event<void>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<any>; target: Event<[number, string]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<[number, string]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<void>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<number>; target: Event<[number]>; filter: (val: number[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>; target: Event<[number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<number>; target: Event<[number]>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
         Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>; target: Event<[number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         "
       `)
     })
@@ -2226,22 +2168,20 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<any>; target: Event<[number, number]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<[number, number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<[number, number]>; filter: (val: readonly [number, string]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<any>; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[number, number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>; target: Event<[number, number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>; target: Event<[number, number]>; filter: (val: readonly [number]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<any>; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
         "
       `)
     })
@@ -2281,50 +2221,14 @@ describe('tuple source', () => {
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: (Store<number> | Event<number>)[]; target: Event<[number, string]>; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<[number, string]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<any>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<void>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: (Store<number> | Event<number>)[]; target: Event<[number, string]>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: (Store<number> | Event<number>)[]; target: Event<any>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: (Store<number> | Event<number>)[]; target: Event<void>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<any>[]; target: Event<[number, string]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<[number, string]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<any>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<void>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<any>[]; target: Event<[number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
         Argument of type '{ source: Store<number>[]; clock: (Store<number> | Event<number>)[]; target: Event<[number]>; filter: (val: number[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>[]; target: Event<[number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Argument of type '{ source: readonly [Store<number>]; clock: (Store<number> | Event<number>)[]; target: Event<[number]>; filter: (val: any, n: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
-        Parameter 'n' implicitly has an 'any' type.
         Argument of type '{ source: Store<number>[]; clock: Event<any>[]; target: Event<[number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>[]; target: Event<[number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
         "
       `)
     })
@@ -2352,22 +2256,20 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<any>[]; target: Event<[number, number]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<[number, number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<[number, number]>; filter: (val: readonly [number, string]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<any>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>, Store<string>]; }'.
+        Argument of type '{ source: readonly [Store<number>, Store<string>]; clock: Event<any>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<any>[]; target: Event<[number, number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>[]; target: Event<[number, number]>; filter: (val: any) => boolean; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-        Parameter 'val' implicitly has an 'any' type.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>[]; target: Event<[number, number]>; filter: (val: readonly [number]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
         Argument of type '{ source: Store<number>[]; clock: Event<any>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: readonly [Store<number>]; }'.
+        Argument of type '{ source: readonly [Store<number>]; clock: Event<any>[]; target: Event<[number, number]>; filter: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
         "
       `)
     })

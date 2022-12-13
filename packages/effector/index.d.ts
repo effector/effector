@@ -5,6 +5,7 @@
  * @see https://github.com/krzkaczor/ts-essentials/blob/a4c2485bc3f37843267820ec552aa662251767bc/lib/types.ts#L169
  */
 type Tuple<T = unknown> = [T?, ...T[]]
+type RoTuple<T = unknown> = readonly [T?, ...T[]]
 
 /**
  * Non inferential type parameter usage. NoInfer in source and in return of fn helps with
@@ -2136,7 +2137,7 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
       ? UnitValue<ClockValueOf<Clock>>
       : never
 
-type SourceRecord = Record<string, Store<any>> | Tuple<Store<any>>
+type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
 type Units = Unit<any> | Tuple<Unit<any>>
 
