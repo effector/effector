@@ -1,9 +1,11 @@
 ---
-id: computation-priority
 title: Computation priority
+lang: en-US
 ---
 
-For sure, you've noticed that function [should be pure](docs/explanation/glossary.md#purity)... or watch, if there is a place for side effect. We will talk about this in current section - **Computation priority**
+# Computation Priority
+
+For sure, you've noticed that function [should be pure](/explanation/glossary.md#purity)... or watch, if there is a place for side effect. We will talk about this in current section - **Computation priority**
 
 A real example of queue priority - people waiting for medical treatment in a hospital, extreme emergency cases will have the highest priority and move to the start of the queue and less significant to the end.
 
@@ -57,8 +59,8 @@ console.log('expect count to be 2', count === 2)
 
 [Try it](https://share.effector.dev/IRAmt9Uq)
 
-:::note
-Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue)
+::: info
+Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue).
 :::
 
-We hope that this information cleared some things on how the library works
+We hope that this information cleared some things on how the library works.

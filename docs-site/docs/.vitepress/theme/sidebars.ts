@@ -118,6 +118,14 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: 'Glossary',
           link: '/explanation/glossary',
         },
+        {
+          text: 'Computation Priority',
+          link: '/explanation/computation-priority',
+        },
+        {
+          text: 'Prior Art',
+          link: '/explanation/prior-art',
+        },
       ],
     },
   ],
