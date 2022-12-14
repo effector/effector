@@ -12,14 +12,6 @@ lang: en-US
 npm add effector
 ```
 
-### Deno <Badge type="info" text="Since effector 21.0.0" />
-
-Just import `effector.mjs` from any CDN.
-
-```typescript
-import {createStore} from 'https://cdn.jsdelivr.net/npm/effector/effector.mjs'
-```
-
 ## React
 
 ```bash
@@ -42,9 +34,45 @@ npm add effector effector-solid
 
 Svelte works with effector out of the box, no additional packages needed.
 
+### Deno
+
+::: info since
+[effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
+:::
+
+Just import `effector.mjs` from any CDN.
+
+```typescript
+import {createStore} from 'https://cdn.jsdelivr.net/npm/effector/effector.mjs'
+```
+
+Sample CDNS:
+
+- https://www.jsdelivr.com/package/npm/effector
+- https://cdn.jsdelivr.net/npm/effector/effector.cjs.js
+- https://cdn.jsdelivr.net/npm/effector/effector.mjs
+- https://cdn.jsdelivr.net/npm/effector-react/effector-react.cjs.js
+- https://cdn.jsdelivr.net/npm/effector-vue/effector-vue.cjs.js
+
 ## DevTools
 
-Use [effector-logger](https://github.com/effector/logger) for printing updates to console, displaying current store values with browser ui and connecting application to familiar redux devtools
+Use [effector-logger](https://github.com/effector/logger) for printing updates to console, displaying current store values with browser ui and connecting application to familiar redux devtools.
+
+For server-side rendering and writing test you may need plugins for your compiler toolkit:
+
+### Babel
+
+To use Babel-plugin you don't need to install additional packages, plugin bundled to `effector` package.
+
+[Read this for more details](/api/effector/babel-plugin).
+
+### SWC
+
+```bash
+npm add --development @effector/swc-plugin @swc/core
+```
+
+[Documentation](https://github.com/effector/swc-plugin).
 
 ## Online playground
 
