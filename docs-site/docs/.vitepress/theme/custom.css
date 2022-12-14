@@ -70,8 +70,8 @@
   font-family: 'Lexend Deca', sans-serif;
 }
 
-.link[href^="http://"]::after,
-.link[href^="https://"]::after
+.VPNavBarMenuLink.link[href^="http://"]::after,
+.VPNavBarMenuLink.link[href^="https://"]::after
 {
   content: '';
   width: 0.7em;
@@ -84,8 +84,8 @@
   background-image: url('/assets/external.svg');
 }
 
-.dark .link[href^="http://"]::after,
-.dark .link[href^="https://"]::after
+.dark .VPNavBarMenuLink.link[href^="http://"]::after,
+.dark .VPNavBarMenuLink.link[href^="https://"]::after
 {
   filter: invert();
 }

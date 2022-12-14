@@ -139,6 +139,19 @@ export const sidebar: DefaultTheme.Sidebar = {
         },
       ],
     },
+    {
+      text: 'Compiler Plugins',
+      items: [
+        {
+          text: 'Babel plugin',
+          link: '/api/effector/babel-plugin',
+        },
+        {
+          text: 'SWC plugin',
+          link: 'https://github.com/effector/swc-plugin',
+        },
+      ],
+    },
   ],
 
   '/recipes': [
