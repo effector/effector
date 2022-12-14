@@ -1,25 +1,29 @@
 ---
-id: store
 title: Store
 keywords:
   - store
   - unit
 description: Store, its methods and properties
+lang: en-US
 ---
 
-_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](docs/explanationglossary.md#common-unit). Some stores can be [derived](#derived-store).
+# Store
 
-## Store Methods
+_Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](/explanation/glossary.md#common-unit). Some stores can be [derived](#derived-store).
 
-### `map(fn: (state: State, lastState?: T) => T, firstState: T)`
+<br/><br/>
 
-:::note
-Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn` and `firstState` are deprecated, use [`updateFilter`](docs/api/effector/createStore.md) or explicit `createStore` instead.
+# Store Methods
+
+## `map(fn: (state: State, lastState?: T) => T, firstState: T)`
+
+::: info
+Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn` and `firstState` are deprecated, use [`updateFilter`](/api/effector/createStore.md) or explicit `createStore` instead.
 :::
 
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
 
-#### Formulae
+### Formulae
 
 ```ts
 const $second = $first.map(fn)
@@ -34,13 +38,13 @@ const $second = $first.map(fn)
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
-[Should be **pure**](docs/explanationglossary.md#purity)
+[Should be **pure**](/explanation/glossary.md#purity)
 
 **Returns**
 
-[_DerivedStore_](docs/api/effector/Store.md#derived-store): New derived store
+[_DerivedStore_](/api/effector/Store.md#derived-store): New derived store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -68,13 +72,11 @@ changed('hello world')
 
 [Try it](https://share.effector.dev/XGKGMvpF)
 
-<hr />
+## `on(trigger, reducer)`
 
-### `on(trigger, reducer)`
+Updates state when `trigger` is triggered by using [`reducer`](/explanation/glossary.md#reducer). For each trigger, last installed reducer will override previous reducers (useful for dynamic behavior).
 
-Updates state when `trigger` is triggered by using [`reducer`](docs/explanationglossary.md#reducer). For each trigger, last installed reducer will override previous reducers (useful for dynamic behavior).
-
-#### Formulae
+### Formulae
 
 ```ts
 $store.on(trigger, reducer)
@@ -85,17 +87,17 @@ $store.on(trigger, reducer)
 
 **Arguments**
 
-1. `trigger` [_Event_](docs/api/effector/Event.md), [_Effect_](docs/api/effector/Effect.md) or another [_Store_](docs/api/effector/Store.md)
-2. `reducer` [_Reducer_](docs/explanationglossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](docs/explanationglossary.md#purity).
+1. `trigger` [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or another [_Store_](/api/effector/Store.md)
+2. `reducer` [_Reducer_](/explanation/glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](/explanation/glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `params`: Parameters passed to event call
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): Current store
+[_Store_](/api/effector/Store.md): Current store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -119,16 +121,14 @@ changed(2)
 
 [Try it](https://share.effector.dev/O0JnDtIl)
 
-<hr />
+## `on(triggers[], reducer)`
 
-### `on(triggers[], reducer)`
-
-:::note since
+::: info since
 effector 20.15.0
 :::
-Updates state when any from `triggers` is triggered by using [`reducer`](docs/explanationglossary.md#reducer).
+Updates state when any from `triggers` is triggered by using [`reducer`](/explanation/glossary.md#reducer).
 
-#### Formulae
+### Formulae
 
 ```ts
 $store.on([triggerA, triggerB, ...], reducer)
@@ -140,17 +140,17 @@ $store.on([triggerA, triggerB, ...], reducer)
 
 **Arguments**
 
-1. `triggers` array of [_Event_](docs/api/effector/Event.md), [_Effect_](docs/api/effector/Effect.md) or [_Store_](docs/api/effector/Store.md)
-2. `reducer` [_Reducer_](docs/explanationglossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](docs/explanationglossary.md#purity).
+1. `triggers` array of [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)
+2. `reducer` [_Reducer_](/explanation/glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](/explanation/glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `payload`: Value passed to event/effect call, or source if it passed as trigger
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): Current store
+[_Store_](/api/effector/Store.md): Current store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -178,13 +178,11 @@ $store.off(changedA)
 
 [Try it](https://share.effector.dev/iP0oM3NF)
 
-<hr />
-
-### `watch(watcher)`
+## `watch(watcher)`
 
 Call `watcher` function each time when store is updated. <br/>
 
-#### Formulae
+### Formulae
 
 ```ts
 const unwatch = $store.watch(watcher)
@@ -195,13 +193,13 @@ const unwatch = $store.watch(watcher)
 
 **Arguments**
 
-1. `watcher` ([_Watcher_](docs/explanationglossary.md#watcher)): Watcher function that receives current store state as the first argument
+1. `watcher` ([_Watcher_](/explanation/glossary.md#watcher)): Watcher function that receives current store state as the first argument
 
 **Returns**
 
-[_Subscription_](docs/explanationglossary.md#subscription): Unsubscribe function
+[_Subscription_](/explanation/glossary.md#subscription): Unsubscribe function
 
-#### Example
+### Example
 
 ```js
 const add = createEvent()
@@ -215,13 +213,11 @@ add(3)
 // => current value: 7
 ```
 
-<hr />
-
-### `watch(trigger, watcher)`
+## `watch(trigger, watcher)`
 
 Run `watcher` only when `trigger` event triggered. <br/>
 
-#### Formulae
+### Formulae
 
 ```ts
 const unwatch = $store.watch(trigger, watcher)
@@ -232,14 +228,14 @@ const unwatch = $store.watch(trigger, watcher)
 
 **Arguments**
 
-1. `trigger` [_Event_](docs/api/effector/Event.md), [_Effect_](docs/api/effector/Effect.md) or [_Store_](docs/api/effector/Store.md): Trigger, which leads to call of `watcher`
+1. `trigger` [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md): Trigger, which leads to call of `watcher`
 1. `watcher` (_Function_): Function that receives current store state as the first argument and payload of trigger as the second argument.
 
 **Returns**
 
-[_Subscription_](docs/explanationglossary.md#subscription): Unsubscribe function
+[_Subscription_](/explanation/glossary.md#subscription): Unsubscribe function
 
-#### Example 1
+### Example 1
 
 `.watch` trigger `watcher` when `foo` is executed, because `foo` is explicitly passed to `watch`. <br/>
 First argument of `watcher` is a state value, second is an event value.
@@ -267,15 +263,13 @@ foo(3)
 
 [Try it](https://share.effector.dev/xEltaFyH)
 
-<hr />
-
-### `reset(...triggers)`
+## `reset(...triggers)`
 
 Resets store state to the default value.
 
 A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
 
-#### Formulae
+### Formulae
 
 ```ts
 $store.reset(...triggers)
@@ -285,13 +279,13 @@ $store.reset(...triggers)
 
 **Arguments**
 
-1. `triggers` (_(Event | Effect | Store)[]_): any number of [_Events_](docs/api/effector/Event.md), [_Effects_](docs/api/effector/Effect.md) or [_Stores_](docs/api/effector/Store.md)
+1. `triggers` (_(Event | Effect | Store)[]_): any number of [_Events_](/api/effector/Event.md), [_Effects_](/api/effector/Effect.md) or [_Stores_](/api/effector/Store.md)
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): Current store
+[_Store_](/api/effector/Store.md): Current store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -314,18 +308,16 @@ reset() // changed 0
 
 [Try it](https://share.effector.dev/7W8m2Zdg)
 
-<hr />
-
-### `reset(triggersArray)`
+## `reset(triggersArray)`
 
 :::note since
 effector 20.15.0
 :::
-Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](docs/api/effector/merge.md) and [store.on(triggers[], fn)](docs/api/effector/Store.md#ontriggers-reducer)
+Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](/api/effector/merge.md) and [store.on(triggers[], fn)](/api/effector/Store.md#ontriggers-reducer)
 
 A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
 
-#### Formulae
+### Formulae
 
 ```ts
 $store.reset([triggerA, triggerB, ...])
@@ -335,13 +327,13 @@ $store.reset([triggerA, triggerB, ...])
 
 **Arguments**
 
-1. `triggersArray` (_(Event | Effect | Store)[]_): any number of [_Events_](docs/api/effector/Event.md), [_Effects_](docs/api/effector/Effect.md) or [_Stores_](docs/api/effector/Store.md)
+1. `triggersArray` (_(Event | Effect | Store)[]_): any number of [_Events_](/api/effector/Event.md), [_Effects_](/api/effector/Effect.md) or [_Stores_](/api/effector/Store.md)
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): Current store
+[_Store_](/api/effector/Store.md): Current store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -364,26 +356,24 @@ reset() // changed 0
 
 [Try it](https://share.effector.dev/ot6R5ePc)
 
-<hr />
-
-### `off(trigger)`
+## `off(trigger)`
 
 ```ts
 $store.off(trigger)
 ```
 
-- Removes reducer for given `trigger`, which was installed via [\$store.on](docs/api/effector/Store.md#ontrigger-reducer) or [\$store.reset](docs/api/effector/Store.md#resettriggers)
+- Removes reducer for given `trigger`, which was installed via [\$store.on](/api/effector/Store.md#ontrigger-reducer) or [\$store.reset](/api/effector/Store.md#resettriggers)
 - If there was no reducer for that `trigger`, this method will do nothing
 
 **Arguments**
 
-1. `trigger`: [_Event_](docs/api/effector/Event.md), [_Effect_](docs/api/effector/Effect.md) or [_Store_](docs/api/effector/Store.md)
+1. `trigger`: [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): Current store
+[_Store_](/api/effector/Store.md): Current store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -403,17 +393,15 @@ $store.off(changed)
 
 [Try it](https://share.effector.dev/bzdoyLHm)
 
-<hr />
+## `thru(fn)`
 
-### `thru(fn)`
-
-:::caution deprecated
+::: warning deprecated
 since 22.0.0
 :::
 
 Call function with the given store and return result as it is.
 
-#### Formulae
+### Formulae
 
 ```ts
 const result = $store.thru(fn)
@@ -424,13 +412,13 @@ const result = $store.thru(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure**](docs/explanationglossary.md#purity)
+1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure**](/explanation/glossary.md#purity)
 
 **Returns**
 
 (_any_): Value, returned by `fn`
 
-#### Example
+### Example
 
 ```js
 import {createStore, createEvent} from 'effector'
@@ -464,13 +452,13 @@ inc()
 
 [Try it](https://share.effector.dev/RRSyqVus)
 
-<hr />
+<br/><br/>
 
-## Store Properties
+# Store Properties
 
-### `updates`
+## `updates`
 
-#### Formulae
+### Formulae
 
 ```ts
 $store.updates
@@ -480,13 +468,13 @@ $store.updates
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): Event that represents updates of the given store.
+[_Event_](/api/effector/Event.md): Event that represents updates of the given store.
 
-:::caution Important
+::: warning Important
 Do not manually call this event. It is event that depends on a store.
 :::
 
-Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](docs/api/effector/Store.md#watchwatcher))
+Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](/api/effector/Store.md#watchwatcher))
 
 ```js
 import {createStore, is} from 'effector'
@@ -505,23 +493,19 @@ $clicksAmount.updates.watch(amount => {
 
 [Try it](https://share.effector.dev/F5L5kLTE)
 
-<hr />
-
-### `shortName`
+## `shortName`
 
 **Returns**
 
 (_`string`_): ID or short name of the store
 
-<hr />
-
-### `defaultState`
+## `defaultState`
 
 **Returns**
 
 (_`State`_): Default state of the store
 
-#### Example
+### Example
 
 ```ts
 const $store = createStore('DEFAULT')
@@ -530,22 +514,24 @@ console.log($store.defaultState === 'DEFAULT')
 // => true
 ```
 
-## Utility methods
+<br/><br/>
 
-### `getState()`
+# Utility methods
+
+## `getState()`
 
 Returns current state of store
 
-:::caution You don't need this method!
+::: warning You don't need this method!
 `getState()` gives rise to difficult to debug imperative code and kind of race condition.
-Prefer declarative [sample](docs/api/effector/sample.md) to pass data from store and [attach](docs/api/effector/attach.md) for effects
+Prefer declarative [sample](/api/effector/sample.md) to pass data from store and [attach](/api/effector/attach.md) for effects
 :::
 
 **Returns**
 
 (_`State`_): Current state of the store
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -568,11 +554,13 @@ add(3)
 
 [Try it](https://share.effector.dev/YrnlMuRj)
 
-## Derived store
+<br/><br/>
+
+# Derived store
 
 _DerivedStore_ has no specific interface in TypeScript, but it has different implementation in the effector kernel.
 
-Some methods like [`combine`](docs/api/effector/combine.md), [`.map`](#mapfn-state-state-laststate-t--t-firststate-t), [`sample`](docs/api/effector/sample.md), [`.pending`](docs/api/effector/Effect.md#pending) returns `Store` instance.
+Some methods like [`combine`](/api/effector/combine.md), [`.map`](#mapfn-state-state-laststate-t--t-firststate-t), [`sample`](/api/effector/sample.md), [`.pending`](/api/effector/Effect.md#pending) returns `Store` instance.
 The store updates by specific rules defined in the method above. That's why we have different type of stores.
 
 Derived stores are not allowed to be modified from the outside. For example, you shall not add new triggers on the derived store:
@@ -611,7 +599,7 @@ These methods are <u>allowed</u> for DerivedStore:
 - using DerivedStore as a `source` and/or `clock` in `sample` and so on
 - using DerivedStore in `combine` sources
 
-:::caution deprecation
+::: warning deprecation
 since 23.0.0 banned methods will throw an exception
 :::
 
@@ -621,4 +609,4 @@ These methods are _banned_ for DerivedStore:
 - `.reset`
 - using DerivedStore as a `target` in `sample`, `guard` and so on
 
-Any kind of store can be used as a `clock` or `source` in methods like [`sample`](docs/api/effector/sample.md).
+Any kind of store can be used as a `clock` or `source` in methods like [`sample`](/api/effector/sample.md).

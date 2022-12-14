@@ -1,7 +1,29 @@
 import {DefaultTheme} from 'vitepress'
 
 export const sidebar: DefaultTheme.Sidebar = {
-  '/api': [],
+  '/api/effector': [
+    {
+      text: 'Unit Types',
+      items: [
+        {
+          text: 'Event',
+          link: '/api/effector/Event',
+        },
+        {
+          text: 'Store',
+          link: '/api/effector/Store',
+        },
+        {
+          text: 'Effect',
+          link: '/api/effector/Effect',
+        },
+        {
+          text: 'Domain',
+          link: '/api/effector/Domain',
+        },
+      ],
+    },
+  ],
   '/recipes': [
     {
       text: 'Common',

@@ -23,7 +23,7 @@ createEffect(handler?)
 [_Effect_](./Effect.md): Новый эффект
 
 :::note
-Вы должны задать обработчик в [createEffect](createEffect.md) или же в [`.use`](Effect.md#usehandler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
+Вы должны задать обработчик в [createEffect](createEffect.md) или же в [`.use`](Effect.md#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
 :::
 
 :::note since
@@ -68,7 +68,7 @@ const $repos = createStore([]).on(
   (_, repos) => repos,
 )
 
-$repos.watch(repos => {
+$repos.watch((repos) => {
   console.log(`${repos.length} repos`)
 })
 // => 0 репозиториев
@@ -108,7 +108,7 @@ const fetchUserReposFx = createEffect(async ({name}) => {
   return req.json()
 })
 
-fetchUserReposFx.pending.watch(pending => {
+fetchUserReposFx.pending.watch((pending) => {
   console.log(`effect is pending?: ${pending ? 'yes' : 'no'}`)
 })
 

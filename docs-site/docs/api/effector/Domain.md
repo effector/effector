@@ -4,19 +4,21 @@ title: Domain
 description: Domain, its methods and properties
 ---
 
+# Domain
+
 Domain is a namespace for your events, stores and effects.
 
 Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
 
 It is useful for logging or other side effects.
 
-## Unit creators
+# Unit creators
 
-:::note since
+::: info since
 effector 20.7.0
 :::
 
-### `createEvent(name?)`
+## `createEvent(name?)`
 
 **Arguments**
 
@@ -24,13 +26,11 @@ effector 20.7.0
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event
+[_Event_](/api/effector/Event.md): New event
 
-<hr />
+## `createEffect(handler?)`
 
-### `createEffect(handler?)`
-
-Creates an [effect](docs/api/effector/Effect.md) with given handler
+Creates an [effect](/api/effector/Effect.md) with given handler
 
 **Arguments**
 
@@ -38,15 +38,13 @@ Creates an [effect](docs/api/effector/Effect.md) with given handler
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): A container for async function.
+[_Effect_](/api/effector/Effect.md): A container for async function.
 
-:::note since
+::: info since
 effector 21.3.0
 :::
 
-<hr />
-
-### `createEffect(name?)`
+## `createEffect(name?)`
 
 **Arguments**
 
@@ -54,11 +52,9 @@ effector 21.3.0
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): A container for async function.
+[_Effect_](/api/effector/Effect.md): A container for async function.
 
-<hr />
-
-### `createStore(defaultState)`
+## `createStore(defaultState)`
 
 **Arguments**
 
@@ -66,11 +62,9 @@ effector 21.3.0
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): New store
+[_Store_](/api/effector/Store.md): New store
 
-<hr />
-
-### `createDomain(name?)`
+## `createDomain(name?)`
 
 **Arguments**
 
@@ -78,15 +72,13 @@ effector 21.3.0
 
 **Returns**
 
-[_Domain_](docs/api/effector/Domain.md): New domain
+[_Domain_](/api/effector/Domain.md): New domain
 
-<hr />
-
-### `history`
+## `history`
 
 Contains mutable read-only sets of units inside domain.
 
-#### Formulae
+### Formulae
 
 ```ts
 const {stores, events, domains, effects} = domain.history
@@ -94,7 +86,7 @@ const {stores, events, domains, effects} = domain.history
 
 - When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
 
-:::note since
+::: info since
 effector 20.3.0
 :::
 
@@ -109,39 +101,29 @@ console.log(domain.history)
 
 [Try it](https://share.effector.dev/flIV7Fja)
 
-<hr />
+## Aliases
 
-### Aliases
+### `event(name?)`
 
-#### `event(name?)`
+An alias for [domain.createEvent](/api/effector/Domain.md#createevent-name)
 
-An alias for [domain.createEvent](docs/api/effector/Domain.md#createeventname)
+### `effect(name?)`
 
-<hr />
+An alias for [domain.createEffect](/api/effector/Domain.md#createeffect-name)
 
-#### `effect(name?)`
+### `store(defaultState)`
 
-An alias for [domain.createEffect](docs/api/effector/Domain.md#createeffectname)
+An alias for [domain.createStore](/api/effector/Domain.md#createstore-defaultstate)
 
-<hr />
+### `domain(name?)`
 
-#### `store(defaultState)`
+An alias for [domain.createDomain](/api/effector/Domain.md#createdomain-name)
 
-An alias for [domain.createStore](docs/api/effector/Domain.md#createstoredefaultstate)
+# Domain hooks
 
-<hr />
+## `onCreateEvent(hook)`
 
-#### `domain(name?)`
-
-An alias for [domain.createDomain](docs/api/effector/Domain.md#createdomainname)
-
-<hr />
-
-## Domain hooks
-
-### `onCreateEvent(hook)`
-
-#### Formulae
+### Formulae
 
 ```ts
 domain.onCreateEvent(event => {})
@@ -153,13 +135,13 @@ domain.onCreateEvent(event => {})
 
 **Arguments**
 
-1. `hook` ([_Watcher_]): A function that receives [Event](docs/api/effector/Event.md) and will be called during every [domain.createEvent](docs/api/effector/Domain.md#createeventname) call
+1. `hook` ([_Watcher_]): A function that receives [Event](/api/effector/Event.md) and will be called during every [domain.createEvent](/api/effector/Domain.md#createeventname) call
 
 **Returns**
 
 [_Subscription_]: Unsubscribe function.
 
-#### Example
+### Example
 
 ```js
 import {createDomain} from 'effector'
@@ -179,11 +161,9 @@ const b = domain.createEvent()
 
 [Try it](https://share.effector.dev/QCQpga6u)
 
-<hr />
+## `onCreateEffect(hook)`
 
-### `onCreateEffect(hook)`
-
-#### Formulae
+### Formulae
 
 ```ts
 domain.onCreateEffect(effect => {})
@@ -195,13 +175,13 @@ domain.onCreateEffect(effect => {})
 
 **Arguments**
 
-1. `hook` ([_Watcher_]): A function that receives [Effect](docs/api/effector/Effect.md) and will be called during every [domain.createEffect](docs/api/effector/Domain.md#createeffectname) call
+1. `hook` ([_Watcher_]): A function that receives [Effect](/api/effector/Effect.md) and will be called during every [domain.createEffect](/api/effector/Domain.md#createeffect-name) call
 
 **Returns**
 
 [_Subscription_]: Unsubscribe function.
 
-#### Example
+### Example
 
 ```js
 import {createDomain} from 'effector'
@@ -221,11 +201,9 @@ const barFx = domain.createEffect()
 
 [Try it](https://share.effector.dev/uT6f8vv9)
 
-<hr />
+## `onCreateStore(hook)`
 
-### `onCreateStore(hook)`
-
-#### Formulae
+### Formulae
 
 ```ts
 domain.onCreateStore($store => {})
@@ -237,13 +215,13 @@ domain.onCreateStore($store => {})
 
 **Arguments**
 
-1. `hook` ([_Watcher_]): A function that receives [Store](docs/api/effector/Store.md) and will be called during every [domain.createStore](docs/api/effector/Domain.md#createstoredefaultstate) call
+1. `hook` ([_Watcher_]): A function that receives [Store](/api/effector/Store.md) and will be called during every [domain.createStore](/api/effector/Domain.md#createstore-defaultstate) call
 
 **Returns**
 
 [_Subscription_]: Unsubscribe function.
 
-#### Example
+### Example
 
 ```js
 import {createDomain} from 'effector'
@@ -260,29 +238,27 @@ const $a = domain.createStore(null)
 
 [Try it](https://share.effector.dev/OGlYOtfz)
 
-<hr />
+## `onCreateDomain(hook)`
 
-### `onCreateDomain(hook)`
-
-#### Formulae
+### Formulae
 
 ```ts
 domain.onCreateDomain(domain => {})
 ```
 
-- Function passed to `onCreateDomain` called every time, as sub domain created in `domain`
+- Function passed to `onCreateDomain` called every time, as subdomain created in `domain`
 - Function called with `domain` as first argument
 - Result of function call is ignored
 
 **Arguments**
 
-1. `hook` ([_Watcher_]): A function that receives [Domain](docs/api/effector/Domain.md) and will be called during every [domain.createDomain](docs/api/effector/Domain.md#createdomainname) call
+1. `hook` ([_Watcher_]): A function that receives [Domain](/api/effector/Domain.md) and will be called during every [domain.createDomain](/api/effector/Domain.md#createdomain-name) call
 
 **Returns**
 
 [_Subscription_]: Unsubscribe function.
 
-#### Example
+### Example
 
 ```js
 import {createDomain} from 'effector'
@@ -302,7 +278,5 @@ const b = domain.createDomain()
 
 [Try it](https://share.effector.dev/dvBLiwHf)
 
-<hr />
-
-[_watcher_]: docs/explanationglossary.md#watcher
-[_subscription_]: docs/explanationglossary.md#subscription
+[_watcher_]: /explanation/glossary.md#watcher
+[_subscription_]: /explanation/glossary.md#subscription

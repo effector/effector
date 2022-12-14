@@ -5,7 +5,7 @@ title: Babel plugin
 
 Встроенный плагин для babel, который можно использовать для ssr и отладки. Он вставляет имя юнита, выводимое из имени переменной, и `sid` (стабильный идентификатор), вычисляемый по расположению в исходном коде.
 
-К примеру, в случае [эффектов без обработчиков](./Effect.md#usehandler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
+К примеру, в случае [эффектов без обработчиков](./Effect.md#use-handler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
 
 ```js
 import {createEffect} from 'effector'
@@ -51,7 +51,7 @@ console.log(getUsers.sid)
 ```js title="worker.js"
 import {getUsers} from './common.js'
 
-getUsers.use(userID => fetch(userID))
+getUsers.use((userID) => fetch(userID))
 
 getUsers.done.watch(({result}) => {
   postMessage({sid: getUsers.sid, result})
@@ -73,8 +73,8 @@ const worker = new Worker('worker.js')
 worker.onmessage = onMessage
 
 getUsers.use(
-  userID =>
-    new Promise(rs => {
+  (userID) =>
+    new Promise((rs) => {
       worker.postMessage({sid: getUsers.sid, userID})
       const unwatch = onMessage.watch(({data}) => {
         if (data.sid !== getUsers.sid) return
@@ -181,7 +181,6 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 > `debugSids: boolean`
 
 Добавляет в sid путь к файлу и имя переменной где объявлен unit. Очень полезно при отладке SSR.
-
 
 ### noDefaults
 

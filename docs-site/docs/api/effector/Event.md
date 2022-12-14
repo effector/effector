@@ -5,7 +5,10 @@ keywords:
   - event
   - unit
 description: Event, its methods and properties
+lang: en-US
 ---
+
+# Event
 
 _Event_ is an intention to change the state. Let's imagine life situation, you enter a shop and, according to etiquette, you have to say "hello" - **intention**, then you say "hello" - **event**.
 
@@ -24,13 +27,15 @@ console.log(event())
 
 [Try it](https://share.effector.dev/iVBYDJjf)
 
-## Event Methods
+<br/><br/>
 
-### `watch(watcher)`
+# Event Methods
 
-It is a function which allows you to watch the event or to create side-effects.
+## `watch(watcher)`
 
-#### Formulae
+It is a function which allows you to watch the event or to create side effects.
+
+### Formulae
 
 ```ts
 const unwatch = event.watch(fn)
@@ -43,13 +48,13 @@ const unwatch = event.watch(fn)
 
 **Arguments**
 
-1. `watcher` ([_Watcher_](docs/explanationglossary.md#watcher)): A function that receives `payload`.
+1. `watcher` ([_Watcher_](/explanation/glossary.md#watcher)): A function that receives `payload`.
 
 **Returns**
 
-[_Subscription_](docs/explanationglossary.md#subscription): Unsubscribe function.
+[_Subscription_](/explanation/glossary.md#subscription): Unsubscribe function.
 
-#### Example
+### Example
 
 ```js
 import {createEvent} from 'effector'
@@ -67,11 +72,11 @@ sayHi('Drew') // => nothing happened
 
 <hr/>
 
-### `map(fn)`
+## `map(fn)`
 
 Creates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
 
-#### Formulae
+### Formulae
 
 ```ts
 const second = first.map(fn)
@@ -82,13 +87,13 @@ const second = first.map(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](docs/explanationglossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event.
+[_Event_](/api/effector/Event.md): New event.
 
-#### Example
+### Example
 
 ```js
 import {createEvent} from 'effector'
@@ -109,13 +114,13 @@ userUpdated({name: 'john', role: 'admin'})
 
 <hr />
 
-### `prepend(fn)`
+## `prepend(fn)`
 
 Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
-If original event belongs to some [domain](docs/api/effector/Domain.md) then new event will belong to it as well
+If original event belongs to some [domain](/api/effector/Domain.md) then new event will belong to it as well
 
-#### Formulae
+### Formulae
 
 ```ts
 const second = first.prepend(fn)
@@ -127,13 +132,13 @@ const second = first.prepend(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](docs/explanationglossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event.
+[_Event_](/api/effector/Event.md): New event.
 
-#### Example
+### Example
 
 ```js
 import {createEvent} from 'effector'
@@ -167,9 +172,9 @@ changeName('alice')
 
 <hr />
 
-### `filterMap(fn)`
+## `filterMap(fn)`
 
-:::note since
+::: info since
 effector 20.0.0
 :::
 
@@ -191,7 +196,7 @@ And you repeat this until you complete the task. Now think about it in the effec
 You may see that we united `filter()` and `map()` methods, the reason for creating was an impossibility to event filtering.
 The method is useful with JavaScript APIs those returns `undefined`.
 
-#### Formulae
+### Formulae
 
 ```ts
 const second = first.filterMap(fn)
@@ -203,34 +208,36 @@ const second = first.filterMap(fn)
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](docs/explanationglossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event.
+[_Event_](/api/effector/Event.md): New event.
 
-#### Example
+### Example
 
-```jsx
+```tsx
 const listReceived = createEvent<string[]>()
-const effectorFound = listReceived.filterMap(list => list.find(name => name === 'effector'))
+const effectorFound = listReceived.filterMap(list =>
+  list.find(name => name === 'effector'),
+)
 
-effectorFound.watch(name => console.info("found", name))
-listReceived(["redux", "effector", "mobx"]) // found effector
-listReceived(["redux", "mobx"])
+effectorFound.watch(name => console.info('found', name))
+listReceived(['redux', 'effector', 'mobx']) // found effector
+listReceived(['redux', 'mobx'])
 ```
 
 [Try it](https://share.effector.dev/ARDanMAM)
 
 <hr/>
 
-### `filter({fn})`
+## `filter({fn})`
 
 Creates a new event, which will be called after the original event is called if `fn` returns `true`.
 
 Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
 
-#### Formulae
+### Formulae
 
 ```ts
 const second = first.filter({fn})
@@ -241,21 +248,21 @@ const second = first.filter({fn})
 
 **Arguments**
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](docs/explanationglossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event.
+[_Event_](/api/effector/Event.md): New event.
 
-:::note
-Object form is used because `event.filter(fn)` was an alias for [event.filterMap](docs/api/effector/Event.md#filtermapfn)
+::: info
+Object form is used because `event.filter(fn)` was an alias for [event.filterMap](/api/effector/Event.md#filtermap-fn)
 :::
 
-:::note
-[`guard`](docs/api/effector/guard.md) method is the preferred filtering method
+::: tip
+[`sample`](/api/effector/sample.md) method with `filter` is the preferred filtering method
 :::
 
-#### Example
+### Example
 
 ```js
 import {createEvent, createStore} from 'effector'

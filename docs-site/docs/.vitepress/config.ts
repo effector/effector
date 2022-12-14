@@ -8,6 +8,16 @@ export default defineConfig({
   lastUpdated: true,
   head: [],
   lang: 'en-US',
+  locales: {
+    'en-US': {
+      lang: 'en-US',
+      label: 'English',
+    },
+    'ru-RU': {
+      lang: 'ru-RU',
+      label: 'Russian',
+    },
+  },
   themeConfig: {
     siteTitle: 'effector',
     logo: '/effector.png',
@@ -38,4 +48,13 @@ export default defineConfig({
     },
     nav: navigation,
   },
+  markdown: {
+    toc: {
+      level: [2, 3, 4],
+    },
+    headers: {
+      level: [2, 3, 4],
+    },
+  },
+  cleanUrls: 'with-subfolders',
 })

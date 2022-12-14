@@ -5,7 +5,7 @@ title: Babel plugin
 
 Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](docs/explanationglossary.md#unit), inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
 
-For example, in case [effects without handlers](docs/api/effector/Effect.md#usehandler), it improves error message by clearly showing in which effect error happened.
+For example, in case [effects without handlers](docs/api/effector/Effect.md#use-handler), it improves error message by clearly showing in which effect error happened.
 
 ```js
 import {createEffect} from 'effector'

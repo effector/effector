@@ -4,6 +4,7 @@ export const navigation: DefaultTheme.NavItem[] = [
   {
     text: 'Docs',
     link: '/introduction/installation',
+    activeMatch: '^/(introduction|conventions|explanation|typescript)/',
   },
   {
     text: 'API',
@@ -30,6 +31,7 @@ export const navigation: DefaultTheme.NavItem[] = [
   {
     text: 'Recipes',
     link: '/recipes/',
+    activeMatch: '^/recipes/',
   },
   {
     text: 'Blog',

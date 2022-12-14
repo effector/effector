@@ -15,7 +15,6 @@ This article is about how to test effects and stores with api calls
 Effects in effector allows users to change their implementation (handler) via use calls, which would be used to mocking them in tests.
 In this example we'll use jest for tests. At first, I'll show full implementation of module with tests and then will describe it line-by-line.
 
-
 ```js
 import {createEvent} from 'effector'
 import {apiRequestFX, lastResults} from '../app'
@@ -27,7 +26,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
- apiRequestFX.use(currentHandler)
+  apiRequestFX.use(currentHandler)
 })
 
 const resetResults = createEvent()
@@ -40,7 +39,7 @@ afterAll(() => {
   lastResults.off(resetResults)
 })
 
-test('api requests will be added to the end of lastResults list', async() => {
+test('api requests will be added to the end of lastResults list', async () => {
   resetResults()
   apiRequestFX.use(() => 'api response')
   await apiRequestFX()
@@ -62,13 +61,13 @@ import {apiRequestFX, lastResults} from '../app'
 
 Then we defining setup code, which will save current handler before each test run and restore it later.
 
-[use.getCurrent in docs](https://effector.dev/docs/api/effector/effect/#usegetcurrent)
+[use.getCurrent in docs](https://effector.dev/docs/api/effector/effect/#use-getcurrent)
 
 ```js
 let currentHandler
 
 beforeEach(() => {
-   currentHandler = apiRequestFX.use.getCurrent()
+  currentHandler = apiRequestFX.use.getCurrent()
 })
 
 afterEach(() => {
@@ -84,11 +83,11 @@ import {createEvent} from 'effector'
 const resetResults = createEvent()
 
 beforeAll(() => {
- lastResults.reset(resetResults)
+  lastResults.reset(resetResults)
 })
 
 afterAll(() => {
- lastResults.off(resetResults)
+  lastResults.off(resetResults)
 })
 ```
 
@@ -97,7 +96,7 @@ And finally, defining our tests
 ## Tests
 
 ```js
-test('api requests will be added to the end of lastResults list', async() => {
+test('api requests will be added to the end of lastResults list', async () => {
   resetResults()
   apiRequestFX.use(() => 'api response')
   await apiRequestFX()
@@ -128,7 +127,7 @@ expect(lastResults.getState()).toEqual(['api response'])
 ```
 
 Then we changing the handler again and checking that new item is going to appear at the end of the list.
-Although in application code you usually will not  use getState(), but in testing it is pretty useful method, allowed us to validate changes in stores directly
+Although in application code you usually will not use getState(), but in testing it is pretty useful method, allowed us to validate changes in stores directly
 
 ```js
 apiRequestFX.use(() => 'last update')

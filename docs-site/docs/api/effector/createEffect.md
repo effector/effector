@@ -23,7 +23,7 @@ createEffect(handler?)
 [_Effect_](docs/api/effector/Effect.md): New effect
 
 :::note
-You must provide a handler either in [createEffect](docs/api/effector/createEffect.md) or in [`.use`](docs/api/effector/Effect.md#usehandler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
+You must provide a handler either in [createEffect](docs/api/effector/createEffect.md) or in [`.use`](docs/api/effector/Effect.md#use-handler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
 :::
 
 :::note since
