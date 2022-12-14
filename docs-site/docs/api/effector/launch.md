@@ -1,11 +1,15 @@
 ---
-id: launch
 title: launch
+lang: en-US
 ---
+
+# launch
 
 ::: info since
 [effector 20.10.0](https://changelog.effector.dev/#effector-20-10-0)
 :::
+
+## Formulae {#launch-formulae}
 
 ```ts
 launch({target: unit, params})

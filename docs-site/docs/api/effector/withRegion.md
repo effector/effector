@@ -1,7 +1,6 @@
 ---
-id: withRegion
 title: withRegion
-hide_title: true
+lang: en-US
 ---
 
 # withRegion
@@ -10,18 +9,22 @@ hide_title: true
 [effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::
 
-### `withRegion(unit: Unit<T> | Step, cb: () => void)`
+## Formulae {#withRegion-formulae}
 
-The method allow to explicitly transfer ownership of all units (including links created with sample, forward, etc...) defined in the callback `cb` to `unit`. As an implication all the created links will be erased as soon as `clearNode` will be called on `unit`.
+```ts
+withRegion(unit: Unit<T> | Step, cb: () => void)
+```
 
-The method based on the idea of region-based memory management (see https://en.wikipedia.org/wiki/Region-based_memory_management for reference)
+The method allow to explicitly transfer ownership of all units (including links created with sample, forward, etc...) defined in the callback `cb` to `unit`. As an implication all the created links will be erased as soon as [`clearNode`](./clearNode.md) will be called on [`Unit`](/explanation/glossary.md#unit).
 
-**Arguments**
+The method based on the idea of region-based memory management (see [Region-based memory management](https://en.wikipedia.org/wiki/Region-based_memory_management) for reference)
+
+### Arguments {#withRegion-arguments}
 
 1. `unit`: Unit | Step which will serve as "local area" or "region" owned all the units created within provided callback `cb`
 2. `cb`: () => void Callback where all the relevant units should be defined
 
-#### Example
+## Example {#withRegion-example}
 
 ```js
 import {

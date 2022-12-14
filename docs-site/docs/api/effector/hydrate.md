@@ -1,24 +1,28 @@
 ---
-id: hydrate
 title: hydrate
+lang: en-US
 ---
 
-A companion method for [_serialize_](serialize). Hydrates provided values into corresponding stores within a provided domain or scope. The main purpose is an application state hydration on the client side after SSR.
+# hydrate
+
+A companion method for [_serialize_](/api/effector/serialize.md). Hydrates provided values into corresponding stores within a provided domain or scope. The main purpose is an application state hydration on the client side after SSR.
+
+## Formulae {#hydrate-formulae}
 
 ```ts
 hydrate(domainOrScope: Domain | Scope, { values: Map<Store<any>, any> | {[sid: string]: any} }): void
 ```
 
-**Arguments**
+### Arguments {#hydrate-args}
 
-1. `domainOrScope`: [domain](docs/api/effector/Domain.md) or [scope](docs/api/effector/Scope.md) which will be filled with given `values`
-2. `values`: a mapping from store sids to store values or a Map where keys are [store](docs/api/effector/Store.md) objects and values contains initial store value
+1. `domainOrScope`: [domain](/api/effector/Domain.md) or [scope](/api/effector/Scope.md) which will be filled with given `values`
+2. `values`: a mapping from store sids to store values or a Map where keys are [store](/api/effector/Store.md) objects and values contains initial store value
 
 ::: warning
 You need to make sure, that the store is created beforehand, otherwise, the hydration might fail. This could be the case, if you store initalization / hydration scripts separate from stores' creation.
 :::
 
-### Example
+## Example {#hydrate-example}
 
 Populate store with a predefined value
 

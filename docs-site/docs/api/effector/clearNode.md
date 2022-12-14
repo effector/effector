@@ -1,19 +1,22 @@
 ---
-id: clearNode
 title: clearNode
-hide_title: true
 description: Method for destroying stores, events, effects, subscriptions and domains
+lang: en-US
 ---
 
 # clearNode
 
-## `clearNode(unit, config?: {deep?: boolean}): void`
+## Formulae {#clearNode-formulae}
+
+```ts
+clearNode(unit, config?: {deep?: boolean}): void
+```
 
 Method for destroying stores, events, effects, subscriptions and domains
 
-**Arguments**
+### Arguments {#clearNode-arguments}
 
-1. `unit` ([_Store_](docs/api/effector/Store.md)/[_Event_](docs/api/effector/Event.md)/[_Effect_](docs/api/effector/Effect.md)/[_Domain_](docs/api/effector/Domain.md)/[_Scope_](docs/api/effector/Scope.md)): unit to be erased
+1. `unit` ([_Store_](/api/effector/Store.md)/[_Event_](/api/effector/Event.md)/[_Effect_](/api/effector/Effect.md)/[_Domain_](/api/effector/Domain.md)/[_Scope_](/api/effector/Scope.md)): unit to be erased
 2. `config: ({deep?: boolean})` (optional): config object
    - `deep: boolean` (optional): erase node _and_ all of its' computed values
 
@@ -21,7 +24,7 @@ Method for destroying stores, events, effects, subscriptions and domains
 
 `void`
 
-### Example 1
+## Example 1 {#clearNode-example-1}
 
 ```js
 import {createStore, createEvent, clearNode} from 'effector'
@@ -42,7 +45,7 @@ inc()
 
 [Try it](https://share.effector.dev/WjuSl6aN)
 
-### Example 2 (with deep)
+## Example 2 (with deep) {#clearNode-example-2}
 
 ```js
 import {createStore, createEvent, clearNode} from 'effector'

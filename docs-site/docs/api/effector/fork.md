@@ -1,7 +1,17 @@
 ---
-id: fork
 title: fork
+lang: en-US
 ---
+
+# fork
+
+::: info since
+
+- `fork()` introduced in [effector `22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+- `fork(domain)` introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
+- support for array of tuples in `values` and `handlers` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+
+:::
 
 Creates an isolated instance of application.
 Primary purposes of this method are SSR and testing.
@@ -14,9 +24,13 @@ fork(options: { values?, handlers? }): Scope
 fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
+::: warning Requirements
+[_babel-plugin_](/api/effector/babel-plugin.md) or [_swc-plugin_](https://github.com/effector/swc-plugin) is required for using this method
+:::
+
 ### Arguments {#fork-args}
 
-1. `domain` ([_Domain_](docs/api/effector/Domain.md)): Optional domain to fork
+1. `domain` ([_Domain_](/api/effector/Domain.md)): Optional domain to fork
 2. `values`: Option to provide initial states for stores
 
    Can be used in three ways:
@@ -51,8 +65,8 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       })
       ```
 
-      ::: info
-      Such objects are created by [serialize](docs/api/effector/serialize.md), in application code **array of tuples is preferred**
+      ::: info Explanation
+      Such objects are created by [serialize](/api/effector/serialize.md), in application code **array of tuples is preferred**
       :::
 
 3. `handlers`: Option to provide handlers for effects
@@ -82,19 +96,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 
 ### Returns {#fork-return}
 
-[_Scope_](docs/api/effector/Scope.md)
-
-::: info
-[_babel-plugin_](docs/api/effector/babel-plugin.md) is required for using this method
-:::
-
-::: info
-
-- `fork()` introduced in `effector 22.0.0`
-- `fork(domain)` introduced in `effector 21.0.0`
-- support for array of tuples in `values` and `handlers` introduced in `effector 22.0.0`
-
-:::
+[_Scope_](/api/effector/Scope.md)
 
 ## Examples {#fork-examples}
 

@@ -89,11 +89,53 @@ export const sidebar: DefaultTheme.Sidebar = {
       ],
     },
     {
+      text: 'Fork API',
+      items: [
+        {
+          text: 'fork',
+          link: '/api/effector/fork',
+        },
+        {
+          text: 'serialize',
+          link: '/api/effector/serialize',
+        },
+        {
+          text: 'allSettled',
+          link: '/api/effector/allSettled',
+        },
+        {
+          text: 'hydrate',
+          link: '/api/effector/hydrate',
+        },
+        {
+          text: 'scopeBind',
+          link: '/api/effector/scopeBind',
+        },
+      ],
+    },
+    {
       text: 'Utilities',
       items: [
         {
           text: 'is',
           link: '/api/effector/is',
+        },
+      ],
+    },
+    {
+      text: 'Low-level API',
+      items: [
+        {
+          text: 'clearNode',
+          link: '/api/effector/clearNode',
+        },
+        {
+          text: 'withRegion',
+          link: '/api/effector/withRegion',
+        },
+        {
+          text: 'launch',
+          link: '/api/effector/launch',
         },
       ],
     },

@@ -7,6 +7,7 @@ lang: en-US
 
 `Scope` is a fully isolated instance of application.
 The primary purpose of scope includes SSR (but is not limited to). Scope contain independent clone of all the units (including connections between them) and basic methods to access them.
+
 Scope can be created by [fork](/api/effector/fork.md).
 
 ```ts
