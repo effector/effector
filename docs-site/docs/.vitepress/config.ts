@@ -14,6 +14,7 @@ export default defineConfig({
       message: 'zerobias & Effector Core team',
       copyright: 'Copyright © 2018-2022',
     },
+    outline: [2, 3],
     socialLinks: [
       {
         icon: 'github',
