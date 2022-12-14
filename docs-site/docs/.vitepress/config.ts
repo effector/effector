@@ -7,17 +7,6 @@ export default defineConfig({
   description: 'Business logic with ease',
   lastUpdated: true,
   head: [],
-  lang: 'en-US',
-  locales: {
-    'en-US': {
-      lang: 'en-US',
-      label: 'English',
-    },
-    'ru-RU': {
-      lang: 'ru-RU',
-      label: 'Russian',
-    },
-  },
   themeConfig: {
     siteTitle: 'effector',
     logo: '/effector.png',
@@ -47,6 +36,24 @@ export default defineConfig({
       pattern: 'https://github.com/effector/effector/tree/master/docs/:path',
     },
     nav: navigation,
+    localeLinks: {
+      text: '',
+      items: [
+        {text: 'English', link: '/'},
+        {text: 'Russian', link: '/ru/introduction/installation'},
+      ],
+    },
+  },
+  lang: 'en-US',
+  locales: {
+    '/ru/': {
+      lang: 'ru-RU',
+      label: 'Russian',
+    },
+    '/': {
+      lang: 'en-US',
+      label: 'English',
+    },
   },
   markdown: {
     toc: {
