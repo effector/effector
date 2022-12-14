@@ -6,35 +6,40 @@ lang: en-US
 
 # Installation
 
-### Via package manager
+## Via package manager
+
+Effector doesn't depend on NPM, you can use any package manager you want.<br/>
+For example: [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/).
 
 ```bash
 npm add effector
 ```
 
-## React
+### React
 
 ```bash
 npm add effector effector-react
 ```
 
-## Vue
+Also, you can start from [Stackblitz template](https://stackblitz.com/fork/github/effector/vite-react-template) with [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/), and [React](https://reactjs.org/) already set up.
+
+### Vue
 
 ```bash
 npm add effector effector-vue
 ```
 
-## Solid
+### Solid
 
 ```bash
 npm add effector effector-solid
 ```
 
-## Svelte
+### Svelte
 
 Svelte works with effector out of the box, no additional packages needed.
 
-### Deno
+## Deno
 
 ::: info since
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
@@ -76,9 +81,7 @@ npm add --development @effector/swc-plugin @swc/core
 
 ## Online playground
 
-Examples in this documentation are running in [our online playground](https://share.effector.dev), which allows someone to test and share ideas quickly, without install. Code sharing, Typescript and react supported out of the box
-
-[Project repository](https://github.com/effector/repl).
+Examples in this documentation are running in [our online playground](https://share.effector.dev), which allows someone to test and share ideas quickly, without install. Code sharing, Typescript and react supported out of the box. [Project repository](https://github.com/effector/repl).
 
 ## Compatibility
 
