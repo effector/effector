@@ -91,11 +91,11 @@ function useList(
 
 `React.ReactNode`
 
-:::note
+::: info
 Опция `getKey` добавлена в effector-react 21.3.0
 :::
 
-:::note
+::: info
 Опция `placeholder` добавлена в effector-react 22.1.0
 :::
 

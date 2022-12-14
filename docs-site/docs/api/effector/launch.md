@@ -3,8 +3,8 @@ id: launch
 title: launch
 ---
 
-:::note since
-effector 20.10.0
+::: info since
+[effector 20.10.0](https://changelog.effector.dev/#effector-20-10-0)
 :::
 
 ```ts

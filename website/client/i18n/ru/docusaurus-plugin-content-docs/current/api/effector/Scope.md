@@ -49,8 +49,8 @@ const inc = domain.createEvent()
 const dec = domain.createEvent()
 const $counter = domain
   .createStore(0)
-  .on(inc, value => value + 1)
-  .on(dec, value => value - 1)
+  .on(inc, (value) => value + 1)
+  .on(dec, (value) => value - 1)
 
 const scopeA = fork(domain)
 const scopeB = fork(domain)
@@ -73,7 +73,7 @@ console.log(scopeB.getState($counter)) // => -1
 
 ```js
 const delayFx = app.createEffect(async () => {
-  await new Promise(rs => setTimeout(rs, 80))
+  await new Promise((rs) => setTimeout(rs, 80))
 })
 ```
 
@@ -96,7 +96,7 @@ const sendWithAuthFx = app.createEffect(async () => {
 const sendWithAuthFx = app.createEffect(async () => {
   await authUserFx()
   //НЕ ПРАВИЛЬНО! этот код следует сделать отдельным эффектом delayFx
-  await new Promise(rs => setTimeout(rs, 80))
+  await new Promise((rs) => setTimeout(rs, 80))
   //потеря контекста
   await sendMessageFx()
 })
@@ -104,10 +104,10 @@ const sendWithAuthFx = app.createEffect(async () => {
 
 Таким образом, любой эффект может либо вызывать другой эффект, либо выполнять некоторые асинхронные вычисления, но не то и другое
 
-:::tip
+::: tip
 Вместо императивных вызовов оптимальнее использовать [attach](./attach.md)
 :::
 
-:::caution
+::: warning
 Императивные вызовы эффектов поддерживаются только в обработчиках других эффектов, **не** в `watch` функциях
 :::

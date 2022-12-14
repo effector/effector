@@ -48,11 +48,11 @@ In such case, we need to tell react about our dependencies and pass keys explici
 4. `getKey` (_(value) => React.Key_): Optional function to compute key for every item of list
 5. `placeholder` (_ReactNode_): Optional react node to render instead of empty list
 
-:::note
+::: info
 `getKey` option introduced in `effector-react@21.3.0`
 :::
 
-:::note
+::: info
 `placeholder` option introduced in `effector-react@22.1.0`
 :::
 

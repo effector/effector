@@ -92,10 +92,10 @@ const updateUser = createEvent()
 const userNameUpdated = updateUser.map(({name}) => name)
 const userRoleUpdated = updateUser.map(({role}) => role.toUpperCase())
 
-userNameUpdated.watch(name =>
+userNameUpdated.watch((name) =>
   console.log(`Имя пользователя изменено на ${name}`),
 )
-userRoleUpdated.watch(role =>
+userRoleUpdated.watch((role) =>
   console.log(`Роль пользователя изменена на ${role}`),
 )
 
@@ -158,11 +158,11 @@ userPropertyChanged.watch(({field, value}) => {
   console.log(`Свойство пользователя "${field}" изменено на ${value}`)
 })
 
-const changeName = userPropertyChanged.prepend(name => ({
+const changeName = userPropertyChanged.prepend((name) => ({
   field: 'name',
   value: name,
 }))
-const changeRole = userPropertyChanged.prepend(role => ({
+const changeRole = userPropertyChanged.prepend((role) => ({
   field: 'role',
   value: role.toUpperCase(),
 }))
@@ -183,7 +183,7 @@ changeName('alice')
 
 Создает производное событие на основе данных из исходного с возможностью отмены вызова
 
-:::note
+::: info
 Метод добавлен в effector 20.0.0
 :::
 
@@ -206,7 +206,7 @@ const eventB = eventA.filterMap(
 
 ```
 
-:::note
+::: info
 Если требуется только фильтрация вызовов без трансформации данных, то оптимальнее использовать [guard](./guard.md)
 :::
 
@@ -245,7 +245,7 @@ listReceived(["redux", "mobx"])
 
 ##### Использование nullable react ref с filterMap {#filterMap-nullable-ref-example}
 
-:::note
+::: info
 Методы _modal.showModal_ и _modal.close_ - стандартные возможности dom-элемента `<dialog>`
 
 [Статья в MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal) про _showModal_
@@ -258,15 +258,15 @@ import {createEvent, createStore} from 'effector'
 const openModal = createEvent()
 const closeModal = createEvent()
 
-const openModalUnboxed = openModal.filterMap(ref => {
+const openModalUnboxed = openModal.filterMap((ref) => {
   if (ref.current) return ref.current
 })
-const closeModalUnboxed = closeModal.filterMap(ref => {
+const closeModalUnboxed = closeModal.filterMap((ref) => {
   if (ref.current) return ref.current
 })
 
-openModalUnboxed.watch(modal => modal.showModal())
-closeModalUnboxed.watch(modal => modal.close())
+openModalUnboxed.watch((modal) => modal.showModal())
+closeModalUnboxed.watch((modal) => modal.close())
 
 const App = () => {
   const modalRef = React.useRef(null)
@@ -298,7 +298,7 @@ const App = () => {
 
 Вызывает функцию с сайд-эффектами при каждом срабатывании события
 
-:::note
+::: info
 По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](./Effect.md) и [сэмпла](./sample.md)
 :::
 
@@ -329,7 +329,7 @@ event.watch(/*watcher*/ (data: T) => any)
 import {createEvent} from 'effector'
 
 const sayHi = createEvent()
-const stop = sayHi.watch(name => {
+const stop = sayHi.watch((name) => {
   console.log(`Привет, ${name}!`)
 })
 
@@ -382,7 +382,7 @@ event.sid
 
 Создает производное событие с возможностью отмены вызова
 
-:::note
+::: info
 Более гибким способом фильтрации является [guard](./guard.md), рекомендуется использовать именно его
 :::
 
@@ -409,7 +409,7 @@ const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
 
 Новое, производное событие
 
-:::note
+::: info
 Объектная форма аргумента используется потому что _event.filter(fn)_ был сокращённой формой [filterMap](#filterMap)
 :::
 
@@ -428,7 +428,7 @@ const positiveNumbers = numbers.filter({
 
 const $lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
 
-$lastPositive.watch(x => {
+$lastPositive.watch((x) => {
   console.log('последнее положительное значение:', x)
 })
 

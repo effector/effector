@@ -5,11 +5,11 @@ title: API Reference
 
 ## Reactive helpers
 
-- [useUnit(unit)](docs/api/effector-solid/useUnit.md)
-- [useStoreMap({ store, keys, fn })](docs/api/effector-solid/useStoreMap.md)
+- [useUnit(unit)]/apieffector-solid/useUnit.md)
+- [useStoreMap({ store, keys, fn })]/apieffector-solid/useStoreMap.md)
 
 ## Gate API
 
-- [Gate](docs/api/effector-solid/Gate.md)
-- [createGate()](docs/api/effector-solid/createGate.md)
-- [useGate(GateComponent, props)](docs/api/effector-solid/useGate.md)
+- [Gate]/apieffector-solid/Gate.md)
+- [createGate()]/apieffector-solid/createGate.md)
+- [useGate(GateComponent, props)]/apieffector-solid/useGate.md)

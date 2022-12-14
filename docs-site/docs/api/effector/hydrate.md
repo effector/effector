@@ -14,7 +14,7 @@ hydrate(domainOrScope: Domain | Scope, { values: Map<Store<any>, any> | {[sid: s
 1. `domainOrScope`: [domain](docs/api/effector/Domain.md) or [scope](docs/api/effector/Scope.md) which will be filled with given `values`
 2. `values`: a mapping from store sids to store values or a Map where keys are [store](docs/api/effector/Store.md) objects and values contains initial store value
 
-:::caution
+::: warning
 You need to make sure, that the store is created beforehand, otherwise, the hydration might fail. This could be the case, if you store initalization / hydration scripts separate from stores' creation.
 :::
 

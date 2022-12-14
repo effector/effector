@@ -3,7 +3,7 @@ id: useStoreMap
 title: useStoreMap
 ---
 
-React hook, which subscribes to [store](docs/api/effector/Store.md) and transforms its value with given function. Component will update only when selector function result will change
+React hook, which subscribes to [store]/apieffector/Store.md) and transforms its value with given function. Component will update only when selector function result will change
 
 Common use case: subscribe to changes in selected part of store only
 
@@ -14,13 +14,13 @@ useStoreMap<State, Result>(
 ): Result
 ```
 
-:::note
+::: info
 Short version of `useStoreMap` introduced in `effector-react@21.3.0`
 :::
 
 **Arguments**
 
-1. `store`: Source [store](docs/api/effector/Store.md)
+1. `store`: Source [store]/apieffector/Store.md)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
 **Returns**
@@ -42,21 +42,21 @@ Overload used when you need to pass dependencies to react (to update items when 
 **Arguments**
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store](docs/api/effector/Store.md)
+   - `store`: Source [store]/apieffector/Store.md)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](docs/api/effector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter]/apieffector/createStore.md) option under the hood
    - `defaultValue`: Optional default value, used whenever `fn` returns undefined
 
 **Returns**
 
 (_Result_)
 
-:::note
+::: info
 `updateFilter` option introduced in `effector-react@21.3.0`
 :::
 
-:::note
+::: info
 `defaultValue` option introduced in `effector-react@22.1.0`
 :::
 

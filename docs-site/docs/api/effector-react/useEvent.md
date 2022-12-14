@@ -3,7 +3,7 @@ id: useEvent
 title: useEvent
 ---
 
-Bind event to current [_scope_](docs/api/effector/Scope.md) to use in dom event handlers.
+Bind event to current [_scope_]/apieffector/Scope.md) to use in dom event handlers.
 Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is no-op and does not require `Provider` with scope.
 
 ## `useEvent(unit)`

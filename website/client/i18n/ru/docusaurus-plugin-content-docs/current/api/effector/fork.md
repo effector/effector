@@ -51,7 +51,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       })
       ```
 
-      :::note
+      ::: info
       Such objects are created by [serialize](./serialize.md), in application code **array of tuples is preferred**
       :::
 
@@ -64,8 +64,8 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       ```ts
       fork({
         handlers: [
-          [getMessageFx, params => ({id: 0, text: 'message'})],
-          [getUserFx, async params => ({name: 'alice', age: 21})],
+          [getMessageFx, (params) => ({id: 0, text: 'message'})],
+          [getUserFx, async (params) => ({name: 'alice', age: 21})],
         ],
       })
       ```
@@ -75,8 +75,8 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       ```ts
       fork({
         handlers: new Map()
-          .set(getMessageFx, params => ({id: 0, text: 'message'}))
-          .set(getUserFx, async params => ({name: 'alice', age: 21})),
+          .set(getMessageFx, (params) => ({id: 0, text: 'message'}))
+          .set(getUserFx, async (params) => ({name: 'alice', age: 21})),
       })
       ```
 
@@ -84,11 +84,11 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 
 [_Scope_](./Scope.md)
 
-:::note
+::: info
 [_babel-plugin_](./babel-plugin.md) is required for using this method
 :::
 
-:::note
+::: info
 
 - `fork()` introduced in `effector 22.0.0`
 - `fork(domain)` introduced in `effector 21.0.0`
@@ -106,8 +106,8 @@ import {createStore, createEvent, forward, fork, allSettled} from 'effector'
 const inc = createEvent()
 const dec = createEvent()
 const $counter = createStore(0)
-  .on(inc, value => value + 1)
-  .on(dec, value => value - 1)
+  .on(inc, (value) => value + 1)
+  .on(dec, (value) => value - 1)
 
 const scopeA = fork()
 const scopeB = fork()

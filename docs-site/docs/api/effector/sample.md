@@ -1,7 +1,9 @@
 ---
-id: sample
 title: sample
+lang: en-US
 ---
+
+# sample
 
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
@@ -22,27 +24,23 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 
 ## Schema
 
-![](docs/api/effector/images/sample-visualization.gif)
+![](/api/effector/images/sample-visualization.gif)
 
 ## Type of the created `target`
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of the unit is described in the table below:
 
-| clock\source                            | [_Store_](docs/api/effector/Store.md)                      | [_Event_](docs/api/effector/Event.md) | [_Effect_](docs/api/effector/Effect.md) |
-| --------------------------------------- | ---------------------------------------------------------- | ------------------------------------- | --------------------------------------- |
-| [_Store_](docs/api/effector/Store.md)   | [`DerivedStore`](docs/api/effector/Store.md#derived-store) | `Event`                               | `Event`                                 |
-| [_Event_](docs/api/effector/Event.md)   | `Event`                                                    | `Event`                               | `Event`                                 |
-| [_Effect_](docs/api/effector/Effect.md) | `Event`                                                    | `Event`                               | `Event`                                 |
+| clock\source                        | [_Store_](/api/effector/Store.md) | [_Event_](/api/effector/Event.md) | [_Effect_](/api/effector/Effect.md) |
+| ----------------------------------- | --------------------------------- | --------------------------------- | ----------------------------------- |
+| [_Store_](/api/effector/Store.md)   | `Store`                           | `Event`                           | `Event`                             |
+| [_Event_](/api/effector/Event.md)   | `Event`                           | `Event`                           | `Event`                             |
+| [_Effect_](/api/effector/Effect.md) | `Event`                           | `Event`                           | `Event`                             |
 
 How to read it:
 
 1. You need to know type of the `source`, it is a column
 2. Type of the `clock` in the rows
 3. Match the column and the row
-
-:::info Caution
-When clock and source contains Store type, `sample` returns not the simple store. It returns [`DerivedStore`](docs/api/effector/Store.md#derived-store), it cannot be modified via events, and cannot be used as target in another `sample`.
-:::
 
 For example:
 
@@ -62,32 +60,32 @@ const event = sample({clock: event, source: $store})
 
 `params` (_Object_): Configuration object
 
-- `clock?`: [Unit](docs/explanationglossary.md#common-unit) or array of units
+- `clock?`: [Unit](/explanation/glossary.md#common-unit) or array of units
   - If event or effect: trigger `target` upon event or effect is called
   - If store: trigger `target` upon store is updated
-  - If array of units: trigger `target` upon any given unit is called or updated. Shorthand for inline [merge](docs/api/effector/merge.md) call
+  - If array of units: trigger `target` upon any given unit is called or updated. Shorthand for inline [merge](/api/effector/merge.md) call
   - If not passed: `source` is used as `clock`
-- `source?`: [Unit](docs/explanationglossary.md#common-unit) or object/array with stores
+- `source?`: [Unit](/explanation/glossary.md#common-unit) or object/array with stores
   - If event or effect: take last invocation argument value. That event or effect must be invoked at least once
   - If store: take current state of given store
-  - If array or object with stores: take values from given stores combined to object or array. Shorthand for inline [combine](docs/api/effector/combine.md) call
+  - If array or object with stores: take values from given stores combined to object or array. Shorthand for inline [combine](/api/effector/combine.md) call
   - If not passed: `clock` is used as `source`
-- `target?`: [Unit](docs/explanationglossary.md#common-unit) or array of units
+- `target?`: [Unit](/explanation/glossary.md#common-unit) or array of units
   - If event or effect: call given event or effect upon `clock` is triggered
   - If store: update given store upon `clock` is triggered
   - If array of units: trigger every given unit upon `clock` is triggered
-  - If not passed: new unit will be created under the hood and will be returned as result of the `sample()` call. Type of created target is described [in table beyond](docs/api/effector/sample.md#type-of-the-created-target)
-- `filter?` _(Function or [Store](docs/api/effector/Store.md))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
-- `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](docs/explanationglossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
+  - If not passed: new unit will be created under the hood and will be returned as result of the `sample()` call. Type of created target is described [in table beyond](/api/effector/sample.md#type-of-the-created-target)
+- `filter?` _(Function or [Store](/api/effector/Store.md))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
+- `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](/explanation/glossary.md#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
 
-:::note
-Array of units in target are supported since effector 21.8.0
+::: info since
+Array of units in target are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
 **Returns**
 
-([_Event_](docs/api/effector/Event.md) | [_Store_](docs/api/effector/Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
+([_Event_](/api/effector/Event.md) | [_Store_](/api/effector/Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
 [The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).
 
 #### Example
@@ -124,18 +122,18 @@ It is just another form of the `sample` invocation, with the same sense.
 
 **Arguments**
 
-- `sourceUnit`: Source [unit](docs/explanationglossary.md#common-unit)
+- `sourceUnit`: Source [unit](/explanation/glossary.md#common-unit)
   - If event or effect. Take last invocation argument value. That event or effect must be invoked at least once
   - If store. Take current store`s state
-- `clockUnit`: Clock [unit](docs/explanationglossary.md#common-unit). If not passed, `source` is used as clock
+- `clockUnit`: Clock [unit](/explanation/glossary.md#common-unit). If not passed, `source` is used as clock
   - If event or effect. Trigger sampled unit, upon event or effect is called
   - If store. Trigger sampled unit, upon store is updated
-- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](docs/explanationglossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](/explanation/glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 **Returns**
 
-([_Event_](docs/api/effector/Event.md) | [_Store_](docs/api/effector/Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
-[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).
+([_Event_](/api/effector/Event.md) | [_Store_](/api/effector/Store.md)) - Unit, which fires/updates upon `clock` is triggered, if `source` is not passed.
+[The type of returned unit depends on the types of clock and source](#type-of-the-created-target).
 
 #### Example
 
@@ -173,11 +171,11 @@ submitForm(12345678)
 
 ## `sample({name?})`
 
-:::note since
-effector 20.4.0
+::: info since
+[effector 20.4.0](https://changelog.effector.dev/#effector-20-4-0)
 :::
 
-Every [unit](docs/explanationglossary.md#unit) in effector may have a name.
+Every [unit](/explanation/glossary.md#unit) in effector may have a name.
 You now can name sampled entities in the same manner as basic ones.
 
 ```js
@@ -197,10 +195,10 @@ console.log(sampled.shortName) // 'sampled foo'
 
 ### Object of stores
 
-:::note since
-effector 20.8.0
+::: info since
+[effector 20.8.0](https://changelog.effector.dev/#effector-20-8-0)
 :::
-`sample` can be called with object of [_Store_](docs/api/effector/Store.md) as `source`:
+`sample` can be called with object of [_Store_](/api/effector/Store.md) as `source`:
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
@@ -228,10 +226,10 @@ trigger()
 
 ### Array of stores
 
-:::note since
-effector 20.8.0
+::: info since
+[effector 20.8.0](https://changelog.effector.dev/#effector-20-8-0)
 :::
-`sample` can be called with array of [_Store_](docs/api/effector/Store.md) as `source`:
+`sample` can be called with array of [_Store_](/api/effector/Store.md) as `source`:
 
 ```js
 import {createStore, createEvent, sample} from 'effector'
@@ -265,8 +263,8 @@ trigger()
 
 ### Support array in clock
 
-:::note since
-effector 21.2.0
+::: info since
+[effector 21.2.0](https://changelog.effector.dev/#effector-21-2-0)
 :::
 
 Support for sample clock field which acts like a merge call
@@ -298,8 +296,8 @@ sample({
 
 ## Example with filter
 
-:::note since
-effector Halley 22.2.0
+::: info since
+[effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
 The new variant of the sample works the same but with one extra method `filter`. Whenever `filter` returns `true` continue execution otherwise cancel. Let's see an example below.

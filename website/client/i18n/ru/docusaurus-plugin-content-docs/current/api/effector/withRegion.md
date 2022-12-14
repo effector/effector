@@ -6,8 +6,8 @@ hide_title: true
 
 # withRegion
 
-:::note since
-effector 20.11.0
+::: info since
+[effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::
 
 ### `withRegion(unit: Unit<T> | Step, cb: () => void)`

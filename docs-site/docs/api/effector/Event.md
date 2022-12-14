@@ -1,5 +1,4 @@
 ---
-id: event
 title: Event
 keywords:
   - event
@@ -175,7 +174,7 @@ changeName('alice')
 ## `filterMap(fn)`
 
 ::: info since
-effector 20.0.0
+[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
 Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.  

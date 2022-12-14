@@ -51,7 +51,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       })
       ```
 
-      :::note
+      ::: info
       Such objects are created by [serialize](docs/api/effector/serialize.md), in application code **array of tuples is preferred**
       :::
 
@@ -84,11 +84,11 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 
 [_Scope_](docs/api/effector/Scope.md)
 
-:::note
+::: info
 [_babel-plugin_](docs/api/effector/babel-plugin.md) is required for using this method
 :::
 
-:::note
+::: info
 
 - `fork()` introduced in `effector 22.0.0`
 - `fork(domain)` introduced in `effector 21.0.0`

@@ -1,10 +1,12 @@
 ---
-id: createEffect
 title: createEffect
 description: Method for creating an effect
+lang: en-US
 ---
 
-Method for creating an [effect](docs/api/effector/Effect.md)
+# createEffect
+
+Method for creating an [effect](/api/effector/Effect.md)
 
 ## createEffect with handler
 
@@ -20,14 +22,14 @@ createEffect(handler?)
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): New effect
+[_Effect_](/api/effector/Effect.md): New effect
 
-:::note
-You must provide a handler either in [createEffect](docs/api/effector/createEffect.md) or in [`.use`](docs/api/effector/Effect.md#use-handler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
+::: tip Reminder
+You must provide a handler either in [createEffect](/api/effector/createEffect.md) or in [`.use`](/api/effector/Effect.md#use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
 :::
 
-:::note since
-effector 21.3.0
+::: info since
+[effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
 ### Examples
@@ -154,7 +156,7 @@ createEffect({handler, name})
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): New effect
+[_Effect_](/api/effector/Effect.md): New effect
 
 ### Examples
 

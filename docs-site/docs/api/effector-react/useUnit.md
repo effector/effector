@@ -5,12 +5,12 @@ title: useUnit
 
 React hook, which takes any unit or shape of units.
 
-In case of [stores](docs/api/effector/Store.md) it subscribes component to provided [store](docs/api/effector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
+In case of [stores]/apieffector/Store.md) it subscribes component to provided [store]/apieffector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
 
-In the case of [events](docs/api/effector/Event.md)/[effects](docs/api/effector/Effect.md) - bind to current [_scope_](docs/api/effector/Scope.md) to use in dom event handlers.
+In the case of [events]/apieffector/Event.md)/[effects]/apieffector/Effect.md) - bind to current [_scope_]/apieffector/Scope.md) to use in dom event handlers.
 Only `effector-react/scope` version works this way, `useUnit` of `effector-react` is no-op for events and does not require `Provider` with scope.
 
-:::note
+::: info
 `useUnit` introduced in effector-react 22.1.0
 :::
 

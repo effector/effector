@@ -1,7 +1,6 @@
 ---
-id: is
 title: is
-hide_title: true
+lang: en-US
 ---
 
 # is
@@ -10,7 +9,7 @@ Namespace for unit validators
 
 ## `is.store(value)`
 
-Checks if given value is [_store_](docs/api/effector/Store.md)
+Checks if given value is [_store_](/api/effector/Store.md)
 
 **Returns**
 
@@ -58,7 +57,7 @@ is.store(null)
 
 ## `is.event(value)`
 
-Checks if given value is [_event_](docs/api/effector/Event.md)
+Checks if given value is [_event_](/api/effector/Event.md)
 
 **Returns**
 
@@ -106,7 +105,7 @@ is.event(null)
 
 ## `is.effect(value)`
 
-Checks if given value is [_effect_](docs/api/effector/Effect.md)
+Checks if given value is [_effect_](/api/effector/Effect.md)
 
 **Returns**
 
@@ -145,7 +144,7 @@ is.effect(null)
 
 ## `is.domain(value)`
 
-Checks if given value is [_domain_](docs/api/effector/Domain.md)
+Checks if given value is [_domain_](/api/effector/Domain.md)
 
 **Returns**
 
@@ -184,15 +183,15 @@ is.domain(null)
 
 ## `is.scope(value)`
 
-:::note since
-effector 22.0.0
+::: info since
+[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
-Checks if given value is [_scope_](docs/api/effector/Scope.md)
+Checks if given value is [_scope_](/api/effector/Scope.md).
 
 **Returns**
 
-boolean
+_boolean_
 
 ```js
 import {fork} from 'effector'
@@ -225,7 +224,7 @@ is.scope(null)
 
 ## `is.unit(value)`
 
-Checks if given value is [unit](docs/explanationglossary.md#unit): [store](docs/api/effector/Store.md), [event](docs/api/effector/Event.md), [effect](docs/api/effector/Effect.md), [domain](docs/api/effector/Domain.md) or [scope](docs/api/effector/Scope.md)
+Checks if given value is [Unit](/explanation/glossary.md#unit): [Store](/api/effector/Store.md), [Event](/api/effector/Event.md), [Effect](/api/effector/Effect.md), [Domain](/api/effector/Domain.md) or [Scope](/api/effector/Scope.md)
 
 **Returns**
 
@@ -278,11 +277,11 @@ is.unit(null)
 
 ## `is.attached(value)`
 
-:::note since
-effector 22.4.0
+::: info since
+[effector 22.4.0](https://changelog.effector.dev/#effector-22-4-0)
 :::
 
-Checks if given value is [_effect_](docs/api/effector/Effect.md) created via [_attach_](docs/api/effector/attach.md) method.
+Checks if given value is [_effect_](/api/effector/Effect.md) created via [_attach_](/api/effector/attach.md) method.
 If passed not an effect, returns `false`.
 
 **Returns**

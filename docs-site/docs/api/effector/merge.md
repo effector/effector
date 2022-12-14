@@ -1,13 +1,16 @@
 ---
-id: merge
 title: merge
 description: merge is a method for creating an event triggered by given units
+lang: en-US
 ---
 
-:::note
-Since effector 20.0.0
+# merge
+
+::: info since
+[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
-Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
+
+Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of given units
 
 ```ts
 merge(units: Unit[]): Event
@@ -15,14 +18,14 @@ merge(units: Unit[]): Event
 
 **Arguments**
 
-1. `units`: Array of [units](docs/explanationglossary.md#common-unit) to be merged
+1. `units`: Array of [units](/explanation/glossary.md#common-unit) to be merged
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event, which fires when any of given units is triggered
+[_Event_](/api/effector/Event.md): New event, which fires when any of given units is triggered
 
-:::tip
-In case of store, resulting event will fire upon store updates
+::: tip
+In case of store, resulting event will fire upon store updates.
 :::
 
 #### Example 1

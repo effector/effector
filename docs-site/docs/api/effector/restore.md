@@ -1,28 +1,27 @@
 ---
-id: restore
 title: restore
-hide_title: true
+lang: en-US
 ---
 
 # restore
 
 ## `restore(event, defaultState)`
 
-Creates a [_Store_](docs/api/effector/Store.md) from [_Event_](docs/api/effector/Event.md).
+Creates a [_Store_](/api/effector/Store.md) from [_Event_](/api/effector/Event.md).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
-:::info It is not a derived store
-Restore creates a new store. It is not [DerivedStore](docs/api/effector/Store.md#derived-store). That means you can modify it's state via events, and use it as `target` in [`sample`](docs/api/effector/sample.md).
+::: warning It is not a derived store
+Restore creates a new store. It is not [DerivedStore](/api/effector/Store.md#derived-store). That means you can modify it's state via events, and use it as `target` in [`sample`](/api/effector/sample.md).
 :::
 
 **Arguments**
 
-1. `event` [_Event_](docs/api/effector/Event.md)
+1. `event` [_Event_](/api/effector/Event.md)
 2. `defaultState` (_Payload_)
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): New store
+[_Store_](/api/effector/Store.md): New store
 
 #### Example
 
@@ -43,17 +42,17 @@ event('foo')
 
 ## `restore(effect, defaultState)`
 
-Creates a [_Store_](docs/api/effector/Store.md) out of successful results of [_Effect_](docs/api/effector/Effect.md).
+Creates a [_Store_](/api/effector/Store.md) out of successful results of [_Effect_](/api/effector/Effect.md).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
 **Arguments**
 
-1. `effect` [_Effect_](docs/api/effector/Effect.md)
+1. `effect` [_Effect_](/api/effector/Effect.md)
 2. `defaultState` (_Done_)
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): New store
+[_Store_](/api/effector/Store.md): New store
 
 #### Example
 
@@ -82,7 +81,7 @@ Creates an object with stores from object with values
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): New store
+[_Store_](/api/effector/Store.md): New store
 
 #### Example
 

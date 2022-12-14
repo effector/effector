@@ -9,7 +9,7 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 
 **Arguments**
 
-1. `unit` ([_Event_](docs/api/effector/Event.md) or [_Effect_](docs/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_]/apieffector/Event.md) or [_Effect_](docs/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
 
 **Returns**
 

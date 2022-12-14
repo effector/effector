@@ -7,7 +7,7 @@ _Gate_ is a hook for conditional rendering, based on current value (or values) i
 
 This allows you to send props back to _Store_ to create feedback loop.
 
-Gate can be used via [useGate](docs/api/effector-solid/useGate.md) hook or as component with props (`<Gate history={history} />`). Gate stores and events can be used in the application as regular units
+Gate can be used via [useGate]/apieffector-solid/useGate.md) hook or as component with props (`<Gate history={history} />`). Gate stores and events can be used in the application as regular units
 
 Gate can have two states:
 
@@ -18,16 +18,16 @@ Gate can have two states:
 
 ## `state`
 
-`Store<Props>`: [`DerivedStore`](docs/api/effector/Store.md#derived-store) with current state of given gate. State came from second argument of [useGate](docs/api/effector-solid/useGate.md) and from props when rendering gate as component
+`Store<Props>`: [`DerivedStore`]/apieffector/Store.md#derived-store) with current state of given gate. State came from second argument of [useGate]/apieffector-solid/useGate.md) and from props when rendering gate as component
 
 ## `open`
 
-[`Event<Props>`](docs/api/effector/Event.md): Event which will be called during gate mounting
+[`Event<Props>`]/apieffector/Event.md): Event which will be called during gate mounting
 
 ## `close`
 
-[`Event<Props>`](docs/api/effector/Event.md): Event which will be called during gate unmounting.
+[`Event<Props>`]/apieffector/Event.md): Event which will be called during gate unmounting.
 
 ## `status`
 
-`Store<boolean>`: Boolean [`DerivedStore`](docs/api/effector/Store.md#derived-store) which show if given gate is mounted.
+`Store<boolean>`: Boolean [`DerivedStore`]/apieffector/Store.md#derived-store) which show if given gate is mounted.

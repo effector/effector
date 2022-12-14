@@ -21,6 +21,6 @@ Call provided unit in scope and wait for finishing all the triggered effects.
 2. `scope`: [_Scope_](./Scope.md)
 3. `params`: params passed to `unit`
 
-:::note
-Return value for effect is supported since effector 21.4.0
+::: info
+Return value for effect is supported since [effector 21.4.0](https://changelog.effector.dev/#effector-21-4-0)
 :::

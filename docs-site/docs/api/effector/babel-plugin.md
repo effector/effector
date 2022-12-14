@@ -3,7 +3,7 @@ id: babel-plugin
 title: Babel plugin
 ---
 
-Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](docs/explanationglossary.md#unit), inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
+Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](/explanation/glossary.md#unit), inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
 
 For example, in case [effects without handlers](docs/api/effector/Effect.md#use-handler), it improves error message by clearly showing in which effect error happened.
 
@@ -31,8 +31,8 @@ In the simplest case, it can be used without any configuration:
 
 ### sid
 
-:::note since
-effector 20.2.0
+::: info since
+[effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
 Stable hash identifier for events, effects, stores and domains, preserved between environments, to handle client-server interaction within the same codebase.
@@ -97,8 +97,8 @@ Specifying import name or names to process by plugin. Import should be used in t
 
 ### factories
 
-:::note since
-effector 21.6.0
+::: info since
+[effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
 - Type: `string[]`
@@ -151,8 +151,8 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 
 ### reactSsr
 
-:::note since
-effector 21.5.0
+::: info since
+[effector 21.5.0](https://changelog.effector.dev/#effector-21-5-0)
 :::
 
 - Type: `boolean`
@@ -162,8 +162,8 @@ Replace imports from `effector-react` to `effector-react/scope`. Useful for buil
 
 ### addNames
 
-:::note since
-effector 21.8.0
+::: info since
+[effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
 - Type: `boolean`
@@ -187,8 +187,8 @@ Add path of a file and a variable name whether a unit was defined to a sid. Usef
 
 ### noDefaults
 
-:::note since
-effector 20.2.0
+::: info since
+[effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
 - Type: `boolean`

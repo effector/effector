@@ -1,10 +1,12 @@
 ---
-id: createStore
 title: createStore
 description: createStore is a method for creating a store
+lang: en-US
 ---
 
-Method for creating a [store](docs/api/effector/Store.md)
+# createStore
+
+Method for creating a [store](/api/effector/Store.md).
 
 ```ts
 createStore<T>(defaultState: T): Store<T>
@@ -24,14 +26,14 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
 2. `config` (_Object_): Optional configuration
    - `name` (_String_): Name for the store. Babel plugin can set it from the variable name, if not passed explicitly in config.
    - `updateFilter` (_Function_): Function that prevents store from updating when it returns `false`. Accepts updated state as the first argument and current state as the second argument. Redundant for most cases since store already ensures that update is not `undefined` and not equal (`!==`) to current state _(since `effector 21.8.0`)_
-   - `serialize: 'ignore'`: Option to disable store serialization when [serialize](docs/api/effector/serialize.md) is called _(since `effector 22.0.0`)_
-   - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` - called on [serialize](docs/api/effector/serialize.md), transforms value to JSON value - primitive type or plain object/array. `read` - parse store state from JSON value, called on [fork](docs/api/effector/fork.md), if provided `values` is result of `serialize` call.
+   - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/api/effector/serialize.md) is called _(since `effector 22.0.0`)_
+   - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` - called on [serialize](/api/effector/serialize.md), transforms value to JSON value - primitive type or plain object/array. `read` - parse store state from JSON value, called on [fork](/api/effector/fork.md), if provided `values` is result of `serialize` call.
 
 **Returns**
 
-[_Store_](docs/api/effector/Store.md): New store
+[_Store_](/api/effector/Store.md): New store
 
-#### Example
+## Example
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -68,7 +70,7 @@ clearTodoList()
 
 [Try it](https://share.effector.dev/MNibrAFC)
 
-#### Example with `updateFilter`
+## Example with `updateFilter`
 
 ```js
 import {createEvent, createStore, forward} from 'effector'
@@ -105,7 +107,7 @@ punch(100) // Also nothing
 
 [Try it](https://share.effector.dev/rtxfqObf)
 
-#### Example with `serialize: ignore`
+## Example with `serialize: ignore`
 
 ```js
 import {
@@ -136,7 +138,7 @@ $version.watch(version => console.log('version %s', version))
 const scope = fork()
 
 // By default serialize saves value only for the changed stores
-// Review `onlyChanges` option https://effector.dev/docs/api/effector/serialize
+// Review `onlyChanges` option https://effector.dev/api/effector/serialize
 const values = serialize(scope)
 console.log(values)
 // => {}
@@ -157,7 +159,7 @@ console.log(actualValues)
 
 [Try it](https://share.effector.dev/aLKAHDOM)
 
-#### Example with custom `serialize` configuration
+## Example with custom `serialize` configuration
 
 ```ts
 import {createEvent, createStore, serialize, fork, allSettled} from 'effector'

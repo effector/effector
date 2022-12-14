@@ -8,7 +8,7 @@ description: метод для объединения апдейтов масс�
 
 Объединяет апдейты массива [юнитов](../../glossary.md#common-unit) в новое событие, которое будет срабатывать при запуске любой из переданных сущностей
 
-:::note
+::: info
 Добавлено в effector 20.0.0
 :::
 
@@ -30,7 +30,7 @@ const result: Event<T> = merge(/*clock*/ [$store, event, fx])
 
 [_Event_](./Event.md): Новое событие
 
-:::tip
+::: tip
 В случае передачи стора, итоговое событие будет срабатывать при обновлении этого стора
 :::
 
@@ -44,7 +44,7 @@ import {createEvent, merge} from 'effector'
 const foo = createEvent()
 const bar = createEvent()
 const baz = merge([foo, bar])
-baz.watch(v => console.log('merged event triggered: ', v))
+baz.watch((v) => console.log('merged event triggered: ', v))
 
 foo(1)
 // => merged event triggered: 1
@@ -67,7 +67,7 @@ const $foo = createStore(0).on(setFoo, (_, v) => v)
 const $bar = createStore(100).on(setBar, (_, v) => v)
 
 const anyUpdated = merge([$foo, $bar])
-anyUpdated.watch(v => console.log(`state changed to: ${v}`))
+anyUpdated.watch((v) => console.log(`state changed to: ${v}`))
 
 setFoo(1) // => state changed to: 1
 setBar(123) // => state changed to: 123
@@ -87,7 +87,7 @@ const $foo = createStore(0).on(setFoo, (_, v) => v)
 
 const merged = merge([$foo, otherEvent])
 
-merged.watch(v => console.log(`merged event payload: ${v}`))
+merged.watch((v) => console.log(`merged event payload: ${v}`))
 
 setFoo(999)
 // => merged event payload: 999

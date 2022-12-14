@@ -1,10 +1,12 @@
 ---
-id: createDomain
 title: createDomain
 description: createDomain is a method for creating a domain
+lang: en-US
 ---
 
-Creates a [domain](docs/api/effector/Domain.md)
+# createDomain
+
+Creates a [domain](/api/effector/Domain.md)
 
 ```typescript
 createDomain(name?)
@@ -16,9 +18,9 @@ createDomain(name?)
 
 **Returns**
 
-[_Domain_](docs/api/effector/Domain.md): New domain
+[_Domain_](/api/effector/Domain.md): New domain
 
-#### Example
+### Example
 
 ```js
 import {createDomain} from 'effector'

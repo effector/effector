@@ -56,13 +56,13 @@ _Effect (эффект)_ это контейнер для сайд-эффекто
 #### Общий пример использования {#effect-example}
 
 ```js
-const getUserFx = createEffect(async params => {
+const getUserFx = createEffect(async (params) => {
   const req = await fetch(`https://example.com/get-user/${params.id}`)
   return req.json()
 })
 
 // подписка на начало вызова эффекта
-getUserFx.watch(params => {
+getUserFx.watch((params) => {
   console.log('эффект вызван с аргументом', params)
 })
 
@@ -150,10 +150,10 @@ const updateUserFx = createEffect(({name, role}) => {})
 const userNameUpdate = updateUserFx.map(({name}) => name)
 const userRoleUpdate = updateUserFx.map(({role}) => role.toUpperCase())
 
-userNameUpdate.watch(name => {
+userNameUpdate.watch((name) => {
   console.log(`Началось изменение имени пользователя на ${name}`)
 })
-userRoleUpdate.watch(role => {
+userRoleUpdate.watch((role) => {
   console.log(`Началось изменение роли пользователя на ${role}`)
 })
 
@@ -207,7 +207,7 @@ const trigger = fx.prepend(/*fn*/(data: T) => S)
 
 Вызывает дополнительную функцию с сайд-эффектами при каждом срабатывании эффекта
 
-:::note
+::: info
 По мере усложнения логики проекта оптимальнее заменить на комбинацию дополнительного эффекта и [сэмпла](./sample.md)
 :::
 
@@ -237,9 +237,9 @@ fx.watch(/*watcher*/ (data: T) => any)
 ```js
 import {createEffect} from 'effector'
 
-const fx = createEffect(params => params)
+const fx = createEffect((params) => params)
 
-fx.watch(params => {
+fx.watch((params) => {
   console.log('эффект вызван с аргументом', params)
 })
 
@@ -255,11 +255,11 @@ await fx(10)
 
 Если на момент вызова эффект уже имел имплементацию, то она будет заменена на новую
 
-:::tip статья от автора
+::: tip статья от автора
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 
-:::note
+::: info
 Нужно предоставить имплементацию либо через use, либо через [createEffect](createEffect.md), иначе при вызове эффекта возникнет ошибка "no handler used in _%effect name%_"
 :::
 
@@ -289,7 +289,7 @@ fx.use(/*handler*/(params: T) => S | Promise<S>)
 
 Текущий эффект
 
-:::note
+::: info
 Если значение имплементации известно сразу, то оптимальнее использовать `createEffect(handler)`
 
 `createEffect().use(handler)` это антипаттерн, который ухудшает вывод типов
@@ -337,11 +337,11 @@ fx.doneData
 -> Event<D>
 ```
 
-:::note Вызов вручную запрещён
+::: info Вызов вручную запрещён
 Это свойство управляется самим эффектом
 :::
 
-:::note
+::: info
 Добавлено в effector 20.12.0
 :::
 
@@ -352,9 +352,9 @@ fx.doneData
 ```js
 import {createEffect} from 'effector'
 
-const fx = createEffect(value => value + 1)
+const fx = createEffect((value) => value + 1)
 
-fx.doneData.watch(result => {
+fx.doneData.watch((result) => {
   console.log(`Эффект успешно выполнился, вернув ${result}`)
 })
 
@@ -377,11 +377,11 @@ fx.failData
 -> Event<E>
 ```
 
-:::note Вызов вручную запрещён
+::: info Вызов вручную запрещён
 Это свойство управляется самим эффектом
 :::
 
-:::note
+::: info
 Добавлено в effector 20.12.0
 :::
 
@@ -392,11 +392,11 @@ fx.failData
 ```js
 import {createEffect} from 'effector'
 
-const fx = createEffect(async value => {
+const fx = createEffect(async (value) => {
   throw Error(value - 1)
 })
 
-fx.failData.watch(error => {
+fx.failData.watch((error) => {
   console.log(`Вызов завершился с ошибкой ${error.message}`)
 })
 
@@ -432,7 +432,7 @@ const $isRequestPending = createStore(false)
   .on(requestFx.fail, () => false)
 ```
 
-:::note Изменение значения вручную запрещено
+::: info Изменение значения вручную запрещено
 Это свойство управляется самим эффектом
 :::
 
@@ -446,8 +446,8 @@ import ReactDOM from 'react-dom'
 import {createEffect} from 'effector'
 import {useStore} from 'effector-react'
 
-const fetchApiFx = createEffect(async ms => {
-  await new Promise(resolve => setTimeout(resolve, ms))
+const fetchApiFx = createEffect(async (ms) => {
+  await new Promise((resolve) => setTimeout(resolve, ms))
 })
 
 fetchApiFx.pending.watch(console.log)
@@ -480,7 +480,7 @@ fx.done
 -> Event<{params: P; result: D}>
 ```
 
-:::note Вызов вручную запрещён
+::: info Вызов вручную запрещён
 Это свойство управляется самим эффектом
 :::
 
@@ -491,7 +491,7 @@ fx.done
 ```js
 import {createEffect} from 'effector'
 
-const fx = createEffect(value => value + 1)
+const fx = createEffect((value) => value + 1)
 
 fx.done.watch(({params, result}) => {
   console.log('Вызов с аргументом', params, 'завершён со значением', result)
@@ -516,7 +516,7 @@ fx.fail
 -> Event<{params: P; error: E}>
 ```
 
-:::note Вызов вручную запрещён
+::: info Вызов вручную запрещён
 Это свойство управляется самим эффектом
 :::
 
@@ -527,7 +527,7 @@ fx.fail
 ```js
 import {createEffect} from 'effector'
 
-const fx = createEffect(async value => {
+const fx = createEffect(async (value) => {
   throw Error(value - 1)
 })
 
@@ -562,11 +562,11 @@ fx.finally
 >
 ```
 
-:::note Вызов вручную запрещён
+::: info Вызов вручную запрещён
 Это свойство управляется самим эффектом
 :::
 
-:::note
+::: info
 Добавлено в effector 20.0.0
 :::
 
@@ -578,12 +578,12 @@ fx.finally
 import {createEffect} from 'effector'
 
 const fetchApiFx = createEffect(async ({time, ok}) => {
-  await new Promise(resolve => setTimeout(resolve, time))
+  await new Promise((resolve) => setTimeout(resolve, time))
   if (ok) return `${time} ms`
   throw Error(`${time} ms`)
 })
 
-fetchApiFx.finally.watch(value => {
+fetchApiFx.finally.watch((value) => {
   switch (value.status) {
     case 'done':
       console.log(
@@ -636,16 +636,16 @@ import {createEffect, createStore} from 'effector'
 const requestFx = createEffect()
 
 const $requestsInFlight = createStore(0)
-  .on(requestFx, n => n + 1)
-  .on(requestFx.done, n => n - 1)
-  .on(requestFx.fail, n => n - 1)
+  .on(requestFx, (n) => n + 1)
+  .on(requestFx.done, (n) => n - 1)
+  .on(requestFx.fail, (n) => n - 1)
 ```
 
-:::note Изменение значения вручную запрещено
+::: info Изменение значения вручную запрещено
 Это свойство управляется самим эффектом
 :::
 
-:::note
+::: info
 Добавлено в effector 20.11.0
 :::
 
@@ -657,10 +657,10 @@ const $requestsInFlight = createStore(0)
 import {createEffect} from 'effector'
 
 const fx = createEffect(async () => {
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
 })
 
-fx.inFlight.watch(amount => {
+fx.inFlight.watch((amount) => {
   console.log('выполняется запросов:', amount)
 })
 // => выполняется запросов: 0

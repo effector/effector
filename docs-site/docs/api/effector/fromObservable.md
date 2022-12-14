@@ -1,7 +1,10 @@
 ---
 id: fromObservable
 title: fromObservable
+lang: en-US
 ---
+
+# fromObservable
 
 Creates an event containing all items from an Observable.
 

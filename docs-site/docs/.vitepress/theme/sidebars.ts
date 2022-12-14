@@ -21,6 +21,80 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: 'Domain',
           link: '/api/effector/Domain',
         },
+        {
+          text: 'Scope',
+          link: '/api/effector/Scope',
+        },
+      ],
+    },
+    {
+      text: 'Methods',
+      items: [
+        {
+          text: 'createStore',
+          link: '/api/effector/createStore',
+        },
+        {
+          text: 'createEvent',
+          link: '/api/effector/createEvent',
+        },
+        {
+          text: 'createEffect',
+          link: '/api/effector/createEffect',
+        },
+        {
+          text: 'createDomain',
+          link: '/api/effector/createDomain',
+        },
+        {
+          text: 'createApi',
+          link: '/api/effector/createApi',
+        },
+        {
+          text: 'attach',
+          link: '/api/effector/attach',
+        },
+        {
+          text: 'combine',
+          link: '/api/effector/combine',
+        },
+        {
+          text: 'forward',
+          link: '/api/effector/forward',
+        },
+        {
+          text: 'fromObservable',
+          link: '/api/effector/fromObservable',
+        },
+        {
+          text: 'guard',
+          link: '/api/effector/guard',
+        },
+        {
+          text: 'merge',
+          link: '/api/effector/merge',
+        },
+        {
+          text: 'restore',
+          link: '/api/effector/restore',
+        },
+        {
+          text: 'sample',
+          link: '/api/effector/sample',
+        },
+        {
+          text: 'split',
+          link: '/api/effector/split',
+        },
+      ],
+    },
+    {
+      text: 'Utilities',
+      items: [
+        {
+          text: 'is',
+          link: '/api/effector/is',
+        },
       ],
     },
   ],

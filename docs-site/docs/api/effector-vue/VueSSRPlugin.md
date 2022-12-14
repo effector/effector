@@ -7,7 +7,7 @@ The Plugin provides a general scope which need for read and update effector's st
 
 **Arguments**
 
-1. `scope` [Scope](docs/api/effector/Scope.md)
+1. `scope` [Scope]/apieffector/Scope.md)
 2. `scopeName?` custom scopeName (default: `root`)
 
 ```js

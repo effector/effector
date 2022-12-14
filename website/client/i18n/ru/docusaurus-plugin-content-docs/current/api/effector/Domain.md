@@ -12,8 +12,8 @@ It is useful for logging or other side effects.
 
 ## Unit creators
 
-:::note since
-effector 20.7.0
+::: info since
+[effector 20.7.0](https://changelog.effector.dev/#effector-20-7-0)
 :::
 
 ### `createEvent(name?)`
@@ -40,8 +40,8 @@ Creates an [effect](Effect.md) with given handler
 
 [_Effect_](Effect.md): A container for async function.
 
-:::note since
-effector 21.3.0
+::: info since
+[effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
 <hr />
@@ -94,8 +94,8 @@ const {stores, events, domains, effects} = domain.history
 
 - When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
 
-:::note since
-effector 20.3.0
+::: info since
+[effector 20.3.0](https://changelog.effector.dev/#effector-20-3-0)
 :::
 
 ```js
@@ -144,7 +144,7 @@ An alias for [domain.createDomain](./Domain.md#createdomainname)
 #### Formulae
 
 ```ts
-domain.onCreateEvent(event => {})
+domain.onCreateEvent((event) => {})
 ```
 
 - Function passed to `onCreateEvent` called every time, as new event created in `domain`
@@ -166,7 +166,7 @@ import {createDomain} from 'effector'
 
 const domain = createDomain()
 
-domain.onCreateEvent(event => {
+domain.onCreateEvent((event) => {
   console.log('new event created')
 })
 
@@ -186,7 +186,7 @@ const b = domain.createEvent()
 #### Formulae
 
 ```ts
-domain.onCreateEffect(effect => {})
+domain.onCreateEffect((effect) => {})
 ```
 
 - Function passed to `onCreateEffect` called every time, as new effect created in `domain`
@@ -208,7 +208,7 @@ import {createDomain} from 'effector'
 
 const domain = createDomain()
 
-domain.onCreateEffect(effect => {
+domain.onCreateEffect((effect) => {
   console.log('new effect created')
 })
 
@@ -228,7 +228,7 @@ const barFx = domain.createEffect()
 #### Formulae
 
 ```ts
-domain.onCreateStore($store => {})
+domain.onCreateStore(($store) => {})
 ```
 
 - Function passed to `onCreateStore` called every time, as new store created in `domain`
@@ -250,7 +250,7 @@ import {createDomain} from 'effector'
 
 const domain = createDomain()
 
-domain.onCreateStore(store => {
+domain.onCreateStore((store) => {
   console.log('new store created')
 })
 
@@ -267,7 +267,7 @@ const $a = domain.createStore(null)
 #### Formulae
 
 ```ts
-domain.onCreateDomain(domain => {})
+domain.onCreateDomain((domain) => {})
 ```
 
 - Function passed to `onCreateDomain` called every time, as sub domain created in `domain`
@@ -289,7 +289,7 @@ import {createDomain} from 'effector'
 
 const domain = createDomain()
 
-domain.onCreateDomain(domain => {
+domain.onCreateDomain((domain) => {
   console.log('new domain created')
 })
 

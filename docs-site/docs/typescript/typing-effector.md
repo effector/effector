@@ -71,8 +71,8 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage)
 // sendMessageFx has type Effect<{text: string}, string, AxiosError>
 ```
 
-:::note since
-effector 21.6.0
+::: info since
+[effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
 ## event.prepend

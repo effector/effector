@@ -183,7 +183,7 @@ is.domain(null)
 
 ## `is.scope(value)`
 
-:::note
+::: info
 Добавлен в effector 22.0.0
 :::
 
@@ -277,7 +277,7 @@ is.unit(null)
 
 ## `is.attached(value)`
 
-:::note
+::: info
 Добавлен в effector 22.4.0
 :::
 
@@ -324,8 +324,8 @@ is.attached(createDomain())
 is.attached(null)
 // => false
 ```
-[Запустить пример](https://share.effector.dev/qsdTF7og)
 
+[Запустить пример](https://share.effector.dev/qsdTF7og)
 
 ### Пример использования
 
@@ -333,14 +333,18 @@ is.attached(null)
 Если оставить `onCreateEffect` как есть, без проверок, то лог ошибки будет задублирован.
 
 ```js
-import { createDomain, attach, is } from 'effector'
+import {createDomain, attach, is} from 'effector'
 
 const logFailuresDomain = createDomain()
 
 logFailuresDomain.onCreateEffect((effect) => {
   if (is.attached(effect)) {
-    effect.fail.watch(({ params, error }) => {
-      console.warn(`Effect "${effect.compositeName.fullName}" failed`, params, error)
+    effect.fail.watch(({params, error}) => {
+      console.warn(
+        `Effect "${effect.compositeName.fullName}" failed`,
+        params,
+        error,
+      )
     })
   }
 })

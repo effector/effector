@@ -20,7 +20,7 @@ A companion method for [_fork_](docs/api/effector/fork.md). Allows to get a seri
 
 An object with store values using sids as a keys
 
-:::caution
+::: warning
 If a store [does not have a sid](docs/api/effector/babel-plugin.md#sid), its value will be omitted during serialization.
 :::
 

@@ -1,5 +1,4 @@
 ---
-id: effect
 title: Effect
 description: Effect, its methods and properties
 lang: en-US
@@ -76,7 +75,7 @@ Hint: current handler can be extracted with [`effect.use.getCurrent()`](#use-get
 
 You must provide a handler either through [`.use`](/api/effector/Effect.md#use-handler) method or `handler` property in [createEffect](/api/effector/createEffect.md), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
 
-:::tip See also
+::: tip See also
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 
@@ -251,7 +250,7 @@ You are not supposed to use parts of effect (like `.done` and `.pending`) as a t
 ## `doneData`
 
 ::: info since
-effector 20.12.0
+[effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
 :::
 
 Event, which is triggered with result of the effect execution:
@@ -290,7 +289,7 @@ await fx(2)
 ## `failData`
 
 ::: info since
-effector 20.12.0
+[effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
 :::
 
 Event, which is triggered with error thrown by the effect
@@ -397,7 +396,7 @@ fx(2)
 ## `finally`
 
 ::: info since
-effector 20.0.0
+[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
 Event, which is triggered when handler is resolved, rejected or throws error.
@@ -520,7 +519,7 @@ const $isLoading = createStore(false)
 ## `inFlight`
 
 ::: info since
-effector 20.11.0
+[effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::
 
 Shows how many effect calls aren't settled yet. Useful for rate limiting.

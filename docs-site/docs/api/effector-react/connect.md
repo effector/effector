@@ -3,21 +3,21 @@ id: connect
 title: connect
 ---
 
-Wrapper for [useStore](docs/api/effector-react/useStore.md) to use during migration from redux and class-based projects. Will merge store value fields to component props
+Wrapper for [useStore]/apieffector-react/useStore.md) to use during migration from redux and class-based projects. Will merge store value fields to component props
 
-:::danger
-Consider using [hooks api](docs/api/effector-react/index.md#hooks) in modern projects
+::: danger
+Consider using [hooks api]/apieffector-react/index.md#hooks) in modern projects
 :::
 
 ## `connect(Store)(Component): Component`
 
-:::note since
+::: info since
 effector-react 21.0.6
 :::
 
 **Arguments**
 
-1. `Store` ([Store](docs/api/effector/Store.md)): store or object with stores
+1. `Store` ([Store]/apieffector/Store.md)): store or object with stores
 
 **Returns**
 

@@ -20,7 +20,7 @@ A companion method for [_fork_](./fork.md). Allows to get a serialized value for
 
 An object with store values using sids as a keys
 
-:::caution
+::: warning
 If a store [does not have a sid](./babel-plugin.md#sid), its value will be omitted during serialization.
 :::
 
@@ -60,18 +60,16 @@ const clientScope = fork(app, {
   values: new Map([
     [$clientTheme, 'dark'],
     [$title, 'profile'],
-  ])
+  ]),
 })
 
 /** server side scope of chats page created for each request */
 const chatsPageScope = fork(app, {
-  values: new Map([
-    [$title, 'chats']
-  ])
+  values: new Map([[$title, 'chats']]),
 })
 
 /** this object will contain only $title data
-  * as $clientTheme never changed in server scope */
+ * as $clientTheme never changed in server scope */
 const chatsPageData = serialize(chatsPageScope, {onlyChanges: true})
 console.log(chatsPageData)
 // => {'-l644hw': 'chats'}

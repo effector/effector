@@ -1,7 +1,7 @@
 ---
-id: domain
 title: Domain
 description: Domain, its methods and properties
+lang: en-US
 ---
 
 # Domain
@@ -15,7 +15,7 @@ It is useful for logging or other side effects.
 # Unit creators
 
 ::: info since
-effector 20.7.0
+[effector 20.7.0](https://changelog.effector.dev/#effector-20-7-0)
 :::
 
 ## `createEvent(name?)`
@@ -41,7 +41,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 [_Effect_](/api/effector/Effect.md): A container for async function.
 
 ::: info since
-effector 21.3.0
+[effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
 ## `createEffect(name?)`
@@ -87,7 +87,7 @@ const {stores, events, domains, effects} = domain.history
 - When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
 
 ::: info since
-effector 20.3.0
+[effector 20.3.0](https://changelog.effector.dev/#effector-20-3-0)
 :::
 
 ```js

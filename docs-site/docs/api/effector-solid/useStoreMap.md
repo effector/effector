@@ -3,7 +3,7 @@ id: useStoreMap
 title: useStoreMap
 ---
 
-Function, which subscribes to [store](docs/api/effector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
+Function, which subscribes to [store]/apieffector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
 
 Common use case: subscribe to changes in selected part of store only
 
@@ -16,7 +16,7 @@ useStoreMap<State, Result>(
 
 **Arguments**
 
-1. `store`: Source [store](docs/api/effector/Store.md)
+1. `store`: Source [store]/apieffector/Store.md)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
 **Returns**
@@ -30,10 +30,10 @@ useStoreMap({store, keys, fn, updateFilter})
 **Arguments**
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store](docs/api/effector/Store.md)
+   - `store`: Source [store]/apieffector/Store.md)
    - `keys` (_Array_): Will be passed to fn selector
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](docs/api/effector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter]/apieffector/createStore.md) option under the hood
 
 **Returns**
 

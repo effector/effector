@@ -9,7 +9,7 @@ description: Function for passing data to Gate
 
 ## `useGate(GateComponent, props)`
 
-Function for passing data to [_`Gate`_](docs/api/effector-solid/Gate.md)
+Function for passing data to [_`Gate`_]/apieffector-solid/Gate.md)
 
 **Arguments**
 

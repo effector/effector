@@ -14,7 +14,7 @@ useStoreMap<State, Result>(
 ): Result
 ```
 
-:::note
+::: info
 Краткая форма `useStoreMap` добавлена в `effector-react@21.3.0`
 :::
 
@@ -52,11 +52,11 @@ useStoreMap<Source, Result>({
 
 (_Result_)
 
-:::note
+::: info
 Опция `updateFilter` добавлена в `effector-react@21.3.0`
 :::
 
-:::note
+::: info
 Опция `defaultValue` добавлена в `effector-react@22.1.0`
 :::
 

@@ -1,17 +1,20 @@
 ---
-id: attach
 title: attach
 description: Wrapper for effect, which allows to map effect arguments and use data from stores.
+lang: en-US
 ---
 
-:::note since
-effector 20.13.0
+# attach
+
+::: info since
+[effector 20.13.0](https://changelog.effector.dev/#effector-20-13-0)
 :::
-Wrapper for [_effect_](docs/api/effector/Effect.md), which allows to map effect arguments and use data from [_stores_](docs/api/effector/Store.md).
+
+Wrapper for [_effect_](/api/effector/Effect.md), which allows to map effect arguments and use data from [_stores_](/api/effector/Store.md).
 
 Use cases: declarative way to pass values from stores to effects and argument preprocessing.
 
-Since `effector 22.4.0`, it is available to check whether effect is created via `attach` method — [`is.attached`](docs/api/effector/is.md#isattachedvalue).
+Since `effector 22.4.0`, it is available to check whether effect is created via `attach` method — [`is.attached`](/api/effector/is.md#isattachedvalue).
 
 ## Formulae
 
@@ -22,8 +25,8 @@ attach({ effect, mapParams?, source?, name? }): newEffect
 When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
 
 - If `attach` called without `source`, `mapParams` will be called only with params of the `newEffect`
-- `attach` always returns new [effect](docs/api/effector/Effect.md)
-- If original `effect` belongs to some [domain](docs/api/effector/Domain.md) then `newEffect` will belong to it as well
+- `attach` always returns new [effect](/api/effector/Effect.md)
+- If original `effect` belongs to some [domain](/api/effector/Domain.md) then `newEffect` will belong to it as well
 
 ### Short example
 
@@ -141,17 +144,17 @@ Create effect which will trigger given one with values from `source` stores
 
 **Arguments**
 
-- `effect` ([_Effect_](docs/api/effector/Effect.md)): Wrapped effect
-- `source` ([_Store_](docs/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+- `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
+- `source` ([_Store_](/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): New effect
+[_Effect_](/api/effector/Effect.md): New effect
 
 ## attach with plain function
 
-:::note since
-effector 22.0.0
+::: info since
+[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
 Create effect which will call async function with values from `source` stores
@@ -167,11 +170,11 @@ resultFx = attach({
 **Arguments**
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
-- `source` ([_Store_](docs/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
+- `source` ([_Store_](/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): New effect
+[_Effect_](/api/effector/Effect.md): New effect
 
 ## `attach({effect, mapParams})`
 
@@ -179,43 +182,43 @@ Create effect which will trigger given one by transforming params by `mapParams`
 
 **Arguments**
 
-- `effect` ([_Effect_](docs/api/effector/Effect.md)): Wrapped effect
-- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works like [event.prepend](docs/api/effector/Event.md#prependfn). Errors happened in `mapParams` function will force attached effect to fail
+- `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
+- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works like [event.prepend](/api/effector/Event.md#prependfn). Errors happened in `mapParams` function will force attached effect to fail
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): New effect
+[_Effect_](/api/effector/Effect.md): New effect
 
 ## `attach({effect, mapParams, source})`
 
 Create effect which will read values from `source` stores, pass them with params to `mapParams` function and call `effect` with result
 
-**Arguments**
-
-- `effect` ([_Effect_](docs/api/effector/Effect.md)): Wrapped effect
-- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
-- `source` ([_Store_](docs/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
-
-**Returns**
-
-[_Effect_](docs/api/effector/Effect.md): New effect
-
-:::note
+::: tip Note
 If `mapParams` throw an error, it will trigger `fail` event and nested `effect` will not be called at all
 :::
 
+**Arguments**
+
+- `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
+- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
+- `source` ([_Store_](/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+
+**Returns**
+
+[_Effect_](/api/effector/Effect.md): New effect
+
 ## `attach({effect})`
+
+::: info since
+[effector 21.5.0](https://changelog.effector.dev/#effector-21-5-0)
+:::
 
 Create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior.
 
 **Arguments**
 
-- `effect` ([_Effect_](docs/api/effector/Effect.md)): Wrapped effect
+- `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
 
 **Returns**
 
-[_Effect_](docs/api/effector/Effect.md): New effect
-
-:::note since
-effector 21.5.0
-:::
+[_Effect_](/api/effector/Effect.md): New effect

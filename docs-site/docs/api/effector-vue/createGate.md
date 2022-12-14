@@ -9,8 +9,8 @@ description: Creates a gate to consume data from view. Designed for vue 3
 
 ## `createGate(config?: {defaultState?, domain?, name?})`
 
-Creates a [_`Gate`_](docs/api/effector-vue/Gate.md) to consume data from view, designed for vue 3.
-If `defaultState` is defined, [Gate.state](docs/api/effector-vue/Gate.md#state) will be created with passed value
+Creates a [_`Gate`_]/apieffector-vue/Gate.md) to consume data from view, designed for vue 3.
+If `defaultState` is defined, [Gate.state]/apieffector-vue/Gate.md#state) will be created with passed value
 
 **Arguments**
 

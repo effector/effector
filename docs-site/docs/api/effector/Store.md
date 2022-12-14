@@ -124,7 +124,7 @@ changed(2)
 ## `on(triggers[], reducer)`
 
 ::: info since
-effector 20.15.0
+[effector 20.15.0](https://changelog.effector.dev/#effector-20-15-0)
 :::
 Updates state when any from `triggers` is triggered by using [`reducer`](/explanation/glossary.md#reducer).
 
@@ -310,8 +310,8 @@ reset() // changed 0
 
 ## `reset(triggersArray)`
 
-:::note since
-effector 20.15.0
+::: info since
+[effector 20.15.0](https://changelog.effector.dev/#effector-20-15-0)
 :::
 Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](/api/effector/merge.md) and [store.on(triggers[], fn)](/api/effector/Store.md#ontriggers-reducer)
 

@@ -46,7 +46,7 @@ createStore<T>(defaultState: T, config: {
 
 Новый [стор](./Store.md)
 
-:::note
+::: info
 
 - Опция `updateFilter` добавлена в effector 21.8.0
 - Опция `serialize` добавлена в effector 22.0.0

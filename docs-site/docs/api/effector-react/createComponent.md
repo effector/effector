@@ -11,7 +11,7 @@ description: Creates store-based React component
 
 Creates store-based React component. The `createComponent` is useful for transfering logic and data of state to your View component.
 
-:::tip
+::: tip
 You can use hooks in `createComponent` since effector-react@20.3.0.
 :::
 
@@ -32,8 +32,7 @@ import {createComponent} from 'effector-react'
 
 const increment = createEvent()
 
-const $counter = createStore(0)
-  .on(increment, n => n + 1)
+const $counter = createStore(0).on(increment, n => n + 1)
 
 const MyCounter = createComponent($counter, (props, state) => (
   <div>

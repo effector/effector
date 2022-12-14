@@ -4,7 +4,7 @@ title: forward
 description: Метод для создания связи между юнитами в декларативной форме. Отправляет обновления из одного набора юнитов в другой
 ---
 
-:::info since effector 22.0.0
+::: info since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 Рекомендуется использовать [sample](sample.md) вместо forward.
 :::
 
@@ -69,7 +69,7 @@ forward({
 
 [Subscription](../../glossary.md#subscription): Функция отмены подписки, после её вызова реактивная связь между `from` и `to` разрушается
 
-:::note
+::: info
 Массивы юнитов поддерживаются с [effector 20.6.0](https://changelog.effector.dev/#effector-20-6-0)
 :::
 

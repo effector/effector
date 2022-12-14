@@ -70,7 +70,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage)
 // => Effect<{text: string}, string, AxiosError>
 ```
 
-:::note
+::: info
 `Fail` в качестве второго дженерика добавлен в effector 21.6.0
 :::
 

@@ -22,12 +22,12 @@ createEffect(handler?)
 
 [_Effect_](./Effect.md): Новый эффект
 
-:::note
+::: info
 Вы должны задать обработчик в [createEffect](createEffect.md) или же в [`.use`](Effect.md#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
 :::
 
-:::note since
-effector 21.3.0
+::: info since
+[effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
 ### Примеры

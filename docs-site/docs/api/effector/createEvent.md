@@ -1,10 +1,12 @@
 ---
-id: createEvent
 title: createEvent
 description: createEvent is a method for creating an event
+lang: en-US
 ---
 
-Method for creating an [event](docs/api/effector/Event.md)
+# createEvent
+
+Method for creating an [event](/api/effector/Event.md).
 
 ```ts
 createEvent<T>(name?): Event<T>
@@ -17,13 +19,13 @@ createEvent(name?): Event<void>
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event
+[_Event_](/api/effector/Event.md): New event
 
-#### Notes
+### Notes
 
-[Event](docs/api/effector/Event.md) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows to send data to another event or effect via effector operators.
+[Event](/api/effector/Event.md) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows to send data to another event or effect via effector operators.
 
-#### Example 1
+## Example 1
 
 ```js
 import {createStore, createEvent} from 'effector'
@@ -59,7 +61,7 @@ resetCounter()
 We created a store `$counter` and an event `incrementBy`, and started watching the store.<br/>
 Notice the function call `incrementBy(10)`. Whenever you will call `incrementBy(10)`, you can look at the console and see how state of `$counter` changes.
 
-#### Example 2
+## Example 2
 
 ```js
 import {createEvent} from 'effector'

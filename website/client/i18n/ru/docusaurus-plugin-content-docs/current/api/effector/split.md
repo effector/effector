@@ -100,8 +100,8 @@ split({
 })
 ```
 
-:::note
-Case store, case funtion and matcher store are supported since effector 21.8.0
+::: info
+Case store, case funtion and matcher store are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
 ## split with cases
@@ -159,7 +159,7 @@ split({
 void
 ```
 
-:::note since
+::: info since
 effector 21.0.0
 :::
 
@@ -267,8 +267,8 @@ split(source, match)
 
 (Object) - Object, having keys, defined in `match` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
 
-:::note since
-effector 20.0.0
+::: info since
+[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
 #### Example 1
@@ -305,7 +305,7 @@ message({user: 'unregistered', text: 'hi'})
 
 [Try it](https://share.effector.dev/QXZsR5yM)
 
-:::note
+::: info
 Only the first met match will trigger resulting event
 :::
 
@@ -337,8 +337,8 @@ message('Hi!')
 
 ## split with clock
 
-:::note
-Since effector 22.2.0
+::: info
+since [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
 It works the same like [split with cases](./split.md#split-with-cases), however computations in `split` will be started after `clock` is triggered.

@@ -9,23 +9,23 @@ description: Creates a gate to consume data from view
 
 ## `createGate(config?: {defaultState?, domain?, name?})`
 
-Creates a [_`Gate`_](docs/api/effector-react/Gate.md), if `defaultState` is defined, [Gate.state](docs/api/effector-react/Gate.md#state) will be created with passed value
+Creates a [_`Gate`_]/apieffector-react/Gate.md), if `defaultState` is defined, [Gate.state]/apieffector-react/Gate.md#state) will be created with passed value
 
 **Arguments**
 
 `config` (_Object_): Optional configuration object
 
-- `defaultState?`: Optional default state for [Gate.state](docs/api/effector-react/Gate.md#state)
-- `domain?` ([_Domain_](docs/api/effector/Domain.md)): Optional domain which will be used to create gate units ([Gate.open](docs/api/effector-react/Gate.md#open) event, [Gate.state](docs/api/effector-react/Gate.md#state) store and so on)
+- `defaultState?`: Optional default state for [Gate.state]/apieffector-react/Gate.md#state)
+- `domain?` ([_Domain_]/apieffector/Domain.md)): Optional domain which will be used to create gate units ([Gate.open]/apieffector-react/Gate.md#open) event, [Gate.state]/apieffector-react/Gate.md#state) store and so on)
 - `name?` (_string_): Optional name which will be used as name of created react component
 
 **Returns**
 
-[_Gate_](docs/api/effector-react/Gate.md)
+[_Gate_]/apieffector-react/Gate.md)
 
 ## `createGate(name?)`
 
-Creates a [_`Gate`_](docs/api/effector-react/Gate.md)
+Creates a [_`Gate`_]/apieffector-react/Gate.md)
 
 **Arguments**
 
@@ -33,7 +33,7 @@ Creates a [_`Gate`_](docs/api/effector-react/Gate.md)
 
 **Returns**
 
-[_Gate_](docs/api/effector-react/Gate.md)
+[_Gate_]/apieffector-react/Gate.md)
 
 #### Example
 

@@ -31,7 +31,7 @@ fetchFx()
 
 ### sid
 
-:::note
+::: info
 Добавлено в effector 20.2.0
 :::
 
@@ -96,7 +96,7 @@ getUsers.use(
 
 ### factories
 
-:::note
+::: info
 Добавлено в effector 21.6.0
 :::
 
@@ -149,7 +149,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 
 ### reactSsr
 
-:::note
+::: info
 Добавлено в effector 21.5.0
 :::
 
@@ -160,7 +160,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 
 ### addNames
 
-:::note
+::: info
 Добавлено в effector 21.8.0
 :::
 
@@ -184,7 +184,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 
 ### noDefaults
 
-:::note
+::: info
 Добавлено в effector 20.2.0
 :::
 
@@ -193,7 +193,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 
 Опция для effector/babel-plugin для создания пользовательских фабрик юнитов с чистой конфигурацией, изначально не делающей ничего.
 
-:::note
+::: info
 Оптимальнее использовать [factories](#factories)
 :::
 

@@ -4,11 +4,11 @@ title: guard
 description: Метод для запуска юнитов по условию, условием может быть функция-предикат или отдельный стор. Позволяет описывать бизнес-правила независимо от других сущностей
 ---
 
-:::note
+::: info
 C effector 22.2.0 предпочтительнее использовать [sample](sample.md)
 :::
 
-:::note
+::: info
 Добавлен в effector 20.4.0
 :::
 
@@ -21,7 +21,7 @@ C effector 22.2.0 предпочтительнее использовать [sam
 guard({clock?, source?, filter, target?}): target
 ```
 
-:::note
+::: info
 `clock` или `source` обязателен
 :::
 
@@ -33,7 +33,7 @@ guard({clock?, source?, filter, target?}): target
 - Если `filter` это [стор](./Store.md), то его значение будет проверено на [истинность](https://developer.mozilla.org/ru/docs/Glossary/Truthy)
 - Если `filter` это функция-предикат, то она будет вызвана с данными из `source` и `clock`, а результат проверен на [истинность](https://developer.mozilla.org/ru/docs/Glossary/Truthy)
 
-:::note
+::: info
 `clock` добавлен в effector 21.8.0
 :::
 

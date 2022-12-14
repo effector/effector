@@ -9,11 +9,11 @@ description: Using a gate to consume data from view. Designed for vue 3
 
 ## `useGate(GateComponent, props)`
 
-Using a [_`Gate`_](docs/api/effector-vue/Gate.md) to consume data from view. Designed for vue 3
+Using a [_`Gate`_]/apieffector-vue/Gate.md) to consume data from view. Designed for vue 3
 
 **Arguments**
 
-1. `GateComponent` ([_Gate_](docs/api/effector-vue/Gate.md))
+1. `GateComponent` ([_Gate_]/apieffector-vue/Gate.md))
 2. `props` (_Props_)
 
 **Returns**
@@ -22,4 +22,4 @@ Using a [_`Gate`_](docs/api/effector-vue/Gate.md) to consume data from view. Des
 
 ### Example
 
-[See example](docs/api/effector-vue/Gate.md)
+[See example]/apieffector-vue/Gate.md)

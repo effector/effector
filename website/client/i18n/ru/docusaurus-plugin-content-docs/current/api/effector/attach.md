@@ -4,8 +4,8 @@ title: attach
 description: Wrapper for effect, which allows to map effect arguments and use data from stores.
 ---
 
-:::note since
-effector 20.13.0
+::: info since
+[effector 20.13.0](https://changelog.effector.dev/#effector-20-13-0)
 :::
 Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use data from [_stores_](Store.md).
 
@@ -30,13 +30,13 @@ When `newEffect` is called, call `mapParams` with params of the `newEffect` and 
 ```js
 import {createEffect, attach} from 'effector'
 
-const originalFx = createEffect(params => {
+const originalFx = createEffect((params) => {
   console.log('Original effect called with', params)
 })
 
 const createdFx = attach({
   effect: originalFx,
-  mapParams: params => {
+  mapParams: (params) => {
     console.log('Created effect called with', params)
     return {wrapped: params}
   },
@@ -55,7 +55,7 @@ await createdFx('HELLO')
 ```js
 import {createEffect, attach} from 'effector'
 
-const originalFx = createEffect(params => {
+const originalFx = createEffect((params) => {
   console.log('Original effect called with', params)
 })
 
@@ -93,10 +93,9 @@ const backendRequestFx = createEffect(async ({token, data, resource}) => {
   })
 })
 
-const $requestsSent = createStore(0)
-  .on(backendRequestFx, total => total + 1)
+const $requestsSent = createStore(0).on(backendRequestFx, (total) => total + 1)
 
-$requestsSent.watch(total => {
+$requestsSent.watch((total) => {
   console.log(`client analytics: sent ${total} requests`)
 })
 
@@ -108,10 +107,10 @@ const authorizedRequestFx = attach({
   mapParams: ({data, resource}, token) => ({data, resource, token}),
 })
 
-const createRequestFx = resource =>
+const createRequestFx = (resource) =>
   attach({
     effect: authorizedRequestFx,
-    mapParams: data => ({data, resource}),
+    mapParams: (data) => ({data, resource}),
   })
 
 const getUserFx = createRequestFx('/user')
@@ -151,8 +150,8 @@ Create effect which will trigger given one with values from `source` stores
 
 ## attach with plain function
 
-:::note since
-effector 22.0.0
+::: info since
+[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
 Create effect which will call async function with values from `source` stores
@@ -201,7 +200,7 @@ Create effect which will read values from `source` stores, pass them with params
 
 [_Effect_](Effect.md): New effect
 
-:::note
+::: info
 If `mapParams` throw an error, it will trigger `fail` event and nested `effect` will not be called at all
 :::
 
@@ -217,7 +216,6 @@ Create effect which will call `effect` with params as it is. That allow to creat
 
 [_Effect_](Effect.md): New effect
 
-:::note since
-effector 21.5.0
+::: info since
+[effector 21.5.0](https://changelog.effector.dev/#effector-21-5-0)
 :::
-
