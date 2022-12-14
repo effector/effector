@@ -4,6 +4,10 @@ title: forward
 description: Метод для создания связи между юнитами в декларативной форме. Отправляет обновления из одного набора юнитов в другой
 ---
 
+:::info since effector 22.0.0
+Рекомендуется использовать [sample](sample.md) вместо forward.
+:::
+
 # forward
 
 Метод для создания связи между юнитами в декларативной форме. Отправляет обновления из одного набора юнитов в другой
@@ -86,7 +90,7 @@ forward({
   to: $store,
 })
 
-$store.watch(state => console.log('store changed: ', state))
+$store.watch((state) => console.log('store changed: ', state))
 // => store changed: 1
 
 event(200)
@@ -111,8 +115,8 @@ forward({
   to: [firstTarget, secondTarget],
 })
 
-firstTarget.watch(e => console.log('first target', e))
-secondTarget.watch(e => console.log('second target', e))
+firstTarget.watch((e) => console.log('first target', e))
+secondTarget.watch((e) => console.log('second target', e))
 
 firstSource('A')
 // => first target A
