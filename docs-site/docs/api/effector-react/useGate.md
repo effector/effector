@@ -1,26 +1,25 @@
 ---
-id: useGate
 title: useGate
-hide_title: true
 description: Hook for passing data to Gate
+lang: en-US
 ---
 
 # useGate
 
-## `useGate(GateComponent, props)`
+## `useGate(GateComponent, props)` {#useGate-props}
 
-Hook for passing data to [_`Gate`_]/apieffector-react/Gate.md)
+Hook for passing data to [_`Gate`_](/api/effector-react/Gate.md).
 
-**Arguments**
+### Arguments {#useGate-props-arguments}
 
 1. `GateComponent` (_Gate_)
 2. `props` (_Props_)
 
-**Returns**
+### Returns {#useGate-props-returns}
 
 (_`void`_)
 
-### Example
+## Example {#useGate-example}
 
 ```js
 import {createGate, useGate} from 'effector-react'

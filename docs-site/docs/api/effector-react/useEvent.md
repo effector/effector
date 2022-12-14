@@ -1,22 +1,32 @@
 ---
-id: useEvent
 title: useEvent
+lang: en-US
 ---
 
-Bind event to current [_scope_]/apieffector/Scope.md) to use in dom event handlers.
+# useEvent
+
+::: info since
+`useEvent` introduced in [effector-react 20.9.0](https://changelog.effector.dev/#effector-20-9-0)
+:::
+
+Bind event to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.<br/>
 Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is no-op and does not require `Provider` with scope.
 
-## `useEvent(unit)`
+::: info Note
+Useful only if you have server-side rendering or writing tests for React-components.
+:::
 
-**Arguments**
+## `useEvent(unit)` {#useEvent-unit}
 
-1. `unit` ([_Event_](docs/api/effector/Event.md) or [_Effect_](docs/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+### Arguments {#useEvent-unit-arguments}
 
-**Returns**
+1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+
+### Returns {#useEvent-unit-returns}
 
 (Function): Function to pass to event handlers. Will trigger given unit in current scope
 
-### Example
+### Example {#useEvent-unit-example}
 
 ```jsx
 import ReactDOM from 'react-dom'
@@ -50,17 +60,17 @@ ReactDOM.render(
 
 [Try it](https://share.effector.dev/GyiJvLdo)
 
-## `useEvent(shape)`
+## `useEvent(shape)` {#useEvent-shape}
 
-**Arguments**
+### Arguments {#useEvent-shape-arguments}
 
-1. `shape` Object or array of ([_Event_](docs/api/effector/Event.md) or [_Effect_](docs/api/effector/Effect.md)): Events or effects as values which will be bound to the current `scope`
+1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Events or effects as values which will be bound to the current `scope`
 
-**Returns**
+### Returns {#useEvent-shape-returns}
 
 (Object or Array): List of functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope
 
-### Example
+### Example {#useEvent-shape-example}
 
 ```jsx
 import ReactDOM from 'react-dom'

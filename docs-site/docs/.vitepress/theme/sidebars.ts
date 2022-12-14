@@ -1,6 +1,72 @@
 import {DefaultTheme} from 'vitepress'
 
 export const sidebar: DefaultTheme.Sidebar = {
+  '/api/effector-react': [
+    {
+      text: 'Hooks',
+      items: [
+        {
+          text: 'useUnit',
+          link: '/api/effector-react/useUnit',
+        },
+        {
+          text: 'useList',
+          link: '/api/effector-react/useList',
+        },
+        {
+          text: 'useStoreMap',
+          link: '/api/effector-react/useStoreMap',
+        },
+        {
+          text: 'useStore',
+          link: '/api/effector-react/useStore',
+        },
+        {
+          text: 'useEvent',
+          link: '/api/effector-react/useEvent',
+        },
+      ],
+    },
+    {
+      text: 'Gates',
+      items: [
+        {
+          text: 'Gate',
+          link: '/api/effector-react/Gate',
+        },
+        {
+          text: 'createGate',
+          link: '/api/effector-react/createGate',
+        },
+        {
+          text: 'useGate',
+          link: '/api/effector-react/useGate',
+        },
+      ],
+    },
+    {
+      text: 'HOC-like APIs',
+      collapsed: true,
+      collapsible: true,
+      items: [
+        {
+          text: 'connect',
+          link: '/api/effector-react/connect',
+        },
+        {
+          text: 'createComponent',
+          link: '/api/effector-react/createComponent',
+        },
+        {
+          text: 'createStoreConsumer',
+          link: '/api/effector-react/createStoreConsumer',
+        },
+      ],
+    },
+  ],
+  '/api/effector-solid': [],
+  '/api/effector-vue': [],
+
   '/api/effector': [
     {
       text: 'Unit Types',
@@ -90,6 +156,8 @@ export const sidebar: DefaultTheme.Sidebar = {
     },
     {
       text: 'Fork API',
+      collapsible: true,
+      collapsed: true,
       items: [
         {
           text: 'fork',
@@ -115,6 +183,8 @@ export const sidebar: DefaultTheme.Sidebar = {
     },
     {
       text: 'Utilities',
+      collapsible: true,
+      collapsed: true,
       items: [
         {
           text: 'is',
@@ -124,6 +194,8 @@ export const sidebar: DefaultTheme.Sidebar = {
     },
     {
       text: 'Low-level API',
+      collapsible: true,
+      collapsed: true,
       items: [
         {
           text: 'clearNode',

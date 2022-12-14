@@ -1,30 +1,32 @@
 ---
-id: useUnit
 title: useUnit
+lang: en-US
 ---
+
+# useUnit
+
+::: info since
+`useUnit` introduced in [effector-react 22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
+:::
 
 React hook, which takes any unit or shape of units.
 
-In case of [stores]/apieffector/Store.md) it subscribes component to provided [store]/apieffector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
+In case of [stores](/api/effector/Store.md) it subscribes component to provided [store](/api/effector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
 
-In the case of [events]/apieffector/Event.md)/[effects]/apieffector/Effect.md) - bind to current [_scope_]/apieffector/Scope.md) to use in dom event handlers.
+In the case of [events](/api/effector/Event.md)/[effects](/api/effector/Effect.md) - bind to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.
 Only `effector-react/scope` version works this way, `useUnit` of `effector-react` is no-op for events and does not require `Provider` with scope.
-
-::: info
-`useUnit` introduced in effector-react 22.1.0
-:::
 
 ## `useUnit(unit)`
 
-**Arguments**
+### Arguments {#useUnit-unit-arguments}
 
-1. `unit` ([_Event_](docs/api/effector/Event.md) or [_Effect_](docs/api/effector/Effect.md)): Event or effect which will be binded to current `scope`.
+1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`.
 
-**Returns**
+### Returns {#useUnit-unit-returns}
 
 (Function): Function to pass to event handlers. Will trigger given unit in current scope
 
-### Example
+### Example {#useUnit-unit-example}
 
 ```jsx
 import {createEvent, createStore, fork} from 'effector'
@@ -58,15 +60,15 @@ render(
 
 ## `useUnit(store)`
 
-**Arguments**
+### Arguments {#useUnit-store-arguments}
 
-1. `store` Effector ([_Store_](docs/api/effector/Store.md))
+1. `store` Effector ([_Store_](/api/effector/Store.md))
 
-**Returns**
+### Returns {#useUnit-store-returns}
 
 Current value of the store.
 
-#### Example
+### Example {#useUnit-store-example}
 
 ```js
 import {createStore, createApi} from 'effector'
@@ -94,18 +96,18 @@ const App = () => {
 
 ## `useUnit(shape)`
 
-**Arguments**
+### Arguments {#useUnit-shape-arguments}
 
-1. `shape` Object or array of ([_Event_](docs/api/effector/Event.md) or [_Effect_](docs/api/effector/Effect.md) or [_Store_](docs/api/effector/Store.md))
+1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md))
 
-**Returns**
+### Returns {#useUnit-shape-returns}
 
 (Object or Array):
 
 - if event or effect: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope _Note: events or effects will be bound **only** if `useUnit` is imported from `effector-react/scope`_
 - if store: current value of the store.
 
-### Example
+### Example {#useUnit-shape-example}
 
 ```jsx
 import {createStore, createEvent, fork} from 'effector'
@@ -115,8 +117,9 @@ const inc = createEvent()
 const dec = createEvent()
 
 const $count = createStore(0)
-  .on(inc, x => x + 1)
-  .on(dec, x => x - 1)
+
+$count.on(inc, x => x + 1)
+$count.on(dec, x => x - 1)
 
 const App = () => {
   const count = useUnit($count)

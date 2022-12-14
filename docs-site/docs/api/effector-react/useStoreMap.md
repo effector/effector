@@ -1,11 +1,27 @@
 ---
-id: useStoreMap
 title: useStoreMap
+lang: en-US
 ---
 
-React hook, which subscribes to [store]/apieffector/Store.md) and transforms its value with given function. Component will update only when selector function result will change
+# useStoreMap
+
+::: info since
+`useStoreMap` introduced in [effector-react 19.1.2](https://changelog.effector.dev/#effector-react-19-1-2)
+:::
+
+React hook, which subscribes to [store](/api/effector/Store.md) and transforms its value with given function. Component will update only when selector function result will change.
+
+You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
+
+## useStoreMap(store, fn) {#useStoreMap-fn}
+
+::: info since
+Short version of `useStoreMap` introduced in [effector-react@21.3.0](https://changelog.effector.dev/#effector-react-21-3-0)
+:::
 
 Common use case: subscribe to changes in selected part of store only
+
+### Formulae {#useStoreMap-fn-formulae}
 
 ```ts
 useStoreMap<State, Result>(
@@ -14,18 +30,20 @@ useStoreMap<State, Result>(
 ): Result
 ```
 
-::: info
-Short version of `useStoreMap` introduced in `effector-react@21.3.0`
-:::
+### Arguments {#useStoreMap-fn-arguments}
 
-**Arguments**
-
-1. `store`: Source [store]/apieffector/Store.md)
+1. `store`: Source [store](/api/effector/Store.md)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
-**Returns**
+### Returns {#useStoreMap-fn-returns}
 
-(_Result_)
+(_`Result`_): Value from the `fn` function call.
+
+## useStoreMap(config) {#useStoreMap-config-}
+
+Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
+
+### Formulae {#useStoreMap-config-formulae}
 
 ```ts
 useStoreMap<Source, Result>({
@@ -37,30 +55,28 @@ useStoreMap<Source, Result>({
 }): Result
 ```
 
-Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
-
-**Arguments**
+### Arguments {#useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store]/apieffector/Store.md)
+   - `store`: Source [store](/api/effector/Store.md)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter]/apieffector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/api/effector/createStore.md) option under the hood
    - `defaultValue`: Optional default value, used whenever `fn` returns undefined
 
-**Returns**
-
-(_Result_)
-
-::: info
-`updateFilter` option introduced in `effector-react@21.3.0`
+::: info since
+`updateFilter` option introduced in [effector-react@21.3.0](https://changelog.effector.dev/#effector-react-21-3-0)
 :::
 
-::: info
-`defaultValue` option introduced in `effector-react@22.1.0`
+::: info since
+`defaultValue` option introduced in [effector-react@22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::
 
-#### Example
+### Returns {#useStoreMap-config-returns}
+
+(_`Result`_): Value from the `fn` function call, or the `defaultValue`.
+
+## Example {#useStoreMap-example}
 
 This hook is useful for working with lists, especially with large ones
 

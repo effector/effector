@@ -15,15 +15,15 @@ export const navigation: DefaultTheme.NavItem[] = [
         link: '/api/effector/',
       },
       {
-        text: 'React',
+        text: 'Effector React',
         link: '/api/effector-react/',
       },
       {
-        text: 'Solid',
+        text: 'Effector Solid',
         link: '/api/effector-solid/',
       },
       {
-        text: 'Vue',
+        text: 'Effector Vue',
         link: '/api/effector-vue/',
       },
     ],

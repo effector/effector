@@ -1,10 +1,20 @@
 ---
-id: useList
 title: useList
+lang: en-US
 ---
+
+# useList
+
+::: info since
+`useList` introduced in [effector-react 20.1.1](https://changelog.effector.dev/#effector-react-20-1-1)
+:::
 
 Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data changes.
+
+## useList(store, fn) {#useList-simple}
+
+### Formulae {#useList-simple-formulae}
 
 ```ts
 useList<T>(
@@ -13,14 +23,18 @@ useList<T>(
 ): React.ReactNode
 ```
 
-**Arguments**
+### Arguments {#useList-simple-arguments}
 
 1. `store` (_Store_): Store with array of items
 2. `fn` (_Function_): Render function which will be called for every item in list
 
-**Returns**
+### Returns {#useList-simple-returns}
 
-(_React.Node_)
+(_React.Node_
+
+## useList(store, config) {#useList-config}
+
+### Formulae {#useList-config-formulae}
 
 ```ts
 useList<T>(
@@ -40,7 +54,7 @@ By default, `useList` rerenders only when some of its items were changed.
 However, sometimes we need to update items when some external value (e.g. props field or state of another store) changes.
 In such case, we need to tell react about our dependencies and pass keys explicitly.
 
-**Arguments**
+### Arguments {#useList-config-arguments}
 
 1. `store` (_Store_): Store with array of items
 2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useList`
@@ -48,17 +62,17 @@ In such case, we need to tell react about our dependencies and pass keys explici
 4. `getKey` (_(value) => React.Key_): Optional function to compute key for every item of list
 5. `placeholder` (_ReactNode_): Optional react node to render instead of empty list
 
-::: info
-`getKey` option introduced in `effector-react@21.3.0`
+::: info since
+`getKey` option introduced in [effector-react@21.3.0](https://changelog.effector.dev/#effector-react-21-3-0)
 :::
 
-::: info
-`placeholder` option introduced in `effector-react@22.1.0`
+::: info since
+`placeholder` option introduced in [effector-react@22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::
 
-## Examples
+## Examples {#useList-examples}
 
-### Example 1
+### Example 1 {#useList-examples-1}
 
 ```js
 import {createStore} from 'effector'
@@ -85,7 +99,7 @@ const App = () => {
 
 [Try it](https://share.effector.dev/dV9dmuz3)
 
-### Example 2
+### Example 2 {#useList-examples-2}
 
 ```js
 import {createStore, createEvent} from 'effector'
@@ -148,7 +162,7 @@ const App = () => (
 
 [Try it](https://share.effector.dev/dUay9F3U)
 
-### Example with config
+### Example with config {#useList-examples-config}
 
 ```js
 import ReactDOM from 'react-dom'

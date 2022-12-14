@@ -1,23 +1,27 @@
 ---
-id: useStore
 title: useStore
+lang: en-US
 ---
 
-React hook, which subscribes to [store]/apieffector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
+# useStore
+
+React hook, which subscribes to [store](/api/effector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
+
+## Formulae {#useStore-formulae}
 
 ```ts
 useStore(store: Store<T>): T
 ```
 
-**Arguments**
+### Arguments {#useStore-arguments}
 
-1. `store`: [Store]/apieffector/Store.md)
+1. `store`: [Store](/api/effector/Store.md)
 
-**Returns**
+### Returns {#useStore-returns}
 
-(_State_)
+(_`State`_): The value from the store
 
-#### Example
+## Example {#useStore-example}
 
 ```js
 import {createStore, createApi} from 'effector'

@@ -1,41 +1,40 @@
 ---
-id: createGate
 title: createGate
-hide_title: true
 description: Creates a gate to consume data from view
+lang: en-US
 ---
 
 # createGate
 
-## `createGate(config?: {defaultState?, domain?, name?})`
+## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}
 
-Creates a [_`Gate`_]/apieffector-react/Gate.md), if `defaultState` is defined, [Gate.state]/apieffector-react/Gate.md#state) will be created with passed value
+Creates a [_`Gate`_](/api/effector-react/Gate.md), if `defaultState` is defined, [Gate.state](/api/effector-react/Gate.md#state) will be created with passed value
 
-**Arguments**
+### Arguments {#createGate-config-arguments}
 
 `config` (_Object_): Optional configuration object
 
-- `defaultState?`: Optional default state for [Gate.state]/apieffector-react/Gate.md#state)
-- `domain?` ([_Domain_]/apieffector/Domain.md)): Optional domain which will be used to create gate units ([Gate.open]/apieffector-react/Gate.md#open) event, [Gate.state]/apieffector-react/Gate.md#state) store and so on)
+- `defaultState?`: Optional default state for [Gate.state](/api/effector-react/Gate.md#state)
+- `domain?` ([_Domain_](/api/effector/Domain.md)): Optional domain which will be used to create gate units ([Gate.open](/api/effector-react/Gate.md#open) event, [Gate.state](/api/effector-react/Gate.md#state) store and so on)
 - `name?` (_string_): Optional name which will be used as name of created react component
 
-**Returns**
+### Returns {#createGate-config-returns}
 
-[_Gate_]/apieffector-react/Gate.md)
+[_Gate_](/api/effector-react/Gate.md)
 
-## `createGate(name?)`
+## `createGate(name?)` {#createGate-name}
 
-Creates a [_`Gate`_]/apieffector-react/Gate.md)
+Creates a [_`Gate`_](/api/effector-react/Gate.md)
 
-**Arguments**
+### Arguments {#createGate-name-arguments}
 
 1. `name`? (_string_): Optional name which will be used as name of created react component
 
-**Returns**
+### Returns {#createGate-name-returns}
 
-[_Gate_]/apieffector-react/Gate.md)
+[_Gate_](/api/effector-react/Gate.md)
 
-#### Example
+## Example {#createGate-example}
 
 ```js
 import React from 'react'
