@@ -1,8 +1,8 @@
 ---
-id: example
-title: React Native Example
-sidebar_label: React Native Example
+title: AsyncStorage Counter
 ---
+
+# AsyncStorage Counter on React Native
 
 The following example is a React Native counter that stores data to AsyncStorage. It uses store, event and effects.
 
@@ -11,53 +11,52 @@ import * as React from 'react'
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import {createStore, createEvent, createEffect, forward} from 'effector'
-import {useStore} from 'effector-react'
+import {createStore, createEvent, createEffect, sample} from 'effector'
+import {useUnit} from 'effector-react'
 
 const init = createEvent()
 const increment = createEvent()
 const decrement = createEvent()
 const reset = createEvent()
 
-const fetchCountFromAsyncStorageFx = createEffect({
-  async handler() {
-    const value = parseInt(await AsyncStorage.getItem('count'))
-    return !isNaN(value) ? value : 0
-  },
+const fetchCountFromAsyncStorageFx = createEffect(async () => {
+  const value = parseInt(await AsyncStorage.getItem('count'))
+  return !isNaN(value) ? value : 0
 })
 
-const updateCountInAsyncStorageFx = createEffect({
-  async handler(count) {
-    try {
-      await AsyncStorage.setItem('count', `${count}`, err => {
-        if (err) console.error(err)
-      })
-    } catch (err) {
-      console.error(err)
-    }
-  },
-})
-
-fetchCountFromAsyncStorageFx.doneData.watch(result => {
-  init(result)
+const updateCountInAsyncStorageFx = createEffect(async count => {
+  try {
+    await AsyncStorage.setItem('count', `${count}`, err => {
+      if (err) console.error(err)
+    })
+  } catch (err) {
+    console.error(err)
+  }
 })
 
 const $counter = createStore(0)
+
+sample({
+  clock: fetchCountFromAsyncStorageFx.doneData,
+  target: init,
+})
+
+$counter
+  .on(init, (state, value) => value)
   .on(increment, state => state + 1)
   .on(decrement, state => state - 1)
-  .on(init, (state, value) => value)
   .reset(reset)
 
-forward({
-  from: $counter,
-  to: updateCountInAsyncStorageFx,
+sample({
+  clock: $counter,
+  target: updateCountInAsyncStorageFx,
 })
 
 fetchCountFromAsyncStorageFx()
 
 export default () => {
-  const count = useStore(counter)
-  
+  const count = useUnit(counter)
+
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>{count}</Text>

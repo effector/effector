@@ -1,11 +1,13 @@
 ---
 id: todo-creator
-title: TODO creator
+title: ToDo creator
 ---
+
+# ToDo Creator
 
 [Try it](https://share.effector.dev/AeiP1Jeb)
 
-```ts
+```tsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent, sample} from 'effector'
@@ -18,11 +20,16 @@ function createTodoListApi(initial: string[] = []) {
   const reset = createEvent<void>()
 
   const $input = createStore<string>('')
-    .on(change, (_, value) => value).reset(reset, insert)
-
   const $todos = createStore<string[]>(initial)
-    .on(insert, (todos, newTodo) => [...todos, newTodo])
-    .on(remove, (todos, index) => todos.filter((_, i) => i !== index))
+
+  $input.on(change, (_, value) => value)
+
+  $input.reset(insert)
+  $todos.on(insert, (todos, newTodo) => [...todos, newTodo])
+
+  $todos.on(remove, (todos, index) => todos.filter((_, i) => i !== index))
+
+  $input.reset(reset)
 
   const submit = createEvent<React.SyntheticEvent>()
   submit.watch(event => event.preventDefault())
@@ -48,23 +55,28 @@ const secondTodoList = createTodoListApi(['hello, world!'])
 
 function TodoList({label, model}) {
   const input = useStore(model.$input)
-  
+
   const todos = useList(model.$todos, (value, index) => (
     <li>
-      {value} <button type="button" onClick={() => model.remove(index)}>Remove</button>
+      {value}{' '}
+      <button type="button" onClick={() => model.remove(index)}>
+        Remove
+      </button>
     </li>
   ))
 
   return (
     <>
       <h1>{label}</h1>
-      <ul>
-        {todos}
-      </ul>
+      <ul>{todos}</ul>
       <form>
         <label>Insert todo: </label>
-        <input type="text" value={input} onChange={(event) => model.change(event.currentTarget.value)}/>
-        <input type="submit" onClick={model.submit} value="Insert"/>
+        <input
+          type="text"
+          value={input}
+          onChange={event => model.change(event.currentTarget.value)}
+        />
+        <input type="submit" onClick={model.submit} value="Insert" />
       </form>
     </>
   )
@@ -73,17 +85,11 @@ function TodoList({label, model}) {
 function App() {
   return (
     <>
-      <TodoList
-        label="First todo list"
-        model={firstTodoList}
-      />
-      <TodoList
-        label="Second todo list"
-        model={secondTodoList}
-      />
+      <TodoList label="First todo list" model={firstTodoList} />
+      <TodoList label="Second todo list" model={secondTodoList} />
     </>
   )
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'))
 ```

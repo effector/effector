@@ -1,12 +1,13 @@
 ---
-id: slots
 title: Slots
 ---
+
+# Slots
 
 A slot is a place in a component where you can insert any unknown component. It's a well-known abstraction used by frameworks
 such as Vue.js and Svelte.
 
-Slots arn't present in the React. With React you can achieve this goal using props or `React.Context`.
+Slots aren't present in the React. With React, you can achieve this goal using props or `React.Context`.
 In large projects this is not convenient, because it generates "props hell" or smears the logic.
 
 Using React with Effector we can achieve slot goals without the problems described above.
@@ -16,10 +17,12 @@ Using React with Effector we can achieve slot goals without the problems describ
 - [Svelte docs](https://svelte.dev/docs#slot)
 - [@space307/effector-react-slots](https://github.com/space307/effector-react-slots)
 
-[Try it](https://replit.com/@binjospookie/effector-react-slots-example)
+<hr/>
+
+[Open ReplIt](https://replit.com/@binjospookie/effector-react-slots-example)
 
 ```tsx
-import {createApi, createStore, createEvent, guard, sample, split} from 'effector'
+import {createApi, createStore, createEvent, sample, split} from 'effector'
 import {useStoreMap} from 'effector-react'
 import React from 'react'
 
@@ -30,17 +33,13 @@ type Store<S> = {
   readonly component: Component<S>
 }
 
-export const createSlotFactory = <Id>({
-  slots,
-}: {
-  readonly slots: Record<string, Id>
-}) => {
+function createSlotFactory<Id>({slots}: {readonly slots: Record<string, Id>}) {
   const api = {
     remove: createEvent<{readonly id: Id}>(),
     set: createEvent<{readonly id: Id; readonly component: Component<any>}>(),
   }
 
-  const createSlot = <P>({id}: {readonly id: Id}) => {
+  function createSlot<P>({id}: {readonly id: Id}) {
     const defaultToStore: Store<P> = {
       component: () => null,
     }
@@ -51,29 +50,27 @@ export const createSlotFactory = <Id>({
     })
     const isSlotEventCalling = (payload: {readonly id: Id}) => payload.id === id
 
-    guard({
+    sample({
       clock: api.remove,
       filter: isSlotEventCalling,
       target: slotApi.remove,
     })
 
     sample({
-      clock: guard({
-        clock: api.set,
-        filter: isSlotEventCalling,
-      }),
+      clock: api.set,
+      filter: isSlotEventCalling,
       fn: ({component}) => component,
       target: slotApi.set,
     })
-    
-    const Slot = (props: P = {} as P) => {
+
+    function Slot(props: P = {} as P) {
       const Component = useStoreMap({
         store: $slot,
-        fn: ({ component }) => component,
+        fn: ({component}) => component,
         keys: [],
-      });
+      })
 
-      return <Component {...props} />;
+      return <Component {...props} />
     }
 
     return {
@@ -85,44 +82,50 @@ export const createSlotFactory = <Id>({
     api,
     createSlot,
   }
-};
+}
 
-const SLOTS = {
-  FOO: 'foo',
-} as const;
+const SLOTS = {FOO: 'foo'} as const
 
-const {api, createSlot} = createSlotFactory({slots: SLOTS});
+const {api, createSlot} = createSlotFactory({slots: SLOTS})
 
-const {Slot: FooSlot} = createSlot({id: SLOTS.FOO});
+const {Slot: FooSlot} = createSlot({id: SLOTS.FOO})
 
 const ComponentWithSlot = () => (
   <>
     <h1>Hello, Slots!</h1>
     <FooSlot />
   </>
-);
+)
 
-const update = createEvent<string>('');
-const $featureToggle = createStore<string>('').on(update, (_, p) => p);
+const updateFeatures = createEvent<string>('')
+const $featureToggle = createStore<string>('')
 
-const MyAwesomeFeature = () => <p>Look at my horse</p>;
-const VeryAwesomeFeature = () => <p>My horse is amaizing</p>;
+const MyAwesomeFeature = () => <p>Look at my horse</p>
+const VeryAwesomeFeature = () => <p>My horse is amaizing</p>
+
+$featureToggle.on(updateFeatures, (_, feature) => feature)
 
 split({
   source: $featureToggle,
   match: {
-    awesome: (data) => data === 'awesome',
-    veryAwesome: (data) => data === 'veryAwesome',
-    hideAll: (data) => data === 'hideAll',
+    awesome: data => data === 'awesome',
+    veryAwesome: data => data === 'veryAwesome',
+    hideAll: data => data === 'hideAll',
   },
   cases: {
-    awesome: api.set.prepend(() => ({ id: SLOTS.FOO, component: MyAwesomeFeature })),
-    veryAwesome: api.set.prepend(() => ({ id: SLOTS.FOO, component: VeryAwesomeFeature })),
-    hideAll: api.remove.prepend(() => ({ id: SLOTS.FOO })),
+    awesome: api.set.prepend(() => ({
+      id: SLOTS.FOO,
+      component: MyAwesomeFeature,
+    })),
+    veryAwesome: api.set.prepend(() => ({
+      id: SLOTS.FOO,
+      component: VeryAwesomeFeature,
+    })),
+    hideAll: api.remove.prepend(() => ({id: SLOTS.FOO})),
   },
-});
+})
 
-// update('awesome'); // render MyAwesomeFeature in slot
-// update('veryAwesome'); // render VeryAwesomeFeature in slot
-// update('hideAll'); // render nothing in slot
+// updateFeatures('awesome'); // render MyAwesomeFeature in slot
+// updateFeatures('veryAwesome'); // render VeryAwesomeFeature in slot
+// updateFeatures('hideAll'); // render nothing in slot
 ```

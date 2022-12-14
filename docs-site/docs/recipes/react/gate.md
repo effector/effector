@@ -1,15 +1,19 @@
 ---
-id: gate
-title: Gate - a bridge between props and store
+title: Gate
+description: Gate - a bridge between props and store
 ---
+
+# Gate
+
+Gate is a bridge between props and store.
 
 Imagine you have the task of transferring something from react props to the effector store.
 Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.
-In a such situation [`Gate`](https://effector.dev/docs/api/effector-react/gate) will help.
+In a such situation [`Gate`](/api/effector-react/gate) will help.
 
 ```js
 import {createStore, createEffect, forward} from 'effector'
-import {useStore, createGate} from 'effector-react'
+import {useUnit, createGate} from 'effector-react'
 
 // Effect for api request
 const getTodoFx = createEffect(async ({id}) => {
@@ -18,7 +22,9 @@ const getTodoFx = createEffect(async ({id}) => {
 })
 
 // Our main store
-const $todo = createStore(null).on(getTodoFx.doneData, (_, todo) => todo)
+const $todo = createStore(null)
+
+$todo.on(getTodoFx.doneData, (_, todo) => todo)
 
 const TodoGate = createGate()
 
@@ -33,8 +39,7 @@ TodoGate.close.watch(() => {
 })
 
 function Todo() {
-  const todo = useStore($todo)
-  const loading = useStore(getTodoFx.pending)
+  const [todo, loading] = useUnit([$todo, getTodoFx.pending])
 
   if (loading) {
     return <div>Loading...</div>

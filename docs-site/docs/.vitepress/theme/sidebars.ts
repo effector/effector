@@ -2,6 +2,63 @@ import {DefaultTheme} from 'vitepress'
 
 export const sidebar: DefaultTheme.Sidebar = {
   '/api': [],
+  '/recipes': [
+    {
+      text: 'Common',
+      items: [
+        {
+          text: 'Countdown Timer',
+          link: '/recipes/countdown',
+        },
+      ],
+    },
+    {
+      text: 'React',
+      items: [
+        {
+          text: 'Counter',
+          link: '/recipes/react/counter',
+        },
+        {
+          text: 'Effects',
+          link: '/recipes/react/effects',
+        },
+        {
+          text: 'Forms',
+          link: '/recipes/react/forms',
+        },
+        {
+          text: 'Gate',
+          link: '/recipes/react/gate',
+        },
+        {
+          text: 'ToDo Creator',
+          link: '/recipes/react/todo-creator',
+        },
+        {
+          text: 'Dynamic Form Schema',
+          link: '/recipes/react/dynamic-form-schema',
+        },
+        {
+          text: 'ToDo List with Validation',
+          link: '/recipes/react/todo-with-validation',
+        },
+        {
+          text: 'Slots',
+          link: '/recipes/react/slots',
+        },
+      ],
+    },
+    {
+      text: 'React Native',
+      items: [
+        {
+          text: 'AsyncStorage Counter',
+          link: '/recipes/react-native/asyncstorage-counter',
+        },
+      ],
+    },
+  ],
   '/': [
     {
       text: 'Getting started',

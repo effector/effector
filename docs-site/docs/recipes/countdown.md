@@ -1,12 +1,13 @@
 ---
 id: countdown
 title: Countdown timer on setTimeout
-sidebar_label: Countdown timer
 ---
+
+# Countdown timer on setTimeout
 
 Sometimes we need simple countdown. Next example allows us to handle each tick and abort the timer.
 
-[Link to a playground](https://share.effector.dev/DIQP8UbH)
+[Link to a playground](https://share.effector.dev/bIFZNWxZ)
 
 Task:
 
@@ -27,23 +28,23 @@ function createCountdown(
 
   $working.on(abort, () => false).on(start, () => true)
 
-  guard({
+  sample({
     source: start,
     filter: timerFx.pending.map(is => !is),
     target: tick,
   })
 
-  forward({
-    from: tick,
-    to: timerFx,
+  sample({
+    clock: tick,
+    target: timerFx,
   })
 
-  const willTick = guard({
+  const willTick = sample({
     source: timerFx.done.map(({params}) => params - 1),
     filter: seconds => seconds >= 0,
   })
 
-  guard({
+  sample({
     source: willTick,
     filter: $working,
     target: tick,

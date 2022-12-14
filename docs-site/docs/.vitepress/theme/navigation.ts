@@ -28,6 +28,10 @@ export const navigation: DefaultTheme.NavItem[] = [
     ],
   },
   {
+    text: 'Recipes',
+    link: '/recipes/countdown',
+  },
+  {
     text: 'Blog',
     link: 'https://www.patreon.com/zero_bias',
   },

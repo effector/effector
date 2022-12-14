@@ -1,32 +1,38 @@
 ---
 id: counter
 title: Counter
-sidebar_label: Counter
 ---
+
+# Counter
 
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEvent, createStore, combine} from 'effector'
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 
 const plus = createEvent()
 
-const $counter = createStore(1).on(plus, n => n + 1)
-const $counterText = $counter.map(n => `current value = ${n}`)
+const $counter = createStore(1)
+
+const $counterText = $counter.map(count => `current value = ${count}`)
 const $counterCombined = combine({counter: $counter, text: $counterText})
 
-const App = () => {
-  const counter = useStore($counter)
-  const counterText = useStore($counterText)
-  const counterCombined = useStore($counterCombined)
-  
+$counter.on(plus, count => count + 1)
+
+function App() {
+  const counter = useUnit($counter)
+  const counterText = useUnit($counterText)
+  const counterCombined = useUnit($counterCombined)
+
   return (
     <div>
       <button onClick={plus}>Plus</button>
       <div>counter: {counter}</div>
       <div>counterText: ${counterText}</div>
-      <div>counterCombined: {counterCombined.counter}, {counterCombined.text}</div>
+      <div>
+        counterCombined: {counterCombined.counter}, {counterCombined.text}
+      </div>
     </div>
   )
 }

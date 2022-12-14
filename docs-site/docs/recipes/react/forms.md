@@ -1,7 +1,8 @@
 ---
-id: example-forms
 title: Forms
 ---
+
+# Forms
 
 ## Example 1
 
@@ -9,36 +10,38 @@ title: Forms
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
-import {useStore, useStoreMap} from 'effector-react'
+import {useStoreMap} from 'effector-react'
 
-const submitted = createEvent()
-const setField = createEvent()
+const formSubmitted = createEvent()
+const fieldUpdate = createEvent()
 
 const sendFormFx = createEffect(params => {
   console.log(params)
 })
 
-const $form = createStore({}).on(setField, (s, {key, value}) => ({
-  ...s,
+const $form = createStore({})
+
+$form.on(fieldUpdate, (form, {key, value}) => ({
+  ...form,
   [key]: value,
 }))
 
 sample({
-  clock: submitted,
+  clock: formSubmitted,
   source: $form,
   target: sendFormFx,
 })
 
-const handleChange = setField.prepend(e => ({
-  key: e.target.name,
-  value: e.target.value,
+const handleChange = fieldUpdate.prepend(event => ({
+  key: event.target.name,
+  value: event.target.value,
 }))
 
 const Field = ({name, type, label}) => {
   const value = useStoreMap({
     store: $form,
     keys: [name],
-    fn: values => values[name] || '',
+    fn: values => values[name] ?? '',
   })
   return (
     <div>
@@ -49,21 +52,21 @@ const Field = ({name, type, label}) => {
 }
 
 const App = () => (
-  <form onSubmit={submitted}>
+  <form onSubmit={formSubmitted}>
     <Field name="login" label="Login" />
     <Field name="password" type="password" label="Password" />
     <button type="submit">Submit!</button>
   </form>
 )
 
-submitted.watch(e => {
+formSubmitted.watch(e => {
   e.preventDefault()
 })
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/G2WBDwZP)
+[Try it](https://share.effector.dev/vvDfdTxp)
 
 Let's break down the code above.
 
@@ -73,10 +76,12 @@ These are just events & effects definitions.
 const sendFormFx = createEffect(params => {
   console.log(params)
 })
-const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form
-const setField = createEvent() //has intention to change $form's state in a way, defined in reducer further
-const $form = createStore({}).on(setField, (s, {key, value}) => ({
-  ...s,
+const formSubmitted = createEvent() // will be used further, and indicates, we have an intention to submit form
+const fieldUpdate = createEvent() //has intention to change $form's state in a way, defined in reducer further
+const $form = createStore({})
+
+$form.on(fieldUpdate, (form, {key, value}) => ({
+  ...form,
   [key]: value,
 }))
 ```
@@ -85,19 +90,19 @@ Next piece of code shows how we can obtain a state in effector in a right way. T
 
 ```js
 sample({
-  clock: submitted, // when `submitted` is triggered
+  clock: formSubmitted, // when `formSubmitted` is triggered
   source: $form, // Take LATEST state from $form, and
   target: sendFormFx, // pass it to `sendFormFx`, in other words -> sendFormFx(state)
   //fn: (sourceState, clockParams) => transformedData // we could additionally transform data here, but if we need just pass source's value, we may omit this property
 })
 ```
 
-So far, so good, we've almost set up our model (events, effects and stores). Next thing is to create event, which will be used as `onChange` callback, which requires some data transformation, before data appear in `setField` event.
+So far, so good, we've almost set up our model (events, effects and stores). Next thing is to create event, which will be used as `onChange` callback, which requires some data transformation, before data appear in `fieldUpdate` event.
 
 ```js
-const handleChange = setField.prepend(e => ({
-  key: e.target.name,
-  value: e.target.value,
+const handleChange = fieldUpdate.prepend(event => ({
+  key: event.target.name,
+  value: event.target.value,
 })) // upon trigger `handleChange`, passed data will be transformed in a way, described in function above, and returning value will be passed to original `setField` event.
 ```
 
@@ -108,7 +113,7 @@ const Field = ({name, type, label}) => {
   const value = useStoreMap({
     store: $form, // take $form's state
     keys: [name], // watch for changes of `name`
-    fn: values => values[name] || '', // retrieve data from $form's state in this way (note: there will be an error, if undefined is returned)
+    fn: values => values[name] ?? '', // retrieve data from $form's state in this way (note: there will be an error, if undefined is returned)
   })
 
   return (
@@ -154,7 +159,7 @@ This example shows, how you can manage state with uncontrolled form, handling lo
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'
-import {useStore, createComponent} from 'effector-react'
+import {useUnit, createComponent} from 'effector-react'
 
 //defining simple Effect, which results a string in 3 seconds
 const sendFormFx = createEffect(
@@ -171,13 +176,14 @@ sendFormFx.doneData.watch(result => {
 
 const Loader = () => {
   //approach #1: explicit store usage, with hook `useStore`
-  const loading = useStore(sendFormFx.pending) //typeof loading === "boolean"
-  
+  const loading = useUnit(sendFormFx.pending) //typeof loading === "boolean"
+
   return loading ? <div>Loading...</div> : null
 }
 
 const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
   //approach #2: implicit store usage
+  //actually `createComponent` is deprecated
   <button disabled={loading} type="submit">
     Submit
   </button>
