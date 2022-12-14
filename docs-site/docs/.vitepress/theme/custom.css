@@ -41,7 +41,8 @@
   font-size: 32px;
 }
 
-.VPNavBar {
+.VPNavBar,
+.VPNavBar .title {
   font-family: 'Lexend Deca', sans-serif;
   font-size: 1rem;
 }
@@ -51,12 +52,22 @@
   font-size: 1rem;
 }
 
+.VPSidebarGroup .title {
+  font-family: 'Lexend Deca', sans-serif;
+}
+
 .vp-doc a {
   color: var(--vp-link-color);
 }
 
 .vp-doc a:hover {
   color: var(--vp-link-color-hover);
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  font-family: 'Lexend Deca', sans-serif;
 }
 
 .link[href^="http://"]::after,
