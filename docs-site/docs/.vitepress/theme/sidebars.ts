@@ -140,6 +140,7 @@ export const sidebar: DefaultTheme.Sidebar = {
       ],
     },
   ],
+
   '/recipes': [
     {
       text: 'Common',

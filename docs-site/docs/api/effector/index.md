@@ -5,45 +5,50 @@ title: API Reference
 
 ## Unit creators
 
-- [createEvent](docs/api/effector/createEvent.md)
-- [createStore](docs/api/effector/createStore.md)
-- [createEffect](docs/api/effector/createEffect.md)
-- [createDomain](docs/api/effector/createDomain.md)
+- [createEvent](./createEvent.md)
+- [createStore](./createStore.md)
+- [createEffect](./createEffect.md)
+- [createDomain](./createDomain.md)
 
 ## Unit definitions
 
-- [Event](docs/api/effector/Event.md)
-- [Effect](docs/api/effector/Effect.md)
-- [Store](docs/api/effector/Store.md)
-- [Domain](docs/api/effector/Domain.md)
+- [Event](./Event.md)
+- [Effect](./Effect.md)
+- [Store](./Store.md)
+- [Domain](./Domain.md)
+- [Scope](./Scope.md)
 
-## Top-Level Exports
+## Common methods
 
-- [combine(...stores, f)](docs/api/effector/combine.md)
-- [attach({effect, mapParams, source?})](docs/api/effector/attach.md)
-- [createApi(store, api)](docs/api/effector/createApi.md)
-- [forward({from, to})](docs/api/effector/forward.md)
-- [merge([eventA, eventB])](docs/api/effector/merge.md)
-- [sample({clock, source, fn, target})](docs/api/effector/sample.md)
-- [guard({source, filter, target})](docs/api/effector/guard.md)
-- [split(event, cases)](docs/api/effector/split.md)
-- [is](docs/api/effector/is.md)
-- [fromObservable(observable)](docs/api/effector/fromObservable.md)
+- [combine(...stores, f)](./combine.md)
+- [attach({effect, mapParams, source?})](./attach.md)
+- [createApi(store, api)](./createApi.md)
+- [forward({from, to})](./forward.md)
+- [merge([eventA, eventB])](./merge.md)
+- [sample({clock, source, fn, target})](./sample.md)
+- [guard({source, filter, target})](./guard.md)
+- [split(event, cases)](./split.md)
+- [fromObservable(observable)](./fromObservable.md)
 
 ## Fork api
 
-- [Scope](docs/api/effector/Scope.md)
-- [fork](docs/api/effector/fork.md)
-- [serialize](docs/api/effector/serialize.md)
-- [hydrate](docs/api/effector/hydrate.md)
-- [allSettled](docs/api/effector/allSettled.md)
-- [scopeBind](docs/api/effector/scopeBind.md)
+- [fork](./fork.md)
+- [serialize](./serialize.md)
+- [hydrate](./hydrate.md)
+- [allSettled](./allSettled.md)
+- [scopeBind](./scopeBind.md)
 
-## Babel plugin
+## Plugins
 
-- [effector/babel-plugin](docs/api/effector/babel-plugin.md)
+- [effector/babel-plugin](./babel-plugin.md)
+- [@effector/swc-plugin](https://github.com/effector/swc-plugin)
+
+## Utilities
+
+- [is](./is.md)
 
 ## Low level api
 
-- [clearNode](docs/api/effector/clearNode.md)
-- [withRegion](docs/api/effector/withRegion.md)
+- [clearNode](./clearNode.md)
+- [withRegion](./withRegion.md)
+- [launch](./launch.md)

@@ -1,15 +1,17 @@
 ---
-id: effector-solid
 title: API Reference
+lang: en-US
 ---
+
+# effector bindings for SolidJS
 
 ## Reactive helpers
 
-- [useUnit(unit)]/apieffector-solid/useUnit.md)
-- [useStoreMap({ store, keys, fn })]/apieffector-solid/useStoreMap.md)
+- [useUnit(unit)](./useUnit.md)
+- [useStoreMap({ store, keys, fn })](./useStoreMap.md)
 
 ## Gate API
 
-- [Gate]/apieffector-solid/Gate.md)
-- [createGate()]/apieffector-solid/createGate.md)
-- [useGate(GateComponent, props)]/apieffector-solid/useGate.md)
+- [Gate](./Gate.md)
+- [createGate()](./createGate.md)
+- [useGate(GateComponent, props)](./useGate.md)

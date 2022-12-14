@@ -1,32 +1,34 @@
 ---
-id: effector-vue
 title: API Reference
+lang: en-US
 ---
+
+# effector bindings for Vue
 
 ### Top-Level Exports
 
-- [VueEffector(Vue, options?)]/apieffector-vue/VueEffector.md)
-- [createComponent(ComponentOptions, store?)]/apieffector-vue/createComponent.md)
+- [VueEffector(Vue, options?)](./VueEffector.md)
+- [createComponent(ComponentOptions, store?)](./createComponent.md)
 
 ### ComponentOptions API
 
-- [ComponentOptions\<V\>]/apieffector-vue/ComponentOptions.md)
-  - [effector]/apieffector-vue/ComponentOptions.md#effector)
+- [ComponentOptions\<V\>](./ComponentOptions.md)
+  - [effector](./ComponentOptions.md#effector)
 
 ### Vue API
 
-- [Vue]/apieffector-vue/Vue.md)
-  - [$watchAsStore]/apieffector-vue/Vue.md#$watchAsStore) _(deprecated)_
-  - [$store]/apieffector-vue/Vue.md#$store) _(deprecated)_
+- [Vue](./Vue.md)
+- [$watchAsStore](./Vue.md#$watchAsStore) _(deprecated)_
+- [$store](./Vue.md#$store) _(deprecated)_
 
 ### Hooks
 
-- [useStore(store)]/apieffector-vue/useStore.md)
-- [useStoreMap({store, keys, fn})]/apieffector-vue/useStoreMap.md)
-- [useVModel(store)]/apieffector-vue/useVModel.md)
+- [useStore(store)](./useStore.md)
+- [useStoreMap({store, keys, fn})](./useStoreMap.md)
+- [useVModel(store)](./useVModel.md)
 
 ### Gate API
 
-- [Gate]/apieffector-vue/Gate.md)
-- [createGate()]/apieffector-vue/createGate.md)
-- [useGate(GateComponent, props)]/apieffector-vue/useGate.md)
+- [Gate](./Gate.md)
+- [createGate()](./createGate.md)
+- [useGate(GateComponent, props)](./useGate.md)
