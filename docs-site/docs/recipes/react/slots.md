@@ -1,5 +1,6 @@
 ---
 title: Slots
+lang: en-US
 ---
 
 # Slots

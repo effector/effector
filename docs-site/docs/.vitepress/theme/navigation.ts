@@ -11,25 +11,25 @@ export const navigation: DefaultTheme.NavItem[] = [
     items: [
       {
         text: 'Effector',
-        link: '/api/effector/index',
+        link: '/api/effector/',
       },
       {
         text: 'React',
-        link: '/api/effector-react/index',
+        link: '/api/effector-react/',
       },
       {
         text: 'Solid',
-        link: '/api/effector-solid/index',
+        link: '/api/effector-solid/',
       },
       {
         text: 'Vue',
-        link: '/api/effector-vue/index',
+        link: '/api/effector-vue/',
       },
     ],
   },
   {
     text: 'Recipes',
-    link: '/recipes/countdown',
+    link: '/recipes/',
   },
   {
     text: 'Blog',

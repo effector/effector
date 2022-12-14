@@ -8,7 +8,7 @@ export const sidebar: DefaultTheme.Sidebar = {
       items: [
         {
           text: 'Countdown Timer',
-          link: '/recipes/countdown',
+          link: '/recipes/common/countdown',
         },
       ],
     },
@@ -108,6 +108,15 @@ export const sidebar: DefaultTheme.Sidebar = {
         {
           text: 'Utility Types',
           link: '/typescript/utility-types',
+        },
+      ],
+    },
+    {
+      text: 'Explanation',
+      items: [
+        {
+          text: 'Glossary',
+          link: '/explanation/glossary',
         },
       ],
     },

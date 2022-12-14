@@ -1,6 +1,7 @@
 ---
 title: Gate
 description: Gate - a bridge between props and store
+lang: en-US
 ---
 
 # Gate

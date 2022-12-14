@@ -1,5 +1,6 @@
 ---
 title: AsyncStorage Counter
+lang: en-US
 ---
 
 # AsyncStorage Counter on React Native

@@ -1,6 +1,7 @@
 ---
 id: countdown
 title: Countdown timer on setTimeout
+lang: en-US
 ---
 
 # Countdown timer on setTimeout

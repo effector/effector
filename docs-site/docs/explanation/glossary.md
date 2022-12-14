@@ -1,8 +1,10 @@
 ---
-id: glossary
 title: Glossary
 description: Glossary of basic terms in effector
+lang: en-US
 ---
+
+# Glossary
 
 Glossary of basic terms in effector
 
@@ -10,14 +12,14 @@ Glossary of basic terms in effector
 
 _Event_ is a function you can subscribe to. It can be an intention to change the store, indication of something happening in the application, a command to be executed, aggregated analytics trigger and so on.
 
-[Event](docs/apipi/effector/Event.md) in api documentation
+[Event](/api/effector/Event.md) in api documentation
 
 ## Store
 
 _Store_ is an object that holds state.
 There can be multiple stores.
 
-[Store](docs/apipi/effector/Store.md) in api documentation
+[Store](/api/effector/Store.md) in api documentation
 
 ## Effect
 
@@ -32,7 +34,7 @@ The only requirement for the function:
 
 - **Must** have zero or one argument
 
-[Effect](docs/apipi/effector/Effect.md) in api documentation
+[Effect](/api/effector/Effect.md) in api documentation
 
 ## Domain
 
@@ -42,7 +44,7 @@ Domains are notified when events, stores, effects, or nested domains are created
 
 It is useful for logging or other side effects.
 
-[Domain](docs/apipi/effector/Domain.md) in api documentation
+[Domain](/api/effector/Domain.md) in api documentation
 
 ## Unit
 
@@ -74,9 +76,9 @@ $loginSize.watch(size => {
 
 [Try it](https://share.effector.dev/D5hV8C70)
 
-[store.map in docs](docs/apipi/effector/Store.md#mapfn-state-state-laststate-t--t)
+[store.map in docs](/api/effector/Store.md#mapfn-state-state-laststate-t--t)
 
-[store.watch in docs](docs/apipi/effector/Store.md#watchwatcher)
+[store.watch in docs](/api/effector/Store.md#watchwatcher)
 
 **Correct**, declarative:
 
@@ -96,7 +98,7 @@ forward({
 
 [Try it](https://share.effector.dev/it0gXQLI)
 
-[forward in docs](docs/apipi/effector/forward.md)
+[forward in docs](/api/effector/forward.md)
 
 **Incorrect**:
 
@@ -128,7 +130,7 @@ _Reducer_ calculates a new state given the previous state and an event's payload
 type Watcher<T> = (update: T) => any
 ```
 
-_Watcher_ is used for **side effects**. Accepted by [event.watch](docs/apipi/effector/Event.md#watchwatcher), [store.watch](docs/apipi/effector/Store.md#watchwatcher) and [domain.onCreate\* hooks](docs/apipi/effector/Domain.md#oncreateeventhook). Return value of a watcher is ignored.
+_Watcher_ is used for **side effects**. Accepted by [event.watch](/api/effector/Event.md#watchwatcher), [store.watch](/api/effector/Store.md#watchwatcher) and [domain.onCreate\* hooks](/api/effector/Domain.md#oncreateeventhook). Return value of a watcher is ignored.
 
 ## Subscription
 
@@ -139,14 +141,14 @@ type Subscription = {
 }
 ```
 
-Function, returned by [forward](docs/apipi/effector/forward.md), [event.watch](docs/apipi/effector/Event.md#watchwatcher), [store.watch](docs/apipi/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
+Function, returned by [forward](/api/effector/forward.md), [event.watch](/api/effector/Event.md#watchwatcher), [store.watch](/api/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
 
-:::caution Managing subscriptions manually distracts from business logic improvements
+::: warning Managing subscriptions manually distracts from business logic improvements
 Effector provides a wide range of features to minimize the need to remove subscriptions. This sets it apart from most other reactive libraries
 :::
 
-[effect]: docs/apipi/effector/Effect.md
-[store]: docs/apipi/effector/Store.md
-[event]: docs/apipi/effector/Event.md
-[domain]: docs/apipi/effector/Domain.md
-[scope]: docs/apipi/effector/Scope.md
+[effect]: /api/effector/Effect.md
+[store]: /api/effector/Store.md
+[event]: /api/effector/Event.md
+[domain]: /api/effector/Domain.md
+[scope]: /api/effector/Scope.md

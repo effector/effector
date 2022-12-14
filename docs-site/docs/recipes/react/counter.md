@@ -1,6 +1,7 @@
 ---
 id: counter
 title: Counter
+lang: en-US
 ---
 
 # Counter

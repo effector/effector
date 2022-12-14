@@ -1,5 +1,6 @@
 ---
 title: Effects
+lang: en-US
 ---
 
 # Effects
