@@ -39,6 +39,10 @@ npm add effector effector-solid
 
 Svelte works with effector out of the box, no additional packages needed.
 
+## Online playground
+
+Examples in this documentation are running in [our online playground](https://share.effector.dev), which allows someone to test and share ideas quickly, without install. Code sharing, Typescript and react supported out of the box. [Project repository](https://github.com/effector/repl).
+
 ## Deno
 
 ::: info since
@@ -78,10 +82,6 @@ npm add --development @effector/swc-plugin @swc/core
 ```
 
 [Documentation](https://github.com/effector/swc-plugin).
-
-## Online playground
-
-Examples in this documentation are running in [our online playground](https://share.effector.dev), which allows someone to test and share ideas quickly, without install. Code sharing, Typescript and react supported out of the box. [Project repository](https://github.com/effector/repl).
 
 ## Compatibility
 
