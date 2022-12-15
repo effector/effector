@@ -6,23 +6,23 @@ const commonSidebars: LSidebar = {
       text: {en: 'Hooks'},
       items: [
         {
-          text: {en: 'useUnit'},
+          text: {en: 'useUnit', ru: 'useUnit'},
           link: '/api/effector-react/useUnit',
         },
         {
-          text: {en: 'useList'},
+          text: {en: 'useList', ru: 'useList'},
           link: '/api/effector-react/useList',
         },
         {
-          text: {en: 'useStoreMap'},
+          text: {en: 'useStoreMap', ru: 'useStoreMap'},
           link: '/api/effector-react/useStoreMap',
         },
         {
-          text: {en: 'useStore'},
+          text: {en: 'useStore', ru: 'useStore'},
           link: '/api/effector-react/useStore',
         },
         {
-          text: {en: 'useEvent'},
+          text: {en: 'useEvent', ru: 'useEvent'},
           link: '/api/effector-react/useEvent',
         },
       ],
@@ -69,18 +69,18 @@ const commonSidebars: LSidebar = {
 
   '/api/effector': [
     {
-      text: {en: 'Unit Types'},
+      text: {en: 'Unit Types', ru: 'Юниты'},
       items: [
         {
-          text: {en: 'Event'},
+          text: {en: 'Event', ru: 'Event'},
           link: '/api/effector/Event',
         },
         {
-          text: {en: 'Store'},
+          text: {en: 'Store', ru: 'Store'},
           link: '/api/effector/Store',
         },
         {
-          text: {en: 'Effect'},
+          text: {en: 'Effect', ru: 'Effect'},
           link: '/api/effector/Effect',
         },
         {
@@ -88,24 +88,24 @@ const commonSidebars: LSidebar = {
           link: '/api/effector/Domain',
         },
         {
-          text: {en: 'Scope'},
+          text: {en: 'Scope', ru: 'Scope'},
           link: '/api/effector/Scope',
         },
       ],
     },
     {
-      text: {en: 'Methods'},
+      text: {en: 'Methods', ru: 'Методы'},
       items: [
         {
-          text: {en: 'createStore'},
+          text: {en: 'createStore', ru: 'createStore'},
           link: '/api/effector/createStore',
         },
         {
-          text: {en: 'createEvent'},
+          text: {en: 'createEvent', ru: 'createEvent'},
           link: '/api/effector/createEvent',
         },
         {
-          text: {en: 'createEffect'},
+          text: {en: 'createEffect', ru: 'createEffect'},
           link: '/api/effector/createEffect',
         },
         {
@@ -113,7 +113,7 @@ const commonSidebars: LSidebar = {
           link: '/api/effector/createDomain',
         },
         {
-          text: {en: 'createApi'},
+          text: {en: 'createApi', ru: 'createApi'},
           link: '/api/effector/createApi',
         },
         {
@@ -121,23 +121,23 @@ const commonSidebars: LSidebar = {
           link: '/api/effector/attach',
         },
         {
-          text: {en: 'combine'},
+          text: {en: 'combine', ru: 'combine'},
           link: '/api/effector/combine',
         },
         {
-          text: {en: 'forward'},
+          text: {en: 'forward', ru: 'forward'},
           link: '/api/effector/forward',
         },
         {
-          text: {en: 'fromObservable'},
+          text: {en: 'fromObservable', ru: 'fromObservable'},
           link: '/api/effector/fromObservable',
         },
         {
-          text: {en: 'guard'},
+          text: {en: 'guard', ru: 'guard'},
           link: '/api/effector/guard',
         },
         {
-          text: {en: 'merge'},
+          text: {en: 'merge', ru: 'merge'},
           link: '/api/effector/merge',
         },
         {
@@ -145,7 +145,7 @@ const commonSidebars: LSidebar = {
           link: '/api/effector/restore',
         },
         {
-          text: {en: 'sample'},
+          text: {en: 'sample', ru: 'sample'},
           link: '/api/effector/sample',
         },
         {
@@ -175,17 +175,17 @@ const commonSidebars: LSidebar = {
           link: '/api/effector/hydrate',
         },
         {
-          text: {en: 'scopeBind'},
+          text: {en: 'scopeBind', ru: 'scopeBind'},
           link: '/api/effector/scopeBind',
         },
       ],
     },
     {
-      text: {en: 'Utilities'},
+      text: {en: 'Utilities', ru: 'Служебные функции'},
       collapsed: true,
       items: [
         {
-          text: {en: 'is'},
+          text: {en: 'is', ru: 'is'},
           link: '/api/effector/is',
         },
       ],
@@ -195,7 +195,7 @@ const commonSidebars: LSidebar = {
       collapsed: true,
       items: [
         {
-          text: {en: 'clearNode'},
+          text: {en: 'clearNode', ru: 'clearNode'},
           link: '/api/effector/clearNode',
         },
         {
@@ -203,7 +203,7 @@ const commonSidebars: LSidebar = {
           link: '/api/effector/withRegion',
         },
         {
-          text: {en: 'launch'},
+          text: {en: 'launch', ru: 'launch'},
           link: '/api/effector/launch',
         },
       ],
@@ -212,11 +212,11 @@ const commonSidebars: LSidebar = {
       text: {en: 'Compiler Plugins'},
       items: [
         {
-          text: {en: 'Babel plugin'},
+          text: {en: 'Babel plugin', ru: 'Babel plugin'},
           link: '/api/effector/babel-plugin',
         },
         {
-          text: {en: 'SWC plugin'},
+          text: {en: 'SWC plugin', ru: 'SWC plugin'},
           link: 'https://github.com/effector/swc-plugin',
         },
       ],
@@ -352,7 +352,9 @@ function localizeSidebarGroups(
       const text =
         item.text[locale] ?? `${item.text[mainLocale]} (${mainLocale})`
       const link =
-        locale in item.text && locale !== mainLocale
+        locale in item.text &&
+        locale !== mainLocale &&
+        !item.link.startsWith('http')
           ? `/${locale}${item.link}`
           : item.link
       return {text, link}

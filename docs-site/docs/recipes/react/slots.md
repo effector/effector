@@ -18,8 +18,6 @@ Using React with Effector we can achieve slot goals without the problems describ
 - [Svelte docs](https://svelte.dev/docs#slot)
 - [@space307/effector-react-slots](https://github.com/space307/effector-react-slots)
 
-<hr/>
-
 [Open ReplIt](https://replit.com/@binjospookie/effector-react-slots-example)
 
 ```tsx

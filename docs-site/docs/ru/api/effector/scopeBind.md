@@ -1,12 +1,12 @@
 ---
-id: scopeBind
 title: scopeBind
 description: Метод привязки события или эффекта к scope для последующего вызова
+lang: ru-RU
 ---
 
 # scopeBind
 
-Метод привязки события или эффекта к [scope](docs/ru/api/effector/Scope.md) для последующего вызова. <br/>
+Метод привязки события или эффекта к [scope](/ru/api/effector/Scope.md) для последующего вызова. <br/>
 
 Иногда необходимо привязать события к scope явно, например, при вызове событий в рамках колбэков setTimeout/setInterval
 
@@ -18,7 +18,7 @@ scopeBind<T>(event: Event<T>): (payload: T) => void
 
 ### Аргументы
 
-1. **`event`**: [Событие](docs/ru/api/effector/Event.md) для привязки к scope
+1. **`event`**: [Событие](/ru/api/effector/Event.md) для привязки к scope
 
 ## Пример
 

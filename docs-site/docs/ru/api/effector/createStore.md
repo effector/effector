@@ -1,10 +1,12 @@
 ---
-id: createStore
 title: createStore
 description: Метод для создания независимого стора
+lang: ru-RU
 ---
 
-Метод для создания независимого [стора](docs/ru/api/effector/Store.md)
+# createStore
+
+Метод для создания независимого [стора](/ru/api/effector/Store.md)
 
 ## Формула {#createStore-formulae}
 
@@ -38,13 +40,13 @@ createStore<T>(defaultState: T, config: {
 
    - **`serialize`**: `'ignore'`
 
-     Опция, запрещающая сериализацию стора при вызовах [serialize](docs/ru/api/effector/serialize.md)
+     Опция, запрещающая сериализацию стора при вызовах [serialize](/ru/api/effector/serialize.md)
 
-   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](docs/ru/api/effector/serialize.md) и приводит состояние стора к JSON-значению - примитив или простой объект/массив. `read` вызывается при [fork](docs/ru/api/effector/fork.md), если предоставленные `values` - результат вызова [serialize](docs/ru/api/effector/serialize.md)
+   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize.md) и приводит состояние стора к JSON-значению - примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork.md), если предоставленные `values` - результат вызова [serialize](/ru/api/effector/serialize.md)
 
 ### Возвращает {#createStore-return}
 
-Новый [стор](docs/ru/api/effector/Store.md)
+Новый [стор](/ru/api/effector/Store.md)
 
 ::: info
 

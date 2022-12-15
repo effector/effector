@@ -1,27 +1,28 @@
 ---
-id: effector-react
 title: Справочник по API
 description: Перечень основных методов API, по группам
 ---
+
+# Effector для React
 
 Перечень основных методов API, по группам
 
 ## Хуки
 
-- [useStore(store)](docs/ru/api/effector-react/useStore.md)
-- [useStoreMap({ store, keys, fn })](docs/ru/api/effector-react/useStoreMap.md)
-- [useList(store, renderItem)](docs/ru/api/effector-react/useList.md)
-- [useUnit(units)](docs/ru/api/effector-react/useUnit.md)
+- [useStore(store)](./useStore.md)
+- [useStoreMap({ store, keys, fn })](./useStoreMap.md)
+- [useList(store, renderItem)](./useList.md)
+- [useUnit(units)](./useUnit.md)
 
 ## Gate API
 
-- [Gate](Gate.md)
+- [Gate](./Gate.md)
 - [createGate()](./createGate.md)
 - [useGate(GateComponent, props)](./useGate.md)
 
 ## effector-react/ssr API
 
-- [useEvent(unit)](docs/ru/api/effector-react/useEvent.md)
+- [useEvent(unit)](./useEvent.md)
 
 ## Остальные функции
 

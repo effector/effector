@@ -1,15 +1,15 @@
 ---
-id: store
 title: Store
 keywords:
   - store
   - unit
 description: Store, его методы и свойства
+lang: ru-RU
 ---
 
 # Store
 
-_Store (стор)_ - это объект, который хранит значение состояния, то есть какие-либо данные. Стор обновляется при получении значения, которое не равно (`!==`) текущему и `undefined`. Является [юнитом](docs/ru/glossary.mdmd#common-unit)
+_Store (стор)_ - это объект, который хранит значение состояния, то есть какие-либо данные. Стор обновляется при получении значения, которое не равно (`!==`) текущему и `undefined`. Является [юнитом](/ru/explanation/glossary.md#common-unit)
 
 ## Структура
 
@@ -65,14 +65,14 @@ $second = $first.map(/*fn*/ (state: T, lastState?: S) => S)
 При обновлении исходного стора `$first`, функция-обработчик `fn` будет вызвана с новым состоянием `$first` и последним состоянием `$second`, результат вычислений будет сохранён в производном сторе `$second`, то есть реактивно обновит его значение
 
 ::: info
-С версии [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) второй аргумент функции `fn` и `firstState` были депрекейтнуты, вместо этого используйте [`updateFilter`](docs/ru/api/effector/createStore.md) или создание нового стора с помощью `createStore`.
+С версии [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) второй аргумент функции `fn` и `firstState` были депрекейтнуты, вместо этого используйте [`updateFilter`](/ru/api/effector/createStore.md) или создание нового стора с помощью `createStore`.
 :::
 
 #### Аргументы {#map-args}
 
 1.  **`fn`**: `(state: T, lastState?: S) => S`
 
-    Функция-обработчик, которая будет вычислять новое состояние производного стора `$second` на основе значения исходного стора `$first`. Генерирует в том числе и исходное состояние стора, поэтому в первый раз запускается в момент вызова `.map`, то есть ещё до создания производного стора. [Должна быть **чистой**](docs/ru/glossary.mdmd#purity)
+    Функция-обработчик, которая будет вычислять новое состояние производного стора `$second` на основе значения исходного стора `$first`. Генерирует в том числе и исходное состояние стора, поэтому в первый раз запускается в момент вызова `.map`, то есть ещё до создания производного стора. [Должна быть **чистой**](/ru/explanation/glossary.md#purity)
 
     **Аргументы**
 
@@ -136,7 +136,7 @@ $store.on(/*clock*/ [event, fx, $storeB], /*fn*/ (state: T, data: S) => T)
 
 #### Аргументы {#on-args}
 
-1. **`clock`**: [Юнит](docs/ru/glossary.mdmd#common-unit) или массив юнитов
+1. **`clock`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив юнитов
 
    Триггер начала вычисления или несколько триггеров. Для каждого триггера последний установленный обработчик будет заменять предыдущие обработчики (полезно для динамического поведения)
 
@@ -148,7 +148,7 @@ $store.on(/*clock*/ [event, fx, $storeB], /*fn*/ (state: T, data: S) => T)
 
 2. **`fn`**: `(state: T, data: S) => T`
 
-   Функция-обработчик, которая будет вычислять новое состояние `$store` на основе его предыдущего состояния и данных из `clock`, [должна быть **чистой**](docs/ru/glossary.mdmd#purity)
+   Функция-обработчик, которая будет вычислять новое состояние `$store` на основе его предыдущего состояния и данных из `clock`, [должна быть **чистой**](/ru/explanation/glossary.md#purity)
 
    **Аргументы**
 
@@ -246,7 +246,7 @@ $store.reset(/*clock*/ ...[event, fx, $storeB])
 
 #### Аргументы {#reset-args}
 
-- **`clock`**: [Юнит](docs/ru/glossary.mdmd#common-unit) или массив юнитов
+- **`clock`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив юнитов
 
   Триггер запуска обновления стора или несколько триггеров. Если на момент срабатывания стор уже находится в исходном состоянии, то обновления не будет
 
@@ -336,7 +336,7 @@ triggerB()
 Вызывает функцию с сайд-эффектами при каждом обновлении стора. В первый раз вызывается сразу же при создании, с текущим значением стора
 
 ::: info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](docs/ru/api/effector/Effect.md) и [сэмпла](docs/ru/api/effector/sample.md)
+По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect.md) и [сэмпла](/ru/api/effector/sample.md)
 :::
 
 #### Формула {#watch-formulae}
@@ -356,7 +356,7 @@ $store.watch(/*watcher*/ (state: T) => any)
 
 #### Возвращает {#watch-return}
 
-[_Subscription_](docs/ru/glossary.mdmd#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
+[_Subscription_](/ru/explanation/glossary.md#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
 
 #### Примеры {#watch-examples}
 
@@ -380,8 +380,6 @@ add(3)
 
 [Запустить пример](https://share.effector.dev/AJzyxwnx)
 
-<hr />
-
 ## Свойства {#properties}
 
 ### updates {#updates}
@@ -393,7 +391,7 @@ add(3)
 :::
 
 ::: info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию эффекта и [сэмпла](docs/ru/api/effector/sample.md)
+По мере усложнения логики проекта оптимальнее заменить на комбинацию эффекта и [сэмпла](/ru/api/effector/sample.md)
 :::
 
 #### Формула {#updates-formulae}
@@ -441,7 +439,7 @@ click()
 
 ### shortName {#shortName}
 
-Имя стора. Задаётся либо явно, через поле [`name` в createStore](docs/ru/api/effector/createStore.md), либо автоматически через [babel plugin](docs/ru/api/effector/babel-plugin.md). Используется для обработки сущностей программно, например при использовании [хуков домена](docs/ru/api/effector/Domain.md#onCreateStore)
+Имя стора. Задаётся либо явно, через поле [`name` в createStore](/ru/api/effector/createStore.md), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin.md). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain.md#onCreateStore)
 
 #### Формула {#shortName-formulae}
 
@@ -510,7 +508,7 @@ console.log($store.defaultState === 'DEFAULT')
 
 ### sid {#sid}
 
-Стабильный идентификатор стора. Задаётся автоматически через [babel-plugin](docs/ru/api/effector/babel-plugin.md)
+Стабильный идентификатор стора. Задаётся автоматически через [babel-plugin](/ru/api/effector/babel-plugin.md)
 
 #### Формула {#sid-formulae}
 
@@ -520,8 +518,6 @@ declare const $store: Store<any>
 $store.sid
 -> string | null
 ```
-
-<hr />
 
 ## Дополнительные методы
 
@@ -533,8 +529,8 @@ $store.sid
 
 Оптимальнее использовать декларативные методы:
 
-- [**sample**](docs/ru/api/effector/sample.md) для использования данных из стора в других вычислениях
-- [**attach**](docs/ru/api/effector/attach.md) для передачи данных в эффекты
+- [**sample**](/ru/api/effector/sample.md) для использования данных из стора в других вычислениях
+- [**attach**](/ru/api/effector/attach.md) для передачи данных в эффекты
 
 :::
 
@@ -578,7 +574,7 @@ add(3)
 Сокращённая запись для описания сайд-эффекта, который необходимо запускать только при срабатывании определённого триггера и в котором необходимо как состояние стора так и данные из триггера
 
 ::: info
-По мере усложнения логики проекта оптимальнее заменить на [attach](docs/ru/api/effector/attach.md)
+По мере усложнения логики проекта оптимальнее заменить на [attach](/ru/api/effector/attach.md)
 :::
 
 #### Формула {#clock-watch-formulae}
@@ -596,7 +592,7 @@ $store.watch(
 
 #### Аргументы {#clock-watch-args}
 
-1. **`clock`**: [Юнит](docs/ru/glossary.mdmd#common-unit)-триггер
+1. **`clock`**: [Юнит](/ru/explanation/glossary.md#common-unit)-триггер
 2. **`fn`**: `(state: T, data: S) => any`
 
    Функция с сайд-эффектами. Возвращаемое значение не используется
@@ -608,7 +604,7 @@ $store.watch(
 
 #### Возвращает {#clock-watch-return}
 
-[_Subscription_](docs/ru/glossary.mdmd#subscription): Функция отмены подписки
+[_Subscription_](/ru/explanation/glossary.md#subscription): Функция отмены подписки
 
 #### Примеры {#clock-watch-examples}
 
@@ -655,7 +651,7 @@ $store.off(/*clock*/ $storeB)
 
 #### Аргументы {#off-args}
 
-- **`clock`**: [Юнит](docs/ru/glossary.mdmd#common-unit)-триггер
+- **`clock`**: [Юнит](/ru/explanation/glossary.md#common-unit)-триггер
 
 #### Возвращает {#off-return}
 
@@ -705,7 +701,7 @@ const result: S = $store.thru(/*fn*/ (store: Store<T>) => S)
 
 - **`fn`**: `(store: Store<T>) => S`
 
-  Функция, которая получает сам стор в аргументы и возвращает некоторое значение, [должна быть **чистой**](docs/ru/glossary.mdmd#purity)
+  Функция, которая получает сам стор в аргументы и возвращает некоторое значение, [должна быть **чистой**](/ru/explanation/glossary.md#purity)
 
 #### Возвращает {#thru-return}
 

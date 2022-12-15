@@ -1,52 +1,57 @@
 ---
-id: effector
 title: Справочник по API
 description: Перечень основных методов API, по группам
+lang: ru-RU
 ---
 
-Перечень основных методов API, по группам
+# Перечень основных методов API
 
 ## Создание юнитов
 
-- [createEvent](docs/ru/api/effector/createEvent.md)
-- [createStore](docs/ru/api/effector/createStore.md)
-- [createEffect](docs/ru/api/effector/createEffect.md)
-- [createDomain](docs/ru/api/effector/createDomain.md)
+- [createEvent](./createEvent.md)
+- [createStore](./createStore.md)
+- [createEffect](./createEffect.md)
+- [createDomain](./createDomain.md)
 
 ## Типы юнитов
 
-- [Event](docs/ru/api/effector/Event.md)
-- [Effect](docs/ru/api/effector/Effect.md)
-- [Store](docs/ru/api/effector/Store.md)
-- [Domain](docs/ru/api/effector/Domain.md)
+- [Event](./Event.md)
+- [Effect](./Effect.md)
+- [Store](./Store.md)
+- [Domain](./Domain.md)
+- [Scope](./Scope.md)
 
 ## Основные методы библиотеки
 
-- [combine(...stores, f)](docs/ru/api/effector/combine.md)
-- [attach({effect, mapParams, source?})](docs/ru/api/effector/attach.md)
-- [createApi(store, api)](docs/ru/api/effector/createApi.md)
-- [forward({from, to})](docs/ru/api/effector/forward.md)
-- [merge([eventA, eventB])](docs/ru/api/effector/merge.md)
-- [sample({clock, source, fn, target})](docs/ru/api/effector/sample.md)
-- [guard({source, filter, target})](docs/ru/api/effector/guard.md)
-- [split(event, cases)](docs/ru/api/effector/split.md)
-- [is](docs/ru/api/effector/is.md)
-- [fromObservable(observable)](docs/ru/api/effector/fromObservable.md)
+- [combine(...stores, f)](./combine.md)
+- [attach({effect, mapParams, source?})](./attach.md)
+- [createApi(store, api)](./createApi.md)
+- [forward({from, to})](./forward.md)
+- [merge([eventA, eventB])](./merge.md)
+- [sample({clock, source, fn, target})](./sample.md)
+- [guard({source, filter, target})](./guard.md)
+- [split(event, cases)](./split.md)
+- [fromObservable(observable)](./fromObservable.md)
 
-## Fork api
+## Fork API
 
-- [Scope](docs/ru/api/effector/Scope.md)
-- [fork](docs/ru/api/effector/fork.md)
-- [serialize](docs/ru/api/effector/serialize.md)
-- [hydrate](docs/ru/api/effector/hydrate.md)
-- [allSettled](docs/ru/api/effector/allSettled.md)
-- [scopeBind](docs/ru/api/effector/scopeBind.md)
+- [fork](./fork.md)
+- [serialize](./serialize.md)
+- [hydrate](./hydrate.md)
+- [allSettled](./allSettled.md)
+- [scopeBind](./scopeBind.md)
 
-## Babel plugin
+## Плагины для компилятора
 
-- [effector/babel-plugin](docs/ru/api/effector/babel-plugin.md)
+- [effector/babel-plugin](./babel-plugin.md)
+- [@effector/swc-plugin](https://github.com/effector/swc-plugin)
 
-## Низкоуровневый api
+## Служебные функции
 
-- [clearNode](docs/ru/api/effector/clearNode.md)
-- [withRegion](docs/ru/api/effector/withRegion.md)
+- [is](./is.md)
+
+## Низкоуровневый API
+
+- [clearNode](./clearNode.md)
+- [withRegion](./withRegion.md)
+- [launch](./launch.md)

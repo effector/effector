@@ -1,10 +1,12 @@
 ---
-id: createEffect
 title: createEffect
 description: метод для создания эффекта
+lang: ru-RU
 ---
 
-Метод для создания [эффектов](docs/ru/api/effector/Effect.md).
+# createEffect
+
+Метод для создания [эффектов](/ru/api/effector/Effect.md).
 
 ## createEffect с обработчиком событий
 
@@ -16,14 +18,14 @@ createEffect(handler?)
 
 **Аргументы**
 
-1. `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть задана с помощью [`use(handler)`](#use)
+1. `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть задана с помощью [`use(handler)`](/ru/api/effector/Effect.md#use)
 
 **Возвращает**
 
-[_Effect_](docs/ru/api/effector/Effect.md): Новый эффект
+[_Effect_](/ru/api/effector/Effect.md): Новый эффект
 
 ::: info
-Вы должны задать обработчик в [createEffect](docs/ru/api/effector/createEffect.md) или же в [`.use`](docs/ru/api/effector/Effect.md#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
+Вы должны задать обработчик в [createEffect](/ru/api/effector/createEffect.md) или же в [`.use`](/ru/api/effector/Effect.md#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
 :::
 
 ::: info since
@@ -156,7 +158,7 @@ createEffect({handler, name})
 
 **Возвращает**
 
-[_Effect_](docs/ru/api/effector/Effect.md): Новый эффект
+[_Effect_](/ru/api/effector/Effect.md): Новый эффект
 
 ### Примеры
 

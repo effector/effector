@@ -12,7 +12,6 @@
   <a href="https://www.patreon.com/zero_bias/overview"><img src="https://img.shields.io/badge/become-a%20patron-%23f96854" alt="become a patron" /></a>
 </p>
 
-
 # ☄️ effector
 
 Business logic with ease
@@ -55,16 +54,19 @@ Effector implements business logic with ease for Javascript apps **(React/React 
 ## Installation
 
 with **pnpm**
+
 ```sh
 pnpm add effector
 ```
 
 with **yarn**
+
 ```sh
 yarn add effector
 ```
 
 with **npm**
+
 ```sh
 npm add effector
 ```
@@ -74,16 +76,19 @@ npm add effector
 To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
 
 with **pnpm**
+
 ```sh
 pnpm add effector effector-react
 ```
 
 with **yarn**
+
 ```sh
 yarn add effector effector-react
 ```
 
 with **npm**
+
 ```sh
 npm add effector effector-react
 ```
@@ -91,16 +96,19 @@ npm add effector effector-react
 **Vue**
 
 with **pnpm**
+
 ```sh
 pnpm add effector effector-vue
 ```
 
 with **yarn**
+
 ```sh
 yarn add effector effector-vue
 ```
 
 with **npm**
+
 ```sh
 npm add effector effector-vue
 ```
@@ -157,8 +165,6 @@ Code sharing, Typescript and react supported out of the box. [Playground reposit
 ## DevTools
 
 Use [effector-logger](https://github.com/effector/logger) for printing updates to console, displaying current store values with ui or connecting application to familiar redux devtools
-
-<hr />
 
 ## More examples [in documentation](https://effector.dev/docs/introduction/examples)
 

@@ -1,6 +1,6 @@
 ---
-id: is
 title: is
+lang: ru-RU
 ---
 
 # is
@@ -9,7 +9,7 @@ title: is
 
 ## `is.store(value)`
 
-Проверяет, является ли переданное значение [_стором_](docs/ru/api/effector/Store.md)
+Проверяет, является ли переданное значение [_стором_](/ru/api/effector/Store.md)
 
 **Возвращает**
 
@@ -57,7 +57,7 @@ is.store(null)
 
 ## `is.event(value)`
 
-Проверяет, является ли переданное значение [_событием_](docs/ru/api/effector/Event.md)
+Проверяет, является ли переданное значение [_событием_](/ru/api/effector/Event.md)
 
 **Возвращает**
 
@@ -105,7 +105,7 @@ is.event(null)
 
 ## `is.effect(value)`
 
-Проверяет, является ли переданное значение [_эффектом_](docs/ru/api/effector/Effect.md)
+Проверяет, является ли переданное значение [_эффектом_](/ru/api/effector/Effect.md)
 
 **Возвращает**
 
@@ -144,7 +144,7 @@ is.effect(null)
 
 ## `is.domain(value)`
 
-Проверяет, является ли переданное значение [_доменом_](docs/ru/api/effector/Domain.md)
+Проверяет, является ли переданное значение [_доменом_](/ru/api/effector/Domain.md)
 
 **Возвращает**
 
@@ -187,7 +187,7 @@ is.domain(null)
 Добавлен в effector 22.0.0
 :::
 
-Проверяет, является ли переданное значение [_скоупом_](docs/ru/api/effector/Scope.md)
+Проверяет, является ли переданное значение [_скоупом_](/ru/api/effector/Scope.md)
 
 **Возвращает**
 
@@ -224,7 +224,7 @@ is.scope(null)
 
 ## `is.unit(value)`
 
-Проверяет, является ли переданное значение [юнитом](docs/ru/glossary.mdmd#unit): [стором](docs/ru/api/effector/Store.md), [эвентом](docs/ru/api/effector/Event.md), [эффектом](docs/ru/api/effector/Effect.md), [доменом](docs/ru/api/effector/Domain.md) или [скоупом](docs/ru/api/effector/Scope.md)
+Проверяет, является ли переданное значение [юнитом](/ru/explanation/glossary.md#unit): [стором](/ru/api/effector/Store.md), [эвентом](/ru/api/effector/Event.md), [эффектом](/ru/api/effector/Effect.md), [доменом](/ru/api/effector/Domain.md) или [скоупом](/ru/api/effector/Scope.md)
 
 **Возвращает**
 
@@ -281,7 +281,7 @@ is.unit(null)
 Добавлен в effector 22.4.0
 :::
 
-Проверяет, что переданный [_effect_](docs/ru/api/effector/Effect.md) был создан с помощью метода [_attach_](docs/ru/api/effector/attach.md).
+Проверяет, что переданный [_effect_](/ru/api/effector/Effect.md) был создан с помощью метода [_attach_](/ru/api/effector/attach.md).
 Если в качестве аргумента был передан не effect, возвращает `false`.
 
 **Возвращает**

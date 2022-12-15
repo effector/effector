@@ -3,6 +3,8 @@ id: effector
 title: API Reference
 ---
 
+# List of the methods
+
 ## Unit creators
 
 - [createEvent](./createEvent.md)
@@ -30,7 +32,7 @@ title: API Reference
 - [split(event, cases)](./split.md)
 - [fromObservable(observable)](./fromObservable.md)
 
-## Fork api
+## Fork API
 
 - [fork](./fork.md)
 - [serialize](./serialize.md)

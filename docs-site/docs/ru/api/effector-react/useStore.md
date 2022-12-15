@@ -1,10 +1,12 @@
 ---
-id: useStore
 title: useStore
 description: Реакт-хук для подписки компонента на стор
+lang: ru-RU
 ---
 
-Реакт-хук, который подписывается на [стор](docs/ru/api/effector/Store.md) и возвращает его текущее значение, поэтому при обновлении стора, компонент также будет автоматически обновлён
+# useStore
+
+Реакт-хук, который подписывается на [стор](/ru/api/effector/Store.md) и возвращает его текущее значение, поэтому при обновлении стора, компонент также будет автоматически обновлён
 
 ```ts
 useStore(store: Store<T>): T
@@ -12,7 +14,7 @@ useStore(store: Store<T>): T
 
 **Аргументы**
 
-1. `store`: [Store](docs/ru/api/effector/Store.md)
+1. `store`: [Store](/ru/api/effector/Store.md)
 
 **Возвращает**
 

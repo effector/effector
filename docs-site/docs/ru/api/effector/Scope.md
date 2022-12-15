@@ -1,7 +1,7 @@
 ---
-id: scope
 title: Scope
 description: Независимый изолированный инстанс приложения
+lang: ru-RU
 ---
 
 # Scope
@@ -10,7 +10,7 @@ description: Независимый изолированный инстанс п
 
 Основные области применения - реализация SSR и тестирование приложения.
 
-Scope может быть создан с помощью [fork](docs/ru/api/effector/fork.md)
+Scope может быть создан с помощью [fork](/ru/api/effector/fork.md)
 
 ## Формула
 
@@ -24,7 +24,7 @@ interface Scope {
 
 ### getState
 
-Возвращает значение [стора](docs/ru/api/effector/Store.md) в данном scope
+Возвращает значение [стора](/ru/api/effector/Store.md) в данном scope
 
 ```ts
 scope.getState<T>(store: Store<T>): T
@@ -105,7 +105,7 @@ const sendWithAuthFx = app.createEffect(async () => {
 Таким образом, любой эффект может либо вызывать другой эффект, либо выполнять некоторые асинхронные вычисления, но не то и другое
 
 ::: tip
-Вместо императивных вызовов оптимальнее использовать [attach](docs/ru/api/effector/attach.md)
+Вместо императивных вызовов оптимальнее использовать [attach](/ru/api/effector/attach.md)
 :::
 
 ::: warning

@@ -1,10 +1,12 @@
 ---
-id: createEvent
 title: createEvent
 description: Метод для создания событий
+lang: ru-RU
 ---
 
-Метод для создания [событий](docs/ru/api/effector/Event.md)
+# createEvent
+
+Метод для создания [событий](/ru/api/effector/Event.md)
 
 ## Формула {#formulae}
 
@@ -27,7 +29,7 @@ event = createEvent(/*name*/ 'eventName')
 
 ### Возвращает {#return}
 
-Новое [событие](docs/ru/api/effector/Event.md)
+Новое [событие](/ru/api/effector/Event.md)
 
 ## Примеры {#examples}
 

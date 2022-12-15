@@ -1,7 +1,7 @@
 ---
-id: clearNode
 title: clearNode
 description: Низкоуровневый метод для уничтожения юнитов и их связей
+lang: ru-RU
 ---
 
 # clearNode
@@ -17,7 +17,7 @@ clearNode(unit: Unit, config: {deep?: boolean}): void
 
 ### Аргументы
 
-1. **`unit`**: Любой [юнит](docs/ru/glossary.mdmd#unit) включая [домены](docs/ru/api/effector/Domain.md) и [scope](docs/ru/api/effector/Scope.md). Переданный юнит будет уничтожен и удалён из памяти
+1. **`unit`**: Любой [юнит](/ru/explanation/glossary.md#unit) включая [домены](/ru/api/effector/Domain.md) и [scope](/ru/api/effector/Scope.md). Переданный юнит будет уничтожен и удалён из памяти
 2. **`config?`**: Объект конфигурации
 
    - **`deep?`**: _boolean_

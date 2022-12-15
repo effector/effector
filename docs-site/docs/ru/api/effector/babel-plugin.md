@@ -1,11 +1,13 @@
 ---
-id: babel-plugin
 title: Babel plugin
+lang: ru-RU
 ---
+
+# Babel plugin
 
 Встроенный плагин для babel, который можно использовать для ssr и отладки. Он вставляет имя юнита, выводимое из имени переменной, и `sid` (стабильный идентификатор), вычисляемый по расположению в исходном коде.
 
-К примеру, в случае [эффектов без обработчиков](docs/ru/api/effector/Effect.md#use-handler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
+К примеру, в случае [эффектов без обработчиков](/ru/api/effector/Effect.md#use-handler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
 
 ```js
 import {createEffect} from 'effector'
@@ -23,7 +25,8 @@ fetchFx()
 
 В простейшем случае его можно использовать без какой-либо настройки:
 
-```json title=".babelrc"
+```json
+// .babelrc
 {
   "plugins": ["effector/babel-plugin"]
 }
@@ -40,7 +43,8 @@ fetchFx()
 
 [Пример проекта](https://github.com/effector/effector/tree/master/examples/worker-rpc)
 
-```js title="common.js"
+```js
+// common.js
 import {createEffect} from 'effector'
 
 export const getUser = createEffect({sid: 'GET /user'})
@@ -48,7 +52,8 @@ console.log(getUsers.sid)
 // => GET /user
 ```
 
-```js title="worker.js"
+```js
+// worker.js
 import {getUsers} from './common.js'
 
 getUsers.use(userID => fetch(userID))
@@ -63,7 +68,8 @@ onmessage = async ({data}) => {
 }
 ```
 
-```js title="client.js"
+```js
+// client.js
 import {createEvent} from 'effector'
 import {getUsers} from './common.js'
 
@@ -102,7 +108,7 @@ getUsers.use(
 
 - Type: `string[]`
 
-Принимает массив имен модулей, экспорты которых будут рассматриваться как пользовательские фабрики, и каждый вызов таких фабрик будет иметь уникальный префикс для [сидов](docs/ru/api/effector/babel-plugin.md#sid) юнитов внутри них. Применяется для реализации SSR, для чисто клиентского приложения не требуется.
+Принимает массив имен модулей, экспорты которых будут рассматриваться как пользовательские фабрики, и каждый вызов таких фабрик будет иметь уникальный префикс для [сидов](/ru/api/effector/babel-plugin.md#sid) юнитов внутри них. Применяется для реализации SSR, для чисто клиентского приложения не требуется.
 
 - Фабрики могут иметь любое количество аргументов
 - Фабрики могут создавать любое количество юнитов
@@ -113,7 +119,8 @@ getUsers.use(
 
 #### Пример
 
-```json title=".babelrc"
+```json
+// .babelrc
 {
   "plugins": [
     [
@@ -126,7 +133,8 @@ getUsers.use(
 }
 ```
 
-```js title="./src/createEffectStatus.js"
+```js
+// ./src/createEffectStatus.js
 import {rootDomain} from './rootDomain'
 
 export function createEffectStatus(fx) {
@@ -137,7 +145,8 @@ export function createEffectStatus(fx) {
 }
 ```
 
-```js title="./src/statuses.js"
+```js
+// ./src/statuses.js
 import {createEffectStatus} from './createEffectStatus'
 import {fetchUserFx, fetchFriendsFx} from './api'
 
@@ -145,7 +154,7 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx)
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 ```
 
-Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривается как фабричная функция, поэтому каждый созданный ею стор получит свой собственный [sid](docs/ru/api/effector/babel-plugin.md#sid) и будет обрабатываться [serialize](docs/ru/api/effector/serialize.md) независимо, в то время как без `factories` они все будут иметь один и тот же `sid`.
+Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривается как фабричная функция, поэтому каждый созданный ею стор получит свой собственный [sid](/ru/api/effector/babel-plugin.md#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize.md) независимо, в то время как без `factories` они все будут иметь один и тот же `sid`.
 
 ### reactSsr
 
@@ -197,7 +206,8 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 Оптимальнее использовать [factories](#factories)
 :::
 
-```json title=".babelrc"
+```json
+// .babelrc
 {
   "plugins": [
     ["effector/babel-plugin", {"addLoc": true}],
@@ -214,7 +224,8 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 }
 ```
 
-```js title="@lib/createInputField.js"
+```js
+// @lib/createInputField.js
 import {createStore} from 'effector'
 import {resetForm} from './form'
 
@@ -223,7 +234,8 @@ export function createInputField(defaultState, {sid, name}) {
 }
 ```
 
-```js title="src/state.js"
+```js
+// src/state.js
 import {createInputField} from '@lib/createInputField'
 
 const foo = createInputField('-')

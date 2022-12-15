@@ -1,12 +1,12 @@
 ---
-title: serialize
+title: Gate
 lang: ru-RU
 ---
 
-# serialize
+# Gate
 
 ::: info Нет перевода
 Эта статья еще не переведена на русский язык. <br/>
 Пожалуйста, используйте ссылку внизу "Edit this page", чтобы добавить перевод.<br/>
-[Прочитайте оригинальную статью](/api/effector/serialize.md) на английском.
+[Прочитайте оригинальную статью](/api/effector-react/Gate.md) на английском.
 :::
