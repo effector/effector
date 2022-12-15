@@ -1,21 +1,23 @@
 ---
-id: useEvent
 title: useEvent
+lang: en-US
 ---
+
+# useEvent
 
 Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
 
-## `useEvent(unit)`
+## `useEvent(unit)` {#useEvent-unit}
 
-**Arguments**
+### Arguments {#useEvent-unit-arguments}
 
-1. `unit` ([_Event_]/apieffector/Event.md) or [_Effect_](docs/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
 
-**Returns**
+### Returns {#useEvent-unit-returns}
 
 (Function): Function to pass to event handlers. Will trigger given unit in current scope
 
-### Example
+### Example {#useEvent-unit-example}
 
 ```js
 import {createDomain} from 'effector'

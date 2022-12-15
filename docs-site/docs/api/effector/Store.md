@@ -32,7 +32,7 @@ const $second = $first.map(fn)
 - When `$first` store is updated, call `fn` with new state and previous state
 - Next update `$second` store with result of `fn()` call and trigger all subscribers
 
-**Arguments**
+### Arguments
 
 1. `fn` (_Function_): Function that receives `state` and `lastState?` and returns a new state for the derived store
 
@@ -85,7 +85,7 @@ $store.on(trigger, reducer)
 - When `trigger` is triggered, call `reducer` with payload of the `trigger` and data of `$store`
 - Next update `$store` with result of `reducer` call and trigger all subscribers
 
-**Arguments**
+### Arguments
 
 1. `trigger` [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or another [_Store_](/api/effector/Store.md)
 2. `reducer` [_Reducer_](/explanation/glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](/explanation/glossary.md#purity).
@@ -138,7 +138,7 @@ $store.on([triggerA, triggerB, ...], reducer)
 - Next update `$store` with result of `reducer` call and trigger all subscribers
 - Any count of triggers can be passed to `triggers`
 
-**Arguments**
+### Arguments
 
 1. `triggers` array of [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)
 2. `reducer` [_Reducer_](/explanation/glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](/explanation/glossary.md#purity).
@@ -191,7 +191,7 @@ const unwatch = $store.watch(watcher)
 - On initialize and each `$store` update, call `watcher` with the new state of `$store`
 - When `unwatch` is called, stop calling `watcher`
 
-**Arguments**
+### Arguments
 
 1. `watcher` ([_Watcher_](/explanation/glossary.md#watcher)): Watcher function that receives current store state as the first argument
 
@@ -226,7 +226,7 @@ const unwatch = $store.watch(trigger, watcher)
 - On each `$store` update with passed `trigger`, call `watcher` with the new state of `$store` and payload from `trigger`
 - When `unwatch` is called, stop calling `watcher`
 
-**Arguments**
+### Arguments
 
 1. `trigger` [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md): Trigger, which leads to call of `watcher`
 1. `watcher` (_Function_): Function that receives current store state as the first argument and payload of trigger as the second argument.
@@ -277,7 +277,7 @@ $store.reset(...triggers)
 
 - When any unit from `triggers` list is triggered, update `$store` with its default state, from `createStore(defaultState)`
 
-**Arguments**
+### Arguments
 
 1. `triggers` (_(Event | Effect | Store)[]_): any number of [_Events_](/api/effector/Event.md), [_Effects_](/api/effector/Effect.md) or [_Stores_](/api/effector/Store.md)
 
@@ -325,7 +325,7 @@ $store.reset([triggerA, triggerB, ...])
 
 - When any unit from `triggersArray` list is triggered, update `$store` with its default state, from `createStore(defaultState)`
 
-**Arguments**
+### Arguments
 
 1. `triggersArray` (_(Event | Effect | Store)[]_): any number of [_Events_](/api/effector/Event.md), [_Effects_](/api/effector/Effect.md) or [_Stores_](/api/effector/Store.md)
 
@@ -365,7 +365,7 @@ $store.off(trigger)
 - Removes reducer for given `trigger`, which was installed via [\$store.on](/api/effector/Store.md#ontrigger-reducer) or [\$store.reset](/api/effector/Store.md#resettriggers)
 - If there was no reducer for that `trigger`, this method will do nothing
 
-**Arguments**
+### Arguments
 
 1. `trigger`: [_Event_](/api/effector/Event.md), [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)
 
@@ -410,7 +410,7 @@ const result = $store.thru(fn)
 - Call `fn` with `$store` as argument
 - Return result of the `fn()` call
 
-**Arguments**
+### Arguments
 
 1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure**](/explanation/glossary.md#purity)
 

@@ -1,11 +1,17 @@
 ---
-id: useStoreMap
 title: useStoreMap
+lang: en-US
 ---
 
-Function, which subscribes to [store](docs/api/effector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
+# useStoreMap
+
+Function, which subscribes to [store](/api/effector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
+
+## useStoreMap(store, fn) {#useStoreMap-fn}
 
 Common use case: subscribe to changes in selected part of store only
+
+### Formulae {#useStoreMap-fn-formulae}
 
 ```ts
 useStoreMap<State, Result>(
@@ -14,31 +20,35 @@ useStoreMap<State, Result>(
 ): ComputedRef<Result>
 ```
 
-**Arguments**
+### Arguments {#useStoreMap-fn-arguments}
 
-1. `store`: Source [store](docs/api/effector/Store.md)
+1. `store`: Source [store](/api/effector/Store.md)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
-**Returns**
+### Returns {#useStoreMap-fn-returns}
 
 (_Result_)
+
+## useStoreMap(config) {#useStoreMap-config}
+
+### Formulae {#useStoreMap-config-formulae}
 
 ```ts
 useStoreMap({store, keys, fn})
 ```
 
-**Arguments**
+### Arguments {#useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store](docs/api/effector/Store.md)
+   - `store`: Source [store](/api/effector/Store.md)
    - `keys` (_Function_): Will be passed to fn selector
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
 
-**Returns**
+### Returns {#useStoreMap-config-returns}
 
 (_ComputedRef<Result\>_)
 
-#### Example
+### Example {#useStoreMap-config-example}
 
 This hook is very useful for working with lists, especially with large ones
 

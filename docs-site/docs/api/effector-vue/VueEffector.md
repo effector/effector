@@ -1,8 +1,7 @@
 ---
-id: vue-effector
 title: VueEffector
-hide_title: true
 description: effector-vue plugin for vue 2
+lang: en-US
 ---
 
 # VueEffector
@@ -11,12 +10,12 @@ description: effector-vue plugin for vue 2
 
 ## `VueEffector(Vue, options?)`
 
-**Arguments**
+### Arguments
 
 1. `Vue` (_class Vue_): Vue class
 2. `options` (_Object_): Plugin options
 
-**Returns**
+### Returns
 
 (_`void`_)
 

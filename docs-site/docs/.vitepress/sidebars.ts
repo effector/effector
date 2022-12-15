@@ -96,7 +96,81 @@ const commonSidebars: LSidebar = {
       ],
     },
   ],
-  '/api/effector-vue': [],
+  '/api/effector-vue': [
+    {
+      text: {en: 'Common methods'},
+      items: [
+        {
+          text: {en: 'VueEffector'},
+          link: '/api/effector-vue/VueEffector',
+        },
+        {
+          text: {en: 'createComponent'},
+          link: '/api/effector-vue/createComponent',
+        },
+      ],
+    },
+    {
+      text: {en: 'Options and properties'},
+      items: [
+        {
+          text: {en: 'ComponentOptions'},
+          link: '/api/effector-vue/ComponentOptions',
+        },
+        {
+          text: {en: 'Vue'},
+          link: '/api/effector-vue/Vue',
+        },
+      ],
+    },
+    {
+      text: {en: 'Gates'},
+      items: [
+        {
+          text: {en: 'Gate'},
+          link: '/api/effector-vue/Gate',
+        },
+        {
+          text: {en: 'createGate'},
+          link: '/api/effector-vue/createGate',
+        },
+        {
+          text: {en: 'useGate'},
+          link: '/api/effector-vue/useGate',
+        },
+      ],
+    },
+    {
+      text: {en: 'Hooks'},
+      items: [
+        {
+          text: {en: 'useStore'},
+          link: '/api/effector-vue/useStore',
+        },
+        {
+          text: {en: 'useStoreMap'},
+          link: '/api/effector-vue/useStoreMap',
+        },
+        {
+          text: {en: 'useVModel'},
+          link: '/api/effector-vue/useVModel',
+        },
+      ],
+    },
+    {
+      text: {en: 'Scoped API'},
+      items: [
+        {
+          text: {en: 'useEvent'},
+          link: '/api/effector-vue/useEvent',
+        },
+        {
+          text: {en: 'VueSSRPlugin'},
+          link: '/api/effector-vue/VueSSRPlugin',
+        },
+      ],
+    },
+  ],
 
   '/api/effector': [
     {

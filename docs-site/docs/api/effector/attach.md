@@ -142,7 +142,7 @@ Authorization: Bearer guest_token
 
 Create effect which will trigger given one with values from `source` stores
 
-**Arguments**
+### Arguments
 
 - `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
 - `source` ([_Store_](/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
@@ -167,7 +167,7 @@ resultFx = attach({
 })
 ```
 
-**Arguments**
+### Arguments
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
 - `source` ([_Store_](/api/effector/Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
@@ -180,7 +180,7 @@ resultFx = attach({
 
 Create effect which will trigger given one by transforming params by `mapParams` function
 
-**Arguments**
+### Arguments
 
 - `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
 - `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works like [event.prepend](/api/effector/Event.md#prependfn). Errors happened in `mapParams` function will force attached effect to fail
@@ -197,7 +197,7 @@ Create effect which will read values from `source` stores, pass them with params
 If `mapParams` throw an error, it will trigger `fail` event and nested `effect` will not be called at all
 :::
 
-**Arguments**
+### Arguments
 
 - `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
 - `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
@@ -215,7 +215,7 @@ If `mapParams` throw an error, it will trigger `fail` event and nested `effect` 
 
 Create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior.
 
-**Arguments**
+### Arguments
 
 - `effect` ([_Effect_](/api/effector/Effect.md)): Wrapped effect
 

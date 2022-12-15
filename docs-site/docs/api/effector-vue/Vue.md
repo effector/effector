@@ -1,15 +1,15 @@
 ---
-id: vue
 title: Vue
+lang: en-US
 ---
+
+# Vue
 
 Methods available on `Vue` prototype after you enable this plugin.
 
-## Vue Methods
+## `$watchAsStore(expOrFn, options?)` _(deprecated)_ {#watch-as-store}
 
-### `$watchAsStore(expOrFn, options?)` _(deprecated)_
-
-**Arguments**
+### Arguments {#watch-as-store-arguments}
 
 1. `expOrFn` (_string | Function_): Expression only accepts dot-delimited paths. For more complex expressions, use a function instead.
 2. `options`? (_Object_)
@@ -17,16 +17,16 @@ Methods available on `Vue` prototype after you enable this plugin.
 - `deep`? (_boolean_)
 - `immediate`? (_boolean_)
 
-**Returns**
+### Returns {#watch-as-store-returns}
 
 (_`Store`_)
 
-### `$store(expOrFn)` _(deprecated)_
+## `$store(expOrFn)` _(deprecated)_ {#store-fn}
 
-**Arguments**
+### Arguments {#store-fn-arguments}
 
 1. `expOrFn` (_string | Function_): Expression only accepts dot-delimited paths. For more complex expressions, use a function instead.
 
-**Returns**
+### Returns {#store-fn-returns}
 
 (_`Store`_)

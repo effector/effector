@@ -10,7 +10,7 @@ lang: en-US
 
 It can be safely used in place of the original async function.
 
-**Arguments**
+### Arguments
 
 1. `params` (_Params_): parameters passed to effect
 
@@ -79,7 +79,7 @@ You must provide a handler either through [`.use`](/api/effector/Effect.md#use-h
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 
-**Arguments**
+### Arguments
 
 1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
@@ -119,7 +119,7 @@ const unwatch = effect.watch(fn)
 - Call `fn` on each `effect` call, pass payload of `effect` as argument to `fn`
 - When `unwatch` is called, stop calling `fn`
 
-**Arguments**
+### Arguments
 
 1. `watcher` ([_Watcher_](/explanation/glossary.md#watcher)): A function that receives `payload`.
 
@@ -156,7 +156,7 @@ const event = effect.prepend(fn)
 
 - When `event` is triggered, call `fn` with payload from `event`, then trigger `effect` with result of `fn()`
 
-**Arguments**
+### Arguments
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
 
@@ -177,7 +177,7 @@ const second = first.map(fn)
 - When `first` is triggered, pass payload from `first` to `fn`
 - Trigger `second` with the result of the `fn()` call as payload
 
-**Arguments**
+### Arguments
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
 

@@ -18,7 +18,7 @@ React hook, который принимает любой юнит (стор, с�
 
 ## `useUnit(unit)`
 
-**Arguments**
+### Arguments
 
 1. `unit` [Событие](/ru/api/effector/Event.md) или [эффект](/ru/api/effector/Effect.md) для привязки к скоупу.
 
@@ -60,7 +60,7 @@ render(
 
 ## `useUnit(store)`
 
-**Arguments**
+### Arguments
 
 1. `store` ([_Store_](/ru/api/effector/Store.md))
 
@@ -96,7 +96,7 @@ const App = () => {
 
 ## `useUnit(shape)`
 
-**Arguments**
+### Arguments
 
 1. `shape` Объект или массив содержащий любые ([_событий_](/ru/api/effector/Event.md), [_эффекты_](/ru/api/effector/Effect.md) или [_сторы_](/ru/api/effector/Store.md))
 

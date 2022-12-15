@@ -89,7 +89,7 @@ const App = () => {
 
 ## `useUnit(shape)`
 
-**Arguments**
+### Arguments
 
 1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)): Events or effects or stores as accessors which will be bound to the current `scope`
 

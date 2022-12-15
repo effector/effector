@@ -1,17 +1,17 @@
 ---
-id: component-options
 title: ComponentOptions
+lang: en-US
 ---
 
-## ComponentOptions Properties
+# ComponentOptions
 
-### `effector`
+## `effector`
 
-**Returns**
+### Returns {#effector-returns}
 
 (_`Function | Object | Store`_): `Store` or object of `Store`, or function which will be called with Component instance as `this`
 
-#### Example
+### Example
 
 ```js
 import Vue from 'vue'

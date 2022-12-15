@@ -1,25 +1,25 @@
 ---
-id: create-component
 title: createComponent
+lang: en-US
 ---
 
-# `createComponent(componentOptions, store?)`
+# createComponent
 
-**Arguments**
+## `createComponent(componentOptions, store?)` {#createComponent-options}
+
+### Arguments {#createComponent-options-arguments}
 
 1. `componentOptions` (_Object_): component options ( hooks, methods, computed properties )
 2. `store` (_Object_): Store object from effector
 
-**Returns**
+### Returns {#createComponent-options-returns}
 
 (_`vue component`_)
 
-#### Example
+### Example {#createComponent-options-example}
 
 ```html
-<template>
-  {{ $counter }}
-</template>
+<template> {{ $counter }} </template>
 ```
 
 ```js

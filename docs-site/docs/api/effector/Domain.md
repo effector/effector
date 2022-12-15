@@ -20,7 +20,7 @@ It is useful for logging or other side effects.
 
 ## `createEvent(name?)`
 
-**Arguments**
+### Arguments
 
 1. `name`? (_string_): event name
 
@@ -32,7 +32,7 @@ It is useful for logging or other side effects.
 
 Creates an [effect](/api/effector/Effect.md) with given handler
 
-**Arguments**
+### Arguments
 
 1. `handler`? (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
 
@@ -46,7 +46,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 ## `createEffect(name?)`
 
-**Arguments**
+### Arguments
 
 1. `name`? (_string_): effect name
 
@@ -56,7 +56,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 ## `createStore(defaultState)`
 
-**Arguments**
+### Arguments
 
 1. `defaultState` (_State_): store default state
 
@@ -66,7 +66,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 ## `createDomain(name?)`
 
-**Arguments**
+### Arguments
 
 1. `name`? (_string_): domain name
 
@@ -133,7 +133,7 @@ domain.onCreateEvent(event => {})
 - Function called with `event` as first argument
 - Result of function call is ignored
 
-**Arguments**
+### Arguments
 
 1. `hook` ([_Watcher_]): A function that receives [Event](/api/effector/Event.md) and will be called during every [domain.createEvent](/api/effector/Domain.md#createeventname) call
 
@@ -173,7 +173,7 @@ domain.onCreateEffect(effect => {})
 - Function called with `effect` as first argument
 - Result of function call is ignored
 
-**Arguments**
+### Arguments
 
 1. `hook` ([_Watcher_]): A function that receives [Effect](/api/effector/Effect.md) and will be called during every [domain.createEffect](/api/effector/Domain.md#createeffect-name) call
 
@@ -213,7 +213,7 @@ domain.onCreateStore($store => {})
 - Function called with `$store` as first argument
 - Result of function call is ignored
 
-**Arguments**
+### Arguments
 
 1. `hook` ([_Watcher_]): A function that receives [Store](/api/effector/Store.md) and will be called during every [domain.createStore](/api/effector/Domain.md#createstore-defaultstate) call
 
@@ -250,7 +250,7 @@ domain.onCreateDomain(domain => {})
 - Function called with `domain` as first argument
 - Result of function call is ignored
 
-**Arguments**
+### Arguments
 
 1. `hook` ([_Watcher_]): A function that receives [Domain](/api/effector/Domain.md) and will be called during every [domain.createDomain](/api/effector/Domain.md#createdomain-name) call
 

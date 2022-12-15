@@ -1,25 +1,24 @@
 ---
-id: useGate
 title: useGate
-hide_title: true
 description: Using a gate to consume data from view. Designed for vue 3
+lang: en-US
 ---
 
 # useGate
 
-## `useGate(GateComponent, props)`
+## `useGate(GateComponent, props)` {#useGate-props}
 
-Using a [_`Gate`_]/apieffector-vue/Gate.md) to consume data from view. Designed for vue 3
+Using a [_`Gate`_](/api/effector-vue/Gate.md) to consume data from view. Designed for vue 3
 
-**Arguments**
+### Arguments {#useGate-props-arguments}
 
-1. `GateComponent` ([_Gate_]/apieffector-vue/Gate.md))
+1. `GateComponent` ([_Gate_](/api/effector-vue/Gate.md))
 2. `props` (_Props_)
 
-**Returns**
+### Returns {#useGate-props-returns}
 
 (_`void`_)
 
-### Example
+### Example {#useGate-props-example}
 
-[See example]/apieffector-vue/Gate.md)
+[See example](/api/effector-vue/Gate.md)
