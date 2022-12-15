@@ -1,6 +1,6 @@
 import {defineConfig} from 'vitepress'
 import {navigation} from './theme/navigation'
-import {sidebar} from './theme/sidebars'
+import {sidebar} from './sidebars'
 
 export default defineConfig({
   title: 'effector',

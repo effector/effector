@@ -1,7 +1,9 @@
 ---
-id: prior-art
 title: Prior Art
+lang: ru-RU
 ---
+
+# Prior Art
 
 ## Пейперы
 

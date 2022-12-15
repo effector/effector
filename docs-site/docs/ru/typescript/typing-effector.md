@@ -1,8 +1,10 @@
 ---
-id: typing-effector
 title: Типизация с эффектором
 description: Лучшие практики для написания хорошо типизированного кода
+lang: ru-RU
 ---
+
+# Типизация с эффектором
 
 Лучшие практики для написания хорошо типизированного кода
 
@@ -46,7 +48,7 @@ const sendWarningFx = createEffect<{warn: string}, string>(async ({warn}) => {
 
 Некоторый код может выдать исключения только некоторых типов, например библиотека axios в качестве ошибок использует только `AxiosError`. В эффектах для описания типов ошибок используется дженерик `Fail`.
 
-Для его указания, в случае, когда тип аргумента и тип результата задаётся явно (первым и вторым дженериком метода [createEffect](docs/ru/apiu/api/effector/createEffect.md) соответственно), используется третий дженерик метода:
+Для его указания, в случае, когда тип аргумента и тип результата задаётся явно (первым и вторым дженериком метода [createEffect](/ru/api/effector/createEffect.md) соответственно), используется третий дженерик метода:
 
 ```typescript
 const sendWarningFx = createEffect<{warn: string}, string, AxiosError>(
@@ -76,7 +78,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage)
 
 ## event.prepend
 
-Чтобы добавить типы к событиям, созданным с помощью [event.prepend](docs/ru/apiu/api/effector/Event.md#prependfn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
+Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event.md#prependfn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
 
 ```typescript
 const message = createEvent<string>()
@@ -155,7 +157,7 @@ const {add, sub} = createApi($count, {
 
 ## is
 
-Методы группы [`is`](docs/ru/apiu/api/effector/is.md) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
+Методы группы [`is`](/ru/api/effector/is.md) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
 
 ```typescript
 export function getUnitType(unit: unknown) {
