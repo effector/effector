@@ -1,26 +1,25 @@
 ---
-id: useGate
 title: useGate
-hide_title: true
 description: Function for passing data to Gate
+lang: en-US
 ---
 
 # useGate
 
-## `useGate(GateComponent, props)`
+## `useGate(GateComponent, props)` {#useGate-props}
 
-Function for passing data to [_`Gate`_]/apieffector-solid/Gate.md)
+Function for passing data to [_`Gate`_](/api/effector-solid/Gate.md)
 
-**Arguments**
+### Arguments {#useGate-props-arguments}
 
 1. `GateComponent` (_Gate_)
 2. `props` (_Props_)
 
-**Returns**
+### Returns {#useGate-props-returns}
 
 (_`void`_)
 
-### Example
+### Example {#useGate-props-example}
 
 ```js
 import {createGate, useGate} from 'effector-solid'

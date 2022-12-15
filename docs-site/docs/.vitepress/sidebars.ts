@@ -64,7 +64,38 @@ const commonSidebars: LSidebar = {
     },
   ],
 
-  '/api/effector-solid': [],
+  '/api/effector-solid': [
+    {
+      text: {en: 'Hooks'},
+      items: [
+        {
+          text: {en: 'useUnit'},
+          link: '/api/effector-solid/useUnit',
+        },
+        {
+          text: {en: 'useStoreMap'},
+          link: '/api/effector-solid/useStoreMap',
+        },
+      ],
+    },
+    {
+      text: {en: 'Gates'},
+      items: [
+        {
+          text: {en: 'Gate'},
+          link: '/api/effector-solid/Gate',
+        },
+        {
+          text: {en: 'createGate'},
+          link: '/api/effector-solid/createGate',
+        },
+        {
+          text: {en: 'useGate'},
+          link: '/api/effector-solid/useGate',
+        },
+      ],
+    },
+  ],
   '/api/effector-vue': [],
 
   '/api/effector': [

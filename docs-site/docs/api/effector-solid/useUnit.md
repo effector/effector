@@ -1,22 +1,24 @@
 ---
-id: useUnit
 title: useUnit
+lang: en-US
 ---
 
-Bind effector stores to solid reactivity system or, in the case of events/effects - bind to current [_scope_]/apieffector/Scope.md) to use in dom event handlers.
+# useUnit
+
+Bind effector stores to solid reactivity system or, in the case of events/effects - bind to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.
 Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 
-## `useUnit(unit)`
+## `useUnit(unit)` {#useUnit-unit}
 
-**Arguments**
+### Arguments {#useUnit-unit-arguments}
 
-1. `unit` ([_Event_]/apieffector/Event.md) or [_Effect_]/apieffector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
 
-**Returns**
+### Returns {#useUnit-unit-returns}
 
 (Function): Function to pass to event handlers. Will trigger given unit in current scope
 
-### Example
+### Example {#useUnit-unit-example}
 
 ```jsx
 import {render} from 'solid-js/web'
@@ -49,17 +51,17 @@ render(
 )
 ```
 
-## `useUnit(store)`
+## `useUnit(store)` {#useUnit-store}
 
-**Arguments**
+### Arguments {#useUnit-store-arguments}
 
-1. `store` Effector ([_Store_]/apieffector/Store.md))
+1. `store` Effector ([_Store_](/api/effector/Store.md))
 
-**Returns**
+### Returns {#useUnit-store-returns}
 
 Accessor which will subscribe to store state
 
-#### Example
+### Example {#useUnit-store-example}
 
 ```js
 import {createStore, createApi} from 'effector'
@@ -89,7 +91,7 @@ const App = () => {
 
 **Arguments**
 
-1. `shape` Object or array of ([_Event_]/apieffector/Event.md) or [_Effect_]/apieffector/Effect.md) or [_Store_]/apieffector/Store.md)): Events or effects or stores as accessors which will be bound to the current `scope`
+1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)): Events or effects or stores as accessors which will be bound to the current `scope`
 
 **Returns**
 

@@ -1,9 +1,13 @@
 ---
-id: useStoreMap
 title: useStoreMap
+lang: en-US
 ---
 
-Function, which subscribes to [store]/apieffector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
+# useStoreMap
+
+Function, which subscribes to [store](/api/effector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
+
+## useStoreMap(store, fn) {#useStoreMap-fn}
 
 Common use case: subscribe to changes in selected part of store only
 
@@ -14,32 +18,34 @@ useStoreMap<State, Result>(
 ): Accessor<Result>
 ```
 
-**Arguments**
+### Arguments {#useStoreMap-fn-arguments}
 
-1. `store`: Source [store]/apieffector/Store.md)
+1. `store`: Source [store](/api/effector/Store.md)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
-**Returns**
+### Returns {#useStoreMap-fn-returns}
 
 (_Result_)
+
+## useStoreMap(config) {#useStoreMap-config}
 
 ```ts
 useStoreMap({store, keys, fn, updateFilter})
 ```
 
-**Arguments**
+### Arguments {#useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store]/apieffector/Store.md)
+   - `store`: Source [store](/api/effector/Store.md)
    - `keys` (_Array_): Will be passed to fn selector
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter]/apieffector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/api/effector/createStore.md) option under the hood
 
-**Returns**
+### Returns {#useStoreMap-config-returns}
 
 (_Accessor<Result\>_)
 
-#### Example
+### Example {#useStoreMap-config-example}
 
 This hook is very useful for working with lists, especially with large ones
 
