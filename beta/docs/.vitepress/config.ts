@@ -36,7 +36,8 @@ export default defineConfig({
         }
       : undefined,
     editLink: {
-      pattern: 'https://github.com/effector/effector/tree/master/docs/:path',
+      pattern:
+        'https://github.com/effector/effector/blob/master/beta/docs/:path',
     },
     nav: navigation,
     localeLinks: {
