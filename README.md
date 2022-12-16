@@ -369,14 +369,21 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Kelin2025>
+            <img src=https://avatars.githubusercontent.com/u/4208480?v=4 width="100;"  alt=Anton Kosykh/>
+            <br />
+            <sub style="font-size:14px"><b>Anton Kosykh</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/yurovant>
             <img src=https://avatars.githubusercontent.com/u/11337124?v=4 width="100;"  alt=Anton Yurovskykh/>
             <br />
             <sub style="font-size:14px"><b>Anton Yurovskykh</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/gamtiq>
             <img src=https://avatars.githubusercontent.com/u/1177323?v=4 width="100;"  alt=Denis Sikuler/>
@@ -412,6 +419,8 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Stanislav</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/Tauka>
             <img src=https://avatars.githubusercontent.com/u/15087247?v=4 width="100;"  alt=Tauyekel Kunzhol/>
@@ -419,8 +428,6 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Tauyekel Kunzhol</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/aldibatyr>
             <img src=https://avatars.githubusercontent.com/u/47831819?v=4 width="100;"  alt=Aldiyar Batyrbekov/>
@@ -456,6 +463,8 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>0xflotus</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/45m0d3u5>
             <img src=https://avatars.githubusercontent.com/u/45828023?v=4 width="100;"  alt=Abdukerim Radjapov/>
@@ -463,8 +472,6 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Abdukerim Radjapov</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/7iomka>
             <img src=https://avatars.githubusercontent.com/u/18473137?v=4 width="100;"  alt=7iomka/>
@@ -500,6 +507,8 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Aleksei Pudnikov</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/sanohin>
             <img src=https://avatars.githubusercontent.com/u/14825383?v=4 width="100;"  alt=Alek Anokhin/>
@@ -507,8 +516,6 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Alek Anokhin</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/mihasia20008>
             <img src=https://avatars.githubusercontent.com/u/9918427?v=4 width="100;"  alt=Alexander/>
@@ -521,13 +528,6 @@ Your support allows us to improve the developer experience 🧡.
             <img src=https://avatars.githubusercontent.com/u/15097064?v=4 width="100;"  alt=Alexandrsv/>
             <br />
             <sub style="font-size:14px"><b>Alexandrsv</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/Kelin2025>
-            <img src=https://avatars.githubusercontent.com/u/4208480?v=4 width="100;"  alt=Anton Kosykh/>
-            <br />
-            <sub style="font-size:14px"><b>Anton Kosykh</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
