@@ -48,6 +48,8 @@ jobs:
       - name: Build
         run: yarn docs:build
         working-directory: ./beta
+        env:
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v2

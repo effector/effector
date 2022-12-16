@@ -1,6 +1,6 @@
 import path from 'node:path'
 import {defineConfig} from 'vitepress'
-import {navigation} from './theme/navigation'
+import {navigation} from './navigation'
 import {sidebar} from './sidebars'
 
 export default defineConfig({
