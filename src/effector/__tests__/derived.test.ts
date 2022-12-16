@@ -139,27 +139,45 @@ test('createApi', () => {
   const $derived = $a.map(x => x)
   createApi($derived, {x: () => 0})
   expect(getWarning()).toMatchInlineSnapshot(
-    `".on in derived store is deprecated, use createStore instead"`,
+    `".on in derived store is deprecated, use .on in store created via createStore instead"`,
   )
 })
 
-describe('.on with derived stores', () => {
-  test('usage with .map is deprecated', () => {
+describe('.on/.reset with derived stores', () => {
+  test('.on usage with .map is deprecated', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = $a.map(x => x)
     $b.on(trigger, x => x)
     expect(getWarning()).toMatchInlineSnapshot(
-      `".on in derived store is deprecated, use createStore instead"`,
+      `".on in derived store is deprecated, use .on in store created via createStore instead"`,
     )
   })
-  test('usage with combine is deprecated', () => {
+  test('.reset usage with .map is deprecated', () => {
+    const trigger = createEvent()
+    const $a = createStore(0)
+    const $b = $a.map(x => x)
+    $b.reset(trigger)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `".reset in derived store is deprecated, use .reset in store created via createStore instead"`,
+    )
+  })
+  test('.on usage with combine is deprecated', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = combine({a: $a})
     $b.on(trigger, x => x)
     expect(getWarning()).toMatchInlineSnapshot(
-      `".on in derived store is deprecated, use createStore instead"`,
+      `".on in derived store is deprecated, use .on in store created via createStore instead"`,
+    )
+  })
+  test('.reset usage with combine is deprecated', () => {
+    const trigger = createEvent()
+    const $a = createStore(0)
+    const $b = combine({a: $a})
+    $b.reset(trigger)
+    expect(getWarning()).toMatchInlineSnapshot(
+      `".reset in derived store is deprecated, use .reset in store created via createStore instead"`,
     )
   })
   describe('internal stores', () => {
@@ -168,7 +186,7 @@ describe('.on with derived stores', () => {
       const fx = createEffect(() => {})
       fx.inFlight.on(trigger, s => s + 1)
       expect(getWarning()).toMatchInlineSnapshot(
-        `".on in derived store is deprecated, use createStore instead"`,
+        `".on in derived store is deprecated, use .on in store created via createStore instead"`,
       )
     })
   })
