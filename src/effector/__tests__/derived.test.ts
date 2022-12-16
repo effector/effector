@@ -139,7 +139,7 @@ test('createApi', () => {
   const $derived = $a.map(x => x)
   createApi($derived, {x: () => 0})
   expect(getWarning()).toMatchInlineSnapshot(
-    `".on in derived store is deprecated, use createStore instead"`,
+    `".on in derived store is deprecated, use .on in store created via createStore instead"`,
   )
 })
 
