@@ -251,7 +251,7 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
-      forEach(units, unit => on(store, '.on', unit, () => store.defaultState))
+      forEach(units, unit => on(store, '.reset', unit, () => store.defaultState))
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
