@@ -77,6 +77,6 @@ getUserFx({id: 1})
 const data = await getUserFx({id: 2}) // handle promise
 ```
 
-[_store_]: docs/apipi/effector/Store.md
-[_effect_]: docs/apipi/effector/Effect.md
-[_event_]: docs/apipi/effector/Event.md
+[_store_]: /api/effector/Store.md
+[_effect_]: /api/effector/Effect.md
+[_event_]: /api/effector/Event.md

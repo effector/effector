@@ -3,7 +3,7 @@ id: createWatch
 title: createWatch
 ---
 
-Creates an subscription on unit (store, event or effect).
+Creates a subscription on unit (store, event or effect).
 
 ```ts
 createWatch<T>(config: {
@@ -18,7 +18,7 @@ createWatch<T>(config: {
 1. `config` (_Object_): Configuration
    - `unit` (_Unit_): Target unit (store, event of effect) that will be watched
    - `fn` (_Function_): Function that will be called when unit is triggered. Accepts unit payload as the first argument.
-   - `scope` ([_Scope_](docs/api/effector/Scope.md)): An optional scope object (forked instance) to restrict watcher calls on particular scope.
+   - `scope` ([_Scope_](/api/effector/Scope.md)): An optional scope object (forked instance) to restrict watcher calls on particular scope.
 
 **Returns**
 

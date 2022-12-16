@@ -3,4 +3,4 @@ id: prior-art
 title: Prior Art
 ---
 
-Page moved into [another section](docs/explanationon/prior-art.md)
+Page moved into [another section](/explanation/prior-art.md)

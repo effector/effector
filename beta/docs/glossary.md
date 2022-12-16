@@ -1,7 +1,9 @@
 ---
-id: glossary
 title: Glossary
 description: Glossary of basic terms in effector
+lang: en-US
 ---
 
-Page moved into [another section](docs/explanationion/glossary.md)
+# Glossary
+
+Page moved into [another section](/explanation/glossary.md)

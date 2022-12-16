@@ -1,3 +1,4 @@
+import path from 'node:path'
 import {defineConfig} from 'vitepress'
 import {navigation} from './theme/navigation'
 import {sidebar} from './sidebars'
@@ -7,6 +8,7 @@ export default defineConfig({
   description: 'Business logic with ease',
   lastUpdated: true,
   head: [],
+  outDir: path.resolve(__dirname, '..', '..', 'dist'),
   themeConfig: {
     siteTitle: 'effector',
     logo: '/effector.png',

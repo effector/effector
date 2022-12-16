@@ -14,7 +14,7 @@ Creates an event containing all items from an Observable.
 
 **Returns**
 
-[_Event_](docs/api/effector/Event.md): New event
+[_Event_](/api/effector/Event.md): New event
 
 #### Example
 

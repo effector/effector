@@ -3,4 +3,4 @@ id: computation-priority
 title: Computation priority
 ---
 
-Page moved into [another section](docs/explanationon/computation-priority.md)
+Page moved into [another section](/explanation/computation-priority.md)

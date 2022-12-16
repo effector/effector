@@ -10,7 +10,7 @@ Gate is a bridge between props and store.
 
 Imagine you have the task of transferring something from react props to the effector store.
 Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.
-In a such situation [`Gate`](/api/effector-react/gate) will help.
+In a such situation [`Gate`](/api/effector-react/Gate.md) will help.
 
 ```js
 import {createStore, createEffect, forward} from 'effector'
