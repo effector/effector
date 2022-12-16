@@ -157,7 +157,7 @@ describe('.on/.reset with derived stores', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = $a.map(x => x)
-    $b.reset(trigger, x => x)
+    $b.reset(trigger)
     expect(getWarning()).toMatchInlineSnapshot(
       `".reset in derived store is deprecated, use .reset in store created via createStore instead"`,
     )
@@ -175,7 +175,7 @@ describe('.on/.reset with derived stores', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = combine({a: $a})
-    $b.reset(trigger, x => x)
+    $b.reset(trigger)
     expect(getWarning()).toMatchInlineSnapshot(
       `".reset in derived store is deprecated, use .reset in store created via createStore instead"`,
     )
@@ -186,7 +186,7 @@ describe('.on/.reset with derived stores', () => {
       const fx = createEffect(() => {})
       fx.inFlight.on(trigger, s => s + 1)
       expect(getWarning()).toMatchInlineSnapshot(
-        `".on in derived store is deprecated, use createStore instead"`,
+        `".on in derived store is deprecated, use .on in store created via createStore instead"`,
       )
     })
   })
