@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Lexend Deca';
   src: local('Lexend Deca Regular'), local('Lexend Deca'),
-    url('/assets/LexendDeca-Regular.woff2') format('woff2'),
-    url('/assets/LexendDeca-Regular.ttf') format('ttf');
+    url('/LexendDeca-Regular.woff2') format('woff2'),
+    url('/LexendDeca-Regular.ttf') format('ttf');
   font-weight: 400;
   font-display: swap;
   font-style: normal;
@@ -81,7 +81,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  background-image: url('/assets/external.svg');
+  background-image: url('/external.svg');
 }
 
 .dark .VPNavBarMenuLink.link[href^="http://"]::after,
