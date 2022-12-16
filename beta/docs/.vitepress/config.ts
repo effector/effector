@@ -28,11 +28,11 @@ export default defineConfig({
       },
     ],
     sidebar,
-    algolia: process.env.ALGOLIA_API_KEY
+    algolia: process.env.BETA_ALGOLIA_API_KEY
       ? {
-          appId: 'BH4D9OD16A',
-          apiKey: process.env.ALGOLIA_API_KEY!,
-          indexName: 'effector',
+          appId: 'ARB8LV9Z4L',
+          apiKey: process.env.BETA_ALGOLIA_API_KEY!,
+          indexName: 'effector-beta',
         }
       : undefined,
     editLink: {
