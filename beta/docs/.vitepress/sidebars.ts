@@ -96,6 +96,7 @@ const commonSidebars: LSidebar = {
       ],
     },
   ],
+
   '/api/effector-vue': [
     {
       text: {en: 'Common methods'},
@@ -323,6 +324,64 @@ const commonSidebars: LSidebar = {
         {
           text: {en: 'SWC plugin', ru: 'SWC plugin'},
           link: 'https://github.com/effector/swc-plugin',
+        },
+      ],
+    },
+  ],
+
+  '/recipes': [
+    {
+      text: {en: 'Common'},
+      items: [
+        {
+          text: {en: 'Countdown Timer'},
+          link: '/recipes/common/countdown',
+        },
+      ],
+    },
+    {
+      text: {en: 'React'},
+      items: [
+        {
+          text: {en: 'Counter'},
+          link: '/recipes/react/counter',
+        },
+        {
+          text: {en: 'Effects'},
+          link: '/recipes/react/effects',
+        },
+        {
+          text: {en: 'Forms'},
+          link: '/recipes/react/forms',
+        },
+        {
+          text: {en: 'Gate'},
+          link: '/recipes/react/gate',
+        },
+        {
+          text: {en: 'ToDo Creator'},
+          link: '/recipes/react/todo-creator',
+        },
+        {
+          text: {en: 'Dynamic Form Schema'},
+          link: '/recipes/react/dynamic-form-schema',
+        },
+        {
+          text: {en: 'ToDo List with Validation'},
+          link: '/recipes/react/todo-with-validation',
+        },
+        {
+          text: {en: 'Slots'},
+          link: '/recipes/react/slots',
+        },
+      ],
+    },
+    {
+      text: {en: 'React Native'},
+      items: [
+        {
+          text: {en: 'AsyncStorage Counter'},
+          link: '/recipes/react-native/asyncstorage-counter',
         },
       ],
     },
