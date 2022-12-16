@@ -13,16 +13,20 @@ More content in [awesome-effector repository](https://github.com/effector/awesom
 
 ## Packages
 
-- [patronum](https://github.com/effector/patronum) - effector utility library delivering modularity and convenience.
-- [effector-logger](https://github.com/effector/logger) - Simple logger with stores inspector.
-- [eslint-plugin-effector](https://eslint.effector.dev) - Enforcing best practices.
+- [patronum](https://github.com/effector/patronum) - Effector utility library delivering modularity and convenience.
+- [farfetched](https://farfetched.pages.dev) — The advanced data fetching tool for web applications.
+- [atomic-router](https://github.com/atomic-router/atomic-router) - View-library agnostic router on top of effector.
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) - Module for effector that sync stores with localStorage.
-- [effector-routing](https://github.com/Kelin2025/effector-routing) - Simple abstact router on top of effector.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) - Simple undo/redo functionality for effector.
-- [effector-utils](https://github.com/Kelin2025/effector-utils) - effector utilities library.
-- [effector-next](https://github.com/weyheyhey/effector-next) - effector wrappers for Next.js.
+- [effector-hotkey](https://github.com/kelin2025/effector-hotkey) - Hotkeys made easy
+- [effector-utils](https://github.com/Kelin2025/effector-utils) - Effector utilities library.
+- [effector-next](https://github.com/weyheyhey/effector-next) - Effector wrappers for Next.js.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) - UI engine for web based on effector.
-- [farfetched](https://farfetched.pages.dev) — the advanced data fetching tool for web applications.
+
+## DX
+
+- [eslint-plugin-effector](https://eslint.effector.dev) - Enforcing best practices.
+- [effector-logger](https://github.com/effector/logger) - Simple logger with stores inspector.
 
 ### Form management
 
