@@ -56,29 +56,30 @@ Effector implements business logic with ease for Javascript apps **(React/React 
 
 > You can use any package manager
 
-| pnpm | yarn | npm |
-| ---- | ---- | --- |
-| `pnpm add effector` | `yarn add effector` | `npm add effector` |
+```bash
+npm add effector
+```
 
 **React**
 
 To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
 
-| pnpm | yarn | npm |
-| ---- | ---- | --- |
-| `pnpm add effector effector-react` | `yarn add effector effector-react` | `npm add effector effector-react` |
+
+```bash
+npm add effector effector-react
+```
 
 **SolidJS**
 
-| pnpm | yarn | npm |
-| ---- | ---- | --- |
-| `pnpm add effector effector-solid` | `yarn add effector effector-solid` | `npm add effector effector-solid` |
+```bash
+npm add effector effector-solid
+```
 
 **Vue**
 
-| pnpm | yarn | npm |
-| ---- | ---- | --- |
-| `pnpm add effector effector-vue` | `yarn add effector effector-vue` | `npm add effector effector-vue` |
+```bash
+npm add effector effector-vue
+```
 
 **Svelte**
 
