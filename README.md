@@ -54,56 +54,31 @@ Effector implements business logic with ease for Javascript apps **(React/React 
 
 ## Installation
 
-with **pnpm**
-```sh
-pnpm add effector
-```
+> You can use any package manager
 
-with **yarn**
-```sh
-yarn add effector
-```
-
-with **npm**
-```sh
-npm add effector
-```
+| pnpm | yarn | npm |
+| ---- | ---- | --- |
+| `pnpm add effector` | `yarn add effector` | `npm add effector` |
 
 **React**
 
 To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
 
-with **pnpm**
-```sh
-pnpm add effector effector-react
-```
+| pnpm | yarn | npm |
+| ---- | ---- | --- |
+| `pnpm add effector effector-react` | `yarn add effector effector-react` | `npm add effector effector-react` |
 
-with **yarn**
-```sh
-yarn add effector effector-react
-```
+**SolidJS**
 
-with **npm**
-```sh
-npm add effector effector-react
-```
+| pnpm | yarn | npm |
+| ---- | ---- | --- |
+| `pnpm add effector effector-solid` | `yarn add effector effector-solid` | `npm add effector effector-solid` |
 
 **Vue**
 
-with **pnpm**
-```sh
-pnpm add effector effector-vue
-```
-
-with **yarn**
-```sh
-yarn add effector effector-vue
-```
-
-with **npm**
-```sh
-npm add effector effector-vue
-```
+| pnpm | yarn | npm |
+| ---- | ---- | --- |
+| `pnpm add effector effector-vue` | `yarn add effector effector-vue` | `npm add effector effector-vue` |
 
 **Svelte**
 
