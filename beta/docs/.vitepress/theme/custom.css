@@ -1,0 +1,91 @@
+@font-face {
+  font-family: 'Lexend Deca';
+  src: local('Lexend Deca Regular'), local('Lexend Deca'),
+    url('/assets/LexendDeca-Regular.woff2') format('woff2'),
+    url('/assets/LexendDeca-Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+:root {
+  --vp-c-brand: #f9b127;
+  --vp-c-brand-light: #f9b127;
+  --vp-c-brand-dark: #ee9d3e;
+  --vp-button-brand-bg: #ee9d3e;
+  --vp-button-brand-hover-border: #f9b127;
+  --vp-button-brand-active-border: #f9b127;
+  --vp-link-color: #ff8c00;
+  --vp-link-color-hover: #ff8c00;
+}
+
+.VPHero .VPImage {
+  max-width: 128px;
+}
+
+@media (min-width: 960px) {
+  .VPHome .VPHero.has-image .main {
+    max-width: 800px;
+    width: calc((100% / 4) * 3);
+  }
+
+  .VPHome .VPHero.has-image .main .text,
+  .VPHome .VPHero.has-image .main .tagline {
+    max-width: 100%;
+  }
+}
+
+.VPFeatures .VPLink.VPFeature .icon {
+  width: 64px;
+  height: 64px;
+  font-size: 32px;
+}
+
+.VPNavBar,
+.VPNavBar .title {
+  font-family: 'Lexend Deca', sans-serif;
+  font-size: 1rem;
+}
+
+.VPNavBar .VPNavBarTitle .title,
+.VPNavBar .VPNavBarMenuLink {
+  font-size: 1rem;
+}
+
+.VPSidebarGroup .title {
+  font-family: 'Lexend Deca', sans-serif;
+}
+
+.vp-doc a {
+  color: var(--vp-link-color);
+}
+
+.vp-doc a:hover {
+  color: var(--vp-link-color-hover);
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  font-family: 'Lexend Deca', sans-serif;
+}
+
+.VPNavBarMenuLink.link[href^="http://"]::after,
+.VPNavBarMenuLink.link[href^="https://"]::after
+{
+  content: '';
+  width: 0.7em;
+  height: 0.7em;
+  margin-left: 0.4em;
+  display: inline-block;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url('/assets/external.svg');
+}
+
+.dark .VPNavBarMenuLink.link[href^="http://"]::after,
+.dark .VPNavBarMenuLink.link[href^="https://"]::after
+{
+  filter: invert();
+}
