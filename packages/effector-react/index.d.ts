@@ -216,7 +216,7 @@ export function useUnit<
 export function useUnit<
   Shape extends Record<string, Event<any> | Effect<any, any, any> | Store<any>>,
 >(
-  shape: Shape,
+  shape: Shape | {'@@unitShape': () => Shape},
   opts?: {forceScope?: boolean},
 ): {
   [Key in keyof Shape]: Shape[Key] extends Event<infer T>

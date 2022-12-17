@@ -17,11 +17,22 @@ const stateReader = <T>(store: Store<T>, scope?: Scope) =>
 const basicUpdateFilter = <T>(upd: T, oldValue: T) => upd !== oldValue
 
 export function useUnitBase<Shape extends {[key: any]: Unit<any>}>(
-  shape: Shape,
+  shape: Shape | {'@@unitShape': () => Shape},
   scope?: Scope,
 ) {
   const isShape = !is.unit(shape) && typeof shape === 'object'
-  const normShape = isShape ? shape : {unit: shape}
+  let normShape: {[key: string]: Unit<any>} = {}
+  if (shape && '@@unitShape' in shape) {
+    if (typeof shape['@@unitShape'] === 'function') {
+      normShape = shape['@@unitShape']()
+    } else {
+      throwError('expect @@unitShape to be a function')
+    }
+  } else if (isShape) {
+    normShape = shape
+  } else {
+    normShape = {unit: shape}
+  }
   const isList = Array.isArray(normShape)
   const entries = Object.entries(normShape)
 

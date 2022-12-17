@@ -158,6 +158,7 @@ const sidebar = {
       ],
     },
   ],
+  'For ecosystem developers': ['ecosystem-development/unit-shape-protocol'],
 }
 
 module.exports = {

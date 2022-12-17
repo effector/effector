@@ -41,13 +41,22 @@ export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
 }
 
 export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
-  shape: Shape,
+  shape: Shape | {'@@unitShape': () => Shape},
   scope?: Scope,
 ) {
   const isSingleUnit = is.unit(shape)
-  const normShape: {[key: string]: Unit<any>} = isSingleUnit
-    ? {unit: shape}
-    : shape
+  let normShape: {[key: string]: Unit<any>} = {}
+  if (isSingleUnit) {
+    normShape = {unit: shape}
+  } else if ('@@unitShape' in shape) {
+    if (typeof shape['@@unitShape'] === 'function') {
+      normShape = shape['@@unitShape']()
+    } else {
+      throwError('expect @@unitShape to be a function')
+    }
+  } else {
+    normShape = shape
+  }
   const isList = Array.isArray(normShape)
   const flagsRef = React.useRef({
     stale: true,
