@@ -54,6 +54,8 @@ function createRoute(/* ... */) {
 
 ## FAQ
 
+---
+
 Q: How frequently `@@unitShape`-function is called?
 
 A: As many times as `useUnit` itself is called - it depends on a UI-library. For example, `effector-react` calls it as any other hook - once per component render, but `effector-solid` calls `useUnit` once per component mount.
