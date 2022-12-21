@@ -8,7 +8,7 @@ export const navigation: DefaultTheme.NavItem[] = [
   },
   {
     text: 'API',
-    activeMatch: '/api/',
+    activeMatch: '^/(api)/',
     items: [
       {
         text: 'Effector',

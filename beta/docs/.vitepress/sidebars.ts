@@ -454,6 +454,10 @@ const commonSidebars: LSidebar = {
           text: {en: 'Prior Art', ru: 'Prior Art'},
           link: '/explanation/prior-art',
         },
+        {
+          text: {en: 'Protocol @@unitShape'},
+          link: '/explanation/protocol-unitShape',
+        },
       ],
     },
   ],
