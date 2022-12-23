@@ -465,6 +465,19 @@ const commonSidebars: LSidebar = {
       ],
     },
     {
+      text: {
+        en: 'For library developers',
+      },
+      items: [
+        {
+          text: {
+            en: 'Universal @@unitShape protocol',
+          },
+          link: '/ecosystem-development/unit-shape-protocol',
+        },
+      ],
+    },
+    {
       text: {en: 'Explanation', ru: 'Погружение'},
       items: [
         {
