@@ -454,6 +454,10 @@ const commonSidebars: LSidebar = {
           text: {en: 'Testing'},
           link: '/core-principles/testing',
         },
+        {
+          text: {en: 'Typings'},
+          link: '/core-principles/typings',
+        },
       ],
     },
     {
