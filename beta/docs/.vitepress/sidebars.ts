@@ -446,10 +446,14 @@ const commonSidebars: LSidebar = {
       items: [
         {
           text: {
-            en: "Releases policy"
+            en: 'Releases policy',
           },
-          link: '/core-principles/releases'
-        }
+          link: '/core-principles/releases',
+        },
+        {
+          text: {en: 'Testing'},
+          link: '/core-principles/testing',
+        },
       ],
     },
     {
