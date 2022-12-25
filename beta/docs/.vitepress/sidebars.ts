@@ -465,6 +465,19 @@ const commonSidebars: LSidebar = {
       ],
     },
     {
+      text: {
+        en: 'For library developers',
+      },
+      items: [
+        {
+          text: {
+            en: 'Universal @@unitShape protocol',
+          },
+          link: '/ecosystem-development/unit-shape-protocol',
+        },
+      ],
+    },
+    {
       text: {en: 'Explanation', ru: 'Погружение'},
       items: [
         {
@@ -478,10 +491,6 @@ const commonSidebars: LSidebar = {
         {
           text: {en: 'Prior Art', ru: 'Prior Art'},
           link: '/explanation/prior-art',
-        },
-        {
-          text: {en: 'Protocol @@unitShape'},
-          link: '/explanation/protocol-unitShape',
         },
       ],
     },
