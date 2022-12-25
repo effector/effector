@@ -458,6 +458,10 @@ const commonSidebars: LSidebar = {
           text: {en: 'Typings'},
           link: '/core-principles/typings',
         },
+        {
+          text: {en: 'Own your data [DRAFT]'},
+          link: '/core-principles/own-your-data',
+        },
       ],
     },
     {
