@@ -440,6 +440,15 @@ const commonSidebars: LSidebar = {
       ],
     },
     {
+      text: {en: 'Guides'},
+      items: [
+        {
+          text: {en: 'Writing tests'},
+          link: '/guides/testing',
+        },
+      ],
+    },
+    {
       text: {
         en: 'Core principles',
       },

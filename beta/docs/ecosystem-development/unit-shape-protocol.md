@@ -6,7 +6,9 @@ description: Re-use UI-library bindings for your own Effector based libraries
 
 # Unit-shape protocol
 
+::: info
 Available since [effector-react 22.4.0](https://changelog.effector.dev/#effector-react-22-4-0), effector-solid 0.22.7
+:::
 
 Effector provides a way to use units ([Stores](/api/effector/Store.md), [Events](/api/effector/Event.md), [Effects](/api/effector/Effect.md)) in UI libraries with a special bindings like `effector-react`, `effector-solid`, etc. Normally, they allow to bind any shape of units to a UI-framework:
 
@@ -56,12 +58,12 @@ function createRoute(/* ... */) {
 
 ---
 
-Q: How frequently `@@unitShape`-function is called?
+**Q**: How frequently `@@unitShape`-function is called?
 
-A: As many times as `useUnit` itself is called - it depends on a UI-library. For example, `effector-react` calls it as any other hook - once per component render, but `effector-solid` calls `useUnit` once per component mount.
+**A**: As many times as `useUnit` itself is called - it depends on a UI-library. For example, `effector-react` calls it as any other hook - once per component render, but `effector-solid` calls `useUnit` once per component mount.
 
 ---
 
-Q: How can I know what UI-library is used for particular `@@unitShape` call?
+**Q**: How can I know what UI-library is used for particular `@@unitShape` call?
 
-A: You cannot. `@@unitShape` has to be universal for all UI-libraries either has to check what UI-library is used inside by UI-library methods (like `Context` in React or Solid).
+**A**: You cannot. `@@unitShape` has to be universal for all UI-libraries either has to check what UI-library is used inside by UI-library methods (like `Context` in React or Solid).
