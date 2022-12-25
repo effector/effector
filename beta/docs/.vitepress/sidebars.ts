@@ -440,6 +440,19 @@ const commonSidebars: LSidebar = {
       ],
     },
     {
+      text: {
+        en: 'Core principles',
+      },
+      items: [
+        {
+          text: {
+            en: "Releases policy"
+          },
+          link: '/core-principles/releases'
+        }
+      ],
+    },
+    {
       text: {en: 'Explanation', ru: 'Погружение'},
       items: [
         {
