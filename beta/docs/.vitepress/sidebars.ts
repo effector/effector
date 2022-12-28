@@ -385,6 +385,23 @@ const commonSidebars: LSidebar = {
         },
       ],
     },
+    {
+      text: {en: 'Next.js'},
+      items: [
+        {
+          text: {en: 'Integrate Next.js with effector'},
+          link: '/recipes/nextjs/integrate',
+        },
+        {
+          text: {en: 'Integrate with Next.js router'},
+          link: '/recipes/nextjs/router',
+        },
+        {
+          text: {en: 'Use scopeBind in Next.js'},
+          link: '/recipes/nextjs/scope-bind',
+        },
+      ],
+    },
   ],
 
   '/': [
