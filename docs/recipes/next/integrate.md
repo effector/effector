@@ -50,7 +50,6 @@ ___
         [
             "effector/babel-plugin", {
             "reactSsr": true,
-            "factories": ["patronum"]
         }
         ]
     ]
