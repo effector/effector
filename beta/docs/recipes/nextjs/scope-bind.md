@@ -1,15 +1,19 @@
 ---
 id: nextjs-scope-bind
-title: Use Scope Bind in next js
+title: Use scopeBind in Next.js
+lang: en-US
 ---
 
+# Use scopeBind in Next.js
+
 There are situations when we need to get values from external libraries through callbacks.
-If we directly bind [events](/docs/api/effector/createEvent.md), then we will face the loss of the scope.
-To solve this problem, we can use [scopeBind](/docs/api/effector/scopeBind.md).
+If we directly bind [events](/beta/docs/api/effector/createEvent.md), then we will face the loss of the scope.
+To solve this problem, we can use [scopeBind](/beta/docs/api/effector/scopeBind.md).
 
 
 We have some external library that returns us the status of our connection.
 Let's call it an instance in the store and call it _$service_, and we will take the status through an event.
+
 ```js
 import { createEvent, createStore } from 'effector';
 
@@ -21,7 +25,8 @@ sample({
     targt: $connectStatus,
 })
 ```
-To pick up the current [scope](/docs/api/effector/Scope.md), let's write a callback in __app.tsx_ under our _clientScope_:
+
+To pick up the current [scope](/beta/docs/api/effector/Scope.md), let's write a callback in __app.tsx_ under our _clientScope_:
 
 ```js
 ...
@@ -33,8 +38,8 @@ export const getCurrentScope = () => clientScope;
 ...
 ```
 
+Now we need to save the current [scope](/beta/docs/api/effector/Scope.md) somewhere.
 
-Now we need to save the current [scope](/docs/api/effector/Scope.md) somewhere.
 ```js
 import { createEvent, createStore, sample, Scope } from 'effector';
         
@@ -47,8 +52,8 @@ sample({
 });
 ```
 
+And on our page we take our [scope](/beta/docs/api/effector/Scope.md):
 
-And on our page we take our [scope](/docs/api/effector/Scope.md):
 ```js
 import { useEvent } from 'effector-react/scope';
 
@@ -66,8 +71,8 @@ import { useEvent } from 'effector-react/scope';
 
 ```
 
+Next, we need to create an effect, within which we will connect our [event](/beta/docs/api/effector/createEvent.md) and _service_.
 
-Next, we need to create an effect, within which we will connect our [event](/docs/api/effector/createEvent.md) and _service_.
 ```js
 import { attach, scopeBind } from 'effector';
 
@@ -82,4 +87,4 @@ const connectFx = attach({
 });
 ```
 
-After calling our [effect](/docs/api/effector/createEffect.md), the [event](/docs/api/effector/createEvent.md) will be tied to the [scope](/docs/api/effector/Scope.md) and will be able to take the current value from our _service_.
+After calling our [effect](/docs/api/effector/createEffect.md), the [event](/beta/docs/api/effector/createEvent.md) will be tied to the [scope](/docs/api/effector/Scope.md) and will be able to take the current value from our _service_.

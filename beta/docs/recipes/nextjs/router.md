@@ -1,8 +1,12 @@
 ---
 id: nextjs-router
-title: Integrate with next js router
+title: Integrate with Next.js router
+lang: en-US
 ---
-This is a simplified example of integration with the next js router.
+
+# Integrate with Next.js router
+
+This is a simplified example of integration with the Next.js router.
 We create a similar model for storing the router instance:
 
 ```js

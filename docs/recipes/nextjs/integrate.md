@@ -1,10 +1,12 @@
 ---
 id: nextjs
-title: Integrate next js with effector
+title: Integrate Next.js with effector
 ---
 
-To do this, we will use the native [fork](../../../api/effector/fork.md) method.
-In the __app.tsx_ file, we create our own [Scope](../../../api/effector/Scope.md) and wrap the application in a provider from _effector-react/scope_
+# Integrate Next.js with effector
+
+To do this, we will use the native [fork](/docs/api/effector/fork.md) method.
+In the __app.tsx_ file, we create our own [Scope](/docs/api/effector/Scope.md) and wrap the application in a provider from _effector-react/scope_
 
 ```js
 import { AppProps } from 'next/app';
@@ -40,9 +42,6 @@ export default App;
 ```
 
 Next, you need to add _.babelrc_ to the project root with the following content:
-___
-.babelrc
-___
 
 ```js
 {
@@ -56,6 +55,7 @@ ___
 }
 ```
 You also need to add an alias to _next.config.js_ to avoid build errors, when under the hood it imports, then cjs then mjs files.
+
 ```js
 config.resolve.alias.effector = path.resolve(__dirname, './node_modules/effector/effector.cjs.js');
 config.resolve.alias['effector-react/ssr'] = path.resolve(__dirname, './node_modules/effector-react/ssr.js');
