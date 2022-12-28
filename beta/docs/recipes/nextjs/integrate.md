@@ -6,8 +6,8 @@ lang: en-US
 
 # Integrate Next.js with effector
 
-To do this, we will use the native [fork](/beta/docs/api/effector/fork.md) method.
-In the __app.tsx_ file, we create our own [Scope](/beta/docs/api/effector/Scope.md) and wrap the application in a provider from _effector-react/scope_
+To do this, we will use the native [fork](/api/effector/fork.md) method.
+In the __app.tsx_ file, we create our own [Scope](/api/effector/Scope.md) and wrap the application in a provider from _effector-react/scope_
 
 ```js
 import { AppProps } from 'next/app';
