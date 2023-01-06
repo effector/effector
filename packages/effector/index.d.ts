@@ -375,6 +375,7 @@ export type Stack = {
   node: Node
   page?: any
   scope?: Scope
+  meta?: Record<string, any>
 }
 
 type BarrierPriorityTag = 'barrier' | 'sampler' | 'effect'
@@ -592,6 +593,7 @@ export function launch<T>(config: {
   defer?: boolean
   page?: any
   scope?: Scope
+  meta?: Record<string, any>
 }): void
 /**
  * Allows to directly start computation from given unit or graph node. Low level tool, usually absent in common applications
@@ -603,6 +605,7 @@ export function launch(config: {
   defer?: boolean
   page?: any
   scope?: Scope
+  meta?: Record<string, any>
 }): void
 
 /**

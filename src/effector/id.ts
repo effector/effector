@@ -6,3 +6,4 @@ const idCount = () => {
 export const nextUnitID = idCount()
 export const nextStepID = idCount()
 export const nextNodeID = idCount()
+export const nextEffectID = idCount()
