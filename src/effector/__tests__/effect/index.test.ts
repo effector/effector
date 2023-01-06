@@ -5,6 +5,9 @@ import {
   combine,
   forward,
   restore,
+  Unit,
+  Node,
+  step,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -422,4 +425,66 @@ it('should validate .use argument', () => {
   expect(() => {
     createEffect().use(null)
   }).toThrowErrorMatchingInlineSnapshot(`".use argument should be a function"`)
+})
+
+describe('fxID support', () => {
+  function getNode(unit: Unit<any>): Node {
+    //@ts-expect-error
+    return unit.graphite || unit
+  }
+  test('fxID in fx seq', async () => {
+    const fx = createEffect(() => {})
+    getNode(fx).seq.push(
+      step.compute({
+        fn(data, _, stack) {
+          const fxID = stack.meta?.fxID
+          expect(typeof fxID).toBe('string')
+          return data
+        },
+      }),
+    )
+    await fx()
+  })
+  test('fxID in fx.finally seq', async () => {
+    const fx = createEffect(() => {})
+    getNode(fx.finally).seq.push(
+      step.compute({
+        fn(data, _, stack) {
+          const fxID = stack.meta?.fxID
+          expect(typeof fxID).toBe('string')
+          return data
+        },
+      }),
+    )
+    await fx()
+  })
+  test('fxID in fx.done seq', async () => {
+    const fx = createEffect(() => {})
+    getNode(fx.done).seq.push(
+      step.compute({
+        fn(data, _, stack) {
+          const finallyStack = stack.parent?.parent
+          const fxID = finallyStack?.meta?.fxID
+          expect(typeof fxID).toBe('string')
+          return data
+        },
+      }),
+    )
+    await fx()
+  })
+  test('fxID in fx.doneData seq', async () => {
+    const fx = createEffect(() => {})
+    getNode(fx.done).seq.push(
+      step.compute({
+        fn(data, _, stack) {
+          const doneStack = stack.parent?.parent
+          const finallyStack = doneStack?.parent?.parent
+          const fxID = finallyStack?.meta?.fxID
+          expect(typeof fxID).toBe('string')
+          return data
+        },
+      }),
+    )
+    await fx()
+  })
 })
