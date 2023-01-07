@@ -37,8 +37,26 @@ test('allSettled first argument validation', async () => {
     // @ts-expect-error
     allSettled(createDomain(), {scope: fork()}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"first argument accepts only effects, events and stores"`,
+    `"first argument accepts only effects, events, stores or scopes"`,
   )
+})
+
+test('allSettled(scope)', async () => {
+  const scope = fork()
+  const requestFx = createEffect(() => new Promise(rs => setTimeout(rs, 400)))
+  const $done = createStore(false)
+  sample({
+    clock: requestFx.done,
+    target: $done,
+    fn: () => true,
+  })
+  allSettled(requestFx, {scope})
+  await allSettled(scope)
+  expect(serialize(scope)).toMatchInlineSnapshot(`
+    Object {
+      "el2wwt": true,
+    }
+  `)
 })
 
 describe('allSettled return value', () => {
@@ -191,20 +209,20 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "7ps077": "a",
-        "sabdpu": Array [
+        "-ec3clm": Array [
           "a",
         ],
+        "-ywmq49": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-lsam6": Array [
+        "-36m1ni": "b",
+        "-ec3clm": Array [
           "b",
         ],
-        "-vlbdb6": "b",
-        "7ps077": "b",
-        "sabdpu": Array [
+        "-ywmq49": "b",
+        "rsx11i": Array [
           "b",
         ],
       }
