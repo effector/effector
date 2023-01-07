@@ -214,9 +214,7 @@ describe('fork handlers', () => {
     const fooFx = app.createEffect<void, void, {message: string}>(() => {})
 
     const scope = fork(app, {
-      handlers: [
-        [fooFx, () => {}],
-      ],
+      handlers: [[fooFx, () => {}]],
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -276,6 +274,17 @@ describe('allSettled', () => {
     > = allSettled(fx, {
       scope: fork(app),
     })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('scope', () => {
+    const app = createDomain()
+    const fx = app.createEffect(() => 'ok')
+    const req: Promise<void> = allSettled(fork())
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors

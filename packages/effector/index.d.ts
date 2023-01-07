@@ -3102,6 +3102,12 @@ export function allSettled(
   unit: Unit<void>,
   config: {scope: Scope},
 ): Promise<void>
+/**
+ * Check for any ongoing computations in provided scope and wait for them to settle.
+ * @param scope {Scope}
+ * @returns void promise, will resolve when there will be no pending effects in given scope
+ */
+export function allSettled(scope: Scope): Promise<void>
 
 export function createWatch<T>({
   unit,
