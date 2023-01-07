@@ -162,6 +162,9 @@ export function createEffect<Params, Done, Fail = Error>(
           ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
           : /** empty stack means that this node was launched directly */
             params
+        if (!stack.meta) {
+          stack.meta = {fxID: nextEffectID()}
+        }
         launch({
           target: runner,
           params: upd,
@@ -193,7 +196,6 @@ export function createEffect<Params, Done, Fail = Error>(
       target: instance,
       params: payload,
       scope: forkPage,
-      meta: {fxID: nextEffectID()},
     })
     return req.req
   }
