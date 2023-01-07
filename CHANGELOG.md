@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.5.0
+
+- Support [`allSettled(scope)`](https://github.com/effector/effector/issues/687) feature.
+
 ## effector-react 22.4.0
 
 - Support [`@@unitShape` protocol](https://effector.dev/docs/ecosystem-development/unit-shape-protocol) ([PR #803](https://github.com/effector/effector/pull/822)) in `useUnit`
