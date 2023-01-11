@@ -272,6 +272,10 @@ const users = [
     alt: 'UNICEF (United Nations Children’s Fund)',
   },
   {
+    url: 'vk.svg',
+    alt: 'VK',
+  },
+  {
     url: 'sber.png',
     alt: 'Sber',
   },
