@@ -91,7 +91,7 @@ nextPost()
 // => Загрузка поста...
 // => Пост 2 имеет 5 комментариев
 `,
-  "zh-cn": `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
+  'zh-cn': `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
 
 const nextPost = createEvent()
 
@@ -131,7 +131,7 @@ nextPost()
 
 // => Loading post...
 // => Post 2 has 5 comments
-`
+`,
 }
 
 const features = [
@@ -146,10 +146,10 @@ const features = [
         title: 'Типизация',
         description: 'Поддержка TypeScript в комплекте поставки',
       },
-      "zh-cn": {
+      'zh-cn': {
         title: '类型安全',
         description: '开箱即用的 TypeScript 支持',
-      }
+      },
     },
   },
   {
@@ -163,10 +163,10 @@ const features = [
         title: 'Независимость от фреймворков',
         description: 'Работает с любыми UI и серверными фреймворками',
       },
-       "zh-cn": {
+      'zh-cn': {
         title: '与框架无关',
         description: '可以使用任何 UI 或 服务器框架',
-      }
+      },
     },
   },
   {
@@ -180,10 +180,10 @@ const features = [
         title: 'Удобство в разработке',
         description: 'Логичный API и отзывчивое сообщество',
       },
-      "zh-cn": {
+      'zh-cn': {
         title: '开发人员友好',
         description: '简单的API 和 有用的社区',
-      }
+      },
     },
   },
   {
@@ -200,9 +200,8 @@ const features = [
       },
       'zh-cn': {
         title: '极致的性能',
-        description:
-          '静态初始化可提高运行时的性能',
-      }
+        description: '静态初始化可提高运行时的性能',
+      },
     },
   },
   {
@@ -217,10 +216,10 @@ const features = [
         description:
           'Эффектор - компактная библиотека и поддерживает tree-shaking',
       },
-      "zh-cn": {
+      'zh-cn': {
         title: '非常小的 bundle size',
         description: 'Effector 提供 small builds 和 支持 tree-shaking',
-      }
+      },
     },
   },
   {
@@ -234,10 +233,10 @@ const features = [
         title: 'Чистый, предсказуемый javascript',
         description: 'Никаких прокси и классов',
       },
-      "zh-cn": {
+      'zh-cn': {
         title: '简单、可预测的 JavaScript',
         description: '没有代理，不需要类。只有您和您的数据',
-      }
+      },
     },
   },
 ]
@@ -247,10 +246,10 @@ const headings = {
     title: 'эффектор',
     tagline: 'Менеджер состояний',
   },
-  "zh-cn": {
+  'zh-cn': {
     title: 'effector',
     tagline: '轻松实现业务逻辑',
-  }
+  },
 }
 
 const users = [
@@ -272,8 +271,8 @@ const users = [
     alt: 'UNICEF (United Nations Children’s Fund)',
   },
   {
-    url: 'vk.svg',
-    alt: 'VK',
+    url: 'joom.svg',
+    alt: 'Joom Group',
   },
   {
     url: 'sber.png',
@@ -305,6 +304,10 @@ const users = [
     url: 'redmadrobot.png',
     alt: 'REDMADROBOT',
     yOffset: true,
+  },
+  {
+    url: 'travelpayouts.svg',
+    alt: 'Travelpayouts',
   },
   {
     url: 'junto.png',
@@ -344,10 +347,6 @@ const users = [
     alt: 'Uptarget',
   },
   {
-    url: 'travelpayouts.svg',
-    alt: 'Travelpayouts',
-  },
-  {
     url: 'smartomato.svg',
     alt: 'смартомато',
   },
@@ -366,10 +365,6 @@ const users = [
   {
     url: 'semrush.png',
     alt: 'Semrush',
-  },
-  {
-    url: 'joom.svg',
-    alt: 'Joom Group',
   },
   {
     url: 'intouchHealth.png',
