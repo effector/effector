@@ -911,6 +911,8 @@ export function restore<E>(event: Event<E>, defaultState: E): Store<E>
  * @param defaultState initial state of new store
  */
 export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
+export function restore<T extends Event<any>>(event: T): never
+export function restore<T extends Effect<any, any, any>>(effect: T): never
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {

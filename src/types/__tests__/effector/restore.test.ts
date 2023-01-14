@@ -120,4 +120,40 @@ describe('restore cases (should fail)', () => {
       "
     `)
   })
+  test('restore(Event<any>)', () => {
+    try {
+      const ev = createEvent<number>()
+
+      let restored = restore(ev)
+      let store: Store<number>
+
+      store = restored
+      //@ts-expect-error
+      restored = store
+    } catch (e) {}
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'Store<number>' is not assignable to type 'never'.
+      "
+    `)
+  })
+  test('restore(Effect<any,number,Error>)', () => {
+    try {
+      const eff = createEffect<any, number, Error>()
+
+      let restored = restore(eff)
+      let store: Store<number>
+
+      store = restored
+      //@ts-expect-error
+      restored = store
+    } catch (e) {}
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'Store<number>' is not assignable to type 'never'.
+      "
+    `)
+  })
 })
