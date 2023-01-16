@@ -2974,6 +2974,27 @@ const q = allSettled(domainEvent, {
 "
 `;
 
+exports[`babel-plugin should localVariables 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/localVariables.js'
+import {createEvent} from 'effector'
+
+function A() {
+  const createEvent = 123
+}
+
+function B() {
+  return createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 8,
+      column: 9,
+    },
+    sid: '2wwj9e',
+  })
+}
+"
+`;
+
 exports[`babel-plugin should merge 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/merge.js'
 import {createEvent, merge} from 'effector'
