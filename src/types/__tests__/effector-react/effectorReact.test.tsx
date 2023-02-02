@@ -92,7 +92,8 @@ test('useEvent of Effect<void, unknown, Error>', () => {
     useEvent(createEffect<void, unknown, Error>())
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Type '() => void' is not assignable to type '() => Promise<unknown>'.
+      Type 'void' is not assignable to type 'Promise<unknown>'.
     "
   `)
 })

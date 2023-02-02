@@ -138,10 +138,6 @@ export interface Event<Payload> extends Unit<Payload> {
   filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
   prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
-  /**
-   * @deprecated use js pipe instead
-   */
-  thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
   compositeName: CompositeName
   sid: string | null
@@ -225,10 +221,6 @@ export interface Store<State> extends Unit<State> {
     trigger: Unit<E>,
     watcher: (state: State, payload: E) => any,
   ): Subscription
-  /**
-   * @deprecated use js pipe instead
-   */
-  thru<U>(fn: (store: Store<State>) => U): U
   defaultState: State
   compositeName: CompositeName
   shortName: string

@@ -74,10 +74,6 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = (fn: Function) => {
-    deprecate(false, 'thru', 'js pipe')
-    return fn(unit)
-  }
   unit.getType = () => compositeName.fullName
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {

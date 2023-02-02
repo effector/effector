@@ -284,26 +284,6 @@ test('#watch', () => {
   `)
 })
 
-test('#thru', () => {
-  const event = createEvent()
-  const store = createStore(0)
-  const result = store.thru(store => {
-    const thru_check1: Store<number> = store
-    return thru_check1
-  })
-
-  const computed = store.map(() => 'hello')
-  const result1 = computed.thru(store => {
-    const thru_computed_check1: Store<string> = store
-    return thru_computed_check1
-  })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
 test('unsafe widening (should fail)', () => {
   //@ts-expect-error
   const $values: Store<{
