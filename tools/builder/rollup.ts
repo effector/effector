@@ -155,14 +155,6 @@ export async function rollupEffector() {
       renderModuleGraph: true,
       inputExtension: 'ts',
     }),
-    createEsCjs(name, {
-      file: {
-        cjs: dir(`npm/${name}/fork.js`),
-        es: dir(`npm/${name}/fork.mjs`),
-      },
-      input: 'fork',
-      inputExtension: 'ts',
-    }),
     createUmd(name, {
       external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),

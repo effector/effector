@@ -20,12 +20,6 @@
       "import": "./effector.mjs",
       "default": "./effector.mjs"
     },
-    "./fork": {
-      "types": "./fork.d.ts",
-      "import": "./fork.mjs",
-      "require": "./fork.js",
-      "default": "./fork.mjs"
-    },
     "./compat": {
       "types": "./compat.d.ts",
       "require": "./compat.js",
@@ -60,11 +54,6 @@
     "effector.mjs.d.ts",
     "effector.umd.d.ts",
     "compat.d.ts",
-    "fork.js",
-    "fork.js.map",
-    "fork.mjs",
-    "fork.mjs.map",
-    "fork.d.ts",
     "babel-plugin.js",
     "babel-plugin-react.js"
   ],

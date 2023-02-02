@@ -95,7 +95,6 @@ export default {
         import: './effector.mjs',
         default: './effector.mjs',
       },
-      './fork': extensionlessExport('./fork'),
       './compat': compatExport,
       './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
@@ -104,9 +103,6 @@ export default {
     },
     files: [
       ...getFiles('effector'),
-      ...compiledFile('fork'),
-      ...esmFile('fork'),
-      'fork.d.ts',
       'babel-plugin.js',
       'babel-plugin-react.js',
     ],

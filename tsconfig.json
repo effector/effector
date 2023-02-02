@@ -12,7 +12,6 @@
     "lib": ["dom", "esnext", "DOM.Iterable"],
     "baseUrl": ".",
     "paths": {
-      "effector/fork": ["packages/effector/fork.d.ts"],
       "effector/fixtures/prettyHtml": ["src/fixtures/prettyHtml.d.ts"],
       "effector/fixtures": ["src/fixtures/index.d.ts"],
       "effector": ["packages/effector/index.d.ts"],
