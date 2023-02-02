@@ -8,13 +8,6 @@ test('createStore throw on undefined', () => {
 })
 
 describe('.map', () => {
-  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
-  beforeEach(() => {
-    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-  })
-  afterEach(() => {
-    warn.mockRestore()
-  })
   it('supports basic mapping', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>()
@@ -22,36 +15,32 @@ describe('.map', () => {
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
-
-    sum.watch(fn)
+    b.watch(fn)
 
     expect(a.getState()).toBe('word')
     expect(b.getState()).toBe(4)
-    expect(sum.getState()).toBe(4)
 
     newWord('lol')
 
     expect(a.getState()).toBe('lol')
     expect(b.getState()).toBe(3)
-    expect(sum.getState()).toBe(7)
 
     newWord('long word')
 
     expect(a.getState()).toBe('long word')
     expect(b.getState()).toBe(9)
-    expect(sum.getState()).toBe(16)
 
     expect(fn).toHaveBeenCalledTimes(3)
 
-    newWord('')
+    newWord('word long')
 
     expect(fn).toHaveBeenCalledTimes(3)
   })
-  it('calls given handler with current state as second argument', () => {
+  it('calls given handler with only one argument', () => {
     const fn = jest.fn()
     const inc = createEvent()
     const store = createStore(0).on(inc, x => x + 1)
+    // @ts-expect-error
     const computed = store.map((x, state) => `(${x}, ${state})`)
     computed.watch(fn)
     inc()
@@ -59,36 +48,20 @@ describe('.map', () => {
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         "(0, undefined)",
-        "(1, (0, undefined))",
-        "(2, (1, (0, undefined)))",
-      ]
-    `)
-  })
-  it('accepts initial state as second argument', () => {
-    const fn = jest.fn()
-    const inc = createEvent()
-    const store = createStore(0).on(inc, x => x + 1)
-    const computed = store.map((x, state) => `(${x}, ${state})`, 'initial')
-    computed.watch(fn)
-    inc()
-    inc()
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        "(0, initial)",
-        "(1, (0, initial))",
-        "(2, (1, (0, initial)))",
+        "(1, undefined)",
+        "(2, undefined)",
       ]
     `)
   })
 
-  test('second argument is deprecated', () => {
+  test('second argument throw an error', () => {
     const $a = createStore(10)
-    const $b = $a.map((x, y) => x + y, 2)
-    expect(warn.mock.calls.map(([msg]) => msg)).toMatchInlineSnapshot(`
-      Array [
-        "second argument of store.map is deprecated, use updateFilter instead",
-      ]
-    `)
+    expect(() => {
+      // @ts-expect-error
+      $a.map((x, y) => x + y, 2)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"second argument of store.map is not supported, use updateFilter instead"`,
+    )
   })
 
   it('supports nested mapping with updates skipping', () => {
