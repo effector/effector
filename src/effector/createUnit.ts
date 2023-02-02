@@ -383,6 +383,11 @@ const updateStore = (
     to: REG_A,
     priority: 'read',
   })
+  /**
+   * Store reading is not needed for store.map anymore
+   * but there is a fine tuning of "wire lengths"
+   * lack of which leads to a lot of reordering and retriggering issues
+   **/
   if (op === MAP) reader.data.softRead = true
   const node = [reader, userFnCall(caller)]
   applyTemplate(
