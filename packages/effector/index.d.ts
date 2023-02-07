@@ -3115,8 +3115,10 @@ export function createWatch<T>({
   unit,
   fn,
   scope,
+  batch,
 }: {
   unit: Unit<T>
   fn: (value: T) => any
   scope?: Scope
+  batch?: boolean
 }): Subscription
