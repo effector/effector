@@ -3,6 +3,7 @@ import {createNode} from './createNode'
 import type {Node, Subscription, Unit} from './index.h'
 import {step} from './step'
 import {Scope} from './unit.h'
+import {addUnsubscribe} from './subscription'
 
 export function createWatch<T>({
   unit,
@@ -21,7 +22,7 @@ export function createWatch<T>({
     const links = scopeLinks[id] || []
     scopeLinks[id] = links
     links.push(node)
-    return createSubscription(() => {
+    return addUnsubscribe(() => {
       const idx = links.indexOf(node)
       if (idx !== -1) links.splice(idx, 1)
       clearNode(node)
@@ -32,15 +33,8 @@ export function createWatch<T>({
       parent: [unit],
       family: {owners: unit},
     })
-    return createSubscription(() => {
+    return addUnsubscribe(() => {
       clearNode(node)
     })
   }
-}
-
-function createSubscription(callback: () => void): Subscription {
-  const subscription: Subscription = () => callback()
-  subscription.unsubscribe = () => callback()
-
-  return subscription
 }
