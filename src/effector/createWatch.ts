@@ -9,12 +9,17 @@ export function createWatch<T>({
   unit,
   fn,
   scope,
+  batch,
 }: {
   unit: Unit<T>
   fn: (value: T) => any
   scope?: Scope
+  batch?: boolean
 }): Subscription {
   const seq = [step.run({fn: value => fn(value)})]
+  if (batch) {
+    seq.unshift(step.compute({priority: 'sampler', batch: true}))
+  }
   if (scope) {
     const node = createNode({node: seq})
     const id = (unit as any).graphite.id
