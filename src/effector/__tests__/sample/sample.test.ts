@@ -772,12 +772,10 @@ describe('event/effect sampling behavior (issue #633)', () => {
 
     triggerEffect()
     /*
-    [effect] targetFx 1
     [effect] targetFx 2
-    [effect] targetFx.done {params: 1, result: undefined}
     [effect] targetFx.done {params: 2, result: undefined}
     */
-    expect(argumentHistory(fn)).toEqual([1, 2])
+    expect(argumentHistory(fn)).toEqual([2])
   })
 
   test('non-batched effect behavior', () => {
