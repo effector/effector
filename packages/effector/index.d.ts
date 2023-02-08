@@ -3117,7 +3117,7 @@ export function createWatch<T>({
   scope,
   batch,
 }: {
-  unit: Unit<T>
+  unit: Unit<T> | Unit<T>[]
   fn: (value: T) => any
   scope?: Scope
   batch?: boolean
