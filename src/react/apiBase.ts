@@ -91,12 +91,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
           cb()
         }
       }
-      const subs = storeValues.map(store =>
-        createWatch({unit: store, fn: cbCaller, scope, batch: true}),
-      )
-      return () => {
-        subs.forEach(fn => fn())
-      }
+      return createWatch({unit: storeValues, fn: cbCaller, scope, batch: true})
     },
     [storeValues, scope, stateRef, flagsRef],
   )
