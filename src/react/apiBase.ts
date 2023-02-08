@@ -56,7 +56,6 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   } else {
     normShape = shape
   }
-  const isList = Array.isArray(normShape)
   const flagsRef = React.useRef({
     stale: true,
     justSubscribed: false,
@@ -108,7 +107,9 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
       (flags.stale || flags.justSubscribed || scopeChanged)
     ) {
       changed = !flags.justSubscribed || scopeChanged
-      resultValue = isList ? [...eventsShape] : {...eventsShape}
+      resultValue = Array.isArray(normShape)
+        ? [...eventsShape]
+        : {...eventsShape}
       if (oldKeys.length !== storeKeys.length) {
         changed = true
       }
