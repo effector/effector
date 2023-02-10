@@ -85,6 +85,14 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'Official',
+              href: 'https://community.effector.dev',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discord.gg/yHcMcuRWeC',
+            },
+            {
               label: 'dev.to',
               href: 'https://dev.to/effector',
             },
