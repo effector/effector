@@ -117,12 +117,12 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Community
 
+- [official](https://community.effector.dev)
 - [awesome-effector](https://github.com/effector/awesome-effector) a curated list of awesome effector packages, videos and articles
 - [Twitter](https://twitter.com/effectorjs)
 - [Telegram](https://t.me/effector_en) (@effector_en)
 - [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
 - [dev.to](https://dev.to/effector)
-- [Gitter](https://gitter.im/effector/community)
 - [Discord](https://discord.gg/yHcMcuRWeC)
 - Add a [GitHub Topic `effector`](https://github.com/topics/effector) to your project's home page
 
