@@ -42,6 +42,7 @@ type QueueBucket = {
 /** Dedicated local metadata */
 type Local = {
   fail: boolean
+  failReason?: unknown
   scope: {[key: string]: any}
 }
 
@@ -227,6 +228,13 @@ export const getPageRef = (
   return ref
 }
 
+/** Introspection api internals */
+type Inspector = (stack: Stack, local: Local) => void
+let inspector: Inspector
+export const setInspector = (newInspector: Inspector) => {
+  inspector = newInspector
+}
+
 export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
@@ -407,6 +415,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       }
       stop = local.fail || skip
     }
+    if (inspector) {
+      inspector(stack, local)
+    }
     if (!stop) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
@@ -542,5 +553,6 @@ const tryRun = (local: Local, fn: Function, stack: Stack) => {
   } catch (err) {
     console.error(err)
     local.fail = true
+    local.failReason = err
   }
 }
