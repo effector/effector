@@ -22,3 +22,58 @@ export function inspect(config: {
   trace?: boolean
   fn: (message: Message) => void
 }): Subscription
+
+export type Declaration =
+  | {
+      type: 'unit'
+      kind: string
+      name?: string
+      factory?: {
+        name?: string
+        loc?: {
+          file: string
+          line: number
+          column: number
+        }
+        method?: string
+        sid?: string
+        from?: string
+      }
+      sid?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
+      }
+      id: string
+      meta: Record<string, unknown>
+      // for derived units - stores or events
+      derived?: boolean
+    }
+  | {
+      type: 'factory'
+      name?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
+      }
+      method?: string
+      sid?: string
+      from?: string
+      factory?: {
+        name?: string
+        loc?: {
+          file: string
+          line: number
+          column: number
+        }
+        method?: string
+        sid?: string
+        from?: string
+      }
+    }
+
+export function inspectGraph(config: {
+  fn: (declaration: Declaration) => void
+}): Subscription

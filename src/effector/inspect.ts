@@ -2,9 +2,13 @@ import {
   Scope,
   Subscription,
   Stack,
+  Node,
   // private
   // @ts-expect-error
   setInspector,
+  // private
+  // @ts-expect-error
+  setGraphInspector,
 } from 'effector'
 
 type Loc = {
@@ -75,19 +79,72 @@ export function inspect(config: {
 }
 
 // Track declarations and graph structure
-type Declaration = {
-  type: 'unit' | 'factory'
-  kind: string
+type Factory = {
   name?: string
-  factory?: boolean
-  sid?: string
   loc?: Loc
-  id: string
-  meta: Record<string, unknown>
-  parents?: {sid?: string; id: string}[]
+  method?: string
+  sid?: string
+  from?: string
 }
 
-const inspectGraphSubs = new Set()
+type Declaration =
+  | {
+      type: 'unit'
+      kind: string
+      name?: string
+      factory?: Factory
+      sid?: string
+      loc?: Loc
+      id: string
+      meta: Record<string, unknown>
+      // for derived units - stores or events
+      derived?: boolean
+    }
+  | {
+      type: 'factory'
+      name?: string
+      loc?: Loc
+      method?: string
+      sid?: string
+      from?: string
+      factory?: Factory
+    }
+
+const inspectGraphSubs = new Set<{
+  fn: (declaration: Declaration) => void
+}>()
+
+setGraphInspector((node: Node, regionStack: RegionStack) => {
+  let decl: Declaration
+
+  if (node.meta.type === 'factory') {
+    decl = {
+      type: 'factory',
+      name: node.meta.name,
+      loc: getLoc(node.meta),
+      method: node.meta.method,
+      sid: node.meta.sid,
+      from: node.meta.from,
+      factory: regionStack ? regionStack.meta : undefined,
+    }
+  } else {
+    decl = {
+      type: 'unit',
+      kind: node.meta.op,
+      name: node.meta.name,
+      factory: regionStack ? regionStack.meta : undefined,
+      sid: node.meta.sid,
+      loc: getLoc(node.meta),
+      id: node.id,
+      meta: node.meta,
+      derived: node.meta.derived,
+    }
+  }
+
+  inspectGraphSubs.forEach(sub => {
+    sub.fn(decl)
+  })
+})
 
 export function inspectGraph(config: {
   fn: (declaration: Declaration) => void
@@ -107,6 +164,11 @@ function createSubscription(cleanup: () => void): Subscription {
 
 function getNodeMeta(stack: Stack) {
   const {node} = stack
+
+  return readNodeMeta(node)
+}
+
+function readNodeMeta(node: Node) {
   const {meta, id} = node
   const loc = getLoc(meta)
   const {sid, name, op: kind} = meta
@@ -134,4 +196,11 @@ function collectMessageTrace(stack: Stack) {
   }
 
   return trace
+}
+
+type RegionStack = {
+  parent: RegionStack | null
+  value: any
+  sidRoot?: string
+  meta?: Record<string, unknown>
 }

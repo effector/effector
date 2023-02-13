@@ -1,8 +1,16 @@
-import {inspect, Message} from 'effector/inspect'
-import {createEvent, createStore, sample, fork, allSettled} from 'effector'
+import {inspect, Message, inspectGraph, Declaration} from 'effector/inspect'
+import {
+  createEvent,
+  createStore,
+  sample,
+  fork,
+  allSettled,
+  createEffect,
+  combine,
+} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-function compactLog(m: Message) {
+function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
     m.value
   }' (id:${typeof m.id}, sid:${typeof m.sid}, loc:${typeof m.loc}, meta:${typeof m.meta})`
@@ -25,7 +33,7 @@ describe('inspect API', () => {
 
     const trackMock = jest.fn()
     inspect({
-      fn: m => trackMock(compactLog(m)),
+      fn: m => trackMock(compactMessage(m)),
     })
 
     start()
@@ -69,7 +77,7 @@ describe('inspect API', () => {
     const trackMock = jest.fn()
     inspect({
       scope: scopeToTrack,
-      fn: m => trackMock(compactLog(m)),
+      fn: m => trackMock(compactMessage(m)),
     })
 
     start('SHOULD_NOT_BE_TRACKED')
@@ -110,7 +118,7 @@ describe('inspect API', () => {
 
     const trackMock = jest.fn()
     const unsub = inspect({
-      fn: m => trackMock(compactLog(m)),
+      fn: m => trackMock(compactMessage(m)),
     })
 
     up()
@@ -157,9 +165,9 @@ describe('inspect API', () => {
       trace: true,
       fn: m => {
         if (m.sid === end.sid) {
-          trackMock(compactLog(m))
+          trackMock(compactMessage(m))
           m.trace!.forEach(trace => {
-            trackMock(`<- ${compactLog(trace)}`)
+            trackMock(`<- ${compactMessage(trace)}`)
           })
         }
       },
@@ -175,5 +183,65 @@ describe('inspect API', () => {
         "<- update of 'start' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object)",
       ]
     `)
+  })
+})
+
+function compactDeclaration(d: Declaration) {
+  if (d.type === 'factory') {
+    return `factory call: ${d.method} of ${d.from} to ${
+      d.name
+    } variable (parent factory: ${typeof d.factory}, sid: ${typeof d.sid}, loc: ${typeof d.loc})`
+  }
+
+  return `${d.derived ? 'derived ' : ''}${d.type} ${d.name} (${
+    d.kind
+  }) created (sid ${typeof d.sid}, parent factory: ${typeof d.factory}, id: ${typeof d.id}, loc: ${typeof d.loc})`
+}
+
+describe('inspectGraph API', () => {
+  test('should work', () => {
+    const declMock = jest.fn()
+    const unsub = inspectGraph({
+      fn: d => declMock(compactDeclaration(d)),
+    })
+
+    const event1 = createEvent()
+    const $store2 = createStore(0)
+    const effectFx = createEffect(() => {})
+    const $store3 = $store2.map(x => x)
+    const event4 = event1.map(x => x)
+    const event5 = event1.prepend(x => x)
+    const $store6 = combine([$store2, $store3])
+
+    expect(argumentHistory(declMock).length).toBeGreaterThan(0)
+    expect(argumentHistory(declMock)).toMatchInlineSnapshot(`
+      Array [
+        "unit event1 (event) created (sid string, parent factory: undefined, id: string, loc: object)",
+        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "unit 35 (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "unit $store2 (store) created (sid string, parent factory: undefined, id: string, loc: object)",
+        "unit effectFx (effect) created (sid string, parent factory: undefined, id: string, loc: object)",
+        "derived unit finally (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit done (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit fail (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit doneData (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit failData (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "unit 44 (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "unit 43 (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit inFlight (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit pending (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit $store2 → * (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit event1 → * (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "unit * → event1 (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
+        "derived unit $store6 (store) created (sid string, parent factory: undefined, id: string, loc: object)",
+      ]
+    `)
+
+    unsub()
   })
 })

@@ -31,7 +31,7 @@ import {createName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
-import {readTemplate, readSidRoot} from './region'
+import {readTemplate, readSidRoot, reportDeclaration} from './region'
 import {
   getSubscribers,
   getStoreState,
@@ -159,7 +159,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(EVENT, event, config),
+      meta: initUnit(config.actualOp || EVENT, event, config),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -191,6 +191,7 @@ export function createEvent<Payload = any>(
   if (config?.domain) {
     config.domain.hooks.event(finalEvent)
   }
+  reportDeclaration(finalEvent.graphite)
   return finalEvent
 }
 function on<State>(
@@ -372,6 +373,8 @@ export function createStore<State>(
     store.reinit = createEvent<void>()
     store.reset(store.reinit)
   }
+
+  reportDeclaration(store.graphite)
 
   return store
 }

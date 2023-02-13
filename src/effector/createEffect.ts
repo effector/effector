@@ -26,7 +26,7 @@ type RunnerData<Params, Done, Fail> = {
 
 export function createEffect<Params, Done, Fail = Error>(
   nameOrConfig: any,
-  maybeConfig?: any,
+  maybeConfig: any = {},
 ): Effect<Params, Done, Fail> {
   const config = flattenConfig(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
@@ -34,7 +34,7 @@ export function createEffect<Params, Done, Fail = Error>(
   )
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
-    maybeConfig,
+    {...maybeConfig, actualOp: EFFECT},
   ) as unknown as Effect<Params, Done, Fail>
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))

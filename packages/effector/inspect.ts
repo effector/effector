@@ -1,1 +1,1 @@
-export {inspect} from '../../src/effector/inspect'
+export {inspect, inspectGraph} from '../../src/effector/inspect'
