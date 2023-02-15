@@ -33,7 +33,7 @@ Creates a [_`Gate`_](/api/effector-react/Gate.md)
 
 ## Example {#createGate-example}
 
-```js
+```jsx
 import React from "react";
 import ReactDOM from "react-dom";
 import { createGate } from "effector-react";

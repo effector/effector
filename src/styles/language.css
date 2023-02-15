@@ -1,0 +1,43 @@
+
+code .token.keyword {
+  color: #89DDFF;
+}
+
+code .token.string,
+code .token.attr-value {
+  color: #C3E88D;
+}
+
+code .token.punctuation {
+  color: #89DDFF;
+}
+
+code .token.function-variable,
+code .token.function {
+  color: #82AAFF;
+}
+
+code .token.operator {
+  color: #C792EA;
+}
+
+code .token.tag {
+  color: #F07178;
+}
+
+code .token.class-name {
+  color: #FFCB6B;
+}
+
+code .token.attr-name {
+  color: #C792EA;
+}
+
+code .token.comment {
+  color: #676E95;
+}
+
+pre[class*="language-"] {
+  color: #d6daf1;
+  background-color: #292d3e;
+}

@@ -55,6 +55,7 @@ h6 {
 	line-height: 1;
 	position: relative;
 	outline: none;
+	/* font-family: Lexend Deca, sans-serif; */
 }
 
 h1 {
@@ -226,7 +227,7 @@ strong {
 
 /* Supporting Content */
 
-code {
+:not(pre)>code {
 	--border-radius: 3px;
 	--padding-block: 0.2rem;
 	--padding-inline: 0.33rem;
