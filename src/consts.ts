@@ -19,7 +19,12 @@ export const KNOWN_LANGUAGES = {
 } as const;
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
-export const GITHUB_EDIT_URL = `https://github.com/effector/effector/tree/master/beta`;
+// TODO: update this urls
+export const GITHUB_REPO = "sergeysova/new-docs";
+export const GITHUB_BRANCH = "main";
+export const GITHUB_DOCS_ROOT = ""; // there would be 'beta/' slash at the end is required
+
+export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
 
 export const COMMUNITY_INVITE_URL = `https://discord.gg/yHcMcuRWeC`;
 

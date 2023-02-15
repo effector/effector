@@ -1,0 +1,33 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getPathParamsFromId } from "../../languages";
+
+export async function getStaticPaths() {
+  const docs = await getCollection("docs");
+  return docs.map((entry) => {
+    const { lang, slug } = getPathParamsFromId(entry.id);
+    return {
+      params: { lang, slug },
+      props: entry,
+    };
+  });
+}
+
+export type Props = CollectionEntry<"docs">;
+const { slug, lang } = Astro.params;
+const translations = await getCollection("docs", (entry) => {
+  const path = getPathParamsFromId(entry.id);
+  // Get any other translation for current slug
+  if (path.slug === slug && path.lang !== lang) return entry;
+});
+const post = Astro.props;
+const { Content, headings } = await post.render();
+---
+
+<MainLayout headings={headings} {...post.data}>
+  <div>Slug: {slug}</div>
+  <div>Lang: {lang}</div>
+  <div>Other: {translations.map((entry) => <a href={`/${entry.slug}`}>{getPathParamsFromId(entry.slug).lang}</a>)}</div>
+  <Content />
+</MainLayout>

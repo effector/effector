@@ -30,7 +30,6 @@ function admonitions() {
     return map(tree, (node) => {
       if (node.type === "containerDirective" || node.type === "textDirective" || node.type === "leafDirective") {
         if (ALLOWED_NAMES.includes(node.name)) {
-          console.log(node);
           const children = node.children;
           delete node.children;
 
@@ -40,38 +39,6 @@ function admonitions() {
             ]),
             h("div", { className: "admonition-content" }, children),
           ]);
-
-          return {
-            type: "element",
-            data: {
-              hName: "strong",
-              hProperties: {
-                className: "admonition admonition-" + node.name,
-              },
-            },
-            children: [
-              {
-                type: "element",
-                data: {
-                  hName: "span",
-                  hProperties: {
-                    id: null,
-                  },
-                },
-                children: [{ type: "text", value: node.attributes.title }],
-              },
-              {
-                type: "element",
-                data: {
-                  hName: "div",
-                  hProperties: {
-                    className: "admonition-content",
-                  },
-                },
-                children,
-              },
-            ],
-          };
         }
       }
       return node;
