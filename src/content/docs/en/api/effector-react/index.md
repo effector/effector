@@ -6,20 +6,20 @@ title: API Reference
 
 ## Hooks
 
-- [useUnit(units)](./useUnit.md)
-- [useList(store, renderItem)](./useList.md)
-- [useStoreMap({ store, keys, fn })](./useStoreMap.md)
-- [useStore(store)](./useStore.md)
-- [useEvent(unit)](./useEvent.md)
+- [useUnit(units)](./useUnit)
+- [useList(store, renderItem)](./useList)
+- [useStoreMap({ store, keys, fn })](./useStoreMap)
+- [useStore(store)](./useStore)
+- [useEvent(unit)](./useEvent)
 
 ## Gate API
 
-- [Gate](./Gate.md)
-- [createGate()](./createGate.md)
-- [useGate(GateComponent, props)](./useGate.md)
+- [Gate](./Gate)
+- [createGate()](./createGate)
+- [useGate(GateComponent, props)](./useGate)
 
 ## Top-Level Exports
 
-- [createComponent(store, render)](./createComponent.md)
-- [createStoreConsumer(store)](./createStoreConsumer.md) render props style
-- [connect(store)(Component)](./connect.md) "connect" style
+- [createComponent(store, render)](./createComponent)
+- [createStoreConsumer(store)](./createStoreConsumer) render props style
+- [connect(store)(Component)](./connect) "connect" style

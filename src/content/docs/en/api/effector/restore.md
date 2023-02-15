@@ -4,21 +4,21 @@ title: restore
 
 ## `restore(event, defaultState)`
 
-Creates a [_Store_](/api/effector/Store.md) from [_Event_](/api/effector/Event.md).
+Creates a [_Store_](/en/api/effector/Store) from [_Event_](/en/api/effector/Event).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
 :::warning{title="It is not a derived store"}
-Restore creates a new store. It is not [DerivedStore](/api/effector/Store.md#derived-store). That means you can modify it's state via events, and use it as `target` in [`sample`](/api/effector/sample.md).
+Restore creates a new store. It is not [DerivedStore](/en/api/effector/Store#derived-store). That means you can modify it's state via events, and use it as `target` in [`sample`](/en/api/effector/sample).
 :::
 
 **Arguments**
 
-1. `event` [_Event_](/api/effector/Event.md)
+1. `event` [_Event_](/en/api/effector/Event)
 2. `defaultState` (_Payload_)
 
 **Returns**
 
-[_Store_](/api/effector/Store.md): New store
+[_Store_](/en/api/effector/Store): New store
 
 #### Example
 
@@ -39,17 +39,17 @@ event("foo");
 
 ## `restore(effect, defaultState)`
 
-Creates a [_Store_](/api/effector/Store.md) out of successful results of [_Effect_](/api/effector/Effect.md).
+Creates a [_Store_](/en/api/effector/Store) out of successful results of [_Effect_](/en/api/effector/Effect).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
 **Arguments**
 
-1. `effect` [_Effect_](/api/effector/Effect.md)
+1. `effect` [_Effect_](/en/api/effector/Effect)
 2. `defaultState` (_Done_)
 
 **Returns**
 
-[_Store_](/api/effector/Store.md): New store
+[_Store_](/en/api/effector/Store): New store
 
 #### Example
 
@@ -78,7 +78,7 @@ Creates an object with stores from object with values
 
 **Returns**
 
-[_Store_](/api/effector/Store.md): New store
+[_Store_](/en/api/effector/Store): New store
 
 #### Example
 

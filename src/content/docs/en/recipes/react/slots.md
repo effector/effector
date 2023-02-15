@@ -10,7 +10,7 @@ In large projects this is not convenient, because it generates "props hell" or s
 
 Using React with Effector we can achieve slot goals without the problems described above.
 
-- [Slots proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Slots-Proposal.md)
+- [Slots proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Slots-Proposal)
 - [Vue.js docs](https://v3.vuejs.org/guide/component-slots.html)
 - [Svelte docs](https://svelte.dev/docs#slot)
 - [@space307/effector-react-slots](https://github.com/space307/effector-react-slots)

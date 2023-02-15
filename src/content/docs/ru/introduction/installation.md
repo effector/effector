@@ -45,7 +45,7 @@ Svelte работает с effector без установки дополните
 
 ## Deno
 
-::: info поддерживается с версии
+:::info{title="поддерживается с версии"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
 

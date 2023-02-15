@@ -9,23 +9,23 @@ description: Перечень основных методов API, по груп
 
 ## Хуки
 
-- [useStore(store)](./useStore.md)
-- [useStoreMap({ store, keys, fn })](./useStoreMap.md)
-- [useList(store, renderItem)](./useList.md)
-- [useUnit(units)](./useUnit.md)
+- [useStore(store)](./useStore)
+- [useStoreMap({ store, keys, fn })](./useStoreMap)
+- [useList(store, renderItem)](./useList)
+- [useUnit(units)](./useUnit)
 
 ## Gate API
 
-- [Gate](./Gate.md)
-- [createGate()](./createGate.md)
-- [useGate(GateComponent, props)](./useGate.md)
+- [Gate](./Gate)
+- [createGate()](./createGate)
+- [useGate(GateComponent, props)](./useGate)
 
 ## effector-react/ssr API
 
-- [useEvent(unit)](./useEvent.md)
+- [useEvent(unit)](./useEvent)
 
 ## Остальные функции
 
-- [createComponent(store, render)](./createComponent.md)
-- [createStoreConsumer(store)](./createStoreConsumer.md) render props style
-- [connect(store)(Component)](./connect.md) "connect" style
+- [createComponent(store, render)](./createComponent)
+- [createStoreConsumer(store)](./createStoreConsumer) render props style
+- [connect(store)(Component)](./connect) "connect" style

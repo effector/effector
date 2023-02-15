@@ -8,12 +8,12 @@ Choose one of cases by given conditions. It "splits" source unit into several ev
 
 ### Case mode
 
-Mode in which target case is selected by name of its field. Case could be selected from data in `source` by [case function](/api/effector/split.md#case-function) or from external [case store](/api/effector/split.md#case-store) which keept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+Mode in which target case is selected by name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which keept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
 
 **See also**:
 
-- [case store](/api/effector/split.md#case-store)
-- [case function](/api/effector/split.md#case-function)
+- [case store](/en/api/effector/split#case-store)
+- [case function](/en/api/effector/split#case-function)
 
 ### Matching mode
 
@@ -22,8 +22,8 @@ If one of the fields got `true` from store value or return of function, then the
 
 **See also**:
 
-- [matching store](/api/effector/split.md#matcher-store)
-- [matching function](/api/effector/split.md#matcher-function)
+- [matching store](/en/api/effector/split#matcher-store)
+- [matching function](/en/api/effector/split#matcher-function)
 
 ### Case store
 
@@ -44,7 +44,7 @@ split({
 
 ### Case function
 
-String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](/explanation/glossary.md#purity)
+String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
 
 ```ts
 split({
@@ -61,7 +61,7 @@ split({
 
 ### Matcher store
 
-Boolean store which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher functions](/api/effector/split.md#matcher-function)
+Boolean store which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#matcher-function)
 
 ```ts
 split({
@@ -85,7 +85,7 @@ split({
 Case store, case function and matcher store are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](/api/effector/split.md#matcher-store), [should be **pure**](/explanation/glossary.md#purity)
+Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](/en/api/effector/split#matcher-store), [should be **pure**](/en/explanation/glossary#purity)
 
 ```ts
 split({
@@ -152,9 +152,9 @@ split({
 
 **Arguments**
 
-- `source`: [Unit](/explanation/glossary.md#common-unit) which will trigger computation in `split`
-- `match`: Single [store with string](/api/effector/split.md#case-store), single [function which returns string](/api/effector/split.md#case-function) or object with [boolean stores](/api/effector/split.md#matching-store) and [functions which returns boolean](/api/effector/split.md#matching-function)
-- `cases`: Object with [units](/explanation/glossary.md#common-unit) to which data will be passed from `source` after case selection
+- `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
+- `match`: Single [store with string](/en/api/effector/split#case-store), single [function which returns string](/en/api/effector/split#case-function) or object with [boolean stores](/en/api/effector/split#matching-store) and [functions which returns boolean](/en/api/effector/split#matching-function)
+- `cases`: Object with [units](/en/explanation/glossary#common-unit) to which data will be passed from `source` after case selection
 
 **Returns**
 
@@ -261,7 +261,7 @@ split(source, match);
 
 **Arguments**
 
-1. `source`: [Unit](/explanation/glossary.md#common-unit) which will trigger computation in `split`
+1. `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
 2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
 
 **Returns**
@@ -338,7 +338,7 @@ message("Hi!");
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
-It works the same like [split with cases](/api/effector/split.md#split-with-cases), however computations in `split` will be started after `clock` is triggered.
+It works the same like [split with cases](/en/api/effector/split#split-with-cases), however computations in `split` will be started after `clock` is triggered.
 
 ```js
 split({source, clock?, match, cases})

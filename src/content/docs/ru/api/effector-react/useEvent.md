@@ -3,7 +3,7 @@ title: useEvent
 lang: ru
 ---
 
-Реакт-хук, который привязывает событие к текущему [scope](/ru/api/effector/Scope.md) для использования в обработчиках событий
+Реакт-хук, который привязывает событие к текущему [scope](/ru/api/effector/Scope) для использования в обработчиках событий
 
 Используется с серверным рендерингом и в тестировании, импортируется из `effector-react/scope`
 
@@ -26,7 +26,7 @@ const fxFn = useEvent(/*unit*/ fx)
 
 ### Аргументы {#useEvent-unit-args}
 
-1. **`unit`**: [Событие](/ru/api/effector/Event.md) или [эффект](/ru/api/effector/Effect.md) для привязки к скоупу компонента
+1. **`unit`**: [Событие](/ru/api/effector/Event) или [эффект](/ru/api/effector/Effect) для привязки к скоупу компонента
 
 ### Возвращает {#useEvent-unit-return}
 
@@ -81,7 +81,7 @@ const [aFn, bFn] = useEvent(/*list*/ [a, bFx])
 
 ### Аргументы {#useEvent-list-args}
 
-1. **`list`**: Массив [событий](/ru/api/effector/Event.md) или [эффектов](/ru/api/effector/Effect.md)
+1. **`list`**: Массив [событий](/ru/api/effector/Event) или [эффектов](/ru/api/effector/Effect)
 
 ### Возвращает {#useEvent-list-return}
 
@@ -140,7 +140,7 @@ const {a: aFn, b: bFn} = useEvent(/*shape*/ {a, b: bFx})
 
 ### Аргументы {#useEvent-shape-args}
 
-1. **`shape`**: Объект [событий](/ru/api/effector/Event.md) или [эффектов](/ru/api/effector/Effect.md)
+1. **`shape`**: Объект [событий](/ru/api/effector/Event) или [эффектов](/ru/api/effector/Effect)
 
 ### Возвращает {#useEvent-shape-return}
 

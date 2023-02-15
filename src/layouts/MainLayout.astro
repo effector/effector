@@ -13,9 +13,10 @@ import AvatarList from "../components/Footer/AvatarList.astro";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
+  translations: { lang: string; slug: string }[];
 };
 
-const { headings, ...data } = Astro.props;
+const { headings, translations, ...data } = Astro.props;
 const currentPage = Astro.url.pathname;
 const currentFile = `src/content/docs${currentPage.replace(/\/$/, "")}.md`;
 const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
@@ -106,7 +107,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
     <div id="grid-main">
-      <PageContent title={data.title} headings={headings} githubEditUrl={githubEditUrl}>
+      <PageContent title={data.title} headings={headings} githubEditUrl={githubEditUrl} translations={translations}>
         <slot />
       </PageContent>
       <AvatarList path={currentPage} />

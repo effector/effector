@@ -22,12 +22,12 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
 :::warning{title="Requirements"}
-[_babel-plugin_](/api/effector/babel-plugin.md) or [_swc-plugin_](https://github.com/effector/swc-plugin) is required for using this method
+[_babel-plugin_](/en/api/effector/babel-plugin) or [_swc-plugin_](https://github.com/effector/swc-plugin) is required for using this method
 :::
 
 ### Arguments {#fork-args}
 
-1. `domain` ([_Domain_](/api/effector/Domain.md)): Optional domain to fork
+1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork
 2. `values`: Option to provide initial states for stores
 
    Can be used in three ways:
@@ -63,7 +63,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       ```
 
       :::info{title="Explanation"}
-      Such objects are created by [serialize](/api/effector/serialize.md), in application code **array of tuples is preferred**
+      Such objects are created by [serialize](/en/api/effector/serialize), in application code **array of tuples is preferred**
       :::
 
 3. `handlers`: Option to provide handlers for effects
@@ -93,7 +93,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 
 ### Returns {#fork-return}
 
-[_Scope_](/api/effector/Scope.md)
+[_Scope_](/en/api/effector/Scope)
 
 ## Examples {#fork-examples}
 

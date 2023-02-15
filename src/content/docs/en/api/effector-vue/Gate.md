@@ -6,7 +6,7 @@ _Gate_ is a hook for conditional rendering, based on current value (or values) i
 
 This allows you to send props back to _Store_ to create feedback loop.
 
-Gate can be used via [useGate](/api/effector-vue/useGate.md) hook. Gate stores and events can be used in the application as regular units
+Gate can be used via [useGate](/en/api/effector-vue/useGate) hook. Gate stores and events can be used in the application as regular units
 
 Gate can have two states:
 
@@ -18,10 +18,10 @@ Gate can have two states:
 ## `state` {#Gate-state}
 
 :::warning{title="Important"}
-Do not modify `state` value! It is [derived store](/api/effector/Store.md#derived-store) and should be in predictable state.
+Do not modify `state` value! It is [derived store](/en/api/effector/Store#derived-store) and should be in predictable state.
 :::
 
-`Store<Props>`: [`DerivedStore`](/api/effector/Store.md#derived-store) with current state of given gate. State came from second argument of [useGate](/api/effector-vue/useGate.md) and from props when rendering gate as component
+`Store<Props>`: [`DerivedStore`](/en/api/effector/Store#derived-store) with current state of given gate. State came from second argument of [useGate](/en/api/effector-vue/useGate) and from props when rendering gate as component
 
 ## `open` {#Gate-open}
 
@@ -29,7 +29,7 @@ Do not modify `state` value! It is [derived store](/api/effector/Store.md#derive
 Do not manually call this event. It is event that depends on a Gate state.
 :::
 
-[`Event<Props>`](/api/effector/Event.md): Event which will be called during gate mounting
+[`Event<Props>`](/en/api/effector/Event): Event which will be called during gate mounting
 
 ## `close` {#Gate-close}
 
@@ -37,12 +37,12 @@ Do not manually call this event. It is event that depends on a Gate state.
 Do not manually call this event. It is event that depends on a Gate state.
 :::
 
-[`Event<Props>`](/api/effector/Event.md): Event which will be called during gate unmounting.
+[`Event<Props>`](/en/api/effector/Event): Event which will be called during gate unmounting.
 
 ## `status` {#Gate-status}
 
 :::warning{title="Important"}
-Do not modify `status` value! It is [derived store](/api/effector/Store.md#derived-store) and should be in predictable state.
+Do not modify `status` value! It is [derived store](/en/api/effector/Store#derived-store) and should be in predictable state.
 :::
 
-`Store<boolean>`: Boolean [`DerivedStore`](/api/effector/Store.md#derived-store) which show if given gate is mounted.
+`Store<boolean>`: Boolean [`DerivedStore`](/en/api/effector/Store#derived-store) which show if given gate is mounted.

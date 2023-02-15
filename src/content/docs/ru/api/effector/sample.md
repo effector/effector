@@ -4,7 +4,7 @@ description: Метод для связывания юнитов связью в
 lang: ru
 ---
 
-Метод для связывания [юнитов](/ru/explanation/glossary.md#common-unit) связью вида _"при срабатывании `clock` прочитать значение из `source` и передать в `target`"_
+Метод для связывания [юнитов](/ru/explanation/glossary#common-unit) связью вида _"при срабатывании `clock` прочитать значение из `source` и передать в `target`"_
 
 Типичный вариант использования - когда необходимо обработать какое-либо событие используя данные из стора. Вместо использования `store.getState()`, которое может вызвать несогласованность состояния, лучше использовать метод sample
 
@@ -19,21 +19,21 @@ sample({ source?, clock?, filter?, fn?, target?}): target
 - Если `clock` не передан, sample будет срабатывать при каждом обновлении `source`.
 - Если `filter` не передан, продолжить выполнение как есть. Если `filter` возвращает `false` или его значение `Store<false>`, то отменить выполнение, а иначе продолжить
 - Если передан `fn`, то при срабатывании передать значения из `source` и `clock` в эту функцию, а в `target` передать результат вычисления
-- Если `target` не передан, то sample создаст и вернёт новый [юнит](/ru/explanation/glossary.md#common-unit)
+- Если `target` не передан, то sample создаст и вернёт новый [юнит](/ru/explanation/glossary#common-unit)
 
 ## Иллюстрация принципа работы
 
-![Иллюстрация принципа работы](/api/effector/images/sample-visualization.gif)
+![Иллюстрация принципа работы](/images/sample-visualization.gif)
 
 ## Тип создаваемого `target`
 
 Если `target` не передан, то он будет создан при вызове. Тип создаваемого юнита описан в данной таблице:
 
-| clock\source                           | [_Store_](/ru/api/effector/Store.md) | [_Event_](/ru/api/effector/Event.md) | [_Effect_](/ru/api/effector/Effect.md) |
-| -------------------------------------- | ------------------------------------ | ------------------------------------ | -------------------------------------- |
-| [_Store_](/ru/api/effector/Store.md)   | `Store`                              | `Event`                              | `Event`                                |
-| [_Event_](/ru/api/effector/Event.md)   | `Event`                              | `Event`                              | `Event`                                |
-| [_Effect_](/ru/api/effector/Effect.md) | `Event`                              | `Event`                              | `Event`                                |
+| clock\source                        | [_Store_](/ru/api/effector/Store) | [_Event_](/ru/api/effector/Event) | [_Effect_](/ru/api/effector/Effect) |
+| ----------------------------------- | --------------------------------- | --------------------------------- | ----------------------------------- |
+| [_Store_](/ru/api/effector/Store)   | `Store`                           | `Event`                           | `Event`                             |
+| [_Event_](/ru/api/effector/Event)   | `Event`                           | `Event`                           | `Event`                             |
+| [_Effect_](/ru/api/effector/Effect) | `Event`                           | `Event`                           | `Event`                             |
 
 Использование таблицы:
 
@@ -59,25 +59,25 @@ const event = sample({ clock: event, source: $store });
 
 `params` (_Object_): Объект конфигурации
 
-- **`clock?`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив юнитов
+- **`clock?`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
 
   **Разновидности**:
 
   - **событие или эффект**: срабатывание этого события/эффекта будет запускать `target`
   - **стор**: обновление этого стора будет запускать `target`
-  - **массив юнитов**: срабатывание любого из юнитов будет запускать `target`. Сокращение для вызова [merge](/ru/api/effector/merge.md)
+  - **массив юнитов**: срабатывание любого из юнитов будет запускать `target`. Сокращение для вызова [merge](/ru/api/effector/merge)
   - **поле отсутствует**: `source` будет использоваться в качестве `clock`
 
-- **`source?`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив/объект со сторами
+- **`source?`**: [Юнит](/ru/explanation/glossary#common-unit) или массив/объект со сторами
 
   **Разновидности**:
 
   - **событие или эффект**: при срабатывании `clock` будет взято последнее значение с которым запускался этот юнит (перед этим он должен будет запуститься хотя бы раз)
   - **стор**: при срабатывании `clock` будет взято текущее значение этого стора
-  - **массив или объект со сторами**: при срабатывании `clock` будут взяты текущие значения из заданных сторов, объединенных в объект или массив. Сокращение для вызова [combine](/ru/api/effector/combine.md)
+  - **массив или объект со сторами**: при срабатывании `clock` будут взяты текущие значения из заданных сторов, объединенных в объект или массив. Сокращение для вызова [combine](/ru/api/effector/combine)
   - **поле отсутствует**: `clock` будет использоваться в качестве `source`
 
-- **`target?`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив юнитов
+- **`target?`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
 
   **Разновидности**:
 
@@ -88,19 +88,19 @@ const event = sample({ clock: event, source: $store });
 
 - **`fn?`**: `(sourceData, clockData) => result`
 
-  Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary.md#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть
+  Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть
 
 - **`greedy?`**: `boolean`
 
   Модификатор, определяющий, будет ли `target` ожидать окончательного значения `clock` прежде чем запуститься самому. При `greedy: false` `target` будет срабатывать только раз после каждой серии идущих подряд обновлений, а при `greedy: true`, `target` сработает по разу при каждом триггере `clock`. Иными словами, эта опция отключает стабилизацию апдейтов `clock` и вынуждает обрабатывать все промежуточные значения. Батчинг обновлений повышает общую эффективность работы системы, поэтому по умолчанию greedy установлен в `false`
 
-::: info
+:::info
 Поддержка массивов юнитов в `target` добавлена в effector 21.8.0
 :::
 
 **Возвращает**
 
-([_Event_](/ru/api/effector/Event.md) | [_Store_](/ru/api/effector/Store.md)) - Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан.
+([_Event_](/ru/api/effector/Event) | [_Store_](/ru/api/effector/Store)) - Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан.
 Тип возвращаемого юнита [зависит от типов `clock` и `source`](#тип-создаваемого-target)
 
 #### Пример
@@ -134,14 +134,14 @@ submitForm(12345678);
 
 **Аргументы**
 
-- **`source`**: [Юнит](/ru/explanation/glossary.md#common-unit)
+- **`source`**: [Юнит](/ru/explanation/glossary#common-unit)
 
   **Разновидности**:
 
   - **событие или эффект**: при срабатывании `clock` будет взято последнее значение с которым запускался этот юнит (перед этим он должен будет запуститься хотя бы раз)
   - **стор**: при срабатывании `clock` будет взято текущее значение этого стора
 
-- **`clock`**: [Юнит](/ru/explanation/glossary.md#common-unit)
+- **`clock`**: [Юнит](/ru/explanation/glossary#common-unit)
 
   **Разновидности**:
 
@@ -151,11 +151,11 @@ submitForm(12345678);
 
 - **`fn?`**: `(sourceData, clockData) => result`
 
-  Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary.md#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть. Поскольку этот обработчик призван организовывать поток данных, следует избегать объявления в нём сайд-эффектов. Правильнее будет поместить их в эффекты или в метод `watch` возвращаемого юнита
+  Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть. Поскольку этот обработчик призван организовывать поток данных, следует избегать объявления в нём сайд-эффектов. Правильнее будет поместить их в эффекты или в метод `watch` возвращаемого юнита
 
 **Возвращает**
 
-([_Event_](/ru/api/effector/Event.md) | [_Store_](/ru/api/effector/Store.md)) - Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан.
+([_Event_](/ru/api/effector/Event) | [_Store_](/ru/api/effector/Store)) - Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан.
 Тип возвращаемого юнита [зависит от типов `clock` и `source`](#тип-создаваемого-target).
 
 #### Пример
@@ -185,11 +185,11 @@ submitForm(12345678);
 
 ## `sample({name?})`
 
-::: info
+:::info
 Добавлено в effector 20.4.0
 :::
 
-Любой [юнит](/ru/explanation/glossary.md#unit) в эффекторе может иметь имя, поле `name` в sample позволяет указать имя создаваемому `target`
+Любой [юнит](/ru/explanation/glossary#unit) в эффекторе может иметь имя, поле `name` в sample позволяет указать имя создаваемому `target`
 
 ```js
 import { createStore, sample } from "effector";
@@ -208,10 +208,10 @@ console.log(sampled.shortName); // 'sampled foo'
 
 ### Объект со сторами
 
-::: info
+:::info
 Добавлено в effector 20.8.0
 :::
-sample может быть вызван с объектом [сторов](/ru/api/effector/Store.md) в `source`:
+sample может быть вызван с объектом [сторов](/ru/api/effector/Store) в `source`:
 
 ```js
 import { createStore, createEvent, sample } from "effector";
@@ -238,10 +238,10 @@ trigger();
 
 ### Массив сторов
 
-::: info
+:::info
 Добавлено в effector 20.8.0
 :::
-sample может быть вызван с массивом [сторов](/ru/api/effector/Store.md) в `source`:
+sample может быть вызван с массивом [сторов](/ru/api/effector/Store) в `source`:
 
 ```js
 import { createStore, createEvent, sample } from "effector";
@@ -274,11 +274,11 @@ trigger();
 
 ## Массивы юнитов в `clock`
 
-::: info
+:::info
 Добавлено в effector 21.2.0
 :::
 
-Передача массивов юнитов в `clock` работает как вызов [merge](/ru/api/effector/merge.md)
+Передача массивов юнитов в `clock` работает как вызов [merge](/ru/api/effector/merge)
 
 ```js
 import {createStore, createEvent, createEffect, sample, merge} from 'effector'
@@ -307,7 +307,7 @@ sample({
 
 ## Пример с filter
 
-::: info since
+:::info{title="since"}
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
@@ -322,11 +322,14 @@ sample({
 
 ```js
 import { createStore, createEvent, createEffect, sample } from "effector";
+
 const sign = createEvent();
 const sentMoney = createEvent();
+
 const $recipientAddress = createStore("a23x3xd");
 const $balance = createStore(20000);
 const $isSigned = createStore(false);
+
 const transactionFx = createEffect(
   ({ amountToSend, recipientAddress }) =>
     new Promise((res) =>
@@ -336,8 +339,10 @@ const transactionFx = createEffect(
       })
     )
 );
+
 $isSigned.on(sign, () => true).reset(transactionFx);
 $balance.on(transactionFx.doneData, (balance, { amount }) => balance - amount);
+
 sample({
   source: {
     recipientAddress: $recipientAddress,
@@ -351,8 +356,10 @@ sample({
   },
   target: transactionFx,
 });
+
 $balance.watch((balance) => console.log("balance: ", balance));
 $isSigned.watch((isSigned) => console.log("is signed: ", isSigned));
+
 sign();
 sentMoney(1000);
 ```

@@ -6,28 +6,28 @@ title: API Reference
 
 ### Top-Level Exports
 
-- [VueEffector(Vue, options?)](./VueEffector.md)
-- [createComponent(ComponentOptions, store?)](./createComponent.md)
+- [VueEffector(Vue, options?)](./VueEffector)
+- [createComponent(ComponentOptions, store?)](./createComponent)
 
 ### ComponentOptions API
 
-- [ComponentOptions\<V\>](./ComponentOptions.md)
-  - [effector](./ComponentOptions.md#effector)
+- [ComponentOptions\<V\>](./ComponentOptions)
+  - [effector](./ComponentOptions#effector)
 
 ### Vue API
 
-- [Vue](./Vue.md)
-- [$watchAsStore](./Vue.md#$watchAsStore) _(deprecated)_
-- [$store](./Vue.md#$store) _(deprecated)_
+- [Vue](./Vue)
+- [$watchAsStore](./Vue#$watchAsStore) _(deprecated)_
+- [$store](./Vue#$store) _(deprecated)_
 
 ### Hooks
 
-- [useStore(store)](./useStore.md)
-- [useStoreMap({store, keys, fn})](./useStoreMap.md)
-- [useVModel(store)](./useVModel.md)
+- [useStore(store)](./useStore)
+- [useStoreMap({store, keys, fn})](./useStoreMap)
+- [useVModel(store)](./useVModel)
 
 ### Gate API
 
-- [Gate](./Gate.md)
-- [createGate()](./createGate.md)
-- [useGate(GateComponent, props)](./useGate.md)
+- [Gate](./Gate)
+- [createGate()](./createGate)
+- [useGate(GateComponent, props)](./useGate)

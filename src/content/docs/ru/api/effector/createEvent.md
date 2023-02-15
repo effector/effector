@@ -4,7 +4,7 @@ description: Метод для создания событий
 lang: ru
 ---
 
-Метод для создания [событий](/ru/api/effector/Event.md)
+Метод для создания [событий](/ru/api/effector/Event)
 
 ## Формула {#formulae}
 
@@ -24,7 +24,7 @@ event = createEvent(/*name*/ "eventName") > Event<void>;
 
 ### Возвращает {#return}
 
-Новое [событие](/ru/api/effector/Event.md)
+Новое [событие](/ru/api/effector/Event)
 
 ## Примеры {#examples}
 

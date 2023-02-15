@@ -44,11 +44,11 @@ const unwatch = event.watch(fn);
 
 ### Arguments
 
-1. `watcher` ([_Watcher_](/explanation/glossary.md#watcher)): A function that receives `payload`.
+1. `watcher` ([_Watcher_](/en/explanation/glossary#watcher)): A function that receives `payload`.
 
 **Returns**
 
-[_Subscription_](/explanation/glossary.md#subscription): Unsubscribe function.
+[_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
 
 ### Example
 
@@ -81,11 +81,11 @@ const second = first.map(fn);
 
 ### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event.
+[_Event_](/en/api/effector/Event): New event.
 
 ### Example
 
@@ -110,7 +110,7 @@ userUpdated({ name: "john", role: "admin" });
 
 Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
-If original event belongs to some [domain](/api/effector/Domain.md) then new event will belong to it as well
+If original event belongs to some [domain](/en/api/effector/Domain) then new event will belong to it as well
 
 ### Formulae
 
@@ -124,11 +124,11 @@ const second = first.prepend(fn);
 
 ### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event.
+[_Event_](/en/api/effector/Event): New event.
 
 ### Example
 
@@ -198,11 +198,11 @@ const second = first.filterMap(fn);
 
 ### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event.
+[_Event_](/en/api/effector/Event): New event.
 
 ### Example
 
@@ -234,18 +234,18 @@ const second = first.filter({ fn });
 
 ### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event.
+[_Event_](/en/api/effector/Event): New event.
 
 :::info
-Object form is used because `event.filter(fn)` was an alias for [event.filterMap](/api/effector/Event.md#filtermap-fn)
+Object form is used because `event.filter(fn)` was an alias for [event.filterMap](/en/api/effector/Event#filtermap-fn)
 :::
 
 :::tip
-[`sample`](/api/effector/sample.md) method with `filter` is the preferred filtering method
+[`sample`](/en/api/effector/sample) method with `filter` is the preferred filtering method
 :::
 
 ### Example

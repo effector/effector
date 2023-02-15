@@ -18,8 +18,8 @@ Designed for vue 3
 
 ### Arguments {#useVModel-store-arguments}
 
-1. `store` ([_Store_](/api/effector/Store.md))
-2. `shape of Stores` ([_Store_](/api/effector/Store.md))
+1. `store` ([_Store_](/en/api/effector/Store))
+2. `shape of Stores` ([_Store_](/en/api/effector/Store))
 
 ### Returns {#useVModel-store-returns}
 

@@ -25,7 +25,11 @@ const post = Astro.props;
 const { Content, headings } = await post.render();
 ---
 
-<MainLayout headings={headings} {...post.data}>
+<MainLayout
+  headings={headings}
+  {...post.data}
+  translations={translations.map((entry) => getPathParamsFromId(entry.id))}
+>
   <!-- <div>Slug: {slug}</div>
   <div>Lang: {lang}</div>
   <div>Other: {translations.map((entry) => <a href={`/${entry.slug}`}>{getPathParamsFromId(entry.slug).lang}</a>)}</div> -->

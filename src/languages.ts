@@ -13,7 +13,7 @@ export function getLanguageFromURL(pathname: string) {
 export function getPathParamsFromId(pathname: string) {
   const ext = path.extname(pathname);
   const parts = pathname.replace(ext, "").split("/");
-  const lang = parts.shift();
+  const lang = parts.shift()!;
   const slug = parts.join("/");
   return { lang, slug };
 }

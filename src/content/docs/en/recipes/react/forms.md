@@ -103,7 +103,7 @@ const handleChange = fieldUpdate.prepend((event) => ({
 })); // upon trigger `handleChange`, passed data will be transformed in a way, described in function above, and returning value will be passed to original `setField` event.
 ```
 
-Next, we have to deal with how inputs should work. [`useStoreMap`](/api/effector-react/useStoreMap.md) hook here prevents component rerender upon non-relevant changes.
+Next, we have to deal with how inputs should work. [`useStoreMap`](/en/api/effector-react/useStoreMap) hook here prevents component rerender upon non-relevant changes.
 
 ```jsx
 const Field = ({ name, type, label }) => {

@@ -8,16 +8,16 @@ title: useUnit
 
 React hook, which takes any unit or shape of units.
 
-In case of [stores](/api/effector/Store.md) it subscribes component to provided [store](/api/effector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
+In case of [stores](/en/api/effector/Store) it subscribes component to provided [store](/en/api/effector/Store) and returns its current value, so when store is updated, the component will update automatically.
 
-In the case of [events](/api/effector/Event.md)/[effects](/api/effector/Effect.md) - bind to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.
+In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) - bind to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 Only `effector-react/scope` version works this way, `useUnit` of `effector-react` is no-op for events and does not require `Provider` with scope.
 
 ## `useUnit(unit)`
 
 ### Arguments {#useUnit-unit-arguments}
 
-1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`.
+1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be binded to current `scope`.
 
 ### Returns {#useUnit-unit-returns}
 
@@ -59,7 +59,7 @@ render(
 
 ### Arguments {#useUnit-store-arguments}
 
-1. `store` Effector ([_Store_](/api/effector/Store.md))
+1. `store` Effector ([_Store_](/en/api/effector/Store))
 
 ### Returns {#useUnit-store-returns}
 
@@ -95,7 +95,7 @@ const App = () => {
 
 ### Arguments {#useUnit-shape-arguments}
 
-1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md))
+1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) or [_Store_](/en/api/effector/Store))
 
 ### Returns {#useUnit-shape-returns}
 

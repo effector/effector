@@ -4,10 +4,10 @@ title: Babel plugin
 
 # Babel plugin
 
-Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](/explanation/glossary.md#unit),
+Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](/en/explanation/glossary#unit),
 inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
 
-For example, in case [effects without handlers](/api/effector/Effect.md#use-handler), it improves error message by
+For example, in case [effects without handlers](/en/api/effector/Effect#use-handler), it improves error message by
 clearly showing in which effect error happened.
 
 ```js
@@ -113,8 +113,8 @@ Specifying import name or names to process by plugin. Import should be used in t
 - Type: `string[]`
 
 Accepts an array of module names which exports treat as custom factories therefore each function call provides unique
-prefix for [sids](/api/effector/babel-plugin.md#sid) of units inside them. Used to
-SSR([Server Side Rendering](/api/effector/Scope.md)) and it's not required for client-only application.
+prefix for [sids](/en/api/effector/babel-plugin#sid) of units inside them. Used to
+SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for client-only application.
 
 - Factories can have any amount of arguments.
 - Factories can create any amount of units.
@@ -160,7 +160,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 ```
 
 Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory function so each store created by it
-has its own [sid](/api/effector/babel-plugin.md#sid) and will be handled by [serialize](/api/effector/serialize.md)
+has its own [sid](/en/api/effector/babel-plugin#sid) and will be handled by [serialize](/en/api/effector/serialize)
 independently, although without `factories` they will share the same `sid`.
 
 ### reactSsr

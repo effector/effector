@@ -7,7 +7,7 @@ lang: ru
 
 Встроенный плагин для babel, который можно использовать для ssr и отладки. Он вставляет имя юнита, выводимое из имени переменной, и `sid` (стабильный идентификатор), вычисляемый по расположению в исходном коде.
 
-К примеру, в случае [эффектов без обработчиков](/ru/api/effector/Effect.md#use-handler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
+К примеру, в случае [эффектов без обработчиков](/ru/api/effector/Effect#use-handler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
 
 ```js
 import { createEffect } from "effector";
@@ -34,7 +34,7 @@ fetchFx();
 
 ### sid
 
-::: info
+:::info
 Добавлено в effector 20.2.0
 :::
 
@@ -102,13 +102,13 @@ getUsers.use(
 
 ### factories
 
-::: info
+:::info
 Добавлено в effector 21.6.0
 :::
 
 - Type: `string[]`
 
-Принимает массив имен модулей, экспорты которых будут рассматриваться как пользовательские фабрики, и каждый вызов таких фабрик будет иметь уникальный префикс для [сидов](/ru/api/effector/babel-plugin.md#sid) юнитов внутри них. Применяется для реализации SSR, для чисто клиентского приложения не требуется.
+Принимает массив имен модулей, экспорты которых будут рассматриваться как пользовательские фабрики, и каждый вызов таких фабрик будет иметь уникальный префикс для [сидов](/ru/api/effector/babel-plugin#sid) юнитов внутри них. Применяется для реализации SSR, для чисто клиентского приложения не требуется.
 
 - Фабрики могут иметь любое количество аргументов
 - Фабрики могут создавать любое количество юнитов
@@ -152,11 +152,11 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx);
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 ```
 
-Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривается как фабричная функция, поэтому каждый созданный ею стор получит свой собственный [sid](/ru/api/effector/babel-plugin.md#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize.md) независимо, в то время как без `factories` они все будут иметь один и тот же `sid`.
+Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривается как фабричная функция, поэтому каждый созданный ею стор получит свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize) независимо, в то время как без `factories` они все будут иметь один и тот же `sid`.
 
 ### reactSsr
 
-::: info
+:::info
 Добавлено в effector 21.5.0
 :::
 
@@ -167,7 +167,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 
 ### addNames
 
-::: info
+:::info
 Добавлено в effector 21.8.0
 :::
 
@@ -191,7 +191,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 
 ### noDefaults
 
-::: info
+:::info
 Добавлено в effector 20.2.0
 :::
 
@@ -200,7 +200,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 
 Опция для effector/babel-plugin для создания пользовательских фабрик юнитов с чистой конфигурацией, изначально не делающей ничего.
 
-::: info
+:::info
 Оптимальнее использовать [factories](#factories)
 :::
 

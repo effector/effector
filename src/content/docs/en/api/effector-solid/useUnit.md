@@ -2,14 +2,14 @@
 title: useUnit
 ---
 
-Bind effector stores to solid reactivity system or, in the case of events/effects - bind to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.
+Bind effector stores to solid reactivity system or, in the case of events/effects - bind to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 
 ## `useUnit(unit)` {#useUnit-unit}
 
 ### Arguments {#useUnit-unit-arguments}
 
-1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be binded to current `scope`
 
 ### Returns {#useUnit-unit-returns}
 
@@ -52,7 +52,7 @@ render(
 
 ### Arguments {#useUnit-store-arguments}
 
-1. `store` Effector ([_Store_](/api/effector/Store.md))
+1. `store` Effector ([_Store_](/en/api/effector/Store))
 
 ### Returns {#useUnit-store-returns}
 
@@ -88,7 +88,7 @@ const App = () => {
 
 ### Arguments
 
-1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md) or [_Store_](/api/effector/Store.md)): Events or effects or stores as accessors which will be bound to the current `scope`
+1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) or [_Store_](/en/api/effector/Store)): Events or effects or stores as accessors which will be bound to the current `scope`
 
 **Returns**
 

@@ -6,7 +6,7 @@ title: useStoreMap
 `useStoreMap` introduced in [effector-react 19.1.2](https://changelog.effector.dev/#effector-react-19-1-2)
 :::
 
-React hook, which subscribes to [store](/api/effector/Store.md) and transforms its value with given function. Component will update only when selector function result will change.
+React hook, which subscribes to [store](/en/api/effector/Store) and transforms its value with given function. Component will update only when selector function result will change.
 
 You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
 
@@ -29,7 +29,7 @@ useStoreMap<State, Result>(
 
 ### Arguments {#useStoreMap-fn-arguments}
 
-1. `store`: Source [store](/api/effector/Store.md)
+1. `store`: Source [store](/en/api/effector/Store)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
 ### Returns {#useStoreMap-fn-returns}
@@ -55,10 +55,10 @@ useStoreMap<Source, Result>({
 ### Arguments {#useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store](/api/effector/Store.md)
+   - `store`: Source [store](/en/api/effector/Store)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/api/effector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore) option under the hood
    - `defaultValue`: Optional default value, used whenever `fn` returns undefined
 
 :::info{title="since"}

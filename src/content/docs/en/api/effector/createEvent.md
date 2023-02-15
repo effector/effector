@@ -3,7 +3,7 @@ title: createEvent
 description: createEvent is a method for creating an event
 ---
 
-Method for creating an [event](/api/effector/Event.md).
+Method for creating an [event](/en/api/effector/Event).
 
 ```ts
 createEvent<T>(name?): Event<T>
@@ -16,11 +16,11 @@ createEvent(name?): Event<void>
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event
+[_Event_](/en/api/effector/Event): New event
 
 ### Notes
 
-[Event](/api/effector/Event.md) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows to send data to another event or effect via effector operators.
+[Event](/en/api/effector/Event) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows to send data to another event or effect via effector operators.
 
 ## Example 1
 

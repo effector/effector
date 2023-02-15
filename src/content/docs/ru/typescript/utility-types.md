@@ -9,7 +9,7 @@ lang: ru
 
 ## `UnitValue<Type>`
 
-Получение типа значения переданного [Unit](/ru/explanation/glossary.md).
+Получение типа значения переданного [Unit](/ru/explanation/glossary).
 
 ### Пример
 
@@ -40,7 +40,7 @@ type UnitScopeType = UnitValue<typeof scope>;
 
 ## `StoreValue<Type>`
 
-Получение типа значения [Store](/ru/api/effector/Store.md).
+Получение типа значения [Store](/ru/api/effector/Store).
 
 ### Пример
 
@@ -55,7 +55,7 @@ type StoreValueType = StoreValue<typeof $store>;
 
 ## `EventPayload<Type>`
 
-Получение типа значения переданного в [Event](/ru/api/effector/Event.md).
+Получение типа значения переданного в [Event](/ru/api/effector/Event).
 
 ### Пример
 
@@ -70,7 +70,7 @@ type EventPayloadType = EventPayload<typeof event>;
 
 ## `EffectParams<Type>`
 
-Получение типа параметров [Effect](/ru/api/effector/Effect.md).
+Получение типа параметров [Effect](/ru/api/effector/Effect).
 
 ### Пример
 
@@ -87,7 +87,7 @@ type EffectParamsType = EffectParams<typeof fx>;
 
 ## `EffectResult<Type>`
 
-Получение типа результата [Effect](/ru/api/effector/Effect.md).
+Получение типа результата [Effect](/ru/api/effector/Effect).
 
 ### Пример
 
@@ -104,7 +104,7 @@ type EffectResultType = EffectResult<typeof fx>;
 
 ## `EffectError<Type>`
 
-Получение типа ошибки [Effect](/ru/api/effector/Effect.md).
+Получение типа ошибки [Effect](/ru/api/effector/Effect).
 
 ### Пример
 

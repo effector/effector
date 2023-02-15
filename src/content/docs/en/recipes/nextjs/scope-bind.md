@@ -6,8 +6,8 @@ title: Use scopeBind in Next.js
 # Use scopeBind in Next.js
 
 There are situations when we need to get values from external libraries through callbacks.
-If we directly bind [events](/api/effector/createEvent.md), then we will face the loss of the scope.
-To solve this problem, we can use [scopeBind](/api/effector/scopeBind.md).
+If we directly bind [events](/en/api/effector/createEvent), then we will face the loss of the scope.
+To solve this problem, we can use [scopeBind](/en/api/effector/scopeBind).
 
 We have some external library that returns us the status of our connection.
 Let's call it an instance in the store and call it _$service_, and we will take the status through an event.
@@ -24,7 +24,7 @@ sample({
 });
 ```
 
-To pick up the current [scope](/api/effector/Scope.md), let's write a callback in \__app.tsx_ under our _clientScope_:
+To pick up the current [scope](/en/api/effector/Scope), let's write a callback in \__app.tsx_ under our _clientScope_:
 
 ```js
 ...
@@ -36,7 +36,7 @@ export const getCurrentScope = () => clientScope;
 ...
 ```
 
-Now we need to save the current [scope](/api/effector/Scope.md) somewhere.
+Now we need to save the current [scope](/en/api/effector/Scope) somewhere.
 
 ```js
 import { createEvent, createStore, sample, Scope } from 'effector';
@@ -50,7 +50,7 @@ sample({
 });
 ```
 
-And on our page we take our [scope](/api/effector/Scope.md):
+And on our page we take our [scope](/en/api/effector/Scope):
 
 ```js
 import { useEvent } from 'effector-react/scope';
@@ -69,7 +69,7 @@ import { useEvent } from 'effector-react/scope';
 
 ```
 
-Next, we need to create an effect, within which we will connect our [event](/api/effector/createEvent.md) and _service_.
+Next, we need to create an effect, within which we will connect our [event](/en/api/effector/createEvent) and _service_.
 
 ```js
 import { attach, scopeBind } from "effector";
@@ -85,4 +85,4 @@ const connectFx = attach({
 });
 ```
 
-After calling our [effect](/api/effector/createEffect.md), the [event](/api/effector/createEvent.md) will be tied to the [scope](/api/effector/Scope.md) and will be able to take the current value from our _service_.
+After calling our [effect](/en/api/effector/createEffect), the [event](/en/api/effector/createEvent) will be tied to the [scope](/en/api/effector/Scope) and will be able to take the current value from our _service_.

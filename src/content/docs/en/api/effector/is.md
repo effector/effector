@@ -6,7 +6,7 @@ Namespace for unit validators
 
 ## `is.store(value)`
 
-Checks if given value is [_store_](/api/effector/Store.md)
+Checks if given value is [_store_](/en/api/effector/Store)
 
 **Returns**
 
@@ -48,7 +48,7 @@ is.store(null);
 
 ## `is.event(value)`
 
-Checks if given value is [_event_](/api/effector/Event.md)
+Checks if given value is [_event_](/en/api/effector/Event)
 
 **Returns**
 
@@ -90,7 +90,7 @@ is.event(null);
 
 ## `is.effect(value)`
 
-Checks if given value is [_effect_](/api/effector/Effect.md)
+Checks if given value is [_effect_](/en/api/effector/Effect)
 
 **Returns**
 
@@ -123,7 +123,7 @@ is.effect(null);
 
 ## `is.domain(value)`
 
-Checks if given value is [_domain_](/api/effector/Domain.md)
+Checks if given value is [_domain_](/en/api/effector/Domain)
 
 **Returns**
 
@@ -160,7 +160,7 @@ is.domain(null);
 [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
-Checks if given value is [_scope_](/api/effector/Scope.md).
+Checks if given value is [_scope_](/en/api/effector/Scope).
 
 **Returns**
 
@@ -197,7 +197,7 @@ is.scope(null);
 
 ## `is.unit(value)`
 
-Checks if given value is [Unit](/explanation/glossary.md#unit): [Store](/api/effector/Store.md), [Event](/api/effector/Event.md), [Effect](/api/effector/Effect.md), [Domain](/api/effector/Domain.md) or [Scope](/api/effector/Scope.md)
+Checks if given value is [Unit](/en/explanation/glossary#unit): [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) or [Scope](/en/api/effector/Scope)
 
 **Returns**
 
@@ -247,7 +247,7 @@ is.unit(null);
 [effector 22.4.0](https://changelog.effector.dev/#effector-22-4-0)
 :::
 
-Checks if given value is [_effect_](/api/effector/Effect.md) created via [_attach_](/api/effector/attach.md) method.
+Checks if given value is [_effect_](/en/api/effector/Effect) created via [_attach_](/en/api/effector/attach) method.
 If passed not an effect, returns `false`.
 
 **Returns**

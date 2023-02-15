@@ -15,11 +15,11 @@ merge(units: Unit[]): Event
 
 **Arguments**
 
-1. `units`: Array of [units](/explanation/glossary.md#common-unit) to be merged
+1. `units`: Array of [units](/en/explanation/glossary#common-unit) to be merged
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event, which fires when any of given units is triggered
+[_Event_](/en/api/effector/Event): New event, which fires when any of given units is triggered
 
 :::tip
 In case of store, resulting event will fire upon store updates.

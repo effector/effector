@@ -18,8 +18,8 @@ Call provided unit in scope and wait for finishing all the triggered effects.
 
 ### Arguments {#allSettled-arguments}
 
-1. `unit`: [_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md) to be called
-2. `scope`: [_Scope_](/api/effector/Scope.md)
+1. `unit`: [_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) to be called
+2. `scope`: [_Scope_](/en/api/effector/Scope)
 3. `params`: params passed to `unit`
 
 :::info{title="since"}
@@ -42,7 +42,7 @@ Check for any ongoing computations in provided scope and wait for their finish.
 
 ### Arguments {#allSettled-scope-arguments}
 
-1. `scope`: [_Scope_](./Scope.md)
+1. `scope`: [_Scope_](./Scope)
 
 :::info{title="since"}
 Supported since effector 22.5.0

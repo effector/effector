@@ -3,7 +3,7 @@ title: createEffect
 description: Method for creating an effect
 ---
 
-Method for creating an [effect](/api/effector/Effect.md)
+Method for creating an [effect](/en/api/effector/Effect)
 
 ## createEffect with handler
 
@@ -19,10 +19,10 @@ createEffect(handler?)
 
 **Returns**
 
-[_Effect_](/api/effector/Effect.md): New effect
+[_Effect_](/en/api/effector/Effect): New effect
 
 :::tip{title="Reminder"}
-You must provide a handler either in [createEffect](/api/effector/createEffect.md) or in [`.use`](/api/effector/Effect.md#use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
+You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [`.use`](/en/api/effector/Effect#use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
 :::
 
 :::info{title="since"}
@@ -150,7 +150,7 @@ createEffect({ handler, name });
 
 **Returns**
 
-[_Effect_](/api/effector/Effect.md): New effect
+[_Effect_](/en/api/effector/Effect): New effect
 
 ### Examples
 

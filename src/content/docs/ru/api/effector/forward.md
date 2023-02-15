@@ -4,8 +4,8 @@ description: Метод для создания связи между юнита
 lang: ru
 ---
 
-::: info since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-Рекомендуется использовать [sample](/ru/api/effector/sample.md) вместо forward.
+:::info{title="since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)"}
+Рекомендуется использовать [sample](/ru/api/effector/sample) вместо forward.
 :::
 
 Метод для создания связи между юнитами в декларативной форме. Отправляет обновления из одного набора юнитов в другой
@@ -47,7 +47,7 @@ forward({
 
 1. **`config`**: Объект конфигурации
 
-   - **`from`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив юнитов
+   - **`from`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
 
      **Разновидности**:
 
@@ -55,7 +55,7 @@ forward({
      - **стор**: обновление этого стора будет запускать юниты `to`
      - **массив юнитов**: срабатывание любого из юнитов будет запускать юниты `to`
 
-   - **`to`**: [Юнит](/ru/explanation/glossary.md#common-unit) или массив юнитов
+   - **`to`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
 
      **Разновидности**:
 
@@ -65,9 +65,9 @@ forward({
 
 ### Возвращает {#return}
 
-[Subscription](/ru/explanation/glossary.md#subscription): Функция отмены подписки, после её вызова реактивная связь между `from` и `to` разрушается
+[Subscription](/ru/explanation/glossary#subscription): Функция отмены подписки, после её вызова реактивная связь между `from` и `to` разрушается
 
-::: info
+:::info
 Массивы юнитов поддерживаются с [effector 20.6.0](https://changelog.effector.dev/#effector-20-6-0)
 :::
 

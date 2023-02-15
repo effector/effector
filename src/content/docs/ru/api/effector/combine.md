@@ -98,7 +98,7 @@ $c = combine(/*shape*/ { a, b }, /*fn*/ (values: { a: A; b: B }) => C) > Store<C
   Функция-обработчик
 
   Преобразует данные перед отправлением в производный стор, <br/>
-  [должна быть **чистой**](/ru/explanation/glossary.md#purity)
+  [должна быть **чистой**](/ru/explanation/glossary#purity)
 
   **Аргументы**
 
@@ -134,7 +134,7 @@ $c = combine(/*stores*/ [a, b], /*fn*/ (values: [A, B]) => C) > Store<C>;
   Функция-обработчик
 
   Преобразует данные перед отправлением в производный стор, <br/>
-  [должна быть **чистой**](/ru/explanation/glossary.md#purity)
+  [должна быть **чистой**](/ru/explanation/glossary#purity)
 
   **Аргументы**
 
@@ -171,7 +171,7 @@ $c = combine(/*...stores*/ a, b, /*fn*/ (a: A, b: B) => C) > Store<C>;
 
   Преобразует данные перед отправлением в производный стор, <br/>
   число аргументов зависит от числа переданных сторов. <br/>
-  [Должна быть **чистой**](/ru/explanation/glossary.md#purity)
+  [Должна быть **чистой**](/ru/explanation/glossary#purity)
 
   **Аргументы**
 

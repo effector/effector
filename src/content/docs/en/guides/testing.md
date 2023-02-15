@@ -4,7 +4,7 @@ title: Testing guide
 
 # Testing effector
 
-Effector's test are usually written via [Fork API](/api/effector/fork).
+Effector's test are usually written via [Fork API](/en/api/effector/fork).
 
 Fork creates a independent context instance, which we can use to emulate some specific situation or environment.
 

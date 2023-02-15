@@ -8,50 +8,50 @@ lang: ru
 
 ## Создание юнитов
 
-- [createEvent](./createEvent.md)
-- [createStore](./createStore.md)
-- [createEffect](./createEffect.md)
-- [createDomain](./createDomain.md)
+- [createEvent](./createEvent)
+- [createStore](./createStore)
+- [createEffect](./createEffect)
+- [createDomain](./createDomain)
 
 ## Типы юнитов
 
-- [Event](./Event.md)
-- [Effect](./Effect.md)
-- [Store](./Store.md)
-- [Domain](./Domain.md)
-- [Scope](./Scope.md)
+- [Event](./Event)
+- [Effect](./Effect)
+- [Store](./Store)
+- [Domain](./Domain)
+- [Scope](./Scope)
 
 ## Основные методы библиотеки
 
-- [combine(...stores, f)](./combine.md)
-- [attach({effect, mapParams, source?})](./attach.md)
-- [createApi(store, api)](./createApi.md)
-- [forward({from, to})](./forward.md)
-- [merge([eventA, eventB])](./merge.md)
-- [sample({clock, source, fn, target})](./sample.md)
-- [guard({source, filter, target})](./guard.md)
-- [split(event, cases)](./split.md)
-- [fromObservable(observable)](./fromObservable.md)
+- [combine(...stores, f)](./combine)
+- [attach({effect, mapParams, source?})](./attach)
+- [createApi(store, api)](./createApi)
+- [forward({from, to})](./forward)
+- [merge([eventA, eventB])](./merge)
+- [sample({clock, source, fn, target})](./sample)
+- [guard({source, filter, target})](./guard)
+- [split(event, cases)](./split)
+- [fromObservable(observable)](./fromObservable)
 
 ## Fork API
 
-- [fork](./fork.md)
-- [serialize](./serialize.md)
-- [hydrate](./hydrate.md)
-- [allSettled](./allSettled.md)
-- [scopeBind](./scopeBind.md)
+- [fork](./fork)
+- [serialize](./serialize)
+- [hydrate](./hydrate)
+- [allSettled](./allSettled)
+- [scopeBind](./scopeBind)
 
 ## Плагины для компилятора
 
-- [effector/babel-plugin](./babel-plugin.md)
+- [effector/babel-plugin](./babel-plugin)
 - [@effector/swc-plugin](https://github.com/effector/swc-plugin)
 
 ## Служебные функции
 
-- [is](./is.md)
+- [is](./is)
 
 ## Низкоуровневый API
 
-- [clearNode](./clearNode.md)
-- [withRegion](./withRegion.md)
-- [launch](./launch.md)
+- [clearNode](./clearNode)
+- [withRegion](./withRegion)
+- [launch](./launch)

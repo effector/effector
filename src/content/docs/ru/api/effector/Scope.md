@@ -8,7 +8,7 @@ lang: ru
 
 Основные области применения - реализация SSR и тестирование приложения.
 
-Scope может быть создан с помощью [fork](/ru/api/effector/fork.md)
+Scope может быть создан с помощью [fork](/ru/api/effector/fork)
 
 ## Формула
 
@@ -22,7 +22,7 @@ interface Scope {
 
 ### getState
 
-Возвращает значение [стора](/ru/api/effector/Store.md) в данном scope
+Возвращает значение [стора](/ru/api/effector/Store) в данном scope
 
 ```ts
 scope.getState<T>(store: Store<T>): T
@@ -95,10 +95,10 @@ const sendWithAuthFx = app.createEffect(async () => {
 
 Таким образом, любой эффект может либо вызывать другой эффект, либо выполнять некоторые асинхронные вычисления, но не то и другое
 
-::: tip
-Вместо императивных вызовов оптимальнее использовать [attach](/ru/api/effector/attach.md)
+:::tip
+Вместо императивных вызовов оптимальнее использовать [attach](/ru/api/effector/attach)
 :::
 
-::: warning
+:::warning
 Императивные вызовы эффектов поддерживаются только в обработчиках других эффектов, **не** в `watch` функциях
 :::

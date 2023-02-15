@@ -6,10 +6,10 @@ title: connect
 [effector-react 21.0.6](https://changelog.effector.dev/#effector-21-0-6)
 :::
 
-Wrapper for [useStore](/api/effector-react/useStore.md) to use during migration from redux and class-based projects. Will merge store value fields to component props.
+Wrapper for [useStore](/en/api/effector-react/useStore) to use during migration from redux and class-based projects. Will merge store value fields to component props.
 
-:::danger{title="Recommendation"}
-Consider using [hooks api](/api/effector-react/index.md#hooks) in modern projects.
+:::warning{title="Recommendation"}
+Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
 :::
 
 ## `connect(Store)(Component)` {#connect-store-component}
@@ -22,7 +22,7 @@ connect(Store)(Component): Component
 
 ### Arguments {#connect-arguments}
 
-1. `Store` ([Store](/api/effector/Store.md)): store or object with stores
+1. `Store` ([Store](/en/api/effector/Store)): store or object with stores
 
 ### Returns {#connect-store-component-returns}
 

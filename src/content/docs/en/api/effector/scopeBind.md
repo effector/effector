@@ -9,11 +9,11 @@ description: scopeBind is a method to bind unit to scope
 scopeBind<T>(event: Event<T>): (payload: T) => void
 ```
 
-A method to bind event or effect to a [Scope](/api/effector/Scope.md) to be called later. effector supports imperative event calling inside watchers but sometimes you should bind events to the scope explicitly, e.g. when calling events within a setTimeout/setInterval callbacks.
+A method to bind event or effect to a [Scope](/en/api/effector/Scope) to be called later. effector supports imperative event calling inside watchers but sometimes you should bind events to the scope explicitly, e.g. when calling events within a setTimeout/setInterval callbacks.
 
 ### Arguments {#scopeBind-arguments}
 
-1. `event` [_Event_](/api/effector/Event.md) to be bound to the scope
+1. `event` [_Event_](/en/api/effector/Event) to be bound to the scope
 
 ## Example {#scopeBind-example}
 

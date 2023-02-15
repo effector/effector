@@ -13,7 +13,7 @@ Method for destroying stores, events, effects, subscriptions and domains
 
 ### Arguments {#clearNode-arguments}
 
-1. `unit` ([_Store_](/api/effector/Store.md)/[_Event_](/api/effector/Event.md)/[_Effect_](/api/effector/Effect.md)/[_Domain_](/api/effector/Domain.md)/[_Scope_](/api/effector/Scope.md)): unit to be erased
+1. `unit` ([_Store_](/en/api/effector/Store)/[_Event_](/en/api/effector/Event)/[_Effect_](/en/api/effector/Effect)/[_Domain_](/en/api/effector/Domain)/[_Scope_](/en/api/effector/Scope)): unit to be erased
 2. `config: ({deep?: boolean})` (optional): config object
    - `deep: boolean` (optional): erase node _and_ all of its' computed values
 

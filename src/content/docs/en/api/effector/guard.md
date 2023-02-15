@@ -4,7 +4,7 @@ description: Method for conditional event routing.
 ---
 
 :::tip{title="since "}[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-core team recommends use [sample](/api/effector/sample.md) instead.
+core team recommends use [sample](/en/api/effector/sample) instead.
 :::
 
 :::info{title="since"}
@@ -28,8 +28,8 @@ When `clock` is triggered, check `filter` for [truthy] and call `target` with da
 
 - If `clock` is not passed, guard will be trigged on every `source` update
 - If `source` is not passed, call `target` with data from `clock`
-- If `target` is not passed, create [_Event_](/api/effector/Event.md) with type of `source` and return it from `guard()`
-- If `filter` is [_Store_](/api/effector/Store.md), check it value for [truthy]
+- If `target` is not passed, create [_Event_](/en/api/effector/Event) with type of `source` and return it from `guard()`
+- If `filter` is [_Store_](/en/api/effector/Store), check it value for [truthy]
 - If `filter` is `Function`, call it with data from `source` and check result for [truthy]
 
 [truthy]: https://developer.mozilla.org/en-US/docs/Glossary/Truthy
@@ -46,7 +46,7 @@ When `clock` is triggered, check `filter` for [truthy] and call `target` with da
 
 **Returns**
 
-[_Event_](/api/effector/Event.md), which fires upon clock trigger
+[_Event_](/en/api/effector/Event), which fires upon clock trigger
 
 #### Example
 
@@ -103,8 +103,8 @@ submitForm("alice"); // ~> searchUser('alice')
 
 **Arguments**
 
-1. `source` ([_Store_](/api/effector/Store.md)/[_Event_](/api/effector/Event.md)/[_Effect_](/api/effector/Effect.md)): Source unit. Will trigger given guard on updates
-1. `filter` ([_Store_](/api/effector/Store.md)): Filter store
+1. `source` ([_Store_](/en/api/effector/Store)/[_Event_](/en/api/effector/Event)/[_Effect_](/en/api/effector/Effect)): Source unit. Will trigger given guard on updates
+1. `filter` ([_Store_](/en/api/effector/Store)): Filter store
 
 #### Example
 
@@ -137,8 +137,8 @@ trigger("C");
 
 **Arguments**
 
-1. `source` ([_Store_](/api/effector/Store.md)/[_Event_](/api/effector/Event.md)/[_Effect_](/api/effector/Effect.md)): Source unit. Will trigger given guard on updates
-2. `filter` (_(payload) => Boolean_): Predicate function, [should be **pure**](/explanation/glossary.md#purity)
+1. `source` ([_Store_](/en/api/effector/Store)/[_Event_](/en/api/effector/Event)/[_Effect_](/en/api/effector/Effect)): Source unit. Will trigger given guard on updates
+2. `filter` (_(payload) => Boolean_): Predicate function, [should be **pure**](/en/explanation/glossary#purity)
 
 #### Example 2
 

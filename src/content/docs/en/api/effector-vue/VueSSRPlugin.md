@@ -6,7 +6,7 @@ The Plugin provides a general scope which need for read and update effector's st
 
 ### Arguments {#VueSSRPlugin-arguments}
 
-1. `scope` [Scope](/api/effector/Scope.md)
+1. `scope` [Scope](/en/api/effector/Scope)
 2. `scopeName?` custom scopeName (default: `root`)
 
 ```js

@@ -2,7 +2,7 @@
 title: useStoreMap
 ---
 
-Function, which subscribes to [store](/api/effector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
+Function, which subscribes to [store](/en/api/effector/Store) and transforms its value with given function. Signal will update only when selector function result will change
 
 ## useStoreMap(store, fn) {#useStoreMap-fn}
 
@@ -17,7 +17,7 @@ useStoreMap<State, Result>(
 
 ### Arguments {#useStoreMap-fn-arguments}
 
-1. `store`: Source [store](/api/effector/Store.md)
+1. `store`: Source [store](/en/api/effector/Store)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
 ### Returns {#useStoreMap-fn-returns}
@@ -33,10 +33,10 @@ useStoreMap({ store, keys, fn, updateFilter });
 ### Arguments {#useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
-   - `store`: Source [store](/api/effector/Store.md)
+   - `store`: Source [store](/en/api/effector/Store)
    - `keys` (_Array_): Will be passed to fn selector
    - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/api/effector/createStore.md) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore) option under the hood
 
 ### Returns {#useStoreMap-config-returns}
 

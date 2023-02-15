@@ -393,7 +393,7 @@ so that you and any teammate can trace the sequence of execution.
 OK. Now we can load a user session and the messages lists on the page mount.
 But, we don't have any event when we can start. Let's fix it.
 
-You can use [`Gate`](/recipes/react/gate.md), but I prefer to use explicit events.
+You can use [`Gate`](/en/recipes/react/gate), but I prefer to use explicit events.
 
 ```ts
 // File: /src/pages/chat/model.ts

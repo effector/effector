@@ -6,11 +6,11 @@ title: API Reference
 
 ## Reactive helpers
 
-- [useUnit(unit)](./useUnit.md)
-- [useStoreMap({ store, keys, fn })](./useStoreMap.md)
+- [useUnit(unit)](./useUnit)
+- [useStoreMap({ store, keys, fn })](./useStoreMap)
 
 ## Gate API
 
-- [Gate](./Gate.md)
-- [createGate()](./createGate.md)
-- [useGate(GateComponent, props)](./useGate.md)
+- [Gate](./Gate)
+- [createGate()](./createGate)
+- [useGate(GateComponent, props)](./useGate)

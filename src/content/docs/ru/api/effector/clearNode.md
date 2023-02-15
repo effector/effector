@@ -15,7 +15,7 @@ clearNode(unit: Unit, config: {deep?: boolean}): void
 
 ### Аргументы
 
-1. **`unit`**: Любой [юнит](/ru/explanation/glossary.md#unit) включая [домены](/ru/api/effector/Domain.md) и [scope](/ru/api/effector/Scope.md). Переданный юнит будет уничтожен и удалён из памяти
+1. **`unit`**: Любой [юнит](/ru/explanation/glossary#unit) включая [домены](/ru/api/effector/Domain) и [scope](/ru/api/effector/Scope). Переданный юнит будет уничтожен и удалён из памяти
 2. **`config?`**: Объект конфигурации
 
    - **`deep?`**: _boolean_

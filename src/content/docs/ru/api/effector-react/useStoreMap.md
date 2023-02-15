@@ -3,7 +3,7 @@ title: useStoreMap
 lang: ru
 ---
 
-Реакт-хук, который подписывается на [стор](/ru/api/effector/Store.md) и трансформирует его значение с переданной функцией. Компонент будет обновляться только когда результат функции будет отличаться от предыдущего
+Реакт-хук, который подписывается на [стор](/ru/api/effector/Store) и трансформирует его значение с переданной функцией. Компонент будет обновляться только когда результат функции будет отличаться от предыдущего
 
 Типичный вариант использования: подписаться на изменения отдельного поля в сторе
 
@@ -14,13 +14,13 @@ useStoreMap<State, Result>(
 ): Result
 ```
 
-::: info
+:::info
 Краткая форма `useStoreMap` добавлена в `effector-react@21.3.0`
 :::
 
 **Аргументы**
 
-1. `store`: Используемый [стор](/ru/api/effector/Store.md)
+1. `store`: Используемый [стор](/ru/api/effector/Store)
 2. `fn` (_(state) => result_): Функция-селектор
 
 **Возвращает**
@@ -42,21 +42,21 @@ useStoreMap<Source, Result>({
 **Аргументы**
 
 1. `params` (_Object_): Объект конфигурации
-   - `store`: Используемый [стор](/ru/api/effector/Store.md)
+   - `store`: Используемый [стор](/ru/api/effector/Store)
    - `keys` (_Array_): Массив, который будет передан в React.useMemo
    - `fn` (_(state, keys) => result_): Функция-селектор
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Опционально_ функция, используемая для сравнения старого и нового результата работы хука, предназначено для избежания лишних ререндеров. Реализация опции для работы использует [createStore updateFilter](/ru/api/effector/createStore.md)
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Опционально_ функция, используемая для сравнения старого и нового результата работы хука, предназначено для избежания лишних ререндеров. Реализация опции для работы использует [createStore updateFilter](/ru/api/effector/createStore)
    - `defaultValue`: Опциональное значение по умолчанию, используется когда `fn` возвращает undefined
 
 **Возвращает**
 
 (_Result_)
 
-::: info
+:::info
 Опция `updateFilter` добавлена в `effector-react@21.3.0`
 :::
 
-::: info
+:::info
 Опция `defaultValue` добавлена в `effector-react@22.1.0`
 :::
 

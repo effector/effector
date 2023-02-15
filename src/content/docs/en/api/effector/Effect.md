@@ -70,7 +70,7 @@ effect.use(fn);
 
 Hint: current handler can be extracted with [`effect.use.getCurrent()`](#use-getcurrent).
 
-You must provide a handler either through [`.use`](/api/effector/Effect.md#use-handler) method or `handler` property in [createEffect](/api/effector/createEffect.md), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
+You must provide a handler either through [`.use`](/en/api/effector/Effect#use-handler) method or `handler` property in [createEffect](/en/api/effector/createEffect), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
 
 :::tip{title="See also"}
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
@@ -82,7 +82,7 @@ You must provide a handler either through [`.use`](/api/effector/Effect.md#use-h
 
 **Returns**
 
-([_Effect_](/api/effector/Effect.md)): The same effect
+([_Effect_](/en/api/effector/Effect)): The same effect
 
 ### Example
 
@@ -118,11 +118,11 @@ const unwatch = effect.watch(fn);
 
 ### Arguments
 
-1. `watcher` ([_Watcher_](/explanation/glossary.md#watcher)): A function that receives `payload`.
+1. `watcher` ([_Watcher_](/en/explanation/glossary#watcher)): A function that receives `payload`.
 
 **Returns**
 
-[_Subscription_](/explanation/glossary.md#subscription): Unsubscribe function.
+[_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
 
 ### Example
 
@@ -155,11 +155,11 @@ const event = effect.prepend(fn);
 
 ### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event.
+[_Event_](/en/api/effector/Event): New event.
 
 ## `map(fn)`
 
@@ -176,11 +176,11 @@ const second = first.map(fn);
 
 ### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/explanation/glossary.md#purity).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event.
+[_Event_](/en/api/effector/Event): New event.
 
 ### Example
 
@@ -242,7 +242,7 @@ console.log(fx.use.getCurrent() === handlerB);
 
 # Effect Properties
 
-You are not supposed to use parts of effect (like `.done` and `.pending`) as a target in [sample](/api/effector/sample.md) or [forward](/api/effector/forward.md) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
+You are not supposed to use parts of effect (like `.done` and `.pending`) as a target in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
 ## `doneData`
 
@@ -264,7 +264,7 @@ event = effect.doneData;
 Do not manually call this event. It is event that depends on effect.
 :::
 
-[_Event_](/api/effector/Event.md) triggered when _handler_ is _resolved_.
+[_Event_](/en/api/effector/Event) triggered when _handler_ is _resolved_.
 
 ### Example
 
@@ -303,7 +303,7 @@ event = effect.failData;
 Do not manually call this event. It is event that depends on effect.
 :::
 
-[_Event_](/api/effector/Event.md) triggered when handler is rejected or throws error.
+[_Event_](/en/api/effector/Event) triggered when handler is rejected or throws error.
 
 ### Example
 
@@ -326,7 +326,7 @@ fx(2);
 
 ## `done`
 
-[_Event_](/api/effector/Event.md), which is triggered when _handler_ is _resolved_.
+[_Event_](/en/api/effector/Event), which is triggered when _handler_ is _resolved_.
 
 :::warning{title="Important"}
 Do not manually call this event. It is event that depends on effect.
@@ -358,7 +358,7 @@ await fx(2);
 
 ## `fail`
 
-[_Event_](/api/effector/Event.md), which is triggered when handler is rejected or throws error.
+[_Event_](/en/api/effector/Event), which is triggered when handler is rejected or throws error.
 
 :::warning{title="Important"}
 Do not manually call this event. It is event that depends on effect.
@@ -404,7 +404,7 @@ Do not manually call this event. It is event that depends on effect.
 
 ### Properties
 
-[_Event_](/api/effector/Event.md), which is triggered with object of `status`, `params` and `error` or `result`:
+[_Event_](/en/api/effector/Event), which is triggered with object of `status`, `params` and `error` or `result`:
 
 1. `status` (_string_): A status of effect (`done` or `fail`)
 2. `params` (_Params_): An argument passed to effect call
@@ -452,16 +452,16 @@ fetchApiFx({ time: 100, ok: false });
 $store = effect.pending;
 ```
 
-- [`$store`](/api/effector/Store.md) will update when `done` or `fail` are triggered
-- [`$store`](/api/effector/Store.md) contains `true` value until the effect is resolved or rejected
+- [`$store`](/en/api/effector/Store) will update when `done` or `fail` are triggered
+- [`$store`](/en/api/effector/Store) contains `true` value until the effect is resolved or rejected
 
 :::warning{title="Important"}
-Do not modify `$store` value! It is [derived store](/api/effector/Store.md#derived-store) and should be in predictable state.
+Do not modify `$store` value! It is [derived store](/en/api/effector/Store#derived-store) and should be in predictable state.
 :::
 
 **Returns**
 
-[_DerivedStore_](/api/effector/Store.md#derived-store): Store that represents current state of the effect
+[_DerivedStore_](/en/api/effector/Store#derived-store): Store that represents current state of the effect
 
 ### Example
 
@@ -515,17 +515,17 @@ Shows how many effect calls aren't settled yet. Useful for rate limiting.
 $count = effect.inFlight;
 ```
 
-- [Store](/api/effector/Store.md) `$count` will be `0` if no calls of `effect` in pending state, its default state
+- [Store](/en/api/effector/Store) `$count` will be `0` if no calls of `effect` in pending state, its default state
 - On each call of `effect` state in `$count` store will be increased
 - When effect resolves to any state(done or fail) state in `$count` store will be decreased
 
 :::warning{title="Important"}
-Do not modify `$count` value! It is [derived store](/api/effector/Store.md#derived-store) and should be in predictable state.
+Do not modify `$count` value! It is [derived store](/en/api/effector/Store#derived-store) and should be in predictable state.
 :::
 
 **Returns**
 
-[_DerivedStore_](/api/effector/Store.md#derived-store): Store that represents count of the ran effects
+[_DerivedStore_](/en/api/effector/Store#derived-store): Store that represents count of the ran effects
 
 ### Example
 

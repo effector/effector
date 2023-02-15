@@ -6,7 +6,7 @@ title: useEvent
 `useEvent` introduced in [effector-react 20.9.0](https://changelog.effector.dev/#effector-20-9-0)
 :::
 
-Bind event to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.<br/>
+Bind event to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.<br/>
 Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is no-op and does not require `Provider` with scope.
 
 :::info{title="Note"}
@@ -17,7 +17,7 @@ Useful only if you have server-side rendering or writing tests for React-compone
 
 ### Arguments {#useEvent-unit-arguments}
 
-1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be binded to current `scope`
 
 ### Returns {#useEvent-unit-returns}
 
@@ -61,7 +61,7 @@ ReactDOM.render(
 
 ### Arguments {#useEvent-shape-arguments}
 
-1. `shape` Object or array of ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Events or effects as values which will be bound to the current `scope`
+1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Events or effects as values which will be bound to the current `scope`
 
 ### Returns {#useEvent-shape-returns}
 

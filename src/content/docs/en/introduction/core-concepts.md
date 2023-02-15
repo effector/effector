@@ -76,6 +76,6 @@ getUserFx({ id: 1 });
 const data = await getUserFx({ id: 2 }); // handle promise
 ```
 
-[_store_]: /api/effector/Store.md
-[_effect_]: /api/effector/Effect.md
-[_event_]: /api/effector/Event.md
+[_store_]: /en/api/effector/Store
+[_effect_]: /en/api/effector/Effect
+[_event_]: /en/api/effector/Event

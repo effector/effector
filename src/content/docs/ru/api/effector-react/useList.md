@@ -16,7 +16,7 @@ function useList(store: Store<T[]>, fn: (item: T, key: number) => React.ReactNod
 
 ### Аргументы {#useList-short-args}
 
-1. **`store`**: [Стор](/ru/api/effector/Store.md) с массивом данных
+1. **`store`**: [Стор](/ru/api/effector/Store) с массивом данных
 2. **`fn`**: `(item: T, key: number) => React.ReactNode`
 
    Рендер-функция для отображения в ui отдельного элемента массива. Явная простановка `key` реакт-элементам внутри рендер-функции не требуется, ключ элемента проставляется автоматически
@@ -55,7 +55,7 @@ function useList(
 
 ### Аргументы {#useList-full-args}
 
-1. **`store`**: [Стор](/ru/api/effector/Store.md) с массивом данных
+1. **`store`**: [Стор](/ru/api/effector/Store) с массивом данных
 2. **`config`**: Объект конфигурации
 
    - **`keys`**: Массив зависимостей, которые будут переданы в react
@@ -86,11 +86,11 @@ function useList(
 
 `React.ReactNode`
 
-::: info
+:::info
 Опция `getKey` добавлена в effector-react 21.3.0
 :::
 
-::: info
+:::info
 Опция `placeholder` добавлена в effector-react 22.1.0
 :::
 

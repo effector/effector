@@ -18,38 +18,38 @@ createWatch<T>(config: {
 1. `config` (_Object_): Конфигурация
    - `unit` (_Unit_): Целевой юнит (стор, ивент или эффект), за которым нужно наблюдать
    - `fn` (_Function_): Функция, которая будет вызываться при каждом обновлении юнита. Первым аргументом получает содержимое обновления.
-   - `scope` ([_Scope_](/ru/api/effector/Scope.md)): Оциональный скоуп. Если передан, то функция будет вызываться только при обновлении юнита именно на этом скоупе.
+   - `scope` ([_Scope_](/ru/api/effector/Scope)): Оциональный скоуп. Если передан, то функция будет вызываться только при обновлении юнита именно на этом скоупе.
 
 **Возвращает**
 
-[_Subscription_](/ru/explanation/glossary.md#subscription): Функция отмены подписки
+[_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки
 
 #### Пример (со скоупом)
 
 ```js
-import {createWatch, createEvent, fork, allSettled} from 'effector'
+import { createWatch, createEvent, fork, allSettled } from "effector";
 
-const changeName = createEvent()
+const changeName = createEvent();
 
-const scope = fork()
+const scope = fork();
 
-const unwatch = createWatch({unit: changeName, scope, fn: console.log})
+const unwatch = createWatch({ unit: changeName, scope, fn: console.log });
 
-await allSettled(changeName, {scope, params: 'Иван'}) // output: Иван
-changeName('Иван') // no output
+await allSettled(changeName, { scope, params: "Иван" }); // output: Иван
+changeName("Иван"); // no output
 ```
 
 #### Пример (без скоупа)
 
 ```js
-import {createWatch, createEvent, fork, allSettled} from 'effector'
+import { createWatch, createEvent, fork, allSettled } from "effector";
 
-const changeName = createEvent()
+const changeName = createEvent();
 
-const scope = fork()
+const scope = fork();
 
-const unwatch = createWatch({unit: changeName, fn: console.log})
+const unwatch = createWatch({ unit: changeName, fn: console.log });
 
-await allSettled(changeName, {scope, params: 'Иван'}) // output: Иван
-changeName('Иван') // output: Иван
+await allSettled(changeName, { scope, params: "Иван" }); // output: Иван
+changeName("Иван"); // output: Иван
 ```

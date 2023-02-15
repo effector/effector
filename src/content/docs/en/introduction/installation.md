@@ -70,7 +70,7 @@ For server-side rendering and writing test you may need plugins for your compile
 
 To use Babel-plugin you don't need to install additional packages, plugin bundled to `effector` package.
 
-[Read this for more details](/api/effector/babel-plugin).
+[Read this for more details](/en/api/effector/babel-plugin).
 
 ### SWC
 

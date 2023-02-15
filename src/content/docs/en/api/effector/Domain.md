@@ -23,11 +23,11 @@ It is useful for logging or other side effects.
 
 **Returns**
 
-[_Event_](/api/effector/Event.md): New event
+[_Event_](/en/api/effector/Event): New event
 
 ## `createEffect(handler?)`
 
-Creates an [effect](/api/effector/Effect.md) with given handler
+Creates an [effect](/en/api/effector/Effect) with given handler
 
 ### Arguments
 
@@ -35,7 +35,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 **Returns**
 
-[_Effect_](/api/effector/Effect.md): A container for async function.
+[_Effect_](/en/api/effector/Effect): A container for async function.
 
 :::info{title="since"}
 [effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
@@ -49,7 +49,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 **Returns**
 
-[_Effect_](/api/effector/Effect.md): A container for async function.
+[_Effect_](/en/api/effector/Effect): A container for async function.
 
 ## `createStore(defaultState)`
 
@@ -59,7 +59,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 **Returns**
 
-[_Store_](/api/effector/Store.md): New store
+[_Store_](/en/api/effector/Store): New store
 
 ## `createDomain(name?)`
 
@@ -69,7 +69,7 @@ Creates an [effect](/api/effector/Effect.md) with given handler
 
 **Returns**
 
-[_Domain_](/api/effector/Domain.md): New domain
+[_Domain_](/en/api/effector/Domain): New domain
 
 ## `history`
 
@@ -102,19 +102,19 @@ console.log(domain.history);
 
 ### `event(name?)`
 
-An alias for [domain.createEvent](/api/effector/Domain.md#createevent-name)
+An alias for [domain.createEvent](/en/api/effector/Domain#createevent-name)
 
 ### `effect(name?)`
 
-An alias for [domain.createEffect](/api/effector/Domain.md#createeffect-name)
+An alias for [domain.createEffect](/en/api/effector/Domain#createeffect-name)
 
 ### `store(defaultState)`
 
-An alias for [domain.createStore](/api/effector/Domain.md#createstore-defaultstate)
+An alias for [domain.createStore](/en/api/effector/Domain#createstore-defaultstate)
 
 ### `domain(name?)`
 
-An alias for [domain.createDomain](/api/effector/Domain.md#createdomain-name)
+An alias for [domain.createDomain](/en/api/effector/Domain#createdomain-name)
 
 # Domain hooks
 
@@ -132,7 +132,7 @@ domain.onCreateEvent((event) => {});
 
 ### Arguments
 
-1. `hook` ([_Watcher_]): A function that receives [Event](/api/effector/Event.md) and will be called during every [domain.createEvent](/api/effector/Domain.md#createeventname) call
+1. `hook` ([_Watcher_]): A function that receives [Event](/en/api/effector/Event) and will be called during every [domain.createEvent](/en/api/effector/Domain#createeventname) call
 
 **Returns**
 
@@ -172,7 +172,7 @@ domain.onCreateEffect((effect) => {});
 
 ### Arguments
 
-1. `hook` ([_Watcher_]): A function that receives [Effect](/api/effector/Effect.md) and will be called during every [domain.createEffect](/api/effector/Domain.md#createeffect-name) call
+1. `hook` ([_Watcher_]): A function that receives [Effect](/en/api/effector/Effect) and will be called during every [domain.createEffect](/en/api/effector/Domain#createeffect-name) call
 
 **Returns**
 
@@ -212,7 +212,7 @@ domain.onCreateStore(($store) => {});
 
 ### Arguments
 
-1. `hook` ([_Watcher_]): A function that receives [Store](/api/effector/Store.md) and will be called during every [domain.createStore](/api/effector/Domain.md#createstore-defaultstate) call
+1. `hook` ([_Watcher_]): A function that receives [Store](/en/api/effector/Store) and will be called during every [domain.createStore](/en/api/effector/Domain#createstore-defaultstate) call
 
 **Returns**
 
@@ -249,7 +249,7 @@ domain.onCreateDomain((domain) => {});
 
 ### Arguments
 
-1. `hook` ([_Watcher_]): A function that receives [Domain](/api/effector/Domain.md) and will be called during every [domain.createDomain](/api/effector/Domain.md#createdomain-name) call
+1. `hook` ([_Watcher_]): A function that receives [Domain](/en/api/effector/Domain) and will be called during every [domain.createDomain](/en/api/effector/Domain#createdomain-name) call
 
 **Returns**
 
@@ -275,5 +275,5 @@ const b = domain.createDomain();
 
 [Try it](https://share.effector.dev/dvBLiwHf)
 
-[_watcher_]: /explanation/glossary.md#watcher
-[_subscription_]: /explanation/glossary.md#subscription
+[_watcher_]: /en/explanation/glossary#watcher
+[_subscription_]: /en/explanation/glossary#subscription

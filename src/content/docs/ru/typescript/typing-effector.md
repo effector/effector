@@ -48,7 +48,7 @@ const sendWarningFx = createEffect<{ warn: string }, string>(async ({ warn }) =>
 
 Некоторый код может выдать исключения только некоторых типов, например библиотека axios в качестве ошибок использует только `AxiosError`. В эффектах для описания типов ошибок используется дженерик `Fail`.
 
-Для его указания, в случае, когда тип аргумента и тип результата задаётся явно (первым и вторым дженериком метода [createEffect](/ru/api/effector/createEffect.md) соответственно), используется третий дженерик метода:
+Для его указания, в случае, когда тип аргумента и тип результата задаётся явно (первым и вторым дженериком метода [createEffect](/ru/api/effector/createEffect) соответственно), используется третий дженерик метода:
 
 ```typescript
 const sendWarningFx = createEffect<{ warn: string }, string, AxiosError>(async ({ warn }) => {
@@ -70,13 +70,13 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 // => Effect<{text: string}, string, AxiosError>
 ```
 
-::: info
+:::info
 `Fail` в качестве второго дженерика добавлен в effector 21.6.0
 :::
 
 ## event.prepend
 
-Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event.md#prependfn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
+Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event#prependfn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
 
 ```typescript
 const message = createEvent<string>();
@@ -155,7 +155,7 @@ const { add, sub } = createApi($count, {
 
 ## is
 
-Методы группы [`is`](/ru/api/effector/is.md) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
+Методы группы [`is`](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
 
 ```typescript
 export function getUnitType(unit: unknown) {

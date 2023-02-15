@@ -1,21 +1,34 @@
 ---
 import type { MarkdownHeading } from "astro";
+import type { CollectionEntry } from "astro:content";
 import MoreMenu from "../RightSidebar/MoreMenu.astro";
 import TableOfContents from "../RightSidebar/TableOfContents";
 
 type Props = {
   title: string;
   headings: MarkdownHeading[];
+  translations: { lang: string; slug: string }[];
   githubEditUrl: string;
 };
 
-const { title, headings, githubEditUrl } = Astro.props;
+const { title, headings, githubEditUrl, translations } = Astro.props;
 ---
 
 <article id="article" class="content">
   <section class="main-section">
     <div class="heading-section">
       <h1 class="content-title" id="overview">{title}</h1>
+      {
+        translations.length && (
+          <span class="translations">
+            [
+            {translations.map((tr) => (
+              <a href={`/${tr.lang}/${tr.slug}`}>{tr.lang}</a>
+            ))}
+            ]
+          </span>
+        )
+      }
     </div>
     <nav class="block sm:hidden">
       <TableOfContents client:media="(max-width: 50em)" headings={headings} />
@@ -47,6 +60,16 @@ const { title, headings, githubEditUrl } = Astro.props;
 
   .heading-section {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .heading-section h1 {
+    margin: 0;
+  }
+
+  .heading-section .translations {
+    font-size: 1rem;
   }
 
   @media (min-width: 50em) {

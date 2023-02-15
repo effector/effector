@@ -9,7 +9,7 @@ Effector provides several utility types to facilitate getting a type of value fr
 
 ## `UnitValue<Type>`
 
-Taking out of [Unit](/explanation/glossary.md#common-unit) value type.
+Taking out of [Unit](/en/explanation/glossary#common-unit) value type.
 
 ### Example
 
@@ -40,7 +40,7 @@ type UnitScopeType = UnitValue<typeof scope>;
 
 ## `StoreValue<Type>`
 
-Taking out of [Store](/api/effector/Store.md) value type.
+Taking out of [Store](/en/api/effector/Store) value type.
 
 ### Example
 
@@ -55,7 +55,7 @@ type StoreValueType = StoreValue<typeof $store>;
 
 ## `EventPayload<Type>`
 
-Taking out of [Event](/api/effector/Event.md) payload type.
+Taking out of [Event](/en/api/effector/Event) payload type.
 
 ### Example
 
@@ -70,7 +70,7 @@ type EventPayloadType = EventPayload<typeof event>;
 
 ## `EffectParams<Type>`
 
-Taking out of [Effect](/api/effector/Effect.md) params type.
+Taking out of [Effect](/en/api/effector/Effect) params type.
 
 ### Example
 
@@ -87,7 +87,7 @@ type EffectParamsType = EffectParams<typeof fx>;
 
 ## `EffectResult<Type>`
 
-Taking out of [Effect](/api/effector/Effect.md) result type.
+Taking out of [Effect](/en/api/effector/Effect) result type.
 
 ### Example
 
@@ -104,7 +104,7 @@ type EffectResultType = EffectResult<typeof fx>;
 
 ## `EffectError<Type>`
 
-Taking out of [Effect](/api/effector/Effect.md) error type.
+Taking out of [Effect](/en/api/effector/Effect) error type.
 
 ### Example
 

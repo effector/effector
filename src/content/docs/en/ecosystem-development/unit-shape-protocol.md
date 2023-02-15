@@ -10,7 +10,7 @@ description: Re-use UI-library bindings for your own Effector based libraries
 Available since [effector-react 22.4.0](https://changelog.effector.dev/#effector-react-22-4-0), effector-solid 0.22.7
 :::
 
-Effector provides a way to use units ([Stores](/api/effector/Store.md), [Events](/api/effector/Event.md), [Effects](/api/effector/Effect.md)) in UI libraries with a special bindings like `effector-react`, `effector-solid`, etc. Normally, they allow to bind any shape of units to a UI-framework:
+Effector provides a way to use units ([Stores](/en/api/effector/Store), [Events](/en/api/effector/Event), [Effects](/en/api/effector/Effect)) in UI libraries with a special bindings like `effector-react`, `effector-solid`, etc. Normally, they allow to bind any shape of units to a UI-framework:
 
 ```ts
 import { createStore } from "effector";

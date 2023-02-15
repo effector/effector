@@ -18,38 +18,38 @@ createWatch<T>(config: {
 1. `config` (_Object_): Configuration
    - `unit` (_Unit_): Target unit (store, event of effect) that will be watched
    - `fn` (_Function_): Function that will be called when unit is triggered. Accepts unit payload as the first argument.
-   - `scope` ([_Scope_](/api/effector/Scope.md)): An optional scope object (forked instance) to restrict watcher calls on particular scope.
+   - `scope` ([_Scope_](/en/api/effector/Scope)): An optional scope object (forked instance) to restrict watcher calls on particular scope.
 
 **Returns**
 
-[_Subscription_](/explanation/glossary.md#subscription): Unsubscribe function
+[_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function
 
 #### Example (scope)
 
 ```js
-import {createWatch, createEvent, fork, allSettled} from 'effector'
+import { createWatch, createEvent, fork, allSettled } from "effector";
 
-const changeName = createEvent()
+const changeName = createEvent();
 
-const scope = fork()
+const scope = fork();
 
-const unwatch = createWatch({unit: changeName, scope, fn: console.log})
+const unwatch = createWatch({ unit: changeName, scope, fn: console.log });
 
-await allSettled(changeName, {scope, params: 'John'}) // output: John
-changeName('John') // no output
+await allSettled(changeName, { scope, params: "John" }); // output: John
+changeName("John"); // no output
 ```
 
 #### Example (no scope)
 
 ```js
-import {createWatch, createEvent, fork, allSettled} from 'effector'
+import { createWatch, createEvent, fork, allSettled } from "effector";
 
-const changeName = createEvent()
+const changeName = createEvent();
 
-const scope = fork()
+const scope = fork();
 
-const unwatch = createWatch({unit: changeName, fn: console.log})
+const unwatch = createWatch({ unit: changeName, fn: console.log });
 
-await allSettled(changeName, {scope, params: 'John'}) // output: John
-changeName('John') // output: John
+await allSettled(changeName, { scope, params: "John" }); // output: John
+changeName("John"); // output: John
 ```

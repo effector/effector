@@ -5,7 +5,7 @@ title: Scope
 `Scope` is a fully isolated instance of application.
 The primary purpose of scope includes SSR (but is not limited to). Scope contain independent clone of all the units (including connections between them) and basic methods to access them.
 
-Scope can be created by [fork](/api/effector/fork.md).
+Scope can be created by [fork](/en/api/effector/fork).
 
 ```ts
 interface Scope {
@@ -55,7 +55,7 @@ const sendWithAuthFx = app.createEffect(async () => {
 So, any effect might either call another effects or perform some async computations but not both.
 
 :::tip
-Consider using [attach](/api/effector/attach.md) instead of imperative call.
+Consider using [attach](/en/api/effector/attach) instead of imperative call.
 :::
 
 <br/><br/>

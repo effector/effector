@@ -4,7 +4,7 @@ description: Method to create connection between units in a declarative way. Sen
 ---
 
 :::info{title="since "}[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-core team recommends [sample](/api/effector/sample.md) instead
+core team recommends [sample](/en/api/effector/sample) instead
 :::
 
 Method to create connection between units in a declarative way. Send updates from one set of units to another
@@ -20,22 +20,22 @@ forward({
 
 **Arguments**
 
-1. `from` ([Unit | Unit\[\]](/explanation/glossary.md#common-unit)): Source of updates. Forward will listen for changes of these units
+1. `from` ([Unit | Unit\[\]](/en/explanation/glossary#common-unit)): Source of updates. Forward will listen for changes of these units
 
    - if an [_Event_] is passed, `to` will be triggered on each event trigger and receives event argument
    - if a [_Store_] is passed, `to` will be triggered on each store **change** and receives new value of the store
    - if an [_Effect_] is passed, `to` will be triggered on each effect call and receives effect parameter
-   - if an array of [units](/explanation/glossary.md#common-unit) is passed, `to` will be triggered when any unit in `from` array is triggered
+   - if an array of [units](/en/explanation/glossary#common-unit) is passed, `to` will be triggered when any unit in `from` array is triggered
 
-2. `to` ([Unit | Unit\[\]](/explanation/glossary.md#common-unit)): Target for updates. `forward` will trigger these units with data from `from`
+2. `to` ([Unit | Unit\[\]](/en/explanation/glossary#common-unit)): Target for updates. `forward` will trigger these units with data from `from`
    - if passed an [_Event_], it will be triggered with data from `from` unit
    - if passed a [_Store_], data from `from` unit will be written to store and **trigger its update**
    - if passed an [_Effect_], it will be called with data from `from` unit as parameter
-   - if `to` is an array of [units](/explanation/glossary.md#common-unit), each unit in that array will be triggered
+   - if `to` is an array of [units](/en/explanation/glossary#common-unit), each unit in that array will be triggered
 
 **Returns**
 
-[Subscription](/explanation/glossary.md#subscription): Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
+[Subscription](/en/explanation/glossary#subscription): Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
 
 :::info{title="since"}
 Arrays of units are supported since [effector 20.6.0](https://changelog.effector.dev/#effector-20-6-0)
@@ -99,6 +99,6 @@ secondSource("B");
 
 [Try it](https://share.effector.dev/8aVpg8nU)
 
-[_effect_]: /api/effector/Effect.md
-[_store_]: /api/effector/Store.md
-[_event_]: /api/effector/Event.md
+[_effect_]: /en/api/effector/Effect
+[_store_]: /en/api/effector/Store
+[_event_]: /en/api/effector/Event
