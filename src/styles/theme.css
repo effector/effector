@@ -29,7 +29,7 @@
 	--color-base-yellow: 41, 100%;
 
 	/*
-   * Color palettes are made using --color-base 
+   * Color palettes are made using --color-base
    * variables, along with a lightness value to
    * define different variants.
    *
@@ -54,12 +54,25 @@
 	--color-purple: var(--color-base-purple), 54%;
 	--color-red: var(--color-base-red), 54%;
 	--color-yellow: var(--color-base-yellow), 59%;
+
+	/* TODO: create theme based variables */
+	--theme-admonition-tip-bg: hsla(var(--color-base-green), 97%);
+	--theme-admonition-tip-border: hsla(var(--color-base-green), 70%);
+	--theme-admonition-tip-text: hsla(var(--color-base-green), 30%);
+
+	--theme-admonition-warning-bg: hsla(var(--color-base-orange), 97%);
+	--theme-admonition-warning-border: hsla(var(--color-base-orange), 70%);
+	--theme-admonition-warning-text: hsla(var(--color-base-orange), 30%);
+
+	--theme-admonition-info-bg: hsla(var(--color-base-blue), 97%);
+	--theme-admonition-info-border: hsla(var(--color-base-blue), 70%);
+	--theme-admonition-info-text: hsla(var(--color-base-blue), 30%);
 }
 
 :root {
 	color-scheme: light;
-	--theme-accent: hsla(var(--color-blue), 1);
-	--theme-text-accent: hsla(var(--color-blue), 1);
+	--theme-accent: #f9b127;
+	--theme-text-accent: #ff8c00;
 	--theme-accent-opacity: 0.15;
 	--theme-divider: hsla(var(--color-gray-95), 1);
 	--theme-text: hsla(var(--color-gray-10), 1);

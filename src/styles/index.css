@@ -115,6 +115,10 @@ a {
 	gap: 0.5rem;
 }
 
+a:hover {
+	text-decoration: none;
+}
+
 article > section :is(ul, ol) > * + * {
 	margin-top: 0.75rem;
 }
@@ -171,12 +175,8 @@ a > code::before {
 	border-radius: var(--border-radius);
 }
 
-a:hover,
 a:focus {
 	text-decoration: underline;
-}
-
-a:focus {
 	outline: 2px solid currentColor;
 	outline-offset: 0.25em;
 }
@@ -409,3 +409,52 @@ h2.heading {
 .current-header-link a {
 	color: var(--theme-text);
 }
+
+.admonition {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	margin-bottom: 0.5em;
+	padding: 1em;
+	border-left: 0.8em solid hsla(var(--color-green));
+	--admonition-bg: gray;
+	--admonition-border: black;
+	--admonition-text: white;
+	border-color: var(--admonition-border);
+	background-color: var(--admonition-bg);
+	color: var(--admonition-text);
+}
+
+.admonition-title {
+	text-transform: uppercase;
+	font-weight: 600;
+}
+
+.admonition a {
+	color: var(--admonition-text);
+}
+
+
+.admonition code {
+  background-color: var(--admonition-bg);
+	color: var(--admonition-text);
+}
+
+.admonition-tip {
+	--admonition-bg: var(--theme-admonition-tip-bg);
+	--admonition-border: var(--theme-admonition-tip-border);
+	--admonition-text: var(--theme-admonition-tip-text);
+}
+
+.admonition-warning {
+	--admonition-bg: var(--theme-admonition-warning-bg);
+	--admonition-border: var(--theme-admonition-warning-border);
+	--admonition-text: var(--theme-admonition-warning-text);
+}
+
+.admonition-info {
+	--admonition-bg: var(--theme-admonition-info-bg);
+	--admonition-border: var(--theme-admonition-info-border);
+	--admonition-text: var(--theme-admonition-info-text);
+}
+
