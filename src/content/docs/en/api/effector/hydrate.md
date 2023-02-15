@@ -2,8 +2,6 @@
 title: hydrate
 ---
 
-# hydrate
-
 A companion method for [_serialize_](/api/effector/serialize.md). Hydrates provided values into corresponding stores within a provided domain or scope. The main purpose is an application state hydration on the client side after SSR.
 
 ## Formulae {#hydrate-formulae}

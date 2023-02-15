@@ -14,7 +14,9 @@ const { title, headings, githubEditUrl } = Astro.props;
 
 <article id="article" class="content">
   <section class="main-section">
-    <!-- <h1 class="content-title" id="overview">{title}</h1> -->
+    <div class="heading-section">
+      <h1 class="content-title" id="overview">{title}</h1>
+    </div>
     <nav class="block sm:hidden">
       <TableOfContents client:media="(max-width: 50em)" headings={headings} />
     </nav>
@@ -41,6 +43,10 @@ const { title, headings, githubEditUrl } = Astro.props;
 
   .block {
     display: block;
+  }
+
+  .heading-section {
+    display: flex;
   }
 
   @media (min-width: 50em) {

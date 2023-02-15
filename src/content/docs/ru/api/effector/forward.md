@@ -4,8 +4,6 @@ description: Метод для создания связи между юнита
 lang: ru
 ---
 
-# forward
-
 ::: info since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 Рекомендуется использовать [sample](/ru/api/effector/sample.md) вместо forward.
 :::

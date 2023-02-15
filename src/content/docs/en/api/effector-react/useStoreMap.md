@@ -2,8 +2,6 @@
 title: useStoreMap
 ---
 
-# useStoreMap
-
 :::info{title="since"}
 `useStoreMap` introduced in [effector-react 19.1.2](https://changelog.effector.dev/#effector-react-19-1-2)
 :::

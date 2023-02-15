@@ -3,8 +3,6 @@ id: examples
 title: Examples
 ---
 
-# Examples
-
 It's difficult to overestimate the learning curve for any technology.
 That's why effector provides you few simple examples that may cover your basic needs and also give more confidence for the users for upcoming projects using effector.
 

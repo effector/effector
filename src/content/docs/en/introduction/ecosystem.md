@@ -4,8 +4,6 @@ title: Ecosystem
 description: Packages and templates of effector ecosystem
 ---
 
-# Ecosystem
-
 Packages and templates of effector ecosystem
 
 More content in [awesome-effector repository](https://github.com/effector/awesome)

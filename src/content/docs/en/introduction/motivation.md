@@ -2,8 +2,6 @@
 title: Motivation
 ---
 
-# Motivation
-
 Most applications have the logic for which they are created.
 This logic itself can be very complex and based on reactive principles, we call it **business logic**.
 

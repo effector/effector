@@ -2,8 +2,6 @@
 title: ComponentOptions
 ---
 
-# ComponentOptions
-
 ## `effector`
 
 ### Returns {#effector-returns}

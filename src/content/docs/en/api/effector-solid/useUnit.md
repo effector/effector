@@ -2,8 +2,6 @@
 title: useUnit
 ---
 
-# useUnit
-
 Bind effector stores to solid reactivity system or, in the case of events/effects - bind to current [_scope_](/api/effector/Scope.md) to use in dom event handlers.
 Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 

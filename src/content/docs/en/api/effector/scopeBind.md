@@ -3,8 +3,6 @@ title: scopeBind
 description: scopeBind is a method to bind unit to scope
 ---
 
-# scopeBind
-
 ## Formulae {#scopeBind-formulae}
 
 ```ts

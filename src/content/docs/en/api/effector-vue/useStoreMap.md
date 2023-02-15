@@ -2,8 +2,6 @@
 title: useStoreMap
 ---
 
-# useStoreMap
-
 Function, which subscribes to [store](/api/effector/Store.md) and transforms its value with given function. Signal will update only when selector function result will change
 
 ## useStoreMap(store, fn) {#useStoreMap-fn}

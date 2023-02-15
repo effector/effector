@@ -3,8 +3,6 @@ title: Installation
 description: How to install and setup effector
 ---
 
-# Installation
-
 ## Via package manager
 
 Effector doesn't depend on NPM, you can use any package manager you want.<br/>

@@ -4,8 +4,6 @@ description: метод для создания эффекта
 lang: ru
 ---
 
-# createEffect
-
 Метод для создания [эффектов](/ru/api/effector/Effect.md).
 
 ## createEffect с обработчиком событий

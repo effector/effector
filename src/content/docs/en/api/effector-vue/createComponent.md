@@ -2,8 +2,6 @@
 title: createComponent
 ---
 
-# createComponent
-
 ## `createComponent(componentOptions, store?)` {#createComponent-options}
 
 ### Arguments {#createComponent-options-arguments}

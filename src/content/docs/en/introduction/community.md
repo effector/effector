@@ -3,8 +3,6 @@ title: Community
 description: Articles and the team behind the project
 ---
 
-# Community
-
 ## Articles
 
 - [dev.to/effector](https://dev.to/effector) — space on the public platform

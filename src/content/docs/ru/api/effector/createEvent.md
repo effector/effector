@@ -4,8 +4,6 @@ description: Метод для создания событий
 lang: ru
 ---
 
-# createEvent
-
 Метод для создания [событий](/ru/api/effector/Event.md)
 
 ## Формула {#formulae}

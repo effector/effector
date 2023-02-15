@@ -2,8 +2,6 @@
 title: useUnit
 ---
 
-# useUnit
-
 :::info{title="since"}
 `useUnit` introduced in [effector-react 22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::

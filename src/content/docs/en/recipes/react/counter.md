@@ -3,8 +3,6 @@ id: counter
 title: Counter
 ---
 
-# Counter
-
 ```js
 import React from "react";
 import ReactDOM from "react-dom";

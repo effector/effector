@@ -2,8 +2,6 @@
 title: combine
 ---
 
-# combine
-
 This method allows you to get state from each passed store and **combine** it to single value and save to single store, that updates every time like each passed store.
 
 :::warning{title="Caution"}

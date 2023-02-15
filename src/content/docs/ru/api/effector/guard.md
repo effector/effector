@@ -4,8 +4,6 @@ description: Метод для запуска юнитов по условию, 
 lang: ru
 ---
 
-# guard
-
 ::: info
 C effector 22.2.0 предпочтительнее использовать [sample](/ru/api/effector/sample.md)
 :::

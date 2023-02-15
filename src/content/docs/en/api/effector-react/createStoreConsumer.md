@@ -3,8 +3,6 @@ title: createStoreConsumer
 description: Creates store-based component with render-props
 ---
 
-# createStoreConsumer
-
 ## `createStoreConsumer(store)` {#createStoreConsumer-store}
 
 Creates store-based react component which is watching for changes in the store. Based on _Render Props_ technique.

@@ -3,8 +3,6 @@ title: Gate
 description: Gate - a bridge between props and store
 ---
 
-# Gate
-
 Gate is a bridge between props and store.
 
 Imagine you have the task of transferring something from react props to the effector store.

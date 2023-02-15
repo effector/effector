@@ -2,8 +2,6 @@
 title: fork
 ---
 
-# fork
-
 :::info{title="since"}
 
 - `fork()` introduced in [effector `22.0.0](https://changelog.effector.dev/#effector-22-0-0)

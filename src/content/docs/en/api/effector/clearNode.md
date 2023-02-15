@@ -3,8 +3,6 @@ title: clearNode
 description: Method for destroying stores, events, effects, subscriptions and domains
 ---
 
-# clearNode
-
 ## Formulae {#clearNode-formulae}
 
 ```ts

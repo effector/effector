@@ -3,8 +3,6 @@ title: useStore
 description: Hook function, which subscribes to watcher, that observes changes in store. Designed for vue 3
 ---
 
-# useStore
-
 ## `useStore(store)` {#useStore-store}
 
 A hook function, which subscribes to watcher, that observes changes in the current **readonly**` store, so when recording results, the component will update automatically.

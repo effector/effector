@@ -6,8 +6,6 @@ keywords:
 description: Store, its methods and properties
 ---
 
-# Store
-
 _Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](/explanation/glossary.md#common-unit). Some stores can be [derived](#derived-store).
 
 <br/><br/>

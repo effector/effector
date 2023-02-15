@@ -3,8 +3,6 @@ title: guard
 description: Method for conditional event routing.
 ---
 
-# guard
-
 :::tip{title="since "}[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 core team recommends use [sample](/api/effector/sample.md) instead.
 :::

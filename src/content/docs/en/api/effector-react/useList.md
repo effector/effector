@@ -2,8 +2,6 @@
 title: useList
 ---
 
-# useList
-
 :::info{title="since"}
 `useList` introduced in [effector-react 20.1.1](https://changelog.effector.dev/#effector-react-20-1-1)
 :::

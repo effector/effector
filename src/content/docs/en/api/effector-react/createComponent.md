@@ -3,8 +3,6 @@ title: createComponent
 description: Creates store-based React component
 ---
 
-# createComponent
-
 ## `createComponent(store, render)` {#createComponent}
 
 Creates store-based React component. The `createComponent` is useful for transfering logic and data of state to your View component.

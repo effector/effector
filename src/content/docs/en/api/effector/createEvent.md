@@ -3,8 +3,6 @@ title: createEvent
 description: createEvent is a method for creating an event
 ---
 
-# createEvent
-
 Method for creating an [event](/api/effector/Event.md).
 
 ```ts

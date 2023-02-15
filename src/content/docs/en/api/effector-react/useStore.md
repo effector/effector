@@ -2,8 +2,6 @@
 title: useStore
 ---
 
-# useStore
-
 React hook, which subscribes to [store](/api/effector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
 
 ## Formulae {#useStore-formulae}

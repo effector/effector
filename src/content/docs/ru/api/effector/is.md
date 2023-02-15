@@ -3,8 +3,6 @@ title: is
 lang: ru
 ---
 
-# is
-
 Объект с валидаторами юнитов
 
 ## `is.store(value)`

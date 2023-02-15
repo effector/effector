@@ -3,8 +3,6 @@ title: attach
 description: Wrapper for effect, which allows to map effect arguments and use data from stores.
 ---
 
-# attach
-
 :::info{title="since"}
 [effector 20.13.0](https://changelog.effector.dev/#effector-20-13-0)
 :::

@@ -3,8 +3,6 @@ title: createEffect
 description: Method for creating an effect
 ---
 
-# createEffect
-
 Method for creating an [effect](/api/effector/Effect.md)
 
 ## createEffect with handler

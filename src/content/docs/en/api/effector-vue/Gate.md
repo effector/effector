@@ -2,8 +2,6 @@
 title: Gate
 ---
 
-# Gate
-
 _Gate_ is a hook for conditional rendering, based on current value (or values) in props. An example of a problem that Gate can solve - you can put together all required data, when component was mounted.
 
 This allows you to send props back to _Store_ to create feedback loop.

@@ -2,8 +2,6 @@
 title: sample
 ---
 
-# sample
-
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
 Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()`, which may cause race conditions and inconsistency of state, it is more suitable to use `sample` method.

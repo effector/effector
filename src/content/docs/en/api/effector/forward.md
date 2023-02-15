@@ -3,8 +3,6 @@ title: forward
 description: Method to create connection between units in a declarative way. Send updates from one set of units to another
 ---
 
-# forward
-
 :::info{title="since "}[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 core team recommends [sample](/api/effector/sample.md) instead
 :::

@@ -3,8 +3,6 @@ title: useVModel
 description: hook function, which subscribes to watcher, that observes changes in the current store. Designed for vue 3
 ---
 
-# useVModel
-
 ## useVModel(store) {#useVModel-store}
 
 A hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.

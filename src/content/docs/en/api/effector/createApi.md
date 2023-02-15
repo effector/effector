@@ -2,8 +2,6 @@
 title: createApi
 ---
 
-# createApi
-
 `createApi` is a shorthand for creating [events](/api/effector/Event.md) attached to [store](/api/effector/Store.md) by providing object with [_reducers_](/explanation/glossary.md#reducer) for them. If source `store` belongs to some [domain](/api/effector/Domain.md) then new events will also belong to it
 
 ## Formulae

@@ -3,8 +3,6 @@ title: Glossary
 description: Glossary of basic terms in effector
 ---
 
-# Glossary
-
 Glossary of basic terms in effector
 
 ## Event

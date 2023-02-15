@@ -3,8 +3,6 @@ title: createStore
 description: createStore is a method for creating a store
 ---
 
-# createStore
-
 Method for creating a [store](/api/effector/Store.md).
 
 ```ts

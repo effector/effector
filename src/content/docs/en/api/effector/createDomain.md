@@ -3,8 +3,6 @@ title: createDomain
 description: createDomain is a method for creating a domain
 ---
 
-# createDomain
-
 Creates a [domain](/api/effector/Domain.md)
 
 ```typescript

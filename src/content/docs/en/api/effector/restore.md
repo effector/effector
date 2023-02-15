@@ -2,8 +2,6 @@
 title: restore
 ---
 
-# restore
-
 ## `restore(event, defaultState)`
 
 Creates a [_Store_](/api/effector/Store.md) from [_Event_](/api/effector/Event.md).

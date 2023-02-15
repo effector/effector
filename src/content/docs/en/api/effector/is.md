@@ -2,8 +2,6 @@
 title: is
 ---
 
-# is
-
 Namespace for unit validators
 
 ## `is.store(value)`

@@ -2,8 +2,6 @@
 title: useEvent
 ---
 
-# useEvent
-
 :::info{title="since"}
 `useEvent` introduced in [effector-react 20.9.0](https://changelog.effector.dev/#effector-20-9-0)
 :::

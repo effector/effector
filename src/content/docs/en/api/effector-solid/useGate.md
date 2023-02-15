@@ -3,8 +3,6 @@ title: useGate
 description: Function for passing data to Gate
 ---
 
-# useGate
-
 ## `useGate(GateComponent, props)` {#useGate-props}
 
 Function for passing data to [_`Gate`_](/api/effector-solid/Gate.md)

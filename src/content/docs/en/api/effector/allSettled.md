@@ -3,8 +3,6 @@ title: allSettled
 description: Call provided unit in scope and wait for finishing all the triggered effects
 ---
 
-# allSettled
-
 ## Formulae {#allSettled-formulae}
 
 ```ts

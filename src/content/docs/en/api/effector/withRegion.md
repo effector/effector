@@ -2,8 +2,6 @@
 title: withRegion
 ---
 
-# withRegion
-
 :::info{title="since"}
 [effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::

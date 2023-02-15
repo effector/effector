@@ -2,8 +2,6 @@
 title: connect
 ---
 
-# connect
-
 :::info{title="since"}
 [effector-react 21.0.6](https://changelog.effector.dev/#effector-21-0-6)
 :::

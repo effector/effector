@@ -3,8 +3,6 @@ title: createGate
 description: Creates a gate to consume data from view. Designed for vue 3
 ---
 
-# createGate
-
 ## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}
 
 Creates a [_`Gate`_]/apieffector-vue/Gate.md) to consume data from view, designed for vue 3.

@@ -2,8 +2,6 @@
 title: Forms
 ---
 
-# Forms
-
 ## Example 1
 
 ```jsx

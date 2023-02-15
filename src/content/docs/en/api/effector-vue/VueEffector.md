@@ -3,8 +3,6 @@ title: VueEffector
 description: effector-vue plugin for vue 2
 ---
 
-# VueEffector
-
 `effector-vue` plugin for vue 2
 
 ## `VueEffector(Vue, options?)`

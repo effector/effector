@@ -3,8 +3,6 @@ title: serialize
 description: serialize is a method for serializing application states within a scope
 ---
 
-# serialize
-
 ## Formulae
 
 ```ts

@@ -3,8 +3,6 @@ title: Effect
 description: Effect, its methods and properties
 ---
 
-# Effect
-
 **Effect** is a container for async function.
 
 It can be safely used in place of the original async function.

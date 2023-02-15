@@ -3,8 +3,6 @@ title: Domain
 description: Domain, its methods and properties
 ---
 
-# Domain
-
 Domain is a namespace for your events, stores and effects.
 
 Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.

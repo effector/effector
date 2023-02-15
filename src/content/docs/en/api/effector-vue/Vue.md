@@ -2,8 +2,6 @@
 title: Vue
 ---
 
-# Vue
-
 Methods available on `Vue` prototype after you enable this plugin.
 
 ## `$watchAsStore(expOrFn, options?)` _(deprecated)_ {#watch-as-store}

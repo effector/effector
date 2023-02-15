@@ -2,8 +2,6 @@
 title: Slots
 ---
 
-# Slots
-
 A slot is a place in a component where you can insert any unknown component. It's a well-known abstraction used by frameworks
 such as Vue.js and Svelte.
 

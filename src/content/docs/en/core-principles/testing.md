@@ -2,8 +2,6 @@
 title: Testing
 ---
 
-# Testing
-
 We believe that the only way to write good code is to test it.
 
 This has the following consequences:

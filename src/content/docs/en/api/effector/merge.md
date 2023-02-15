@@ -3,8 +3,6 @@ title: merge
 description: merge is a method for creating an event triggered by given units
 ---
 
-# merge
-
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::

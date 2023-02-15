@@ -6,8 +6,6 @@ keywords:
 description: Event, its methods and properties
 ---
 
-# Event
-
 _Event_ is an intention to change the state. Let's imagine life situation, you enter a shop and, according to etiquette, you have to say "hello" - **intention**, then you say "hello" - **event**.
 
 Event calls always return its payload:

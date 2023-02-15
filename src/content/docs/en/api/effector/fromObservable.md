@@ -3,8 +3,6 @@ id: fromObservable
 title: fromObservable
 ---
 
-# fromObservable
-
 Creates an event containing all items from an Observable.
 
 **Arguments**

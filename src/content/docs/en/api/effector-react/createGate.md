@@ -3,8 +3,6 @@ title: createGate
 description: Creates a gate to consume data from view
 ---
 
-# createGate
-
 ## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}
 
 Creates a [_`Gate`_](/api/effector-react/Gate.md), if `defaultState` is defined, [Gate.state](/api/effector-react/Gate.md#state) will be created with passed value

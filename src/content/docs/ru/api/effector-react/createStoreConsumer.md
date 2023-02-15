@@ -3,8 +3,6 @@ title: createStoreConsumer
 lang: ru
 ---
 
-# createStoreConsumer
-
 ::: info Нет перевода
 Эта статья еще не переведена на русский язык. <br/>
 Пожалуйста, используйте ссылку внизу "Edit this page", чтобы добавить перевод.<br/>
