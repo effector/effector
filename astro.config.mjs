@@ -1,14 +1,16 @@
-import { defineConfig } from 'astro/config';
-import preact from '@astrojs/preact';
-import react from '@astrojs/react';
+import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import mdx from "@astrojs/mdx";
+import compress from "astro-compress";
+import prefetch from "@astrojs/prefetch";
+import preact from "@astrojs/preact";
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [
-		// Enable Preact to support Preact JSX components.
-		preact(),
-		// Enable React for the Algolia search component.
-		react(),
-	],
-	site: `https://astro.build`,
+  site: process.env.NODE_ENV === "development" ? "https://localhost:3000" : `https://beta.effector.dev`,
+  integrations: [preact(), react(), mdx(), prefetch(), compress()],
+  base: "/",
+  markdown: {
+    syntaxHighlight: "prism",
+  },
 });
