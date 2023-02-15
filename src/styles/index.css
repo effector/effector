@@ -312,7 +312,7 @@ h2.heading {
 }
 
 .header-link {
-	font-size: 1em;
+	font-size: 0.9em;
 	transition: border-inline-start-color 100ms ease-out, background-color 200ms ease-out;
 	border-left: 4px solid var(--theme-divider);
 }
@@ -320,13 +320,16 @@ h2.heading {
 .header-link a {
 	display: inline-flex;
 	gap: 0.5em;
-	width: 100%;
+	width: 100%;;
 	font: inherit;
 	padding: 0.4rem 0;
 	line-height: 1.3;
 	color: inherit;
 	text-decoration: none;
 	unicode-bidi: plaintext;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 @media (min-width: 50em) {

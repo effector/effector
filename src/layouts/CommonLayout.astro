@@ -7,11 +7,9 @@ import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
 import { SITE } from "../consts";
 
-export type Props = CollectionEntry<"docs">["data"] & {
-  headings: MarkdownHeading[];
-};
+export type Props = CollectionEntry<"docs">["data"];
 
-const { headings, ...data } = Astro.props;
+const data = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const currentPage = Astro.url.pathname;
 ---
