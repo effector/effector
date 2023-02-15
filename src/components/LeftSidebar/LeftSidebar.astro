@@ -1,33 +1,40 @@
 ---
 import type { MarkdownHeading } from "astro";
-import { getLanguageFromURL } from "../../languages";
-import { SIDEBAR } from "../../consts";
+import { getPathParamsFromId } from "../../languages";
+import { createLink, getSidebarForSlug, getTextLocalized } from "../../sidebars";
 
 type Props = {
   currentPage: string;
   headings: MarkdownHeading[];
 };
 
-const { currentPage, headings } = Astro.props;
+const { currentPage } = Astro.props;
 const currentPageMatch = currentPage.endsWith("/") ? currentPage.slice(1, -1) : currentPage.slice(1);
-const langCode = getLanguageFromURL(currentPage);
-const sidebar = SIDEBAR[langCode];
+
+const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
+const baseSidebar = getSidebarForSlug(slug);
+// TODO: add collapsible groups
+// TODO: add external link icon
 ---
 
 <nav aria-labelledby="grid-left">
   <ul class="nav-groups">
     {
-      Object.entries(sidebar).map(([header, children]) => (
+      baseSidebar.map((group) => (
         <li>
           <div class="nav-group">
-            <h2 class="nav-group-title">{header}</h2>
+            <h2 class="nav-group-title">{getTextLocalized(group, lang)}</h2>
             <ul>
-              {children.map((child) => {
-                const url = Astro.site?.pathname + child.link;
+              {group.items.map((item) => {
+                const href = createLink(item, lang);
                 return (
                   <li class="nav-link">
-                    <a href={url} aria-current={currentPageMatch === child.link ? "page" : false}>
-                      {child.text}
+                    <a
+                      href={href}
+                      aria-current={currentPageMatch === href ? "page" : false}
+                      target={item.link.startsWith("/") ? undefined : "_blank"}
+                    >
+                      {getTextLocalized(item, lang)}
                     </a>
                   </li>
                 );
@@ -37,8 +44,8 @@ const sidebar = SIDEBAR[langCode];
         </li>
       ))
     }
-    <!-- <TableOfContents client:media="(min-width: 72em)" headings={headings} /> -->
   </ul>
+  <!-- <TableOfContents client:media="(min-width: 72em)" headings={headings} /> -->
 </nav>
 
 <script is:inline>
@@ -70,6 +77,10 @@ const sidebar = SIDEBAR[langCode];
 
   .nav-groups > :first-child {
     padding-top: var(--doc-padding);
+  }
+
+  .nav-groups > :first-child h2 {
+    margin-top: 0;
   }
 
   .nav-groups > :last-child {

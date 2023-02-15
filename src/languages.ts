@@ -11,8 +11,9 @@ export function getLanguageFromURL(pathname: string) {
 }
 
 export function getPathParamsFromId(pathname: string) {
-  const ext = path.extname(pathname);
-  const parts = pathname.replace(ext, "").split("/");
+  const strippedPath = pathname.startsWith("/") ? pathname.slice(1) : pathname;
+  const ext = path.extname(strippedPath);
+  const parts = strippedPath.replace(ext, "").split("/");
   const lang = parts.shift()!;
   const slug = parts.join("/");
   return { lang, slug };
