@@ -340,12 +340,16 @@ export function useEventBase(eventObject: any, scope?: Scope) {
 export function useGateBase<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
+  scope?: Scope,
 ) {
-  const {open, close, set} = useUnitBase({
-    open: GateComponent.open,
-    close: GateComponent.close,
-    set: GateComponent.set,
-  })
+  const {open, close, set} = useUnitBase(
+    {
+      open: GateComponent.open,
+      close: GateComponent.close,
+      set: GateComponent.set,
+    },
+    scope,
+  )
   const ForkedGate = React.useMemo(
     () =>
       ({

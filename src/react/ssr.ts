@@ -10,11 +10,10 @@ import {
 } from './apiBase'
 import {withDisplayName} from './withDisplayName'
 import {createGateImplementation, processCreateGateConfig} from './createGate'
+import type {Gate} from './index.h'
 import {throwError} from './throw'
 import {deprecate} from './deprecate'
 import {getScope} from './scope'
-
-export {useGateBase as useGate}
 
 export function createGate<Props>(
   ...args: Array<
@@ -103,4 +102,12 @@ works like React.useCallback, but for scopes
 */
 export function useEvent(eventObject: any) {
   return useEventBase(eventObject, getScope(true))
+}
+
+/** useGate wrapper for scopes */
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+) {
+  return useGateBase(GateComponent, props, getScope(true))
 }
