@@ -2,6 +2,11 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.5.0
+
+- Make `useGate` isomorphic in `effector-react` module, so the one not needed to use `effector-react/scope` anymore ([PR #852](https://github.com/effector/effector/pull/852))
+- Fix `useUnit` hangs when scope is changed (happens when route is changed in next.js) ([PR #851](https://github.com/effector/effector/pull/851))
+
 ## effector 22.5.0
 
 - Support [`allSettled(scope)`](https://github.com/effector/effector/issues/687) feature.
