@@ -1,0 +1,131 @@
+---
+import type { LText } from "../consts";
+import { getPathParamsFromId, getTextLocalized } from "../languages";
+
+interface Link {
+  href: string;
+  text: LText;
+}
+
+interface Group {
+  text: LText;
+  links: Link[];
+}
+
+export interface Props {
+  links: (Group | Link)[];
+}
+
+const { links } = Astro.props;
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<div class="menu">
+  <button type="button" title="Change language" class="menu-button">
+    <div class="button-title">
+      <slot />
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="16px" viewBox="0 0 24 24">
+      <path
+        fill="currentColor"
+        d="M12,16c-0.3,0-0.5-0.1-0.7-0.3l-6-6c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l5.3,5.3l5.3-5.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-6,6C12.5,15.9,12.3,16,12,16z"
+      ></path>
+    </svg>
+  </button>
+  <div class="flyout">
+    <div class="items">
+      <div class="group">
+        {
+          links.map((linkOrGroup) => {
+            if ("links" in linkOrGroup) {
+              return null;
+            }
+            return (
+              <a class="link" href={linkOrGroup.href} target={linkOrGroup.href.startsWith("/") ? undefined : "_blank"}>
+                {getTextLocalized(linkOrGroup, lang)}
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu {
+    color: var(--theme-text-light);
+    background-color: transparent;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    overflow: visible;
+  }
+
+  .menu :global(svg) {
+    pointer-events: none;
+  }
+
+  .menu .button {
+    display: flex;
+    appearance: none;
+    align-items: center;
+    padding: 0;
+    color: var(--theme-text);
+    transition: color 0.3s;
+  }
+
+  .menu:hover .button {
+    color: var(--theme-text-light);
+  }
+
+  .menu .flyout {
+    position: absolute;
+    top: 130%;
+    right: 0rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.25s, visibility 0.25s, transform 0.25s;
+  }
+
+  .menu:hover .flyout {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .items {
+    border-radius: 1rem;
+    padding: 0.8rem;
+    min-width: 8rem;
+    border: 1px solid var(--theme-divider);
+    background-color: var(--theme-bg);
+    overflow-y: auto;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .link {
+    display: block;
+    border-radius: 0.5rem;
+    padding: 0 0.8rem;
+    line-height: 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: currentColor;
+    white-space: nowrap;
+    text-align: start;
+    transition: background-color 0.25s, color 0.25s;
+  }
+
+  .link:hover {
+    color: var(--theme-accent);
+    background-color: var(--theme-divider);
+  }
+</style>
