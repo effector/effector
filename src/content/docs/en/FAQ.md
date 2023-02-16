@@ -1,6 +1,6 @@
 ---
-id: faq
 title: FAQ
+description: Frequent questions and answers about effector
 ---
 
 ## Why do we need to give names to events, effects and etc ?

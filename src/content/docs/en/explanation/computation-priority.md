@@ -1,5 +1,6 @@
 ---
 title: Computation priority
+description: How effector calculates units
 ---
 
 # Computation Priority

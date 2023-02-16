@@ -7,9 +7,9 @@ import CommonLayout from "./CommonLayout.astro";
 import PageContent from "../components/PageContent/PageContent.astro";
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
+import AvatarList from "../components/PageContent/AvatarList.astro";
 
 import { GITHUB_EDIT_URL } from "../consts";
-import AvatarList from "../components/Footer/AvatarList.astro";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];

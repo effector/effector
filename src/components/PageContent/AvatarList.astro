@@ -42,7 +42,10 @@ async function loadContributors(path: string) {
   return Array.from(contributors.values()).filter((user) => user.login !== "web-flow");
 }
 
-const contributors = await loadContributors(`${GITHUB_DOCS_FILE_PREFIX}${path}.md`);
+const contributors = await loadContributors(`${GITHUB_DOCS_FILE_PREFIX}${path}.md`).catch((error) => {
+  console.info("Failed to load contributors. Skipping.");
+  return [];
+});
 const recentContributors = contributors.slice(0, 3); // only show avatars for the 3 most recent contributors
 const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
 ---
