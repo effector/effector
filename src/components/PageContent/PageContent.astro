@@ -11,7 +11,7 @@ type Props = {
   githubEditUrl: string;
 };
 
-const { title, headings, githubEditUrl, translations } = Astro.props;
+const { title, headings, githubEditUrl, translations = [] } = Astro.props;
 ---
 
 <article id="article" class="content">
@@ -19,7 +19,7 @@ const { title, headings, githubEditUrl, translations } = Astro.props;
     <div class="heading-section">
       <h1 class="content-title" id="overview">{title}</h1>
       {
-        translations.length && (
+        translations.length ? (
           <span class="translations">
             [
             {translations.map((tr) => (
@@ -27,7 +27,7 @@ const { title, headings, githubEditUrl, translations } = Astro.props;
             ))}
             ]
           </span>
-        )
+        ) : null
       }
     </div>
     <nav class="block sm:hidden">

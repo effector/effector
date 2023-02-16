@@ -16,7 +16,7 @@ type Props = {
 const { lang, slug } = getPathParamsFromId(Astro.url.pathname);
 const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
   text: { en: name },
-  href: `/${code}/${slug}`,
+  href: slug === "/" ? `/${code}` : `/${code}/${slug}`,
 }));
 ---
 

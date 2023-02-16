@@ -30,8 +30,5 @@ const { Content, headings } = await post.render();
   {...post.data}
   translations={translations.map((entry) => getPathParamsFromId(entry.id))}
 >
-  <!-- <div>Slug: {slug}</div>
-  <div>Lang: {lang}</div>
-  <div>Other: {translations.map((entry) => <a href={`/${entry.slug}`}>{getPathParamsFromId(entry.slug).lang}</a>)}</div> -->
   <Content />
 </MainLayout>
