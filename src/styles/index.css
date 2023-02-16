@@ -1,3 +1,13 @@
+@font-face {
+	font-family: 'Lexend Deca';
+	src: local('Lexend Deca Regular'), local('Lexend Deca'),
+		url('/fonts/LexendDeca-Regular.woff2') format('woff2'),
+		url('/fonts/LexendDeca-Regular.ttf') format('ttf');
+	font-weight: 400;
+	font-display: swap;
+	font-style: normal;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -55,7 +65,7 @@ h6 {
 	line-height: 1;
 	position: relative;
 	outline: none;
-	/* font-family: Lexend Deca, sans-serif; */
+	font-family: Lexend Deca, sans-serif;
 }
 
 h1 {

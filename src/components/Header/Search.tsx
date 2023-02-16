@@ -44,7 +44,7 @@ export default function Search() {
   return (
     <>
       <button type="button" ref={searchButtonRef} onClick={onOpen} className="search-input">
-        <svg width="24" height="24" fill="none">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
           <path
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             stroke="currentColor"
@@ -54,12 +54,13 @@ export default function Search() {
           />
         </svg>
 
-        <span>Search</span>
+        <span className="search-text">Search</span>
 
         <span className="search-hint">
           <span className="sr-only">Press </span>
 
-          <kbd>/</kbd>
+          <kbd>⌘</kbd>
+          <kbd>K</kbd>
 
           <span className="sr-only"> to search</span>
         </span>

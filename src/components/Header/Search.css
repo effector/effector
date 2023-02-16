@@ -3,46 +3,57 @@
 	--docsearch-primary-color: var(--theme-accent);
 	--docsearch-logo-color: var(--theme-text);
 }
-.search-input {
-	flex-grow: 1;
+
+button.search-input {
+	display: flex;
 	box-sizing: border-box;
-	width: 100%;
 	margin: 0;
-	padding: 0.33em 0.5em;
+	padding: 0.5em 0.5em;
 	overflow: visible;
+
 	font-weight: 500;
-	font-size: 1rem;
+	font-size: 0.9rem;
 	font-family: inherit;
 	line-height: inherit;
+
 	background-color: var(--theme-divider);
-	border-color: var(--theme-divider);
 	color: var(--theme-text-light);
-	border-style: solid;
-	border-width: 1px;
-	border-radius: 0.25rem;
+	border: 1px solid var(--theme-divider);
+	border-radius: 0.5rem;
+
 	outline: 0;
 	cursor: pointer;
+
 	transition-timing-function: ease-out;
 	transition-duration: 0.2s;
-	transition-property: border-color, color;
+	transition-property: border-color, color, background-color;
 	-webkit-font-smoothing: antialiased;
 }
-.search-input:hover,
-.search-input:focus {
+
+button.search-input:hover,
+button.search-input:focus {
 	color: var(--theme-text);
-	border-color: var(--theme-text-light);
+	border-color: var(--theme-accent);
 }
-.search-input:hover::placeholder,
-.search-input:focus::placeholder {
+
+button.search-input:hover::placeholder,
+button.search-input:focus::placeholder {
 	color: var(--theme-text-light);
 }
-.search-input::placeholder {
+
+button.search-input::placeholder {
 	color: var(--theme-text-light);
 }
+
+button.search-input svg {
+	margin-right: 0.25rem;
+}
+
+.search-text {
+	margin-right: 1em;
+}
+
 .search-hint {
-	position: absolute;
-	top: 7px;
-	right: 19px;
 	padding: 3px 5px;
 	display: none;
 	align-items: center;

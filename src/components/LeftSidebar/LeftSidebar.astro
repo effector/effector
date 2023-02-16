@@ -70,6 +70,8 @@ const baseSidebar = getSidebarForSlug(slug);
     overflow-x: visible;
     overflow-y: auto;
     max-height: 100vh;
+    position: sticky;
+    top: var(--theme-navbar-height);
   }
 
   .nav-groups > li + li {
@@ -116,6 +118,26 @@ const baseSidebar = getSidebarForSlug(slug);
     color: var(--theme-text-accent);
     background-color: var(--theme-bg-accent);
     font-weight: 600;
+  }
+
+  .nav-link a[href^="http://"]::after,
+  .nav-link a[href^="https://"]::after
+  {
+    content: "";
+    width: 0.7em;
+    height: 0.7em;
+    margin-left: 0.4em;
+    display: inline-block;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("/external.svg");
+  }
+
+  :global(.theme-dark) .nav-link a[href^="http://"]::after,
+  :global(.theme-dark) .nav-link a[href^="https://"]::after
+  {
+    filter: invert();
   }
 
   @media (min-width: 50em) {

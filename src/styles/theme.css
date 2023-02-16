@@ -2,7 +2,7 @@
 	--font-fallback: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
 		Apple Color Emoji, Segoe UI Emoji;
 	--font-body: system-ui, var(--font-fallback);
-	--font-mono: 'Jet Brains Mono', 'IBM Plex Mono', Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console',
+	--font-mono: 'JetBrains Mono', 'IBM Plex Mono', Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console',
 		'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono',
 		'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace;
 
@@ -87,7 +87,7 @@
 	--theme-code-inline-text: var(--theme-text);
 	--theme-code-bg: hsla(217, 19%, 27%, 1);
 	--theme-code-text: hsla(var(--color-gray-95), 1);
-	--theme-navbar-bg: hsla(var(--color-base-white), 100%, 1);
+	--theme-navbar-bg: rgba(255, 255, 255, .7);
 	--theme-navbar-height: 6rem;
 	--theme-selection-color: hsla(var(--color-blue), 1);
 	--theme-selection-bg: hsla(var(--color-blue), var(--theme-accent-opacity));

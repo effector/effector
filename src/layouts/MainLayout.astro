@@ -24,6 +24,10 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
 
 <CommonLayout {...data}>
   <style>
+    main {
+      margin-top: var(--theme-navbar-height);
+    }
+
     .layout {
       display: grid;
       grid-auto-flow: column;
