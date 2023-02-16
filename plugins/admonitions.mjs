@@ -2,7 +2,7 @@ import { map } from "unist-util-map";
 
 // TODO: Add svg icons
 
-export function admonitions({ types = ["tip", "info", "warning"] }) {
+export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
   return (tree) => {
     return map(tree, (node) => {
       if (node.type === "containerDirective" || node.type === "textDirective" || node.type === "leafDirective") {
