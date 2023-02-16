@@ -19,6 +19,10 @@ export const KNOWN_LANGUAGES = {
 } as const;
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
+export type LText = {
+  [Key in (typeof KNOWN_LANGUAGE_CODES)[number]]?: string;
+} & { en: string };
+
 // TODO: update this urls
 export const GITHUB_REPO = "sergeysova/new-docs";
 export const GITHUB_BRANCH = "main";

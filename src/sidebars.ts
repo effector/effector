@@ -1,3 +1,5 @@
+import type { LText } from "./consts";
+
 const defaultSidebar: LSidebarGroup[] = [
   {
     text: { en: "Introduction", ru: "Начало работы" },
@@ -524,12 +526,6 @@ export const SIDEBARS: LSidebar = {
 };
 const sidebarEntries = Object.entries(SIDEBARS);
 
-interface LText {
-  en: string;
-  ru?: string;
-  "zh-cn"?: string;
-}
-
 interface LSidebar {
   [path: string]: LSidebarGroup[];
 }
@@ -546,63 +542,3 @@ export function getSidebarForSlug(slug: string): LSidebarGroup[] {
   const path = slug.startsWith("/") ? slug : `/${slug}`;
   return sidebarEntries.find(([prefix]) => path.startsWith(prefix))?.[1] ?? defaultSidebar;
 }
-
-export function getTextLocalized(item: LSidebarItem | LSidebarGroup, lang: string) {
-  if (lang in item.text) {
-    return item.text[lang as "en" | "ru" | "zh-cn"];
-  }
-  return item.text.en;
-}
-
-export function createLink(item: LSidebarItem, lang: string) {
-  if (item.link.startsWith("/")) {
-    return `/${lang}${item.link}`;
-  }
-  return item.link;
-}
-
-// function makeLocalizedSidebar(
-//   sidebar: LSidebar,
-//   locales: Array<keyof LText>, // [ru, zh-cn]
-//   mainLocale: keyof LText // en
-// ): DefaultTheme.Sidebar {
-//   const convertedSidebar: DefaultTheme.Sidebar = {};
-
-//   locales.forEach((locale) => {
-//     Object.keys(sidebar).forEach((sidebarPath) => {
-//       convertedSidebar[`/${locale}${sidebarPath}`] = localizeSidebarGroups(sidebar[sidebarPath], locale, mainLocale);
-//     });
-//   });
-
-//   Object.keys(sidebar).forEach((sidebarPath) => {
-//     convertedSidebar[sidebarPath] = localizeSidebarGroups(sidebar[sidebarPath], mainLocale, mainLocale);
-//   });
-
-//   return convertedSidebar;
-// }
-
-// function localizeSidebarGroups(
-//   groups: LSidebarGroup[],
-//   locale: keyof LText,
-//   mainLocale: keyof LText
-// ): DefaultTheme.SidebarGroup[] {
-//   return groups.map<DefaultTheme.SidebarGroup>((group) => {
-//     const text = group.text[locale] ?? group.text[mainLocale];
-//     const items = group.items.map<DefaultTheme.SidebarItem>((item) => {
-//       const text = item.text[locale] ?? `${item.text[mainLocale]} (${mainLocale})`;
-//       const link =
-//         locale in item.text && locale !== mainLocale && !item.link.startsWith("http")
-//           ? `/${locale}${item.link}`
-//           : item.link;
-//       return { text, link };
-//     });
-//     return {
-//       text,
-//       items,
-//       collapsed: group.collapsed,
-//       collapsible: group.collapsed,
-//     };
-//   });
-// }
-
-// export const sidebar = makeLocalizedSidebar(commonSidebars, ["ru", "zh-cn"], "en");

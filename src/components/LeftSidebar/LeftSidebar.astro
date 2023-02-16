@@ -1,7 +1,8 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
-import { createLink, getSidebarForSlug, getTextLocalized } from "../../sidebars";
+import { getSidebarForSlug } from "../../sidebars";
+import { createLink, getTextLocalized } from "../../languages";
 
 type Props = {
   currentPage: string;

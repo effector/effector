@@ -1,5 +1,5 @@
 import path from "node:path";
-import { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES } from "./consts";
+import { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES, type LText } from "./consts";
 export { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES };
 
 export const langPathRegex = /\/([a-z]{2}-?[A-Z]{0,2})\//;
@@ -17,4 +17,18 @@ export function getPathParamsFromId(pathname: string) {
   const lang = parts.shift()!;
   const slug = parts.join("/");
   return { lang, slug };
+}
+
+export function getTextLocalized(item: { text: LText }, lang: string) {
+  if (lang in item.text) {
+    return item.text[lang as "en" | "ru"];
+  }
+  return item.text.en;
+}
+
+export function createLink(item: { text: LText; link: string }, lang: string) {
+  if (item.link.startsWith("/")) {
+    return `/${lang}${item.link}`;
+  }
+  return item.link;
 }
