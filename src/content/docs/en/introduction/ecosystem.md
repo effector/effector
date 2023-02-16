@@ -8,7 +8,7 @@ Packages and templates of effector ecosystem
 
 More content in [awesome-effector repository](https://github.com/effector/awesome)
 
-:::info Legend
+:::info{title="Legend"}
 Stage 4. 💚 — Stable, supported, awesome<br/>
 Stage 3. 🛠️ — Stable, but still in development, v0.x<br/>
 Stage 2. ☢️️ — Unstable/Incomplete, works in most cases, may be redesigned<br/>
