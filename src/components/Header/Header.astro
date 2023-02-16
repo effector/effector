@@ -36,6 +36,38 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
       </div>
     </div>
     <div style="flex-grow: 1;"></div>
+    <NavMenu
+      links={[
+        {
+          text: { en: "Introduction" },
+          href: `/${lang}/introduction/installation`,
+        },
+        {
+          text: { en: "Recipes" },
+          href: `/${lang}/recipes`,
+        },
+        {
+          text: { en: "Blog" },
+          href: `https://www.patreon.com/zero_bias`,
+        },
+        {
+          text: { en: "Changelog" },
+          href: `https://changelog.effector.dev`,
+        },
+        {
+          text: { en: "API" },
+          links: [
+            { text: { en: "Effector" }, href: `/${lang}/api/effector` },
+            { text: { en: "Effector React" }, href: `/${lang}/api/effector-react` },
+            { text: { en: "Effector Solid" }, href: `/${lang}/api/effector-solid` },
+            { text: { en: "Effector Vue" }, href: `/${lang}/api/effector-vue` },
+          ],
+        },
+      ]}
+    >
+      Docs
+    </NavMenu>
+    <hr />
     {
       KNOWN_LANGUAGE_CODES.length > 1 && (
         <NavMenu links={languageLinks}>
@@ -60,10 +92,7 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
         </NavMenu>
       )
     }
-    <hr />
     <ThemeToggleButton client:visible />
-
-    <hr />
 
     <div style="color: var(--theme-text-light); display: flex; gap: 0.8rem;">
       <svg role="img" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

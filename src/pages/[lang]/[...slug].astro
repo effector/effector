@@ -3,10 +3,15 @@ import { CollectionEntry, getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import { getPathParamsFromId } from "../../languages";
 
+// TODO: add breadcrumbs
+
 export async function getStaticPaths() {
   const docs = await getCollection("docs");
   return docs.map((entry) => {
-    const { lang, slug } = getPathParamsFromId(entry.id);
+    let { lang, slug } = getPathParamsFromId(entry.id);
+    if (slug.endsWith("/index")) {
+      slug = slug.replace(/\/index$/, "");
+    }
     return {
       params: { lang, slug },
       props: entry,
@@ -19,7 +24,8 @@ const { slug, lang } = Astro.params;
 const translations = await getCollection("docs", (entry) => {
   const path = getPathParamsFromId(entry.id);
   // Get any other translation for current slug
-  if (path.slug === slug && path.lang !== lang) return entry;
+  const sameSlug = path.slug === slug || `${path.slug}/index` === slug;
+  if (sameSlug && path.lang !== lang) return entry;
 });
 const post = Astro.props;
 const { Content, headings } = await post.render();

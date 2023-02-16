@@ -1,9 +1,8 @@
 ---
-id: effector
 title: API Reference
 ---
 
-# List of the methods
+List of the methods
 
 ## Unit creators
 

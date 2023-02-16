@@ -64,6 +64,7 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: {
       en: "Core principles",
+      ru: "Основные принципы",
     },
     items: [
       {

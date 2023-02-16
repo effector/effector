@@ -47,6 +47,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       background-color: var(--theme-bg);
       z-index: 10;
       display: none;
+      height: 100%;
     }
 
     #grid-main {
@@ -81,7 +82,8 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
         grid-template-columns: 20rem minmax(0, var(--max-width)) 18rem;
         padding-left: 0;
         padding-right: 0;
-        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       #grid-right {
