@@ -1,5 +1,6 @@
 ---
-import { GITHUB_BRANCH, GITHUB_DOCS_ROOT, GITHUB_REPO } from "../../consts";
+import { Octokit } from "@octokit/rest";
+import { GITHUB_BRANCH, GITHUB_DOCS_FILE_PREFIX, GITHUB_DOCS_ROOT, GITHUB_REPO } from "../../consts";
 
 // fetch all commits for just this page's path
 type Props = {
@@ -7,67 +8,43 @@ type Props = {
 };
 const { path } = Astro.props;
 
-const resolvedPath = `${GITHUB_DOCS_ROOT}${path}`;
-const url = `https://api.github.com/repos/${GITHUB_REPO}/commits?path=${resolvedPath}`;
-const commitsURL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/${resolvedPath}`;
+const commitsURL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/${GITHUB_DOCS_FILE_PREFIX}${path}.md`;
 
-type Commit = {
-  author: {
-    id: string;
-    login: string;
-  };
-};
+const [owner, repo] = GITHUB_REPO.split("/");
 
-async function getCommits(url: string) {
-  try {
-    const token = import.meta.env.GITHUB_TOKEN ?? "hello";
-    if (!token) {
-      throw new Error('Cannot find "GITHUB_TOKEN" used for escaping rate-limiting.');
+const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
+
+async function loadContributors(path: string) {
+  const { data: commits } = await octokit.repos.listCommits({
+    owner,
+    repo,
+    path,
+    per_page: 100,
+  });
+
+  const contributors = new Map<number, { id: number; login: string; avatar: string }>();
+  commits.forEach((commit) => {
+    if (commit.author) {
+      contributors.set(commit.author.id, {
+        id: commit.author.id,
+        login: commit.author.login,
+        avatar: commit.author.avatar_url,
+      });
     }
-
-    const auth = `Basic ${Buffer.from(token, "binary").toString("base64")}`;
-
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: auth,
-        "User-Agent": "effector-docs/2.0",
-      },
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(
-        `Request to fetch commits failed. Reason: ${res.statusText}
-       Message: ${data.message}`
-      );
+    if (commit.committer) {
+      contributors.set(commit.committer.id, {
+        id: commit.committer.id,
+        login: commit.committer.login,
+        avatar: commit.committer.avatar_url,
+      });
     }
-
-    return data as Commit[];
-  } catch (e) {
-    console.warn(`[error]  /src/components/AvatarList.astro
-    ${(e as any)?.message ?? e}`);
-    return [] as Commit[];
-  }
+  });
+  return Array.from(contributors.values()).filter((user) => user.login !== "web-flow");
 }
 
-function removeDups(arr: Commit[]) {
-  const map = new Map<string, Commit["author"]>();
-
-  for (let item of arr) {
-    const author = item.author;
-    // Deduplicate based on author.id
-    map.set(author.id, { login: author.login, id: author.id });
-  }
-
-  return [...map.values()];
-}
-
-const data = await getCommits(url);
-const unique = removeDups(data);
-const recentContributors = unique.slice(0, 3); // only show avatars for the 3 most recent contributors
-const additionalContributors = unique.length - recentContributors.length; // list the rest of them as # of extra contributors
+const contributors = await loadContributors(`${GITHUB_DOCS_FILE_PREFIX}${path}.md`);
+const recentContributors = contributors.slice(0, 3); // only show avatars for the 3 most recent contributors
+const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
 ---
 
 <!-- Thanks to @5t3ph for https://smolcss.dev/#smol-avatar-list! -->
@@ -75,15 +52,15 @@ const additionalContributors = unique.length - recentContributors.length; // lis
   {
     recentContributors.length > 0 && (
       <ul class="avatar-list" style={`--avatar-count: ${recentContributors.length}`}>
-        {recentContributors.map((item) => (
+        {recentContributors.map((contributor) => (
           <li>
-            <a href={`https://github.com/${item.login}`}>
+            <a href={`https://github.com/${contributor.login}`}>
               <img
-                alt={`Contributor ${item.login}`}
-                title={`Contributor ${item.login}`}
+                alt={`Contributor ${contributor.login}`}
+                title={`Contributor ${contributor.login}`}
                 width="64"
                 height="64"
-                src={`https://avatars.githubusercontent.com/u/${item.id}`}
+                src={contributor.avatar}
               />
             </a>
           </li>
@@ -100,7 +77,7 @@ const additionalContributors = unique.length - recentContributors.length; // lis
       </span>
     )
   }
-  {unique.length === 0 && <a href={commitsURL}>Contributors</a>}
+  <a href={commitsURL}>Commits</a>
 </div>
 
 <style>
