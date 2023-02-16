@@ -1,14 +1,13 @@
 export const SITE = {
   title: "effector",
-  description: "Your website description.",
-  defaultLanguage: "en-us",
+  description: "Business logic with ease.",
+  defaultLanguage: "en",
 } as const;
 
 export const OPEN_GRAPH = {
   image: {
-    src: "https://github.com/withastro/astro/blob/main/assets/social/banner-minimal.png?raw=true",
-    alt:
-      "astro logo on a starry expanse of space," + " with a purple saturn-like planet floating in the right foreground",
+    src: "/banner.png",
+    alt: "effector logo is a comet moving away",
   },
   twitter: "effectorjs",
 };
