@@ -5,8 +5,10 @@ import {
   useListBase,
   useUnitBase,
   useEventBase,
+  useGateBase,
 } from './apiBase'
 import {getScope} from './scope'
+import type {Gate} from './index.h'
 
 /**
 bind event to scope
@@ -65,4 +67,12 @@ export function useList<T>(
   opts?: {forceScope?: boolean},
 ): React.ReactNode {
   return useListBase(list, renderItem, getScope(opts?.forceScope))
+}
+
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+  opts?: {forceScope?: boolean},
+) {
+  return useGateBase(GateComponent, props, getScope(opts?.forceScope))
 }

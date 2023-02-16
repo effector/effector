@@ -5,8 +5,6 @@ import {useGateBase} from './apiBase'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
 import {isObject} from '../effector/is'
 
-export {useGateBase as useGate}
-
 export function createGateImplementation<State>({
   domain,
   defaultState,
