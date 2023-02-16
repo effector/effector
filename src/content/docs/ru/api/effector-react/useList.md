@@ -3,6 +3,10 @@ title: useList
 lang: ru
 ---
 
+:::info{title="since"}
+`useList` появился в [effector-react 20.1.1](https://changelog.effector.dev/#effector-react-20-1-1)
+:::
+
 React-хук для эффективного рендеринга сторов хранящих массивы данных.
 Каждый элемент будет мемоизирован и обновлен только при изменении его данных
 

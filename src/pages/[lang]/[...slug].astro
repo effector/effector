@@ -21,20 +21,27 @@ export async function getStaticPaths() {
 
 export type Props = CollectionEntry<"docs">;
 const { slug, lang } = Astro.params;
-const translations = await getCollection("docs", (entry) => {
+const translations = (
+  await getCollection("docs", (entry) => {
+    const path = getPathParamsFromId(entry.id);
+    // Get any other translation for current slug
+    const sameSlug = path.slug === slug || `${slug}/index` === path.slug;
+    if (sameSlug && path.lang !== lang) return entry;
+  })
+).map((entry) => {
   const path = getPathParamsFromId(entry.id);
-  // Get any other translation for current slug
-  const sameSlug = path.slug === slug || `${path.slug}/index` === slug;
-  if (sameSlug && path.lang !== lang) return entry;
+  if (path.slug.endsWith("/index")) {
+    return {
+      slug: path.slug.replace(/\/index$/, ""),
+      lang: path.lang,
+    };
+  }
+  return path;
 });
 const post = Astro.props;
 const { Content, headings } = await post.render();
 ---
 
-<MainLayout
-  headings={headings}
-  {...post.data}
-  translations={translations.map((entry) => getPathParamsFromId(entry.id))}
->
+<MainLayout headings={headings} {...post.data} translations={translations}>
   <Content />
 </MainLayout>

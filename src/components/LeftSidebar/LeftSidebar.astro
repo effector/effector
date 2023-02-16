@@ -10,7 +10,7 @@ type Props = {
 };
 
 const { currentPage } = Astro.props;
-const currentPageMatch = currentPage.endsWith("/") ? currentPage.slice(1, -1) : currentPage.slice(1);
+const currentPageMatch = currentPage.endsWith("/") ? currentPage.slice(0, -1) : currentPage;
 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const baseSidebar = getSidebarForSlug(slug);
@@ -115,8 +115,8 @@ const baseSidebar = getSidebarForSlug(slug);
   }
 
   .nav-link a[aria-current="page"] {
-    color: var(--theme-text-accent);
-    background-color: var(--theme-bg-accent);
+    color: var(--theme-bg);
+    background-color: var(--theme-accent);
     font-weight: 600;
   }
 

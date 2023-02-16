@@ -43,7 +43,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                   <p>{getTextLocalized(linkOrGroup, lang)}</p>
                   {linkOrGroup.links.map((link) => {
                     return (
-                      <a class="link" href={link.href} target={link.href.startsWith("/") ? undefined : "_blank"}>
+                      <a
+                        class="link"
+                        class:list={{ active: Astro.url.pathname.startsWith(link.href) }}
+                        href={link.href}
+                        target={link.href.startsWith("/") ? undefined : "_blank"}
+                      >
                         {getTextLocalized(link, lang)}
                       </a>
                     );
@@ -51,8 +56,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                 </div>
               );
             }
+            console.log(linkOrGroup, Astro.url.pathname);
             return (
-              <a class="link" href={linkOrGroup.href} target={linkOrGroup.href.startsWith("/") ? undefined : "_blank"}>
+              <a
+                href={linkOrGroup.href}
+                class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.href) }}
+                target={linkOrGroup.href.startsWith("/") ? undefined : "_blank"}
+              >
                 {getTextLocalized(linkOrGroup, lang)}
               </a>
             );
@@ -142,5 +152,9 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   .link:hover {
     color: var(--theme-accent);
     background-color: var(--theme-divider);
+  }
+
+  .link.active {
+    color: var(--theme-accent);
   }
 </style>
