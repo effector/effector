@@ -112,10 +112,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     const oldVal = state.value
     const oldKeys = state.storeKeys
     const scopeChanged = scope !== flags.scope
-    if (
-      (storeKeys.length > 0 || oldKeys.length > 0) &&
-      (flags.stale || flags.justSubscribed || scopeChanged)
-    ) {
+    if (flags.stale || flags.justSubscribed || scopeChanged) {
       changed = !flags.justSubscribed || scopeChanged
       resultValue = isList ? [...eventsShape] : {...eventsShape}
       if (oldKeys.length !== storeKeys.length) {
