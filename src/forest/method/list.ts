@@ -176,8 +176,7 @@ export function list<T>(opts: any, maybeFn?: any) {
           const skipNode: boolean[] = Array(input.length).fill(false)
           const keys = input.map(getID)
           const resultRecords: ListItemType[] = []
-          for (let i = 0; i < records.length; i++) {
-            const record = records[i]
+          records.forEach(record => {
             const index = keys.indexOf(record.key)
             if (index !== -1) {
               resultRecords.push(record)
@@ -190,10 +189,9 @@ export function list<T>(opts: any, maybeFn?: any) {
               }
               stopAsyncValue(record.asyncValue)
             }
-          }
-          for (let i = 0; i < input.length; i++) {
-            if (skipNode[i]) continue
-            const value = input[i]
+          })
+          input.forEach((value, i) => {
+            if (skipNode[i]) return
             const id = keys[i]
             const group = createOpGroup(
               leaf.root.leafOps[leaf.fullID].group.queue,
@@ -290,7 +288,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 root: leaf.root,
               })
             }
-          }
+          })
           endMark('list update [' + source.shortName + ']')
           if (resultRecords.length === 0) {
             parentBlock.lastChild = null

@@ -6,9 +6,7 @@ export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
   const childSpawns = leaf.root.childSpawns[leaf.fullID]
   for (const key in childSpawns) {
     const childs = childSpawns[key]
-    for (let i = 0; i < childs.length; i++) {
-      cb(childs[i])
-    }
+    childs.forEach(cb)
   }
 }
 

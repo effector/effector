@@ -35,15 +35,12 @@ export function unmountLeafTree(leaf: Leaf) {
       break
     }
     case 'list': {
-      const records = data.records
-      for (let i = 0; i < records.length; i++) {
-        const item = records[i]
-
+      data.records.forEach(item => {
         if (item.instance) {
           unmountLeafTree(item.instance)
         }
         item.active = false
-      }
+      })
       leaf.root.activeSpawns.delete(leaf.fullID)
       unmountOwnSpawn(leaf)
       break

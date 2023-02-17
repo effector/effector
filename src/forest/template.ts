@@ -441,8 +441,7 @@ export function spawn(
   root.childSpawns[leaf.fullID] = {}
   root.activeSpawns.add(leaf.fullID)
   root.leafOps[leaf.fullID] = {group: opGroup, domSubtree}
-  for (let i = 0; i < template.closure.length; i++) {
-    const ref = template.closure[i]
+  template.closure.forEach(ref => {
     let closureRef = ref
     let parent = leaf.parent
     findClosure: while (parent) {
@@ -457,16 +456,14 @@ export function spawn(
       closureRef = root.scope.reg[ref.id]
     }
     page[ref.id] = closureRef
-  }
-
-  for (let i = 0; i < template.plain.length; i++) {
-    const ref = template.plain[i]
+  })
+  template.plain.forEach(ref => {
     const next: StateRef = {
       id: ref.id,
       current: getCurrent(ref, root.scope),
     }
     page[ref.id] = next
-  }
+  })
   for (const name in values) {
     const id = template.nameMap[name].stateRef.id
     page[id] = {
@@ -475,33 +472,31 @@ export function spawn(
     }
   }
   function execRef(ref: StateRef) {
-    if (ref.before) {
-      for (let i = 0; i < ref.before.length; i++) {
-        const cmd = ref.before[i]
-        switch (cmd.type) {
-          case 'map': {
-            const from = cmd.from
-            if (!cmd.fn && !from) break
-            let value
-            if (from) {
-              ensureLeafHasRef(from, leaf)
-              value = page[from.id].current
-            }
-            page[ref.id].current = cmd.fn ? cmd.fn(value) : value
-            break
-          }
-          case 'field': {
-            const from = cmd.from
+    if (!ref.before) return
+    ref.before.forEach(cmd => {
+      switch (cmd.type) {
+        case 'map': {
+          const from = cmd.from
+          if (!cmd.fn && !from) break
+          let value
+          if (from) {
             ensureLeafHasRef(from, leaf)
-            page[ref.id].current[cmd.field] = page[from.id].current
-            break
+            value = page[from.id].current
           }
-          case 'closure':
-            ensureLeafHasRef(cmd.of, leaf)
-            break
+          page[ref.id].current = cmd.fn ? cmd.fn(value) : value
+          break
         }
+        case 'field': {
+          const from = cmd.from
+          ensureLeafHasRef(from, leaf)
+          page[ref.id].current[cmd.field] = page[from.id].current
+          break
+        }
+        case 'closure':
+          ensureLeafHasRef(cmd.of, leaf)
+          break
       }
-    }
+    })
   }
   template.closure.forEach(execRef)
   template.plain.forEach(execRef)
