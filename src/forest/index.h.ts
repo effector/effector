@@ -1,4 +1,4 @@
-import type {Store, Event, Filter} from 'effector'
+import type {Store, Event} from 'effector'
 import type {Scope} from '../effector/unit.h'
 import type {StateRef, Node, Cmd} from '../effector/index.h'
 
@@ -24,8 +24,8 @@ export type Template = {
   nameMap: Record<string, any>
   pages: Leaf[]
   childTemplates: Template[]
-  loader: Filter
-  upward: Filter
+  loader: Cmd
+  upward: Cmd
   parent: Template | null
 
   node: Node
@@ -386,6 +386,6 @@ export type TemplateHandlers = {
     clockState: StateRef,
   ): void
   sampleTarget(template: Template, target: Node): void
-  sampleSourceLoader(template: Template): Filter
-  sampleSourceUpward(template: Template, isUpward: boolean): Filter | false
+  sampleSourceLoader(template: Template): Cmd
+  sampleSourceUpward(template: Template, isUpward: boolean): Cmd | false
 }

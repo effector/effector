@@ -109,6 +109,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     closure: [],
     childTemplates: [],
     handlers,
+    // @ts-expect-error
     upward: step.filter({
       //@ts-expect-error
       fn(upd, scope, stack: Stack) {
@@ -170,6 +171,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
         return false
       },
     }),
+    // @ts-expect-error
     loader: step.filter({
       //@ts-expect-error
       fn(upd, scope, stack: Stack) {
@@ -302,6 +304,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
       template,
     },
   })
+  // @ts-expect-error internal and public Node types are different
   template.node = node
   currentTemplate = template
   if (!defer) {
