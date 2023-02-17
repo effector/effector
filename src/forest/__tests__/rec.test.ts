@@ -355,7 +355,7 @@ function printLeaf(leaf: Leaf) {
       case 'route': {
         break
       }
-      case 'rec item': {
+      case 'recItem': {
         break
       }
       case 'rec': {
@@ -521,7 +521,7 @@ describe('recursion', () => {
     expect(cClicked).toMatchInlineSnapshot()
     expect(bClicked).toMatchInlineSnapshot()
     expect(dClicked).toMatchInlineSnapshot()
-     expect(aClicked).toMatchInlineSnapshot()
+    expect(aClicked).toMatchInlineSnapshot()
   })
   describe('store update #2', () => {
     //prettier-ignore

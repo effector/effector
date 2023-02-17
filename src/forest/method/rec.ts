@@ -63,7 +63,7 @@ export function rec<T>(
       inParentIndex: -1,
     }
     const recItemTemplate = createTemplate({
-      name: 'rec item',
+      name: 'recItem',
       isSvgRoot: false,
       namespace,
       env,

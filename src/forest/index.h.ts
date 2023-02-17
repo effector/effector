@@ -200,7 +200,7 @@ export type LeafDataBlock = {
 }
 
 export type LeafDataBlockItem = {
-  type: 'block item'
+  type: 'blockItem'
   block: BlockItemBlock
 }
 
@@ -210,7 +210,7 @@ export type LeafDataRec = {
 }
 
 export type LeafDataRecItem = {
-  type: 'rec item'
+  type: 'recItem'
   block: RecItemBlock
 }
 

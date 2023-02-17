@@ -43,7 +43,7 @@ export function block({
     }
     const {env, namespace} = currentTemplate
     const blockItemTemplate = createTemplate({
-      name: 'block item',
+      name: 'blockItem',
       isSvgRoot: false,
       namespace,
       env,

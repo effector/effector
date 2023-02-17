@@ -118,18 +118,21 @@ export function mountChild({
   const parentDomSubtree = leaf.root.leafOps[leaf.fullID].domSubtree
   let domSubtree = parentDomSubtree
   switch (draft.type) {
+    case 'using':
+    case 'listItem':
+      break
     case 'route': {
-      const routeBlock: RouteBlock = {
+      const block: RouteBlock = {
         type: 'route',
         parent: parentBlockFragment,
         child: [],
         visible: false,
         index: draft.inParentIndex,
       }
-      parentBlockFragment.child[draft.inParentIndex] = routeBlock
+      parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'route',
-        block: routeBlock,
+        block,
         ops: {},
         initialized: false,
         pendingInit: null,
@@ -168,7 +171,7 @@ export function mountChild({
       } else {
         element = draft.stencil.cloneNode() as DOMElement
       }
-      const elementBlock: ElementBlock = {
+      const block: ElementBlock = {
         type: 'element',
         parent: parentBlockFragment,
         child: [],
@@ -176,10 +179,10 @@ export function mountChild({
         visible: false,
         index: draft.inParentIndex,
       }
-      parentBlockFragment.child[draft.inParentIndex] = elementBlock
+      parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'element',
-        block: elementBlock,
+        block,
         ops: {
           visible: createOp({
             value: false,
@@ -188,14 +191,14 @@ export function mountChild({
               if (leaf.hydration) {
               }
               if (value) {
-                appendChild(elementBlock)
+                appendChild(block)
                 const leafData_ = leafData as LeafDataElement
                 if (leafData_.needToCallNode) {
                   leafData_.needToCallNode = false
                   launch({
                     target: onMount,
                     params: {
-                      element: elementBlock.value,
+                      element: block.value,
                       fns: draft.node,
                     },
                     page: childSpawn,
@@ -203,10 +206,10 @@ export function mountChild({
                     scope: leaf.root.scope,
                   })
                 }
-                elementBlock.visible = true
+                block.visible = true
               } else {
-                elementBlock.value.remove()
-                elementBlock.visible = false
+                block.value.remove()
+                block.visible = false
               }
             },
             group: parentDomSubtree,
@@ -218,7 +221,7 @@ export function mountChild({
       break
     }
     case 'list': {
-      const listBlock: ListBlock = {
+      const block: ListBlock = {
         type: 'list',
         parent: parentBlockFragment,
         child: [],
@@ -226,46 +229,43 @@ export function mountChild({
         visible: true,
         index: draft.inParentIndex,
       }
-      parentBlockFragment.child[draft.inParentIndex] = listBlock
+      parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'list',
         draft,
-        block: listBlock,
+        block,
         records: [],
         pendingUpdate: null,
       }
       break
     }
-    case 'using':
-    case 'listItem':
-      break
     case 'rec': {
-      const recBlock: RecBlock = {
+      const block: RecBlock = {
         type: 'rec',
         parent: parentBlockFragment,
         child: [],
         visible: true,
         index: draft.inParentIndex,
       }
-      parentBlockFragment.child[draft.inParentIndex] = recBlock
+      parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
         type: 'rec',
-        block: recBlock,
+        block,
       }
       break
     }
     case 'recItem': {
-      const recItemBlock: RecItemBlock = {
+      const block: RecItemBlock = {
         type: 'recItem',
         parent: parentBlockFragment,
         child: [],
         visible: true,
         index: draft.inParentIndex,
       }
-      parentBlockFragment.child[draft.inParentIndex] = recItemBlock
+      parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
-        type: 'rec item',
-        block: recItemBlock,
+        type: 'recItem',
+        block,
       }
       break
     }
@@ -294,7 +294,7 @@ export function mountChild({
       }
       parentBlockFragment.child[draft.inParentIndex] = block
       leafData = {
-        type: 'block item',
+        type: 'blockItem',
         block: block,
       }
       break

@@ -81,9 +81,9 @@ export function unmountLeafTree(leaf: Leaf) {
       unmountOwnSpawn(leaf)
       break
     case 'block':
-    case 'block item':
+    case 'blockItem':
     case 'rec':
-    case 'rec item':
+    case 'recItem':
       unmountChildLeafsNoEvent(leaf)
       break
     case 'using':
