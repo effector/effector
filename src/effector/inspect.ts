@@ -87,47 +87,34 @@ type Factory = {
   from?: string
 }
 
-type Declaration =
-  | {
-      type: 'unit'
-      kind: string
-      name?: string
-      factory?: Factory
-      sid?: string
-      loc?: Loc
-      id: string
-      meta: Record<string, unknown>
-      // for derived units - stores or events
-      derived?: boolean
-    }
-  | {
-      type: 'factory'
-      name?: string
-      loc?: Loc
-      method?: string
-      sid?: string
-      from?: string
-      factory?: Factory
-    }
+type UnitDeclaration = {
+  type: 'unit'
+  kind: string
+  name?: string
+  factory?: Factory
+  sid?: string
+  loc?: Loc
+  id: string
+  meta: Record<string, unknown>
+  // for derived units - stores or events
+  derived?: boolean
+  // e.g fx.finally will have original fx details here
+  owners: {
+    sid: string
+    id: string
+    kind: string
+    name?: string
+  }[]
+}
+
+type Declaration = UnitDeclaration
 
 const inspectGraphSubs = new Set<{
   fn: (declaration: Declaration) => void
 }>()
 
 setGraphInspector((node: Node, regionStack: RegionStack) => {
-  let decl: Declaration
-
-  decl = {
-    type: 'unit',
-    kind: node.meta.op,
-    name: node.meta.name,
-    factory: regionStack ? regionStack.meta : undefined,
-    sid: node.meta.sid,
-    loc: getLoc(node.meta),
-    id: node.id,
-    meta: node.meta,
-    derived: node.meta.derived,
-  }
+  const decl = readUnitDeclaration(node, regionStack)
 
   inspectGraphSubs.forEach(sub => {
     sub.fn(decl)
@@ -184,6 +171,53 @@ function collectMessageTrace(stack: Stack) {
   }
 
   return trace
+}
+
+function readUnitDeclaration(
+  node: Node,
+  regionStack: RegionStack,
+): UnitDeclaration {
+  return {
+    type: 'unit',
+    kind: node.meta.op,
+    name: node.meta.name,
+    factory: regionStack ? regionStack.meta : undefined,
+    sid: node.meta.sid,
+    loc: getLoc(node.meta),
+    id: node.id,
+    meta: node.meta,
+    derived: node.meta.derived,
+    owners: readOwners(node),
+  }
+}
+
+function readOwners(node: Node) {
+  const owners: UnitDeclaration['owners'] = []
+
+  getRawOwners(node).forEach(owner => {
+    owners.push({
+      sid: owner.meta.sid,
+      id: owner.id,
+      kind: owner.meta.op,
+      name: owner.meta.name,
+    })
+  })
+
+  return owners
+}
+
+function getRawOwners(node: Node): Node[] {
+  let result: Node[] = node.family.owners;
+
+  /**
+   * Works for fx.finally, $store.updates
+   * 
+   * TODO: handle edge cases like:
+   * - combine, map (doesn't have meaningful owners at the first level)
+   * - check other possible cases
+   */
+
+  return result
 }
 
 type RegionStack = {
