@@ -117,28 +117,16 @@ const inspectGraphSubs = new Set<{
 setGraphInspector((node: Node, regionStack: RegionStack) => {
   let decl: Declaration
 
-  if (node.meta.type === 'factory') {
-    decl = {
-      type: 'factory',
-      name: node.meta.name,
-      loc: getLoc(node.meta),
-      method: node.meta.method,
-      sid: node.meta.sid,
-      from: node.meta.from,
-      factory: regionStack ? regionStack.meta : undefined,
-    }
-  } else {
-    decl = {
-      type: 'unit',
-      kind: node.meta.op,
-      name: node.meta.name,
-      factory: regionStack ? regionStack.meta : undefined,
-      sid: node.meta.sid,
-      loc: getLoc(node.meta),
-      id: node.id,
-      meta: node.meta,
-      derived: node.meta.derived,
-    }
+  decl = {
+    type: 'unit',
+    kind: node.meta.op,
+    name: node.meta.name,
+    factory: regionStack ? regionStack.meta : undefined,
+    sid: node.meta.sid,
+    loc: getLoc(node.meta),
+    id: node.id,
+    meta: node.meta,
+    derived: node.meta.derived,
   }
 
   inspectGraphSubs.forEach(sub => {

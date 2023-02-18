@@ -23,56 +23,32 @@ export function inspect(config: {
   fn: (message: Message) => void
 }): Subscription
 
-export type Declaration =
-  | {
-      type: 'unit'
-      kind: string
-      name?: string
-      factory?: {
-        name?: string
-        loc?: {
-          file: string
-          line: number
-          column: number
-        }
-        method?: string
-        sid?: string
-        from?: string
-      }
-      sid?: string
-      loc?: {
-        file: string
-        line: number
-        column: number
-      }
-      id: string
-      meta: Record<string, unknown>
-      // for derived units - stores or events
-      derived?: boolean
+export type Declaration = {
+  type: 'unit'
+  kind: string
+  name?: string
+  factory?: {
+    name?: string
+    loc?: {
+      file: string
+      line: number
+      column: number
     }
-  | {
-      type: 'factory'
-      name?: string
-      loc?: {
-        file: string
-        line: number
-        column: number
-      }
-      method?: string
-      sid?: string
-      from?: string
-      factory?: {
-        name?: string
-        loc?: {
-          file: string
-          line: number
-          column: number
-        }
-        method?: string
-        sid?: string
-        from?: string
-      }
-    }
+    method?: string
+    sid?: string
+    from?: string
+  }
+  sid?: string
+  loc?: {
+    file: string
+    line: number
+    column: number
+  }
+  id: string
+  meta: Record<string, unknown>
+  // for derived units - stores or events
+  derived?: boolean
+}
 
 export function inspectGraph(config: {
   fn: (declaration: Declaration) => void
