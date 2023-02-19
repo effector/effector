@@ -476,12 +476,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
 const noopParser = (x: any) => x
 
 export const initRefInScope = (
-  scope: {
-    reg: Record<string, StateRef>
-    sidValuesMap: Record<string, any>
-    sidIdMap: Record<string, string>
-    fromSerialize?: boolean
-  },
+  scope: Scope,
   sourceRef: StateRef,
   isGetState?: boolean,
   isKernelCall?: boolean,
@@ -501,8 +496,10 @@ export const initRefInScope = (
     meta: sourceRef.meta,
   }
 
-  if (sid && sid in scope.sidValuesMap && !(sid in scope.sidIdMap)) {
-    ref.current = parser(scope.sidValuesMap[sid])
+  if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
+    ref.current = parser(scope.values.sidMap[sid])
+  } else if (ref.id in scope.values.idMap) {
+    ref.current = scope.values.idMap[ref.id]
   } else {
     if (sourceRef.before && !softRead) {
       let isFresh = false

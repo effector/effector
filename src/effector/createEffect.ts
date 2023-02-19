@@ -102,7 +102,7 @@ export function createEffect<Params, Done, Fail = Error>(
           if (scope) {
             const scopeHandler = instance.sid
               ? scope.handlers.sidMap[instance.sid]
-              : scope.handlers.idMap[instance.id]
+              : scope.handlers.unitMap.get(instance)
             if (scopeHandler) handler = scopeHandler
           }
           upd.handler = handler
