@@ -45,7 +45,7 @@ export function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
         break
       case 'route':
       case 'list':
-      case 'list item':
+      case 'listItem':
         iterateChildLeafs(child, childLeafIterator)
         break
       default:

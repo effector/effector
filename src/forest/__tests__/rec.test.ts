@@ -349,7 +349,7 @@ function printLeaf(leaf: Leaf) {
       case 'list': {
         break
       }
-      case 'list item': {
+      case 'listItem': {
         break
       }
       case 'route': {

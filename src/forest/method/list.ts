@@ -74,7 +74,7 @@ export function list<T>(opts: any, maybeFn?: any) {
       const listItemTemplate = createTemplate<{
         itemUpdater: any
       }>({
-        name: 'list item',
+        name: 'listItem',
         state: {id: -1, store: null},
         draft,
         isSvgRoot: false,
@@ -211,7 +211,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               index: id as number,
               active: true,
               leafData: {
-                type: 'list item',
+                type: 'listItem',
                 block: listItemBlock,
                 listDraft: draft,
               },

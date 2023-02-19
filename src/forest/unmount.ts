@@ -45,7 +45,7 @@ export function unmountLeafTree(leaf: Leaf) {
       unmountOwnSpawn(leaf)
       break
     }
-    case 'list item': {
+    case 'listItem': {
       const listItemBlock = data.block
       removeItem(listItemBlock, listItemBlock.parent.child)
       const leftBlock = listItemBlock.left
