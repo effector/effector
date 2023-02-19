@@ -2,9 +2,9 @@ import {Store, launch, createEvent} from 'effector'
 
 import type {RecItemDraft, LeafDataRecItem, RecDraft} from '../index.h'
 
-import {createTemplate, currentTemplate} from '../template'
-import {mountChild, setInParentIndex} from '../mountChild'
-import {iterateChildLeafs} from '../iterateChildLeafs'
+import {createTemplate, currentTemplate} from '../engine/createTemplate'
+import {mountChild, setInParentIndex} from '../engine/mountChild'
+import {iterateChildLeafs} from '../engine/iterateChildLeafs'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
 import {mutualSample} from '../mutualSample'

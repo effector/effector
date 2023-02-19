@@ -1,6 +1,6 @@
 import {launch} from 'effector'
-import type {Leaf} from './index.h'
-import {pushOpToQueue} from './plan'
+import type {Leaf} from '../index.h'
+import {pushOpToQueue} from '../plan'
 
 export function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
   const childSpawns = leaf.root.childSpawns[leaf.fullID]

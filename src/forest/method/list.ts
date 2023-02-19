@@ -18,13 +18,14 @@ import {
   stopAsyncValue,
   updateAsyncValue,
 } from '../plan'
-import {createTemplate, spawn, currentTemplate} from '../template'
-import {mountChildTemplates, setInParentIndex} from '../mountChild'
-import {unmountLeafTree} from '../unmount'
+import {createTemplate, currentTemplate} from '../engine/createTemplate'
+import {spawn} from '../engine/spawn'
+import {mountChildTemplates, setInParentIndex} from '../engine/mountChild'
+import {unmountLeafTree} from '../engine/unmountLeafTree'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
 import {mutualSample} from '../mutualSample'
-import {changeChildLeafsVisible} from '../iterateChildLeafs'
+import {changeChildLeafsVisible} from '../engine/iterateChildLeafs'
 import {remap} from './remap'
 
 export function list<T, K extends keyof T>(config: {

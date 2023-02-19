@@ -1,6 +1,6 @@
-import type {Leaf} from './index.h'
+import type {Leaf} from '../index.h'
 
-import {pushOpToQueue} from './plan'
+import {pushOpToQueue} from '../plan'
 import {iterateChildLeafs} from './iterateChildLeafs'
 
 function unmountChildLeafsNoEvent(leaf: Leaf) {

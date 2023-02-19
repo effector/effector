@@ -8,7 +8,7 @@ import type {
   Env,
   LeafDataElement,
   Template,
-} from './index.h'
+} from '../index.h'
 
 import type {
   ElementBlock,
@@ -20,14 +20,15 @@ import type {
   RecBlock,
   BlockBlock,
   BlockItemBlock,
-} from './relation.h'
+} from '../relation.h'
 
-import {createOpGroup, createOp} from './plan'
+import {createOpGroup, createOp} from '../plan'
 
-import {spawn, currentTemplate} from './template'
+import {currentTemplate} from './createTemplate'
+import {spawn} from './spawn'
 import {findParentDOMElement, findPreviousVisibleSibling} from './search'
-import {applyStaticOps} from './bindings'
-import {assert} from './assert'
+import {applyStaticOps} from '../bindings'
+import {assert} from '../assert'
 
 export function setInParentIndex(template: Template) {
   if (!currentTemplate) return
