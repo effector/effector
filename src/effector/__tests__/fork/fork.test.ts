@@ -55,6 +55,20 @@ describe('units without sids support', () => {
     const scope = fork({values: [[$foo, 2]]})
     expect(scope.getState($foo)).toBe(2)
   })
+  test('mapped stores derived from sidless ones should be supported', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = $foo.map(x => x)
+    const scope = fork({values: [[$foo, 2]]})
+    expect(scope.getState($bar)).toBe(2)
+  })
+  test('combined stores derived from sidless ones should be supported', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = combine($foo, x => x)
+    const scope = fork({values: [[$foo, 2]]})
+    expect(scope.getState($bar)).toBe(2)
+  })
   test('effect without sid should be supported', async () => {
     const fooFx = createEffect({
       handler(): any {

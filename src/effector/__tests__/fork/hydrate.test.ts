@@ -11,6 +11,26 @@ import {
   Event,
 } from 'effector'
 
+describe('sidless stores support', () => {
+  test('with scope', () => {
+    //@ts-expect-error
+    const app = createDomain({sid: null})
+    //@ts-expect-error
+    const $foo = app.createStore(0, {sid: null})
+    const scope = fork(app)
+    hydrate(scope, {values: [[$foo, 2]]})
+    expect(scope.getState($foo)).toBe(2)
+  })
+  test('with domain', () => {
+    //@ts-expect-error
+    const app = createDomain({sid: null})
+    //@ts-expect-error
+    const $foo = app.createStore(0, {sid: null})
+    hydrate(app, {values: [[$foo, 2]]})
+    expect($foo.getState()).toBe(2)
+  })
+})
+
 test('watch calls during hydration', async () => {
   const fxHandlerFn = jest.fn()
   const storeWatchFn = jest.fn()
