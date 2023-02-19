@@ -3,8 +3,6 @@ id: usage-with-effector-react
 title: Usage with effector-react
 ---
 
-# Usage with `effector-react`
-
 **TypeScript** is a typed superset of JavaScript. It became popular
 recently in applications due to the benefits it can bring. If you are new to
 TypeScript, it is highly recommended to become familiar with it first, before

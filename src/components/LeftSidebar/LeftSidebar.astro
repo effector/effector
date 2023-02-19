@@ -15,7 +15,6 @@ const currentPageMatch = currentPage.endsWith("/") ? currentPage.slice(0, -1) : 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const baseSidebar = getSidebarForSlug(slug);
 // TODO: add collapsible groups
-// TODO: add external link icon
 ---
 
 <nav aria-labelledby="grid-left">
