@@ -45,7 +45,33 @@ test('usage without domain', async () => {
   expect(scope.getState($count)).toBe(15)
   expect($count.getState()).toBe(0)
 })
-
+describe('units without sids support', () => {
+  test('store without sid should be supported', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    expect(() => {
+      fork({values: [[$foo, 1]]})
+    }).not.toThrow()
+    const scope = fork({values: [[$foo, 2]]})
+    expect(scope.getState($foo)).toBe(2)
+  })
+  test('effect without sid should be supported', async () => {
+    const fooFx = createEffect({
+      handler(): any {
+        throw Error('default handler')
+      },
+      //@ts-expect-error
+      sid: null,
+    })
+    expect(() => {
+      fork({handlers: [[fooFx, () => 1]]})
+    }).not.toThrow()
+    const fn = jest.fn()
+    const scope = fork({handlers: [[fooFx, fn]]})
+    await allSettled(fooFx, {scope})
+    expect(fn).toBeCalled()
+  })
+})
 describe('fork values support', () => {
   test('values as js Map', async () => {
     const app = createDomain()
@@ -129,13 +155,6 @@ describe('fork values support', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only stores as keys"`,
     )
-  })
-  test('store without sid should throw', () => {
-    //@ts-expect-error
-    const $foo = createStore(0, {sid: null})
-    expect(() => {
-      fork({values: [[$foo, 1]]})
-    }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
   })
   describe('consistency simple', () => {
     test('consistency simple with getState', async () => {
@@ -424,16 +443,6 @@ describe('handlers validation', () => {
         handlers: new Map().set(attached, () => {}),
       })
     }).not.toThrow()
-  })
-  test('effect without sid should throw', () => {
-    const fx = createEffect({
-      handler() {},
-      //@ts-expect-error
-      sid: null,
-    })
-    expect(() => {
-      fork({handlers: [[fx, () => {}]]})
-    }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
   })
 })
 
