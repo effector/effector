@@ -18,8 +18,8 @@ import {getGraph, getMeta} from '../getter'
  */
 export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
   assert(isObject(values), 'values property should be an object')
-  const normalizedValues = normalizeValues(values)
-  const valuesSidList = Object.getOwnPropertyNames(normalizedValues)
+  const {sidMap, idMap} = normalizeValues(values)
+  const valuesSidList = Object.getOwnPropertyNames(sidMap)
   const storeNodes: Node[] = []
   const storeValues: any[] = []
   let forkPage: Scope
@@ -41,9 +41,9 @@ export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
       add(storeNodes, node)
       const serializer = getMeta(node, 'serialize')
       if (serializer && serializer !== 'ignore') {
-        normalizedValues[sid] = serializer.read(normalizedValues[sid])
+        sidMap[sid] = serializer.read(sidMap[sid])
       }
-      add(storeValues, normalizedValues[sid])
+      add(storeValues, sidMap[sid])
     }
   })
   launch({
@@ -52,6 +52,6 @@ export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
     scope: forkPage!,
   })
   if (needToAssign) {
-    Object.assign(forkPage!.sidValuesMap, normalizedValues)
+    Object.assign(forkPage!.sidValuesMap, sidMap)
   }
 }

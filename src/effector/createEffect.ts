@@ -1,7 +1,7 @@
 import type {Unit, Stack} from './index.h'
 import type {Effect, Scope} from './unit.h'
 import {calc, run} from './step'
-import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
+import {getForkPage, getGraph, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage, isWatch} from './kernel'
@@ -90,19 +90,20 @@ export function createEffect<Params, Done, Fail = Error>(
 
   const runner = createNode({
     scope: {
-      handlerId: getMeta(node, 'sid'),
       handler:
         instance.defaultConfig.handler ||
         (() => assert(false, `no handler used in ${instance.getType()}`)),
     },
     node: [
       calc(
-        (upd: RunnerData<Params, Done, Fail>, scope_, stack) => {
-          const scope: {handlerId: string; handler: Function} = scope_ as any
-          let handler = scope.handler
-          if (getForkPage(stack)) {
-            const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
-            if (handler_) handler = handler_
+        (upd: RunnerData<Params, Done, Fail>, scope_: any, stack) => {
+          let handler: Function = scope_.handler
+          const scope = getForkPage(stack)
+          if (scope) {
+            const scopeHandler = instance.sid
+              ? scope.handlers.sidMap[instance.sid]
+              : scope.handlers.idMap[instance.id]
+            if (scopeHandler) handler = scopeHandler
           }
           upd.handler = handler
           return upd

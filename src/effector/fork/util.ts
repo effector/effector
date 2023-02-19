@@ -31,19 +31,23 @@ export function normalizeValues(
 ) {
   const mapOrRecordValues: Map<StoreOrEffect, any> | Record<string, any> =
     Array.isArray(values) ? new Map(values as [StoreOrEffect, any][]) : values
+  const idMap: Record<string, any> = {}
   if (mapOrRecordValues instanceof Map) {
-    const result = {} as Record<string, any>
+    const sidMap = {} as Record<string, any>
     forEach(mapOrRecordValues, (value, key) => {
       assert(
         (is.unit as (val: unknown) => val is StoreOrEffect)(key),
         'Map key should be a unit',
       )
       if (assertEach) assertEach(key, value)
-      assert(key.sid, 'unit should have a sid')
-      assert(!(key.sid! in result), 'duplicate sid found')
-      result[key.sid!] = value
+      if (key.sid) {
+        assert(!(key.sid in sidMap), 'duplicate sid found')
+        sidMap[key.sid!] = value
+      } else {
+        idMap[key.id] = value
+      }
     })
-    return result
+    return {sidMap, idMap}
   }
-  return mapOrRecordValues
+  return {sidMap: mapOrRecordValues, idMap}
 }

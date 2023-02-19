@@ -33,10 +33,10 @@ export function fork(
       forEach(activeEffects, scopeRef => (scopeRef.ref = scope))
     }
     if (config.values) {
-      const valuesSidMap = normalizeValues(config.values, unit =>
+      const {sidMap, idMap} = normalizeValues(config.values, unit =>
         assert(is.store(unit), 'Values map can contain only stores as keys'),
       )
-      Object.assign(scope.sidValuesMap, valuesSidMap)
+      Object.assign(scope.sidValuesMap, sidMap)
       scope.fromSerialize =
         !Array.isArray(config.values) && !(config.values instanceof Map)
     }

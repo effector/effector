@@ -179,7 +179,10 @@ export interface Scope extends Unit {
     {ignore: true} | {ignore: false; write: (value: any) => any}
   >
   additionalLinks: Record<string, Node[]>
-  handlers: Record<string, (params: unknown) => any>
+  handlers: {
+    sidMap: Record<string, (params: unknown) => any>
+    idMap: Record<string, (params: unknown) => any>
+  }
   fxCount: Node
   storeChange: Node
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
