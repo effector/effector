@@ -40,6 +40,20 @@ async function getGzipSize(packageName) {
 //   credentials: "omit",
 // });
 
+// // FETCH DOWNLOADS COUNT FROM NPM
+// fetch("https://npm-stat.com/api/download-counts?package=effector&from=2017-02-01&until=2023-02-19", {
+//   headers: {
+//     accept: "application/json, text/javascript, */*; q=0.01",
+//     "x-requested-with": "XMLHttpRequest",
+//   },
+//   referrer: "https://npm-stat.com/charts.html?package=effector&from=2017-02-01&to=2023-02-19",
+//   referrerPolicy: "strict-origin-when-cross-origin",
+//   body: null,
+//   method: "GET",
+//   mode: "cors",
+//   credentials: "omit",
+// });
+
 const packages = ["effector", "effector-react", "effector-solid", "effector-vue", "patronum", "@effector/reflect"];
 
 const minWidth = packages.reduce((a, b) => Math.max(a, b.length), 0);
