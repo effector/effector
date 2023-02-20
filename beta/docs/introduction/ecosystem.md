@@ -22,6 +22,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated 
 ## Packages
 
 - [patronum](https://github.com/effector/patronum) 💚 — Effector utility library delivering modularity and convenience.
+- [reflect](https://github.com/effector/reflect) 💚 — Attach effector stores to react components without hooks.
 - [farfetched](https://farfetched.pages.dev) 🛠 — The advanced data fetching tool for web applications.
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Module for effector that sync stores with localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
@@ -34,6 +35,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated 
 ## DX
 
 - [eslint-plugin-effector](https://eslint.effector.dev) 🛠 — Enforcing best practices.
+- [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — SWC plugin to efficiently work with effector.
 - [effector-logger](https://github.com/effector/logger) 🧨 — Simple logger with stores inspector.
 
 ## Form management
