@@ -1,3 +1,11 @@
+const defaultFactories = [
+  '@farfetched/core',
+  '@effector/reflect',
+  '@effector/reflect/ssr',
+  '@effector/reflect/scope',
+  'atomic-router',
+]
+
 module.exports = function (babel, options = {}) {
   const {
     addNames,
@@ -516,7 +524,7 @@ const normalizeOptions = options => {
         reactMethods: {
           createGate: ['createGate'],
         },
-        factories: [],
+        factories: defaultFactories,
       }
   return readConfigFlags({
     options,
@@ -552,11 +560,6 @@ const normalizeOptions = options => {
               'effector-logger',
               'trail/runtime',
               '@effector/effector',
-              '@farfetched/core',
-              '@effector/reflect',
-              '@effector/reflect/ssr',
-              '@effector/reflect/scope',
-              'atomic-router',
             ],
       ),
       importReactNames: {
@@ -594,7 +597,9 @@ const normalizeOptions = options => {
         options.reactMethods,
         defaults.reactMethods,
       ),
-      factories: (options.factories || defaults.factories).map(stripExtension),
+      factories: [...(options.factories || []), ...defaults.factories].map(
+        stripExtension,
+      ),
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
       addNames:
