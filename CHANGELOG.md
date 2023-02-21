@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.5.1
+
+- Fix default factories list in babel-plugin ([PR #857](https://github.com/effector/effector/pull/857))
+
 ## effector-react 22.5.0
 
 - Make `useGate` isomorphic in `effector-react` module, so the one not needed to use `effector-react/scope` anymore ([PR #852](https://github.com/effector/effector/pull/852))
