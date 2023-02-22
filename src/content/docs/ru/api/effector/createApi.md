@@ -19,7 +19,7 @@ const api: {
   /*handlers*/ {
     event1: /*handler*/ (state: T, data: S) => T,
     event2: /*handler*/ (state: T, data: Q) => T,
-  }
+  },
 );
 ```
 

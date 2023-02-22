@@ -580,7 +580,10 @@ Now we can just append a message to the end of list:
 
 ```ts
 // File: /src/pages/chat/model.ts
-$messages.on(messageApi.messageSendFx.doneData, (messages, newMessage) => [...messages, newMessage]);
+$messages.on(messageApi.messageSendFx.doneData, (messages, newMessage) => [
+  ...messages,
+  newMessage,
+]);
 ```
 
 But at the moment, sent message still left in the input.
@@ -609,7 +612,7 @@ sample({
 });
 
 $messages.on(messageApi.messageDeleteFx.done, (messages, { params: toDelete }) =>
-  messages.filter((message) => message.id !== toDelete.id)
+  messages.filter((message) => message.id !== toDelete.id),
 );
 ```
 

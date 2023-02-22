@@ -91,7 +91,7 @@ getUsers.use(
         unwatch();
         rs(data.result);
       });
-    })
+    }),
 );
 ```
 

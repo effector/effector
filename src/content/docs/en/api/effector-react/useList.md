@@ -117,7 +117,7 @@ const $todoList = createStore([
           done: !todo.done,
         };
       return todo;
-    })
+    }),
   )
   .on(addTodo, (list, e) => [
     ...list,

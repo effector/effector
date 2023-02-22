@@ -71,7 +71,11 @@ function TodoList({ label, model }) {
       <ul>{todos}</ul>
       <form>
         <label>Insert todo: </label>
-        <input type="text" value={input} onChange={(event) => model.change(event.currentTarget.value)} />
+        <input
+          type="text"
+          value={input}
+          onChange={(event) => model.change(event.currentTarget.value)}
+        />
         <input type="submit" onClick={model.submit} value="Insert" />
       </form>
     </>

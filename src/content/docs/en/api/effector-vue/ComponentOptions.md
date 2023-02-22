@@ -27,7 +27,7 @@ new Vue({
     return combine(
       this.$store(() => this.foo),
       counter,
-      (foo, counter) => `${foo} + ${counter}`
+      (foo, counter) => `${foo} + ${counter}`,
     );
   },
 });

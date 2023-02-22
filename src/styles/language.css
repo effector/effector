@@ -1,43 +1,42 @@
-
 code .token.keyword {
-  color: #89DDFF;
+  color: #89ddff;
 }
 
 code .token.string,
 code .token.attr-value {
-  color: #C3E88D;
+  color: #c3e88d;
 }
 
 code .token.punctuation {
-  color: #89DDFF;
+  color: #89ddff;
 }
 
 code .token.function-variable,
 code .token.function {
-  color: #82AAFF;
+  color: #82aaff;
 }
 
 code .token.operator {
-  color: #C792EA;
+  color: #c792ea;
 }
 
 code .token.tag {
-  color: #F07178;
+  color: #f07178;
 }
 
 code .token.class-name {
-  color: #FFCB6B;
+  color: #ffcb6b;
 }
 
 code .token.attr-name {
-  color: #C792EA;
+  color: #c792ea;
 }
 
 code .token.comment {
-  color: #676E95;
+  color: #676e95;
 }
 
 pre[class*="language-"] {
-  color: #d6daf1;
   background-color: #292d3e;
+  color: #d6daf1;
 }

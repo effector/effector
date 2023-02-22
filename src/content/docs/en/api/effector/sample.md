@@ -145,7 +145,11 @@ const signInFx = createEffect((params) => {
 
 const $userName = createStore("john");
 
-const sampleUnit = sample($userName /* 2 */, submitForm /* 1 */, (name, password) => ({ name, password }) /* 3 */);
+const sampleUnit = sample(
+  $userName /* 2 */,
+  submitForm /* 1 */,
+  (name, password) => ({ name, password }) /* 3 */,
+);
 /* 5 */
 forward({
   from: sampleUnit,
@@ -316,8 +320,8 @@ const transactionFx = createEffect(
       setTimeout(res, 3000, {
         amount: amountToSend,
         recipientAddress,
-      })
-    )
+      }),
+    ),
 );
 
 $isSigned.on(sign, () => true).reset(transactionFx);

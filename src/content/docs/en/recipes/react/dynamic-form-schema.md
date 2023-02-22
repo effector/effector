@@ -224,7 +224,16 @@ function InputField({ name }) {
 
   switch (type) {
     case "checkbox":
-      input = <input id={name} name={name} value={name} checked={value} onChange={changeFieldInput} type="checkbox" />;
+      input = (
+        <input
+          id={name}
+          name={name}
+          value={name}
+          checked={value}
+          onChange={changeFieldInput}
+          type="checkbox"
+        />
+      );
       break;
     case "text":
     default:

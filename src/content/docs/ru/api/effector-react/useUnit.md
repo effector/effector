@@ -52,7 +52,7 @@ render(
       <App />
     </Provider>
   ),
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 ```
 
@@ -141,6 +141,6 @@ render(
       <App />
     </Provider>
   ),
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 ```

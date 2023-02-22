@@ -4,18 +4,21 @@ import { promisify } from "node:util";
 const exec = promisify(childProcess.exec);
 
 async function getGzipSize(packageName) {
-  const response = await fetch(`https://bundlephobia.com/api/size?package=${packageName}@latest&record=true`, {
-    headers: {
-      accept: "application/json",
-      "accept-language": "en-GB,en;q=0.9,ru-RU;q=0.8,ru;q=0.7,en-US;q=0.6",
-      "x-bundlephobia-user": "bundlephobia website",
+  const response = await fetch(
+    `https://bundlephobia.com/api/size?package=${packageName}@latest&record=true`,
+    {
+      headers: {
+        accept: "application/json",
+        "accept-language": "en-GB,en;q=0.9,ru-RU;q=0.8,ru;q=0.7,en-US;q=0.6",
+        "x-bundlephobia-user": "bundlephobia website",
+      },
+      referrerPolicy: "strict-origin-when-cross-origin",
+      body: null,
+      method: "GET",
+      mode: "cors",
+      credentials: "omit",
     },
-    referrerPolicy: "strict-origin-when-cross-origin",
-    body: null,
-    method: "GET",
-    mode: "cors",
-    credentials: "omit",
-  });
+  );
 
   const { gzip } = await response.json();
   if (!gzip) return null;
@@ -54,15 +57,24 @@ async function getGzipSize(packageName) {
 //   credentials: "omit",
 // });
 
-const packages = ["effector", "effector-react", "effector-solid", "effector-vue", "patronum", "@effector/reflect"];
+const packages = [
+  "effector",
+  "effector-react",
+  "effector-solid",
+  "effector-vue",
+  "patronum",
+  "@effector/reflect",
+];
 
 const minWidth = packages.reduce((a, b) => Math.max(a, b.length), 0);
 
 const results = await Promise.all(
   packages.map(
     async (packageName) =>
-      `${packageName.padEnd(minWidth + 4, " ")}${await (await getGzipSize(packageName)).toFixed(1)} kB gzipped`
-  )
+      `${packageName.padEnd(minWidth + 4, " ")}${await (
+        await getGzipSize(packageName)
+      ).toFixed(1)} kB gzipped`,
+  ),
 );
 
 console.log(results.join("\n"));
@@ -79,6 +91,6 @@ console.log(
   "Latest version".padEnd(minWidth + 3, " "),
   latestVersion,
   "at",
-  new Date(latestVersionReleaseDate).toLocaleDateString("ru-RU")
+  new Date(latestVersionReleaseDate).toLocaleDateString("ru-RU"),
 );
 console.log("Total NPM Releases".padEnd(minWidth + 3, " "), totalNpmReleases);

@@ -51,7 +51,7 @@ ReactDOM.render(
   <Provider value={scope}>
     <App />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 ```
 
@@ -102,6 +102,6 @@ ReactDOM.render(
   <Provider value={scope}>
     <App />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 ```

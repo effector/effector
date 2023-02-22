@@ -25,7 +25,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     <div class="button-title">
       <slot />
     </div>
-    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="16px" viewBox="0 0 24 24">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+      width="16px"
+      viewBox="0 0 24 24"
+    >
       <path
         fill="currentColor"
         d="M12,16c-0.3,0-0.5-0.1-0.7-0.3l-6-6c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l5.3,5.3l5.3-5.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-6,6C12.5,15.9,12.3,16,12,16z"
@@ -74,14 +80,14 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 
 <style>
   .menu {
-    color: var(--theme-text-light);
-    background-color: transparent;
-    position: relative;
     display: flex;
-    align-items: center;
+    position: relative;
     justify-content: center;
-    pointer-events: auto;
+    align-items: center;
+    background-color: transparent;
     overflow: visible;
+    pointer-events: auto;
+    color: var(--theme-text-light);
   }
 
   .menu :global(svg) {
@@ -90,11 +96,11 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 
   .menu .button {
     display: flex;
-    appearance: none;
     align-items: center;
+    appearance: none;
+    transition: color 0.3s;
     padding: 0;
     color: var(--theme-text);
-    transition: color 0.3s;
   }
 
   .menu:hover .button {
@@ -111,19 +117,19 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .menu:hover .flyout {
-    opacity: 1;
-    visibility: visible;
     transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
   }
 
   .items {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--theme-divider);
     border-radius: 1rem;
+    background-color: var(--theme-bg);
     padding: 0.8rem;
     min-width: 8rem;
-    border: 1px solid var(--theme-divider);
-    background-color: var(--theme-bg);
     overflow-y: auto;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
   }
 
   .group {
@@ -137,20 +143,20 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 
   .link {
     display: block;
+    transition: background-color 0.25s, color 0.25s;
     border-radius: 0.5rem;
     padding: 0 0.8rem;
-    line-height: 2rem;
-    font-size: 0.9rem;
-    font-weight: 500;
     color: currentColor;
-    white-space: nowrap;
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 2rem;
     text-align: start;
-    transition: background-color 0.25s, color 0.25s;
+    white-space: nowrap;
   }
 
   .link:hover {
-    color: var(--theme-accent);
     background-color: var(--theme-divider);
+    color: var(--theme-accent);
   }
 
   .link.active {

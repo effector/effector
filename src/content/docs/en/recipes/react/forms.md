@@ -115,7 +115,13 @@ const Field = ({ name, type, label }) => {
 
   return (
     <div>
-      {label} <input name={name} type={type} value={value} onChange={handleChange /*note, bound event is here!*/} />
+      {label}{" "}
+      <input
+        name={name}
+        type={type}
+        value={value}
+        onChange={handleChange /*note, bound event is here!*/}
+      />
     </div>
   );
 };
@@ -153,7 +159,7 @@ import { useUnit, createComponent } from "effector-react";
 
 //defining simple Effect, which results a string in 3 seconds
 const sendFormFx = createEffect(
-  (formData) => new Promise((rs) => setTimeout(rs, 1000, `Signed in as [${formData.get("name")}]`))
+  (formData) => new Promise((rs) => setTimeout(rs, 1000, `Signed in as [${formData.get("name")}]`)),
 );
 
 //applying side-effect, upon sendFormFx `doneData`

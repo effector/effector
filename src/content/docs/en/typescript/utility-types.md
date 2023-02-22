@@ -77,9 +77,11 @@ Taking out of [Effect](/en/api/effector/Effect) params type.
 ```ts
 import { createEffect, EffectParams } from "effector";
 
-const fx = createEffect<{ id: string }, { name: string; isAdmin: boolean }, { statusText: string; status: number }>(
-  () => ({ name: "Alice", isAdmin: false })
-);
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
 
 type EffectParamsType = EffectParams<typeof fx>;
 // {id: string}
@@ -94,9 +96,11 @@ Taking out of [Effect](/en/api/effector/Effect) result type.
 ```ts
 import { createEffect, EffectResult } from "effector";
 
-const fx = createEffect<{ id: string }, { name: string; isAdmin: boolean }, { statusText: string; status: number }>(
-  () => ({ name: "Alice", isAdmin: false })
-);
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
 
 type EffectResultType = EffectResult<typeof fx>;
 // {name: string; isAdmin: boolean}
@@ -111,9 +115,11 @@ Taking out of [Effect](/en/api/effector/Effect) error type.
 ```ts
 import { createEffect, EffectError } from "effector";
 
-const fx = createEffect<{ id: string }, { name: string; isAdmin: boolean }, { statusText: string; status: number }>(
-  () => ({ name: "Alice", isAdmin: false })
-);
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
 
 type EffectErrorType = EffectError<typeof fx>;
 // {statusText: string; status: number}

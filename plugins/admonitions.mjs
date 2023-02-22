@@ -5,14 +5,20 @@ import { map } from "unist-util-map";
 export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
   return (tree) => {
     return map(tree, (node) => {
-      if (node.type === "containerDirective" || node.type === "textDirective" || node.type === "leafDirective") {
+      if (
+        node.type === "containerDirective" ||
+        node.type === "textDirective" ||
+        node.type === "leafDirective"
+      ) {
         if (types.includes(node.name)) {
           const children = node.children;
           delete node.children;
 
           return h("div", { className: `admonition admonition-${node.name}` }, [
             h("div", { className: "admonition-heading" }, [
-              h("span", { className: "admonition-title" }, [text(node.attributes.title ?? node.name)]),
+              h("span", { className: "admonition-title" }, [
+                text(node.attributes.title ?? node.name),
+              ]),
             ]),
             h("div", { className: "admonition-content" }, children),
           ]);

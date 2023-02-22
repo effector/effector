@@ -53,7 +53,7 @@ function useList(
     keys: any[];
     fn: (item: T, key: React.Key) => React.ReactNode;
     getKey?: (item: T) => React.Key;
-  }
+  },
 ): React.ReactNode;
 ```
 
@@ -147,7 +147,7 @@ const $todoList = createStore([
           done: !todo.done,
         };
       return todo;
-    })
+    }),
   )
   .on(addTodo, (list, e) => [
     ...list,

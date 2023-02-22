@@ -122,38 +122,38 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
 
 <style>
   header {
-    font-family: "Lexend Deca", sans-serif;
-    z-index: 110;
-    height: var(--theme-navbar-height);
-    width: 100%;
-    background-color: var(--theme-navbar-bg);
-    -webkit-backdrop-filter: saturate(50%) blur(8px);
-    backdrop-filter: saturate(50%) blur(8px);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: visible;
     position: fixed;
     top: 0;
     left: 0;
+    justify-content: center;
+    align-items: center;
+    z-index: 110;
+    -webkit-backdrop-filter: saturate(50%) blur(8px);
+    backdrop-filter: saturate(50%) blur(8px);
+    background-color: var(--theme-navbar-bg);
+    width: 100%;
+    height: var(--theme-navbar-height);
+    overflow: visible;
+    font-family: "Lexend Deca", sans-serif;
   }
 
   .logo {
     display: flex;
-    font-size: 1.5rem;
     flex-shrink: 0;
-    line-height: 1;
-    color: hsla(var(--color-base-white), 100%, 1);
+    align-items: center;
     gap: 1rem;
     z-index: -1;
-    align-items: center;
+    color: hsla(var(--color-base-white), 100%, 1);
+    font-size: 1.5rem;
+    line-height: 1;
   }
 
   .logo a {
     display: flex;
-    text-decoration: none;
-    font-weight: 500;
     align-items: center;
+    font-weight: 500;
+    text-decoration: none;
   }
 
   .logo a {
@@ -168,35 +168,35 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
 
   .logo .title {
     display: none;
-    font: inherit;
-    color: inherit;
     margin: 0;
+    color: inherit;
+    font: inherit;
   }
 
   .nav-wrapper {
     display: flex;
-    align-items: center;
     justify-content: flex-end;
+    align-items: center;
     gap: 1em;
+    padding: 0 1rem;
     width: 100%;
     max-width: 82em;
-    padding: 0 1rem;
   }
 
   header hr {
-    margin-left: 4px;
     margin-right: 4px;
+    margin-left: 4px;
+    border-top: 0;
+    background-color: var(--theme-divider);
     width: 1px;
     height: 1.5rem;
-    background-color: var(--theme-divider);
-    border-top: 0;
   }
 
   @media (min-width: 50em) {
     .logo {
-      width: auto;
-      margin: 0;
       z-index: 0;
+      margin: 0;
+      width: auto;
     }
 
     .logo .title {
@@ -215,9 +215,9 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
   }
 
   .search-item {
+    display: flex;
     position: relative;
     z-index: 10;
     padding-left: 0.7rem;
-    display: flex;
   }
 </style>

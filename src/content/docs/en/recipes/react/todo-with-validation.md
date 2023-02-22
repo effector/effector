@@ -33,7 +33,7 @@ $todos.on(completed, (list, index) =>
   list.map((todo, foundIndex) => ({
     ...todo,
     completed: index === foundIndex ? !todo.completed : todo.completed,
-  }))
+  })),
 );
 $todos.on(removed, (state, index) => state.filter((_, i) => i !== index));
 
@@ -71,7 +71,13 @@ const App = () => {
     <div>
       <h1>Todos</h1>
       <form>
-        <input className="text" type="text" name="todo" value={todo} onChange={(e) => changed(e.target.value)} />
+        <input
+          className="text"
+          type="text"
+          name="todo"
+          value={todo}
+          onChange={(e) => changed(e.target.value)}
+        />
         <button type="submit" onClick={submit} className="submit">
           Submit
         </button>
