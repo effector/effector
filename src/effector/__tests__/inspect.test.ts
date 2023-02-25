@@ -209,7 +209,8 @@ describe('inspectGraph API', () => {
     const $store6 = combine([$store2, $store3])
 
     expect(argumentHistory(declMock).length).toBeGreaterThan(0)
-    expect(argumentHistory(declMock)).toMatchInlineSnapshot(`
+    const history = [...argumentHistory(declMock)]
+    expect(history).toMatchInlineSnapshot(`
       Array [
         "unit event1 (event) created (sid string, parent factory: undefined, id: string, loc: object)",
         "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
@@ -238,7 +239,14 @@ describe('inspectGraph API', () => {
     `)
 
     unsub()
+
+    const event2 = createEvent()
+    const $store1 = createStore(0)
+    const effFx = createEffect(() => {})
+
+    expect(argumentHistory(declMock)).toEqual(history)
   })
+  test.todo('factories support')
 })
 
 describe('real use cases', () => {
