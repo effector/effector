@@ -17,19 +17,23 @@ type Loc = {
   column: number
 }
 
-// Watch calculations
-type Message = {
-  type: 'update' | 'error'
-  value: unknown
-  stack: Record<string, unknown>
+type NodeCommonMeta = {
   kind: string
   sid?: string
   id: string
   name?: string
   loc?: Loc
   meta: Record<string, unknown>
-  trace?: Message[]
+  derived?: boolean
 }
+
+// Watch calculations
+type Message = {
+  type: 'update' | 'error'
+  value: unknown
+  stack: Record<string, unknown>
+  trace?: Message[]
+} & NodeCommonMeta
 
 const inspectSubs = new Set<{
   scope?: Scope
@@ -89,16 +93,8 @@ type Factory = {
 
 type UnitDeclaration = {
   type: 'unit'
-  kind: string
-  name?: string
   factory?: Factory
-  sid?: string
-  loc?: Loc
-  id: string
-  meta: Record<string, unknown>
-  // for derived units - stores or events
-  derived?: boolean
-}
+} & NodeCommonMeta
 
 type Declaration = UnitDeclaration
 
@@ -136,12 +132,12 @@ function getNodeMeta(stack: Stack) {
   return readNodeMeta(node)
 }
 
-function readNodeMeta(node: Node) {
+function readNodeMeta(node: Node): NodeCommonMeta {
   const {meta, id} = node
   const loc = getLoc(meta)
   const {sid, name, op: kind} = meta
 
-  return {meta, id, sid, name, kind, loc}
+  return {meta, id, sid, name, kind, loc, derived: meta.derived}
 }
 
 function getLoc(meta: Record<string, unknown>) {
@@ -170,16 +166,12 @@ function readUnitDeclaration(
   node: Node,
   regionStack: RegionStack,
 ): UnitDeclaration {
+  const nodeMeta = readNodeMeta(node)
+
   return {
     type: 'unit',
-    kind: node.meta.op,
-    name: node.meta.name,
     factory: regionStack ? regionStack.meta : undefined,
-    sid: node.meta.sid,
-    loc: getLoc(node.meta),
-    id: node.id,
-    meta: node.meta,
-    derived: node.meta.derived,
+    ...nodeMeta,
   }
 }
 
