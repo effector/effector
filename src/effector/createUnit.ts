@@ -370,7 +370,9 @@ export function createStore<State>(
   }
 
   if (!derived) {
-    store.reinit = createEvent<void>()
+    store.reinit = createEvent<void>({
+      named: 'reinit',
+    })
     store.reset(store.reinit)
   }
 

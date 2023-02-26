@@ -7,6 +7,8 @@ import {
   allSettled,
   createEffect,
   combine,
+  withRegion,
+  createNode,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
@@ -190,7 +192,7 @@ describe('inspect API', () => {
 function compactDeclaration(d: Declaration) {
   return `${d.derived ? 'derived ' : ''}${d.type} ${d.name} (${
     d.kind
-  }) created (sid ${typeof d.sid}, parent factory: ${typeof d.factory}, id: ${typeof d.id}, loc: ${typeof d.loc})`
+  }) created (sid ${typeof d.sid}, parent region: ${typeof d.region}, id: ${typeof d.id}, loc: ${typeof d.loc})`
 }
 
 describe('inspectGraph API', () => {
@@ -212,29 +214,29 @@ describe('inspectGraph API', () => {
     const history = [...argumentHistory(declMock)]
     expect(history).toMatchInlineSnapshot(`
       Array [
-        "unit event1 (event) created (sid string, parent factory: undefined, id: string, loc: object)",
-        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "unit 35 (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "unit $store2 (store) created (sid string, parent factory: undefined, id: string, loc: object)",
-        "unit effectFx (effect) created (sid string, parent factory: undefined, id: string, loc: object)",
-        "derived unit finally (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit done (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit fail (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit doneData (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit failData (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "unit 44 (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "unit 43 (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit inFlight (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit pending (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit $store2 → * (store) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit event1 → * (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "unit * → event1 (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit updates (event) created (sid object, parent factory: undefined, id: string, loc: undefined)",
-        "derived unit $store6 (store) created (sid string, parent factory: undefined, id: string, loc: object)",
+        "unit event1 (event) created (sid string, parent region: undefined, id: string, loc: object)",
+        "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "unit reinit (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "unit $store2 (store) created (sid string, parent region: undefined, id: string, loc: object)",
+        "unit effectFx (effect) created (sid string, parent region: undefined, id: string, loc: object)",
+        "derived unit finally (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit done (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit fail (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit doneData (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit failData (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "unit reinit (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "unit 43 (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit inFlight (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit pending (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit $store2 → * (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit event1 → * (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "unit * → event1 (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "derived unit $store6 (store) created (sid string, parent region: undefined, id: string, loc: object)",
       ]
     `)
 
@@ -246,7 +248,56 @@ describe('inspectGraph API', () => {
 
     expect(argumentHistory(declMock)).toEqual(history)
   })
-  test.todo('factories support')
+  describe('region support', () => {
+    test('simple case', () => {
+      function customOperator(config: Record<string, unknown>) {
+        withRegion(
+          createNode({
+            meta: {
+              myLibType: 'customOperator',
+              myLibConfig: config,
+            },
+          }),
+          () => {
+            const internalEvent = createEvent()
+          },
+        )
+      }
+
+      const declared = jest.fn()
+      const nonRegionalUnitDeclared = jest.fn()
+      const regionalUnitDeclared = jest.fn()
+      inspectGraph({
+        fn: d => {
+          declared()
+          if (!d.region) {
+            nonRegionalUnitDeclared()
+          } else {
+            regionalUnitDeclared(d.region.meta)
+          }
+        },
+      })
+
+      const $source = createStore(0)
+      const targetEvent = createEvent()
+
+      customOperator({
+        source: $source,
+        target: targetEvent,
+      })
+
+      expect(declared).toHaveBeenCalledTimes(5) // store == 1 store + 2 events (updates + reinit)
+      expect(nonRegionalUnitDeclared).toHaveBeenCalledTimes(4)
+      expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
+      expect(regionalUnitDeclared).toHaveBeenCalledWith({
+        myLibType: 'customOperator',
+        myLibConfig: {
+          source: $source,
+          target: targetEvent,
+        },
+      })
+    })
+  })
 })
 
 describe('real use cases', () => {

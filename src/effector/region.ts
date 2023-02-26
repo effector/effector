@@ -3,7 +3,10 @@ import type {NodeUnit, Node} from './index.h'
 import {getParent, getMeta, getGraph} from './getter'
 import {createNode} from './createNode'
 
-type DeclarationSourceReporter = (node: Node, regionStack: RegionStack | null) => void
+type DeclarationSourceReporter = (
+  node: Node,
+  regionStack: RegionStack | null,
+) => void
 
 let reporter: DeclarationSourceReporter
 
@@ -16,7 +19,15 @@ type RegionStack = {
   value: any
   template: Template | null
   sidRoot?: string
-  meta?: Record<string, unknown>
+  meta:
+    | Record<string, unknown>
+    | {
+        type: 'factory'
+        sid?: string
+        name?: string
+        loc: unknown
+        method?: string
+      }
 }
 
 export let regionStack: RegionStack | null = null
@@ -41,7 +52,7 @@ export function withRegion(unit: NodeUnit, cb: () => void) {
     value: unit,
     template: getMeta(unit, 'template') || readTemplate(),
     sidRoot: getMeta(unit, 'sidRoot') || (regionStack && regionStack.sidRoot),
-    meta: getGraph(unit).meta,
+    meta: getGraph(unit).meta || {},
   }
   try {
     return cb()
@@ -64,8 +75,8 @@ export const withFactory = ({
   fn: () => any
 }) => {
   const factoryRootNode = createNode({
-    meta: {sidRoot: readSidRoot(sid), sid, name, loc, method, type: "factory"},
+    meta: {sidRoot: readSidRoot(sid), sid, name, loc, method, type: 'factory'},
   })
-  reportDeclaration(factoryRootNode)
+
   return withRegion(factoryRootNode, fn)
 }

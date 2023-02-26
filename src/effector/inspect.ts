@@ -83,17 +83,30 @@ export function inspect(config: {
 }
 
 // Track declarations and graph structure
-type Factory = {
-  name?: string
-  loc?: Loc
-  method?: string
-  sid?: string
-  from?: string
-}
+type Region =
+  | {
+      type: 'region'
+      meta: Record<string, unknown>
+      parent?: Region
+    }
+  | {
+      type: 'factory'
+      parent?: Region
+      meta: {
+        sid?: string
+        name?: string
+        method?: string
+        loc?: {
+          file: string
+          line: number
+          column: number
+        }
+      }
+    }
 
 type UnitDeclaration = {
   type: 'unit'
-  factory?: Factory
+  region?: Region
 } & NodeCommonMeta
 
 type Declaration = UnitDeclaration
@@ -170,14 +183,40 @@ function readUnitDeclaration(
 
   return {
     type: 'unit',
-    factory: regionStack ? regionStack.meta : undefined,
+    region: readRegionStack(regionStack),
     ...nodeMeta,
+  }
+}
+
+function readRegionStack(regionStack?: RegionStack | null): Region | undefined {
+  if (!regionStack) return
+  const {parent, meta} = regionStack
+  const parentRegion = readRegionStack(parent) || undefined
+
+  if (meta.type === 'factory') {
+    return {
+      type: 'factory',
+      parent: parentRegion,
+      meta,
+    }
+  }
+
+  return {
+    type: 'region',
+    parent: parentRegion,
+    meta,
   }
 }
 
 type RegionStack = {
   parent: RegionStack | null
-  value: any
-  sidRoot?: string
-  meta?: Record<string, unknown>
+  meta:
+    | Record<string, unknown>
+    | {
+        type: 'factory'
+        sid?: string
+        name?: string
+        method?: string
+        loc?: Loc
+      }
 }
