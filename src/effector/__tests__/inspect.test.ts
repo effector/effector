@@ -12,6 +12,7 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
+import {withFactory} from '../region'
 
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
@@ -249,7 +250,7 @@ describe('inspectGraph API', () => {
     expect(argumentHistory(declMock)).toEqual(history)
   })
   describe('region support', () => {
-    test('simple case', () => {
+    test('one-level withRegion', () => {
       function customOperator(config: Record<string, unknown>) {
         withRegion(
           createNode({
@@ -294,6 +295,106 @@ describe('inspectGraph API', () => {
         myLibConfig: {
           source: $source,
           target: targetEvent,
+        },
+      })
+    })
+    test('one-level withFactory', () => {
+      function customOperator(config: Record<string, unknown>) {
+        const internalEvent = createEvent()
+      }
+
+      const declared = jest.fn()
+      const nonRegionalUnitDeclared = jest.fn()
+      const regionalUnitDeclared = jest.fn()
+      inspectGraph({
+        fn: d => {
+          declared()
+          if (!d.region) {
+            nonRegionalUnitDeclared()
+          } else {
+            regionalUnitDeclared(d.region.meta)
+          }
+        },
+      })
+
+      const $source = createStore(0)
+      const targetEvent = createEvent()
+
+      withFactory({
+        sid: 'customOperator-call-1',
+        method: 'customOperator',
+        fn: () =>
+          customOperator({
+            source: $source,
+            target: targetEvent,
+          }),
+      })
+
+      expect(declared).toHaveBeenCalledTimes(5) // store == 1 store + 2 events (updates + reinit)
+      expect(nonRegionalUnitDeclared).toHaveBeenCalledTimes(4)
+      expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
+      expect(regionalUnitDeclared).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sid: 'customOperator-call-1',
+          method: 'customOperator',
+        }),
+      )
+    })
+    test('nested regions', () => {
+      function customOperator(config: Record<string, unknown>) {
+        withRegion(createNode({meta: {region: 'outer'}}), () => {
+          withRegion(createNode({meta: {region: 'inner'}}), () => {
+            const internalEvent = createEvent()
+          })
+        })
+      }
+
+      const declared = jest.fn()
+      const nonRegionalUnitDeclared = jest.fn()
+      const regionalUnitDeclared = jest.fn()
+      inspectGraph({
+        fn: d => {
+          declared()
+          if (!d.region) {
+            nonRegionalUnitDeclared()
+          } else {
+            regionalUnitDeclared(d.region)
+          }
+        },
+      })
+
+      const $source = createStore(0)
+      const targetEvent = createEvent()
+
+      withFactory({
+        sid: 'customOperator-call-1',
+        method: 'customOperator',
+        fn: () =>
+          customOperator({
+            source: $source,
+            target: targetEvent,
+          }),
+      })
+
+      expect(declared).toHaveBeenCalledTimes(5) // store == 1 store + 2 events (updates + reinit)
+      expect(nonRegionalUnitDeclared).toHaveBeenCalledTimes(4)
+      expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
+      expect(regionalUnitDeclared).toHaveBeenCalledWith({
+        type: 'region',
+        meta: {
+          region: 'inner',
+        },
+        parent: {
+          type: 'region',
+          meta: {region: 'outer'},
+          parent: {
+            type: 'factory',
+            parent: undefined,
+            meta: expect.objectContaining({
+              sid: 'customOperator-call-1',
+              method: 'customOperator',
+            }),
+          },
         },
       })
     })
