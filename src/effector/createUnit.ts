@@ -338,7 +338,10 @@ export function createStore<State>(
       mov({from: STACK, target: plainState}),
     ],
     child: updates,
-    meta,
+    meta: {
+      ...meta,
+      defaultState,
+    },
     regional: true,
   })
   const serializeMeta = getMeta(store, 'serialize')

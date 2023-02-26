@@ -605,5 +605,84 @@ describe('real use cases', () => {
       'name: started, error: unexpected error, branch computation stopped',
     )
   })
-  test.todo('custom factories and operators handling')
+  test('list both units and custom stuff by file', () => {
+    function createQuery(config: Record<string, unknown>) {
+      return withRegion(
+        createNode({
+          meta: {
+            config,
+          },
+        }),
+        () => {
+          const start = createEvent()
+          const $data = createStore(0)
+
+          return {
+            start,
+            $data,
+          }
+        },
+      )
+    }
+
+    const unitsByFile: Record<
+      string,
+      {
+        name: string
+        value: unknown
+      }[]
+    > = {}
+    inspectGraph({
+      fn: d => {
+        if (d.loc) {
+          const file = d.loc.file.split('/').at(-1) || ''
+          const units = unitsByFile[file] || []
+          const name = d.region
+            ? `${d.region.parent?.meta.name!}/${d.name!}`
+            : d.name!
+
+          units.push({
+            name: name,
+            value: d.meta.defaultState,
+          })
+          unitsByFile[file] = units
+        }
+      },
+    })
+    const $a = createStore(0)
+    const $b = createStore('1')
+    const $c = createStore(2)
+
+    const myQuery = withFactory({
+      sid: 'some-sid',
+      name: 'myQuery',
+      method: 'createQuery',
+      fn: () => createQuery({a: 1, b: 2}),
+    })
+
+    expect(unitsByFile).toEqual({
+      'inspect.test.ts': [
+        {
+          name: '$a',
+          value: 0,
+        },
+        {
+          name: '$b',
+          value: '1',
+        },
+        {
+          name: '$c',
+          value: 2,
+        },
+        {
+          name: 'myQuery/start',
+          value: undefined,
+        },
+        {
+          name: 'myQuery/$data',
+          value: 0,
+        },
+      ],
+    })
+  })
 })
