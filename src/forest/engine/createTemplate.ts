@@ -283,6 +283,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     namespace,
     env,
     isBlock: isBlock || !!(parent && parent.isBlock),
+    units: [],
   }
   if (parent) {
     parent.childTemplates.push(template)

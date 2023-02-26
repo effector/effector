@@ -1,5 +1,5 @@
 import type {Store, Event} from 'effector'
-import type {Scope} from '../effector/unit.h'
+import type {Scope, CommonUnit} from '../effector/unit.h'
 import type {StateRef, Node, Cmd} from '../effector/index.h'
 
 import type {
@@ -41,6 +41,7 @@ export type Template = {
   deferredInit?: (() => void) | null
   isBlock: boolean
   handlers: TemplateHandlers
+  units: CommonUnit[]
 }
 
 export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
