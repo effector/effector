@@ -22,7 +22,12 @@ export function serialize(
   forIn(scope.sidValuesMap, (value, sid) => {
     if (includes(ignoredStores, sid)) return
     const id = scope.sidIdMap[sid]
-    const serializer = scope.sidSerializeMap[sid] || noopSerializer
+    const serializeSettings = scope.sidSerializeSettings.get(sid) ?? {
+      ignore: false,
+      write: noopSerializer,
+    }
+    if (serializeSettings.ignore) return
+    const serializer = serializeSettings.write
     // if (!scope.changedStores.has(id)) return
     if (id && id in scope.reg) {
       result[sid] = serializer(scope.reg[id].current)

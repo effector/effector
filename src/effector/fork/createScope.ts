@@ -71,8 +71,15 @@ export function createScope(unit?: Domain): Scope {
             forkPage.sidValuesMap[sid] = value
 
             const serialize = getMeta(storeNode, 'serialize')
-            if (serialize && serialize !== 'ignore') {
-              forkPage.sidSerializeMap[sid] = serialize.write
+            if (serialize) {
+              if (serialize === 'ignore') {
+                forkPage.sidSerializeSettings.set(sid, {ignore: true})
+              } else {
+                forkPage.sidSerializeSettings.set(sid, {
+                  ignore: false,
+                  write: serialize.write,
+                })
+              }
             }
           }
         }
@@ -104,7 +111,7 @@ export function createScope(unit?: Domain): Scope {
     reg: page,
     sidValuesMap: {},
     sidIdMap: {},
-    sidSerializeMap: {},
+    sidSerializeSettings: new Map(),
     getState(store: StateRef | Store<any>) {
       if ('current' in store) {
         return getPageRef(currentPage, resultScope, null, store).current
@@ -117,7 +124,7 @@ export function createScope(unit?: Domain): Scope {
     graphite: createNode({
       family: {
         type: DOMAIN,
-        links: [forkInFlightCounter, storeChange, warnSerializeNode],
+        links: [storeChange, forkInFlightCounter, warnSerializeNode],
       },
       meta: {unit: 'fork'},
       scope: {forkInFlightCounter},
