@@ -124,7 +124,7 @@ export function createScope(unit?: Domain): Scope {
     graphite: createNode({
       family: {
         type: DOMAIN,
-        links: [storeChange, forkInFlightCounter, warnSerializeNode],
+        links: [forkInFlightCounter, storeChange, warnSerializeNode],
       },
       meta: {unit: 'fork'},
       scope: {forkInFlightCounter},
