@@ -193,7 +193,12 @@ export function createEvent<Payload = any>(
   }
   return finalEvent
 }
-function on(store: Store<State>, methodName: string, nodeSet: CommonUnit | CommonUnit[], fn: Function) {
+function on<State>(
+  store: Store<State>,
+  methodName: string,
+  nodeSet: CommonUnit | CommonUnit[],
+  fn: Function,
+) {
   assertNodeSet(nodeSet, methodName, 'first argument')
   assert(isFunction(fn), 'second argument should be a function')
   deprecate(
@@ -205,9 +210,7 @@ function on(store: Store<State>, methodName: string, nodeSet: CommonUnit | Commo
     store.off(trigger)
     getSubscribers(store).set(
       trigger,
-      createSubscription(
-        updateStore(trigger, store, 'on', callARegStack, fn),
-      ),
+      createSubscription(updateStore(trigger, store, 'on', callARegStack, fn)),
     )
   })
   return store
@@ -251,7 +254,9 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
-      forEach(units, unit => on(store, '.reset', unit, () => store.defaultState))
+      forEach(units, unit =>
+        on(store, '.reset', unit, () => store.defaultState),
+      )
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
@@ -341,7 +346,7 @@ export function createStore<State>(
   const customSerialize = !serializeMeta || ignored ? false : serializeMeta
   const sid: string | null = getMeta(store, 'sid')
   if (sid) {
-    if (!ignored) setMeta(store, 'storeChange', true)
+    setMeta(store, 'storeChange', true)
     plainState.sid = sid
 
     if (customSerialize) {
