@@ -1,5 +1,5 @@
-import {fork, serialize} from 'effector'
-import {createField, createFieldset} from './factory'
+import {allSettled, attach, createStore, fork, serialize} from 'effector'
+import {createField, createFieldset, createOperation} from './factory'
 
 test('factory support', async () => {
   const username = createField('username', 'guest')
@@ -12,8 +12,8 @@ test('factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-iajnln|-77rc2s": 21,
-      "8iua16|-77rc2s": "alice",
+      "-iajnln|57xl5h": 21,
+      "8iua16|57xl5h": "alice",
     }
   `)
 })
@@ -31,8 +31,29 @@ test('nested factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-fjbluz|1104zu|-77rc2s": "alice",
-      "-fjbluz|11jxl7|-77rc2s": 21,
+      "-fjbluz|1104zu|57xl5h": "alice",
+      "-fjbluz|11jxl7|57xl5h": 21,
+    }
+  `)
+})
+
+test('issue #863: serialize should ignore store with serialize: ignore event it used in fork({ values })', async () => {
+  const $count = createStore(0, {sid: 'mustBeIgnored', serialize: 'ignore'})
+  const fx = attach({
+    source: $count,
+    effect: count => count * 100,
+  })
+
+  const operation = createOperation(fx)
+
+  const scope = fork({
+    values: [[$count, 5]],
+  })
+
+  await allSettled(operation.run, {scope})
+  expect(serialize(scope)).toMatchInlineSnapshot(`
+    Object {
+      "gxtf3v|k9rtgc": 500,
     }
   `)
 })
