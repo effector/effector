@@ -24,14 +24,12 @@ sample({
 })
 ```
 
-To pick up the current [scope](/docs/api/effector/Scope.md), let's write a callback in __app.tsx_ under our _clientScope_:
+To pick up the current [scope](/docs/api/effector/Scope.md), let's write a callback in [useScope.tsx](/docs/recipes/nextjs/integrate.md) under our _useScope_:
 
 ```js
 ...
 
-let clientScope: Scope;
-
-export const getCurrentScope = () => clientScope;
+export const getCurrentScope = () => scope;
 
 ...
 ```

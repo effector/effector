@@ -6,28 +6,61 @@ lang: en-US
 
 # Integrate Next.js with effector
 
-To do this, we will use the native [fork](/api/effector/fork.md) method.
-In the __app.tsx_ file, we create our own [scope](/api/effector/Scope.md) and wrap the application in a provider from _effector-react/scope_
+To do this, we will use the native [fork](/api/effector/fork.md) method to create a [scope](/api/effector/Scope.md)
+This hook does that  and memoize our data. It also merges server and client states:
+
+```js
+import { fork, Scope, serialize } from 'effector';
+import { useMemo } from 'react';
+
+let scope;
+
+const initScope = initialData => fork({ values: initialData });
+
+const initializeScope = preloadedData => {
+    let _scope = scope ?? initScope(preloadedData);
+
+    // After navigating to a page with an initial scope state, merge that state
+    // with the current state in the scope, and create a new scope
+    if (preloadedData && scope) {
+        _scope = initScope({
+            ...serialize(scope, { onlyChanges: true }),
+            ...preloadedData,
+        });
+
+        // Reset the current scope
+        scope = undefined;
+    }
+
+    // For SSG and SSR always create a new scope
+    if (typeof window === 'undefined') {
+        return _scope;
+    }
+
+    // Create the scope once in the client
+    if (!scope) {
+        scope = _scope;
+    }
+
+    return _scope;
+};
+
+export const useScope = (initialState): Scope => {
+    return useMemo(() => initializeScope(initialState), [initialState]);
+};
+```
+
+In the __app.tsx_ file, we used our **useScope** and wrap the application in a provider from _effector-react/scope_
 
 ```js
 import { AppProps } from 'next/app';
 import { FC } from 'react';
 import { Provider } from 'effector-react/scope';
 import { fork, Scope, serialize } from 'effector';
-
-let clientScope: Scope;
+import { useScope } from '../useScope'; // use your path to file
 
 const App: FC<AppProps<{ initialState }>> = ({ Component, pageProps }) => {
-    const scope = fork({
-        values: {
-            ...(clientScope && serialize(clientScope)),
-            ...pageProps.initialState,
-        },
-    });
-
-    if (typeof window !== 'undefined') {
-        clientScope = scope;
-    }
+    const scope = useScope(pageProps.initialState);
 
     return (
         <Provider
