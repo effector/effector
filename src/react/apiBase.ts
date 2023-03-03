@@ -5,6 +5,8 @@ import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/wit
 import {throwError} from './throw'
 import {createWatch} from './createWatch'
 import {withDisplayName} from './withDisplayName'
+import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
+import {Gate} from './index.h'
 
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
@@ -110,10 +112,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     const oldVal = state.value
     const oldKeys = state.storeKeys
     const scopeChanged = scope !== flags.scope
-    if (
-      (storeKeys.length > 0 || oldKeys.length > 0) &&
-      (flags.stale || flags.justSubscribed || scopeChanged)
-    ) {
+    if (flags.stale || flags.justSubscribed || scopeChanged) {
       changed = !flags.justSubscribed || scopeChanged
       resultValue = isList ? [...eventsShape] : {...eventsShape}
       if (oldKeys.length !== storeKeys.length) {
@@ -333,4 +332,64 @@ export function useEventBase(eventObject: any, scope?: Scope) {
     }
     return shape
   }, [scope, ...Object.keys(events), ...Object.values(events)])
+}
+
+export function useGateBase<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+  scope?: Scope,
+) {
+  const {open, close, set} = useUnitBase(
+    {
+      open: GateComponent.open,
+      close: GateComponent.close,
+      set: GateComponent.set,
+    },
+    scope,
+  )
+  const ForkedGate = React.useMemo(
+    () =>
+      ({
+        open,
+        close,
+        set,
+      } as Gate<Props>),
+    [GateComponent, open],
+  )
+
+  const propsRef = React.useRef<{value: any; count: number}>({
+    value: null,
+    count: 0,
+  })
+  useIsomorphicLayoutEffect(() => {
+    ForkedGate.open(propsRef.current.value)
+    return () => ForkedGate.close(propsRef.current.value) as any
+  }, [ForkedGate])
+  if (!shallowCompare(propsRef.current.value, props)) {
+    propsRef.current.value = props
+    propsRef.current.count += 1
+  }
+  useIsomorphicLayoutEffect(() => {
+    ForkedGate.set(propsRef.current.value)
+  }, [propsRef.current.count])
+}
+
+function shallowCompare(a: any, b: any) {
+  if (a === b) return true
+  if (
+    typeof a === 'object' &&
+    a !== null &&
+    typeof b === 'object' &&
+    b !== null
+  ) {
+    const aKeys = Object.keys(a)
+    const bKeys = Object.keys(b)
+    if (aKeys.length !== bKeys.length) return false
+    for (let i = 0; i < aKeys.length; i++) {
+      const key = aKeys[i]
+      if (a[key] !== b[key]) return false
+    }
+    return true
+  }
+  return false
 }

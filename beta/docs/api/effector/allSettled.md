@@ -34,3 +34,51 @@ Return value for effect is supported since [effector 21.4.0](https://changelog.e
 ::: tip Contribution
 Please, [open PullRequest](https://github.com/effector/effector) and contribute examples for this section via "Edit this page" link below.
 :::
+
+## allSettled(scope) {#allSettled-scope-formulae}
+
+```ts
+allSettled<T>(scope): Promise<void>
+```
+
+Check for any ongoing computations in provided scope and wait for their finish.
+
+### Arguments {#allSettled-scope-arguments}
+
+1. `scope`: [_Scope_](./Scope.md)
+
+::: info since
+Supported since effector 22.5.0
+:::
+
+### Example {#allSettled-scope-example}
+
+#### Usage in tests
+
+E.g. tests for integration with some external reactive api
+
+```ts
+test('integration with externalSource', async () => {
+  const scope = fork()
+
+  const updated = createEvent()
+
+  sample({
+    clock: updated,
+    target: someOtherLogicStart,
+  })
+
+  // 1. Subscribe event to external source
+  const externalUpdated = scopeBind(updated, {scope})
+  externalSource.listen(() => externalUpdates())
+
+  // 2. Trigger update of external source
+  externalSource.trigger()
+
+  //3. Wait for all triggered computations in effector's scope, even though these were not triggered by effector itself
+  await allSettled(scope)
+
+  // 4. Check anything as usual
+  expect(...).toBe(...)
+})
+```

@@ -118,6 +118,7 @@ const pushFirstHeapItem = (
   parent: Stack | null,
   value: any,
   scope?: Scope | null | void,
+  meta?: Record<string, any> | void,
 ) =>
   pushHeap(
     0,
@@ -129,6 +130,7 @@ const pushFirstHeapItem = (
       value,
       page,
       scope,
+      meta,
     },
     type,
   )
@@ -230,17 +232,20 @@ export function launch(config: {
   params?: any
   defer?: boolean
   page?: Leaf | void | null
-  scope?: Scope | void
+  scope?: Scope | void | null
   stack?: Stack | void
+  meta?: Record<string, any> | void
 }): void
 export function launch(unit: NodeUnit, payload?: any, upsert?: boolean): void
 export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
+  let meta: Record<string, any> | void
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
+    meta = unit.meta
     pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
     if (unit[STACK]) stackForLaunch = unit[STACK]
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
@@ -258,6 +263,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         stackForLaunch,
         payload[i],
         forkPageForLaunch,
+        meta,
       )
     }
   } else {
@@ -268,6 +274,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       stackForLaunch,
       payload,
       forkPageForLaunch,
+      meta,
     )
   }
   if (upsert && !isRoot) return

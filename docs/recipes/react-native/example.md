@@ -56,7 +56,7 @@ forward({
 fetchCountFromAsyncStorageFx()
 
 export default () => {
-  const count = useStore(counter)
+  const count = useStore($counter)
   
   return (
     <View style={styles.container}>

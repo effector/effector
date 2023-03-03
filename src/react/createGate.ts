@@ -1,51 +1,10 @@
-import React from 'react'
-import {createStore, launch, Store, Domain, createEvent} from 'effector'
+import {createStore, launch, Domain, createEvent} from 'effector'
 import {Gate} from './index.h'
-import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {withDisplayName} from './withDisplayName'
+import {useGateBase} from './apiBase'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
 import {isObject} from '../effector/is'
 
-export function useGate<Props>(
-  GateComponent: Gate<Props>,
-  props: Props = {} as any,
-) {
-  const propsRef = React.useRef<{value: any; count: number}>({
-    value: null,
-    count: 0,
-  })
-  useIsomorphicLayoutEffect(() => {
-    GateComponent.open(propsRef.current.value)
-    return () => GateComponent.close(propsRef.current.value) as any
-  }, [GateComponent])
-  if (!shallowCompare(propsRef.current.value, props)) {
-    propsRef.current.value = props
-    propsRef.current.count += 1
-  }
-  useIsomorphicLayoutEffect(() => {
-    GateComponent.set(propsRef.current.value)
-  }, [propsRef.current.count])
-}
-
-function shallowCompare(a: any, b: any) {
-  if (a === b) return true
-  if (
-    typeof a === 'object' &&
-    a !== null &&
-    typeof b === 'object' &&
-    b !== null
-  ) {
-    const aKeys = Object.keys(a)
-    const bKeys = Object.keys(b)
-    if (aKeys.length !== bKeys.length) return false
-    for (let i = 0; i < aKeys.length; i++) {
-      const key = aKeys[i]
-      if (a[key] !== b[key]) return false
-    }
-    return true
-  }
-  return false
-}
 export function createGateImplementation<State>({
   domain,
   defaultState,
@@ -55,7 +14,7 @@ export function createGateImplementation<State>({
 }: {
   domain?: Domain
   defaultState: State | {}
-  hook: typeof useGate
+  hook: typeof useGateBase
   mainConfig?: Record<string, any>
   maybeConfig?: Record<string, any> & {sid?: string}
 }): Gate<State> {
@@ -127,12 +86,12 @@ const isStructuredConfig = (arg: unknown) =>
   isObject(arg) && (arg.and || arg.or)
 
 export function processCreateGateConfig<State>(
-  hook: typeof useGate,
+  hook: typeof useGateBase,
   args: unknown[],
 ): {
   domain?: Domain
   defaultState: State | {}
-  hook: typeof useGate
+  hook: typeof useGateBase
   mainConfig?: Record<string, any>
   maybeConfig?: Record<string, any> & {sid?: string}
 } {
@@ -168,5 +127,7 @@ export function processCreateGateConfig<State>(
 }
 
 export function createGate<Props>(...args: unknown[]): Gate<Props> {
-  return createGateImplementation<Props>(processCreateGateConfig(useGate, args))
+  return createGateImplementation<Props>(
+    processCreateGateConfig(useGateBase, args),
+  )
 }

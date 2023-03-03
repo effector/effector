@@ -375,6 +375,7 @@ export type Stack = {
   node: Node
   page?: any
   scope?: Scope
+  meta?: Record<string, any>
 }
 
 type BarrierPriorityTag = 'barrier' | 'sampler' | 'effect'
@@ -592,6 +593,7 @@ export function launch<T>(config: {
   defer?: boolean
   page?: any
   scope?: Scope
+  meta?: Record<string, any>
 }): void
 /**
  * Allows to directly start computation from given unit or graph node. Low level tool, usually absent in common applications
@@ -603,6 +605,7 @@ export function launch(config: {
   defer?: boolean
   page?: any
   scope?: Scope
+  meta?: Record<string, any>
 }): void
 
 /**
@@ -908,6 +911,8 @@ export function restore<E>(event: Event<E>, defaultState: E): Store<E>
  * @param defaultState initial state of new store
  */
 export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
+export function restore<T extends Event<any>>(event: T): never
+export function restore<T extends Effect<any, any, any>>(effect: T): never
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {
@@ -3099,6 +3104,12 @@ export function allSettled(
   unit: Unit<void>,
   config: {scope: Scope},
 ): Promise<void>
+/**
+ * Check for any ongoing computations in provided scope and wait for them to settle.
+ * @param scope {Scope}
+ * @returns void promise, will resolve when there will be no pending effects in given scope
+ */
+export function allSettled(scope: Scope): Promise<void>
 
 export function createWatch<T>({
   unit,

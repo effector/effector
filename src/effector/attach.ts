@@ -53,6 +53,7 @@ export function attach(config: any) {
             },
             page: stack.page,
             defer: true,
+            meta: stack.meta,
           })
         } else {
           upd.args = [sourceData, computedParams]

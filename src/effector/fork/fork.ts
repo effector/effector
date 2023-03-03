@@ -13,13 +13,13 @@ type ForkConfig = {
 
 export function fork(
   domainOrConfig?: Domain | ForkConfig,
-  optiionalConfig?: ForkConfig,
+  optionalConfig?: ForkConfig,
 ) {
   let config: ForkConfig | void = domainOrConfig as any
   let domain: Domain
   if (is.domain(domainOrConfig)) {
     domain = domainOrConfig
-    config = optiionalConfig
+    config = optionalConfig
   }
 
   const scope = createScope(domain!)

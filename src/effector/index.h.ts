@@ -144,4 +144,5 @@ export type Stack = {
   node: Node
   page: Leaf | null
   scope?: Scope | null | void
+  meta?: Record<string, any> | void
 }

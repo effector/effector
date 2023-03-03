@@ -1983,6 +1983,28 @@ exports[`babel-plugin should debug sids with options 1`] = `
 "
 `;
 
+exports[`babel-plugin should default factories 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/default-factories.js'
+import {withFactory as _withFactory} from 'effector'
+import {createQuery} from '@farfetched/core'
+
+const q = _withFactory({
+  sid: '-9en8j0',
+  fn: () =>
+    createQuery({
+      handler: async () => null,
+    }),
+  name: 'q',
+  method: 'createQuery',
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 10,
+  },
+})
+"
+`;
+
 exports[`babel-plugin should factories 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/factories.js'
 import {withFactory as _withFactory2} from 'effector'
@@ -2971,6 +2993,27 @@ const p = scopeBind(domainEvent)
 const q = allSettled(domainEvent, {
   scope,
 })
+"
+`;
+
+exports[`babel-plugin should localVariables 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/localVariables.js'
+import {createEvent} from 'effector'
+
+function A() {
+  const createEvent = 123
+}
+
+function B() {
+  return createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 8,
+      column: 9,
+    },
+    sid: '2wwj9e',
+  })
+}
 "
 `;
 

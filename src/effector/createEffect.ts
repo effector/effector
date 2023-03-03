@@ -12,6 +12,7 @@ import {assert} from './throw'
 import {EFFECT} from './tag'
 import {add, removeItem} from './collection'
 import {flattenConfig} from './config'
+import {nextEffectID} from './id'
 
 type RunnerData<Params, Done, Fail> = {
   params: Params
@@ -161,11 +162,15 @@ export function createEffect<Params, Done, Fail = Error>(
           ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
           : /** empty stack means that this node was launched directly */
             params
+        if (!stack.meta) {
+          stack.meta = {fxID: nextEffectID()}
+        }
         launch({
           target: runner,
           params: upd,
           defer: true,
           scope: getForkPage(stack),
+          meta: stack.meta,
         })
         return upd.params
       },
@@ -186,10 +191,12 @@ export function createEffect<Params, Done, Fail = Error>(
           })
           .catch(() => {})
       }
-      launch({target: instance, params: payload, scope: forkPage})
-    } else {
-      launch(instance, payload)
     }
+    launch({
+      target: instance,
+      params: payload,
+      scope: forkPage,
+    })
     return req.req
   }
 
@@ -263,6 +270,7 @@ export const onSettled =
       // WARN! Will broke forest pages as they arent moved to new scope
       page: stack.page,
       scope: scopeRef.ref,
+      meta: stack.meta,
     })
   }
 const sidechain = createNode({

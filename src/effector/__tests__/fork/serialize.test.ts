@@ -69,6 +69,22 @@ test('serialize: ignore', async () => {
   expect(serialize(scope)).toEqual({b: 1})
 })
 
+test('serialize: ignore with fork(values)', async () => {
+  const inc = createEvent()
+  const $a = createStore(0, {sid: 'a', serialize: 'ignore'})
+  const $b = createStore(0, {sid: 'b'})
+  $a.on(inc, x => x + 1)
+  $b.on(inc, x => x + 1)
+
+  const scope = fork({
+    values: [[$a, 100]]
+  })
+
+  await allSettled(inc, {scope})
+
+  expect(serialize(scope)).toEqual({b: 1})
+})
+
 describe('serialize: custom', () => {
   test('base case', async () => {
     expect.assertions(4)

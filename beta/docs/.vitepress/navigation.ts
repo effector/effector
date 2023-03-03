@@ -45,4 +45,25 @@ export const navigation: DefaultTheme.NavItem[] = [
     text: 'Changelog',
     link: 'https://changelog.effector.dev/',
   },
+  {
+    text: 'v22.x.x',
+    items: [
+      {
+        text: 'beta (current)',
+        link: '/',
+      },
+      {
+        text: 'v22.x.x (actual)',
+        link: 'https://effector.dev',
+      },
+      {
+        text: 'v21.x.x',
+        link: 'https://v21.effector.dev',
+      },
+      {
+        text: 'v20.x.x',
+        link: 'https://v20.effector.dev',
+      },
+    ],
+  },
 ]
