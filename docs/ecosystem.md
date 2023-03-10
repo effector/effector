@@ -28,6 +28,7 @@ More content in [awesome-effector repository](https://github.com/effector/awesom
 - [efform](https://github.com/tehSLy/efform) - Form manager, based on effector state manager, designed to deliver high-quality DX.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form)
 - [filledout](https://filledout.github.io) - Form manager with easy-to-use yup validation
+- [effector-final-form](https://github.com/binjospookie/effector-final-form) - Effector bindings for Final Form.
 
 ## Templates
 
