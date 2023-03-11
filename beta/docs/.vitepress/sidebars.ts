@@ -312,6 +312,10 @@ const commonSidebars: LSidebar = {
           text: {en: 'launch', ru: 'launch'},
           link: '/api/effector/launch',
         },
+        {
+          text: {en: 'inspect', ru: 'inspect'},
+          link: '/api/effector/inspect',
+        },
       ],
     },
     {
