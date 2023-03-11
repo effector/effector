@@ -14,7 +14,7 @@ Useful to create developer tools and production monitoring and observability ins
 Allows to track any computations, that have happened in the effector's kernel.
 
 ```ts
-import {inspect, Message} from 'effector/inspect'
+import {inspect, type Message} from 'effector/inspect'
 
 import {someEvent} from './app-code'
 
@@ -45,7 +45,7 @@ If no scope is provided - default out-of-scope mode computations will be tracked
 
 ```ts
 import {fork, allSettled} from 'effector'
-import {inspect, Message} from 'effector/inspect'
+import {inspect, type Message} from 'effector/inspect'
 
 import {someEvent} from './app-code'
 
@@ -80,7 +80,7 @@ It is useful to debug the specific reason of some event happening
 
 ```ts
 import {fork, allSettled} from 'effector'
-import {inspect, Message} from 'effector/inspect'
+import {inspect, type Message} from 'effector/inspect'
 
 import {someEvent, $count} from './app-code'
 
@@ -126,4 +126,26 @@ inspect({
     }
   },
 })
+```
+
+## Inspect Graph
+
+Allows to track units declarations.
+
+```ts
+import {createStore} from "effector"
+import { inspectGraph, type Declaration } from "effector/inspect"
+
+function printDeclaration(d: Declaration) {
+  console.log(`${d.kind} ${d.name}`)
+}
+
+inspectGraph({
+  fn: (d) => {
+    printDeclaration(d)
+  }
+})
+
+const $count = createStore(0)
+// logs "store $count" to console
 ```
