@@ -377,10 +377,12 @@ describe('inspectGraph API', () => {
       inspectGraph({
         fn: d => {
           declared(`${d.type} ${d.name} created`)
-          if (!d.region) {
-            nonRegionalUnitDeclared()
-          } else {
-            regionalUnitDeclared(d.region)
+          if (d.type === 'unit') {
+            if (!d.region) {
+              nonRegionalUnitDeclared()
+            } else {
+              regionalUnitDeclared(d.region)
+            }
           }
         },
       })
@@ -405,12 +407,15 @@ describe('inspectGraph API', () => {
         meta: {
           region: 'inner',
         },
-        parent: {
+        region: {
           type: 'region',
           meta: {region: 'outer'},
-          parent: {
+          region: {
             type: 'factory',
-            parent: undefined,
+            region: undefined,
+            sid: 'customOperator-call-1',
+            method: 'customOperator',
+            name: 'test-name',
             meta: expect.objectContaining({
               sid: 'customOperator-call-1',
               method: 'customOperator',
@@ -427,7 +432,7 @@ describe('inspectGraph API', () => {
           "unit internalEvent created",
           "region undefined created",
           "region undefined created",
-          "factory undefined created",
+          "factory test-name created",
         ]
       `)
     })
