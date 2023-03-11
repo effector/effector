@@ -27,11 +27,11 @@ type Region =
   | {
       type: 'region'
       meta: Record<string, unknown>
-      parent?: Region
+      region?: Region
     }
   | {
       type: 'factory'
-      parent?: Region
+      region?: Region
       meta: {
         sid?: string
         name?: string
@@ -44,22 +44,59 @@ type Region =
       }
     }
 
-export type Declaration = {
-  type: 'unit'
-  kind: string
-  name?: string
-  id: string
-  sid?: string
-  loc?: {
-    file: string
-    line: number
-    column: number
-  }
-  meta: Record<string, unknown>
-  region?: Show<Region>
-  // for derived units - stores or events
-  derived?: boolean
-}
+export type Declaration =
+  | {
+      type: 'unit'
+      kind: string
+      name?: string
+      id: string
+      sid?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
+      }
+      meta: Record<string, unknown>
+      region?: Show<Region>
+      // for derived units - stores or events
+      derived?: boolean
+    }
+  | {
+      type: 'factory'
+      meta: Record<string, unknown>
+      region?: Region
+      sid?: string
+      name?: string
+      method?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
+      }
+      // these fields are not provided to factories
+      // however, to make it easier to work with it in Typescript
+      // and to avoid annoying `some prop does not exist` errors
+      // they are explictily set to undefined
+      kind?: undefined
+      id?: undefined
+      derived?: undefined
+    }
+  | {
+      type: 'region'
+      region?: Region
+      meta: Record<string, unknown>
+      // these fields are not provided to regions
+      // however, to make it easier to work with it in Typescript
+      // and to avoid annoying `some prop does not exist` errors
+      // they are explictily set to undefined
+      kind?: undefined
+      id?: undefined
+      derived?: undefined
+      sid?: undefined
+      name?: undefined
+      method?: undefined
+      loc?: undefined
+    }
 
 export function inspectGraph(config: {
   fn: (declaration: Declaration) => void

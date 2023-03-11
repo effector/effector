@@ -4,7 +4,7 @@ import {getParent, getMeta, getGraph} from './getter'
 import {createNode} from './createNode'
 
 type DeclarationSourceReporter = (
-  node: Node,
+  node: Node | "region",
   regionStack: RegionStack | null,
 ) => void
 
@@ -32,7 +32,7 @@ type RegionStack = {
 
 export let regionStack: RegionStack | null = null
 
-export const reportDeclaration = (node: Node) => {
+export const reportDeclaration = (node: Node | "region") => {
   if (reporter) {
     reporter(node, regionStack)
   }
@@ -47,16 +47,19 @@ export const readSidRoot = (sid?: string | null) => {
 }
 
 export function withRegion(unit: NodeUnit, cb: () => void) {
+  const meta = getGraph(unit).meta || {}
+
   regionStack = {
     parent: regionStack,
     value: unit,
-    template: getMeta(unit, 'template') || readTemplate(),
-    sidRoot: getMeta(unit, 'sidRoot') || (regionStack && regionStack.sidRoot),
-    meta: getGraph(unit).meta || {},
+    template: meta.template || readTemplate(),
+    sidRoot: meta.sidRoot || (regionStack && regionStack.sidRoot),
+    meta: meta,
   }
   try {
     return cb()
   } finally {
+    reportDeclaration("region")
     regionStack = getParent(regionStack)
   }
 }

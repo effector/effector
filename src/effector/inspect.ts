@@ -87,40 +87,48 @@ type Region =
   | {
       type: 'region'
       meta: Record<string, unknown>
-      parent?: Region
+      region?: Region
     }
   | {
       type: 'factory'
-      parent?: Region
-      meta: {
-        sid?: string
-        name?: string
-        method?: string
-        loc?: {
-          file: string
-          line: number
-          column: number
-        }
+      meta: Record<string, unknown>
+      region?: Region
+      sid?: string
+      name?: string
+      method?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
       }
     }
 
 type UnitDeclaration = {
   type: 'unit'
+  meta: Record<string, unknown>
   region?: Region
 } & NodeCommonMeta
 
-type Declaration = UnitDeclaration
+type Declaration = UnitDeclaration | Region
 
 const inspectGraphSubs = new Set<{
   fn: (declaration: Declaration) => void
 }>()
 
-setGraphInspector((node: Node, regionStack: RegionStack) => {
-  const decl = readUnitDeclaration(node, regionStack)
+setGraphInspector((node: Node | 'region', regionStack: RegionStack) => {
+  let decl: Declaration | undefined
 
-  inspectGraphSubs.forEach(sub => {
-    sub.fn(decl)
-  })
+  if (node === 'region') {
+    decl = readRegionStack(regionStack)
+  } else {
+    decl = readUnitDeclaration(node, regionStack)
+  }
+
+  if (decl) {
+    inspectGraphSubs.forEach(sub => {
+      sub.fn(decl!)
+    })
+  }
 })
 
 export function inspectGraph(config: {
@@ -194,16 +202,22 @@ function readRegionStack(regionStack?: RegionStack | null): Region | undefined {
   const parentRegion = readRegionStack(parent) || undefined
 
   if (meta.type === 'factory') {
+    const {sid, name, loc, method} = meta as any
+
     return {
       type: 'factory',
-      parent: parentRegion,
+      region: parentRegion,
       meta,
+      sid,
+      name,
+      loc,
+      method,
     }
   }
 
   return {
     type: 'region',
-    parent: parentRegion,
+    region: parentRegion,
     meta,
   }
 }

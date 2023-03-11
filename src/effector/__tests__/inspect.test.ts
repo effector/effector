@@ -191,6 +191,12 @@ describe('inspect API', () => {
 })
 
 function compactDeclaration(d: Declaration) {
+  if (d.type === 'region') return `region, parent: ${typeof d.region}`
+  if (d.type === 'factory')
+    return `factory, ${d.method}, ${d.sid}, ${
+      d.name
+    }, parent: ${typeof d.region}`
+
   return `${d.derived ? 'derived ' : ''}${d.type} ${d.name} (${
     d.kind
   }) created (sid ${typeof d.sid}, parent region: ${typeof d.region}, id: ${typeof d.id}, loc: ${typeof d.loc})`
@@ -270,7 +276,7 @@ describe('inspectGraph API', () => {
       const regionalUnitDeclared = jest.fn()
       inspectGraph({
         fn: d => {
-          declared()
+          declared(`${d.type} ${d.name} created`)
           if (!d.region) {
             nonRegionalUnitDeclared()
           } else {
@@ -287,8 +293,6 @@ describe('inspectGraph API', () => {
         target: targetEvent,
       })
 
-      expect(declared).toHaveBeenCalledTimes(5) // store == 1 store + 2 events (updates + reinit)
-      expect(nonRegionalUnitDeclared).toHaveBeenCalledTimes(4)
       expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
       expect(regionalUnitDeclared).toHaveBeenCalledWith({
         myLibType: 'customOperator',
@@ -297,6 +301,16 @@ describe('inspectGraph API', () => {
           target: targetEvent,
         },
       })
+      expect(argumentHistory(declared)).toMatchInlineSnapshot(`
+        Array [
+          "unit updates created",
+          "unit reinit created",
+          "unit $source created",
+          "unit targetEvent created",
+          "unit internalEvent created",
+          "region undefined created",
+        ]
+      `)
     })
     test('one-level withFactory', () => {
       function customOperator(config: Record<string, unknown>) {
@@ -308,7 +322,7 @@ describe('inspectGraph API', () => {
       const regionalUnitDeclared = jest.fn()
       inspectGraph({
         fn: d => {
-          declared()
+          declared(`${d.type} ${d.name} created`)
           if (!d.region) {
             nonRegionalUnitDeclared()
           } else {
@@ -323,15 +337,13 @@ describe('inspectGraph API', () => {
       withFactory({
         sid: 'customOperator-call-1',
         method: 'customOperator',
+        name: 'test-name',
         fn: () =>
           customOperator({
             source: $source,
             target: targetEvent,
           }),
       })
-
-      expect(declared).toHaveBeenCalledTimes(5) // store == 1 store + 2 events (updates + reinit)
-      expect(nonRegionalUnitDeclared).toHaveBeenCalledTimes(4)
       expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
       expect(regionalUnitDeclared).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -339,6 +351,16 @@ describe('inspectGraph API', () => {
           method: 'customOperator',
         }),
       )
+      expect(argumentHistory(declared)).toMatchInlineSnapshot(`
+        Array [
+          "unit updates created",
+          "unit reinit created",
+          "unit $source created",
+          "unit targetEvent created",
+          "unit internalEvent created",
+          "factory test-name created",
+        ]
+      `)
     })
     test('nested regions', () => {
       function customOperator(config: Record<string, unknown>) {
@@ -354,7 +376,7 @@ describe('inspectGraph API', () => {
       const regionalUnitDeclared = jest.fn()
       inspectGraph({
         fn: d => {
-          declared()
+          declared(`${d.type} ${d.name} created`)
           if (!d.region) {
             nonRegionalUnitDeclared()
           } else {
@@ -369,6 +391,7 @@ describe('inspectGraph API', () => {
       withFactory({
         sid: 'customOperator-call-1',
         method: 'customOperator',
+        name: 'test-name',
         fn: () =>
           customOperator({
             source: $source,
@@ -376,8 +399,6 @@ describe('inspectGraph API', () => {
           }),
       })
 
-      expect(declared).toHaveBeenCalledTimes(5) // store == 1 store + 2 events (updates + reinit)
-      expect(nonRegionalUnitDeclared).toHaveBeenCalledTimes(4)
       expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
       expect(regionalUnitDeclared).toHaveBeenCalledWith({
         type: 'region',
@@ -397,6 +418,18 @@ describe('inspectGraph API', () => {
           },
         },
       })
+      expect(argumentHistory(declared)).toMatchInlineSnapshot(`
+        Array [
+          "unit updates created",
+          "unit reinit created",
+          "unit $source created",
+          "unit targetEvent created",
+          "unit internalEvent created",
+          "region undefined created",
+          "region undefined created",
+          "factory undefined created",
+        ]
+      `)
     })
   })
 })
@@ -638,7 +671,7 @@ describe('real use cases', () => {
           const file = d.loc.file.split('/').at(-1) || ''
           const units = unitsByFile[file] || []
           const name = d.region
-            ? `${d.region.parent?.meta.name!}/${d.name!}`
+            ? `${d.region.region?.meta.name!}/${d.name!}`
             : d.name!
 
           units.push({
