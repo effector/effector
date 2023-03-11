@@ -627,7 +627,7 @@ describe('real use cases', () => {
       scope,
       fn: m => {
         if (m.type === 'error') {
-          appLogger.log(`name: ${m.name}, error: ${(m.value as Error).message}`)
+          appLogger.log(`name: ${m.name}, error: ${(m.error as Error).message}`)
         }
       },
     })

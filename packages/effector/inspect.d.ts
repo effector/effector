@@ -2,6 +2,7 @@ import {Scope, Subscription, Show} from 'effector'
 
 export type Message = {
   type: 'update' | 'error'
+  error?: unknown
   value: unknown
   stack: Record<string, unknown>
   kind: string

@@ -30,6 +30,7 @@ type NodeCommonMeta = {
 // Watch calculations
 type Message = {
   type: 'update' | 'error'
+  error?: unknown
   value: unknown
   stack: Record<string, unknown>
   trace?: Message[]
@@ -62,7 +63,8 @@ setInspector((stack: Stack, local: {fail: boolean; failReason?: unknown}) => {
 
     config.fn({
       type: local.fail ? 'error' : 'update',
-      value: local.fail ? local.failReason : stack.value,
+      value: stack.value,
+      error: local.fail ? local.failReason : undefined,
       stack: stack.meta || {},
       trace: config.trace ? collectMessageTrace(stack) : [],
       ...getNodeMeta(stack),
