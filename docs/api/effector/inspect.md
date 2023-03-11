@@ -130,7 +130,7 @@ inspect({
 
 ## Inspect Graph
 
-Allows to track units declarations.
+Allows to track declarations of units, [factories](./babel-plugin.md#factories) and [regions](./withRegion.md)
 
 ```ts
 import {createStore} from "effector"
@@ -148,4 +148,32 @@ inspectGraph({
 
 const $count = createStore(0)
 // logs "store $count" to console
+```
+
+## withRegion
+
+Meta-data provided via region's root node is available on declaration.
+
+```ts
+import {createNode, withRegion, createStore} from "effector"
+import { inspectGraph, type Declaration } from "effector/inspect"
+
+function createCustomSomething(config) {
+  const $something = createStore(0)
+
+  withRegion(createNode({meta: {hello: 'world'}}), () => {
+    // some code
+  })
+
+  return $something
+}
+inspectGraph({
+  fn: (d) => {
+    if (d.type === "region")
+    console.log(d.meta.hello)
+  }
+})
+
+const $some = createCustomSomething({})
+// logs "world"
 ```
