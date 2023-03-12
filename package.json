@@ -9,7 +9,7 @@
     "test:react": "npx jest --config=jest.config.js --testPathPattern=react/.*/base",
     "test": "npx jest --config=jest.config.js",
     "coverage": "COVERAGE=yes jest --config=jest.config.js",
-    "build": "node tools/build",
+    "build": "node tools/build && yarn releaser:clean",
     "test:watch": "npx jest --config=jest.config.js --watch",
     "doc:update-readme": "npx doctoc README.md",
     "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
