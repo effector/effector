@@ -1,3 +1,9 @@
 const {prepareReleseFlow} = require('../prepareReleaseFlow')
+const {applyReleaseUpdateFlow} = require('../applyReleaseUpdateFlow')
 
-prepareReleseFlow()
+async function main() {
+  await prepareReleseFlow()
+  await applyReleaseUpdateFlow()
+}
+
+main().catch(console.error)
