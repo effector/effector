@@ -9,6 +9,10 @@ Special API methods designed to handle debugging and monitoring use cases withou
 
 Useful to create developer tools and production monitoring and observability instruments.
 
+::: info since
+[effector 22.6.1](https://changelog.effector.dev/#effector-22-6-1)
+:::
+
 ## Inspect
 
 Allows to track any computations, that have happened in the effector's kernel.
