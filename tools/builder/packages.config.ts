@@ -8,6 +8,12 @@ import {
   rootExport,
 } from './packageUtils'
 
+const version =
+  // @ts-expect-error
+  __NEXT_VERSIONS__
+
+console.log(version)
+
 const common = {
   author: 'Zero Bias',
   maintainers: [
@@ -58,14 +64,6 @@ const keywords = [
   'functional',
   'store',
 ]
-
-const version = {
-  effector: '22.6.1',
-  'effector-react': '22.5.0',
-  'effector-vue': '22.2.0',
-  'effector-solid': '0.22.7',
-  forest: '0.21.2',
-}
 
 const dependsOnEffector = {
   effector: `^${version.effector}`,

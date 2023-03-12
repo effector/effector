@@ -49,6 +49,7 @@
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-replace": "^5.0.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@types/babel-core": "^6.25.6",
     "@types/chroma-js": "^2.1.0",

@@ -4,11 +4,17 @@ const {babel} = require('@rollup/plugin-babel')
 const {nodeResolve: resolvePlugin} = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
 const json = require('@rollup/plugin-json')
+const replace = require('@rollup/plugin-replace')
+
+const nextVersions = require('./nextVersions.json')
 
 const extensions = ['.js', '.mjs', '.ts', '.tsx', '.json']
 const input = {
   input: resolve(__dirname, 'index.ts'),
   plugins: [
+    replace({
+      __NEXT_VERSIONS__: JSON.stringify(nextVersions),
+    }),
     babel({
       babelrc: false,
       skipPreflightCheck: true,
