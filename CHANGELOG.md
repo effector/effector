@@ -2,6 +2,14 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.6.0
+
+- Implemented inspect API ([PR #859](https://github.com/effector/effector/pull/859))
+
+# effector 22.5.2
+
+- Fix `serialize: "ignore"` in `fork({ values })` ([PR #862](https://github.com/effector/effector/pull/862))
+
 ## effector 22.5.1
 
 - Fix default factories list in babel-plugin ([PR #857](https://github.com/effector/effector/pull/857))
@@ -49,18 +57,18 @@ Note that the one need to use "as const" in that case to got correct typecheckin
 - Add `store.reinit` event to set default value into store ([PR #797](https://github.com/effector/effector/pull/797))
 
 ```ts
-const $store = createStore<Array<number>>([]);
+const $store = createStore<Array<number>>([])
 
 sample({
   clock: someEffectFailed,
-  target: $store.reinit
-});
+  target: $store.reinit,
+})
 
 // subscribe on store reinit
 sample({
   clock: $store.reinit,
-  fn: createEffect(() => console.log("store value set to default"))
-});
+  fn: createEffect(() => console.log('store value set to default')),
+})
 ```
 
 - Add safe mode for scopeBind ([PR #688](https://github.com/effector/effector/pull/688))
