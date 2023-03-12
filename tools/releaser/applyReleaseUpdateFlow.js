@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const chalk = require('chalk')
 const path = require('path')
 
-const {getUpdatedVersion} = require('./utils')
+const {getUpdatedVersion, readCurrentVersion} = require('./utils')
 const releaseCandidates = require('../builder/nextVersions.json')
 
 async function applyReleaseUpdateFlow() {
@@ -11,9 +11,6 @@ async function applyReleaseUpdateFlow() {
 
   applyNextVersions(update)
   applyChangelogChanges(update)
-
-  // cleanup update
-  fs.outputJSONSync(path.resolve(__dirname, './update.json'), {})
 }
 
 // builder versions update
@@ -23,8 +20,8 @@ function applyNextVersions(update) {
   const nextVersions = {...releaseCandidates}
 
   updateEntries.forEach(([pkgName, update]) => {
-    const currentUpdateVersion = nextVersions[pkgName]
-    const nextVersion = getUpdatedVersion(currentUpdateVersion, update.bump)
+    const currentVersion = readCurrentVersion(pkgName)
+    const nextVersion = getUpdatedVersion(currentVersion, update.bump)
 
     nextVersions[pkgName] = nextVersion
 

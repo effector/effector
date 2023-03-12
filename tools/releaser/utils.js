@@ -49,7 +49,7 @@ function getUpdatedVersion(currentVersion, bump) {
 }
 
 function readCurrentVersion(pkgName) {
-  const pkg = require(`../packages/${pkgName}/package.json`)
+  const pkg = require(`../../packages/${pkgName}/package.json`)
   return pkg.version
 }
 
