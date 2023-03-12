@@ -1,16 +1,42 @@
 import type {Template} from '../forest/index.h'
-import type {NodeUnit} from './index.h'
-import {getParent, getMeta} from './getter'
+import type {NodeUnit, Node} from './index.h'
+import {getParent, getMeta, getGraph} from './getter'
 import {createNode} from './createNode'
+
+type DeclarationSourceReporter = (
+  node: Node | "region",
+  regionStack: RegionStack | null,
+) => void
+
+let reporter: DeclarationSourceReporter
+
+export const setGraphInspector = (fn: DeclarationSourceReporter) => {
+  reporter = fn
+}
 
 type RegionStack = {
   parent: RegionStack | null
   value: any
   template: Template | null
   sidRoot?: string
+  meta:
+    | Record<string, unknown>
+    | {
+        type: 'factory'
+        sid?: string
+        name?: string
+        loc: unknown
+        method?: string
+      }
 }
 
 export let regionStack: RegionStack | null = null
+
+export const reportDeclaration = (node: Node | "region") => {
+  if (reporter) {
+    reporter(node, regionStack)
+  }
+}
 
 export const readTemplate = (): Template | null =>
   regionStack && regionStack.template
@@ -21,15 +47,19 @@ export const readSidRoot = (sid?: string | null) => {
 }
 
 export function withRegion(unit: NodeUnit, cb: () => void) {
+  const meta = getGraph(unit).meta || {}
+
   regionStack = {
     parent: regionStack,
     value: unit,
-    template: getMeta(unit, 'template') || readTemplate(),
-    sidRoot: getMeta(unit, 'sidRoot') || (regionStack && regionStack.sidRoot),
+    template: meta.template || readTemplate(),
+    sidRoot: meta.sidRoot || (regionStack && regionStack.sidRoot),
+    meta: meta,
   }
   try {
     return cb()
   } finally {
+    reportDeclaration("region")
     regionStack = getParent(regionStack)
   }
 }
@@ -47,8 +77,9 @@ export const withFactory = ({
   method?: string
   fn: () => any
 }) => {
-  const sidNode = createNode({
-    meta: {sidRoot: readSidRoot(sid), name, loc, method},
+  const factoryRootNode = createNode({
+    meta: {sidRoot: readSidRoot(sid), sid, name, loc, method, type: 'factory'},
   })
-  return withRegion(sidNode, fn)
+
+  return withRegion(factoryRootNode, fn)
 }
