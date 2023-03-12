@@ -74,7 +74,12 @@ Before opening a feature request, please read the [exists ideas discussions](htt
 
 ### Publishing
 
-Change version in [packages.config.js](https://github.com/effector/effector/blob/master/tools/builder/packages.config.ts#L48), run `yarn build` and commit changes to `master` branch
+1. Run `yarn releaser:prepare` for **each updated package** and answer the survey
+2. Manually update changelog files, if needed. They are located at `tools/releaser/releaseState/changelogs`. You also can run `yarn releaser:prepare` to update changes.
+3. If everything is as you want it to be, run `yarn releaser:apply` - it will update `nextVersions` config and `CHANGELOG.md`
+4. Run `yarn build`. Check `npm/{packageName}` if needed.
+5. Commit the result to the `master` branch - updates will be automatically published to the `npm` and `changelog.effector.dev`.
+6. If packages are published successfuly - create corresponding GitHub Releases for each update.
 
 ## Submitting Changes
 
