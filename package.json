@@ -15,7 +15,8 @@
     "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
     "test:generate": "yarn test:regen && yarn test -u --selectProjects types",
     "manifold": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/runner/manifold/tsFacade.ts",
-    "releaser:prepare": "node tools/releaser/commands/preparePackageRelease"
+    "releaser:prepare": "node tools/releaser/commands/preparePackageRelease",
+    "releaser:apply": "node tools/releaser/commands/applyPackageRelease"
   },
   "author": "Zero Bias",
   "license": "MIT",

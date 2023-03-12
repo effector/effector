@@ -1,3 +1,5 @@
+const path = require('path')
+
 // version management
 const validBumpKinds = ['major', 'minor', 'patch']
 const bumpWeights = {
@@ -53,9 +55,22 @@ function readCurrentVersion(pkgName) {
   return pkg.version
 }
 
+function getReleaseStatePaths() {
+  const releaseStatePath = path.resolve(__dirname, './releaseState')
+  const updateJsonPath = path.resolve(releaseStatePath, './update.json')
+  const changelogsPath = path.resolve(releaseStatePath, './changelogs')
+
+  return {
+    releaseStatePath,
+    updateJsonPath,
+    changelogsPath,
+  }
+}
+
 module.exports = {
   getUpdatedVersion,
   readCurrentVersion,
   isValidBump,
-  getNextBump
+  getNextBump,
+  getReleaseStatePaths,
 }

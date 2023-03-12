@@ -4,8 +4,7 @@ const path = require('path')
 const chalk = require('chalk')
 
 const releaseCandidates = require('../builder/nextVersions.json')
-const {isValidBump, getNextBump} = require('./utils')
-const update = require('./update.json')
+const {isValidBump, getNextBump, getReleaseStatePaths} = require('./utils')
 
 const packages = Object.keys(releaseCandidates)
 
@@ -46,15 +45,18 @@ async function prepareReleseFlow() {
 
 // update state management
 function createPackageUpdate(pkgName) {
-  const currentUpdateState = update[pkgName] || {}
+  const {releaseStatePath, updateJsonPath, changelogsPath} =
+    getReleaseStatePaths()
+  const updateJson = fs.readJsonSync(updateJsonPath, 'utf-8')
+  const currentUpdateState = updateJson[pkgName] || {}
 
   /**
-   * @type {{package: string; bump: "major" | "minor" | "patch"; changelog: string;}}
+   * @type {{package: string; bump: "major" | "minor" | "patch"; changelog: string}}
    */
   const state = {
     package: pkgName,
     bump: currentUpdateState.bump,
-    changelog: currentUpdateState.changelog,
+    changelog: '',
   }
   function bump(bumpKind) {
     if (!isValidBump(bumpKind)) {
@@ -66,20 +68,37 @@ function createPackageUpdate(pkgName) {
     return state.bump
   }
   function changelog(message) {
-    state.changelogMessage = message
+    state.changelog = message
   }
   function save() {
     const nextUpdate = {
-      ...update,
+      ...updateJson,
       [state.package]: {
         bump: state.bump,
-        changelog: state.changelogMessage,
       },
     }
 
-    const updatePath = path.resolve(__dirname, './update.json')
+    fs.ensureDirSync(releaseStatePath)
 
-    fs.outputJSONSync(updatePath, nextUpdate, {spaces: 2})
+    fs.outputJSONSync(updateJsonPath, nextUpdate, {spaces: 2})
+
+    fs.ensureDirSync(changelogsPath)
+
+    const pkgChangelogPath = path.resolve(
+      changelogsPath,
+      `./${state.package}.md`,
+    )
+    const hasChangelog = fs.existsSync(pkgChangelogPath)
+
+    if (hasChangelog) {
+      const changelog = fs.readFileSync(pkgChangelogPath, 'utf-8')
+      fs.outputFileSync(
+        pkgChangelogPath,
+        `${changelog}\n${state.changelog || ''}`,
+      )
+    } else {
+      fs.outputFileSync(pkgChangelogPath, state.changelog || '')
+    }
   }
 
   return {
