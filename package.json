@@ -14,7 +14,8 @@
     "doc:update-readme": "npx doctoc README.md",
     "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
     "test:generate": "yarn test:regen && yarn test -u --selectProjects types",
-    "manifold": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/runner/manifold/tsFacade.ts"
+    "manifold": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/runner/manifold/tsFacade.ts",
+    "releaser:prepare": "node tools/releaser/commands/preparePackageRelease"
   },
   "author": "Zero Bias",
   "license": "MIT",
@@ -81,6 +82,7 @@
     "dotenv": "^8.2.0",
     "effector-npm": "npm:effector@^21.8.1",
     "enhanced-resolve-jest": "^1.1.0",
+    "enquirer": "^2.3.6",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-babel": "^5.3.1",
