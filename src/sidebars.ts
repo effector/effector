@@ -581,8 +581,7 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
         if (slugs.has(originalLink.toLowerCase())) {
           return {
             title: `${itemTitle} (${SITE.defaultLanguage.toUpperCase()})`,
-            // TODO: when not translated page will be available place here `link`
-            link: originalLink,
+            link,
           };
         }
 

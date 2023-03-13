@@ -36,4 +36,28 @@ export function createLink(item: { text: LText; link: string }, lang: string): s
 export const translations = {
   docs: { text: { en: "Docs", ru: "Меню" } },
   Documentation: { text: { en: "Documentation", ru: "Документация" } },
+  ThisPageIsNotTranslatedYet: {
+    text: {
+      en: "This page is not translated yet",
+      ru: "Этот страница еще не переведена",
+    },
+  },
+  PleaseOpenPRWithTranslations: {
+    text: {
+      en: "To add new translation open Pull Request",
+      ru: "Чтобы добавить перевод, откройте Pull Request",
+    },
+  },
+  usingThisLink: {
+    text: {
+      en: "using this link",
+      ru: "по этой ссылке",
+    },
+  },
+  ShowingContentForDefaultLanguage: {
+    text: {
+      en: "Showing content for default language",
+      ru: "Отображается содержимое для языка по умолчанию",
+    },
+  },
 };

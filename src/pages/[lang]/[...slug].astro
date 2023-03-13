@@ -1,47 +1,56 @@
 ---
-import { CollectionEntry, getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 import MainLayout from "../../layouts/MainLayout.astro";
-import { getPathParamsFromId } from "../../languages";
+import { createLink, getPathParamsFromId, KNOWN_LANGUAGE_CODES } from "../../languages";
+import { getTranslatedDocs } from "../../docs";
+import { SITE } from "../../consts";
+import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
 
 // TODO: add breadcrumbs
 
 export async function getStaticPaths() {
-  const docs = await getCollection("docs");
-  return docs.map((entry) => {
-    let { lang, slug } = getPathParamsFromId(entry.id);
-    if (slug.endsWith("/index")) {
-      slug = slug.replace(/\/index$/, "");
+  const { sourceSlugs, docs } = await getTranslatedDocs();
+  const paths: {
+    params: { lang: string; slug: string };
+    props: { post: CollectionEntry<"docs"> | null };
+  }[] = [];
+
+  // Create path for each slug for each language
+  for (const slug of sourceSlugs.values()) {
+    for (const lang of KNOWN_LANGUAGE_CODES) {
+      paths.push({
+        params: { lang, slug },
+        props: { post: docs[`${lang}/${slug}`] ?? null },
+      });
     }
-    return {
-      params: { lang, slug },
-      props: entry,
-    };
-  });
+  }
+
+  return paths;
 }
 
-export type Props = CollectionEntry<"docs">;
+export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { slug, lang } = Astro.params;
-const translations = (
-  await getCollection("docs", (entry) => {
-    const path = getPathParamsFromId(entry.id);
-    // Get any other translation for current slug
-    const sameSlug = path.slug === slug || `${slug}/index` === path.slug;
-    if (sameSlug && path.lang !== lang) return entry;
-  })
-).map((entry) => {
-  const path = getPathParamsFromId(entry.id);
-  if (path.slug.endsWith("/index")) {
-    return {
-      slug: path.slug.replace(/\/index$/, ""),
-      lang: path.lang,
-    };
+
+const { docs } = await getTranslatedDocs();
+
+const { post } = Astro.props;
+const defaultLanguagePost = docs[`${SITE.defaultLanguage}/${slug}`];
+
+const translations: { lang: string; slug: string }[] = [];
+
+// Create link for each translated page
+KNOWN_LANGUAGE_CODES.forEach((langCode) => {
+  if (langCode !== lang && docs[`${langCode}/${slug}`]) {
+    translations.push({ lang: langCode, slug: slug! });
   }
-  return path;
 });
-const post = Astro.props;
-const { Content, headings } = await post.render();
+
+const { Content, headings } = post ? await post.render() : await defaultLanguagePost.render();
+const postData = (post ?? defaultLanguagePost).data;
 ---
 
-<MainLayout headings={headings} {...post.data} translations={translations}>
+<MainLayout headings={headings} {...postData} translations={translations}>
+  {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
 </MainLayout>

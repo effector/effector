@@ -1,9 +1,6 @@
 ---
-id: countdown
 title: Countdown timer on setTimeout
 ---
-
-# Countdown timer on setTimeout
 
 Sometimes we need simple countdown. Next example allows us to handle each tick and abort the timer.
 

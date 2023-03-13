@@ -22,7 +22,7 @@ export default defineConfig({
   base: "/",
   markdown: {
     syntaxHighlight: "prism",
-    remarkPlugins: [[directive, {}], admonitions, github, remarkHeadingId, remarkFallbackLang],
+    remarkPlugins: [[directive, {}], admonitions, github, remarkHeadingId],
     rehypePlugins: [],
   },
 });
