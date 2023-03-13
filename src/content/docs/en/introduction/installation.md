@@ -82,7 +82,7 @@ npm add --development @effector/swc-plugin @swc/core
 
 ## Compatibility
 
-The library provides separate modules with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices): `effector/compat`, `effector-react/compat` and `effector-vue/compat`
+The library provides separate modules with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices): `effector/compat`, `effector-react/compat`, and `effector-vue/compat`
 
 Usage with manual import replacement:
 
@@ -111,7 +111,9 @@ Usage with [`babel-plugin-module-resolver`](https://github.com/tleunen/babel-plu
 
 ### Polyfills
 
-You need to install polyfills for these objects:
+Effector uses some APIs and objects, older browsers may not have them, so you may need to install them yourself if you intend to support such browsers.
+
+You may need to install the following polyfills:
 
 - `Promise`
 - `Object.assign`

@@ -1,5 +1,10 @@
 ---
-import { getLanguageFromURL, getPathParamsFromId, KNOWN_LANGUAGE_CODES } from "../../languages";
+import {
+  getPathParamsFromId,
+  getTextLocalized,
+  KNOWN_LANGUAGE_CODES,
+  translations,
+} from "../../languages";
 import { KNOWN_LANGUAGES, SITE } from "../../consts";
 
 import EffectorLogo from "./EffectorLogo.astro";
@@ -29,7 +34,7 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
     <div class="logo">
       <a href="/">
         <EffectorLogo size={40} />
-        <div class="title">{SITE.title ?? "Documentation"}</div>
+        <div class="title">{SITE.title ?? getTextLocalized(translations.Documentation, lang)}</div>
       </a>
       <div class="search-item">
         <Search client:idle />
@@ -39,19 +44,19 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
     <NavMenu
       links={[
         {
-          text: { en: "Introduction" },
+          text: { en: "Introduction", ru: "Введение" },
           href: `/${lang}/introduction/installation`,
         },
         {
-          text: { en: "Recipes" },
+          text: { en: "Recipes", ru: "Рецепты" },
           href: `/${lang}/recipes`,
         },
         {
-          text: { en: "Blog" },
+          text: { en: "Blog", ru: "Блог" },
           href: `https://www.patreon.com/zero_bias`,
         },
         {
-          text: { en: "Changelog" },
+          text: { en: "Changelog", ru: "Список изменений" },
           href: `https://changelog.effector.dev`,
         },
         {
@@ -65,7 +70,7 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
         },
       ]}
     >
-      Docs
+      {getTextLocalized(translations.docs, lang)}
     </NavMenu>
     <hr />
     {

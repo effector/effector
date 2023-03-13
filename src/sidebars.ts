@@ -1,4 +1,7 @@
+import { getCollection } from "astro:content";
 import type { LText } from "./consts";
+import { SITE } from "./consts";
+import { getTextLocalized, createLink } from "./languages";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -542,4 +545,61 @@ type LSidebarItem = { text: LText; link: string };
 export function getSidebarForSlug(slug: string): LSidebarGroup[] {
   const path = slug.startsWith("/") ? slug : `/${slug}`;
   return sidebarEntries.find(([prefix]) => path.startsWith(prefix))?.[1] ?? defaultSidebar;
+}
+
+export async function getLocalizedSidebar(slug: string, lang: string) {
+  const sidebar = getSidebarForSlug(slug);
+  const slugs = await getSlugs();
+
+  return sidebar.map((group) => {
+    const groupTitle = getTextLocalized(group, lang);
+    return {
+      title: groupTitle,
+      collapsed: group.collapsed,
+      items: group.items.map((item) => {
+        const itemTitle = getTextLocalized(item, lang);
+
+        if (isRemoteUrl(item.link)) {
+          return {
+            title: itemTitle,
+            link: item.link,
+          };
+        }
+
+        const link = createLink(item, lang);
+
+        // Translated page exists
+        if (slugs.has(link.toLowerCase())) {
+          return {
+            title: itemTitle,
+            link,
+          };
+        }
+
+        // If original page exists
+        const originalLink = createLink(item, SITE.defaultLanguage);
+        if (slugs.has(originalLink.toLowerCase())) {
+          return {
+            title: `${itemTitle} (${SITE.defaultLanguage.toUpperCase()})`,
+            // TODO: when not translated page will be available place here `link`
+            link: originalLink,
+          };
+        }
+
+        // If no original page exists, may be link is wrong?
+        return {
+          title: `${itemTitle} (404)`,
+          link: item.link,
+        };
+      }),
+    };
+  });
+}
+
+function getSlugs() {
+  return getCollection("docs").then((docs) => new Set(docs.map((doc) => `/${doc.slug}`)));
+}
+
+function isRemoteUrl(link: string) {
+  return link.startsWith("https://") || link.startsWith("http://");
 }

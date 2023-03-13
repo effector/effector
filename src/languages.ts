@@ -19,16 +19,21 @@ export function getPathParamsFromId(pathname: string) {
   return { lang, slug };
 }
 
-export function getTextLocalized(item: { text: LText }, lang: string) {
+export function getTextLocalized(item: { text: LText }, lang: string): string {
   if (lang in item.text) {
-    return item.text[lang as "en" | "ru"];
+    return item.text[lang as "en" | "ru"]!;
   }
   return item.text.en;
 }
 
-export function createLink(item: { text: LText; link: string }, lang: string) {
+export function createLink(item: { text: LText; link: string }, lang: string): string {
   if (item.link.startsWith("/")) {
     return `/${lang}${item.link}`;
   }
   return item.link;
 }
+
+export const translations = {
+  docs: { text: { en: "Docs", ru: "Меню" } },
+  Documentation: { text: { en: "Documentation", ru: "Документация" } },
+};

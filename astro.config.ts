@@ -11,7 +11,8 @@ import github from "remark-github";
 import breaks from "remark-breaks";
 import remarkHeadingId from "remark-heading-id";
 
-import { admonitions } from "./plugins/admonitions.mjs";
+import { admonitions } from "./plugins/admonitions";
+import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,7 +22,7 @@ export default defineConfig({
   base: "/",
   markdown: {
     syntaxHighlight: "prism",
-    remarkPlugins: [[directive, {}], admonitions, remarkHeadingId],
+    remarkPlugins: [[directive, {}], admonitions, github, remarkHeadingId, remarkFallbackLang],
     rehypePlugins: [],
   },
 });

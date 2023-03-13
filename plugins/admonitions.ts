@@ -1,9 +1,10 @@
 import { map } from "unist-util-map";
+import type { Root } from "mdast";
 
 // TODO: Add svg icons
 
 export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
-  return (tree) => {
+  return (tree: Root) => {
     return map(tree, (node) => {
       if (
         node.type === "containerDirective" ||
@@ -29,7 +30,7 @@ export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
   };
 }
 
-function node(type, name, props = {}, rest = {}) {
+function node(type: string, name: string, props = {}, rest = {}) {
   return {
     type,
     data: {
@@ -40,10 +41,10 @@ function node(type, name, props = {}, rest = {}) {
   };
 }
 
-function text(value) {
+function text(value: string) {
   return { type: "text", value };
 }
 
-function h(name, props = {}, children = []) {
+function h(name: string, props = {}, children: unknown[] = []) {
   return node("element", name, props, { children });
 }

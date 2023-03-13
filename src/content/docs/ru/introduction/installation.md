@@ -4,8 +4,6 @@ description: Установка эффектора и сопутствующих
 lang: ru
 ---
 
-# Установка
-
 ## С помощью пакетного менеджера
 
 Effector не требует использования какого-то одного пакетного менеджера, можете использовать любой на свой выбор.<br/>
@@ -83,9 +81,41 @@ npm add --development @effector/swc-plugin @swc/core
 
 [Документация плагина](https://github.com/effector/swc-plugin).
 
+## Совместимость
+
+Для совместимости с устаревшими версиями браузеров до IE11 и Chrome 47 (версия браузера для Smart TV) используйте импорты из файлов: `effector/compat`, `effector-react/compat` и `effector-vue/compat`.
+
+Вы можете заменить импорты вручную:
+
+```diff
+- import {createStore} from 'effector'
++ import {createStore} from 'effector/compat'
+```
+
+А также используя плагин [`babel-plugin-module-resolver`](https://github.com/tleunen/babel-plugin-module-resolver).
+Примерная конфигурация в `.babelrc`:
+
+```json
+{
+  "plugins": [
+    [
+      "babel-plugin-module-resolver",
+      {
+        "alias": {
+          "^effector$": "effector/compat",
+          "^effector-react$": "effector-react/compat"
+        }
+      }
+    ]
+  ]
+}
+```
+
 ### Polyfills
 
-You need to install polyfills for these objects:
+Effector использует некоторые глобальные объекты, в старых версиях браузеров их может не быть, поэтому вам может понадобится установить их самостоятельно, если вы собираетесь поддерживать такие браузеры.
+
+Вам может понадобиться установить следующие полифиллы:
 
 - `Promise`
 - `Object.assign`

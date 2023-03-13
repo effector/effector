@@ -10,13 +10,16 @@ specifiers:
   '@docsearch/css': ^3.1.0
   '@docsearch/react': ^3.1.0
   '@octokit/rest': ^19.0.7
+  '@tailwindcss/typography': ^0.5.9
   '@types/html-escaper': ^3.0.0
+  '@types/mdast': ^3.0.10
   '@types/node': ^18.15.1
   '@types/react': ^18.0.28
   '@types/react-dom': ^18.0.11
   astro: ^2.1.2
   astro-compress: ^1.1.35
   html-escaper: ^3.0.3
+  mdast: ^3.0.0
   preact: ^10.13.1
   prettier: ^2.8.4
   prettier-plugin-astro: ^0.8.0
@@ -30,6 +33,7 @@ specifiers:
   remark-heading-id: ^1.0.0
   rollup: ^3.19.1
   tailwindcss: ^3.2.7
+  unified: ^10.1.2
   unist-util-map: ^3.1.3
   unist-util-visit: ^4.1.2
 
@@ -43,13 +47,16 @@ dependencies:
   '@docsearch/css': 3.3.3
   '@docsearch/react': 3.3.3_4jk4sx5gsa4z6dpons6mwt4w6q
   '@octokit/rest': 19.0.7
+  '@tailwindcss/typography': 0.5.9_tailwindcss@3.2.7
   '@types/html-escaper': 3.0.0
+  '@types/mdast': 3.0.10
   '@types/node': 18.15.1
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
   astro: 2.1.2_@types+node@18.15.1
   astro-compress: 1.1.35
   html-escaper: 3.0.3
+  mdast: 3.0.0
   preact: 10.13.1
   prettier: 2.8.4
   prettier-plugin-astro: 0.8.0
@@ -63,6 +70,7 @@ dependencies:
   remark-heading-id: 1.0.0
   rollup: 3.19.1
   tailwindcss: 3.2.7
+  unified: 10.1.2
   unist-util-map: 3.1.3
   unist-util-visit: 4.1.2
 
@@ -1161,6 +1169,18 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
       rollup: 3.19.1
+    dev: false
+
+  /@tailwindcss/typography/0.5.9_tailwindcss@3.2.7:
+    resolution: {integrity: sha512-t8Sg3DyynFysV9f4JDOVISGsjazNb48AeIYQwcL+Bsq5uf4RYL75C1giZ43KISjeDGBaTN3Kxh7Xj/vRSMJUUg==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+    dependencies:
+      lodash.castarray: 4.4.0
+      lodash.isplainobject: 4.0.6
+      lodash.merge: 4.6.2
+      postcss-selector-parser: 6.0.10
+      tailwindcss: 3.2.7
     dev: false
 
   /@trysound/sax/0.2.0:
@@ -2783,6 +2803,18 @@ packages:
       p-locate: 5.0.0
     dev: false
 
+  /lodash.castarray/4.4.0:
+    resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
+    dev: false
+
+  /lodash.isplainobject/4.0.6:
+    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
+    dev: false
+
+  /lodash.merge/4.6.2:
+    resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+    dev: false
+
   /log-symbols/5.1.0:
     resolution: {integrity: sha512-l0x2DvrW294C9uDCoQe1VSU4gf529FkSZ6leBl4TiqZH/e+0R7hSfHQBNut2mNygDgHwvYHfFLn6Oxb3VWj2rA==}
     engines: {node: '>=12'}
@@ -3043,6 +3075,11 @@ packages:
     resolution: {integrity: sha512-tGvhT94e+cVnQt8JWE9/b3cUQZWS732TJxXHktvP+BYo62PpYD53Ls/6cC60rW21dW+txxiM4zMdc6abASvZKA==}
     dependencies:
       '@types/mdast': 3.0.10
+    dev: false
+
+  /mdast/3.0.0:
+    resolution: {integrity: sha512-xySmf8g4fPKMeC07jXGz971EkLbWAJ83s4US2Tj9lEdnZ142UP5grN73H1Xd3HzrdbU5o9GYYP/y8F9ZSwLE9g==}
+    deprecated: '`mdast` was renamed to `remark`'
     dev: false
 
   /mdn-data/2.0.28:
@@ -3801,6 +3838,14 @@ packages:
     dependencies:
       postcss: 8.4.21
       postcss-selector-parser: 6.0.11
+    dev: false
+
+  /postcss-selector-parser/6.0.10:
+    resolution: {integrity: sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==}
+    engines: {node: '>=4'}
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
     dev: false
 
   /postcss-selector-parser/6.0.11:
