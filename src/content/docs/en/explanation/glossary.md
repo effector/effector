@@ -140,7 +140,9 @@ type Subscription = {
 
 Function, returned by [forward](/en/api/effector/forward), [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
 
-:::warning{title="Managing subscriptions manually distracts from business logic improvements"}
+:::warning
+**Managing subscriptions manually distracts from business logic improvements.**
+<br/><br/>
 Effector provides a wide range of features to minimize the need to remove subscriptions. This sets it apart from most other reactive libraries
 :::
 

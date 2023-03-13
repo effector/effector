@@ -2,8 +2,6 @@
 title: Releases policy
 ---
 
-# Releases policy
-
 The main goal of Effector is to **make developer experience better**, as a part of this strategy we are committing to some rules of Effector releases.
 
 ## No breaking changes without prior deprecation

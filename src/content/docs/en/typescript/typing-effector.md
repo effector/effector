@@ -4,8 +4,6 @@ title: Typing effector
 description: Best practices for writing well-typed code
 ---
 
-# Typing effector
-
 Best practices for writing well-typed code
 
 ## createEvent

@@ -4,8 +4,6 @@ title: Protocol @@unitShape
 description: Re-use UI-library bindings for your own Effector based libraries
 ---
 
-# Unit-shape protocol
-
 :::info
 Available since [effector-react 22.4.0](https://changelog.effector.dev/#effector-react-22-4-0), effector-solid 0.22.7
 :::
