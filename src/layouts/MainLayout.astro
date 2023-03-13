@@ -9,16 +9,17 @@ import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
 import AvatarList from "../components/PageContent/AvatarList.astro";
 
-import { GITHUB_EDIT_URL } from "../consts";
+import { GITHUB_DOCS_FILE_PREFIX, GITHUB_EDIT_URL } from "../consts";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
   translations: { lang: string; slug: string }[];
+  breadcrumbs: { title: string; path: string }[];
 };
 
-const { headings, translations, ...data } = Astro.props;
+const { headings, translations, breadcrumbs, ...data } = Astro.props;
 const currentPage = Astro.url.pathname;
-const currentFile = `src/content/docs${currentPage.replace(/\/$/, "")}.md`;
+const currentFile = `${GITHUB_DOCS_FILE_PREFIX}${currentPage.replace(/\/$/, "")}.md`;
 const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
 ---
 
@@ -121,6 +122,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
         headings={headings}
         githubEditUrl={githubEditUrl}
         translations={translations}
+        breadcrumbs={breadcrumbs}
       >
         <slot />
       </PageContent>

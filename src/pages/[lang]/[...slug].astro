@@ -1,13 +1,13 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
-import MainLayout from "../../layouts/MainLayout.astro";
-import { createLink, getPathParamsFromId, KNOWN_LANGUAGE_CODES } from "../../languages";
-import { getTranslatedDocs } from "../../docs";
-import { SITE } from "../../consts";
-import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
+import type { InferGetStaticPropsType } from "astro";
 
-// TODO: add breadcrumbs
+import { KNOWN_LANGUAGE_CODES } from "../../languages";
+import { getTranslatedDocs, getBreadcrumbs } from "../../docs";
+import { SITE } from "../../consts";
+
+import MainLayout from "../../layouts/MainLayout.astro";
+import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
 
 export async function getStaticPaths() {
   const { sourceSlugs, docs } = await getTranslatedDocs();
@@ -33,6 +33,7 @@ export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { slug, lang } = Astro.params;
 
 const { docs } = await getTranslatedDocs();
+const breadcrumbs = getBreadcrumbs({ docs, path: Astro.url.pathname });
 
 const { post } = Astro.props;
 const defaultLanguagePost = docs[`${SITE.defaultLanguage}/${slug}`];
@@ -50,7 +51,7 @@ const { Content, headings } = post ? await post.render() : await defaultLanguage
 const postData = (post ?? defaultLanguagePost).data;
 ---
 
-<MainLayout headings={headings} {...postData} translations={translations}>
+<MainLayout headings={headings} {...postData} translations={translations} breadcrumbs={breadcrumbs}>
   {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
 </MainLayout>
