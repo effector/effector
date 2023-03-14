@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.6.2
+
+- Fix return type of `withRegion`
+
 ## effector 22.6.1
 
 - Add missing `exports` definition for `effector/inspect` API
