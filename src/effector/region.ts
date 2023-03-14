@@ -1,10 +1,10 @@
 import type {Template} from '../forest/index.h'
-import type {NodeUnit, Node} from './index.h'
-import {getParent, getMeta, getGraph} from './getter'
+import type {NodeUnit, Node, ID} from './index.h'
+import {getParent, getGraph} from './getter'
 import {createNode} from './createNode'
 
 type DeclarationSourceReporter = (
-  node: Node | "region",
+  node: Node | 'region',
   regionStack: RegionStack | null,
 ) => void
 
@@ -15,6 +15,7 @@ export const setGraphInspector = (fn: DeclarationSourceReporter) => {
 }
 
 type RegionStack = {
+  id: ID
   parent: RegionStack | null
   value: any
   template: Template | null
@@ -32,7 +33,7 @@ type RegionStack = {
 
 export let regionStack: RegionStack | null = null
 
-export const reportDeclaration = (node: Node | "region") => {
+export const reportDeclaration = (node: Node | 'region') => {
   if (reporter) {
     reporter(node, regionStack)
   }
@@ -50,6 +51,7 @@ export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
   const meta = getGraph(unit).meta || {}
 
   regionStack = {
+    id: getGraph(unit).id,
     parent: regionStack,
     value: unit,
     template: meta.template || readTemplate(),
@@ -59,7 +61,7 @@ export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
   try {
     return cb()
   } finally {
-    reportDeclaration("region")
+    reportDeclaration('region')
     regionStack = getParent(regionStack)
   }
 }

@@ -1,4 +1,4 @@
-import {Scope, Subscription, Show} from 'effector'
+import {Scope, Subscription, Show, ID} from 'effector'
 
 export type Message = {
   type: 'update' | 'error'
@@ -63,6 +63,7 @@ export type Declaration =
     }
   | {
       type: 'factory'
+      id: ID,
       meta: Record<string, unknown>
       region?: Region
       sid?: string
@@ -78,11 +79,11 @@ export type Declaration =
       // and to avoid annoying `some prop does not exist` errors
       // they are explictily set to undefined
       kind?: undefined
-      id?: undefined
       derived?: undefined
     }
   | {
       type: 'region'
+      id: ID,
       region?: Region
       meta: Record<string, unknown>
       // these fields are not provided to regions
@@ -90,7 +91,6 @@ export type Declaration =
       // and to avoid annoying `some prop does not exist` errors
       // they are explictily set to undefined
       kind?: undefined
-      id?: undefined
       derived?: undefined
       sid?: undefined
       name?: undefined
