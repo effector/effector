@@ -13,6 +13,7 @@
     "type": "git",
     "url": "https://github.com/sergeysova/new-docs"
   },
+  "packageManager": "pnpm@7.29.0",
   "dependencies": {
     "@algolia/client-search": "^4.15.0",
     "@astrojs/mdx": "^0.16.2",
