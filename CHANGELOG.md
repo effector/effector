@@ -2,6 +2,11 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.7.0
+
+- Fix `Declaration` type, provide missing top-level properties for `region` and `factory` types
+- Add node's `id` to `Declaration` type
+
 ## effector 22.6.2
 
 - Fix return type of `withRegion`
