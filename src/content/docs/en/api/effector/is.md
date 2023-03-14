@@ -4,11 +4,11 @@ title: is
 
 Namespace for unit validators
 
-## `is.store(value)`
+## `is.store(value)` {#is-store}
 
 Checks if given value is [_store_](/en/api/effector/Store)
 
-**Returns**
+### Returns {#is-store-returns}
 
 boolean
 
@@ -46,11 +46,11 @@ is.store(null);
 
 [Try it](https://share.effector.dev/4vzdWan1)
 
-## `is.event(value)`
+## `is.event(value)` {#is-event}
 
 Checks if given value is [_event_](/en/api/effector/Event)
 
-**Returns**
+### Returns {#is-event-returns}
 
 boolean
 
@@ -88,11 +88,11 @@ is.event(null);
 
 [Try it](https://share.effector.dev/hB0JEiIo)
 
-## `is.effect(value)`
+## `is.effect(value)` {#is-effect}
 
 Checks if given value is [_effect_](/en/api/effector/Effect)
 
-**Returns**
+### Returns {#is-effect-returns}
 
 boolean
 
@@ -121,11 +121,11 @@ is.effect(null);
 
 [Try it](https://share.effector.dev/ZdZ2N6VG)
 
-## `is.domain(value)`
+## `is.domain(value)` {#is-domain}
 
 Checks if given value is [_domain_](/en/api/effector/Domain)
 
-**Returns**
+### Returns {#is-domain-returns}
 
 boolean
 
@@ -154,7 +154,7 @@ is.domain(null);
 
 [Try it](https://share.effector.dev/Iea0gmfD)
 
-## `is.scope(value)`
+## `is.scope(value)` {#is-scope}
 
 :::info{title="since"}
 [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
@@ -162,7 +162,7 @@ is.domain(null);
 
 Checks if given value is [_scope_](/en/api/effector/Scope).
 
-**Returns**
+### Returns {#is-scope-returns}
 
 _boolean_
 
@@ -195,11 +195,11 @@ is.scope(null);
 
 [Try it](https://share.effector.dev/hF0krFUK)
 
-## `is.unit(value)`
+## `is.unit(value)` {#is-unit}
 
 Checks if given value is [Unit](/en/explanation/glossary#unit): [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) or [Scope](/en/api/effector/Scope)
 
-**Returns**
+### Returns {#is-unit-returns}
 
 boolean
 
@@ -241,7 +241,7 @@ is.unit(null);
 
 [Try it](https://share.effector.dev/iOpDvweB)
 
-## `is.attached(value)`
+## `is.attached(value)` {#is-attached}
 
 :::info{title="since"}
 [effector 22.4.0](https://changelog.effector.dev/#effector-22-4-0)
@@ -250,7 +250,7 @@ is.unit(null);
 Checks if given value is [_effect_](/en/api/effector/Effect) created via [_attach_](/en/api/effector/attach) method.
 If passed not an effect, returns `false`.
 
-**Returns**
+### Returns {#is-attached-returns}
 
 boolean
 
@@ -286,7 +286,7 @@ is.attached(null);
 
 [Try it](https://share.effector.dev/qsdTF7og)
 
-### Use case
+### Use case {#is-attached-use-case}
 
 Sometimes you need to add an error log on effects failures, but only on effects that have been "localized" via `attach`.
 If you leave `onCreateEffect` as it is, without checks, the error log will be duplicated, because it will happen on the parent and the child effect.

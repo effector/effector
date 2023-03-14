@@ -5,7 +5,7 @@ description: Method for creating an effect
 
 Method for creating an [effect](/en/api/effector/Effect)
 
-## createEffect with handler
+## createEffect with handler {#createEffect-handler}
 
 Creates an effect with given handler
 
@@ -13,23 +13,23 @@ Creates an effect with given handler
 createEffect(handler?)
 ```
 
-**Arguments**
+### Arguments {#createEffect-handler-arguments}
 
-1. `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
+1. `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](/en/api/effector/Effect#use)
 
-**Returns**
+### Returns {#createEffect-handler-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
 :::tip{title="Reminder"}
-You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [`.use`](/en/api/effector/Effect#use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
+You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [`.use`](/en/api/effector/Effect#use) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
 :::
 
 :::info{title="since"}
 [effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
-### Examples
+### Examples {#createEffect-handler-examples}
 
 #### Create effect with handler
 
@@ -51,7 +51,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/7K23rdej)
 
-### Change state on effect completion
+#### Change state on effect completion
 
 ```js
 import { createStore, createEffect } from "effector";
@@ -134,7 +134,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/LeurvtYA)
 
-## createEffect with config
+## createEffect with config {#createEffect-config}
 
 Creates an effect with handler and name from given config object
 
@@ -142,17 +142,17 @@ Creates an effect with handler and name from given config object
 createEffect({ handler, name });
 ```
 
-**Arguments**
+### Arguments {#createEffect-config-arguments}
 
 1. `config`? (_Params_): effect
    - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
    - `name`? (_string_): Optional effect name
 
-**Returns**
+### Returns {#createEffect-config-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Examples
+### Examples {#createEffect-config-examples}
 
 #### Create named effect
 

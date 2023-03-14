@@ -168,8 +168,9 @@ a:hover {
   text-decoration: none;
 }
 
-article > section :is(ul, ol) > * + * {
-  margin-top: 0.75rem;
+.content ul {
+  list-style: disc;
+  line-height: 2;
 }
 
 article > section nav :is(ul, ol) > * + * {

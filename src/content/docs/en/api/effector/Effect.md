@@ -7,59 +7,15 @@ description: Effect, its methods and properties
 
 It can be safely used in place of the original async function.
 
-## Arguments
+<br/><br/>
 
-1. `params` (_Params_): parameters passed to effect
+# Effect Methods
 
-**Returns**
-
-(_`Promise`_)
-
-## Example
-
-```js
-import { createEffect, createStore } from "effector";
-
-const fetchUserFx = createEffect(async ({ id }) => {
-  const res = await fetch(`https://example.com/users/${id}`);
-  return res.json();
-});
-
-const $users = createStore([]) // Default state
-  // add reducer for fetchUserFx.doneData event (triggered when handler resolved)
-  .on(fetchUserFx.doneData, (users, user) => [...users, user]);
-
-// subscribe to handler resolve
-fetchUserFx.done.watch(({ result, params }) => {
-  console.log(params); // => {id: 1}
-  console.log(result); // => resolved value
-});
-
-// subscribe to handler reject or throw error
-fetchUserFx.fail.watch(({ error, params }) => {
-  console.error(params); // => {id: 1}
-  console.error(error); // => rejected value
-});
-
-// you can replace function anytime
-fetchUserFx.use(function anotherHandler() {});
-
-// call effect with your params
-fetchUserFx({ id: 1 });
-
-// handle promise
-const data = await fetchUserFx({ id: 2 });
-```
-
-[Try it](https://share.effector.dev/7sfYga4o)
-
-## Effect Methods
-
-### `use(handler)`
+## `use(handler)` {#use}
 
 Provides a function, which will be called when effect is triggered.
 
-#### Formulae
+### Formulae {#use-formulae}
 
 ```ts
 effect.use(fn);
@@ -76,7 +32,7 @@ You must provide a handler either through [`.use`](/en/api/effector/Effect#use-h
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 
-#### Arguments
+### Arguments {#use-arguments}
 
 1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
@@ -84,7 +40,7 @@ You must provide a handler either through [`.use`](/en/api/effector/Effect#use-h
 
 ([_Effect_](/en/api/effector/Effect)): The same effect
 
-#### Example
+### Example {#use-example}
 
 ```js
 const fetchUserReposFx = createEffect();
@@ -103,11 +59,47 @@ fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/TlYuDeve)
 
-### `watch(watcher)`
+## `use.getCurrent()` {#use-getCurrent}
+
+Returns current handler of effect. Useful for testing.
+
+### Formulae {#use-getCurrent-formulae}
+
+```ts
+fn = effect.use.getCurrent();
+```
+
+- Returns current handler for `effect`
+- If no handler was assigned to `effect`, default handler will be returned ([that throws an error](https://share.effector.dev/8PBjt3TL))
+- Hint: to set a new handler use [`effect.use(handler)`](#use-handler)
+
+**Returns**
+
+(_Function_): Current handler, defined by `handler` property or via `use` call.
+
+### Example {#use-getCurrent-example}
+
+```js
+const handlerA = () => "A";
+const handlerB = () => "B";
+
+const fx = createEffect(handlerA);
+
+console.log(fx.use.getCurrent() === handlerA);
+// => true
+
+fx.use(handlerB);
+console.log(fx.use.getCurrent() === handlerB);
+// => true
+```
+
+[Try it](https://share.effector.dev/CM6hgtOM)
+
+## `watch(watcher)` {#watch}
 
 Subscribe to effect calls.
 
-#### Formulae
+### Formulae {#watch-formulae}
 
 ```ts
 const unwatch = effect.watch(fn);
@@ -116,7 +108,7 @@ const unwatch = effect.watch(fn);
 - Call `fn` on each `effect` call, pass payload of `effect` as argument to `fn`
 - When `unwatch` is called, stop calling `fn`
 
-#### Arguments
+### Arguments {#watch-arguments}
 
 1. `watcher` ([_Watcher_](/en/explanation/glossary#watcher)): A function that receives `payload`.
 
@@ -124,7 +116,7 @@ const unwatch = effect.watch(fn);
 
 [_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
 
-#### Example
+### Example {#watch-example}
 
 ```js
 import { createEffect } from "effector";
@@ -141,11 +133,11 @@ await fx(10);
 
 [Try it](https://share.effector.dev/VN1ef0TZ)
 
-### `prepend(fn)`
+## `prepend(fn)` {#prepend}
 
 Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
-#### Formulae
+### Formulae {#prepend-formulae}
 
 ```ts
 const event = effect.prepend(fn);
@@ -153,7 +145,7 @@ const event = effect.prepend(fn);
 
 - When `event` is triggered, call `fn` with payload from `event`, then trigger `effect` with result of `fn()`
 
-#### Arguments
+### Arguments {#prepend-arguments}
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
@@ -161,11 +153,11 @@ const event = effect.prepend(fn);
 
 [_Event_](/en/api/effector/Event): New event.
 
-### `map(fn)`
+## `map(fn)` {#map}
 
 Creates a new event, which will be called after the original effect is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
 
-#### Formulae
+### Formulae {#map-formulae}
 
 ```ts
 const second = first.map(fn);
@@ -174,7 +166,7 @@ const second = first.map(fn);
 - When `first` is triggered, pass payload from `first` to `fn`
 - Trigger `second` with the result of the `fn()` call as payload
 
-#### Arguments
+### Arguments {#map-arguments}
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
 
@@ -182,7 +174,7 @@ const second = first.map(fn);
 
 [_Event_](/en/api/effector/Event): New event.
 
-#### Example
+### Example {#map-example}
 
 ```js
 import { createEffect } from "effector";
@@ -204,127 +196,11 @@ await userUpdate({ name: "john", role: "admin" });
 
 [Try it](https://share.effector.dev/MmBBKXZe)
 
-### `use.getCurrent()`
-
-Returns current handler of effect. Useful for testing.
-
-#### Formulae
-
-```ts
-fn = effect.use.getCurrent();
-```
-
-- Returns current handler for `effect`
-- If no handler was assigned to `effect`, default handler will be returned ([that throws an error](https://share.effector.dev/8PBjt3TL))
-- Hint: to set a new handler use [`effect.use(handler)`](#use-handler)
-
-**Returns**
-
-(_Function_): Current handler, defined by `handler` property or via `use` call.
-
-#### Example
-
-```js
-const handlerA = () => "A";
-const handlerB = () => "B";
-
-const fx = createEffect(handlerA);
-
-console.log(fx.use.getCurrent() === handlerA);
-// => true
-
-fx.use(handlerB);
-console.log(fx.use.getCurrent() === handlerB);
-// => true
-```
-
-[Try it](https://share.effector.dev/CM6hgtOM)
-
-## Effect Properties
+# Effect Properties {#properties}
 
 You are not supposed to use parts of effect (like `.done` and `.pending`) as a target in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
-### `doneData`
-
-:::info{title="since"}
-[effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
-:::
-
-Event, which is triggered with result of the effect execution:
-
-#### Formulae
-
-```ts
-event = effect.doneData;
-```
-
-- `doneData` is an event, that triggered when `effect` is successfully resolved with `result` from [`.done`](#done)
-
-:::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
-:::
-
-[_Event_](/en/api/effector/Event) triggered when _handler_ is _resolved_.
-
-#### Example
-
-```js
-import { createEffect } from "effector";
-
-const fx = createEffect((value) => value + 1);
-
-fx.doneData.watch((result) => {
-  console.log(`Effect was successfully resolved, returning ${result}`);
-});
-
-await fx(2);
-// => Effect was successfully resolved, returning 3
-```
-
-[Try it](https://share.effector.dev/rNesMDtw)
-
-### `failData`
-
-:::info{title="since"}
-[effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
-:::
-
-Event, which is triggered with error thrown by the effect
-
-#### Formulae
-
-```ts
-event = effect.failData;
-```
-
-- `failData` is an event, that triggered when `effect` is rejected with `error` from [`.fail`](#fail)
-
-:::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
-:::
-
-[_Event_](/en/api/effector/Event) triggered when handler is rejected or throws error.
-
-#### Example
-
-```js
-import { createEffect } from "effector";
-
-const fx = createEffect(async (value) => {
-  throw Error(value - 1);
-});
-
-fx.failData.watch((error) => {
-  console.log(`Execution failed with error ${error.message}`);
-});
-
-fx(2);
-// => Execution failed with error 1
-```
-
-[Try it](https://share.effector.dev/rNU3tqEx)
-
-### `done`
+## `done` {#done}
 
 [_Event_](/en/api/effector/Event), which is triggered when _handler_ is _resolved_.
 
@@ -332,14 +208,14 @@ fx(2);
 Do not manually call this event. It is event that depends on effect.
 :::
 
-#### Properties
+### Properties {#done-properties}
 
 Event triggered with object of `params` and `result`:
 
 1. `params` (_Params_): An argument passed to the effect call
 2. `result` (_Done_): A result of the resolved handler
 
-#### Example
+### Example {#done-example}
 
 ```js
 import { createEffect } from "effector";
@@ -356,7 +232,46 @@ await fx(2);
 
 [Try it](https://share.effector.dev/VogsNaDn)
 
-### `fail`
+## `doneData` {#doneData}
+
+:::info{title="since"}
+[effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
+:::
+
+Event, which is triggered with result of the effect execution:
+
+### Formulae {#doneData-formulae}
+
+```ts
+event = effect.doneData;
+```
+
+- `doneData` is an event, that triggered when `effect` is successfully resolved with `result` from [`.done`](#done)
+
+:::warning{title="Important"}
+Do not manually call this event. It is event that depends on effect.
+:::
+
+[_Event_](/en/api/effector/Event) triggered when _handler_ is _resolved_.
+
+### Example {#doneData-example}
+
+```js
+import { createEffect } from "effector";
+
+const fx = createEffect((value) => value + 1);
+
+fx.doneData.watch((result) => {
+  console.log(`Effect was successfully resolved, returning ${result}`);
+});
+
+await fx(2);
+// => Effect was successfully resolved, returning 3
+```
+
+[Try it](https://share.effector.dev/rNesMDtw)
+
+## `fail` {#fail}
 
 [_Event_](/en/api/effector/Event), which is triggered when handler is rejected or throws error.
 
@@ -364,14 +279,14 @@ await fx(2);
 Do not manually call this event. It is event that depends on effect.
 :::
 
-#### Properties
+### Properties {#fail-properties}
 
 Event triggered with object of `params` and `error`:
 
 1. `params` (_Params_): An argument passed to effect call
 2. `error` (_Fail_): An error catched from the handler
 
-#### Example
+### Example {#fail-example}
 
 ```js
 import { createEffect } from "effector";
@@ -390,7 +305,48 @@ fx(2);
 
 [Try it](https://share.effector.dev/hCPCHQ5N)
 
-### `finally`
+## `failData` {#failData}
+
+:::info{title="since"}
+[effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
+:::
+
+Event, which is triggered with error thrown by the effect
+
+### Formulae {#failData-formulae}
+
+```ts
+event = effect.failData;
+```
+
+- `failData` is an event, that triggered when `effect` is rejected with `error` from [`.fail`](#fail)
+
+:::warning{title="Important"}
+Do not manually call this event. It is event that depends on effect.
+:::
+
+[_Event_](/en/api/effector/Event) triggered when handler is rejected or throws error.
+
+### Example {#failData-example}
+
+```js
+import { createEffect } from "effector";
+
+const fx = createEffect(async (value) => {
+  throw Error(value - 1);
+});
+
+fx.failData.watch((error) => {
+  console.log(`Execution failed with error ${error.message}`);
+});
+
+fx(2);
+// => Execution failed with error 1
+```
+
+[Try it](https://share.effector.dev/rNU3tqEx)
+
+## `finally` {#finally}
 
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
@@ -402,7 +358,7 @@ Event, which is triggered when handler is resolved, rejected or throws error.
 Do not manually call this event. It is event that depends on effect.
 :::
 
-#### Properties
+### Properties {#finally-properties}
 
 [_Event_](/en/api/effector/Event), which is triggered with object of `status`, `params` and `error` or `result`:
 
@@ -411,7 +367,7 @@ Do not manually call this event. It is event that depends on effect.
 3. `error` (_Fail_): An error catched from the handler
 4. `result` (_Done_): A result of the resolved handler
 
-#### Example
+### Example {#finally-example}
 
 ```js
 import { createEffect } from "effector";
@@ -444,9 +400,11 @@ fetchApiFx({ time: 100, ok: false });
 
 [Try it](https://share.effector.dev/f90vETOc)
 
-### `pending`
+## `pending` {#pending}
 
-#### Formulae
+Store contains `true` when effect is called but not resolved yet. Useful to show loaders.
+
+### Formulae {#pending-formulae}
 
 ```ts
 $store = effect.pending;
@@ -455,15 +413,15 @@ $store = effect.pending;
 - [`$store`](/en/api/effector/Store) will update when `done` or `fail` are triggered
 - [`$store`](/en/api/effector/Store) contains `true` value until the effect is resolved or rejected
 
+### Returns {#pending-returns}
+
 :::warning{title="Important"}
 Do not modify `$store` value! It is [derived store](/en/api/effector/Store#derived-store) and should be in predictable state.
 :::
 
-**Returns**
-
 [_DerivedStore_](/en/api/effector/Store#derived-store): Store that represents current state of the effect
 
-#### Example
+### Example {#pending-example}
 
 ```jsx
 import React from "react";
@@ -501,7 +459,7 @@ const $isLoading = createStore(false)
   .on(fetchApiFx.fail, () => false);
 ```
 
-### `inFlight`
+## `inFlight` {#inFlight}
 
 :::info{title="since"}
 [effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
@@ -509,7 +467,7 @@ const $isLoading = createStore(false)
 
 Shows how many effect calls aren't settled yet. Useful for rate limiting.
 
-#### Formulae
+### Formulae {#inFlight-formulae}
 
 ```ts
 $count = effect.inFlight;
@@ -523,11 +481,11 @@ $count = effect.inFlight;
 Do not modify `$count` value! It is [derived store](/en/api/effector/Store#derived-store) and should be in predictable state.
 :::
 
-**Returns**
+### Returns {#inFlight-returns}
 
 [_DerivedStore_](/en/api/effector/Store#derived-store): Store that represents count of the ran effects
 
-#### Example
+### Example {#inFlight-example}
 
 ```js
 import { createEffect } from "effector";
