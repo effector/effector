@@ -59,6 +59,8 @@ In case of this simple variant of `attach`, types of `originalFx` and `attachedF
 It allows to create _local_ copy of the effect, to react only on triggers emitted from the current _local_ code.
 
 ```ts
+import { createEffect, attach } from "effector";
+
 const originalFx = createEffect((word: string) => {
   console.info("Printed:", word);
 });
