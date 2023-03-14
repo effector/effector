@@ -1,5 +1,7 @@
 ---
+import clsx from "clsx";
 import { COMMUNITY_INVITE_URL } from "../../consts";
+import styles from "./TableOfContents.module.css";
 
 type Props = {
   editHref: string;
@@ -9,11 +11,11 @@ const { editHref } = Astro.props;
 const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
 ---
 
-{showMoreSection && <h2 class="heading">More</h2>}
-<ul>
+{showMoreSection && <h2 class={styles.title}>More</h2>}
+<ul class={styles.contents}>
   {
     editHref && (
-      <li class="header-link depth-2">
+      <li class={clsx(styles.link, styles.level2)}>
         <a class="edit-on-github" href={editHref} target="_blank">
           <svg
             aria-hidden="true"
@@ -39,7 +41,7 @@ const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
   }
   {
     COMMUNITY_INVITE_URL && (
-      <li class="header-link depth-2">
+      <li class={clsx(styles.link, styles.level2)}>
         <a href={COMMUNITY_INVITE_URL} target="_blank">
           <svg
             aria-hidden="true"
@@ -64,12 +66,3 @@ const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
     )
   }
 </ul>
-
-<style>
-  .edit-on-github {
-    color: inherit;
-    font: inherit;
-    font-size: 1rem;
-    text-decoration: none;
-  }
-</style>

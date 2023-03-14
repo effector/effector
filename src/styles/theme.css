@@ -75,21 +75,27 @@
   --theme-accent-opacity: 0.15;
   --theme-divider: hsla(var(--color-gray-95), 1);
   --theme-text: hsla(var(--color-gray-10), 1);
+  --theme-text-dark: hsla(var(--color-base-black), 1);
   --theme-text-light: hsla(var(--color-gray-40), 1);
+
   /* @@@: not used anywhere */
   --theme-text-lighter: hsla(var(--color-gray-80), 1);
   --theme-bg: hsla(var(--color-base-white), 100%, 1);
   --theme-bg-hover: hsla(var(--color-gray-95), 1);
   --theme-bg-offset: hsla(var(--color-gray-90), 1);
   --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
+
   --theme-code-inline-bg: hsla(var(--color-gray-95), 1);
   --theme-code-inline-text: var(--theme-text);
   --theme-code-bg: hsla(217, 19%, 27%, 1);
   --theme-code-text: hsla(var(--color-gray-95), 1);
-  --theme-navbar-bg: rgba(255, 255, 255, 0.7);
-  --theme-navbar-height: 6rem;
+
+  --theme-navbar-bg: rgba(255, 255, 255, 0.85);
+  --theme-navbar-height: 4rem;
+
   --theme-selection-color: hsla(var(--color-blue), 1);
   --theme-selection-bg: hsla(var(--color-blue), var(--theme-accent-opacity));
+
   color-scheme: light;
 }
 

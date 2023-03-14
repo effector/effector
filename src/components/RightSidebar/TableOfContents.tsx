@@ -1,7 +1,9 @@
 import type { MarkdownHeading } from "astro";
 import type { FunctionalComponent } from "preact";
 import { unescape } from "html-escaper";
+import clsx from "clsx";
 import { useState, useEffect, useRef } from "preact/hooks";
+import styles from "./TableOfContents.module.css";
 
 type ItemOffsets = {
   id: string;
@@ -62,29 +64,31 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     return () => headingsObserver.disconnect();
   }, [toc.current]);
 
-  const onLinkClick = (e: any) => {
-    setCurrentID(e.target.getAttribute("href").replace("#", ""));
+  const onLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    setCurrentID(e.currentTarget.getAttribute("href")?.replace("#", "")!);
   };
 
   return (
     <>
-      <h2 id={onThisPageID} className="heading">
-        On this page
+      <h2 id={onThisPageID} className={styles.title}>
+        On This Page
       </h2>
-      <ul ref={toc}>
+      <ul ref={toc} className={styles.contents}>
         {headings
-          .filter(({ depth }) => depth > 1 && depth < 4)
-          .map((heading) => (
-            <li
-              className={`header-link depth-${heading.depth} ${
-                currentID === heading.slug ? "current-header-link" : ""
-              }`.trim()}
-            >
-              <a href={`#${heading.slug}`} onClick={onLinkClick}>
-                {unescape(heading.text)}
-              </a>
-            </li>
-          ))}
+          .filter(({ depth }) => depth > 0 && depth < 4)
+          .map((heading) => {
+            const linkClass = clsx(styles.link, styles[`level${heading.depth}`], {
+              [styles.active]: currentID === heading.slug,
+            });
+
+            return (
+              <li className={linkClass}>
+                <a href={`#${heading.slug}`} id={`toc-${heading.slug}`} onClick={onLinkClick}>
+                  {unescape(heading.text)}
+                </a>
+              </li>
+            );
+          })}
       </ul>
     </>
   );

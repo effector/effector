@@ -135,11 +135,12 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
     align-items: center;
     z-index: 110;
     -webkit-backdrop-filter: saturate(50%) blur(8px);
-    backdrop-filter: saturate(50%) blur(8px);
+    backdrop-filter: saturate(50%) blur(12px);
     background-color: var(--theme-navbar-bg);
     width: 100%;
     height: var(--theme-navbar-height);
     overflow: visible;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 0 rgba(0, 0, 0, 0.06);
     font-family: "Lexend Deca", sans-serif;
   }
 
@@ -183,7 +184,8 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
     justify-content: flex-end;
     align-items: center;
     gap: 1em;
-    padding: 0 1rem;
+    padding-right: max(env(safe-area-inset-right), 1.5rem);
+    padding-left: max(env(safe-area-inset-left), 1.5rem);
     width: 100%;
     max-width: 82em;
   }
