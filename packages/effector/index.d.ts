@@ -2776,7 +2776,7 @@ type CombineState<State> = State[keyof State] extends Store<any>
  * @param unit parent unit or graph node
  * @param cb callback assumed to create some units
  */
-export function withRegion(unit: Unit<any> | Node, cb: () => void): void
+export function withRegion<T = void>(unit: Unit<any> | Node, cb: () => T): T
 
 /**
  * Convert given stores to store with array which values updated upon changes in given ones

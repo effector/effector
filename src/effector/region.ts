@@ -46,7 +46,7 @@ export const readSidRoot = (sid?: string | null) => {
   return sid
 }
 
-export function withRegion(unit: NodeUnit, cb: () => void) {
+export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
   const meta = getGraph(unit).meta || {}
 
   regionStack = {
