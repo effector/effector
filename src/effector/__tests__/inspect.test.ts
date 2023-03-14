@@ -404,14 +404,17 @@ describe('inspectGraph API', () => {
       expect(regionalUnitDeclared).toHaveBeenCalledTimes(1)
       expect(regionalUnitDeclared).toHaveBeenCalledWith({
         type: 'region',
+        id: expect.any(String),
         meta: {
           region: 'inner',
         },
         region: {
           type: 'region',
+          id: expect.any(String),
           meta: {region: 'outer'},
           region: {
             type: 'factory',
+            id: expect.any(String),
             region: undefined,
             sid: 'customOperator-call-1',
             method: 'customOperator',

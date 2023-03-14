@@ -10,6 +10,7 @@ import {
   // @ts-expect-error
   setGraphInspector,
 } from 'effector'
+import { ID } from './index.h'
 
 type Loc = {
   file: string
@@ -88,11 +89,13 @@ export function inspect(config: {
 type Region =
   | {
       type: 'region'
+      id: ID,
       meta: Record<string, unknown>
       region?: Region
     }
   | {
       type: 'factory'
+      id: ID,
       meta: Record<string, unknown>
       region?: Region
       sid?: string
@@ -200,7 +203,7 @@ function readUnitDeclaration(
 
 function readRegionStack(regionStack?: RegionStack | null): Region | undefined {
   if (!regionStack) return
-  const {parent, meta} = regionStack
+  const {parent, meta, id} = regionStack
   const parentRegion = readRegionStack(parent) || undefined
 
   if (meta.type === 'factory') {
@@ -208,6 +211,7 @@ function readRegionStack(regionStack?: RegionStack | null): Region | undefined {
 
     return {
       type: 'factory',
+      id,
       region: parentRegion,
       meta,
       sid,
@@ -219,12 +223,14 @@ function readRegionStack(regionStack?: RegionStack | null): Region | undefined {
 
   return {
     type: 'region',
+    id,
     region: parentRegion,
     meta,
   }
 }
 
 type RegionStack = {
+  id: ID,
   parent: RegionStack | null
   meta:
     | Record<string, unknown>
