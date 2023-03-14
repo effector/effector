@@ -32,16 +32,15 @@ type Region =
     }
   | {
       type: 'factory'
+      meta: Record<string, unknown>
       region?: Region
-      meta: {
-        sid?: string
-        name?: string
-        method?: string
-        loc?: {
-          file: string
-          line: number
-          column: number
-        }
+      sid?: string
+      name?: string
+      method?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
       }
     }
 
