@@ -34,7 +34,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^22.6.2"
+    "effector": "^22.7.0"
   },
   "keywords": [
     "business",
