@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.5.1
+
+- Fix Gate usage as component. `<Gate />` will also be isomorphic by scope.
+
 ## effector 22.7.0
 
 - Fix `Declaration` type, provide missing top-level properties for `region` and `factory` types
