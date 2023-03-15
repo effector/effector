@@ -2,6 +2,7 @@ import {createStore, launch, Domain, createEvent} from 'effector'
 import {Gate} from './index.h'
 import {withDisplayName} from './withDisplayName'
 import {useGateBase} from './apiBase'
+import {getScope} from './scope'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
 import {isObject} from '../effector/is'
 
@@ -64,7 +65,7 @@ export function createGateImplementation<State>({
     })
   }
   function GateComponent(props: State) {
-    useGateHook(GateComponent as any, props)
+    useGateHook(GateComponent as any, props, getScope())
     return null
   }
   GateComponent.open = open
