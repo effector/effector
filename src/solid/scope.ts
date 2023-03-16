@@ -26,7 +26,7 @@ export function createGate<Props>(
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  props: Accessor<Props> = () => ({} as any),
+  props: Props = {} as any,
 ) {
   return useGateBase(GateComponent, props, getScope(true))
 }

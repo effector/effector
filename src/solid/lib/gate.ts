@@ -26,7 +26,7 @@ function useGate<Props>(
 
 export function useGateBase<Props>(
   GateComponent: Gate<Props>,
-  props: Accessor<Props> = () => ({} as any),
+  props: Props = {} as any,
   scope?: Scope,
 ) {
   const events = useUnitBase([
@@ -45,7 +45,7 @@ export function useGateBase<Props>(
     } as Gate<Props>
   })
 
-  createEffect(() => useGate(ForkedGate(), props()))
+  createEffect(() => useGate(ForkedGate(), props))
 }
 
 export function createGateImplementation<State>({

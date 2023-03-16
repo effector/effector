@@ -30,7 +30,7 @@ export function useUnit(shape, opts?: {forceScope?: boolean}) {
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  props: Accessor<Props> = () => ({} as any),
+  props: Props = {} as any,
   opts?: {forceScope?: boolean},
 ) {
   return useGateBase(GateComponent, props, getScope(opts?.forceScope))
