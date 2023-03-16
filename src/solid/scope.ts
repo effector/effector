@@ -47,12 +47,12 @@ export function useGate<Props>(
   createEffect(() => commonUseGate(ForkedGate(), props))
 }
 export function useUnit(shape) {
-  const scope = getScope()
+  const scope = getScope(true)
   return useUnitBase(shape, scope)
 }
 /** useStoreMap wrapper for scopes */
 export function useStoreMap(configOrStore: any, separateFn: any) {
-  const scope = getScope()
+  const scope = getScope(true)
   if (separateFn) return useStoreMapBase([configOrStore, separateFn], scope)
   return useStoreMapBase(
     [

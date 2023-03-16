@@ -63,6 +63,7 @@ const externals = [
   'use-sync-external-store/shim/index.js',
   'use-sync-external-store/shim/with-selector.js',
   'solid-js',
+  'solid-js/web'
 ]
 
 const getPlugins = (

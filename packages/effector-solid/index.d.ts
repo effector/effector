@@ -21,6 +21,7 @@ export function useStoreMap<
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
+  readonly forceScope?: boolean
 }): Accessor<Result>
 export function useStoreMap<State, Result>(
   store: Store<State>,

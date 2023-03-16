@@ -11,13 +11,17 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
         keys: Keys
         fn(state: State, keys: Keys): Result
         updateFilter?: (update: Result, current: Result) => boolean
+        forceScope?: boolean
       }
     | Store<State>,
   separateFn?: (state: State, keys: Keys) => Result,
 ): Accessor<Result> {
-  return useStoreMapBase([configOrStore, separateFn])
+  return useStoreMapBase(
+    [configOrStore, separateFn],
+    getScope(configOrStore?.forceScope),
+  )
 }
 export function useUnit(shape, opts?: {forceScope?: boolean}) {
-  const scope = getScope(opts?.forceScope ?? false)
+  const scope = getScope(opts?.forceScope)
   return useUnitBase(shape, scope)
 }
