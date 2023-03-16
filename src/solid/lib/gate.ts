@@ -1,10 +1,12 @@
 import {Gate} from '../index.h'
-import {createEvent, createStore, Domain, launch} from 'effector'
-import {onCleanup, onMount, createEffect} from 'solid-js'
+import {createEvent, createStore, Domain, launch, Scope} from 'effector'
+import {onCleanup, onMount, createEffect, createMemo, Accessor} from 'solid-js'
 import {flattenConfig, processArgsToConfig} from '../../effector/config'
 import {isObject} from '../../effector/is'
+import {useUnit} from "../scope";
+import {useUnitBase} from "./base";
 
-export function useGate<Props>(
+function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
 ) {
@@ -20,6 +22,30 @@ export function useGate<Props>(
     }
     GateComponent.set(props)
   })
+}
+
+export function useGateBase<Props>(
+  GateComponent: Gate<Props>,
+  props: Accessor<Props> = () => ({} as any),
+  scope?: Scope,
+) {
+  const events = useUnitBase([
+    GateComponent.open,
+    GateComponent.close,
+    GateComponent.set,
+  ], scope)
+
+  const ForkedGate = createMemo(() => {
+    const [open, close, set] = events
+
+    return {
+      open,
+      close,
+      set,
+    } as Gate<Props>
+  })
+
+  createEffect(() => useGate(ForkedGate(), props()))
 }
 
 export function createGateImplementation<State>({
