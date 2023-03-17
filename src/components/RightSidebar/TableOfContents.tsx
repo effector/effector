@@ -1,8 +1,10 @@
 import type { MarkdownHeading } from "astro";
 import type { FunctionalComponent } from "preact";
+import { useState, useEffect, useRef } from "preact/hooks";
 import { unescape } from "html-escaper";
 import clsx from "clsx";
-import { useState, useEffect, useRef } from "preact/hooks";
+
+import { getTextLocalized, translations } from "../../languages";
 import styles from "./TableOfContents.module.css";
 
 type ItemOffsets = {
@@ -13,7 +15,8 @@ type ItemOffsets = {
 const TableOfContents: FunctionalComponent<{
   headings: MarkdownHeading[];
   collapsed?: boolean;
-}> = ({ headings = [], collapsed = false }) => {
+  lang: string;
+}> = ({ headings = [], collapsed = false, lang }) => {
   const toc = useRef<HTMLUListElement>(null);
   const onThisPageID = "on-this-page-heading";
   const itemOffsets = useRef<ItemOffsets[]>([]);
@@ -96,7 +99,7 @@ const TableOfContents: FunctionalComponent<{
     return (
       <details className={styles.expandDetails}>
         <summary id={onThisPageID}>
-          <span>On This Page</span>
+          <span>{getTextLocalized(translations.OnThisPage, lang)}</span>
         </summary>
         <div className={styles.expandContent}>{items}</div>
       </details>
@@ -106,7 +109,7 @@ const TableOfContents: FunctionalComponent<{
   return (
     <>
       <h2 id={onThisPageID} className={styles.title}>
-        On This Page
+        {getTextLocalized(translations.OnThisPage, lang)}
       </h2>
       {items}
     </>

@@ -60,4 +60,28 @@ export const translations = {
       ru: "Отображается содержимое для языка по умолчанию",
     },
   },
+  OnThisPage: {
+    text: {
+      en: "On this page",
+      ru: "Оглавление",
+    },
+  },
+  EditThisPage: {
+    text: {
+      en: "Edit this page",
+      ru: "Внести правки",
+    },
+  },
+  JoinOurCommunity: {
+    text: {
+      en: "Join our community",
+      ru: "Войти в чат",
+    },
+  },
+  More: {
+    text: {
+      en: "More",
+      ru: "Дополнительно",
+    },
+  },
 };

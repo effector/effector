@@ -60,7 +60,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
       }
     </div>
     <nav class="block xl:hidden">
-      <TableOfContents collapsed client:media="(max-width: 1280px)" headings={headings} />
+      <TableOfContents
+        lang={lang}
+        collapsed
+        client:media="(max-width: 1280px)"
+        headings={headings}
+      />
     </nav>
     <slot />
   </section>

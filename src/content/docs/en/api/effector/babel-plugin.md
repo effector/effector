@@ -2,8 +2,6 @@
 title: Babel plugin
 ---
 
-# Babel plugin
-
 Built-in plugin for babel can be used for ssr and debugging. It inserts a name an [Unit](/en/explanation/glossary#unit),
 inferred from variable name and `sid` (stable identifier), computed from the location in the source code.
 
