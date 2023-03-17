@@ -39,7 +39,6 @@ export function getBreadcrumbs({
     const part = path.slice(0, foundIndex);
     breadcrumbs.push(part);
   }
-  breadcrumbs.push(path);
 
   return breadcrumbs
     .filter((path) => docs[path])
