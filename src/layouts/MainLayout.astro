@@ -39,19 +39,17 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       overflow-x: hidden;
     }
 
-    .grid-sidebar {
-      position: sticky;
-      top: 0;
-      padding: 0;
-      height: 100vh;
-    }
-
     #grid-left {
       display: none;
       position: fixed;
       z-index: 10;
       background-color: var(--theme-bg);
       height: 100%;
+
+      position: sticky;
+      top: 0;
+      padding: 0;
+      height: 100vh;
     }
 
     #grid-main {
@@ -66,7 +64,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       display: none;
     }
 
-    @media (min-width: 50em) {
+    @media (min-width: 768px) {
       .layout {
         grid-template-columns: 20rem minmax(0, var(--max-width));
         gap: 1em;
@@ -81,7 +79,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       }
     }
 
-    @media (min-width: 72em) {
+    @media (min-width: 1280px) {
       .layout {
         grid-template-columns: 20rem minmax(0, var(--max-width)) 18rem;
         margin-right: auto;
@@ -113,7 +111,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
   </style>
 
   <main class="layout">
-    <aside id="grid-left" class="grid-sidebar" title="Site Navigation">
+    <aside id="grid-left" title="Site Navigation">
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
     <div id="grid-main">
@@ -128,7 +126,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       </PageContent>
       <AvatarList path={currentPage} />
     </div>
-    <aside id="grid-right" class="grid-sidebar" title="Table of Contents">
+    <aside id="grid-right" title="Table of Contents">
       <RightSidebar headings={headings} githubEditUrl={githubEditUrl} />
     </aside>
   </main>

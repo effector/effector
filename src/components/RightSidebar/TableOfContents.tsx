@@ -10,9 +10,10 @@ type ItemOffsets = {
   topOffset: number;
 };
 
-const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
-  headings = [],
-}) => {
+const TableOfContents: FunctionalComponent<{
+  headings: MarkdownHeading[];
+  collapsed?: boolean;
+}> = ({ headings = [], collapsed = false }) => {
   const toc = useRef<HTMLUListElement>(null);
   const onThisPageID = "on-this-page-heading";
   const itemOffsets = useRef<ItemOffsets[]>([]);
@@ -68,28 +69,46 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     setCurrentID(e.currentTarget.getAttribute("href")?.replace("#", "")!);
   };
 
+  if (headings.length === 0) return null;
+
+  const items = (
+    <ul ref={toc} className={styles.contents}>
+      {headings
+        .filter(({ depth }) => depth > 0 && depth < 4)
+        .map((heading) => {
+          const linkClass = clsx(styles.link, styles[`level${heading.depth}`], {
+            [styles.active]: currentID === heading.slug,
+          });
+
+          return (
+            <li className={linkClass}>
+              <a href={`#${heading.slug}`} id={`toc-${heading.slug}`} onClick={onLinkClick}>
+                {unescape(heading.text)}
+              </a>
+            </li>
+          );
+        })}
+    </ul>
+  );
+
+  // When component setup as collapsed by default
+  if (collapsed) {
+    return (
+      <details className={styles.expandDetails}>
+        <summary id={onThisPageID}>
+          <span>On This Page</span>
+        </summary>
+        <div className={styles.expandContent}>{items}</div>
+      </details>
+    );
+  }
+
   return (
     <>
       <h2 id={onThisPageID} className={styles.title}>
         On This Page
       </h2>
-      <ul ref={toc} className={styles.contents}>
-        {headings
-          .filter(({ depth }) => depth > 0 && depth < 4)
-          .map((heading) => {
-            const linkClass = clsx(styles.link, styles[`level${heading.depth}`], {
-              [styles.active]: currentID === heading.slug,
-            });
-
-            return (
-              <li className={linkClass}>
-                <a href={`#${heading.slug}`} id={`toc-${heading.slug}`} onClick={onLinkClick}>
-                  {unescape(heading.text)}
-                </a>
-              </li>
-            );
-          })}
-      </ul>
+      {items}
     </>
   );
 };

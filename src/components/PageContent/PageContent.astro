@@ -59,12 +59,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
         ) : null
       }
     </div>
-    <nav class="block sm:hidden">
-      <TableOfContents client:media="(max-width: 50em)" headings={headings} />
+    <nav class="block xl:hidden">
+      <TableOfContents collapsed client:media="(max-width: 1280px)" headings={headings} />
     </nav>
     <slot />
   </section>
-  <nav class="block sm:hidden">
+  <nav class="block xl:hidden">
     <MoreMenu editHref={githubEditUrl} />
   </nav>
 </article>
@@ -81,10 +81,6 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 
   .content > section {
     margin-bottom: 4rem;
-  }
-
-  .block {
-    display: block;
   }
 
   .heading-section {
