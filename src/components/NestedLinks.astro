@@ -27,7 +27,7 @@ const { firstLevel = false, items } = Astro.props;
         const active = item.link.startsWith(`/${slug}`);
         return (
           <li>
-            <div class="section">
+            <div class="line">
               <a
                 class:list={{ active }}
                 href={createLink(item, lang)}
@@ -50,7 +50,7 @@ const { firstLevel = false, items } = Astro.props;
       if (isExpandable) {
         return (
           <li>
-            <div class="section">
+            <div class="line">
               <span>{text}</span>
               <button type="button" class:list={{ expander: true, expanded: true }}>
                 <IconChevronRight size={18} />
@@ -63,7 +63,7 @@ const { firstLevel = false, items } = Astro.props;
 
       return (
         <li>
-          <div class="section">
+          <div class="line">
             <span>{text}</span>
           </div>
         </li>
@@ -92,7 +92,7 @@ const { firstLevel = false, items } = Astro.props;
     background-color: var(--theme-bg);
   }
 
-  li > .section {
+  li > .line {
     @apply flex items-center justify-between gap-2;
   }
 

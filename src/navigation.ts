@@ -561,7 +561,7 @@ export const DESKTOP_NAVIGATION: LSidebarItem[] = [
   { text: { en: "Learn", ru: "Изучение" }, link: "/introduction/installation" },
   { text: { en: "API" }, link: "/api" },
   { text: { en: "Recipes", ru: "Рецепты" }, link: "/recipes" },
-  { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero__bias" },
+  { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero_bias" },
   { text: { en: "Playground", ru: "Песочница" }, link: "https://share.effector.dev" },
   { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
 ];
@@ -586,7 +586,7 @@ export const MOBILE_NAVIGATION: LMobileNavItem[] = [
     link: "/recipes",
     items: recipes,
   },
-  { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero__bias" },
+  { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero_bias" },
   { text: { en: "Playground", ru: "Песочница" }, link: "https://share.effector.dev" },
   { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
 ];
