@@ -1,0 +1,61 @@
+---
+import { MOBILE_NAVIGATION } from "../navigation";
+
+import NestedLinks from "./NestedLinks.astro";
+
+import IconGithub from "../icons/Github.astro";
+import IconTwitter from "../icons/Twitter.astro";
+import IconDiscord from "../icons/Discord.astro";
+import IconYoutube from "../icons/Youtube.astro";
+
+const socialIcons = {
+  github: IconGithub,
+  twitter: IconTwitter,
+  discord: IconDiscord,
+  youtube: IconYoutube,
+};
+---
+
+<div class="navigation">
+  <nav>
+    <NestedLinks items={MOBILE_NAVIGATION} firstLevel />
+  </nav>
+  <footer>Theme & Socials</footer>
+</div>
+
+<style>
+  :global(.mobile-menu-opened) .navigation {
+    display: flex;
+  }
+
+  .navigation {
+    @apply fixed z-50 hidden w-screen flex-col overflow-hidden overflow-y-auto;
+
+    top: var(--theme-navbar-height);
+    bottom: 0;
+
+    will-change: transform, opacity;
+    contain: layout style;
+    backface-visibility: hidden;
+    background-color: var(--theme-bg);
+  }
+
+  nav {
+    @apply flex grow flex-col overflow-y-auto py-4;
+    font-family: "Lexend Deca", sans-serif;
+
+    overscroll-behavior: contain;
+    padding-left: max(env(safe-area-inset-left), 1rem);
+    padding-right: max(env(safe-area-inset-right), 1rem);
+  }
+
+  footer {
+    @apply py-4;
+
+    padding-left: max(env(safe-area-inset-left), 1rem);
+    padding-right: max(env(safe-area-inset-right), 1rem);
+
+    box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 0.1);
+    background-color: var(--theme-bg);
+  }
+</style>

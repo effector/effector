@@ -1,0 +1,137 @@
+---
+import { createLink, getPathParamsFromId, getTextLocalized } from "../languages";
+import { isNavGroup, isNavLink, isNavLinkGroup, type LMobileNavItem } from "../navigation";
+
+import IconChevronRight from "../icons/Chevron.astro";
+import IconExternal from "../icons/External.astro";
+
+const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
+
+interface Props {
+  items: LMobileNavItem[];
+  firstLevel?: boolean;
+}
+
+const { firstLevel = false, items } = Astro.props;
+---
+
+<ul class:list={{ nested: !firstLevel }}>
+  {
+    items.map((item) => {
+      const isExpandable = isNavLinkGroup(item) || isNavGroup(item);
+      const isLink = isNavLink(item) || isNavLinkGroup(item);
+      const text = getTextLocalized(item, lang);
+
+      if (isLink) {
+        const external = item.link.startsWith("https://") || item.link.startsWith("http://");
+        const active = item.link.startsWith(`/${slug}`);
+        return (
+          <li>
+            <div class="section">
+              <a
+                class:list={{ active }}
+                href={createLink(item, lang)}
+                target={external ? "_blank" : undefined}
+              >
+                {text}
+                {external ? <IconExternal /> : null}
+              </a>
+              {isExpandable ? (
+                <button type="button" class:list={{ expander: true, expanded: true }}>
+                  <IconChevronRight size={18} />
+                </button>
+              ) : null}
+            </div>
+            {isExpandable ? <Astro.self items={item.items} /> : null}
+          </li>
+        );
+      }
+
+      if (isExpandable) {
+        return (
+          <li>
+            <div class="section">
+              <span>{text}</span>
+              <button type="button" class:list={{ expander: true, expanded: true }}>
+                <IconChevronRight size={18} />
+              </button>
+            </div>
+            <Astro.self items={item.items} />
+          </li>
+        );
+      }
+
+      return (
+        <li>
+          <div class="section">
+            <span>{text}</span>
+          </div>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  ul {
+    @apply relative flex flex-col gap-1;
+  }
+
+  ul.nested {
+    @apply pl-3;
+  }
+
+  ul.nested::before {
+    @apply absolute inset-y-1 left-0 w-[1px];
+    content: "";
+    background-color: var(--theme-divider);
+  }
+
+  li {
+    @apply relative flex flex-col gap-2;
+    background-color: var(--theme-bg);
+  }
+
+  li > .section {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  li span {
+    @apply select-none py-1 px-3 text-sm;
+    font-weight: 300;
+  }
+
+  a {
+    @apply flex grow cursor-pointer items-center gap-0 rounded py-1 px-3 text-sm transition-colors;
+    color: var(--theme-text);
+
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    word-break: break-word;
+  }
+
+  a:hover {
+    background-color: var(--theme-divider);
+  }
+
+  a.active {
+    color: var(--theme-text-accent);
+  }
+
+  button {
+    @apply cursor-pointer rounded p-1 transition-colors;
+    color: var(--theme-text);
+  }
+
+  button:hover {
+    background-color: var(--theme-divider);
+  }
+
+  .expander :global(svg) {
+    @apply transform-gpu will-change-transform;
+  }
+
+  .expander.expanded :global(svg) {
+    @apply rotate-90;
+  }
+</style>

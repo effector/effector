@@ -3,6 +3,7 @@ import { createLink, getPathParamsFromId, getTextLocalized, translations } from 
 import { KNOWN_LANGUAGES, SITE } from "../../consts";
 import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigation";
 
+import NavigationTree from "../NavigationTree.astro";
 import DropDownMenu from "../DropDownMenu.astro";
 
 import EffectorLogo from "./EffectorLogo.astro";
@@ -11,14 +12,14 @@ import Search from "./Search";
 import SkipToContent from "./SkipToContent.astro";
 import ThemeToggle from "./ThemeToggleButton";
 
-import IconExternal from "./icons/External.astro";
-import IconLanguage from "./icons/Language.astro";
-import IconDots from "./icons/Dots.astro";
+import IconExternal from "../../icons/External.astro";
+import IconLanguage from "../../icons/Language.astro";
+import IconDots from "../../icons/Dots.astro";
 
-import IconGithub from "./icons/Github.astro";
-import IconTwitter from "./icons/Twitter.astro";
-import IconDiscord from "./icons/Discord.astro";
-import IconYoutube from "./icons/Youtube.astro";
+import IconGithub from "../../icons/Github.astro";
+import IconTwitter from "../../icons/Twitter.astro";
+import IconDiscord from "../../icons/Discord.astro";
+import IconYoutube from "../../icons/Youtube.astro";
 
 const socialIcons = {
   github: IconGithub,
@@ -121,6 +122,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     </div>
   </nav>
 </header>
+<NavigationTree />
 
 <style>
   header {

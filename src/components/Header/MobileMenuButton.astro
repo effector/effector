@@ -1,5 +1,5 @@
 ---
-import IconMenu from "./icons/Menu.astro";
+import IconMenu from "../../icons/Menu.astro";
 
 // Animation copied from https://github.com/shuding/nextra/blob/a84ed9642e59a9f60c3cf1eaeca643b1f425bd9f/packages/nextra-theme-docs/css/hamburger.css
 ---
@@ -62,7 +62,7 @@ import IconMenu from "./icons/Menu.astro";
   const button = document.getElementById("mobile-menu") as HTMLButtonElement;
   function toggle() {
     button.classList.toggle("open");
-    document.body.classList.toggle("mobile-sidebar-shown");
+    document.body.classList.toggle("mobile-menu-opened");
   }
   button.addEventListener("touch", toggle);
   button.addEventListener("click", toggle);

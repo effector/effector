@@ -591,23 +591,35 @@ export const MOBILE_NAVIGATION: LMobileNavItem[] = [
   { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
 ];
 
-type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
+export type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
 
 type LMobileNavLink = {
   text: LText;
   link: string;
 };
 
+export function isNavLink(item: LMobileNavItem): item is LMobileNavLink {
+  return "link" in item && !("items" in item);
+}
+
 type LMobileNavGroup = {
   text: LText;
   items: LMobileNavItem[];
 };
+
+export function isNavGroup(item: LMobileNavItem): item is LMobileNavGroup {
+  return !("link" in item) && "items" in item;
+}
 
 type LMobileNavLinkGroup = {
   text: LText;
   link: string;
   items: LMobileNavItem[];
 };
+
+export function isNavLinkGroup(item: LMobileNavItem): item is LMobileNavLinkGroup {
+  return "link" in item && "items" in item;
+}
 
 interface LSidebar {
   [path: string]: LSidebarGroup[];
