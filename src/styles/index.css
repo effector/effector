@@ -8,6 +8,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-style: normal;
+  font-weight: 300;
+  src: local("Lexend Deca Light"), local("Lexend Deca"),
+    url("/fonts/LexendDeca-Light.ttf") format("ttf");
+  font-family: "Lexend Deca";
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -23,11 +32,11 @@
   --max-width: calc(100% - 1rem);
 }
 
-@media (min-width: 50em) {
+/* @media (max-width: 50em) {
   :root {
     --max-width: 46em;
   }
-}
+} */
 
 body {
   display: flex;

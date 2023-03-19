@@ -1,29 +1,20 @@
-/** Style Algolia */
-:root {
-  --docsearch-primary-color: var(--theme-accent);
-  --docsearch-logo-color: var(--theme-text);
-}
-
 button.search-input {
-  -webkit-font-smoothing: antialiased;
-  display: flex;
-  transition-duration: 0.2s;
+  @apply flex cursor-pointer m-0 outline-0 rounded-lg px-3 py-2 box-border;
+
   transition-property: border-color, color, background-color;
+  transition-duration: 0.2s;
   transition-timing-function: ease-out;
-  cursor: pointer;
-  box-sizing: border-box;
-  margin: 0;
-  outline: 0;
-  border: 1px solid var(--theme-divider);
-  border-radius: 0.5rem;
+
   background-color: var(--theme-divider);
-  padding: 0.5em 0.5em;
-  overflow: visible;
+  border: 1px solid var(--theme-divider);
   color: var(--theme-text-light);
-  font-weight: 500;
-  font-size: 0.9rem;
-  line-height: inherit;
+  overflow: visible;
+
   font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
 }
 
 button.search-input:hover,
@@ -75,6 +66,11 @@ button.search-input svg {
 /* ------------------------------------------------------------ *\
 	DocSearch (Algolia)
 \* ------------------------------------------------------------ */
+
+:root {
+  --docsearch-primary-color: var(--theme-accent);
+  --docsearch-logo-color: var(--theme-text);
+}
 
 .DocSearch-Modal .DocSearch-Hit a {
   box-shadow: none;
