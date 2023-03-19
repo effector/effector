@@ -94,13 +94,14 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
   }
 
   .nav-link a {
-    display: block;
+    display: flex;
     margin: 1px;
     padding: 0.3rem 1rem;
     color: inherit;
     font-size: 1rem;
     font: inherit;
     text-decoration: none;
+    align-items: center;
   }
 
   .nav-link a:hover,
@@ -118,13 +119,12 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
   .nav-link a[href^="https://"]::after
   {
     display: inline-block;
-    margin-left: 0.4em;
     background-image: url("/external.svg");
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    width: 0.7em;
-    height: 0.7em;
+    width: 1em;
+    height: 1em;
     content: "";
   }
 

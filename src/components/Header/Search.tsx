@@ -7,9 +7,10 @@ import "@docsearch/css";
 import { ALGOLIA } from "../../consts";
 import "./Search.css";
 
-// Because of docsearch built only as a commonjs module
-const { useDocSearchKeyboardEvents, DocSearchModal } = (docSearch as any)
-  .default as typeof docSearch;
+/** FIXME: This is still kinda nasty, but DocSearch is not ESM ready. */
+const DocSearchModal = docSearch.DocSearchModal || (docSearch as any).default.DocSearchModal;
+const useDocSearchKeyboardEvents =
+  docSearch.useDocSearchKeyboardEvents || (docSearch as any).default.useDocSearchKeyboardEvents;
 
 export default function Search() {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,11 +49,11 @@ export default function Search() {
           width="18"
           height="18"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <circle cx="10" cy="10" r="7" />

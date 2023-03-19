@@ -14,28 +14,31 @@ interface Group {
 
 export interface Props {
   links: (Group | Link)[];
+  class?: string;
 }
 
 const { links } = Astro.props;
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
-<div class="menu">
+<div class={`menu ${Astro.props.class}`}>
   <button type="button" title="Change language" class="menu-button">
     <div class="button-title">
       <slot />
     </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      focusable="false"
-      width="16px"
+      width="18"
+      height="18"
       viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     >
-      <path
-        fill="currentColor"
-        d="M12,16c-0.3,0-0.5-0.1-0.7-0.3l-6-6c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l5.3,5.3l5.3-5.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-6,6C12.5,15.9,12.3,16,12,16z"
-      ></path>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
   </button>
   <div class="flyout">
@@ -50,12 +53,31 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                   {linkOrGroup.links.map((link) => {
                     return (
                       <a
-                        class="link"
-                        class:list={{ active: Astro.url.pathname.startsWith(link.href) }}
+                        class:list={{
+                          link: true,
+                          active: Astro.url.pathname.startsWith(link.href),
+                        }}
                         href={link.href}
                         target={link.href.startsWith("/") ? undefined : "_blank"}
                       >
                         {getTextLocalized(link, lang)}
+                        {link.href.startsWith("https://") || link.href.startsWith("http://") ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <line x1="17" y1="7" x2="7" y2="17" />
+                            <polyline points="8 7 17 7 17 16" />
+                          </svg>
+                        ) : null}
                       </a>
                     );
                   })}
@@ -69,6 +91,24 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                 target={linkOrGroup.href.startsWith("/") ? undefined : "_blank"}
               >
                 {getTextLocalized(linkOrGroup, lang)}
+                {linkOrGroup.href.startsWith("https://") ||
+                linkOrGroup.href.startsWith("http://") ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="17" y1="7" x2="7" y2="17" />
+                    <polyline points="8 7 17 7 17 16" />
+                  </svg>
+                ) : null}
               </a>
             );
           })
@@ -94,7 +134,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     pointer-events: none;
   }
 
-  .menu .button {
+  .menu button {
     display: flex;
     align-items: center;
     appearance: none;
@@ -103,7 +143,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     color: var(--theme-text);
   }
 
-  .menu:hover .button {
+  .menu:hover button {
     color: var(--theme-text-light);
   }
 
@@ -142,7 +182,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .link {
-    display: block;
+    display: flex;
     transition: background-color 0.25s, color 0.25s;
     border-radius: 0.5rem;
     padding: 0 0.8rem;
@@ -159,7 +199,8 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     color: var(--theme-accent);
   }
 
-  .link.active {
+  .link.active,
+  .group .link.active {
     color: var(--theme-accent);
   }
 </style>

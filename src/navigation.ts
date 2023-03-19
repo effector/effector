@@ -2,7 +2,7 @@ import type { LText } from "./consts";
 
 export const navigation: Navigation = [
   {
-    text: { en: "Docs" },
+    text: { en: "Docs", ru: "Начало работы" },
     link: "/introduction/installation",
     activeMatch: /^\/(introduction|conventions|explanation|typescript)\//,
   },
@@ -29,20 +29,20 @@ export const navigation: Navigation = [
     ],
   },
   {
-    text: { en: "Recipes" },
+    text: { en: "Recipes", ru: "Рецепты" },
     link: "/recipes/",
     activeMatch: /^\/recipes\//,
   },
   {
-    text: { en: "Blog" },
+    text: { en: "Blog", ru: "Блог" },
     link: "https://www.patreon.com/zero_bias",
   },
   {
-    text: { en: "Playground" },
+    text: { en: "Playground", ru: "Песочница" },
     link: "https://share.effector.dev",
   },
   {
-    text: { en: "Changelog" },
+    text: { en: "Changelog", ru: "Изменения" },
     link: "https://changelog.effector.dev/",
   },
 ];
