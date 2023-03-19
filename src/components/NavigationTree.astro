@@ -1,5 +1,5 @@
 ---
-import { MOBILE_NAVIGATION } from "../navigation";
+import { MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
 
 import NestedLinks from "./NestedLinks.astro";
 
@@ -20,7 +20,18 @@ const socialIcons = {
   <nav>
     <NestedLinks items={MOBILE_NAVIGATION} firstLevel />
   </nav>
-  <footer>Theme & Socials</footer>
+  <footer>
+    {
+      SOCIAL_LINKS.map((link) => {
+        const Icon = socialIcons[link.icon];
+        return (
+          <a class="social" href={link.link} class="link only-medium" target="_blank">
+            <Icon />
+          </a>
+        );
+      })
+    }
+  </footer>
 </div>
 
 <style>
@@ -50,12 +61,21 @@ const socialIcons = {
   }
 
   footer {
-    @apply py-4;
+    @apply z-10 flex gap-2 py-4;
 
     padding-left: max(env(safe-area-inset-left), 1rem);
     padding-right: max(env(safe-area-inset-right), 1rem);
 
     box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 0.1);
     background-color: var(--theme-bg);
+  }
+
+  .social {
+    @apply cursor-pointer rounded py-3 px-3 transition-colors;
+    color: var(--theme-text);
+  }
+
+  .social:hover {
+    background-color: var(--theme-divider);
   }
 </style>
