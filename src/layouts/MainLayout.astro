@@ -26,13 +26,19 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
 
 <CommonLayout lang={lang} {...data}>
   <style>
+    :root {
+      --gutter: 0.5rem;
+      --content-max-width: 56rem;
+      --header-max-width: calc(100% - 1rem);
+    }
+
     main {
       margin-top: var(--theme-navbar-height);
     }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--max-width)) minmax(
+      grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--content-max-width)) minmax(
           var(--gutter),
           1fr
         );
@@ -66,8 +72,13 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
     }
 
     @media (min-width: 768px) {
+      :root {
+        --sidebar-left-width: 20rem;
+        --header-max-width: calc(var(--sidebar-left-width) + var(--content-max-width));
+      }
+
       .layout {
-        grid-template-columns: 20rem minmax(0, var(--max-width));
+        grid-template-columns: var(--sidebar-left-width) minmax(0, var(--content-max-width));
         gap: 1em;
         overflow: initial;
       }
@@ -81,8 +92,17 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
     }
 
     @media (min-width: 1280px) {
+      :root {
+        --sidebar-right-width: 18rem;
+        --header-max-width: calc(
+          var(--sidebar-left-width) + var(--content-max-width) + var(--sidebar-right-width)
+        );
+      }
+
       .layout {
-        grid-template-columns: 20rem minmax(0, var(--max-width)) 18rem;
+        grid-template-columns: var(--sidebar-left-width) minmax(0, var(--content-max-width)) var(
+            --sidebar-right-width
+          );
         margin-right: auto;
         margin-left: auto;
         padding-right: 0;

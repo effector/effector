@@ -29,14 +29,7 @@
 
 :root {
   --user-font-scale: 1rem - 16px;
-  --max-width: calc(100% - 1rem);
 }
-
-/* @media (max-width: 50em) {
-  :root {
-    --max-width: 46em;
-  }
-} */
 
 body {
   display: flex;
