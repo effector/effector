@@ -8,7 +8,7 @@ import IconExternal from "../icons/External.astro";
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 
 interface Props {
-  items: LMobileNavItem[];
+  items: (LMobileNavItem & { id: string })[];
   firstLevel?: boolean;
 }
 
@@ -37,12 +37,20 @@ const { firstLevel = false, items } = Astro.props;
                 {external ? <IconExternal /> : null}
               </a>
               {isExpandable ? (
-                <button type="button" class:list={{ expander: true, expanded: true }}>
+                <button
+                  type="button"
+                  data-target={item.id}
+                  class:list={{ expander: true, expanded: false }}
+                >
                   <IconChevronRight size={18} />
                 </button>
               ) : null}
             </div>
-            {isExpandable ? <Astro.self items={item.items} /> : null}
+            {isExpandable ? (
+              <div class="expand-section" data-id={item.id}>
+                <Astro.self items={item.items} />
+              </div>
+            ) : null}
           </li>
         );
       }
@@ -52,11 +60,17 @@ const { firstLevel = false, items } = Astro.props;
           <li>
             <div class="line">
               <span>{text}</span>
-              <button type="button" class:list={{ expander: true, expanded: true }}>
+              <button
+                data-target={item.id}
+                type="button"
+                class:list={{ expander: true, expanded: false }}
+              >
                 <IconChevronRight size={18} />
               </button>
             </div>
-            <Astro.self items={item.items} />
+            <div class="expand-section" data-id={item.id}>
+              <Astro.self items={item.items} />
+            </div>
           </li>
         );
       }
@@ -133,5 +147,14 @@ const { firstLevel = false, items } = Astro.props;
 
   .expander.expanded :global(svg) {
     @apply rotate-90;
+  }
+
+  .expand-section {
+    display: none;
+    @apply flex-col;
+  }
+
+  .expand-section:global(.expanded) {
+    display: flex;
   }
 </style>

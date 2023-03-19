@@ -1,5 +1,5 @@
 ---
-import { MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
+import { generateIdsForNav, MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
 
 import NestedLinks from "./NestedLinks.astro";
 
@@ -14,11 +14,13 @@ const socialIcons = {
   discord: IconDiscord,
   youtube: IconYoutube,
 };
+
+const nav = generateIdsForNav(MOBILE_NAVIGATION);
 ---
 
 <div class="navigation">
   <nav>
-    <NestedLinks items={MOBILE_NAVIGATION} firstLevel />
+    <NestedLinks items={nav} firstLevel />
   </nav>
   <footer>
     {
@@ -79,3 +81,16 @@ const socialIcons = {
     background-color: var(--theme-divider);
   }
 </style>
+
+<script>
+  document.querySelectorAll(".expander").forEach((button) => {
+    const btn = button as HTMLButtonElement;
+    const target = document.querySelector(`[data-id="${btn.dataset.target}"]`);
+    if (target) {
+      btn.addEventListener("click", function () {
+        btn.classList.toggle("expanded");
+        target.classList.toggle("expanded");
+      });
+    }
+  });
+</script>

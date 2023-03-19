@@ -1,4 +1,5 @@
 import { getCollection } from "astro:content";
+import { nanoid } from "nanoid";
 import { COMMUNITY_INVITE_URL, LText } from "./consts";
 import { SITE } from "./consts";
 import { getTextLocalized, createLink } from "./languages";
@@ -692,4 +693,20 @@ function getSlugs() {
 
 function isRemoteUrl(link: string) {
   return link.startsWith("https://") || link.startsWith("http://");
+}
+
+export function generateIdsForNav(nav: LMobileNavItem[]) {
+  return nav.map((item): LMobileNavItem & { id: string } => {
+    if ("items" in item) {
+      return {
+        ...item,
+        id: nanoid(),
+        items: generateIdsForNav(item.items),
+      };
+    }
+    return {
+      ...item,
+      id: nanoid(),
+    };
+  });
 }

@@ -21,6 +21,7 @@ specifiers:
   clsx: ^1.2.1
   html-escaper: ^3.0.3
   mdast: ^3.0.0
+  nanoid: ^4.0.1
   preact: ^10.13.1
   prettier: ^2.8.4
   prettier-plugin-astro: ^0.8.0
@@ -59,6 +60,7 @@ dependencies:
   clsx: 1.2.1
   html-escaper: 3.0.3
   mdast: 3.0.0
+  nanoid: 4.0.1
   preact: 10.13.1
   prettier: 2.8.4
   prettier-plugin-astro: 0.8.0
@@ -3514,6 +3516,12 @@ packages:
   /nanoid/3.3.4:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+    dev: false
+
+  /nanoid/4.0.1:
+    resolution: {integrity: sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==}
+    engines: {node: ^14 || ^16 || >=18}
     hasBin: true
     dev: false
 
