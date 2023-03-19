@@ -1,7 +1,7 @@
 /** @jsxImportSource react */
 import { useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { useDocSearchKeyboardEvents, DocSearchModal } from "@docsearch/react";
+import * as docSearch from "@docsearch/react";
 import "@docsearch/css";
 
 import { ALGOLIA } from "../../consts";
@@ -28,7 +28,7 @@ export default function Search() {
     [setIsOpen, setInitialQuery],
   );
 
-  useDocSearchKeyboardEvents({
+  docSearch.useDocSearchKeyboardEvents({
     isOpen,
     onOpen,
     onClose,
@@ -69,7 +69,7 @@ export default function Search() {
 
       {isOpen &&
         createPortal(
-          <DocSearchModal
+          <docSearch.DocSearchModal
             initialQuery={initialQuery}
             initialScrollY={window.scrollY}
             onClose={onClose}
