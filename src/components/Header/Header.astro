@@ -21,7 +21,7 @@ type Props = {
 const { lang, slug } = getPathParamsFromId(Astro.url.pathname);
 const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
   text: { en: name },
-  href: slug === "/" ? `/${code}` : `/${code}/${slug}`,
+  link: slug === "/" ? `/${code}` : `/${code}/${slug}`,
 }));
 ---
 
@@ -45,27 +45,27 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
       links={[
         {
           text: { en: "Introduction", ru: "Введение" },
-          href: `/${lang}/introduction/installation`,
+          link: `/${lang}/introduction/installation`,
         },
         {
           text: { en: "Recipes", ru: "Рецепты" },
-          href: `/${lang}/recipes`,
+          link: `/${lang}/recipes`,
         },
         {
           text: { en: "Blog", ru: "Блог" },
-          href: `https://www.patreon.com/zero_bias`,
+          link: `https://www.patreon.com/zero_bias`,
         },
         {
           text: { en: "Changelog", ru: "Список изменений" },
-          href: `https://changelog.effector.dev`,
+          link: `https://changelog.effector.dev`,
         },
         {
           text: { en: "API" },
           links: [
-            { text: { en: "Effector" }, href: `/${lang}/api/effector` },
-            { text: { en: "Effector React" }, href: `/${lang}/api/effector-react` },
-            { text: { en: "Effector Solid" }, href: `/${lang}/api/effector-solid` },
-            { text: { en: "Effector Vue" }, href: `/${lang}/api/effector-vue` },
+            { text: { en: "Effector" }, link: `/${lang}/api/effector` },
+            { text: { en: "Effector React" }, link: `/${lang}/api/effector-react` },
+            { text: { en: "Effector Solid" }, link: `/${lang}/api/effector-solid` },
+            { text: { en: "Effector Vue" }, link: `/${lang}/api/effector-vue` },
           ],
         },
       ]}

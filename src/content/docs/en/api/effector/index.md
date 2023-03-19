@@ -1,5 +1,5 @@
 ---
-title: API Reference
+title: effector
 ---
 
 List of the methods

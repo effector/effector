@@ -1,8 +1,8 @@
 ---
-title: API Reference
+title: effector-vue
 ---
 
-# effector bindings for Vue
+Effector binginds for Vue.
 
 ### Top-Level Exports
 

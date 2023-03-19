@@ -1,8 +1,8 @@
 ---
-title: effector-react API Reference
+title: effector-react
 ---
 
-effector bindings for React.
+Effector bindings for ReactJS.
 
 ## Hooks
 

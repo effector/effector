@@ -3,7 +3,7 @@ import type { LText } from "../consts";
 import { getPathParamsFromId, getTextLocalized } from "../languages";
 
 interface Link {
-  href: string;
+  link: string;
   text: LText;
 }
 
@@ -55,13 +55,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                       <a
                         class:list={{
                           link: true,
-                          active: Astro.url.pathname.startsWith(link.href),
+                          active: Astro.url.pathname.startsWith(link.link),
                         }}
-                        href={link.href}
-                        target={link.href.startsWith("/") ? undefined : "_blank"}
+                        href={link.link}
+                        target={link.link.startsWith("/") ? undefined : "_blank"}
                       >
                         {getTextLocalized(link, lang)}
-                        {link.href.startsWith("https://") || link.href.startsWith("http://") ? (
+                        {link.link.startsWith("https://") || link.link.startsWith("http://") ? (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="18"
@@ -86,13 +86,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
             }
             return (
               <a
-                href={linkOrGroup.href}
-                class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.href) }}
-                target={linkOrGroup.href.startsWith("/") ? undefined : "_blank"}
+                href={linkOrGroup.link}
+                class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.link) }}
+                target={linkOrGroup.link.startsWith("/") ? undefined : "_blank"}
               >
                 {getTextLocalized(linkOrGroup, lang)}
-                {linkOrGroup.href.startsWith("https://") ||
-                linkOrGroup.href.startsWith("http://") ? (
+                {linkOrGroup.link.startsWith("https://") ||
+                linkOrGroup.link.startsWith("http://") ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"

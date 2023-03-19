@@ -1,8 +1,8 @@
 ---
-title: API Reference
+title: effector-solid
 ---
 
-# effector bindings for SolidJS
+Effector bindings for SolidJS.
 
 ## Reactive helpers
 
