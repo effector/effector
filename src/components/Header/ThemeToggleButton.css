@@ -1,23 +1,16 @@
 .theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-  border-radius: 99em;
+  @apply flex gap-1 items-center rounded-full px-2 py-1;
   background-color: var(--theme-code-inline-bg);
-  padding: 0.33em 0.67em;
 }
 
 .theme-toggle > label:focus-within {
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 0.08em var(--theme-accent), 0 0 0 0.12em white;
+  outline: none;
+  color: var(--theme-accent);
+  @apply ring-1 ring-current ring-offset-2;
 }
 
 .theme-toggle > label {
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  opacity: 0.5;
+  @apply flex relative justify-center items-center rounded-full opacity-50 cursor-pointer;
   color: var(--theme-code-inline-text);
 }
 

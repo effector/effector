@@ -62,7 +62,7 @@ const docsVersions = [
         <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
     </div>
-    <div class="link only-medium">
+    <a href="https://patreon.com/zero__bias" target="_blank" class="link only-medium">
       <span>Blog</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -79,9 +79,9 @@ const docsVersions = [
         <line x1="17" y1="7" x2="7" y2="17"></line>
         <polyline points="8 7 17 7 17 16"></polyline>
       </svg>
-    </div>
+    </a>
     <a href="https://share.effector.dev" target="_blank" class="link"> Playground</a>
-    <div class="link only-medium">
+    <a href="https://changelog.effector.dev" target="_blank" class="link only-medium">
       <span>Changelog</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +98,7 @@ const docsVersions = [
         <line x1="17" y1="7" x2="7" y2="17"></line>
         <polyline points="8 7 17 7 17 16"></polyline>
       </svg>
-    </div>
+    </a>
     <div class="only-medium">
       <NavMenu links={docsVersions}>v22.x</NavMenu>
     </div>
@@ -258,7 +258,13 @@ const docsVersions = [
     @apply flex items-center justify-center text-base font-normal;
     color: var(--theme-text);
   }
+  nav .link:hover,
+  nav .link:focus,
   nav .link.active {
+    color: var(--theme-accent);
+  }
+  nav .link.active:hover,
+  nav .link.active:focus {
     color: var(--theme-text-accent);
   }
 
