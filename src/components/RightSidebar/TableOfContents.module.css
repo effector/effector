@@ -75,9 +75,14 @@ ul.contents {
 }
 
 .expandDetails summary {
-  @apply inline-block;
+  display: inline-block;
   -webkit-tap-highlight-color: transparent;
-  list-style: none disclosure-closed;
+  list-style: none;
+}
+
+.expandDetails summary::-webkit-details-marker /* Safari */,
+.expandDetails summary::marker /* Latest Chrome, Edge, Firefox */ {
+  display: none;
 }
 
 .expandDetails summary span {
