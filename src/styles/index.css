@@ -244,7 +244,7 @@ strong {
   --border-radius: 3px;
   --padding-block: 0.2rem;
   --padding-inline: 0.33rem;
-  margin: calc(var(--padding-block) * -1) -0.125em;
+  margin: calc(var(--padding-block) * -1) 0;
   border-radius: var(--border-radius);
   background-color: var(--theme-code-inline-bg);
   padding: var(--padding-block) var(--padding-inline);
