@@ -8,6 +8,7 @@ import EffectorLogo from "./EffectorLogo.astro";
 import Search from "./Search";
 import NavMenu from "../NavMenu.astro";
 import ThemeToggle from "./ThemeToggleButton";
+import MobileMenuButton from "./MobileMenuButton.astro";
 
 import IconExternal from "./icons/External.astro";
 import IconLanguage from "./icons/Language.astro";
@@ -114,6 +115,9 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         <IconDots />
       </NavMenu>
     </div>
+    <div class="md:hidden">
+      <MobileMenuButton client:idle />
+    </div>
   </nav>
 </header>
 
@@ -149,6 +153,12 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
   .logo span {
     @apply mx-2 select-none text-2xl font-extrabold;
     color: var(--theme-text);
+  }
+
+  @media (max-width: 512px) {
+    .logo span {
+      display: none;
+    }
   }
 
   nav {
