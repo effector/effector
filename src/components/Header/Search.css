@@ -1,12 +1,11 @@
 button.search-input {
-  @apply flex cursor-pointer m-0 outline-0 rounded-lg px-3 py-2 box-border;
+  @apply flex cursor-pointer m-0 outline-0 rounded-2xl px-2 py-1 box-border;
 
   transition-property: border-color, color, background-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-out;
 
   background-color: var(--theme-divider);
-  border: 1px solid var(--theme-divider);
   color: var(--theme-text-light);
   overflow: visible;
 
@@ -17,9 +16,8 @@ button.search-input {
   -webkit-font-smoothing: antialiased;
 }
 
-button.search-input:hover,
 button.search-input:focus {
-  border-color: var(--theme-accent);
+  box-shadow: 0 0 0 2px var(--theme-text-accent);
   color: var(--theme-text);
 }
 
@@ -47,7 +45,7 @@ button.search-input svg {
   border-width: 1px;
   border-style: solid;
   border-color: var(--theme-text-lighter);
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   padding: 3px 5px;
   pointer-events: none;
   color: var(--theme-text-light);

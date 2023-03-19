@@ -5,7 +5,7 @@
 
 .theme-toggle > label:focus-within {
   outline: none;
-  color: var(--theme-accent);
+  color: var(--theme-text-accent);
   @apply ring-1 ring-current ring-offset-2;
 }
 

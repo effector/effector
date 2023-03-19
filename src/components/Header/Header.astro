@@ -3,12 +3,13 @@ import { createLink, getPathParamsFromId, getTextLocalized, translations } from 
 import { KNOWN_LANGUAGES, SITE } from "../../consts";
 import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigation";
 
-import SkipToContent from "./SkipToContent.astro";
-import EffectorLogo from "./EffectorLogo.astro";
-import Search from "./Search";
 import DropDownMenu from "../DropDownMenu.astro";
-import ThemeToggle from "./ThemeToggleButton";
+
+import EffectorLogo from "./EffectorLogo.astro";
 import MobileMenuButton from "./MobileMenuButton.astro";
+import Search from "./Search";
+import SkipToContent from "./SkipToContent.astro";
+import ThemeToggle from "./ThemeToggleButton";
 
 import IconExternal from "./icons/External.astro";
 import IconLanguage from "./icons/Language.astro";
@@ -146,7 +147,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
   }
 
   .logo {
-    @apply flex items-center hover:opacity-75 focus:no-underline;
+    @apply flex items-center rounded-3xl hover:opacity-75 focus:no-underline;
     transition: opacity 100ms ease-out;
   }
 

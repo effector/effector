@@ -8,6 +8,14 @@ import IconMenu from "./icons/Menu.astro";
   <IconMenu class="icon" />
 </button>
 
+<style>
+  button:focus {
+    color: var(--theme-text-accent);
+    outline: none;
+    @apply ring-2 ring-current ring-offset-2;
+  }
+</style>
+
 <style is:global>
   #mobile-menu {
     @apply p-2;
