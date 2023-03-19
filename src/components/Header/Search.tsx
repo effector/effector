@@ -7,6 +7,10 @@ import "@docsearch/css";
 import { ALGOLIA } from "../../consts";
 import "./Search.css";
 
+// Because of docsearch built only as a commonjs module
+const { useDocSearchKeyboardEvents, DocSearchModal } = (docSearch as any)
+  .default as typeof docSearch;
+
 export default function Search() {
   const [isOpen, setIsOpen] = useState(false);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
@@ -28,7 +32,7 @@ export default function Search() {
     [setIsOpen, setInitialQuery],
   );
 
-  docSearch.useDocSearchKeyboardEvents({
+  useDocSearchKeyboardEvents({
     isOpen,
     onOpen,
     onClose,
@@ -69,7 +73,7 @@ export default function Search() {
 
       {isOpen &&
         createPortal(
-          <docSearch.DocSearchModal
+          <DocSearchModal
             initialQuery={initialQuery}
             initialScrollY={window.scrollY}
             onClose={onClose}
