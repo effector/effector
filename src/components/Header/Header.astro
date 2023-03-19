@@ -1,18 +1,30 @@
 ---
-import {
-  getPathParamsFromId,
-  getTextLocalized,
-  KNOWN_LANGUAGE_CODES,
-  translations,
-} from "../../languages";
+import { createLink, getPathParamsFromId, getTextLocalized, translations } from "../../languages";
 import { KNOWN_LANGUAGES, SITE } from "../../consts";
+import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigation";
 
-import EffectorLogo from "./EffectorLogo.astro";
 import SkipToContent from "./SkipToContent.astro";
-import SidebarToggle from "./SidebarToggle";
+import EffectorLogo from "./EffectorLogo.astro";
 import Search from "./Search";
-import ThemeToggleButton from "./ThemeToggleButton";
 import NavMenu from "../NavMenu.astro";
+import ThemeToggle from "./ThemeToggleButton";
+import MobileMenuButton from "./MobileMenuButton.astro";
+
+import IconExternal from "./icons/External.astro";
+import IconLanguage from "./icons/Language.astro";
+import IconDots from "./icons/Dots.astro";
+
+import IconGithub from "./icons/Github.astro";
+import IconTwitter from "./icons/Twitter.astro";
+import IconDiscord from "./icons/Discord.astro";
+import IconYoutube from "./icons/Youtube.astro";
+
+const socialIcons = {
+  github: IconGithub,
+  twitter: IconTwitter,
+  discord: IconDiscord,
+  youtube: IconYoutube,
+};
 
 type Props = {
   currentPage: string;
@@ -23,208 +35,154 @@ const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
   text: { en: name },
   link: slug === "/" ? `/${code}` : `/${code}/${slug}`,
 }));
+const homeLink = lang === "en" ? "/" : `/${lang}`;
 ---
 
 <header>
   <SkipToContent />
-  <nav class="nav-wrapper">
-    <div class="menu-toggle">
-      <SidebarToggle client:idle />
-    </div>
-    <div class="logo">
-      <a href="/">
-        <EffectorLogo size={40} />
-        <div class="title">{SITE.title ?? getTextLocalized(translations.Documentation, lang)}</div>
-      </a>
-      <div class="search-item">
-        <Search client:idle />
-      </div>
-    </div>
-    <div style="flex-grow: 1;"></div>
-    <NavMenu
-      links={[
-        {
-          text: { en: "Introduction", ru: "Введение" },
-          link: `/${lang}/introduction/installation`,
-        },
-        {
-          text: { en: "Recipes", ru: "Рецепты" },
-          link: `/${lang}/recipes`,
-        },
-        {
-          text: { en: "Blog", ru: "Блог" },
-          link: `https://www.patreon.com/zero_bias`,
-        },
-        {
-          text: { en: "Changelog", ru: "Список изменений" },
-          link: `https://changelog.effector.dev`,
-        },
-        {
-          text: { en: "API" },
-          links: [
-            { text: { en: "Effector" }, link: `/${lang}/api/effector` },
-            { text: { en: "Effector React" }, link: `/${lang}/api/effector-react` },
-            { text: { en: "Effector Solid" }, link: `/${lang}/api/effector-solid` },
-            { text: { en: "Effector Vue" }, link: `/${lang}/api/effector-vue` },
-          ],
-        },
-      ]}
-    >
-      {getTextLocalized(translations.docs, lang)}
-    </NavMenu>
-    <hr />
-    {
-      KNOWN_LANGUAGE_CODES.length > 1 && (
-        <NavMenu links={languageLinks}>
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 88.6 77.3"
-            height="20px"
-            width="20px"
-          >
-            <path
-              fill="currentColor"
-              d="M61,24.6h7.9l18.7,51.6h-7.7l-5.4-15.5H54.3l-5.6,15.5h-7.2L61,24.6z M72.6,55l-8-22.8L56.3,55H72.6z"
-            />
-            <path
-              fill="currentColor"
-              d="M53.6,60.6c-10-4-16-9-22-14c0,0,1.3,1.3,0,0c-6,5-20,13-20,13l-4-6c8-5,10-6,19-13c-2.1-1.9-12-13-13-19h8          c4,9,10,14,10,14c10-8,10-19,10-19h8c0,0-1,13-12,24l0,0c5,5,10,9,19,13L53.6,60.6z M1.6,16.6h56v-8h-23v-7h-9v7h-24V16.6z"
-            />
-          </svg>
-        </NavMenu>
-      )
-    }
-    <ThemeToggleButton client:visible />
 
-    <div style="color: var(--theme-text-light); display: flex; gap: 0.8rem;">
-      <svg role="img" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <title>GitHub</title>
-        <path
-          fill="currentColor"
-          d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-        ></path>
-      </svg>
-      <svg role="img" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <title>Twitter</title>
-        <path
-          fill="currentColor"
-          d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
-        ></path>
-      </svg>
-      <svg role="img" width="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <title>Discord</title>
-        <path
-          fill="currentColor"
-          d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"
-        ></path>
-      </svg>
+  <nav>
+    <a class="logo" href={homeLink}>
+      <EffectorLogo size={40} />
+      <span>{SITE.title ?? getTextLocalized(translations.Documentation, lang)}</span>
+    </a>
+    <div class="mr-auto">
+      <Search client:idle />
+    </div>
+    {
+      DESKTOP_NAVIGATION.map((navLink) => {
+        const external = navLink.link.startsWith("https://") || navLink.link.startsWith("http://");
+        const href = external ? navLink.link : createLink(navLink, lang);
+        const text = getTextLocalized(navLink, lang);
+
+        if (external) {
+          return (
+            <a href={href} target="_blank" class="link only-medium">
+              <span>{text}</span>
+              <IconExternal />
+            </a>
+          );
+        }
+
+        return (
+          <div class="hidden md:flex">
+            <a href={href} class="link">
+              {text}
+            </a>
+          </div>
+        );
+      })
+    }
+    <div class="only-medium">
+      <NavMenu links={DOCS_VERSIONS}>v22.x</NavMenu>
+    </div>
+    <div class="only-medium">
+      <NavMenu links={languageLinks}>
+        <IconLanguage />
+      </NavMenu>
+    </div>
+    <ThemeToggle client:idle />
+    {
+      SOCIAL_LINKS.map((link) => {
+        const Icon = socialIcons[link.icon];
+        return (
+          <a href={link.link} class="link only-medium" target="_blank">
+            <Icon />
+          </a>
+        );
+      })
+    }
+    <div class="hidden md:inline-block xl:hidden">
+      <NavMenu
+        links={[
+          ...DESKTOP_NAVIGATION.filter(
+            (navLink) => navLink.link.startsWith("https://") || navLink.link.startsWith("http://"),
+          ),
+          {
+            text: { en: "Language", ru: "Язык документации" },
+            links: languageLinks,
+          },
+          {
+            text: { en: "Other versions", ru: "Другие версии" },
+            links: DOCS_VERSIONS,
+          },
+          {
+            text: { en: "Social", ru: "Социальные сети" },
+            links: SOCIAL_LINKS,
+          },
+        ]}
+      >
+        <IconDots />
+      </NavMenu>
+    </div>
+    <div class="md:hidden">
+      <MobileMenuButton client:idle />
     </div>
   </nav>
 </header>
 
 <style>
   header {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-items: center;
+    @apply fixed top-0 left-0 right-0 flex w-full items-center justify-center overflow-visible shadow;
+
     z-index: 110;
-    -webkit-backdrop-filter: saturate(50%) blur(8px);
+    height: var(--theme-navbar-height);
+
+    -webkit-backdrop-filter: saturate(50%) blur(12px);
     backdrop-filter: saturate(50%) blur(12px);
     background-color: var(--theme-navbar-bg);
-    width: 100%;
-    height: var(--theme-navbar-height);
-    overflow: visible;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 0 rgba(0, 0, 0, 0.06);
     font-family: "Lexend Deca", sans-serif;
   }
 
+  nav {
+    @apply mx-auto flex items-center justify-end gap-2;
+
+    padding-left: max(env(safe-area-inset-left), 1.5rem);
+    padding-right: max(env(safe-area-inset-right), 1.5rem);
+    /* max-width: 84rem; */
+    width: 100%;
+    max-width: var(--header-max-width, 84rem);
+    height: var(--theme-navbar-height);
+  }
+
   .logo {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    gap: 1rem;
-    z-index: -1;
-    color: hsla(var(--color-base-white), 100%, 1);
-    font-size: 1.5rem;
-    line-height: 1;
+    @apply flex items-center hover:opacity-75 focus:no-underline;
+    transition: opacity 100ms ease-out;
   }
 
-  .logo a {
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    text-decoration: none;
-  }
-
-  .logo a {
-    transition: color 100ms ease-out;
+  .logo span {
+    @apply mx-2 select-none text-2xl font-extrabold;
     color: var(--theme-text);
   }
 
-  .logo a:hover,
-  .logo a:focus {
-    color: var(--theme-text-accent);
-  }
-
-  .logo .title {
-    display: none;
-    margin: 0;
-    color: inherit;
-    font: inherit;
-  }
-
-  .nav-wrapper {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 1em;
-    padding-right: max(env(safe-area-inset-right), 1.5rem);
-    padding-left: max(env(safe-area-inset-left), 1.5rem);
-    width: 100%;
-    max-width: 82em;
-  }
-
-  header hr {
-    margin-right: 4px;
-    margin-left: 4px;
-    border-top: 0;
-    background-color: var(--theme-divider);
-    width: 1px;
-    height: 1.5rem;
-  }
-
-  @media (min-width: 50em) {
-    .logo {
-      z-index: 0;
-      margin: 0;
-      width: auto;
-    }
-
-    .logo .title {
-      display: initial;
-    }
-
-    .menu-toggle {
+  @media (max-width: 512px) {
+    .logo span {
       display: none;
     }
   }
 
-  /** Style Algolia */
-  :root {
-    --docsearch-primary-color: var(--theme-accent);
-    --docsearch-logo-color: var(--theme-text);
+  nav {
+    @apply flex gap-4 text-base font-normal;
+    font-stretch: normal;
+    font-optical-sizing: auto;
   }
 
-  .search-item {
-    display: flex;
-    position: relative;
-    z-index: 10;
-    padding-left: 0.7rem;
+  nav .link {
+    @apply flex items-center justify-center gap-1 text-base font-normal;
+    color: var(--theme-text);
+  }
+  nav .link:hover,
+  nav .link:focus,
+  nav .link.active {
+    color: var(--theme-accent);
+  }
+  nav .link.active:hover,
+  nav .link.active:focus {
+    color: var(--theme-text-accent);
+  }
+
+  .link.only-medium,
+  .only-medium {
+    @apply hidden xl:flex;
   }
 </style>
