@@ -6,7 +6,7 @@ import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigatio
 import SkipToContent from "./SkipToContent.astro";
 import EffectorLogo from "./EffectorLogo.astro";
 import Search from "./Search";
-import NavMenu from "../NavMenu.astro";
+import DropDownMenu from "../DropDownMenu.astro";
 import ThemeToggle from "./ThemeToggleButton";
 import MobileMenuButton from "./MobileMenuButton.astro";
 
@@ -74,12 +74,12 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
       })
     }
     <div class="only-medium">
-      <NavMenu links={DOCS_VERSIONS}>v22.x</NavMenu>
+      <DropDownMenu links={DOCS_VERSIONS}>v22.x</DropDownMenu>
     </div>
     <div class="only-medium">
-      <NavMenu links={languageLinks}>
+      <DropDownMenu links={languageLinks}>
         <IconLanguage />
-      </NavMenu>
+      </DropDownMenu>
     </div>
     <ThemeToggle client:idle />
     {
@@ -93,7 +93,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
       })
     }
     <div class="hidden md:inline-block xl:hidden">
-      <NavMenu
+      <DropDownMenu
         links={[
           ...DESKTOP_NAVIGATION.filter(
             (navLink) => navLink.link.startsWith("https://") || navLink.link.startsWith("http://"),
@@ -113,10 +113,10 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         ]}
       >
         <IconDots />
-      </NavMenu>
+      </DropDownMenu>
     </div>
     <div class="md:hidden">
-      <MobileMenuButton client:idle />
+      <MobileMenuButton />
     </div>
   </nav>
 </header>
