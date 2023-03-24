@@ -8,7 +8,7 @@ lang: en-US
 
 ## `createComponent(store, render)` {#createComponent}
 
-Creates store-based React component. The `createComponent` is useful for transfering logic and data of state to your View component.
+Creates store-based React component. The `createComponent` is useful for transferring logic and data of state to your View component.
 
 ::: tip since
 You can use hooks in `createComponent` since [effector-react@20.3.0](https://changelog.effector.dev/#effector-20-3-0).

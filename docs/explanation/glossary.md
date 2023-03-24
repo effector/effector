@@ -55,7 +55,7 @@ Common units can be used to trigger updates of other units. There are three comm
 
 ## Purity
 
-Most of functions in api must not call other events or effects: it's easier to reason about application's data flow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
+Most of the functions in api must not call other events or effects: it's easier to reason about application's data flow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
 
 **Correct**, imperative:
 

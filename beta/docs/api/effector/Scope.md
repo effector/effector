@@ -20,7 +20,7 @@ interface Scope {
 
 Imperative effects calls are supported in effect handlers but **not** in `watch` functions.
 
-When effect call another effects then it should call only effects, not common async functions and effect calls should have await:
+When effect call another effects then it should call only effects, not common async functions and effect calls should have awaited:
 
 **Correct**, effect without inner effects:
 

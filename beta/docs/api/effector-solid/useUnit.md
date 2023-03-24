@@ -12,7 +12,7 @@ Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid
 
 ### Arguments {#useUnit-unit-arguments}
 
-1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be bound to current `scope`
 
 ### Returns {#useUnit-unit-returns}
 

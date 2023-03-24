@@ -20,7 +20,7 @@ Useful only if you have server-side rendering or writing tests for React-compone
 
 ### Arguments {#useEvent-unit-arguments}
 
-1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be binded to current `scope`
+1. `unit` ([_Event_](/api/effector/Event.md) or [_Effect_](/api/effector/Effect.md)): Event or effect which will be bound to current `scope`
 
 ### Returns {#useEvent-unit-returns}
 
