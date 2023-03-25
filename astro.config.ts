@@ -10,6 +10,7 @@ import directive from "remark-directive";
 import github from "remark-github";
 import breaks from "remark-breaks";
 import remarkHeadingId from "remark-heading-id";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 import { admonitions } from "./plugins/admonitions";
 import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
@@ -18,13 +19,16 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 export default defineConfig({
   site:
     process.env.NODE_ENV === "development"
-      ? "https://localhost:3000"
+      ? "http://localhost:3000"
       : `https://effector-beta.sova.dev`,
   integrations: [tailwind(), preact(), react(), mdx(), prefetch(), compress()],
   base: "/",
+  build: {
+    assets: "assets",
+  },
   markdown: {
     syntaxHighlight: "prism",
-    remarkPlugins: [[directive, {}], admonitions, github, remarkHeadingId],
-    rehypePlugins: [],
+    remarkPlugins: [directive, admonitions, github, remarkHeadingId],
+    rehypePlugins: [[rehypeAutolinkHeadings, { behavior: "prepend" }]],
   },
 });
