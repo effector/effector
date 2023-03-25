@@ -6,7 +6,7 @@ title: Testing guide
 
 Effector's test are usually written via [Fork API](/en/api/effector/fork).
 
-Fork creates a independent context instance, which we can use to emulate some specific situation or environment.
+Fork creates an independent context instance, which we can use to emulate some specific situation or environment.
 
 ## Counter example
 
@@ -51,12 +51,12 @@ sample({
 Our main scenario is:
 
 1. User clicks the button
-2. Validation ends successfuly
+2. Validation ends successfully
 3. Counter is up by 1
 
 Let's test it:
 
-1. We create a new Scope via `fork` call. We can treat it as an indepentend instance of our effector's app.
+1. We create a new Scope via `fork` call. We can treat it as an independent instance of our effector's app.
 2. We check, that initially we have count `0`.
 3. Then we emulate `buttonClicked` event with `allSettled` - this promise will resolve once all computations are over.
 4. We check, that we have a desired state in the end.
@@ -79,7 +79,7 @@ test("main case", async () => {
 
 ### Custom effect handlers
 
-But this test has a problem - it uses real backend api. But since this is an unit test, we should mock this request somehow.
+But this test has a problem — it uses real backend api. But since this is a unit test, we should mock this request somehow.
 
 We can provide custom handler via `fork` configuration.
 

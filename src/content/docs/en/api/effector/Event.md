@@ -169,13 +169,13 @@ changeName("alice");
 :::
 
 Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.
-Imagine a situation, you come up to a grocery store and you have let's say a task: you need to buy 10 apples, but only those that are red, otherwise nothing.
+Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only if they're red. If they're not red, you're out of luck.
 Let's consider by steps:
 
 1. Take one apple;
 2. Have a look, is it red(put in a pack) or not(take another).
 
-And you repeat this until you complete the task. Now think about it in the effector terms and we consider the positive case:
+And you repeat this until you complete the task. Now think about it in the effector terms, and we consider the positive case:
 
 1. Take an apple - event;
 2. Have a look, red or no - filter;
@@ -221,7 +221,7 @@ listReceived(["redux", "mobx"]);
 
 Creates a new event, which will be called after the original event is called if `fn` returns `true`.
 
-Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
 
 ### Formulae
 

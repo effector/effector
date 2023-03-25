@@ -284,7 +284,7 @@ Do not manually call this event. It is event that depends on effect.
 Event triggered with object of `params` and `error`:
 
 1. `params` (_Params_): An argument passed to effect call
-2. `error` (_Fail_): An error catched from the handler
+2. `error` (_Fail_): An error caught from the handler
 
 ### Example {#fail-example}
 
@@ -364,7 +364,7 @@ Do not manually call this event. It is event that depends on effect.
 
 1. `status` (_string_): A status of effect (`done` or `fail`)
 2. `params` (_Params_): An argument passed to effect call
-3. `error` (_Fail_): An error catched from the handler
+3. `error` (_Fail_): An error caught from the handler
 4. `result` (_Done_): A result of the resolved handler
 
 ### Example {#finally-example}

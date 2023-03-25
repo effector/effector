@@ -14,7 +14,7 @@ sample({ source?, clock?, filter?, fn?, target?}): target
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
 
-- If the `clock` is not passed, sample will be trigged on every `source` update.
+- If the `clock` is not passed, sample will be triggered on every `source` update.
 - If the `filter` is not passed, continue as it is. If filter return `false` or contains `Store<false>` cancel execution otherwise continue
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
@@ -82,7 +82,7 @@ Array of units in target are supported since [effector 21.8.0](https://changelog
 
 **Returns**
 
-([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
+([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) - Unit, which fires/updates upon `clock` is triggered, if `source` is not passed.
 [The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).
 
 #### Example
@@ -125,7 +125,7 @@ It is just another form of the `sample` invocation, with the same sense.
 - `clockUnit`: Clock [unit](/en/explanation/glossary#common-unit). If not passed, `source` is used as clock
   - If event or effect. Trigger sampled unit, upon event or effect is called
   - If store. Trigger sampled unit, upon store is updated
-- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](/en/explanation/glossary#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](/en/explanation/glossary#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 **Returns**
 

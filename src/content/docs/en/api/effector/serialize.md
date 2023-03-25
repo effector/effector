@@ -15,7 +15,7 @@ A companion method for [_fork_](/en/api/effector/fork). Allows to get a serializ
 
 1. `scope` [_Scope_](/en/api/effector/Scope): a scope object (forked instance)
 2. `ignore` Optional array of [_Store_](/en/api/effector/Store) to be omitted during serialization (added 20.14.0)
-3. `onlyChanges` Optional boolean flag to ignore stores which didn't changed in fork (prevent default values from being carried over network)
+3. `onlyChanges` Optional boolean flag to ignore stores which didn't change in fork (prevent default values from being carried over network)
 
 ### Returns {#serialize-returns}
 

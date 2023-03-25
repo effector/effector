@@ -8,7 +8,7 @@ Choose one of cases by given conditions. It "splits" source unit into several ev
 
 ### Case mode
 
-Mode in which target case is selected by name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which keept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+Mode in which target case is selected by name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
 
 **See also**:
 
@@ -27,7 +27,7 @@ If one of the fields got `true` from store value or return of function, then the
 
 ### Case store
 
-Store with string which will be used to choose case by it's name. Placed directly in `match` field
+Store with string which will be used to choose case by its name. Placed directly in `match` field.
 
 ```ts
 split({
@@ -44,7 +44,7 @@ split({
 
 ### Case function
 
-String-returning function which will be called with value from `source` to choose case by it's name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
+String-returning function which will be called with value from `source` to choose case by its name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
 
 ```ts
 split({
@@ -338,7 +338,7 @@ message("Hi!");
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
-It works the same like [split with cases](/en/api/effector/split#split-with-cases), however computations in `split` will be started after `clock` is triggered.
+It works the same as [split with cases](/en/api/effector/split#split-with-cases), however computations in `split` will be started after `clock` is triggered.
 
 ```js
 split({source, clock?, match, cases})

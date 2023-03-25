@@ -17,7 +17,7 @@ Only `effector-react/scope` version works this way, `useUnit` of `effector-react
 
 ### Arguments {#useUnit-unit-arguments}
 
-1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be binded to current `scope`.
+1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`.
 
 ### Returns {#useUnit-unit-returns}
 

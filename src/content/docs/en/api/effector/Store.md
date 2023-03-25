@@ -520,7 +520,7 @@ console.log($store.defaultState === "DEFAULT");
 Returns current state of store
 
 :::warning{title="You don't need this method!"}
-`getState()` gives rise to difficult to debug imperative code and kind of race condition.
+`getState()` usage can result in difficult-to-debug imperative code and create a kind of race condition.
 Prefer declarative [sample](/en/api/effector/sample) to pass data from store and [attach](/en/api/effector/attach) for effects
 :::
 
