@@ -393,15 +393,15 @@ const effector = [
     text: { en: "Methods", ru: "Методы" },
     items: [
       {
-        text: { en: "createStore", ru: "createStore" },
+        text: { en: "createStore" },
         link: "/api/effector/createStore",
       },
       {
-        text: { en: "createEvent", ru: "createEvent" },
+        text: { en: "createEvent" },
         link: "/api/effector/createEvent",
       },
       {
-        text: { en: "createEffect", ru: "createEffect" },
+        text: { en: "createEffect" },
         link: "/api/effector/createEffect",
       },
       {
@@ -409,7 +409,7 @@ const effector = [
         link: "/api/effector/createDomain",
       },
       {
-        text: { en: "createApi", ru: "createApi" },
+        text: { en: "createApi" },
         link: "/api/effector/createApi",
       },
       {
@@ -417,23 +417,23 @@ const effector = [
         link: "/api/effector/attach",
       },
       {
-        text: { en: "combine", ru: "combine" },
+        text: { en: "combine" },
         link: "/api/effector/combine",
       },
       {
-        text: { en: "forward", ru: "forward" },
+        text: { en: "forward" },
         link: "/api/effector/forward",
       },
       {
-        text: { en: "fromObservable", ru: "fromObservable" },
+        text: { en: "fromObservable" },
         link: "/api/effector/fromObservable",
       },
       {
-        text: { en: "guard", ru: "guard" },
+        text: { en: "guard" },
         link: "/api/effector/guard",
       },
       {
-        text: { en: "merge", ru: "merge" },
+        text: { en: "merge" },
         link: "/api/effector/merge",
       },
       {
@@ -441,7 +441,7 @@ const effector = [
         link: "/api/effector/restore",
       },
       {
-        text: { en: "sample", ru: "sample" },
+        text: { en: "sample" },
         link: "/api/effector/sample",
       },
       {
@@ -471,7 +471,7 @@ const effector = [
         link: "/api/effector/hydrate",
       },
       {
-        text: { en: "scopeBind", ru: "scopeBind" },
+        text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
       },
     ],
@@ -481,7 +481,7 @@ const effector = [
     collapsed: true,
     items: [
       {
-        text: { en: "is", ru: "is" },
+        text: { en: "is" },
         link: "/api/effector/is",
       },
     ],
@@ -491,7 +491,7 @@ const effector = [
     collapsed: true,
     items: [
       {
-        text: { en: "clearNode", ru: "clearNode" },
+        text: { en: "clearNode" },
         link: "/api/effector/clearNode",
       },
       {
@@ -499,7 +499,7 @@ const effector = [
         link: "/api/effector/withRegion",
       },
       {
-        text: { en: "launch", ru: "launch" },
+        text: { en: "launch" },
         link: "/api/effector/launch",
       },
     ],
@@ -508,11 +508,11 @@ const effector = [
     text: { en: "Compiler Plugins" },
     items: [
       {
-        text: { en: "Babel plugin", ru: "Babel plugin" },
+        text: { en: "Babel plugin" },
         link: "/api/effector/babel-plugin",
       },
       {
-        text: { en: "SWC plugin", ru: "SWC plugin" },
+        text: { en: "SWC plugin" },
         link: "https://github.com/effector/swc-plugin",
       },
     ],
