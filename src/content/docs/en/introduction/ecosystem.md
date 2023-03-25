@@ -25,6 +25,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated 
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
 - [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router on top of effector.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality for effector.
+- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework for Effector which is based on i18next.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — UI engine for web based on effector.
 - [effector-next](https://github.com/effector/nextjs) 🧨 — Effector wrappers for Next.js.
 - [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Effector utilities library.
@@ -37,6 +38,8 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated 
 
 ## Form management
 
+- [effector-final-form](https://github.com/binjospookie/effector-final-form) 🛠️ - Effector bindings for Final Form.
+- [filledout](https://filledout.github.io) ☢️ — Form manager with easy-to-use yup validation
 - [effector-forms](https://github.com/aanation/effector-forms) ☢️ — Form manager for effector.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form) ☢️ — Connect your forms with state manager.
 - [efform](https://github.com/tehSLy/efform) ⛔ — Form manager, based on effector state manager, designed to deliver high-quality DX.
