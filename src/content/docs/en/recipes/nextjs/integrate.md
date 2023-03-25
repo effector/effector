@@ -1,41 +1,65 @@
 ---
-id: nextjs
 title: Integrate Next.js with effector
 ---
 
-# Integrate Next.js with effector
-
-To do this, we will use the native [fork](/en/api/effector/fork) method.
-In the \__app.tsx_ file, we create our own [scope](/en/api/effector/Scope) and wrap the application in a provider from _effector-react/scope_
+To do this, we will use the native [fork](/en/api/effector/fork) method to create a [scope](/en/api/effector/Scope)
+This hook does that and memoize our data. It also merges server and client states:
 
 ```js
-import { AppProps } from 'next/app';
-import { FC } from 'react';
-import { Provider } from 'effector-react/scope';
-import { fork, Scope, serialize } from 'effector';
+import { fork, Scope, serialize } from "effector";
+import { useMemo } from "react";
 
-let clientScope: Scope;
+let scope;
 
-const App: FC<AppProps<{ initialState }>> = ({ Component, pageProps }) => {
-    const scope = fork({
-        values: {
-            ...(clientScope && serialize(clientScope)),
-            ...pageProps.initialState,
-        },
+function initScope(initialData) {
+  return fork({ values: initialData });
+}
+
+function initializeScope(preloadedData) {
+  let _scope = scope ?? initScope(preloadedData);
+  // After navigating to a page with an initial scope state, merge that state
+  // with the current state in the scope, and create a new scope
+  if (preloadedData && scope) {
+    _scope = initScope({
+      ...serialize(scope, { onlyChanges: true }),
+      ...preloadedData,
     });
+    // Reset the current scope
+    scope = undefined;
+  }
+  // For SSG and SSR always create a new scope
+  if (typeof window === "undefined") {
+    return _scope;
+  }
+  // Create the scope once in the client
+  if (!scope) {
+    scope = _scope;
+  }
+  return _scope;
+}
 
-    if (typeof window !== 'undefined') {
-        clientScope = scope;
-    }
+export function useScope(initialState): Scope {
+  return useMemo(() => initializeScope(initialState), [initialState]);
+}
+```
 
-    return (
-        <Provider
-            key={scope?.graphite?.id || '0'}
-            value={scope}
-        >
-            <Component {...pageProps} />
-        </Provider>
-    );
+In the `app.tsx` file, we used our `useScope` and wrap the application in a provider from `effector-react/scope`.
+
+```js
+import { AppProps } from "next/app";
+import { FC } from "react";
+import { Provider } from "effector-react/scope";
+import { fork, Scope, serialize } from "effector";
+import { useScope } from "../useScope"; // use your path to file
+
+const App: FC<AppProps<{ initialState: InitialStateType }>> = ({ Component, pageProps }) => {
+  const scope = useScope(pageProps.initialState);
+
+  return (
+    <Provider key={scope?.graphite?.id || "0"} value={scope}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 };
 
 export default App;

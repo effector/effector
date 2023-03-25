@@ -1,9 +1,6 @@
 ---
-id: nextjs-scope-bind
 title: Use scopeBind in Next.js
 ---
-
-# Use scopeBind in Next.js
 
 There are situations when we need to get values from external libraries through callbacks.
 If we directly bind [events](/en/api/effector/createEvent), then we will face the loss of the scope.
@@ -24,14 +21,12 @@ sample({
 });
 ```
 
-To pick up the current [scope](/en/api/effector/Scope), let's write a callback in \__app.tsx_ under our _clientScope_:
+To pick up the current [scope](/en/api/effector/Scope), let's write a callback in [useScope.tsx](/en/recipes/nextjs/integrate) under our _useScope_:
 
 ```js
 ...
 
-let clientScope: Scope;
-
-export const getCurrentScope = () => clientScope;
+export const getCurrentScope = () => scope;
 
 ...
 ```
