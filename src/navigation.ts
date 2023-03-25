@@ -502,6 +502,10 @@ const effector = [
         text: { en: "launch" },
         link: "/api/effector/launch",
       },
+      {
+        text: { en: "inspect" },
+        link: "/api/effector/inspect",
+      },
     ],
   },
   {
