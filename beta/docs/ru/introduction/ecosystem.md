@@ -18,7 +18,7 @@ lang: ru-RU
 - [effector-reeffect](https://github.com/yumauri/effector-reeffect) - Concurrent effects for effector.
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) - Module for effector that sync stores with localStorage.
 - [effector-storage](https://github.com/yumauri/effector-storage) - Another module for effector to sync stores with localStorage/sessionStorage.
-- [effector-routing](https://github.com/Kelin2025/effector-routing) - Simple abstact router on top of effector.
+- [effector-routing](https://github.com/Kelin2025/effector-routing) - Simple abstract router on top of effector.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) - Simple undo/redo functionality for effector.
 - [effector-utils](https://github.com/Kelin2025/effector-utils) - effector utilities library.
 - [effector-next](https://github.com/weyheyhey/effector-next) - effector wrappers for Next.js.

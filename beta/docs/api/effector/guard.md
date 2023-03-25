@@ -29,7 +29,7 @@ Either `clock` or `source` is required
 
 When `clock` is triggered, check `filter` for [truthy] and call `target` with data from `source` if `true`.
 
-- If `clock` is not passed, guard will be trigged on every `source` update
+- If `clock` is not passed, guard will be triggered on every `source` update
 - If `source` is not passed, call `target` with data from `clock`
 - If `target` is not passed, create [_Event_](/api/effector/Event.md) with type of `source` and return it from `guard()`
 - If `filter` is [_Store_](/api/effector/Store.md), check it value for [truthy]

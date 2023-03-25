@@ -5,7 +5,7 @@ lang: en-US
 
 # Inspect API
 
-Special API methods designed to handle debugging and monitoring use cases without giving too much access to internals of your's actual app.
+Special API methods designed to handle debugging and monitoring use cases without giving too much access to internals of your actual app.
 
 Useful to create developer tools and production monitoring and observability instruments.
 

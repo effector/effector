@@ -154,7 +154,7 @@ submitted.watch(e => {
 
 ## Example 2
 
-This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which dependend on stores, transform data passed between events.
+This example demonstrates how to manage state using an uncontrolled form, handle data loading, create components that depend on stores, and transform data passed between events.
 
 ```jsx
 import React from 'react'
