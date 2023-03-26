@@ -6,15 +6,15 @@ description: Wrapper for effect, which allows to map effect arguments and use da
 :::info{title="since"}
 Available since [effector 20.13.0](https://changelog.effector.dev/#effector-20-13-0).
 
-Since [effector 22.4.0](https://changelog.effector.dev/#effector-encke-22-4-0), it is available to check whether effect is created via `attach` method — [`is.attached`](/en/api/effector/is#is-attached).
+Since [effector 22.4.0](https://changelog.effector.dev/#effector-encke-22-4-0), it is available to check whether effect is created via `attach` method — [is.attached](/en/api/effector/is#is-attached).
 :::
 
-Creates new [effects](/en/api/effector/Effect) based on the other effects, [stores](/en/api/effector/Store). Allows to map params and handle errors.
+Creates new [effects](/en/api/effector/Effect) based on the other effects, [stores](/en/api/effector/Store). Allows mapping params and handling errors.
 
 Use cases: declarative way to pass values from stores to effects and argument preprocessing. Most useful case is `attach({ source, async effect })`.
 
 :::tip
-The attached effects are the same first-class-citizens as the regular effects made by [`createEffect`](/en/api/effector/createEffect). You should place them in the same files as regular effects, also you can use the same naming strategy.
+The attached effects are the same first-class-citizens as the regular effects made by [createEffect](/en/api/effector/createEffect). You should place them in the same files as regular effects, also you can use the same naming strategy.
 :::
 
 ## `attach({effect})` {#attach-effect}
@@ -23,7 +23,7 @@ The attached effects are the same first-class-citizens as the regular effects ma
 [effector 21.5.0](https://changelog.effector.dev/#effector-21-5-0)
 :::
 
-Create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior.
+Create effect which will call `effect` with params as it is. That allows creating separate effects with shared behavior.
 
 ### Formulae {#attach-effect-formulae}
 
@@ -116,7 +116,7 @@ const attachedFx = attach({
 ### Types {#attach-source-effect-types}
 
 :::tip
-You don't need to explicitly set types for each declaration. Here is just example for easy understanding.
+You don't need to explicitly set types for each declaration. The purpose of the following example is to provide a clear understanding.
 :::
 
 In most userland code you will write code like this, without explicit types of the `let`/`const`:
@@ -248,7 +248,7 @@ const attachedFx = attach({
 });
 ```
 
-**Scope loses** if there any async function call:
+**Scope is lost** if there are any asynchronous function calls made:
 
 ```ts
 const attachedFx = attach({
@@ -264,7 +264,7 @@ const attachedFx = attach({
 });
 ```
 
-To solve this case you need just wrap your `regularFunction` into effect:
+To solve this case, you need to just wrap your `regularFunction` into effect:
 
 ```ts
 const regularFunctionFx = createEffect(regularFunction);
@@ -283,9 +283,9 @@ const attachedFx: Effect<Params, Done, Fail> = attach({
 });
 ```
 
-You need to type explicitly only `params` argument. All other types of arguments should be inferred automatically. Also you may want to explicitly set return type of the `effect` function.
+You need to type explicitly only `params` argument. All other types of arguments should be inferred automatically. Also, you may want to explicitly set the return type of the `effect` function.
 
-If you want to remove any arguments from the `attachedFx` you need just remove second argument from `effect` function:
+If you want to remove any arguments from the `attachedFx` you need to just remove second argument from `effect` function:
 
 ```ts
 const attachedFx: Effect<void, void, Fail> = attach({
@@ -337,7 +337,7 @@ const attachedFx = attach({
 });
 ```
 
-- When `attachedFx` triggered, payload passed into `mapParams` function, then result of it passed into `originalFx`
+- When `attachedFx` triggered, payload passed into `mapParams` function, then the result of it passed into `originalFx`
 - When `originalFx` is finished, then `attachedFx` must be finished with the same resolution (done/fail).
 - If `mapParams` throws an exception, then `attachedFx` must be finished with the error as `attachedFx.fail`. But `originalFx` will not be triggered at all.
 
@@ -431,12 +431,12 @@ attachedFx(1);
 
 ## `attach({effect, mapParams, source})` {#attach-effect-mapParams-source}
 
-Creates effect which will read values from `source` stores, pass them with params to `mapParams` function and call `effect` with result.
+Creates effect which will read values from `source` stores, pass them with params to `mapParams` function and then call `effect` with the result.
 
 ### Formulae {#attach-effect-mapParams-source-formulae}
 
 :::tip{title="Note"}
-This variant of `attach` mostly works like the [`attach({effect, mapParams})`](#attach-effect-mapParams). The same things are omitted from this section.
+This variant of `attach` mostly works like the [attach({effect, mapParams})](#attach-effect-mapParams). The same things are omitted from this section.
 :::
 
 ```ts
@@ -446,7 +446,7 @@ const attachedFx = attach({
 });
 ```
 
-- When `attachedFx` triggered, payload passed into `mapParams` function, then result of it passed into `originalFx`
+- When `attachedFx` triggered, payload passed into `mapParams` function, then the result of it passed into `originalFx`
 - When `originalFx` is finished, then `attachedFx` must be finished with the same resolution (done/fail).
 - If `mapParams` throws an exception, then `attachedFx` must be finished with the error as `attachedFx.fail`. But `originalFx` will not be triggered at all.
 
@@ -540,7 +540,7 @@ Authorization: Bearer guest_token
 // => client analytics: sent 2 requests
 ```
 
-To allow factory works correct, add path to a `./api/authorized` into `factories` option for babel-plugin:
+To allow factory works correct, add a path to a `./api/authorized` into `factories` option for Babel plugin:
 
 ```json5
 // .babelrc
@@ -566,7 +566,7 @@ To allow factory works correct, add path to a `./api/authorized` into `factories
 name?: string
 ```
 
-It allows to explicitly set name of the created attached effect:
+It allows us to explicitly set the name of the created attached effect:
 
 ```ts
 const attachedFx = attach({

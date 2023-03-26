@@ -63,7 +63,7 @@ function saveHistory(messages: Message[]) {
 }
 ```
 
-I also created some libraries to generate identifier and wait to simulate network requests.
+I also created some libraries to generate identifiers and wait to simulate network requests.
 
 ```ts
 // File: /src/shared/lib/oid.ts
@@ -173,9 +173,9 @@ export const sessionDeleteFx = createEffect(async () => {
 });
 
 // Look at the type of the `sessionCreateFx` constant.
-// It will be `Effect<void, Session, Error>` because Typescript can infer type from `session` constant
+// It will be `Effect<void, Session, Error>` because TypeScript can infer type from `session` constant
 export const sessionCreateFx = createEffect(async () => {
-  // I explicitly set type for the next constant, because it allows Typescript help me
+  // I explicitly set type for the next constant, because it allows TypeScript help me
   // If I forgot to set property, I'll see error in the place of definition
   // Also it allows IDE to autocomplete property names
   const session: Session = {
@@ -187,11 +187,11 @@ export const sessionCreateFx = createEffect(async () => {
 });
 ```
 
-How we need to import this effects?
+How we need to import these effects?
 
-I surely recommend to write short imports and use reexports.
+I surely recommend writing short imports and using reexports.
 It allows to securely refactor code structure inside `shared/api` and the same slices,
-and don't worry about refactoring another imports and unnecessary changes in the git history.
+and don't worry about refactoring other imports and unnecessary changes in the git history.
 
 ```ts
 // File: /src/shared/api/index.ts
@@ -216,7 +216,7 @@ src/
       index.ts — reexports, sometimes there will be a connection code
 ```
 
-I recommend to write code in the view layer from the top to bottom, more common code at the top.
+I recommend writing code in the view layer from the top to bottom, more common code at the top.
 Let's model our view layer. We will have two main sections at the page: messages history and a message form.
 
 ```tsx
@@ -250,8 +250,8 @@ function MessageForm() {
 ```
 
 OK. Now we know what kind of structure we have, and we can start to model business-logic processes.
-View layer should do two tasks: render data from stores and report events to the model.
-View layer doesn't know how data is loaded, how it should be converted and sent back.
+The view layer should do two tasks: render data from stores and report events to the model.
+The view layer doesn't know how data are loaded, how it should be converted and sent back.
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -378,8 +378,8 @@ export const $session = createStore<Session | null>(null);
 export const $isLogged = $session.map((session) => session !== null);
 ```
 
-Now in the page we can implement login or logout features. Why not here?
-If we place login logic here, we will have very implicit scenario,
+Now we can implement login or logout features on the page. Why not here?
+If we place login logic here, we will have a very implicit scenario,
 when you call `sessionCreateFx` you won't see code called after effect.
 But consequences will be visible in the DevTools and application behaviour.
 
@@ -391,7 +391,7 @@ so that you and any teammate can trace the sequence of execution.
 OK. Now we can load a user session and the messages lists on the page mount.
 But, we don't have any event when we can start. Let's fix it.
 
-You can use [`Gate`](/en/recipes/react/gate), but I prefer to use explicit events.
+You can use [Gate](/en/recipes/react/gate), but I prefer to use explicit events.
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -455,7 +455,7 @@ $messages.on(messageApi.messagesLoadFx.doneData, (_, messages) => messages);
 $session.on(sessionApi.sessionLoadFx.doneData, (_, session) => session);
 ```
 
-OK. Session and messages loaded. Let's allow user to log in.
+OK. Session and messages loaded. Let's allow the users to log in.
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -494,7 +494,7 @@ sample({
 });
 ```
 
-> Note: most of the comments wrote just for educational purpose. In the real life application code will be self-describable
+> Note: most of the comments wrote just for educational purpose. In real life, application code will be self-describable
 
 But if we start the dev server and try to log in, we see nothing changed.
 This is because we created `$loggedIn` store in the model, but don't change it. Let's fix:
@@ -513,7 +513,7 @@ The same situation with `$userName` store. Just reload the page, and you'll see,
 
 ## Send message
 
-Now we can log in and log out. I think you want to send message. This is pretty simple:
+Now we can log in and log out. I think you want to send a message. This is pretty simple:
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -535,7 +535,7 @@ But if in the `tsconfig.json` you set `"strictNullChecks": true`, you will see t
 It is because store `$session` contains `Session | null` and `messageSendFx` wants `Author` in the arguments.
 `Author` and `Session` are compatible, but not the `null`.
 
-To fix this strange behaviour we need to use `filter` there:
+To fix this strange behaviour, we need to use `filter` there:
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -551,14 +551,14 @@ sample({
 
 I want to focus your attention on the return type `form is {author: Session; text: string}`.
 This feature called [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)
-and allows Typescript to reduce `Session | null` type to more specific `Session` via condition inside the function.
+and allows TypeScript to reduce `Session | null` type to more specific `Session` via condition inside the function.
 
-Now we can read this like: when message should be sent, take session and message text, check that session is exists, and send it.
+Now we can read this like: when a message should be sent, take session and message text, check that session exists, and send it.
 
 OK. Now we can write a new message to a server.
 But if we don't call `messagesLoadFx` again we didn't see any changes,
 because `$messages` store didn't update. We can write generic code for this case.
-Easiest way is to return sent message from the effect.
+The easiest way is to return the sent message from the effect.
 
 ```ts
 // File: /src/shared/api/message.ts
@@ -576,7 +576,7 @@ export const messageSendFx = createEffect(async ({ text, author }: SendMessage) 
 });
 ```
 
-Now we can just append a message to the end of list:
+Now we can just append a message to the end of the list:
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -586,7 +586,7 @@ $messages.on(messageApi.messageSendFx.doneData, (messages, newMessage) => [
 ]);
 ```
 
-But at the moment, sent message still left in the input.
+But at the moment, sent a message still left in the input.
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -602,7 +602,7 @@ sample({
 
 ## Deleting the message
 
-There is pretty simple.
+It is pretty simple.
 
 ```ts
 // File: /src/pages/chat/model.ts
@@ -618,7 +618,7 @@ $messages.on(messageApi.messageDeleteFx.done, (messages, { params: toDelete }) =
 
 But you can see the bug, when "Deleting" state doesn't disable.
 This is because `useList` caches renders, and doesn't know about dependency on `messageDeleting` state.
-To fix it we need to provide `keys`:
+To fix it, we need to provide `keys`:
 
 ```tsx
 // File: /src/pages/chat/page.tsx
@@ -638,6 +638,6 @@ const messages = useList(model.$messages, {
 
 ## Conclusion
 
-This is simple example of application on effector with React and TypeScript.
+This is a simple example of an application on effector with React and TypeScript.
 
 You can clone this [effector/examples/react-and-ts](https://github.com/effector/effector/tree/master/examples/react-and-ts) and run this example on your computer.

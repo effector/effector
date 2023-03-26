@@ -13,7 +13,7 @@ It can be safely used in place of the original async function.
 
 ## `use(handler)` {#use}
 
-Provides a function, which will be called when effect is triggered.
+Provides a function, which will be called when the effect is triggered.
 
 ### Formulae {#use-formulae}
 
@@ -24,9 +24,9 @@ effect.use(fn);
 - Set handler `fn` for `effect`
 - If effect already had an implementation at the time of the call, it will be replaced by a new one
 
-Hint: current handler can be extracted with [`effect.use.getCurrent()`](#use-getcurrent).
+Hint: current handler can be extracted with [effect.use.getCurrent()](#use-getcurrent).
 
-You must provide a handler either through [`.use`](/en/api/effector/Effect#use-handler) method or `handler` property in [createEffect](/en/api/effector/createEffect), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
+You must provide a handler either through [.use](/en/api/effector/Effect#use-handler) method or `handler` property in [createEffect](/en/api/effector/createEffect), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
 
 :::tip{title="See also"}
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
@@ -71,7 +71,7 @@ fn = effect.use.getCurrent();
 
 - Returns current handler for `effect`
 - If no handler was assigned to `effect`, default handler will be returned ([that throws an error](https://share.effector.dev/8PBjt3TL))
-- Hint: to set a new handler use [`effect.use(handler)`](#use-handler)
+- Hint: to set a new handler use [effect.use(handler)](#use-handler)
 
 **Returns**
 
@@ -143,7 +143,7 @@ Creates an event, upon trigger it sends transformed data into the source event. 
 const event = effect.prepend(fn);
 ```
 
-- When `event` is triggered, call `fn` with payload from `event`, then trigger `effect` with result of `fn()`
+- When `event` is triggered, call `fn` with payload from `event`, then trigger `effect` with the result of `fn()`
 
 ### Arguments {#prepend-arguments}
 
@@ -155,7 +155,7 @@ const event = effect.prepend(fn);
 
 ## `map(fn)` {#map}
 
-Creates a new event, which will be called after the original effect is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
+Creates a new event, which will be called after the original effect is called, applying the result of a `fn` as a payload. It is a special function which allows you to decompose dataflow, extract or transform data.
 
 ### Formulae {#map-formulae}
 
@@ -198,19 +198,19 @@ await userUpdate({ name: "john", role: "admin" });
 
 # Effect Properties {#properties}
 
-You are not supposed to use parts of effect (like `.done` and `.pending`) as a target in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
+You are not supposed to use parts of effect (like `.done` and `.pending`) as a `target` in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
 ## `done` {#done}
 
 [_Event_](/en/api/effector/Event), which is triggered when _handler_ is _resolved_.
 
 :::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
+Do not manually call this event. It is an event that depends on effect.
 :::
 
 ### Properties {#done-properties}
 
-Event triggered with object of `params` and `result`:
+Event triggered with an object of `params` and `result`:
 
 1. `params` (_Params_): An argument passed to the effect call
 2. `result` (_Done_): A result of the resolved handler
@@ -238,7 +238,7 @@ await fx(2);
 [effector 20.12.0](https://changelog.effector.dev/#effector-20-12-0)
 :::
 
-Event, which is triggered with result of the effect execution:
+Event, which is triggered by the result of the effect execution:
 
 ### Formulae {#doneData-formulae}
 
@@ -246,10 +246,10 @@ Event, which is triggered with result of the effect execution:
 event = effect.doneData;
 ```
 
-- `doneData` is an event, that triggered when `effect` is successfully resolved with `result` from [`.done`](#done)
+- `doneData` is an event, that triggered when `effect` is successfully resolved with `result` from [.done](#done)
 
 :::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
+Do not manually call this event. It is an event that depends on the effect.
 :::
 
 [_Event_](/en/api/effector/Event) triggered when _handler_ is _resolved_.
@@ -276,12 +276,12 @@ await fx(2);
 [_Event_](/en/api/effector/Event), which is triggered when handler is rejected or throws error.
 
 :::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
+Do not manually call this event. It is an event that depends on effect.
 :::
 
 ### Properties {#fail-properties}
 
-Event triggered with object of `params` and `error`:
+Event triggered with an object of `params` and `error`:
 
 1. `params` (_Params_): An argument passed to effect call
 2. `error` (_Fail_): An error caught from the handler
@@ -319,10 +319,10 @@ Event, which is triggered with error thrown by the effect
 event = effect.failData;
 ```
 
-- `failData` is an event, that triggered when `effect` is rejected with `error` from [`.fail`](#fail)
+- `failData` is an event, that triggered when `effect` is rejected with `error` from [.fail](#fail)
 
 :::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
+Do not manually call this event. It is an event that depends on effect.
 :::
 
 [_Event_](/en/api/effector/Event) triggered when handler is rejected or throws error.
@@ -355,12 +355,12 @@ fx(2);
 Event, which is triggered when handler is resolved, rejected or throws error.
 
 :::warning{title="Important"}
-Do not manually call this event. It is event that depends on effect.
+Do not manually call this event. It is an event that depends on effect.
 :::
 
 ### Properties {#finally-properties}
 
-[_Event_](/en/api/effector/Event), which is triggered with object of `status`, `params` and `error` or `result`:
+[_Event_](/en/api/effector/Event), which is triggered with an object of `status`, `params` and `error` or `result`:
 
 1. `status` (_string_): A status of effect (`done` or `fail`)
 2. `params` (_Params_): An argument passed to effect call
@@ -410,8 +410,8 @@ Store contains `true` when effect is called but not resolved yet. Useful to show
 $store = effect.pending;
 ```
 
-- [`$store`](/en/api/effector/Store) will update when `done` or `fail` are triggered
-- [`$store`](/en/api/effector/Store) contains `true` value until the effect is resolved or rejected
+- [$store](/en/api/effector/Store) will update when `done` or `fail` are triggered
+- [$store](/en/api/effector/Store) contains `true` value until the effect is resolved or rejected
 
 ### Returns {#pending-returns}
 
@@ -483,7 +483,7 @@ Do not modify `$count` value! It is [derived store](/en/api/effector/Store#deriv
 
 ### Returns {#inFlight-returns}
 
-[_DerivedStore_](/en/api/effector/Store#derived-store): Store that represents count of the ran effects
+[_DerivedStore_](/en/api/effector/Store#derived-store): Store that represents count of the running effects
 
 ### Example {#inFlight-example}
 

@@ -6,7 +6,7 @@ title: createComponent
 
 ### Arguments {#createComponent-options-arguments}
 
-1. `componentOptions` (_Object_): component options ( hooks, methods, computed properties )
+1. `componentOptions` (_Object_): component options (hooks, methods, computed properties)
 2. `store` (_Object_): Store object from effector
 
 ### Returns {#createComponent-options-returns}

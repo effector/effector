@@ -3,9 +3,11 @@ title: Computation priority
 description: How effector calculates units
 ---
 
-For sure, you've noticed that function [should be pure](/en/explanation/glossary#purity)... or watch, if there is a place for side effect. We will talk about this in current section - **Computation priority**
+For sure, you've noticed that function [should be pure](/en/explanation/glossary#purity)... or watch if there is a place
+for side effect. We will talk about this in the current section – **Computation priority**
 
-A real example of queue priority - people waiting for medical treatment in a hospital, extreme emergency cases will have the highest priority and move to the start of the queue and less significant to the end.
+A real example of queue priority — people waiting for medical treatment in a hospital, extreme emergency cases will have
+the highest priority and move to the start of the queue and less significant to the end.
 
 Computation priority allows us to have side effects, and it's one of the main reasons to create this concept:
 
@@ -13,7 +15,8 @@ Computation priority allows us to have side effects, and it's one of the main re
 - Side effects can follow a consistent state of the application
 - Batching pure computations in `combine()`
 
-Actually, pure computation cannot be observed out of the scope, therefore the definition of **_pure computation_** used in this library gives us an opportunity to optimize grouping.
+Actually, pure computation cannot be observed out of the scope, therefore, the definition of **_pure computation_** used
+in this library gives us an opportunity to optimize grouping.
 
 Priority:
 
@@ -27,9 +30,9 @@ Priority:
 5. effect -> watch, effect handler
 ```
 
-> Whenever you will allow side effects in pure computations, the library will work by worst scenario. Thereby, increasing non-consistency of application and breaking pure computations. Don't ignore that.
+> Whenever you allow side effects in pure computations, the library will work by the worst scenario. Thereby, increasing non-consistency of application and breaking pure computations. Don't ignore that.
 
-Let's consider prioritize in the example below.
+Let's consider prioritizing in the example below.
 
 ```js
 let count = 0;
@@ -58,7 +61,7 @@ console.log("expect count to be 2", count === 2);
 [Try it](https://share.effector.dev/IRAmt9Uq)
 
 :::info
-Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue).
+Whenever a library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue).
 :::
 
 We hope that this information cleared some things on how the library works.

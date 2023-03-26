@@ -4,7 +4,7 @@ title: Testing guide
 
 # Testing effector
 
-Effector's test are usually written via [Fork API](/en/api/effector/fork).
+Effector's tests are usually written via [Fork API](/en/api/effector/fork).
 
 Fork creates an independent context instance, which we can use to emulate some specific situation or environment.
 
@@ -12,7 +12,7 @@ Fork creates an independent context instance, which we can use to emulate some s
 
 For example, we have some typical counter, but with asynchronous checking through our backend api, and our logic rules are as follows:
 
-- When user clicks a button, we check if the current counter is less than 100, and then check that click through our backend api.
+- When the user clicks a button, we check if the current counter is less than 100, and then check that click through our backend api.
 - If the validation is successful, we increase the counter by 1.
 - If the validation fails, we have to drop the counter to 0.
 
@@ -58,8 +58,8 @@ Let's test it:
 
 1. We create a new Scope via `fork` call. We can treat it as an independent instance of our effector's app.
 2. We check, that initially we have count `0`.
-3. Then we emulate `buttonClicked` event with `allSettled` - this promise will resolve once all computations are over.
-4. We check, that we have a desired state in the end.
+3. Then we emulate `buttonClicked` event with `allSettled` – this promise will resolve once all computations are over.
+4. We check that we have a desired state in the end.
 
 ```ts
 import { fork, allSettled } from "effector";
@@ -108,7 +108,7 @@ We have another scenario:
 1. User clicks the button.
 2. There should be no effect call.
 
-For that case we will need to mock initial "more than 100" state somehow.
+For that case, we will need to mock initial "more than 100" states somehow.
 
 We can provide custom initial value via `fork` configuration too.
 

@@ -7,7 +7,7 @@ title: useList
 :::
 
 Hook function for efficient rendering of list store.
-Every item will be memoized and updated only when their data changes.
+Every item will be memoized and updated only when their data change.
 
 ## useList(store, fn) {#useList-simple}
 
@@ -22,7 +22,7 @@ useList<T>(
 
 ### Arguments {#useList-simple-arguments}
 
-1. `store` (_Store_): Store with array of items
+1. `store` (_Store_): Store with an array of items
 2. `fn` (_Function_): Render function which will be called for every item in list
 
 ### Returns {#useList-simple-returns}
@@ -49,15 +49,15 @@ Used when you need to pass dependencies to react (to update items when some of i
 
 By default, `useList` rerenders only when some of its items were changed.
 However, sometimes we need to update items when some external value (e.g. props field or state of another store) changes.
-In such case, we need to tell react about our dependencies and pass keys explicitly.
+In such case, we need to tell React about our dependencies and pass keys explicitly.
 
 ### Arguments {#useList-config-arguments}
 
-1. `store` (_Store_): Store with array of items
+1. `store` (_Store_): Store with an array of items
 2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useList`
 3. `fn` (_Function_): Render function which will be called for every item in list
 4. `getKey` (_(value) => React.Key_): Optional function to compute key for every item of list
-5. `placeholder` (_ReactNode_): Optional react node to render instead of empty list
+5. `placeholder` (_ReactNode_): Optional react node to render instead of an empty list
 
 :::info{title="since"}
 `getKey` option introduced in [effector-react@21.3.0](https://changelog.effector.dev/#effector-react-21-3-0)

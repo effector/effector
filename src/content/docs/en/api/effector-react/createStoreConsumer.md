@@ -5,7 +5,7 @@ description: Creates store-based component with render-props
 
 ## `createStoreConsumer(store)` {#createStoreConsumer-store}
 
-Creates store-based react component which is watching for changes in the store. Based on _Render Props_ technique.
+Creates a store-based React component which is watching for changes in the store. Based on _Render Props_ technique.
 
 ### Arguments {#createStoreConsumer-store-arguments}
 

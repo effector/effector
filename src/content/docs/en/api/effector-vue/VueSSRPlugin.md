@@ -2,7 +2,7 @@
 title: VueSSRPlugin
 ---
 
-The Plugin provides a general scope which need for read and update effector's stores, call effector's events. Required for SSR.
+The Plugin provides a general scope which needs for read and update effector's stores, call effector's events. Required for SSR.
 
 ### Arguments {#VueSSRPlugin-arguments}
 

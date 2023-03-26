@@ -15,14 +15,14 @@ createEffect(handler?)
 
 ### Arguments {#createEffect-handler-arguments}
 
-1. `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](/en/api/effector/Effect#use)
+1. `handler` (_Function_): function to handle effect calls, also can be set with [use(handler)](/en/api/effector/Effect#use)
 
 ### Returns {#createEffect-handler-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
 :::tip{title="Reminder"}
-You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [`.use`](/en/api/effector/Effect#use) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
+You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [.use](/en/api/effector/Effect#use) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
 :::
 
 :::info{title="since"}
@@ -136,7 +136,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 ## createEffect with config {#createEffect-config}
 
-Creates an effect with handler and name from given config object
+Creates an effect with handler and name from a given config object
 
 ```typescript
 createEffect({ handler, name });
@@ -145,7 +145,7 @@ createEffect({ handler, name });
 ### Arguments {#createEffect-config-arguments}
 
 1. `config`? (_Params_): effect
-   - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
+   - `handler` (_Function_): function to handle effect calls, also can be set with [use(handler)](#use)
    - `name`? (_string_): Optional effect name
 
 ### Returns {#createEffect-config-returns}

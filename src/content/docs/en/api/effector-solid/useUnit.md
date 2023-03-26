@@ -2,7 +2,7 @@
 title: useUnit
 ---
 
-Bind effector stores to solid reactivity system or, in the case of events/effects - bind to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
+Binds effector stores to the Solid reactivity system or, in the case of events/effects – binds to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 
 ## `useUnit(unit)` {#useUnit-unit}
@@ -13,7 +13,7 @@ Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid
 
 ### Returns {#useUnit-unit-returns}
 
-(Function): Function to pass to event handlers. Will trigger given unit in current scope
+(Function): Function to pass to event handlers. Will trigger the given unit in current scope
 
 ### Example {#useUnit-unit-example}
 
@@ -52,11 +52,11 @@ render(
 
 ### Arguments {#useUnit-store-arguments}
 
-1. `store` Effector ([_Store_](/en/api/effector/Store))
+1. `store` effector ([_Store_](/en/api/effector/Store))
 
 ### Returns {#useUnit-store-returns}
 
-Accessor which will subscribe to store state
+Accessor, which will subscribe to store state
 
 ### Example {#useUnit-store-example}
 

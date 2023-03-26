@@ -196,7 +196,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 - Type: `boolean`
 - Default: `false`
 
-Опция для effector/babel-plugin для создания пользовательских фабрик юнитов с чистой конфигурацией, изначально не делающей ничего.
+Опция для `effector/babel-plugin` для создания пользовательских фабрик юнитов с чистой конфигурацией, изначально не делающей ничего.
 
 :::info
 Оптимальнее использовать [factories](#factories)

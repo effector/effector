@@ -8,7 +8,7 @@ Choose one of cases by given conditions. It "splits" source unit into several ev
 
 ### Case mode
 
-Mode in which target case is selected by name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
+Mode in which target case is selected by the name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
 
 **See also**:
 
@@ -17,7 +17,7 @@ Mode in which target case is selected by name of its field. Case could be select
 
 ### Matching mode
 
-Mode in which each case sequentially matched by stores and functions in fields of `match` object.
+Mode in which each case is sequentially matched by stores and functions in fields of `match` object.
 If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
 
 **See also**:
@@ -27,7 +27,7 @@ If one of the fields got `true` from store value or return of function, then the
 
 ### Case store
 
-Store with string which will be used to choose case by its name. Placed directly in `match` field.
+Store with a string which will be used to choose the case by its name. Placed directly in `match` field.
 
 ```ts
 split({
@@ -44,7 +44,7 @@ split({
 
 ### Case function
 
-String-returning function which will be called with value from `source` to choose case by its name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
+String-returning function which will be called with value from `source` to choose the case by its name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
 
 ```ts
 split({
@@ -61,7 +61,7 @@ split({
 
 ### Matcher store
 
-Boolean store which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#matcher-function)
+Boolean store which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#matcher-function)
 
 ```ts
 split({
@@ -85,7 +85,7 @@ split({
 Case store, case function and matcher store are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-Boolean-returning function which indicates whether to choose particular case or try next one. Placed in fields of `match` object, might be mixed with [matcher stores](/en/api/effector/split#matcher-store), [should be **pure**](/en/explanation/glossary#purity)
+Boolean-returning function which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher stores](/en/api/effector/split#matcher-store), [should be **pure**](/en/explanation/glossary#purity)
 
 ```ts
 split({
@@ -103,7 +103,7 @@ split({
 })
 ```
 
-## split with cases
+## `split` with cases
 
 :::info{title="since"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
@@ -249,7 +249,7 @@ messageReceived({
 
 [Try it](https://share.effector.dev/32FNNk8H)
 
-## split without explicit cases
+## `split` without explicit cases
 
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
@@ -266,7 +266,7 @@ split(source, match);
 
 **Returns**
 
-(Object) - Object, having keys, defined in `match` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
+(Object) – Object, having keys, defined in `match` argument, plus `__`(two underscores) – which stands for `default` (no matches met) case.
 
 #### Example 1
 
@@ -332,7 +332,7 @@ message("Hi!");
 
 [Try it](https://share.effector.dev/ke2tM78I)
 
-## split with clock
+## `split` with `clock`
 
 :::info{title="since"}
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)

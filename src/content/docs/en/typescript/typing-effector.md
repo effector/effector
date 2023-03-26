@@ -6,7 +6,7 @@ description: Best practices for writing well-typed code
 
 Best practices for writing well-typed code
 
-## createEvent
+## `createEvent`
 
 By default, this method returns `Event<void>`.
 
@@ -24,9 +24,9 @@ const event = createEvent<number>();
 event(0);
 ```
 
-## createEffect
+## `createEffect`
 
-Typescript can infer effect result type from given handler, but argument type should be defined either in handler argument or as generic type
+TypeScript can infer an effect result type from a given handler, but the argument type should be defined either in handler argument or as generic type
 
 ```typescript
 const sendMessageFx = createEffect(async (params: { text: string }) => {
@@ -42,7 +42,7 @@ const sendWarningFx = createEffect<{ warn: string }, string>(async ({ warn }) =>
 // sendWarningFx has type Effect<{warn: string}, string>
 ```
 
-## createEffect and custom errors
+## `createEffect` and custom errors
 
 When you need custom error types (`Fail` type in `Effect`) you can define all generics explicitly:
 
@@ -54,7 +54,7 @@ const sendWarningFx = createEffect<{ warn: string }, string, AxiosError>(async (
 // sendWarningFx has type Effect<{warn: string}, string, AxiosError>
 ```
 
-In case when effect's handler is defined before effect itself you can allow typescript to infer type of `Params` and `Done` by using `typeof handler` in first generic and optionally provide `Fail` type as second one
+In case when effect's handler is defined before effect itself you can allow typescript to infer the type of `Params` and `Done` by using `typeof handler` in first generic and optionally provide `Fail` type as second one
 
 ```typescript
 const sendMessage = async (params: { text: string }) => {
@@ -70,9 +70,9 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 [effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
-## event.prepend
+## `event.prepend`
 
-To add types to events, created by [event.prepend](/en/api/effector/Event#prependfn) you need to add type either to prepend function argument or as generic type
+To add types to events, created by [event.prepend](/en/api/effector/Event#prependfn), you need to add a type either by prepending function argument or as generic type
 
 ```typescript
 const message = createEvent<string>();
@@ -84,9 +84,9 @@ const warningMessage = message.prepend<{ warn: string }>(({ warn }) => warn);
 // warningMessage has type Event<{warn: string}>
 ```
 
-## attach
+## `attach`
 
-To allow typescript to infer types of created effect, add type to `mapParams` first argument, which will become effect `params` type
+To allow typescript to infer types of created effect, add a type to `mapParams` first argument, which will become effect `params` type
 
 ```typescript
 const sendTextFx = createEffect<{ text: string }, "ok">();
@@ -98,9 +98,9 @@ const sendWarningFx = attach({
 // sendWarningFx has type Effect<{warn: string}, 'ok'>
 ```
 
-## split
+## `split`
 
-[Typescript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) can be used to split common event type to several cases (hence the name)
+[TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) can be used to split a common event type to several cases (hence the name)
 
 ```typescript
 type UserMessage = { kind: "user"; text: string };
@@ -116,9 +116,9 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage has type Event<WarnMessage>
 ```
 
-## guard
+## `guard`
 
-[Typescript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) can be used to infer result type by `filter` function
+[TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) can be used to infer a result type by `filter` function
 
 ```typescript
 type UserMessage = { kind: "user"; text: string };
@@ -133,9 +133,9 @@ const userMessage = guard(message, {
 // userMessage has type Event<UserMessage>
 ```
 
-## sample
+## `sample`
 
-Since `effector@22.2.0` update `sample` also supports a `filter` field, which can also be a [Typescript type predicate](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates).
+Since `effector@22.2.0` update `sample` also supports a `filter` field, which can also be a [TypeScript type predicate](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates).
 
 ```typescript
 type UserMessage = { kind: "user"; text: string };
@@ -151,10 +151,10 @@ sample({
 });
 ```
 
-### filter + fn
+### `filter + fn`
 
 However, `sample` also has a `fn` field to apply custom transformations.
-There is a caveat with Typescript type inference mechanic, which requires user to explicitly type `filter` arguments for type inference to work
+There is a caveat with TypeScript type inference mechanic, which requires user to explicitly type `filter` arguments for type inference to work
 
 ```typescript
 type UserMessage = { kind: "user"; text: string };
@@ -178,7 +178,7 @@ sample({
 
 Otherwise, TypeScript will fall back to `any`.
 
-However, Typescript will not allow you to set incorrect filter type
+However, TypeScript will not allow you to set an incorrect `filter` type
 
 ```typescript
 const message = createEvent<Message>();
@@ -194,9 +194,9 @@ sample({
 });
 ```
 
-## createApi
+## `createApi`
 
-To allow typescript to infer types of created events, add type to second argument of given reducers
+To allow TypeScript to infer types of created events, adding a type to second argument of given reducers
 
 ```typescript
 const $count = createStore(0);
@@ -210,9 +210,9 @@ const { add, sub } = createApi($count, {
 // sub has type Event<number>
 ```
 
-## is
+## `is`
 
-`is` methods can help to infer unit type (thereby `is` methods acts as [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)) which can help to write strongly-typed helper functions
+`is` methods can help to infer a unit type (thereby `is` methods acts as [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)) which can help to write strongly-typed helper functions
 
 ```typescript
 export function getUnitType(unit: unknown) {

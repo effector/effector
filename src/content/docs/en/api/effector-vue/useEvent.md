@@ -12,7 +12,7 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 
 ### Returns {#useEvent-unit-returns}
 
-(Function): Function to pass to event handlers. Will trigger given unit in current scope
+(Function): Function to pass to event handlers. Will trigger a given unit in current scope
 
 ### Example {#useEvent-unit-example}
 

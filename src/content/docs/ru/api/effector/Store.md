@@ -7,7 +7,7 @@ description: Store, его методы и свойства
 lang: ru
 ---
 
-_Store (стор)_ - это объект, который хранит значение состояния, то есть какие-либо данные. Стор обновляется при получении значения, которое не равно (`!==`) текущему и `undefined`. Является [юнитом](/ru/explanation/glossary#common-unit)
+_Store (стор)_ – это объект, который хранит значение состояния, то есть какие-либо данные. Стор обновляется при получении значения, которое не равно (`!==`) текущему и `undefined`. Является [юнитом](/ru/explanation/glossary#common-unit)
 
 ## Структура
 
@@ -27,7 +27,7 @@ _Store (стор)_ - это объект, который хранит значе
 
 ## Примеры {#all-examples}
 
-- **map** - [пример использования map](#map-usage-example)
+- **map** – [пример использования map](#map-usage-example)
 
 - **on**
 
@@ -39,9 +39,9 @@ _Store (стор)_ - это объект, который хранит значе
   - [Использование события для сброса состояния](#reset-event-example)
   - [Использование массива юнитов в clock](#reset-array-example)
 
-- **watch** - [логгирование значения стора](#watch-logging-example)
-- **updates** - [вызов сайд-эффектов начиная с первого обновления](#updates-skip-init-example)
-- **shortName** - [логгирование с помощью shortName](#shortName-logging-example)
+- **watch** – [логирование значения стора](#watch-logging-example)
+- **updates** – [вызов сайд-эффектов начиная с первого обновления](#updates-skip-init-example)
+- **shortName** – [логирование с помощью shortName](#shortName-logging-example)
 
 ## Методы {#methods}
 
@@ -63,14 +63,14 @@ $second = $first.map(/*fn*/ (state: T, lastState?: S) => S);
 При обновлении исходного стора `$first`, функция-обработчик `fn` будет вызвана с новым состоянием `$first` и последним состоянием `$second`, результат вычислений будет сохранён в производном сторе `$second`, то есть реактивно обновит его значение
 
 :::info
-С версии [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) второй аргумент функции `fn` и `firstState` были депрекейтнуты, вместо этого используйте [`updateFilter`](/ru/api/effector/createStore) или создание нового стора с помощью `createStore`.
+С версии [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) второй аргумент функции `fn` и `firstState` были депрекейтнуты, вместо этого используйте [updateFilter](/ru/api/effector/createStore) или создание нового стора с помощью `createStore`.
 :::
 
 #### Аргументы {#map-args}
 
 1.  **`fn`**: `(state: T, lastState?: S) => S`
 
-    Функция-обработчик, которая будет вычислять новое состояние производного стора `$second` на основе значения исходного стора `$first`. Генерирует в том числе и исходное состояние стора, поэтому в первый раз запускается в момент вызова `.map`, то есть ещё до создания производного стора. [Должна быть **чистой**](/ru/explanation/glossary#purity)
+    Функция-обработчик, которая будет вычислять новое состояние производного стора `$second` на основе значения исходного стора `$first`. Функция также генерирует и исходное состояние стора, поэтому в первый раз запускается в момент вызова `.map`, то есть ещё до создания производного стора. [Должна быть **чистой**](/ru/explanation/glossary#purity)
 
     **Аргументы**
 
@@ -197,7 +197,7 @@ trigger(2);
 
 [Запустить пример](https://share.effector.dev/HLeTYPlO)
 
-##### Использование массива юнитов в clock {#on-array-example}
+##### Использование массива юнитов в `clock` {#on-array-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -296,7 +296,7 @@ resetTrigger();
 
 [Запустить пример](https://share.effector.dev/Ms4nlZiJ)
 
-##### Использование массива юнитов в clock {#reset-array-example}
+##### Использование массива юнитов в `clock` {#reset-array-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -334,7 +334,7 @@ triggerB();
 Вызывает функцию с сайд-эффектами при каждом обновлении стора. В первый раз вызывается сразу же при создании, с текущим значением стора
 
 :::info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [сэмпла](/ru/api/effector/sample)
+По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [sample](/ru/api/effector/sample)
 :::
 
 #### Формула {#watch-formulae}
@@ -358,7 +358,7 @@ $store.watch(/*watcher*/ (state: T) => any)
 
 #### Примеры {#watch-examples}
 
-##### Логгирование значения стора {#watch-logging-example}
+##### Логирование значения стора {#watch-logging-example}
 
 ```js
 const add = createEvent();
@@ -382,14 +382,14 @@ add(3);
 
 ### updates {#updates}
 
-Дочернее событие стора, будет вызвано при каждом обновлении стора. Используется только для определения сайд-эффектов через _store.updates.watch_, где будут срабатывать начиная с первого обновления, в отличии от [_store.watch_](#watch), обработчики в котором запускаются при создании немедленно
+Дочернее событие стора, будет вызвано при каждом обновлении стора. Используется только для определения сайд-эффектов через _store.updates.watch_, где будут срабатывать начиная с первого обновления, в отличие от [_store.watch_](#watch), обработчики в котором запускаются при создании немедленно
 
 :::warning{title="Вызов вручную запрещён"}
 Это свойство управляется самим стором.
 :::
 
 :::info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию эффекта и [сэмпла](/ru/api/effector/sample)
+По мере усложнения логики проекта оптимальнее заменить на комбинацию эффекта и [sample](/ru/api/effector/sample)
 :::
 
 #### Формула {#updates-formulae}
@@ -434,7 +434,7 @@ click();
 
 ### shortName {#shortName}
 
-Имя стора. Задаётся либо явно, через поле [`name` в createStore](/ru/api/effector/createStore), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateStore)
+Имя стора. Задаётся либо явно, через поле `name` в [createStore](/ru/api/effector/createStore), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateStore)
 
 #### Формула {#shortName-formulae}
 
@@ -447,7 +447,7 @@ $store.shortName
 
 #### Примеры {#shortName-examples}
 
-##### Логгирование с помощью shortName {#shortName-logging-example}
+##### Логирование с помощью shortName {#shortName-logging-example}
 
 ```js
 import { createDomain, createEvent } from "effector";
@@ -503,7 +503,7 @@ console.log($store.defaultState === "DEFAULT");
 
 ### sid {#sid}
 
-Стабильный идентификатор стора. Задаётся автоматически через [babel-plugin](/ru/api/effector/babel-plugin)
+Стабильный идентификатор стора. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
 #### Формула {#sid-formulae}
 
@@ -566,7 +566,7 @@ add(3);
 
 [Запустить пример](https://share.effector.dev/YrnlMuRj)
 
-### clock watch {#clock-watch}
+### `clock` watch {#clock-watch}
 
 Сокращённая запись для описания сайд-эффекта, который необходимо запускать только при срабатывании определённого триггера и в котором необходимо как состояние стора так и данные из триггера
 

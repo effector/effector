@@ -2,7 +2,7 @@
 title: Countdown timer on setTimeout
 ---
 
-Sometimes we need simple countdown. Next example allows us to handle each tick and abort the timer.
+Sometimes we need a simple countdown. The next example allows us to handle each tick and abort the timer.
 
 [Link to a playground](https://share.effector.dev/bIFZNWxZ)
 

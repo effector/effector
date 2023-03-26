@@ -2,7 +2,7 @@
 title: useStore
 ---
 
-React hook, which subscribes to [store](/en/api/effector/Store) and returns its current value, so when store is updated, the component will update automatically.
+React hook, which subscribes to a [store](/en/api/effector/Store) and returns its current value, so when the store is updated, the component will update automatically.
 
 ## Formulae {#useStore-formulae}
 

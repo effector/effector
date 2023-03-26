@@ -2,7 +2,7 @@
 title: createApi
 ---
 
-`createApi` is a shorthand for creating [events](/en/api/effector/Event) attached to [store](/en/api/effector/Store) by providing object with [_reducers_](/en/explanation/glossary#reducer) for them. If source `store` belongs to some [domain](/en/api/effector/Domain) then new events will also belong to it
+`createApi` is a shorthand for creating [events](/en/api/effector/Event) attached to [store](/en/api/effector/Store) by providing an object with [_reducers_](/en/explanation/glossary#reducer) for them. If source `store` belongs to some [domain](/en/api/effector/Domain) then new events will also belong to it
 
 ## Formulae
 

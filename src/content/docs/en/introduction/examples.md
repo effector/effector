@@ -4,7 +4,7 @@ title: Examples
 ---
 
 It's difficult to overestimate the learning curve for any technology.
-That's why effector provides you few simple examples that may cover your basic needs and also give more confidence for the users for upcoming projects using effector.
+That's why effector provides you a few simple examples that may cover your basic needs and also give more confidence for the users for upcoming projects using effector.
 
 ## Simple examples
 
@@ -26,7 +26,7 @@ To connect react modal with state
 
 ### [Range input](https://share.effector.dev/oRB2iB8M)
 
-To connect custom range input component with state
+To connect a custom range input component with state
 
 ## More examples
 
@@ -44,7 +44,7 @@ To connect custom range input component with state
 - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
 - [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
 - [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
-- [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
+- [Update on scroll with guard](https://share.effector.dev/avjCFH22)
 - [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
 - [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq)
 - [Values history](https://share.effector.dev/NsPi84mV)

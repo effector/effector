@@ -5,8 +5,8 @@ description: Creates a gate to consume data from view. Designed for vue 3
 
 ## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}
 
-Creates a [_`Gate`_]/apieffector-vue/Gate) to consume data from view, designed for vue 3.
-If `defaultState` is defined, [Gate.state]/apieffector-vue/Gate#state) will be created with passed value
+Creates a [_Gate_](/apieffector-vue/Gate) to consume data from view, designed for vue 3.
+If `defaultState` is defined, [Gate.state](/apieffector-vue/Gate#state) will be created with passed value
 
 ### Arguments {#createGate-config-arguments}
 
@@ -14,7 +14,7 @@ If `defaultState` is defined, [Gate.state]/apieffector-vue/Gate#state) will be c
 
 - `defaultState?`: Optional default state for [Gate.state](/en/api/effector-vue/Gate#state)
 - `domain?` ([_Domain_](/en/api/effector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-vue/Gate#open) event, [Gate.state](/en/api/effector-vue/Gate#state) store and so on)
-- `name?` (_string_): Optional name which will be used as name of created react component
+- `name?` (_string_): Optional name which will be used as name of a created React component
 
 ### Returns {#createGate-config-returns}
 

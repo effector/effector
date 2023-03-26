@@ -8,7 +8,7 @@ First of all, to avoid any misconceptions and get better developer experience fo
 
 ## Stores naming
 
-Your stores should be distinguished by a `$`. Will you make it as a prefix either postfix - doesn't really matter. This should be done to have a better search experience in your IDE.
+Your stores should be distinguished by a `$`. The choice between prefix or postfix is mostly a matter of personal preference. This should be done to have a better search experience in your IDE.
 
 ```js
 const $user = createStore({});
@@ -16,7 +16,7 @@ const $user = createStore({});
 
 ## Effect naming
 
-Your effects should be postfixed by the `Fx` postfix. It will let you differentiate your effects from the events.
+It is recommended to add the `Fx` postfix to the end of your effects. It will let you differentiate your effects from the events.
 
 ```js
 const fetchUserFx = createEffect(async () => {
@@ -27,7 +27,7 @@ const fetchUserFx = createEffect(async () => {
 
 ## Event naming
 
-There is no any real preferred rules on that. But the proposal is to name events, which directly trigger store updates like it has already done in the past.
+There are no any real preferred rules on that. But the proposal is to name events, which directly trigger store updates like it has already done in the past.
 
 ```js
 const emailChanged = createEvent();

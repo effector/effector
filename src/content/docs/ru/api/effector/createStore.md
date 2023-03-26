@@ -40,7 +40,7 @@ createStore<T>(defaultState: T, config: {
 
      Опция, запрещающая сериализацию стора при вызовах [serialize](/ru/api/effector/serialize)
 
-   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению - примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` - результат вызова [serialize](/ru/api/effector/serialize)
+   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
 
 ### Возвращает {#createStore-return}
 
@@ -84,7 +84,7 @@ import { createEvent, createStore, serialize, fork, allSettled } from "effector"
 const saveDate = createEvent();
 const $date = createStore<null | Date>(null, {
   // Объект Date автоматически приводится в строку ISO-даты при вызове JSON.stringify
-  // но не приводится обратно к Date при вызове JSON.parse - результатом будет та же строка ISO-даты
+  // но не приводится обратно к Date при вызове JSON.parse – результатом будет та же строка ISO-даты
   // Это приведет к расхождению состояния стора при гидрации состояния на клиенте при серверном рендеринге
   //
   // Кастомная конфигурация `serialize` решает эту проблему

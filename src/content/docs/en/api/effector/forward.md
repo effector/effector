@@ -3,8 +3,8 @@ title: forward
 description: Method to create connection between units in a declarative way. Send updates from one set of units to another
 ---
 
-:::info{title="since "}[effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-core team recommends [sample](/en/api/effector/sample) instead
+:::info{title="since"}
+The core team recommends using [sample](/en/api/effector/sample) instead of `forward` since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
 Method to create connection between units in a declarative way. Send updates from one set of units to another
@@ -43,7 +43,7 @@ Arrays of units are supported since [effector 20.6.0](https://changelog.effector
 
 ## Recommendation
 
-- Arrays can contain different type of units, but their data types should match
+- Arrays can contain different types of units, but their data types should match
 - Use subscription with caution, because it breaks static connections and makes debug harder
 
 ## Examples

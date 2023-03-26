@@ -14,7 +14,7 @@ description: Articles and the team behind the project
 
 - [Youtube Channel](https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q)
 
-## Where can I ask a question
+## Where can I ask a question?
 
 1. First of all, you can review the [issues](https://github.com/effector/effector/issues) and [discussions](https://github.com/effector/effector/discussions) of the repository
 2. We have some chat spaces:
@@ -44,7 +44,7 @@ description: Articles and the team behind the project
 
 ## Meet the Effector Team
 
-The Effector team members work full time on the projects which use Effector to solve business tasks.
+The Effector Team members work full time on the projects which use effector to solve business tasks.
 Each member uses the library every day as a user and tries to improve the user experience as a core team member.
 
 ### Dmitry Boldyrev
@@ -54,7 +54,7 @@ Each member uses the library every day as a user and tries to improve the user e
 [Github](https://github.com/zerobias) • [Twitter](https://twitter.com/zero__bias) • [Commits](https://github.com/effector/effector/commits?author=zerobias)
 
 Dmitry made the first version of effector in 2018 to solve reactive event-driver architecture in the messenger.
-Now his main focus is to improve UX in the effector itself and speed up the kernel.
+Now his main focus is to improve the UX in the effector itself and speed up the kernel.
 
 ### Sergey Sova
 
@@ -62,7 +62,7 @@ Now his main focus is to improve UX in the effector itself and speed up the kern
 
 [Github](https://github.com/sergeysova) • [Twitter](https://twitter.com/_sergeysova) • [Commits](https://github.com/effector/effector/commits?author=sergeysova)
 
-Since 2018 Sergey has made some ecosystem packages: [patronum](https://github.com/effector/patronum), [logger](https://github.com/effector/logger), [inspector](https://github.com/effector/inspector).
+Since 2018, Sergey has made some ecosystem packages: [patronum](https://github.com/effector/patronum), [logger](https://github.com/effector/logger), [inspector](https://github.com/effector/inspector).
 His main task is to improve the UX through the ecosystem and documentation.
 
 ### Alexandr Horoshih
@@ -90,7 +90,7 @@ and now improves ecosystem and core functionality.
 [Github](https://github.com/igorkamyshev) • [Telegram](https://t.me/igorkamyshev) • [Commits](https://github.com/effector/effector/commits?author=igorkamyshev)
 
 Igor is working on [Farfetched](https://farfetched.pages.dev) is the advanced data fetching tool.
-Igor made [eslint-plugin-effector](https://eslint.effector.dev) and reviewed many of PRs and issues of the effector and ecosystem packages.
+Igor made [eslint-plugin-effector](https://eslint.effector.dev) and reviewed many of the PRs and issues of the effector and ecosystem packages.
 
 ### Yan Lobaty
 
@@ -107,7 +107,7 @@ Yan helps us to write explanations and reference documentation. You may hear abo
 
 [Github](https://github.com/egorguscha) • [Twitter](https://twitter.com/simpleigich)
 
-Since 2019 working in the effector core team on documentation, learning materials, and ecosystem improving.
+Since 2019, working in the effector core team on documentation, learning materials, and ecosystem improving.
 
 <br /><br />
 
@@ -143,7 +143,7 @@ Valeriy developed server-side code for [REPL](https://share.effector.dev) and wr
 
 [Github](https://github.com/Kelin2025) • [Telegram](https://t.me/kelin2025)
 
-One of the earliest users of Effector, working on [Atomic Router](https://atomic-router.github.io/) and ecosystem packages like [effector-history](https://github.com/kelin2025/effector-history),
+One of the earliest users of effector, working on [Atomic Router](https://atomic-router.github.io/) and ecosystem packages like [effector-history](https://github.com/kelin2025/effector-history),
 [effector-pagination](https://github.com/kelin2025/effector-pagination) and [effector-factorio](https://github.com/Kelin2025/effector-factorio)
 
 ### Andrei Tshurotshkin

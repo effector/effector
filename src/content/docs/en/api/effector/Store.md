@@ -15,7 +15,7 @@ _Store_ is an object that holds the state value. Store is getting updates when r
 ## `map(fn: (state: State, lastState?: T) => T, firstState: T)`
 
 :::info
-Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn` and `firstState` are deprecated, use [`updateFilter`](/en/api/effector/createStore) or explicit `createStore` instead.
+Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn` and `firstState` are deprecated, use [updateFilter](/en/api/effector/createStore) or explicit `createStore` instead.
 :::
 
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
@@ -27,7 +27,7 @@ const $second = $first.map(fn);
 ```
 
 - When `$first` store is updated, call `fn` with new state and previous state
-- Next update `$second` store with result of `fn()` call and trigger all subscribers
+- Next update `$second` store with the result of `fn()` call and trigger all subscribers
 
 ### Arguments
 
@@ -71,7 +71,7 @@ changed("hello world");
 
 ## `on(trigger, reducer)`
 
-Updates state when `trigger` is triggered by using [`reducer`](/en/explanation/glossary#reducer). For each trigger, last installed reducer will override previous reducers (useful for dynamic behavior).
+Updates state when `trigger` is triggered by using [reducer](/en/explanation/glossary#reducer). For each trigger, the last installed reducer will override previous reducers (useful for dynamic behavior).
 
 ### Formulae
 
@@ -88,7 +88,7 @@ $store.on(trigger, reducer);
 2. `reducer` [_Reducer_](/en/explanation/glossary#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](/en/explanation/glossary#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
-   - `params`: Parameters passed to event call
+   - `params`: Parameters passed to the event call
 
 **Returns**
 
@@ -123,7 +123,7 @@ changed(2);
 :::info{title="since"}
 [effector 20.15.0](https://changelog.effector.dev/#effector-20-15-0)
 :::
-Updates state when any from `triggers` is triggered by using [`reducer`](/en/explanation/glossary#reducer).
+Updates state when any from `triggers` is triggered by using [reducer](/en/explanation/glossary#reducer).
 
 ### Formulae
 
@@ -468,7 +468,7 @@ $store.updates;
 [_Event_](/en/api/effector/Event): Event that represents updates of the given store.
 
 :::warning{title="Important"}
-Do not manually call this event. It is event that depends on a store.
+Do not manually call this event. It is an event that depends on a store.
 :::
 
 Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](/en/api/effector/Store#watchwatcher))
@@ -557,8 +557,8 @@ add(3);
 
 _DerivedStore_ has no specific interface in TypeScript, but it has different implementation in the effector kernel.
 
-Some methods like [`combine`](/en/api/effector/combine), [`.map`](#mapfn-state-state-laststate-t--t-firststate-t), [`sample`](/en/api/effector/sample), [`.pending`](/en/api/effector/Effect#pending) returns `Store` instance.
-The store updates by specific rules defined in the method above. That's why we have different type of stores.
+Some methods like [combine](/en/api/effector/combine), [.map](#mapfn-state-state-laststate-t--t-firststate-t), [sample](/en/api/effector/sample), [.pending](/en/api/effector/Effect#pending) returns `Store` instance.
+The store updates by specific rules defined in the method above. That's why we have different types of stores.
 
 Derived stores are not allowed to be modified from the outside. For example, you shall not add new triggers on the derived store:
 
@@ -572,7 +572,7 @@ $derived.on(update, (_, value) => ({ a: value, b: value }));
 // => .on in derived store is deprecated, use createStore instead
 ```
 
-Derived store only allows methods that do not modify state. It means, that DerivedStore cannot be used as `target` in `sample`:
+Derived store only allows methods that do not modify state. It means that DerivedStore cannot be used as `target` in `sample`:
 
 ```ts
 const update = createEvent();
@@ -606,4 +606,4 @@ These methods are _banned_ for DerivedStore:
 - `.reset`
 - using DerivedStore as a `target` in `sample`, `guard` and so on
 
-Any kind of store can be used as a `clock` or `source` in methods like [`sample`](/en/api/effector/sample).
+Any kind of store can be used as a `clock` or `source` in methods like [sample](/en/api/effector/sample).

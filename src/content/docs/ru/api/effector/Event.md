@@ -33,10 +33,10 @@ _Event (событие, эвент)_ это декларация намерен�
 
 ## Примеры {#all-examples}
 
-- **map** - [пример использования map](#map-usage-example)
-- **prepend** - [пример использования prepend](#prepend-usage-example)
-- **filterMap** - [использование nullable react ref с filterMap](#filterMap-nullable-ref-example)
-- **watch** - [пример использования watch](#watch-usage-example)
+- **map** – [пример использования map](#map-usage-example)
+- **prepend** – [пример использования prepend](#prepend-usage-example)
+- **filterMap** – [использование nullable React ref с filterMap](#filterMap-nullable-ref-example)
+- **watch** – [пример использования watch](#watch-usage-example)
 
 ## Методы {#methods}
 
@@ -100,7 +100,7 @@ updateUser({ name: "john", role: "admin" });
 
 [Запустить пример](https://share.effector.dev/U3w3dlbO)
 
-### prepend {#prepend}
+### `prepend` {#prepend}
 
 Создаёт событие-триггер для преобразования данных _перед_ запуском исходного эвента. По сравнению с [map](#map), работает в обратном направлении
 
@@ -141,7 +141,7 @@ const trigger = targetEvent.prepend(/*fn*/(data: T) => S)
 
 #### Примеры {#prepend-examples}
 
-##### Пример использования prepend {#prepend-usage-example}
+##### Пример использования `prepend` {#prepend-usage-example}
 
 ```js
 import { createEvent } from "effector";
@@ -237,10 +237,10 @@ listReceived(["redux", "mobx"])
 
 [Запустить пример](https://share.effector.dev/ARDanMAM)
 
-##### Использование nullable react ref с filterMap {#filterMap-nullable-ref-example}
+##### Использование nullable React ref с filterMap {#filterMap-nullable-ref-example}
 
 :::info
-Методы _modal.showModal_ и _modal.close_ - стандартные возможности dom-элемента `<dialog>`
+Методы _modal.showModal_ и _modal.close_ – стандартные возможности dom-элемента `<dialog>`
 
 [Статья в MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal) про _showModal_
 :::
@@ -291,7 +291,7 @@ const App = () => {
 Вызывает функцию с сайд-эффектами при каждом срабатывании события
 
 :::info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [сэмпла](/ru/api/effector/sample)
+По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [sample](/ru/api/effector/sample)
 :::
 
 #### Формула {#watch-formulae}
@@ -340,7 +340,7 @@ sayHi("Алиса");
 
 ### shortName {#shortName}
 
-Имя события. Задаётся либо явно, через поле [`name` в createEvent](/ru/api/effector/createEvent), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEvent)
+Имя события. Задаётся либо явно, через поле `name` [в createEvent](/ru/api/effector/createEvent), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEvent)
 
 #### Формула {#shortName-formulae}
 
@@ -353,7 +353,7 @@ event.shortName
 
 ### sid {#sid}
 
-Стабильный идентификатор события. Задаётся автоматически через [babel-plugin](/ru/api/effector/babel-plugin)
+Стабильный идентификатор события. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
 #### Формула {#sid-formulae}
 
@@ -398,7 +398,7 @@ const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
 Новое, производное событие
 
 :::info
-Объектная форма аргумента используется потому что _event.filter(fn)_ был сокращённой формой [filterMap](#filterMap)
+Объектная форма аргумента используется потому что _event.filter(fn)_ был сокращённой формой [_filterMap_](#filterMap)
 :::
 
 #### Примеры {#filter-examples}

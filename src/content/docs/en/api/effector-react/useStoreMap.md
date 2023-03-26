@@ -6,7 +6,7 @@ title: useStoreMap
 `useStoreMap` introduced in [effector-react 19.1.2](https://changelog.effector.dev/#effector-react-19-1-2)
 :::
 
-React hook, which subscribes to [store](/en/api/effector/Store) and transforms its value with given function. Component will update only when selector function result will change.
+React hook, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given function. The component will update only when the selector function result will change.
 
 You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
 
