@@ -710,14 +710,14 @@ function createMobileNavigation(nav: LMobileNavItem[]) {
     if ("items" in item) {
       return {
         ...item,
-        id: nanoid(),
+        id: nanoid(6),
         items: createMobileNavigation(item.items),
         active: false,
       };
     }
     return {
       ...item,
-      id: nanoid(),
+      id: nanoid(6),
       active: false,
     };
   });
