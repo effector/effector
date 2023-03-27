@@ -45,6 +45,16 @@ export const LINKS = {
   blog: "https://patreon.com/zero_bias",
   repl: "https://share.effector.dev",
   changelog: "https://changelog.effector.dev",
+
+  community: "https://community.effector.dev/",
+  telegramRU: "https://t.me/effector_ru",
+  telegramEN: "https://t.me/effector_en",
+  devTo: "https://dev.to/effector",
+  reddit: "https://www.reddit.com/r/effectorjs/",
+  youtube: "https://youtube.com/@effectorjs",
+  linesOfCode: "https://t.me/lines_of_code_diagrams",
+
+  zerobias: "https://github.com/zerobias",
 };
 
 export const COMMUNITY_INVITE_URL = LINKS.discord;

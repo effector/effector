@@ -595,6 +595,51 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
   { text: { en: "Changelog", ru: "Изменения" }, link: LINKS.changelog },
 ] satisfies LMobileNavItem[]);
 
+export const FOOTER_LINKS = [
+  {
+    text: { en: "Docs", ru: "Документация" },
+    items: [
+      { text: { en: "Getting started", ru: "С чего начать" }, link: "/introduction/installation" },
+      { text: { en: "API Reference" }, link: "/api" },
+      { text: { en: "Writings tests", ru: "Тестирование кода" }, link: "/guides/testing" },
+      { text: { en: "Release policy", ru: "Политика релизов" }, link: "/core-principles/releases" },
+      { text: { en: "What's new", ru: "Что нового" }, link: LINKS.changelog },
+      { text: { en: "Blog", ru: "Блог" }, link: LINKS.blog },
+    ],
+  },
+  {
+    text: { en: "Community", ru: "Сообщество" },
+    items: [
+      { text: { en: "Official", ru: "Официальное" }, link: LINKS.community },
+      { text: { en: "Discord" }, link: LINKS.discord },
+      { text: { en: "dev.to" }, link: LINKS.devTo },
+      { text: { en: "Twitter" }, link: LINKS.twitter },
+      { text: { en: "Telegram 🇷🇺" }, link: LINKS.telegramRU },
+      { text: { en: "Telegram 🇺🇸" }, link: LINKS.telegramEN },
+    ],
+  },
+  {
+    text: { en: "More", ru: "Больше" },
+    items: [
+      { text: { en: "Github" }, link: LINKS.github },
+      { text: { en: "Reddit" }, link: LINKS.reddit },
+      { text: { en: "Youtube" }, link: LINKS.youtube },
+      { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
+      { text: { en: "Made by Astro" }, link: "https://astro.build" },
+    ],
+  },
+] satisfies FooterGroup[];
+
+type FooterGroup = {
+  text: LText;
+  items: FooterItem[];
+};
+
+type FooterItem = {
+  text: LText;
+  link: string;
+};
+
 export type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
 
 type LMobileNavLink = {
