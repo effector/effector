@@ -28,31 +28,51 @@ async function loadContributors() {
     per_page: 100,
   });
 
-  const contributors = new Map<number, { id: number; login: string; avatar: string }>();
+  interface Contributor {
+    id: number;
+    login: string;
+    avatar: string;
+    commits: number;
+  }
+
+  const contributors = new Map<number, Contributor>();
+
+  function add(user: { id: number; login: string; avatar: string }) {
+    const exist = contributors.get(user.id);
+    // Let's count total amount of commits
+    if (exist) {
+      exist.commits++;
+    } else {
+      contributors.set(user.id, { ...user, commits: 1 });
+    }
+  }
   commits.forEach((commit) => {
     if (commit.author) {
-      contributors.set(commit.author.id, {
+      add({
         id: commit.author.id,
         login: commit.author.login,
         avatar: commit.author.avatar_url,
       });
     }
     if (commit.committer) {
-      contributors.set(commit.committer.id, {
+      add({
         id: commit.committer.id,
         login: commit.committer.login,
         avatar: commit.committer.avatar_url,
       });
     }
   });
-  return Array.from(contributors.values()).filter((user) => user.login !== "web-flow");
+  return Array.from(contributors.values())
+    .filter((user) => user.login !== "web-flow")
+    .sort((a, b) => b.commits - a.commits);
 }
 
 const contributors = await loadContributors().catch((error) => {
   console.info("Failed to load contributors. Skipping.");
   return [];
 });
-const recentContributors = contributors.slice(0, 3); // only show avatars for the 3 most recent contributors
+
+const recentContributors = contributors.slice(0, 5).sort((a, b) => a.commits - b.commits); // only show avatars for the 3 most recent contributors
 const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
 ---
 
