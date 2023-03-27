@@ -31,7 +31,7 @@ export const GITHUB_DOCS_ROOT = "";
 export const GITHUB_DOCS_CONTENT_DIR = "src/content/docs/";
 
 export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
-export const GITHUB_COMMITS_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
+export const GITHUB_COMMITS_URL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/`;
 
 export const LINKS = {
   github: "https://github.com/effector/effector",
