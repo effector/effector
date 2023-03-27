@@ -161,7 +161,7 @@ const instanceId = nanoid(5);
   }
 
   button {
-    @apply cursor-pointer rounded p-3 transition-colors;
+    @apply cursor-pointer rounded p-2 transition-colors;
     color: var(--theme-text);
   }
 
@@ -170,11 +170,12 @@ const instanceId = nanoid(5);
   }
 
   button.noLink {
-    @apply flex grow py-2 px-2 text-base font-light;
+    @apply flex grow p-2 text-base font-light;
   }
 
   button.standalone {
     background-color: var(--theme-divider-light);
+    @apply box-content flex h-6 w-6 items-center justify-center;
   }
 
   button.standalone:hover {

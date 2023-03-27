@@ -17,7 +17,7 @@ const socialIcons = {
 };
 
 const { slug } = getPathParamsFromId(Astro.url.pathname);
-const activeNavigation = markActiveNavigation(`/${slug}`, MOBILE_NAVIGATION);
+const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOBILE_NAVIGATION);
 ---
 
 <div class="navigation">
