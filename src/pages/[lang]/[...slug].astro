@@ -51,7 +51,13 @@ const { Content, headings } = post ? await post.render() : await defaultLanguage
 const postData = (post ?? defaultLanguagePost).data;
 ---
 
-<MainLayout headings={headings} {...postData} translations={translations} breadcrumbs={breadcrumbs}>
+<MainLayout
+  documentId={post?.id ?? defaultLanguagePost.id}
+  headings={headings}
+  {...postData}
+  translations={translations}
+  breadcrumbs={breadcrumbs}
+>
   {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
 </MainLayout>

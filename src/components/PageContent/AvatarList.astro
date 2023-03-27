@@ -13,17 +13,18 @@ type Props = {
 };
 const { path } = Astro.props;
 
-const commitsURL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/${GITHUB_DOCS_FILE_PREFIX}${path}.md`;
+const commitsURL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/${GITHUB_DOCS_FILE_PREFIX}${path}`;
 
 const [owner, repo] = GITHUB_REPO.split("/");
 
 const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
 
-async function loadContributors(path: string) {
+async function loadContributors() {
+  const filePath = `${GITHUB_DOCS_FILE_PREFIX}${path}`;
   const { data: commits } = await octokit.repos.listCommits({
     owner,
     repo,
-    path,
+    path: filePath,
     per_page: 100,
   });
 
@@ -47,12 +48,10 @@ async function loadContributors(path: string) {
   return Array.from(contributors.values()).filter((user) => user.login !== "web-flow");
 }
 
-const contributors = await loadContributors(`${GITHUB_DOCS_FILE_PREFIX}${path}.md`).catch(
-  (error) => {
-    console.info("Failed to load contributors. Skipping.");
-    return [];
-  },
-);
+const contributors = await loadContributors().catch((error) => {
+  console.info("Failed to load contributors. Skipping.");
+  return [];
+});
 const recentContributors = contributors.slice(0, 3); // only show avatars for the 3 most recent contributors
 const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
 ---
