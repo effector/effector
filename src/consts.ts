@@ -30,8 +30,11 @@ export const GITHUB_DOCS_ROOT = "";
 // It is where the docs are located related to the docs package.json file
 export const GITHUB_DOCS_CONTENT_DIR = "src/content/docs/";
 
-export const GITHUB_EDIT_URL = `https://stackblitz.com/~/github.com/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/`;
-// export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
+// @see https://developer.stackblitz.com/codeflow/integrating-web-publisher
+// Format: https://pr.new/github.com/{repo-owner's-username}/{repo}/edit/{branch}/{file-path-in-the-repo}
+// export const GITHUB_EDIT_URL = `https://pr.new/github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
+
+export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
 export const GITHUB_COMMITS_URL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/`;
 
 export const LINKS = {
