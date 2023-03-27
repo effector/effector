@@ -2,6 +2,7 @@
 import { Octokit } from "@octokit/rest";
 import {
   GITHUB_BRANCH,
+  GITHUB_COMMITS_URL,
   GITHUB_DOCS_FILE_PREFIX,
   GITHUB_DOCS_ROOT,
   GITHUB_REPO,
@@ -9,18 +10,19 @@ import {
 
 // fetch all commits for just this page's path
 type Props = {
-  path: string;
+  documentId: string;
 };
-const { path } = Astro.props;
+const { documentId } = Astro.props;
 
-const commitsURL = `https://github.com/${GITHUB_REPO}/commits/${GITHUB_BRANCH}/${GITHUB_DOCS_ROOT}${GITHUB_DOCS_FILE_PREFIX}${path}`;
+const fullFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_FILE_PREFIX, documentId].join("");
+const commitsURL = [GITHUB_COMMITS_URL, fullFilePath].join("");
 
 const [owner, repo] = GITHUB_REPO.split("/");
 
 const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
 
 async function loadContributors() {
-  const filePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_FILE_PREFIX, path].join("");
+  const filePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_FILE_PREFIX, documentId].join("");
   const { data: commits } = await octokit.repos.listCommits({
     owner,
     repo,

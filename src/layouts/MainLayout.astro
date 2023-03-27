@@ -148,7 +148,7 @@ const currentPage = Astro.url.pathname;
       >
         <slot />
       </PageContent>
-      <AvatarList path={documentId} />
+      <AvatarList documentId={documentId} />
     </div>
     <aside id="grid-right" title="Table of Contents">
       <RightSidebar lang={lang} headings={headings} documentId={documentId} />

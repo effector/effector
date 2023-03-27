@@ -27,9 +27,11 @@ export const GITHUB_BRANCH = "main";
 export const GITHUB_DOCS_ROOT = "";
 
 // Used to convert pathname into file path in the repository
+// It is where the docs are located related to the docs package.json file
 export const GITHUB_DOCS_FILE_PREFIX = "src/content/docs/";
 
 export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
+export const GITHUB_COMMITS_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
 
 export const LINKS = {
   github: "https://github.com/effector/effector",
