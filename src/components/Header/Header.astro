@@ -1,5 +1,11 @@
 ---
-import { createLink, getPathParamsFromId, getTextLocalized, translations } from "../../languages";
+import {
+  createChangeLangLinks,
+  createLink,
+  getPathParamsFromId,
+  getTextLocalized,
+  translations,
+} from "../../languages";
 import { KNOWN_LANGUAGES, SITE } from "../../consts";
 import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigation";
 
@@ -33,10 +39,7 @@ type Props = {
 };
 
 const { lang, slug } = getPathParamsFromId(Astro.url.pathname);
-const languageLinks = Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
-  text: { en: name },
-  link: slug === "/" ? `/${code}` : `/${code}/${slug}`,
-}));
+const languageLinks = createChangeLangLinks({ slug });
 const homeLink = lang === "en" ? "/" : `/${lang}`;
 ---
 

@@ -1,6 +1,6 @@
 ---
 import { markActiveNavigation, MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
-import { getPathParamsFromId } from "../languages";
+import { createChangeLangLinks, getPathParamsFromId, getTextLocalized } from "../languages";
 
 import NestedLinks from "./NestedLinks.astro";
 
@@ -16,7 +16,8 @@ const socialIcons = {
   youtube: IconYoutube,
 };
 
-const { slug } = getPathParamsFromId(Astro.url.pathname);
+const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
+const languageLinks = createChangeLangLinks({ slug });
 const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOBILE_NAVIGATION);
 ---
 
@@ -25,16 +26,29 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
     <NestedLinks items={activeNavigation} firstLevel />
   </nav>
   <footer>
-    {
-      SOCIAL_LINKS.map((link) => {
-        const Icon = socialIcons[link.icon];
-        return (
-          <a class="social" href={link.link} class="link only-medium" target="_blank">
-            <Icon />
-          </a>
-        );
-      })
-    }
+    <div class="socials">
+      {
+        SOCIAL_LINKS.map((link) => {
+          const Icon = socialIcons[link.icon];
+          return (
+            <a class="social" href={link.link} class="link only-medium" target="_blank">
+              <Icon />
+            </a>
+          );
+        })
+      }
+    </div>
+    <select class="language-switch" id="language-switch">
+      {
+        languageLinks.map((link) => {
+          return (
+            <option selected={link.link === Astro.url.pathname} value={link.link}>
+              {getTextLocalized(link, lang)}
+            </option>
+          );
+        })
+      }
+    </select>
   </footer>
 </div>
 
@@ -65,13 +79,17 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
   }
 
   footer {
-    @apply z-10 flex gap-2 py-2;
+    @apply z-10 flex justify-between py-2;
 
     padding-left: max(env(safe-area-inset-left), 1rem);
     padding-right: max(env(safe-area-inset-right), 1rem);
 
     box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 0.1);
     background-color: var(--theme-bg);
+  }
+
+  .socials {
+    @apply flex gap-2;
   }
 
   .social {
@@ -82,4 +100,18 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
   .social:hover {
     background-color: var(--theme-divider);
   }
+
+  .language-switch {
+    @apply box-content flex items-center justify-center rounded p-2 text-base;
+  }
 </style>
+
+<script>
+  document.querySelectorAll("#language-switch").forEach((switcher) => {
+    const select = switcher as HTMLSelectElement;
+
+    select.addEventListener("change", function () {
+      document.location.pathname = select.value;
+    });
+  });
+</script>

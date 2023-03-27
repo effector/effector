@@ -33,6 +33,13 @@ export function createLink(item: { text: LText; link: string }, lang: string): s
   return item.link;
 }
 
+export function createChangeLangLinks({ slug }: { slug: string }) {
+  return Object.entries(KNOWN_LANGUAGES).map(([name, code]) => ({
+    text: { en: name },
+    link: slug === "/" ? `/${code}` : `/${code}/${slug}`,
+  }));
+}
+
 export const translations = {
   docs: { text: { en: "Docs", ru: "Меню" } },
   Documentation: { text: { en: "Documentation", ru: "Документация" } },
