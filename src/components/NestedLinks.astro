@@ -39,7 +39,7 @@ const { firstLevel = false, items } = Astro.props;
                 <button
                   type="button"
                   data-target={item.id}
-                  class:list={{ expander: true, expanded: item.active }}
+                  class:list={{ expander: true, standalone: true, expanded: item.active }}
                 >
                   <IconChevronRight size={18} />
                 </button>
@@ -155,6 +155,14 @@ const { firstLevel = false, items } = Astro.props;
 
   button.noLink {
     @apply flex grow py-2 px-2 text-base font-light;
+  }
+
+  button.standalone {
+    background-color: var(--theme-divider-light);
+  }
+
+  button.standalone:hover {
+    background-color: var(--theme-divider);
   }
 
   .expander :global(svg) {

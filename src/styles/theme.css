@@ -74,6 +74,7 @@
   --theme-text-accent: #ff8c00;
   --theme-accent-opacity: 0.15;
   --theme-divider: hsla(var(--color-gray-95), 1);
+  --theme-divider-light: hsla(var(--color-gray-95), 0.6);
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-dark: hsla(var(--color-base-black), 1);
   --theme-text-light: hsla(var(--color-gray-40), 1);
