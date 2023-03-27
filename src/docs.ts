@@ -3,7 +3,7 @@ import { getPathParamsFromId } from "./languages";
 
 type DocsEntry = CollectionEntry<"docs">;
 
-export async function getTranslatedDocs() {
+export async function getTranslatedDocsIndex() {
   // Slugs without lang prefix is required to generate all documents even translated yet.
   const sourceSlugs = new Set<string>();
   // Slug WITH lang prefix per entry mapping, here the translated pages

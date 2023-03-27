@@ -5,10 +5,10 @@ import { isNavGroup, isNavLink, isNavLinkGroup, type LMobileNavItem } from "../n
 import IconChevronRight from "../icons/Chevron.astro";
 import IconExternal from "../icons/External.astro";
 
-const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
+const { lang } = getPathParamsFromId(Astro.url.pathname);
 
 interface Props {
-  items: (LMobileNavItem & { id: string })[];
+  items: LMobileNavItem[];
   firstLevel?: boolean;
 }
 
@@ -24,12 +24,11 @@ const { firstLevel = false, items } = Astro.props;
 
       if (isLink) {
         const external = item.link.startsWith("https://") || item.link.startsWith("http://");
-        const active = item.link.startsWith(`/${slug}`);
         return (
           <li>
             <div class="line">
               <a
-                class:list={{ active }}
+                class:list={{ active: item.active }}
                 href={createLink(item, lang)}
                 target={external ? "_blank" : undefined}
               >
@@ -40,14 +39,14 @@ const { firstLevel = false, items } = Astro.props;
                 <button
                   type="button"
                   data-target={item.id}
-                  class:list={{ expander: true, expanded: false }}
+                  class:list={{ expander: true, expanded: item.active }}
                 >
                   <IconChevronRight size={18} />
                 </button>
               ) : null}
             </div>
             {isExpandable ? (
-              <div class="expand-section" data-id={item.id}>
+              <div data-id={item.id} class:list={{ "expand-section": true, expanded: item.active }}>
                 <Astro.self items={item.items} />
               </div>
             ) : null}
@@ -59,16 +58,16 @@ const { firstLevel = false, items } = Astro.props;
         return (
           <li>
             <div class="line">
-              <span>{text}</span>
               <button
                 data-target={item.id}
                 type="button"
-                class:list={{ expander: true, expanded: false }}
+                class:list={{ expander: true, noLink: true, expanded: item.active }}
               >
                 <IconChevronRight size={18} />
+                {text}
               </button>
             </div>
-            <div class="expand-section" data-id={item.id}>
+            <div data-id={item.id} class:list={{ "expand-section": true, expanded: item.active }}>
               <Astro.self items={item.items} />
             </div>
           </li>
@@ -85,6 +84,19 @@ const { firstLevel = false, items } = Astro.props;
     })
   }
 </ul>
+
+<script>
+  document.querySelectorAll(".expander").forEach((button) => {
+    const btn = button as HTMLButtonElement;
+    const target = document.querySelector(`[data-id="${btn.dataset.target}"]`);
+    if (target) {
+      btn.addEventListener("click", function () {
+        btn.classList.toggle("expanded");
+        target.classList.toggle("expanded");
+      });
+    }
+  });
+</script>
 
 <style>
   ul {
@@ -110,13 +122,13 @@ const { firstLevel = false, items } = Astro.props;
     @apply flex items-center justify-between gap-2;
   }
 
-  li span {
-    @apply select-none py-1 px-3 text-sm;
+  .line span {
+    @apply select-none py-2 px-4 text-base;
     font-weight: 300;
   }
 
   a {
-    @apply flex grow cursor-pointer items-center gap-0 rounded py-1 px-3 text-sm transition-colors;
+    @apply flex grow cursor-pointer items-center gap-0 rounded py-2 px-4 text-base transition-colors;
     color: var(--theme-text);
 
     -webkit-touch-callout: none;
@@ -133,12 +145,16 @@ const { firstLevel = false, items } = Astro.props;
   }
 
   button {
-    @apply cursor-pointer rounded p-1 transition-colors;
+    @apply cursor-pointer rounded p-3 transition-colors;
     color: var(--theme-text);
   }
 
   button:hover {
     background-color: var(--theme-divider);
+  }
+
+  button.noLink {
+    @apply flex grow py-2 px-2 text-base font-light;
   }
 
   .expander :global(svg) {

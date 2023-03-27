@@ -3,14 +3,14 @@ import type { CollectionEntry } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 
 import { KNOWN_LANGUAGE_CODES } from "../../languages";
-import { getTranslatedDocs, getBreadcrumbs } from "../../docs";
+import { getTranslatedDocsIndex, getBreadcrumbs } from "../../docs";
 import { SITE } from "../../consts";
 
 import MainLayout from "../../layouts/MainLayout.astro";
 import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
 
 export async function getStaticPaths() {
-  const { sourceSlugs, docs } = await getTranslatedDocs();
+  const { sourceSlugs, docs } = await getTranslatedDocsIndex();
   const paths: {
     params: { lang: string; slug: string };
     props: { post: CollectionEntry<"docs"> | null };
@@ -32,7 +32,7 @@ export async function getStaticPaths() {
 export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { slug, lang } = Astro.params;
 
-const { docs } = await getTranslatedDocs();
+const { docs } = await getTranslatedDocsIndex();
 const breadcrumbs = getBreadcrumbs({ docs, path: Astro.url.pathname });
 
 const { post } = Astro.props;

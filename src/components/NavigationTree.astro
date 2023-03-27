@@ -1,5 +1,6 @@
 ---
-import { generateIdsForNav, MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
+import { markActiveNavigation, MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
+import { getPathParamsFromId } from "../languages";
 
 import NestedLinks from "./NestedLinks.astro";
 
@@ -15,12 +16,13 @@ const socialIcons = {
   youtube: IconYoutube,
 };
 
-const nav = generateIdsForNav(MOBILE_NAVIGATION);
+const { slug } = getPathParamsFromId(Astro.url.pathname);
+const activeNavigation = markActiveNavigation(`/${slug}`, MOBILE_NAVIGATION);
 ---
 
 <div class="navigation">
   <nav>
-    <NestedLinks items={nav} firstLevel />
+    <NestedLinks items={activeNavigation} firstLevel />
   </nav>
   <footer>
     {
@@ -81,16 +83,3 @@ const nav = generateIdsForNav(MOBILE_NAVIGATION);
     background-color: var(--theme-divider);
   }
 </style>
-
-<script>
-  document.querySelectorAll(".expander").forEach((button) => {
-    const btn = button as HTMLButtonElement;
-    const target = document.querySelector(`[data-id="${btn.dataset.target}"]`);
-    if (target) {
-      btn.addEventListener("click", function () {
-        btn.classList.toggle("expanded");
-        target.classList.toggle("expanded");
-      });
-    }
-  });
-</script>

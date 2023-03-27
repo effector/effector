@@ -571,7 +571,7 @@ export const DESKTOP_NAVIGATION: LSidebarItem[] = [
   { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
 ];
 
-export const MOBILE_NAVIGATION: LMobileNavItem[] = [
+export const MOBILE_NAVIGATION = createMobileNavigation([
   {
     text: { en: "Documentation", ru: "Документация" },
     items: defaultSidebar,
@@ -594,13 +594,15 @@ export const MOBILE_NAVIGATION: LMobileNavItem[] = [
   { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero_bias" },
   { text: { en: "Playground", ru: "Песочница" }, link: "https://share.effector.dev" },
   { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
-];
+] satisfies LMobileNavItem[]);
 
 export type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
 
 type LMobileNavLink = {
   text: LText;
   link: string;
+  id?: string;
+  active?: boolean;
 };
 
 export function isNavLink(item: LMobileNavItem): item is LMobileNavLink {
@@ -610,6 +612,8 @@ export function isNavLink(item: LMobileNavItem): item is LMobileNavLink {
 type LMobileNavGroup = {
   text: LText;
   items: LMobileNavItem[];
+  id?: string;
+  active?: boolean;
 };
 
 export function isNavGroup(item: LMobileNavItem): item is LMobileNavGroup {
@@ -620,6 +624,8 @@ type LMobileNavLinkGroup = {
   text: LText;
   link: string;
   items: LMobileNavItem[];
+  id?: string;
+  active?: boolean;
 };
 
 export function isNavLinkGroup(item: LMobileNavItem): item is LMobileNavLinkGroup {
@@ -699,18 +705,58 @@ function isRemoteUrl(link: string) {
   return link.startsWith("https://") || link.startsWith("http://");
 }
 
-export function generateIdsForNav(nav: LMobileNavItem[]) {
-  return nav.map((item): LMobileNavItem & { id: string } => {
+function createMobileNavigation(nav: LMobileNavItem[]) {
+  return nav.map((item): LMobileNavItem => {
     if ("items" in item) {
       return {
         ...item,
         id: nanoid(),
-        items: generateIdsForNav(item.items),
+        items: createMobileNavigation(item.items),
+        active: false,
       };
     }
     return {
       ...item,
       id: nanoid(),
+      active: false,
     };
   });
+}
+
+export function markActiveNavigation(link: string, navigation: LMobileNavItem[]) {
+  // We want to mutate the array and items inside.
+  // Immutable will be awful for dev perf (on each reload immutable recreate deep array)
+  const nav = structuredClone(navigation);
+
+  function findActive(group: LMobileNavItem) {
+    // If user on the page that exactly matches link
+    // When user on the `effector-react` API page we want only highlight the group-link, not all the childs
+    if (isNavLink(group) || isNavLinkGroup(group)) {
+      if (link === group.link) {
+        group.active = true;
+        return true;
+      }
+    }
+
+    // If we found an active element, early return
+    if (isNavGroup(group) || isNavLinkGroup(group)) {
+      for (const item of group.items) {
+        item.active = findActive(item);
+        if (item.active) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  for (const item of nav) {
+    if (findActive(item)) {
+      item.active = true;
+      break;
+    }
+  }
+
+  return nav;
 }
