@@ -32,7 +32,16 @@ export const GITHUB_DOCS_FILE_PREFIX = "src/content/docs";
 
 export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}`;
 
-export const COMMUNITY_INVITE_URL = `https://discord.gg/yHcMcuRWeC`;
+export const LINKS = {
+  github: "https://github.com/effector/effector",
+  discord: "https://discord.gg/yHcMcuRWeC",
+  twitter: "https://twitter.com/effectorjs",
+  blog: "https://patreon.com/zero_bias",
+  repl: "https://share.effector.dev",
+  changelog: "https://changelog.effector.dev",
+};
+
+export const COMMUNITY_INVITE_URL = LINKS.discord;
 
 // See "Algolia" section of the README for more information.
 export const ALGOLIA = {

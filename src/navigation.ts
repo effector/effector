@@ -1,6 +1,6 @@
 import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
-import { COMMUNITY_INVITE_URL, LText } from "./consts";
+import { LINKS, LText } from "./consts";
 import { SITE } from "./consts";
 import { getTextLocalized, createLink } from "./languages";
 
@@ -557,18 +557,18 @@ export const DOCS_VERSIONS = [
 
 type SocialIcon = "github" | "twitter" | "discord" | "youtube";
 export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
-  { text: { en: "GitHub" }, icon: "github", link: "https://github.com/effector/effector" },
-  { text: { en: "Twitter" }, icon: "twitter", link: "https://twitter.com/effectorjs" },
-  { text: { en: "Discord" }, icon: "discord", link: COMMUNITY_INVITE_URL },
+  { text: { en: "GitHub" }, icon: "github", link: LINKS.github },
+  { text: { en: "Twitter" }, icon: "twitter", link: LINKS.twitter },
+  { text: { en: "Discord" }, icon: "discord", link: LINKS.discord },
 ];
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
   { text: { en: "Learn", ru: "Изучение" }, link: "/introduction/installation" },
   { text: { en: "API" }, link: "/api" },
   { text: { en: "Recipes", ru: "Рецепты" }, link: "/recipes" },
-  { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero_bias" },
-  { text: { en: "Playground", ru: "Песочница" }, link: "https://share.effector.dev" },
-  { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
+  { text: { en: "Blog", ru: "Блог" }, link: LINKS.blog },
+  { text: { en: "Playground", ru: "Песочница" }, link: LINKS.repl },
+  { text: { en: "Changelog", ru: "Изменения" }, link: LINKS.changelog },
 ];
 
 export const MOBILE_NAVIGATION = createMobileNavigation([
@@ -591,9 +591,9 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
     link: "/recipes",
     items: recipes,
   },
-  { text: { en: "Blog", ru: "Блог" }, link: "https://patreon.com/zero_bias" },
-  { text: { en: "Playground", ru: "Песочница" }, link: "https://share.effector.dev" },
-  { text: { en: "Changelog", ru: "Изменения" }, link: "https://changelog.effector.dev" },
+  { text: { en: "Blog", ru: "Блог" }, link: LINKS.blog },
+  { text: { en: "Playground", ru: "Песочница" }, link: LINKS.repl },
+  { text: { en: "Changelog", ru: "Изменения" }, link: LINKS.changelog },
 ] satisfies LMobileNavItem[]);
 
 export type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
