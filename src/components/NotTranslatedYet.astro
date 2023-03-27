@@ -1,5 +1,5 @@
 ---
-import { GITHUB_BRANCH, GITHUB_DOCS_FILE_PREFIX, GITHUB_REPO } from "../consts";
+import { GITHUB_BRANCH, GITHUB_DOCS_CONTENT_DIR, GITHUB_REPO } from "../consts";
 import { getTextLocalized, translations } from "../languages";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 
 const { lang } = Astro.props;
 
-const DOCS_LINK = `https://github.com/${GITHUB_REPO}/tree/${GITHUB_BRANCH}/${GITHUB_DOCS_FILE_PREFIX}/${lang}`;
+const DOCS_LINK = `https://github.com/${GITHUB_REPO}/tree/${GITHUB_BRANCH}/${GITHUB_DOCS_CONTENT_DIR}/${lang}`;
 ---
 
 <div class="admonition admonition-info">

@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import {
   COMMUNITY_INVITE_URL,
-  GITHUB_DOCS_FILE_PREFIX,
+  GITHUB_DOCS_CONTENT_DIR,
   GITHUB_DOCS_ROOT,
   GITHUB_EDIT_URL,
 } from "../../consts";
@@ -16,7 +16,7 @@ type Props = {
 const { documentId } = Astro.props;
 const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
 const { lang } = getPathParamsFromId(Astro.url.pathname);
-const editFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_FILE_PREFIX, documentId].join("");
+const editFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].join("");
 const editUrl = [GITHUB_EDIT_URL, editFilePath].join("");
 ---
 

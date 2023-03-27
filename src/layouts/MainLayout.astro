@@ -9,8 +9,6 @@ import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
 import AvatarList from "../components/PageContent/AvatarList.astro";
 
-import { GITHUB_DOCS_FILE_PREFIX, GITHUB_EDIT_URL } from "../consts";
-
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
   translations: { lang: string; slug: string }[];
