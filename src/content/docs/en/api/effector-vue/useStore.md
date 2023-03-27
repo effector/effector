@@ -6,7 +6,7 @@ description: Hook function, which subscribes to watcher, that observes changes i
 ## `useStore(store)` {#useStore-store}
 
 A hook function, which subscribes to watcher, that observes changes in the current **readonly**` store, so when recording results, the component will update automatically.
-You can mutate this data **only via [createEvent](/en/api/effector/createEvent)**.
+You can mutate the store value **only via [createEvent](/en/api/effector/createEvent)**.
 
 Designed for vue 3
 

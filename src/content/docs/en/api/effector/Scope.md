@@ -3,7 +3,7 @@ title: Scope
 ---
 
 `Scope` is a fully isolated instance of application.
-The primary purpose of scope includes SSR (but is not limited to). Scope contain independent clone of all the units (including connections between them) and basic methods to access them.
+The primary purpose of scope includes SSR (but is not limited to). Scope contains independent clone of all the units (including connections between them) and basic methods to access them.
 
 Scope can be created by [fork](/en/api/effector/fork).
 
@@ -17,7 +17,7 @@ interface Scope {
 
 Imperative effects calls are supported in effect handlers but **not** in `watch` functions.
 
-When effect call another effects then it should call only effects, not common async functions and effect calls should have awaited:
+When effect calls other effects, then it should call only effects, not common async functions and effect calls should have awaited:
 
 **Correct**, effect without inner effects:
 
@@ -52,7 +52,7 @@ const sendWithAuthFx = app.createEffect(async () => {
 });
 ```
 
-So, any effect might either call another effects or perform some async computations but not both.
+So, any effect might either call another effect or perform some async computations but not both.
 
 :::tip
 Consider using [attach](/en/api/effector/attach) instead of imperative call.

@@ -22,7 +22,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
 :::warning{title="Requirements"}
-[_babel-plugin_](/en/api/effector/babel-plugin) or [_swc-plugin_](https://github.com/effector/swc-plugin) is required for using this method
+[_Babel plugin_](/en/api/effector/babel-plugin) or [_SWC plugin_](https://github.com/effector/swc-plugin) is required for using this method
 :::
 
 ### Arguments {#fork-args}

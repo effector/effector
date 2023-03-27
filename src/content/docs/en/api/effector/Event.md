@@ -6,7 +6,7 @@ keywords:
 description: Event, its methods and properties
 ---
 
-_Event_ is an intention to change the state. Let's imagine life situation, you enter a shop and, according to etiquette, you have to say "hello" - **intention**, then you say "hello" - **event**.
+_Event_ is an intention to change the state. Let's imagine a life situation, you enter a shop and, according to etiquette, you have to say "hello" – **intention**, then you say "hello" – **event**.
 
 Event calls always return its payload:
 
@@ -40,7 +40,7 @@ const unwatch = event.watch(fn);
 - Call `fn` on each `event` trigger, pass payload of `event` as argument to `fn`
 - When `unwatch` is called, stop calling `fn` on each `event` trigger
 
-<!--If you want to know, when watch is called, welcome to advanced section-->
+<!--If you want to know, when watch is called, welcome to the advanced section-->
 
 ### Arguments
 
@@ -68,7 +68,7 @@ sayHi("Drew"); // => nothing happened
 
 ## `map(fn)`
 
-Creates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
+Creates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is a special function which allows you to decompose dataflow, extract or transform data.
 
 ### Formulae
 
@@ -110,7 +110,7 @@ userUpdated({ name: "john", role: "admin" });
 
 Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
-If original event belongs to some [domain](/en/api/effector/Domain) then new event will belong to it as well
+If the original event belongs to some [domain](/en/api/effector/Domain), then a new event will belong to it as well
 
 ### Formulae
 
@@ -120,7 +120,7 @@ const second = first.prepend(fn);
 
 - When `second` event is triggered
 - Call `fn` with payload from `second`
-- Trigger `first` with result of `fn()`
+- Trigger `first` with the result of `fn()`
 
 ### Arguments
 
@@ -177,11 +177,11 @@ Let's consider by steps:
 
 And you repeat this until you complete the task. Now think about it in the effector terms, and we consider the positive case:
 
-1. Take an apple - event;
-2. Have a look, red or no - filter;
-3. You keep it - map;
-4. Put in pack - event.
-5. Pack - store
+1. Take an apple – event;
+2. Have a look, red or no – filter;
+3. You keep it – map;
+4. Put in pack – event.
+5. Pack – store
 
 You may see that we united `filter()` and `map()` methods, the reason for creating was an impossibility to event filtering.
 The method is useful with JavaScript APIs those returns `undefined`.
@@ -221,7 +221,7 @@ listReceived(["redux", "mobx"]);
 
 Creates a new event, which will be called after the original event is called if `fn` returns `true`.
 
-Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If `filter` returns `true`, the event will be called.
 
 ### Formulae
 
@@ -245,7 +245,7 @@ Object form is used because `event.filter(fn)` was an alias for [event.filterMap
 :::
 
 :::tip
-[`sample`](/en/api/effector/sample) method with `filter` is the preferred filtering method
+[sample](/en/api/effector/sample) method with `filter` is the preferred filtering method
 :::
 
 ### Example

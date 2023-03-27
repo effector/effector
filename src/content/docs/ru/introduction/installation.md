@@ -47,7 +47,7 @@ Svelte работает с effector без установки дополните
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
 
-Чтобы использовать просто импортируйте `effector.mjs` из любого CDN.
+Чтобы использовать effector, просто импортируйте `effector.mjs` из любого CDN.
 
 ```typescript
 import { createStore } from "https://cdn.jsdelivr.net/npm/effector/effector.mjs";
@@ -92,7 +92,7 @@ npm add --development @effector/swc-plugin @swc/core
 + import {createStore} from 'effector/compat'
 ```
 
-А также используя плагин [`babel-plugin-module-resolver`](https://github.com/tleunen/babel-plugin-module-resolver).
+А также используя плагин [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver).
 Примерная конфигурация в `.babelrc`:
 
 ```json
@@ -113,7 +113,7 @@ npm add --development @effector/swc-plugin @swc/core
 
 ### Polyfills
 
-Effector использует некоторые глобальные объекты, в старых версиях браузеров их может не быть, поэтому вам может понадобится установить их самостоятельно, если вы собираетесь поддерживать такие браузеры.
+Effector использует некоторые глобальные объекты, в старых версиях браузеров их может не быть, поэтому вам может понадобиться установить их самостоятельно, если вы собираетесь поддерживать такие браузеры.
 
 Вам может понадобиться установить следующие полифиллы:
 

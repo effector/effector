@@ -31,7 +31,7 @@ Creates an [effect](/en/api/effector/Effect) with given handler
 
 ### Arguments
 
-1. `handler`? (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
+1. `handler`? (_Function_): function to handle effect calls, also can be set with [use(handler)](#use)
 
 **Returns**
 
@@ -73,7 +73,7 @@ Creates an [effect](/en/api/effector/Effect) with given handler
 
 ## `history`
 
-Contains mutable read-only sets of units inside domain.
+Contains mutable read-only sets of units inside a domain.
 
 ### Formulae
 
@@ -81,7 +81,7 @@ Contains mutable read-only sets of units inside domain.
 const { stores, events, domains, effects } = domain.history;
 ```
 
-- When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
+- When any kind of unit created inside a domain, it appears in a set with the name of type(stores, events, domains, effects) in the same order as created
 
 :::info{title="since"}
 [effector 20.3.0](https://changelog.effector.dev/#effector-20-3-0)
@@ -128,7 +128,7 @@ domain.onCreateEvent((event) => {});
 
 - Function passed to `onCreateEvent` called every time, as new event created in `domain`
 - Function called with `event` as first argument
-- Result of function call is ignored
+- The result of function call is ignored
 
 ### Arguments
 
@@ -168,7 +168,7 @@ domain.onCreateEffect((effect) => {});
 
 - Function passed to `onCreateEffect` called every time, as new effect created in `domain`
 - Function called with `effect` as first argument
-- Result of function call is ignored
+- The result of function call is ignored
 
 ### Arguments
 
@@ -208,7 +208,7 @@ domain.onCreateStore(($store) => {});
 
 - Function passed to `onCreateStore` called every time, as new store created in `domain`
 - Function called with `$store` as first argument
-- Result of function call is ignored
+- The result of function call is ignored
 
 ### Arguments
 
@@ -245,7 +245,7 @@ domain.onCreateDomain((domain) => {});
 
 - Function passed to `onCreateDomain` called every time, as subdomain created in `domain`
 - Function called with `domain` as first argument
-- Result of function call is ignored
+- The result of function call is ignored
 
 ### Arguments
 

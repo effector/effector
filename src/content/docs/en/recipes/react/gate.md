@@ -1,13 +1,13 @@
 ---
 title: Gate
-description: Gate - a bridge between props and store
+description: Gate – a bridge between props and store
 ---
 
-Gate is a bridge between props and store.
+Gate is a bridge between props and stores.
 
-Imagine you have the task of transferring something from react props to the effector store.
+Imagine you have the task of transferring something from React props to the effector store.
 Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.
-In a such situation [`Gate`](/en/api/effector-react/Gate) will help.
+In a such situation [Gate](/en/api/effector-react/Gate) will help.
 
 ```js
 import { createStore, createEffect, forward } from "effector";

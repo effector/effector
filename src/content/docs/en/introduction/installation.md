@@ -38,7 +38,7 @@ Svelte works with effector out of the box, no additional packages needed.
 
 ## Online playground
 
-Examples in this documentation are running in [our online playground](https://share.effector.dev), which allows someone to test and share ideas quickly, without install. Code sharing, Typescript and react supported out of the box. [Project repository](https://github.com/effector/repl).
+Examples in this documentation are running in [our online playground](https://share.effector.dev), which allows someone to test and share ideas quickly, without install. Code sharing, TypeScript and React supported out of the box. [Project repository](https://github.com/effector/repl).
 
 ## Deno
 
@@ -68,7 +68,7 @@ For server-side rendering and writing test you may need plugins for your compile
 
 ### Babel
 
-To use Babel-plugin you don't need to install additional packages, plugin bundled to `effector` package.
+To use Babel plugin, you don't need to install additional packages, plugin bundled to `effector` package.
 
 [Read this for more details](/en/api/effector/babel-plugin).
 
@@ -91,7 +91,7 @@ Usage with manual import replacement:
 + import {createStore} from 'effector/compat'
 ```
 
-Usage with [`babel-plugin-module-resolver`](https://github.com/tleunen/babel-plugin-module-resolver) in your `.babelrc`:
+Usage with [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) in your `.babelrc`:
 
 ```json
 {
@@ -111,7 +111,7 @@ Usage with [`babel-plugin-module-resolver`](https://github.com/tleunen/babel-plu
 
 ### Polyfills
 
-Effector uses some APIs and objects, older browsers may not have them, so you may need to install them yourself if you intend to support such browsers.
+Effector uses some APIs and objects that older browsers may not have, so you may need to install them yourself if you intend to support such browsers.
 
 You may need to install the following polyfills:
 

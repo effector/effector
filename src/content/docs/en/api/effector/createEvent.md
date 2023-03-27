@@ -20,7 +20,7 @@ createEvent(name?): Event<void>
 
 ### Notes
 
-[Event](/en/api/effector/Event) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows to send data to another event or effect via effector operators.
+[Event](/en/api/effector/Event) – it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows us to send data to another event or effect via effector operators.
 
 ## Example 1
 

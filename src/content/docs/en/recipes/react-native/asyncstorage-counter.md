@@ -4,7 +4,7 @@ title: AsyncStorage Counter
 
 # AsyncStorage Counter on React Native
 
-The following example is a React Native counter that stores data to AsyncStorage. It uses store, event and effects.
+The following example is a React Native counter that stores data to AsyncStorage. It uses store, events and effects.
 
 ```js
 import * as React from "react";

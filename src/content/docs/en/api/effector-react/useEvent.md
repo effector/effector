@@ -21,7 +21,7 @@ Useful only if you have server-side rendering or writing tests for React-compone
 
 ### Returns {#useEvent-unit-returns}
 
-(Function): Function to pass to event handlers. Will trigger given unit in current scope
+(Function): Function to pass to event handlers. Will trigger a given unit in current scope
 
 ### Example {#useEvent-unit-example}
 
@@ -65,7 +65,7 @@ ReactDOM.render(
 
 ### Returns {#useEvent-shape-returns}
 
-(Object or Array): List of functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope
+(Object or Array): List of functions with the same names or keys as argument to pass to event handlers. Will trigger a given unit in current scope
 
 ### Example {#useEvent-shape-example}
 

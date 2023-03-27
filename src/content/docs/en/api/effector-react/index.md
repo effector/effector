@@ -21,5 +21,5 @@ Effector bindings for ReactJS.
 ## Top-Level Exports
 
 - [createComponent(store, render)](./createComponent)
-- [createStoreConsumer(store)](./createStoreConsumer) render props style
+- [createStoreConsumer(store)](./createStoreConsumer) renders props style
 - [connect(store)(Component)](./connect) "connect" style

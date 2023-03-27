@@ -38,16 +38,16 @@ _Effect (эффект)_ это контейнер для сайд-эффекто
 
 ## Примеры {#all-examples}
 
-- **map** - [пример использования map](#map-usage-example)
-- **watch** - [пример использования watch](#watch-usage-example)
-- **use** - [пример использования use](#use-usage-example)
-- **doneData** - [пример использования doneData](#doneData-usage-example)
-- **failData** - [пример использования failData](#failData-usage-example)
-- **pending** - [отображение индикатора загрузки с react](#pending-react-example)
-- **done** - [пример использования done](#done-usage-example)
-- **fail** - [пример использования fail](#fail-usage-example)
-- **finally** - [пример использования finally](#finally-usage-example)
-- **inFlight** - [пример использования inFlight](#inFlight-usage-example)
+- **map** – [пример использования map](#map-usage-example)
+- **watch** – [пример использования watch](#watch-usage-example)
+- **use** – [пример использования use](#use-usage-example)
+- **doneData** – [пример использования doneData](#doneData-usage-example)
+- **failData** – [пример использования failData](#failData-usage-example)
+- **pending** – [отображение индикатора загрузки с React](#pending-react-example)
+- **done** – [пример использования done](#done-usage-example)
+- **fail** – [пример использования fail](#fail-usage-example)
+- **finally** – [пример использования finally](#finally-usage-example)
+- **inFlight** – [пример использования inFlight](#inFlight-usage-example)
 
 #### Общий пример использования {#effect-example}
 
@@ -135,7 +135,7 @@ const eventB = fxA.map(/*fn*/(data: T) => S)
 
 #### Примеры {#map-examples}
 
-##### Пример использования map {#map-usage-example}
+##### Пример использования `map` {#map-usage-example}
 
 ```js
 import { createEffect } from "effector";
@@ -158,7 +158,7 @@ await updateUserFx({ name: "john", role: "admin" });
 
 [Запустить пример](https://share.effector.dev/4UFLTo5p)
 
-### prepend {#prepend}
+### `prepend` {#prepend}
 
 Создаёт событие-триггер для преобразования данных _перед_ запуском эффекта. По сравнению с [map](#map), работает в обратном направлении
 
@@ -202,7 +202,7 @@ const trigger = fx.prepend(/*fn*/(data: T) => S)
 Вызывает дополнительную функцию с сайд-эффектами при каждом срабатывании эффекта
 
 :::info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию дополнительного эффекта и [сэмпла](/ru/api/effector/sample)
+По мере усложнения логики проекта оптимальнее заменить на комбинацию дополнительного эффекта и [sample](/ru/api/effector/sample)
 :::
 
 #### Формула {#watch-formulae}
@@ -430,7 +430,7 @@ const $isRequestPending = createStore(false)
 
 #### Примеры {#pending-examples}
 
-##### Отображение индикатора загрузки с react {#pending-react-example}
+##### Отображение индикатора загрузки с React {#pending-react-example}
 
 ```jsx
 import React from "react";
@@ -658,7 +658,7 @@ await Promise.all([req1, req2]);
 
 ### shortName {#shortName}
 
-Имя эффекта. Задаётся либо явно, через поле [`name` в createEffect](/ru/api/effector/createEffect), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEffect)
+Имя эффекта. Задаётся либо явно, через поле `name` в [createEffect](/ru/api/effector/createEffect), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEffect)
 
 #### Формула {#shortName-formulae}
 
@@ -671,7 +671,7 @@ fx.shortName
 
 ### sid {#sid}
 
-Стабильный идентификатор эффекта. Задаётся автоматически через [babel-plugin](/ru/api/effector/babel-plugin)
+Стабильный идентификатор эффекта. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
 #### Формула {#sid-formulae}
 

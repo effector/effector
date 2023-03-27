@@ -1,14 +1,14 @@
 ---
 id: unit-shape-protocol
 title: Protocol @@unitShape
-description: Re-use UI-library bindings for your own Effector based libraries
+description: Re-use UI-library bindings for your own effector-based libraries
 ---
 
 :::info
 Available since [effector-react 22.4.0](https://changelog.effector.dev/#effector-react-22-4-0), effector-solid 0.22.7
 :::
 
-Effector provides a way to use units ([Stores](/en/api/effector/Store), [Events](/en/api/effector/Event), [Effects](/en/api/effector/Effect)) in UI libraries with a special bindings like `effector-react`, `effector-solid`, etc. Normally, they allow to bind any shape of units to a UI-framework:
+Effector provides a way to use units ([Stores](/en/api/effector/Store), [Events](/en/api/effector/Event), [Effects](/en/api/effector/Effect)) in UI libraries with a special bindings like `effector-react`, `effector-solid`, etc. Normally, they allow binding any shape of units to a UI-framework:
 
 ```ts
 import { createStore } from "effector";
@@ -23,7 +23,7 @@ const Component = () => {
 };
 ```
 
-But what if you want to create your own library on top of Effector with some custom entities? For example, you want to create a router library with a custom `Route` entity, and you want to allow users to use it with `effector-react` bindings:
+But what if you want to create your own library on top of effector with some custom entities? For example, you want to create a router library with a custom `Route` entity, and you want to allow users to use it with `effector-react` bindings:
 
 ```ts
 import { createRoute } from "my-router-library";
@@ -38,7 +38,7 @@ const Component = () => {
 };
 ```
 
-It is possible with the `@@unitShape` protocol. It allows to define a shape of a unit in your custom entity, and then use it in UI libraries. Just add field `@@unitShape` with a function that return shape of units to your entity:
+It is possible with the `@@unitShape` protocol. It allows us to define the shape of a unit in your custom entity, and then using it in UI libraries. Just add field `@@unitShape` with a function that return shape of units to your entity:
 
 ```ts
 function createRoute(/* ... */) {
@@ -58,7 +58,7 @@ function createRoute(/* ... */) {
 
 **Q**: How frequently `@@unitShape`-function is called?
 
-**A**: As many times as `useUnit` itself is called - it depends on a UI-library. For example, `effector-react` calls it as any other hook - once per component render, but `effector-solid` calls `useUnit` once per component mount.
+**A**: As many times as `useUnit` itself is called – it depends on a UI-library. For example, `effector-react` calls it as any other hook – once per component render, but `effector-solid` calls `useUnit` once per component mount.
 
 ---
 

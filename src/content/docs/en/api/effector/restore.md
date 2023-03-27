@@ -8,7 +8,7 @@ Creates a [_Store_](/en/api/effector/Store) from [_Event_](/en/api/effector/Even
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
 :::warning{title="It is not a derived store"}
-Restore creates a new store. It is not [DerivedStore](/en/api/effector/Store#derived-store). That means you can modify it's state via events, and use it as `target` in [`sample`](/en/api/effector/sample).
+Restore creates a new store. It is not [DerivedStore](/en/api/effector/Store#derived-store). That means you can modify it's state via events, and use it as `target` in [sample](/en/api/effector/sample).
 :::
 
 **Arguments**
@@ -70,7 +70,7 @@ await fx();
 
 ## `restore(obj)`
 
-Creates an object with stores from object with values
+Creates an object with stores from an object with values
 
 **Arguments**
 

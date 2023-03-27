@@ -9,7 +9,7 @@ description: serialize is a method for serializing application states within a s
 serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): {[sid: string]: any}
 ```
 
-A companion method for [_fork_](/en/api/effector/fork). Allows to get a serialized value for all the store states within a [scope](/en/api/effector/Scope). The main purpose is an application state serialization on the server side during SSR.
+A companion method for [_fork_](/en/api/effector/fork). It allows us to get a serialized value for all the store states within a [scope](/en/api/effector/Scope). The main purpose is an application state serialization on the server side during SSR.
 
 ### Arguments {#serialize-args}
 
@@ -42,8 +42,8 @@ console.log(serialize(scope)); // => {[sid]: 42}
 
 ## Note on `onlyChanges`
 
-With `onlyChanges`, this method will serialize only stores which were changed by some trigger during work or defined in `values` field by [fork](/en/api/effector/fork) or [hydrate(scope)](/en/api/effector/hydrate). Once being changed, a store will stay marked as changed in given scope even if it was turned back to default state during work, otherwise client will not update that store on its side, which is unexpected and inconsistent.
-This allows to hydrate client state several times, for example during route changes in next.js
+With `onlyChanges`, this method will serialize only stores which were changed by some trigger during work or defined in `values` field by [fork](/en/api/effector/fork) or [hydrate(scope)](/en/api/effector/hydrate). Once being changed, a store will stay marked as changed in given scope even if it was turned back to the default state during work, otherwise client will not update that store on its side, which is unexpected and inconsistent.
+This allows us to hydrate client state several times, for example, during route changes in next.js
 
 ```js
 import { createDomain, fork, serialize, hydrate } from "effector";

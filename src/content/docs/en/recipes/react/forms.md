@@ -83,7 +83,7 @@ $form.on(fieldUpdate, (form, { key, value }) => ({
 }));
 ```
 
-Next piece of code shows how we can obtain a state in effector in a right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
+The next piece of code shows how we can obtain a state in effector in the right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
 
 ```js
 sample({
@@ -103,7 +103,7 @@ const handleChange = fieldUpdate.prepend((event) => ({
 })); // upon trigger `handleChange`, passed data will be transformed in a way, described in function above, and returning value will be passed to original `setField` event.
 ```
 
-Next, we have to deal with how inputs should work. [`useStoreMap`](/en/api/effector-react/useStoreMap) hook here prevents component rerender upon non-relevant changes.
+Next, we have to deal with how inputs should work. [useStoreMap](/en/api/effector-react/useStoreMap) hook here prevents component rerender upon non-relevant changes.
 
 ```jsx
 const Field = ({ name, type, label }) => {
@@ -131,7 +131,7 @@ And, finally, the `App` itself! Note, how we got rid of any business-logic in vi
 
 ```jsx
 const App = () => (
-  <form onSubmit={submitted /*note, there is an event, which is clock for sample*/}>
+  <form onSubmit={submitted /*note, there is an event, which is `clock` for `sample`*/}>
     <Field name="login" label="Login" />
     <Field name="password" type="password" label="Password" />
     <button type="submit">Submit!</button>
@@ -139,7 +139,7 @@ const App = () => (
 );
 ```
 
-Prevent default html form submit behavior using react event from `submitted`
+Prevent the default html form submit behavior using react event from `submitted`
 
 ```js
 submitted.watch((e) => {
@@ -149,7 +149,7 @@ submitted.watch((e) => {
 
 ## Example 2
 
-This example demonstrates how to manage state using an uncontrolled form, handle data loading, create components that depend on stores, and transform data passed between events.
+This example demonstrates how to manage state by using an uncontrolled form, handle data loading, create components that depend on stores, and transform data passed between events.
 
 ```jsx
 import React from "react";

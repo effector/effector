@@ -2,10 +2,10 @@
 title: combine
 ---
 
-This method allows you to get state from each passed store and **combine** it to single value and save to single store, that updates every time like each passed store.
+This method allows you to get state from each passed store and **combine** it to a single value and save into a single store, that updates every time like each passed store.
 
 :::warning{title="Caution"}
-Combine returns not just a common store. Instead, it returns [DerivedStore](/en/api/effector/Store#derived-store), it cannot be modified by the events or used as `target` in [`sample`](/en/api/effector/sample).
+`combine` returns not just a common store. Instead, it returns [DerivedStore](/en/api/effector/Store#derived-store), it cannot be modified by the events or used as `target` in [sample](/en/api/effector/sample).
 :::
 
 ## `combine(...stores, fn)`
@@ -20,7 +20,7 @@ $result = combine(
 ```
 
 - After call `combine`, state of each store is extracted and passed to function arguments, `result` of a function call will be state of store `$result`
-- Any amount of stores can be passed to `combine`, but latest argument always should be function-reducer that returns new state
+- Any number of stores can be passed to `combine`, but the latest argument always should be function-reducer that returns new state
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
@@ -105,7 +105,7 @@ $sum.watch(console.log); // => 510
 $result = combine([$first, $second, $third], ([A, B, C]) => result);
 ```
 
-- Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, calls function with that array
+- Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, call function with that array
 - The `result` of the function call saved in `$result` store
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store

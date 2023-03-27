@@ -25,7 +25,7 @@ It exposes special events and stores, such as `pending`, `done`, `fail`, `finall
 
 It can be safely used in place of the original async function.
 
-It returns promise with result of a function call
+It returns promise with the result of a function call
 
 The only requirement for the function:
 
@@ -46,11 +46,11 @@ It is useful for logging or other side effects.
 ## Unit
 
 Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
-There are five units types: [store], [event], [effect], [domain] and [scope]
+There are five unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) and [Scope](/en/api/effector/Scope)
 
 ## Common unit
 
-Common units can be used to trigger updates of other units. There are three common unit types: [store], [event] and [effect]. **When a method accepts units, it means that it accepts events, effects, and stores** as a source of reactive updates
+Common units can be used to trigger updates of other units. There are three common unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event) and [Effect](/en/api/effector/Effect). **When a method accepts units, it means that it accepts events, effects, and stores** as a source of reactive updates
 
 ## Purity
 
@@ -138,7 +138,7 @@ type Subscription = {
 };
 ```
 
-Function, returned by [forward](/en/api/effector/forward), [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
+Function, returned by [forward](/en/api/effector/forward), [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#watchwatcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing
 
 :::warning
 **Managing subscriptions manually distracts from business logic improvements.**

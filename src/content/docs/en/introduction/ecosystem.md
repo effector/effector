@@ -12,8 +12,8 @@ More content in [awesome-effector repository](https://github.com/effector/awesom
 Stage 4. 💚 — Stable, supported, awesome<br/>
 Stage 3. 🛠️ — Stable, but still in development, v0.x<br/>
 Stage 2. ☢️️ — Unstable/Incomplete, works in most cases, may be redesigned<br/>
-Stage 1. 🧨 — Breaks in most cases, must be redesigned, do not use in production<br/>
-Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated from<br/>
+Stage 1. 🧨 — Breaks in most cases, it must be redesigned, do not use in production<br/>
+Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrated from<br/>
 :::
 
 ## Packages
@@ -25,7 +25,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated 
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
 - [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router on top of effector.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality for effector.
-- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework for Effector which is based on i18next.
+- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework for effector which is based on i18next.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — UI engine for web based on effector.
 - [effector-next](https://github.com/effector/nextjs) 🧨 — Effector wrappers for Next.js.
 - [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Effector utilities library.
@@ -34,11 +34,11 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken, must be migrated 
 
 - [eslint-plugin-effector](https://eslint.effector.dev) 🛠 — Enforcing best practices.
 - [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — SWC plugin to efficiently work with effector.
-- [effector-logger](https://github.com/effector/logger) 🧨 — Simple logger with stores inspector.
+- [effector-logger](https://github.com/effector/logger) 🧨 — Simple logger for stores, events, effects and domains.
 
 ## Form management
 
-- [effector-final-form](https://github.com/binjospookie/effector-final-form) 🛠️ - Effector bindings for Final Form.
+- [effector-final-form](https://github.com/binjospookie/effector-final-form) 🛠️ – Effector bindings for Final Form.
 - [filledout](https://filledout.github.io) ☢️ — Form manager with easy-to-use yup validation
 - [effector-forms](https://github.com/aanation/effector-forms) ☢️ — Form manager for effector.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form) ☢️ — Connect your forms with state manager.

@@ -8,7 +8,7 @@ Useful to create developer tools and production monitoring and observability ins
 
 ## Inspect API
 
-Allows to track any computations, that have happened in the effector's kernel.
+Allows us to track any computations that have happened in the effector's kernel.
 
 ```ts
 import { inspect, type Message } from "effector/inspect";
@@ -37,7 +37,7 @@ someEvent(42);
 // and so on, any triggers
 ```
 
-Computations tracking is restricted by [Scope](./Scope.md).
+[Scope](./Scope.md) limits the extent to which computations can be tracked.
 If no scope is provided - default out-of-scope mode computations will be tracked.
 
 ```ts
@@ -72,8 +72,8 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 
 ### Tracing
 
-Adding `trace: true` setting allows to look up previous computations, that led to this specific one.
-It is useful to debug the specific reason of some event happening
+Adding `trace: true` setting allows looking up previous computations, that led to this specific one.
+It is useful to debug the specific reason for some events happening
 
 ```ts
 import { fork, allSettled } from "effector";
@@ -110,7 +110,7 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 
 ### Errors
 
-Effector does not allow exceptions in pure functions. In such case branch computation is stopped and exception is logged.
+Effector does not allow exceptions in pure functions. In such case, branch computation is stopped and an exception is logged.
 
 There is also a special message type in such case:
 
@@ -127,7 +127,7 @@ inspect({
 
 ## Inspect Graph
 
-Allows to track declarations of units, [factories](./babel-plugin.md#factories) and [regions](./withRegion.md)
+Allows us to track declarations of units, [factories](./babel-plugin.md#factories) and [regions](./withRegion.md)
 
 ```ts
 import { createStore } from "effector";

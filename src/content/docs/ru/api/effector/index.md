@@ -15,11 +15,11 @@ lang: ru
 
 ## Типы юнитов
 
-- [Event](./Event)
-- [Effect](./Effect)
-- [Store](./Store)
-- [Domain](./Domain)
-- [Scope](./Scope)
+- [_Event_](./Event)
+- [_Effect_](./Effect)
+- [_Store_](./Store)
+- [_Domain_](./Domain)
+- [_Scope_](./Scope)
 
 ## Основные методы библиотеки
 

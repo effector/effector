@@ -8,9 +8,9 @@ title: useUnit
 
 React hook, which takes any unit or shape of units.
 
-In case of [stores](/en/api/effector/Store) it subscribes component to provided [store](/en/api/effector/Store) and returns its current value, so when store is updated, the component will update automatically.
+In case of [stores](/en/api/effector/Store) it subscribes component to the provided [store](/en/api/effector/Store) and returns its current value, so when the store is updated, the component will update automatically.
 
-In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) - bind to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
+In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) – bind to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 Only `effector-react/scope` version works this way, `useUnit` of `effector-react` is no-op for events and does not require `Provider` with scope.
 
 ## `useUnit(unit)`
@@ -21,7 +21,7 @@ Only `effector-react/scope` version works this way, `useUnit` of `effector-react
 
 ### Returns {#useUnit-unit-returns}
 
-(Function): Function to pass to event handlers. Will trigger given unit in current scope
+(Function): Function to pass to event handlers. Will trigger the given unit in current scope
 
 ### Example {#useUnit-unit-example}
 
@@ -59,7 +59,7 @@ render(
 
 ### Arguments {#useUnit-store-arguments}
 
-1. `store` Effector ([_Store_](/en/api/effector/Store))
+1. `store` effector ([_Store_](/en/api/effector/Store))
 
 ### Returns {#useUnit-store-returns}
 

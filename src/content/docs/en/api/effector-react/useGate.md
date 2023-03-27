@@ -5,7 +5,7 @@ description: Hook for passing data to Gate
 
 ## `useGate(GateComponent, props)` {#useGate-props}
 
-Hook for passing data to [_`Gate`_](/en/api/effector-react/Gate).
+Hook for passing data to [_Gate_](/en/api/effector-react/Gate).
 
 ### Arguments {#useGate-props-arguments}
 

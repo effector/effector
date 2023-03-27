@@ -6,7 +6,7 @@ lang: ru
 
 Лучшие практики для написания хорошо типизированного кода
 
-## createEvent
+## `createEvent`
 
 По умолчанию этот метод возвращает `Event<void>`
 
@@ -24,9 +24,9 @@ const event = createEvent<number>();
 event(0);
 ```
 
-## createEffect
+## `createEffect`
 
-Typescript может вывести тип результата эффекта из заданного обработчика, но тип аргумента должен быть определен либо в аргументе обработчика, либо как дженерик
+TypeScript может вывести тип результата эффекта из заданного обработчика, но тип аргумента должен быть определен либо в аргументе обработчика, либо как дженерик
 
 ```typescript
 const sendMessageFx = createEffect(async (params: { text: string }) => {
@@ -42,7 +42,7 @@ const sendWarningFx = createEffect<{ warn: string }, string>(async ({ warn }) =>
 // => Effect<{warn: string}, string>
 ```
 
-## Типизация ошибок с createEffect
+## Типизация ошибок с `createEffect`
 
 Некоторый код может выдать исключения только некоторых типов, например библиотека axios в качестве ошибок использует только `AxiosError`. В эффектах для описания типов ошибок используется дженерик `Fail`.
 
@@ -56,7 +56,7 @@ const sendWarningFx = createEffect<{ warn: string }, string, AxiosError>(async (
 // => Effect<{warn: string}, string, AxiosError>
 ```
 
-В случае, когда обработчик эффекта определен до самого эффекта, typescript может определить тип `Params` и `Done` используя `typeof handler` в первом generic, не указывая сами типы явно. В таком случае описание типа ошибок можно передать в опциональный второй дженерик метода:
+В случае, когда обработчик эффекта определен до самого эффекта, TypeScript может определить тип `Params` и `Done` используя `typeof handler` в первом generic, не указывая сами типы явно. В таком случае описание типа ошибок можно передать в опциональный второй дженерик метода:
 
 ```typescript
 const sendMessage = async (params: { text: string }) => {
@@ -72,7 +72,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 `Fail` в качестве второго дженерика добавлен в effector 21.6.0
 :::
 
-## event.prepend
+## `event.prepend`
 
 Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event#prependfn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
 
@@ -86,9 +86,9 @@ const warningMessage = message.prepend<{ warn: string }>(({ warn }) => warn);
 // warningMessage имеет тип Event<{warn: string}>
 ```
 
-## attach
+## `attach`
 
-Чтобы позволить typescript выводить типы создаваемого эффекта, можно добавить тип к первому аргументу `mapParams`, который станет дженериком `Params` у результата
+Чтобы позволить TypeScript выводить типы создаваемого эффекта, можно добавить тип к первому аргументу `mapParams`, который станет дженериком `Params` у результата
 
 ```typescript
 const sendTextFx = createEffect<{ text: string }, "ok">();
@@ -100,9 +100,9 @@ const sendWarningFx = attach({
 // sendWarningFx имеет тип Effect<{warn: string}, 'ok'>
 ```
 
-## split
+## `split`
 
-[Typescript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для разделения исходного типа события на несколько вариантов (отсюда и название)
+[TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для разделения исходного типа события на несколько вариантов (отсюда и название)
 
 ```typescript
 type UserMessage = { kind: "user"; text: string };
@@ -118,9 +118,9 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage имеет тип Event<WarnMessage>
 ```
 
-## guard
+## `guard`
 
-[Typescript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для вывода типа результата с помощью функции `filter`
+[TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для вывода типа результата с помощью функции `filter`
 
 ```typescript
 type UserMessage = { kind: "user"; text: string };
@@ -135,9 +135,9 @@ const userMessage = guard(message, {
 // userMessage имеет тип Event<UserMessage>
 ```
 
-## createApi
+## `createApi`
 
-Чтобы позволить typescript выводить типы создаваемых событий, можно добавить тип ко второму аргументу обработчиков
+Чтобы позволить TypeScript выводить типы создаваемых событий, можно добавить тип ко второму аргументу обработчиков
 
 ```typescript
 const $count = createStore(0);
@@ -151,9 +151,9 @@ const { add, sub } = createApi($count, {
 // sub имеет тип Event<number>
 ```
 
-## is
+## `is`
 
-Методы группы [`is`](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
+Методы группы [is](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
 
 ```typescript
 export function getUnitType(unit: unknown) {

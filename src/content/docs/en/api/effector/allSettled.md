@@ -14,7 +14,7 @@ allSettled<T>(unit: Effect<T, Done, Fail>, {scope: Scope, params?: T}): Promise<
 allSettled<T>(unit: Store<T>, {scope: Scope, params?: T}): Promise<void>
 ```
 
-Call provided unit in scope and wait for finishing all the triggered effects.
+Call the provided unit within the current scope and wait for all triggered effects to complete
 
 ### Arguments {#allSettled-arguments}
 
@@ -38,7 +38,7 @@ Please, [open PullRequest](https://github.com/effector/effector) and contribute 
 allSettled<T>(scope): Promise<void>
 ```
 
-Check for any ongoing computations in provided scope and wait for their finish.
+Check the provided scope for any ongoing computations and wait for their completion.
 
 ### Arguments {#allSettled-scope-arguments}
 
@@ -52,7 +52,7 @@ Supported since effector 22.5.0
 
 #### Usage in tests
 
-E.g. tests for integration with some external reactive api
+For example, tests that validate the integration with an external reactive API
 
 ```ts
 test('integration with externalSource', async () => {
