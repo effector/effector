@@ -3,7 +3,7 @@ import { createLink, getPathParamsFromId, getTextLocalized, translations } from 
 import { KNOWN_LANGUAGES, SITE } from "../../consts";
 import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigation";
 
-import NavigationTree from "../NavigationTree.astro";
+import MobileNavigation from "../MobileNavigation.astro";
 import DropDownMenu from "../DropDownMenu.astro";
 
 import EffectorLogo from "./EffectorLogo.astro";
@@ -122,7 +122,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     </div>
   </nav>
 </header>
-<NavigationTree />
+<MobileNavigation />
 
 <style>
   header {
