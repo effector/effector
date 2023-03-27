@@ -5,9 +5,9 @@ import type { CollectionEntry } from "astro:content";
 import CommonLayout from "./CommonLayout.astro";
 
 import PageContent from "../components/PageContent/PageContent.astro";
+import Contributors from "../components/PageContent/Contributors.astro";
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
-import AvatarList from "../components/PageContent/AvatarList.astro";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
@@ -146,7 +146,7 @@ const currentPage = Astro.url.pathname;
       >
         <slot />
       </PageContent>
-      <AvatarList documentId={documentId} />
+      <Contributors documentId={documentId} />
     </div>
     <aside id="grid-right" title="Table of Contents">
       <RightSidebar lang={lang} headings={headings} documentId={documentId} />
