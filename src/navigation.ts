@@ -417,36 +417,32 @@ const effector = [
         link: "/api/effector/attach",
       },
       {
+        text: { en: "sample" },
+        link: "/api/effector/sample",
+      },
+      {
         text: { en: "combine" },
         link: "/api/effector/combine",
-      },
-      {
-        text: { en: "forward" },
-        link: "/api/effector/forward",
-      },
-      {
-        text: { en: "fromObservable" },
-        link: "/api/effector/fromObservable",
-      },
-      {
-        text: { en: "guard" },
-        link: "/api/effector/guard",
       },
       {
         text: { en: "merge" },
         link: "/api/effector/merge",
       },
       {
+        text: { en: "split" },
+        link: "/api/effector/split",
+      },
+      {
         text: { en: "restore" },
         link: "/api/effector/restore",
       },
       {
-        text: { en: "sample" },
-        link: "/api/effector/sample",
+        text: { en: "forward" },
+        link: "/api/effector/forward",
       },
       {
-        text: { en: "split" },
-        link: "/api/effector/split",
+        text: { en: "guard" },
+        link: "/api/effector/guard",
       },
     ],
   },
@@ -467,12 +463,12 @@ const effector = [
         link: "/api/effector/allSettled",
       },
       {
-        text: { en: "hydrate" },
-        link: "/api/effector/hydrate",
-      },
-      {
         text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
+      },
+      {
+        text: { en: "hydrate" },
+        link: "/api/effector/hydrate",
       },
     ],
   },
@@ -483,6 +479,10 @@ const effector = [
       {
         text: { en: "is" },
         link: "/api/effector/is",
+      },
+      {
+        text: { en: "fromObservable" },
+        link: "/api/effector/fromObservable",
       },
     ],
   },
