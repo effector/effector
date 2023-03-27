@@ -5,17 +5,17 @@ import MoreMenu from "./MoreMenu.astro";
 
 type Props = {
   headings: MarkdownHeading[];
-  githubEditUrl: string;
+  documentId: string;
   lang: string;
 };
 
-const { headings, githubEditUrl, lang } = Astro.props;
+const { headings, documentId, lang } = Astro.props;
 ---
 
 <nav class="sidebar-nav" aria-labelledby="grid-right">
   <div class="sidebar-nav-inner">
     <TableOfContents lang={lang} client:media="(min-width: 50em)" headings={headings} />
-    <MoreMenu editHref={githubEditUrl} />
+    <MoreMenu documentId={documentId} />
   </div>
 </nav>
 

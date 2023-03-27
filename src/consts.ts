@@ -29,7 +29,7 @@ export const GITHUB_DOCS_ROOT = "";
 // Used to convert pathname into file path in the repository
 export const GITHUB_DOCS_FILE_PREFIX = "src/content/docs/";
 
-export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}`;
+export const GITHUB_EDIT_URL = `https://github.com/${GITHUB_REPO}/edit/${GITHUB_BRANCH}/`;
 
 export const LINKS = {
   github: "https://github.com/effector/effector",

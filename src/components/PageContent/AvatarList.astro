@@ -20,7 +20,7 @@ const [owner, repo] = GITHUB_REPO.split("/");
 const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
 
 async function loadContributors() {
-  const filePath = `${GITHUB_DOCS_ROOT}${GITHUB_DOCS_FILE_PREFIX}${path}`;
+  const filePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_FILE_PREFIX, path].join("");
   const { data: commits } = await octokit.repos.listCommits({
     owner,
     repo,

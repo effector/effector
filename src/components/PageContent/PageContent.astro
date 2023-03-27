@@ -9,10 +9,10 @@ type Props = {
   headings: MarkdownHeading[];
   translations: { lang: string; slug: string }[];
   breadcrumbs?: { title: string; path: string }[];
-  githubEditUrl: string;
+  documentId: string;
 };
 
-const { title, headings, githubEditUrl, translations = [], breadcrumbs = [] } = Astro.props;
+const { title, headings, documentId, translations = [], breadcrumbs = [] } = Astro.props;
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
@@ -67,7 +67,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     <slot />
   </section>
   <nav class="block xl:hidden">
-    <MoreMenu editHref={githubEditUrl} />
+    <MoreMenu documentId={documentId} />
   </nav>
 </article>
 

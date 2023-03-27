@@ -1,24 +1,31 @@
 ---
 import clsx from "clsx";
-import { COMMUNITY_INVITE_URL } from "../../consts";
+import {
+  COMMUNITY_INVITE_URL,
+  GITHUB_DOCS_FILE_PREFIX,
+  GITHUB_DOCS_ROOT,
+  GITHUB_EDIT_URL,
+} from "../../consts";
 import { getPathParamsFromId, getTextLocalized, translations } from "../../languages";
 import styles from "./TableOfContents.module.css";
 
 type Props = {
-  editHref: string;
+  documentId: string;
 };
 
-const { editHref } = Astro.props;
+const { documentId } = Astro.props;
 const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
 const { lang } = getPathParamsFromId(Astro.url.pathname);
+const editFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_FILE_PREFIX, documentId].join("");
+const editUrl = [GITHUB_EDIT_URL, editFilePath].join("");
 ---
 
 {showMoreSection && <h2 class={styles.title}>{getTextLocalized(translations.More, lang)}</h2>}
 <ul class={styles.contents}>
   {
-    editHref && (
+    documentId && (
       <li class={clsx(styles.link, styles.level2)}>
-        <a class="edit-on-github" href={editHref} target="_blank">
+        <a class="edit-on-github" href={editUrl} target="_blank">
           <svg
             aria-hidden="true"
             focusable="false"

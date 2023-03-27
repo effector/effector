@@ -21,8 +21,6 @@ export type Props = CollectionEntry<"docs">["data"] & {
 
 const { headings, translations, breadcrumbs, lang, documentId, ...data } = Astro.props;
 const currentPage = Astro.url.pathname;
-const currentFile = `${GITHUB_DOCS_FILE_PREFIX}${currentPage.replace(/\/$/, "")}.md`;
-const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
 ---
 
 <CommonLayout lang={lang} {...data}>
@@ -144,7 +142,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       <PageContent
         title={data.title}
         headings={headings}
-        githubEditUrl={githubEditUrl}
+        documentId={documentId}
         translations={translations}
         breadcrumbs={breadcrumbs}
       >
@@ -153,7 +151,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
       <AvatarList path={documentId} />
     </div>
     <aside id="grid-right" title="Table of Contents">
-      <RightSidebar lang={lang} headings={headings} githubEditUrl={githubEditUrl} />
+      <RightSidebar lang={lang} headings={headings} documentId={documentId} />
     </aside>
   </main>
 </CommonLayout>
