@@ -9,11 +9,11 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Introduction", ru: "Начало работы" },
     items: [
       {
-        text: { en: "Motivation" },
+        text: { en: "Motivation", ru: "Мотивация" },
         link: "/introduction/motivation",
       },
       {
-        text: { en: "Community" },
+        text: { en: "Community", ru: "Сообщество" },
         link: "/introduction/community",
       },
       {
@@ -34,7 +34,7 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Conventions", ru: "Соглашения" },
     items: [
       {
-        text: { en: "Naming" },
+        text: { en: "Naming", ru: "Именование" },
         link: "/conventions/naming",
       },
     ],
@@ -57,7 +57,7 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Guides" },
+    text: { en: "Guides", ru: "Руководства" },
     items: [
       {
         text: { en: "Writing tests" },
