@@ -1,7 +1,13 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
-import { getLocalizedSidebar } from "../../navigation";
+import {
+  getLocalizedSidebar,
+  getSidebarForSlug,
+  markActiveNavigation,
+  MOBILE_NAVIGATION,
+} from "../../navigation";
+import NestedLinks from "../NestedLinks.astro";
 
 type Props = {
   currentPage: string;

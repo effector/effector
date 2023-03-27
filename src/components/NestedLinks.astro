@@ -4,15 +4,18 @@ import { isNavGroup, isNavLink, isNavLinkGroup, type LMobileNavItem } from "../n
 
 import IconChevronRight from "../icons/Chevron.astro";
 import IconExternal from "../icons/External.astro";
+import { nanoid } from "nanoid";
 
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 
 interface Props {
   items: LMobileNavItem[];
   firstLevel?: boolean;
+  expandDefault?: boolean;
 }
 
-const { firstLevel = false, items } = Astro.props;
+const { firstLevel = false, expandDefault, items } = Astro.props;
+const instanceId = nanoid(5);
 ---
 
 <ul class:list={{ nested: !firstLevel }}>
@@ -21,6 +24,7 @@ const { firstLevel = false, items } = Astro.props;
       const isExpandable = isNavLinkGroup(item) || isNavGroup(item);
       const isLink = isNavLink(item) || isNavLinkGroup(item);
       const text = getTextLocalized(item, lang);
+      const expanded = expandDefault ? expandDefault : item.active;
 
       if (isLink) {
         const external = item.link.startsWith("https://") || item.link.startsWith("http://");
@@ -39,14 +43,19 @@ const { firstLevel = false, items } = Astro.props;
                 <button
                   type="button"
                   data-target={item.id}
-                  class:list={{ expander: true, standalone: true, expanded: item.active }}
+                  data-instance={instanceId}
+                  class:list={{ expander: true, standalone: true, expanded }}
                 >
                   <IconChevronRight size={18} />
                 </button>
               ) : null}
             </div>
             {isExpandable ? (
-              <div data-id={item.id} class:list={{ "expand-section": true, expanded: item.active }}>
+              <div
+                data-id={item.id}
+                data-instance={instanceId}
+                class:list={{ "expand-section": true, expanded }}
+              >
                 <Astro.self items={item.items} />
               </div>
             ) : null}
@@ -60,14 +69,19 @@ const { firstLevel = false, items } = Astro.props;
             <div class="line">
               <button
                 data-target={item.id}
+                data-instance={instanceId}
                 type="button"
-                class:list={{ expander: true, noLink: true, expanded: item.active }}
+                class:list={{ expander: true, noLink: true, expanded }}
               >
                 <IconChevronRight size={18} />
                 {text}
               </button>
             </div>
-            <div data-id={item.id} class:list={{ "expand-section": true, expanded: item.active }}>
+            <div
+              data-id={item.id}
+              data-instance={instanceId}
+              class:list={{ "expand-section": true, expanded }}
+            >
               <Astro.self items={item.items} />
             </div>
           </li>
@@ -88,7 +102,9 @@ const { firstLevel = false, items } = Astro.props;
 <script>
   document.querySelectorAll(".expander").forEach((button) => {
     const btn = button as HTMLButtonElement;
-    const target = document.querySelector(`[data-id="${btn.dataset.target}"]`);
+    const id = btn.dataset.target;
+    const instance = btn.dataset.instance;
+    const target = document.querySelector(`[data-id="${id}"][data-instance="${instance}"]`);
     if (target) {
       btn.addEventListener("click", function () {
         btn.classList.toggle("expanded");
