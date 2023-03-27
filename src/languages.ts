@@ -1,6 +1,10 @@
 import path from "node:path";
-import { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES, SITE, type LText } from "./consts";
+import { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES, SITE } from "./consts";
 export { KNOWN_LANGUAGES, KNOWN_LANGUAGE_CODES };
+
+export type LText = {
+  [Key in (typeof KNOWN_LANGUAGE_CODES)[number]]?: string;
+} & { en: string };
 
 export const langPathRegex = /\/([a-z]{2}-?[A-Z]{0,2})\//;
 

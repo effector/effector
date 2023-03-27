@@ -18,14 +18,13 @@ export const KNOWN_LANGUAGES = {
 } as const;
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
-export type LText = {
-  [Key in (typeof KNOWN_LANGUAGE_CODES)[number]]?: string;
-} & { en: string };
-
 // TODO: update this urls
 export const GITHUB_REPO = "sergeysova/new-docs";
 export const GITHUB_BRANCH = "main";
-export const GITHUB_DOCS_ROOT = ""; // there would be 'beta/'. Slash at the end is required
+
+// It is useful when documentation package located in a subdirectory
+// There would be 'beta/'. Slash at the end is required
+export const GITHUB_DOCS_ROOT = "";
 
 // Used to convert pathname into file path in the repository
 export const GITHUB_DOCS_FILE_PREFIX = "src/content/docs/";

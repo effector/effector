@@ -1,8 +1,7 @@
 import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
-import { LINKS, LText } from "./consts";
-import { SITE } from "./consts";
-import { getTextLocalized, createLink } from "./languages";
+import { SITE, LINKS } from "./consts";
+import { getTextLocalized, createLink, type LText } from "./languages";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
