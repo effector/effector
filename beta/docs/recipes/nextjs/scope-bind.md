@@ -22,7 +22,7 @@ const connectEv = createEvent();
 
 sample({
     clock: connectEv,
-    targt: $connectStatus,
+    target: $connectStatus,
 })
 ```
 
