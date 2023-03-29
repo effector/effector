@@ -19,7 +19,7 @@ export const KNOWN_LANGUAGES = {
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
 // TODO: update this urls
-export const GITHUB_REPO = "sergeysova/new-docs";
+export const GITHUB_REPO = "effector/new-docs";
 export const GITHUB_BRANCH = "main";
 
 // It is useful when documentation package located in a subdirectory
