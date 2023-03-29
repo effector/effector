@@ -80,7 +80,6 @@
   --theme-text-light: hsla(var(--color-gray-40), 1);
   --theme-text-lighter: hsla(var(--color-gray-80), 1);
 
-  /* @@@: not used anywhere */
   --theme-bg: hsla(var(--color-base-white), 100%, 1);
   --theme-bg-hover: hsla(var(--color-gray-95), 1);
   --theme-bg-offset: hsla(var(--color-gray-90), 1);
