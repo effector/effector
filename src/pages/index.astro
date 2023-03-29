@@ -21,54 +21,6 @@ import IconChevron from "../icons/Chevron.astro";
         </a>
       </div>
     </section>
-
-    <section class="features">
-      {
-        [
-          {
-            emoji: "🛡️",
-            title: "Type safe",
-            description:
-              "Excellent TypeScript support out of the box. With the type testing in the repository.",
-          },
-          {
-            emoji: "⚙️",
-            title: "Framework agnostic",
-            description: "Works with any UI or server framework. Tested with React, Solid, Vue.",
-          },
-          {
-            emoji: "🧑‍💻",
-            title: "Developer-friendly",
-            description:
-              "Simple API surface with helpful community. Core-team reduces amount of methods to lear.",
-          },
-          {
-            emoji: "⚡️",
-            title: "Performant",
-            description:
-              "Initialization of the whole logic at the app start provides a boost at the runtime.",
-          },
-          {
-            emoji: "📦",
-            title: "10Kb",
-            description:
-              "Effector supports tree-shaking and provides maximum opportunities with the small size.",
-          },
-          {
-            emoji: "🫂",
-            title: "Just JavaScript",
-            description:
-              "There is no Proxies, classes and some magic inside. Just JavaScript code that works.",
-          },
-        ].map((feat) => (
-          <article>
-            <div class="emoji">{feat.emoji}</div>
-            <div class="title">{feat.title}</div>
-            <p>{feat.description}</p>
-          </article>
-        ))
-      }
-    </section>
   </div>
 </CommonLayout>
 
