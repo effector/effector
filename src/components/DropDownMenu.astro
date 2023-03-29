@@ -162,11 +162,10 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .items {
+    @apply rounded-xl p-3;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--theme-divider);
-    border-radius: 1rem;
     background-color: var(--theme-bg);
-    padding: 0.8rem;
     min-width: 8rem;
     overflow-y: auto;
   }
@@ -181,9 +180,9 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .link {
+    @apply rounded-md;
     display: flex;
     transition: background-color 0.25s, color 0.25s;
-    border-radius: 0.5rem;
     padding: 0 0.8rem;
     color: currentColor;
     font-weight: 500;

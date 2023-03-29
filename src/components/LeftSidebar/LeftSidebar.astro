@@ -84,6 +84,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 
   .nav-groups > :first-child h2 {
     margin-top: 0;
+    border-top: none;
   }
 
   .nav-groups > :last-child {
@@ -91,23 +92,27 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     padding-bottom: 2rem;
   }
 
+  .nav-group {
+    @apply flex flex-col gap-1;
+  }
+
   .nav-group-title {
-    margin-bottom: 0.5rem;
+    @apply m-0;
     padding: 0.1rem 1rem;
     font-weight: 700;
     font-size: 1rem;
     text-transform: uppercase;
   }
 
+  .nav-group ul {
+    @apply flex flex-col gap-0.5;
+  }
+
   .nav-link a {
-    display: flex;
-    margin: 1px;
-    padding: 0.3rem 1rem;
+    @apply flex items-center rounded-md px-4 py-1.5 text-base;
     color: inherit;
-    font-size: 1rem;
     font: inherit;
     text-decoration: none;
-    align-items: center;
   }
 
   .nav-link a:hover,
