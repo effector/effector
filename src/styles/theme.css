@@ -27,6 +27,8 @@
   --color-base-purple: 269, 79%;
   --color-base-red: 351, 100%;
   --color-base-yellow: 41, 100%;
+  --color-base-primary: 33, 100%;
+  --color-base-primary-light: 30, 87%;
 
   /*
    * Color palettes are made using --color-base
@@ -46,6 +48,17 @@
   --color-gray-80: var(--color-base-gray), 80%;
   --color-gray-90: var(--color-base-gray), 90%;
   --color-gray-95: var(--color-base-gray), 95%;
+
+  --color-primary-20: var(--color-base-primary), 33%;
+  --color-primary-30: var(--color-base-primary), 37%;
+  --color-primary-40: var(--color-base-primary), 42%;
+  --color-primary-50: var(--color-base-primary), 50%;
+  --color-primary-60: var(--color-base-primary), 56%;
+  --color-primary-70: var(--color-base-primary), 61%;
+  --color-primary-80: var(--color-base-primary), 69%;
+  --color-primary-text: var(--color-white), 100%;
+
+  --color-cink-5: 210, 20%, 98.04%;
 
   --color-blue: var(--color-base-blue), 61%;
   --color-blue-dark: var(--color-base-blue-dark), 39%;
@@ -70,20 +83,23 @@
 }
 
 :root {
-  --theme-accent: #f9b127;
-  --theme-text-accent: #ff8c00;
+  --theme-accent: hsl(var(--color-primary-50));
+  --theme-text-accent: hsl(var(--color-primary-50));
   --theme-accent-opacity: 0.15;
   --theme-divider: hsla(var(--color-gray-95), 1);
   --theme-divider-light: hsla(var(--color-gray-95), 0.6);
+
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-dark: hsla(var(--color-base-black), 1);
   --theme-text-light: hsla(var(--color-gray-40), 1);
   --theme-text-lighter: hsla(var(--color-gray-80), 1);
 
-  --theme-bg: hsla(var(--color-base-white), 100%, 1);
+  --theme-bg: hsla(var(--color-cink-5), 1);
   --theme-bg-hover: hsla(var(--color-gray-95), 1);
   --theme-bg-offset: hsla(var(--color-gray-90), 1);
   --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
+
+  --theme-card: hsla(0, 0%, 100%, 1);
 
   --theme-code-inline-bg: hsla(var(--color-gray-95), 1);
   --theme-code-inline-text: var(--theme-text);

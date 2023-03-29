@@ -2,6 +2,52 @@
 import { SITE } from "../consts";
 import CommonLayout from "../layouts/CommonLayout.astro";
 import IconChevron from "../icons/Chevron.astro";
+
+const features = [
+  {
+    emoji: "☄️",
+    class: "major",
+    title: "Effector Spacewatch",
+    description:
+      "Experience the power of effector v23.0, featuring refined typings, universal hooks support.",
+  },
+  {
+    emoji: "🛡️",
+    title: "Type safe",
+    description:
+      "Excellent TypeScript support out of the box. With the type testing in the repository.",
+  },
+  {
+    emoji: "⚙️",
+    title: "Framework agnostic",
+    description: "Works with any UI or server framework. Tested with React, Solid, Vue.",
+  },
+  {
+    emoji: "⚡️",
+    title: "Performant",
+    description:
+      "Initialization of the whole logic at the app start provides a boost at the runtime.",
+  },
+  {
+    emoji: "📦",
+    title: "10Kb",
+    description:
+      "Effector supports tree-shaking and provides maximum opportunities with the small size.",
+  },
+  {
+    emoji: "🧑‍💻",
+    class: "minor",
+    title: "Developer-friendly",
+    description:
+      "Simple API surface with helpful community. Core-team reduces amount of methods to lear.",
+  },
+  {
+    emoji: "🫂",
+    title: "Just JavaScript",
+    description:
+      "There is no Proxies, classes and some magic inside. Just JavaScript code that works.",
+  },
+];
 ---
 
 <CommonLayout lang={SITE.defaultLanguage} title="Welcome" dir="ltr" description={SITE.description}>
@@ -19,6 +65,20 @@ import IconChevron from "../icons/Chevron.astro";
           <span>Getting started</span>
           <IconChevron />
         </a>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="wrapper">
+        {
+          features.map((feat) => (
+            <article class={feat.class}>
+              <div class="emoji">{feat.emoji}</div>
+              <div class="title">{feat.title}</div>
+              <p>{feat.description}</p>
+            </article>
+          ))
+        }
       </div>
     </section>
   </div>
@@ -72,7 +132,7 @@ import IconChevron from "../icons/Chevron.astro";
   }
 
   .hero a.primary {
-    background: linear-gradient(to right bottom, var(--theme-accent) 30%, var(--theme-text-accent));
+    background: linear-gradient(170deg, hsl(var(--color-primary-70)), hsl(var(--color-primary-50)));
     color: var(--theme-bg);
     text-shadow: var(--theme-text-accent) 0px 1px 0px;
 
@@ -116,5 +176,54 @@ import IconChevron from "../icons/Chevron.astro";
     .hero .description {
       @apply text-xl;
     }
+  }
+
+  /* ==== FEATURES ==== */
+
+  .features {
+  }
+
+  .features .wrapper {
+    @apply mx-auto grid min-h-[680px] w-full max-w-6xl grid-cols-3 grid-rows-3 gap-6 p-6;
+  }
+
+  .features article {
+    @apply z-10 flex flex-col gap-4 rounded-3xl p-4 text-center shadow-lg transition-shadow duration-500 hover:shadow-xl;
+    background-color: var(--theme-card);
+  }
+
+  .features article .emoji {
+    @apply flex h-16 w-16 items-center justify-center self-center text-4xl;
+  }
+
+  .features article .title {
+    @apply text-2xl;
+  }
+
+  .features article p {
+    @apply text-base;
+    color: var(--theme-text);
+  }
+
+  .features article.major {
+    @apply row-span-2;
+    /* background-image: linear-gradient(var(--theme-text-accent), var(--theme-bg)); */
+    background-image: radial-gradient(
+      circle at 50% 30%,
+      hsla(var(--color-primary-50), 0.4),
+      hsla(var(--color-primary-80), 0.3) 25%,
+      var(--theme-bg) 90%
+    );
+  }
+  .features article.major .emoji {
+    @apply w-full text-8xl;
+    height: 60%;
+  }
+  .features article.major .title {
+    @apply text-3xl;
+  }
+
+  .features article.minor {
+    @apply col-span-2;
   }
 </style>
