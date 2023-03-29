@@ -35,17 +35,17 @@ const features = [
       "Effector supports tree-shaking and provides maximum opportunities with the small size.",
   },
   {
+    emoji: "🫂",
+    title: "Just JavaScript",
+    description:
+      "There is no Proxies, classes and some magic inside. Just JavaScript code that works.",
+  },
+  {
     emoji: "🧑‍💻",
     class: "minor",
     title: "Developer-friendly",
     description:
       "Simple API surface with helpful community. Core-team reduces amount of methods to lear.",
-  },
-  {
-    emoji: "🫂",
-    title: "Just JavaScript",
-    description:
-      "There is no Proxies, classes and some magic inside. Just JavaScript code that works.",
   },
 ];
 ---
@@ -184,11 +184,11 @@ const features = [
   }
 
   .features .wrapper {
-    @apply mx-auto grid min-h-[680px] w-full max-w-6xl grid-cols-3 grid-rows-3 gap-6 p-6;
+    @apply mx-auto grid min-h-[680px] w-full max-w-6xl grid-cols-2 gap-3 p-3 sm:gap-6 sm:p-6 md:grid-cols-3 md:grid-rows-3;
   }
 
   .features article {
-    @apply z-10 flex flex-col gap-4 rounded-3xl p-4 text-center shadow-lg transition-shadow duration-500 hover:shadow-xl;
+    @apply z-10 flex flex-col gap-3 rounded-2xl p-3 text-center shadow-lg transition-shadow duration-500 hover:shadow-xl sm:gap-4 sm:rounded-3xl sm:p-4;
     background-color: var(--theme-card);
   }
 
@@ -197,11 +197,11 @@ const features = [
   }
 
   .features article .title {
-    @apply text-2xl;
+    @apply text-xl sm:text-2xl;
   }
 
   .features article p {
-    @apply text-base;
+    @apply text-sm sm:text-base;
     color: var(--theme-text);
   }
 
@@ -216,14 +216,16 @@ const features = [
     );
   }
   .features article.major .emoji {
-    @apply w-full text-8xl;
-    height: 60%;
+    @apply h-[50%] w-full text-8xl md:h-[60%];
   }
   .features article.major .title {
-    @apply text-3xl;
+    @apply text-2xl md:text-3xl;
   }
 
   .features article.minor {
-    @apply col-span-2;
+    @apply md:col-span-2;
+  }
+  .features article.minor p {
+    @apply mx-auto max-w-[50ch];
   }
 </style>
