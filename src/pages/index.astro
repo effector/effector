@@ -34,7 +34,7 @@ import IconChevron from "../icons/Chevron.astro";
   }
 
   .hero {
-    @apply mx-5 mt-12 mb-20 flex flex-col justify-center gap-6 lg:mt-24 lg:mb-32;
+    @apply mx-5 mt-12 mb-20 flex flex-col justify-center gap-6;
   }
 
   .hero .title {
@@ -46,7 +46,7 @@ import IconChevron from "../icons/Chevron.astro";
     -webkit-background-clip: text;
     font-family: "Lexend Deca";
 
-    @apply m-0 max-w-full p-0 text-center text-5xl font-bold md:text-6xl lg:text-8xl;
+    @apply m-0 max-w-full p-0 text-center text-5xl font-bold;
     line-height: 1;
   }
 
@@ -59,12 +59,12 @@ import IconChevron from "../icons/Chevron.astro";
     -webkit-background-clip: text;
     font-family: "Lexend Deca";
 
-    @apply m-0 p-0 text-center text-2xl font-medium md:text-4xl lg:text-5xl;
+    @apply m-0 p-0 text-center text-2xl font-medium;
     line-height: 1.5;
   }
 
   .hero .description {
-    @apply text-center text-base md:text-lg lg:text-xl;
+    @apply text-center text-base;
   }
 
   .hero .links {
@@ -76,6 +76,43 @@ import IconChevron from "../icons/Chevron.astro";
     color: var(--theme-bg);
     text-shadow: var(--theme-text-accent) 0px 1px 0px;
 
-    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base transition-shadow hover:shadow-md md:text-lg;
+    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base transition-shadow hover:shadow-md;
+  }
+
+  /* Some shit happens with tailwind, and order of md/lg rules is changed */
+  @media (min-width: 768px) {
+    .hero .title {
+      @apply text-6xl;
+    }
+
+    .hero .subtitle {
+      @apply text-4xl;
+    }
+
+    .hero .description {
+      @apply text-lg;
+    }
+
+    .hero a.primary {
+      @apply text-lg;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      @apply mt-24 mb-32;
+    }
+
+    .hero .title {
+      @apply text-8xl;
+    }
+
+    .hero .subtitle {
+      @apply text-5xl;
+    }
+
+    .hero .description {
+      @apply text-xl;
+    }
   }
 </style>
