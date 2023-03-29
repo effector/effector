@@ -7,7 +7,7 @@ import IconChevron from "../icons/Chevron.astro";
 <CommonLayout lang={SITE.defaultLanguage} title="Welcome" dir="ltr" description={SITE.description}>
   <div class="landing">
     <section class="hero">
-      <h1>effector</h1>
+      <div class="title">effector</div>
       <div class="subtitle">Write business logic with ease</div>
       <p class="description">
         Meet the new standard for modern TypeScript development.
@@ -37,9 +37,7 @@ import IconChevron from "../icons/Chevron.astro";
     @apply mx-5 mt-12 mb-20 flex flex-col justify-center gap-6 lg:mt-24 lg:mb-32;
   }
 
-  .hero h1 {
-    @apply m-0 p-0 text-center text-5xl font-bold md:text-6xl lg:text-8xl;
-
+  .hero .title {
     -webkit-box-decoration-break: clone;
     -webkit-text-fill-color: transparent;
     color: unset;
@@ -47,12 +45,12 @@ import IconChevron from "../icons/Chevron.astro";
     background: linear-gradient(to right bottom, var(--theme-text-light) 30%, var(--theme-text));
     -webkit-background-clip: text;
     font-family: "Lexend Deca";
+
+    @apply m-0 max-w-full p-0 text-center text-5xl font-bold md:text-6xl lg:text-8xl;
     line-height: 1;
   }
 
   .hero .subtitle {
-    @apply m-0 p-0 text-center text-2xl font-medium md:text-4xl lg:text-5xl;
-
     -webkit-box-decoration-break: clone;
     -webkit-text-fill-color: transparent;
     color: unset;
@@ -60,6 +58,8 @@ import IconChevron from "../icons/Chevron.astro";
     background: linear-gradient(to right bottom, var(--theme-text-light) 30%, var(--theme-text));
     -webkit-background-clip: text;
     font-family: "Lexend Deca";
+
+    @apply m-0 p-0 text-center text-2xl font-medium md:text-4xl lg:text-5xl;
     line-height: 1.5;
   }
 
@@ -72,11 +72,10 @@ import IconChevron from "../icons/Chevron.astro";
   }
 
   .hero a.primary {
-    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base transition-shadow hover:shadow-md;
-    @apply md:text-lg;
-
     background: linear-gradient(to right bottom, var(--theme-accent) 30%, var(--theme-text-accent));
     color: var(--theme-bg);
     text-shadow: var(--theme-text-accent) 0px 1px 0px;
+
+    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base transition-shadow hover:shadow-md md:text-lg;
   }
 </style>
