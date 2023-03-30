@@ -557,7 +557,7 @@ add(3);
 
 _DerivedStore_ has no specific interface in TypeScript, but it has different implementation in the effector kernel.
 
-Some methods like [combine](/en/api/effector/combine), [.map](#mapfn-state-state-laststate-t--t-firststate-t), [sample](/en/api/effector/sample), [.pending](/en/api/effector/Effect#pending) returns `Store` instance.
+Some methods like [combine](/en/api/effector/combine), [.map](#mapfn-state-state-laststate-t--t-firststate-t), [sample](/en/api/effector/sample), [.pending](/en/api/effector/Effect#effect-pending) returns `Store` instance.
 The store updates by specific rules defined in the method above. That's why we have different types of stores.
 
 Derived stores are not allowed to be modified from the outside. For example, you shall not add new triggers on the derived store:

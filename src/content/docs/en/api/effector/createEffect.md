@@ -15,14 +15,14 @@ createEffect(handler?)
 
 ### Arguments {#createEffect-handler-arguments}
 
-1. `handler` (_Function_): function to handle effect calls, also can be set with [use(handler)](/en/api/effector/Effect#use)
+1. `handler` (_Function_): function to handle effect calls, also can be set with [use(handler)](/en/api/effector/Effect#effect-use-handler)
 
 ### Returns {#createEffect-handler-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
 :::tip{title="Reminder"}
-You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [.use](/en/api/effector/Effect#use) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
+You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [.use](/en/api/effector/Effect#effect-use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
 :::
 
 :::info{title="since"}
@@ -31,7 +31,7 @@ You must provide a handler either in [createEffect](/en/api/effector/createEffec
 
 ### Examples {#createEffect-handler-examples}
 
-#### Create effect with handler
+#### Create effect with handler {#createEffect-handler-examples-usage}
 
 ```js
 import { createEffect } from "effector";
@@ -154,7 +154,7 @@ createEffect({ handler, name });
 
 ### Examples {#createEffect-config-examples}
 
-#### Create named effect
+#### Create named effect {#createEffect-config-examples-usage}
 
 ```js
 import { createEffect } from "effector";
