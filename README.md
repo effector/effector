@@ -935,6 +935,13 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>xxxxue</b></sub>
         </a>
     </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/faustienf>
+            <img src=https://avatars.githubusercontent.com/u/3603479?v=4 width="100;"  alt=☃︎/>
+            <br />
+            <sub style="font-size:14px"><b>☃︎</b></sub>
+        </a>
+    </td>
 </tr>
 </table>
 
