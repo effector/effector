@@ -73,9 +73,9 @@ $loginSize.watch((size) => {
 
 [Try it](https://share.effector.dev/D5hV8C70)
 
-[store.map in docs](/en/api/effector/Store#mapfn-state-state-laststate-t--t)
+[store.map in docs](/en/api/effector/Store#store-map-fn)
 
-[store.watch in docs](/en/api/effector/Store#watchwatcher)
+[store.watch in docs](/en/api/effector/Store#store-watch-watcher)
 
 **Correct**, declarative:
 
@@ -127,7 +127,7 @@ _Reducer_ calculates a new state given the previous state and an event's payload
 type Watcher<T> = (update: T) => any;
 ```
 
-_Watcher_ is used for **side effects**. Accepted by [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#watchwatcher) and [domain.onCreate\* hooks](/en/api/effector/Domain#oncreateeventhook). Return value of a watcher is ignored.
+_Watcher_ is used for **side effects**. Accepted by [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#store-watch-watcher) and [domain.onCreate\* hooks](/en/api/effector/Domain#oncreateeventhook). Return value of a watcher is ignored.
 
 ## Subscription
 
@@ -138,7 +138,7 @@ type Subscription = {
 };
 ```
 
-Function, returned by [forward](/en/api/effector/forward), [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#watchwatcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing
+Function, returned by [forward](/en/api/effector/forward), [event.watch](/en/api/effector/Event#watchwatcher), [store.watch](/en/api/effector/Store#store-watch-watcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing
 
 :::warning
 **Managing subscriptions manually distracts from business logic improvements.**
