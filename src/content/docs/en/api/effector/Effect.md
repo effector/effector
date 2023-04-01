@@ -9,13 +9,13 @@ It can be safely used in place of the original async function.
 
 <br/><br/>
 
-# Effect Methods {#effect-methods}
+# Methods {#effect-methods}
 
-## `use(handler)` {#effect-use}
+## `use(handler)` {#effect-use-handler}
 
 Provides a function, which will be called when the effect is triggered.
 
-### Formulae {#effect-use-formulae}
+### Formulae {#effect-use-handler-formulae}
 
 ```ts
 effect.use(fn);
@@ -26,21 +26,21 @@ effect.use(fn);
 
 Hint: current handler can be extracted with [effect.use.getCurrent()](#use-getcurrent).
 
-You must provide a handler either through [.use](/en/api/effector/Effect#use-handler) method or `handler` property in [createEffect](/en/api/effector/createEffect), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
+You must provide a handler either through [.use](/en/api/effector/Effect#effect-use-handler) method or `handler` property in [createEffect](/en/api/effector/createEffect), otherwise effect will throw with `no handler used in _%effect name%_` error when effect will be called.
 
 :::tip{title="See also"}
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 
-### Arguments {#effect-use-arguments}
+### Arguments {#effect-use-handler-arguments}
 
 1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
-### Returns {#effect-use-returns} 
+### Returns {#effect-use-handler-returns} 
 
 ([_Effect_](/en/api/effector/Effect)): The same effect
 
-### Example {#effect-use-example}
+### Example {#effect-use-handler-example}
 
 ```js
 const fetchUserReposFx = createEffect();
@@ -196,7 +196,7 @@ await userUpdate({ name: "john", role: "admin" });
 
 [Try it](https://share.effector.dev/MmBBKXZe)
 
-# Effect Properties {#effect-properties}
+# Properties {#effect-properties}
 
 You are not supposed to use parts of effect (like `.done` and `.pending`) as a `target` in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 

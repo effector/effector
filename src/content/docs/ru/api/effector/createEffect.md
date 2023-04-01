@@ -16,14 +16,14 @@ createEffect(handler?)
 
 **Аргументы**
 
-1. `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть задана с помощью [use(handler)](/ru/api/effector/Effect#use)
+1. `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть задана с помощью [use(handler)](/ru/api/effector/Effect#effect-use-handler)
 
 **Возвращает**
 
 [_Effect_](/ru/api/effector/Effect): Новый эффект
 
 :::info
-Вы должны задать обработчик в [createEffect](/ru/api/effector/createEffect) или же в [.use](/ru/api/effector/Effect#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
+Вы должны задать обработчик в [createEffect](/ru/api/effector/createEffect) или же в [.use](/ru/api/effector/Effect#effect-use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
 :::
 
 :::info{title="since"}
