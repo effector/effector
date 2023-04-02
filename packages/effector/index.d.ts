@@ -2844,8 +2844,8 @@ export function combine<State, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, R>(
-  a: Store<A>,
-  b: Store<B>,
+  a: A | Store<A>,
+  b: B | Store<B>,
   fn: (a: A, b: B) => R,
 ): Store<R>
 /**
@@ -2854,9 +2854,9 @@ export function combine<A, B, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
   fn: (a: A, b: B, c: C) => R,
 ): Store<R>
 /**
@@ -2865,10 +2865,10 @@ export function combine<A, B, C, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
   fn: (a: A, b: B, c: C, d: D) => R,
 ): Store<R>
 /**
@@ -2877,11 +2877,11 @@ export function combine<A, B, C, D, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
   fn: (a: A, b: B, c: C, d: D, e: E) => R,
 ): Store<R>
 /**
@@ -2890,12 +2890,12 @@ export function combine<A, B, C, D, E, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
-  f: Store<F>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
+  f: F | Store<F>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
 ): Store<R>
 /**
@@ -2904,13 +2904,13 @@ export function combine<A, B, C, D, E, F, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
-  f: Store<F>,
-  g: Store<G>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
+  f: F | Store<F>,
+  g: G | Store<G>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
 ): Store<R>
 /**
@@ -2922,14 +2922,14 @@ export function combine<A, B, C, D, E, F, G, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
-  f: Store<F>,
-  g: Store<G>,
-  h: Store<H>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
+  f: F | Store<F>,
+  g: G | Store<G>,
+  h: H | Store<H>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
 ): Store<R>
 /**
@@ -2941,15 +2941,15 @@ export function combine<A, B, C, D, E, F, G, H, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, I, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
-  f: Store<F>,
-  g: Store<G>,
-  h: Store<H>,
-  i: Store<I>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
+  f: F | Store<F>,
+  g: G | Store<G>,
+  h: H | Store<H>,
+  i: I | Store<I>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
 ): Store<R>
 /**
@@ -2961,16 +2961,16 @@ export function combine<A, B, C, D, E, F, G, H, I, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, I, J, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
-  f: Store<F>,
-  g: Store<G>,
-  h: Store<H>,
-  i: Store<I>,
-  j: Store<J>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
+  f: F | Store<F>,
+  g: G | Store<G>,
+  h: H | Store<H>,
+  i: I | Store<I>,
+  j: J | Store<J>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
 ): Store<R>
 /**
@@ -2982,24 +2982,24 @@ export function combine<A, B, C, D, E, F, G, H, I, J, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
-  a: Store<A>,
-  b: Store<B>,
-  c: Store<C>,
-  d: Store<D>,
-  e: Store<E>,
-  f: Store<F>,
-  g: Store<G>,
-  h: Store<H>,
-  i: Store<I>,
-  j: Store<J>,
-  k: Store<K>,
+  a: A | Store<A>,
+  b: B | Store<B>,
+  c: C | Store<C>,
+  d: D | Store<D>,
+  e: E | Store<E>,
+  f: F | Store<F>,
+  g: G | Store<G>,
+  h: H | Store<H>,
+  i: I | Store<I>,
+  j: J | Store<J>,
+  k: K | Store<K>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
 ): Store<R>
 /**
  * Convert given stores to store with array which values updated upon changes in given ones
  * @returns derived store
  */
-export function combine<T extends Tuple<Store<any>>>(
+export function combine<T extends Tuple<Store<any> | any>>(
   ...stores: T
 ): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
 
