@@ -60,7 +60,8 @@ const currentPage = Astro.url.pathname;
       display: flex;
       grid-column: 2;
       flex-direction: column;
-      padding: var(--doc-padding) var(--gutter);
+      padding-block: var(--doc-padding);
+      padding-inline: 1rem;
       height: 100%;
     }
 
@@ -85,6 +86,10 @@ const currentPage = Astro.url.pathname;
         position: sticky;
         grid-column: 1;
         padding-left: 2rem;
+      }
+
+      #grid-main {
+        padding-right: 2rem;
       }
     }
 
