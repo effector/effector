@@ -1,5 +1,5 @@
 ---
-title: Справочник по API
+title: effector
 description: Перечень основных методов API, по группам
 lang: ru
 ---
