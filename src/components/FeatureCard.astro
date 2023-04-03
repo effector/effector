@@ -1,0 +1,37 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  link: string;
+}
+---
+
+<a href={Astro.props.link} class="feature">
+  <div class="icon"><slot name="icon" /></div>
+  <div class="title">{Astro.props.title}</div>
+  <div class="description">{Astro.props.description}</div>
+</a>
+
+<style>
+  .feature {
+    @apply relative flex h-32 flex-col items-start gap-0 overflow-hidden rounded-xl p-2 text-left shadow-md transition-all hover:-translate-y-1 hover:shadow-xl focus:no-underline active:no-underline;
+    background-color: var(--theme-card);
+  }
+
+  .icon {
+    @apply absolute -top-3 -left-3 h-24 w-24;
+  }
+
+  .title,
+  .description {
+    @apply ml-24 text-left;
+    color: var(--theme-text);
+  }
+
+  .title {
+    @apply py-2 text-2xl;
+  }
+
+  .description {
+  }
+</style>

@@ -3,6 +3,11 @@
   "compilerOptions": {
     "jsx": "preserve",
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "baseUrl": ".",
+    "strictNullChecks": true,
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@icons/*": ["src/icons/*"]
+    }
   }
 }
