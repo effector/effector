@@ -42,7 +42,7 @@ Check the provided scope for any ongoing computations and wait for their complet
 
 ### Arguments {#allSettled-scope-arguments}
 
-1. `scope`: [_Scope_](./Scope)
+1. `scope`: [_Scope_](/en/api/effector/Scope)
 
 :::info{title="since"}
 Supported since effector 22.5.0

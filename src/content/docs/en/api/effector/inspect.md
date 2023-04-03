@@ -37,7 +37,7 @@ someEvent(42);
 // and so on, any triggers
 ```
 
-[Scope](./Scope.md) limits the extent to which computations can be tracked.
+[Scope](/en/api/effector/Scope) limits the extent to which computations can be tracked.
 If no scope is provided - default out-of-scope mode computations will be tracked.
 
 ```ts
@@ -127,7 +127,7 @@ inspect({
 
 ## Inspect Graph
 
-Allows us to track declarations of units, [factories](./babel-plugin.md#factories) and [regions](./withRegion.md)
+Allows us to track declarations of units, [factories](/en/api/effector/babel-plugin#factories) and [regions](/en/api/effector/withRegion)
 
 ```ts
 import { createStore } from "effector";

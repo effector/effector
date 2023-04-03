@@ -1,8 +1,5 @@
 ---
 title: Store
-keywords:
-  - store
-  - unit
 description: Store, его методы и свойства
 lang: ru
 ---
@@ -55,7 +52,6 @@ $second = $first.map(/*fn*/ (state: T, lastState?: S) => S);
 Новый, производный стор
 
 ### Пример {#store-map-fn-example}
-
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -187,7 +183,6 @@ triggerB(2);
 ```
 
 [Запустить пример](https://share.effector.dev/KDmGet6T)
-
 
 ## `watch(watcher)` {#store-watch-watcher}
 
@@ -366,7 +361,6 @@ $store.off(/*clock*/ $storeB);
 Текущий стор
 
 ### Пример {#store-off-trigger-example}
-
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -547,7 +541,7 @@ increment();
 
 ## `defaultState` {#store-defaultState}
 
-Начальное состояние стора, то, с которым он создавался. К этому состоянию будет возвращать метод [reset](./#reset)
+Начальное состояние стора, то, с которым он создавался. К этому состоянию будет возвращать метод [reset](#store-reset-triggers)
 
 ### Формула {#store-defaultState-formulae}
 
@@ -559,7 +553,6 @@ $store.defaultState
 ```
 
 ### Пример {#store-defaultState-example}
-
 
 ```ts
 const $store = createStore("DEFAULT");
@@ -607,7 +600,6 @@ const currentValue: T = $store.getState();
 ```
 
 ### Пример {#store-getState-example}
-
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -670,7 +662,6 @@ $store.watch(
 [_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки
 
 ### Пример {#store-watch-trigger-watcher-example}
-
 
 ```js
 import { createEvent, createStore } from "effector";
