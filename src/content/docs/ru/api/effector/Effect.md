@@ -16,9 +16,9 @@ _Effect (эффект)_ это контейнер для сайд-эффекто
 Эффекты можно вызывать как обычные функции (_императивный вызов_) а также подключать их и их свойства в различные методы api включая [sample](/ru/api/effector/sample), [guard](/ru/api/effector/guard) и [split](/ru/api/effector/split) (_декларативное подключение_). При императивном вызове принимают максимум один аргумент и всегда возвращают промис, отражающий ход выполнения сайд-эффекта
 
 
-# Методы {#effect-methods}
+# Методы {#methods}
 
-## `use(handler)` {#effect-use-handler}
+## `use(handler)` {#use-handler}
 
 Определяет имплементацию эффекта: функцию, которая будет вызвана при срабатывании. Используется для случаев когда имплементация не установлена [при создании](/ru/api/effector/createEffect) или когда требуется изменение поведения эффекта при тестировании
 
@@ -32,7 +32,7 @@ _Effect (эффект)_ это контейнер для сайд-эффекто
 Нужно предоставить имплементацию либо через use, либо через [createEffect](/ru/api/effector/createEffect), иначе при вызове эффекта возникнет ошибка "no handler used in _%effect name%_"
 :::
 
-### Формула {#effect-use-handler-formulae}
+### Формула {#use-handler-formulae}
 
 ```ts
 declare const fx: Effect<T, S>;
@@ -40,7 +40,7 @@ declare const fx: Effect<T, S>;
 fx.use(/*handler*/ (params: T) => S | Promise<S>);
 ```
 
-### Аргументы {#effect-use-handler-arguments}
+### Аргументы {#use-handler-arguments}
 
 1. **`handler`**: `(params: T) => S | Promise<S>`
 
@@ -54,7 +54,7 @@ fx.use(/*handler*/ (params: T) => S | Promise<S>);
 
    Результат выполнения эффекта в виде значения, либо в виде промиса со значением
 
-### Возвращает {#effect-use-handler-return}
+### Возвращает {#use-handler-return}
 
 Текущий эффект
 
@@ -64,7 +64,7 @@ fx.use(/*handler*/ (params: T) => S | Promise<S>);
 `createEffect().use(handler)` это антипаттерн, который ухудшает вывод типов
 :::
 
-### Пример {#effect-use-handler-example}
+### Пример {#use-handler-example}
 
 ```js
 import { createEffect } from "effector";
@@ -87,13 +87,13 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Запустить пример](https://share.effector.dev/Vp8tPzBh)
 
-## `use.getCurrent()` {#effect-use-getCurrent}
+## `use.getCurrent()` {#use-getCurrent}
 
 Метод для получения текущей имплементации эффекта. Используется для тестирования
 
 Если у эффекта ещё не была установлена имплементация, то будет возвращена функция по умолчанию, при срабатывании она [выбрасывает ошибку](https://share.effector.dev/8PBjt3TL)
 
-### Формула {#effect-getCurrent-formulae}
+### Формула {#getCurrent-formulae}
 
 ```ts
 declare const fx: Effect<P, D>
@@ -102,11 +102,11 @@ fx.use.getCurrent()
 -> (params: P) => D
 ```
 
-### Возвращает {#effect-getCurrent-return}
+### Возвращает {#getCurrent-return}
 
 Функцию-имплементацию эффекта, которая была установлена через [createEffect](/ru/api/effector/createEffect) или с помощью метода [use](#use)
 
-### Пример {#effect-getCurrent-example}
+### Пример {#getCurrent-example}
 
 ```js
 const handlerA = () => "A";
@@ -124,7 +124,7 @@ console.log(fx.use.getCurrent() === handlerB);
 
 [Запустить пример](https://share.effector.dev/CM6hgtOM)
 
-## `watch(watcher)` {#effect-watch-watcher}
+## `watch(watcher)` {#watch-watcher}
 
 Вызывает дополнительную функцию с сайд-эффектами при каждом срабатывании эффекта
 
@@ -132,7 +132,7 @@ console.log(fx.use.getCurrent() === handlerB);
 По мере усложнения логики проекта оптимальнее заменить на комбинацию дополнительного эффекта и [sample](/ru/api/effector/sample)
 :::
 
-### Формула {#effect-watch-watcher-formulae}
+### Формула {#watch-watcher-formulae}
 
 ```ts
 declare const fx: Effect<T, any>
@@ -141,17 +141,17 @@ fx.watch(/*watcher*/ (data: T) => any)
 -> Subscription
 ```
 
-### Аргументы {#effect-watch-watcher-arguments}
+### Аргументы {#watch-watcher-arguments}
 
 1. **`watcher`**: `(data: T) => any`
 
    Функция с сайд-эффектами, в качестве первого аргумента получает значение с которым был вызван эффект. Возвращаемое значение не используется
 
-### Возвращает {#effect-watch-watcher-return}
+### Возвращает {#watch-watcher-return}
 
 [_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
 
-### Пример {#effect-watch-watcher-example}
+### Пример {#watch-watcher-example}
 
 ```js
 import { createEffect } from "effector";
@@ -168,11 +168,11 @@ await fx(10);
 
 [Запустить пример](https://share.effector.dev/iNb7YIdV)
 
-## `prepend(fn)` {#effect-prepend-fn}
+## `prepend(fn)` {#prepend-fn}
 
 Создаёт событие-триггер для преобразования данных _перед_ запуском эффекта. По сравнению с [map](#map), работает в обратном направлении
 
-### Формула {#effect-prepend-fn-formulae}
+### Формула {#prepend-fn-formulae}
 
 ```ts
 declare const fx: Effect<S, any>
@@ -189,7 +189,7 @@ const trigger = fx.prepend(/*fn*/(data: T) => S)
 
 ```
 
-### Аргументы {#effect-prepend-fn-arguments}
+### Аргументы {#prepend-fn-arguments}
 
 1.  **`fn`**: `(data: T) => S`
 
@@ -203,16 +203,16 @@ const trigger = fx.prepend(/*fn*/(data: T) => S)
 
     Данные для передачи в `fx`
 
-### Возвращает {#effect-prepend-fn-return}
+### Возвращает {#prepend-fn-return}
 
 Новое событие
 
 
-## `map(fn)` {#effect-map-fn}
+## `map(fn)` {#map-fn}
 
 Создает производное событие на основе данных эффекта
 
-### Формула {#effect-map-fn-formulae}
+### Формула {#map-fn-formulae}
 
 ```ts
 declare const fxA: Effect<T, any>
@@ -229,7 +229,7 @@ const eventB = fxA.map(/*fn*/(data: T) => S)
 
 ```
 
-### Аргументы {#effect-map-fn-arguments}
+### Аргументы {#map-fn-arguments}
 
 1.  **`fn`**: `(data: T) => S`
 
@@ -243,11 +243,11 @@ const eventB = fxA.map(/*fn*/(data: T) => S)
 
     Данные для передачи в производное событие `eventB`
 
-### Возвращает {#effect-map-fn-return}
+### Возвращает {#map-fn-return}
 
 Новое, производное событие
 
-### Пример {#effect-map-fn-example}
+### Пример {#map-fn-example}
 
 ```js
 import { createEffect } from "effector";
@@ -270,13 +270,13 @@ await updateUserFx({ name: "john", role: "admin" });
 
 [Запустить пример](https://share.effector.dev/4UFLTo5p)
 
-# Свойства {#effect-properties}
+# Свойства {#properties}
 
-## `done` {#effect-done}
+## `done` {#done}
 
 [Событие](/ru/api/effector/Event), которое срабатывает с результатом выполнения эффекта и аргументом, переданным при вызове
 
-### Формула {#effect-done-formulae}
+### Формула {#done-formulae}
 
 ```ts
 declare const fx: Effect<P, D>
@@ -289,7 +289,7 @@ fx.done
 Это свойство управляется самим эффектом
 :::
 
-### Пример {#effect-done-example}
+### Пример {#done-example}
 
 ```js
 import { createEffect } from "effector";
@@ -307,11 +307,11 @@ await fx(2);
 [Запустить пример](https://share.effector.dev/tnSg24Ca)
 
 
-## `doneData` {#effect-doneData}
+## `doneData` {#doneData}
 
 [Событие](/ru/api/effector/Event), которое срабатывает с результатом выполнения эффекта
 
-### Формула {#effect-doneData-formulae}
+### Формула {#doneData-formulae}
 
 ```ts
 declare const fx: Effect<any, D>
@@ -328,7 +328,7 @@ fx.doneData
 Добавлено в effector 20.12.0
 :::
 
-### Пример {#effect-doneData-example}
+### Пример {#doneData-example}
 
 ```js
 import { createEffect } from "effector";
@@ -345,11 +345,11 @@ await fx(2);
 
 [Запустить пример](https://share.effector.dev/KexWC7GO)
 
-## `fail` {#effect-fail}
+## `fail` {#fail}
 
 [Событие](/ru/api/effector/Event), которое срабатывает с ошибкой, возникшей при выполнении эффекта и аргументом, переданным при вызове
 
-### Формула {#effect-fail-formulae}
+### Формула {#fail-formulae}
 
 ```ts
 declare const fx: Effect<P, any, E>
@@ -362,7 +362,7 @@ fx.fail
 Это свойство управляется самим эффектом
 :::
 
-### Пример {#effect-fail-example}
+### Пример {#fail-example}
 
 ```js
 import { createEffect } from "effector";
@@ -381,7 +381,7 @@ fx(2);
 
 [Запустить пример](https://share.effector.dev/5xHVmzIJ)
 
-## `failData` {#effect-failData}
+## `failData` {#failData}
 
 :::info
 Добавлено в effector 20.12.0
@@ -389,7 +389,7 @@ fx(2);
 
 [Событие](/ru/api/effector/Event), которое срабатывает с ошибкой, возникшей при выполнении эффекта
 
-### Формула {#effect-failData-formulae}
+### Формула {#failData-formulae}
 
 ```ts
 declare const fx: Effect<any, any, E>
@@ -402,7 +402,7 @@ fx.failData
 Это свойство управляется самим эффектом
 :::
 
-### Пример {#effect-failData-example}
+### Пример {#failData-example}
 
 ```js
 import { createEffect } from "effector";
@@ -421,7 +421,7 @@ fx(2);
 
 [Запустить пример](https://share.effector.dev/i5ktYSqM)
 
-## `finally` {#effect-finally}
+## `finally` {#finally}
 
 :::info
 Добавлено в effector 20.0.0
@@ -429,7 +429,7 @@ fx(2);
 
 [Событие](/ru/api/effector/Event), которое срабатывает при завершении эффекта с подробной информацией об аргументах, результатах и статусе выполнения
 
-### Формула {#effect-finally-formulae}
+### Формула {#finally-formulae}
 
 ```ts
 declare const fx: Effect<P, D, E>
@@ -445,7 +445,7 @@ fx.finally
 Это свойство управляется самим эффектом
 :::
 
-### Пример {#effect-finally-example}
+### Пример {#finally-example}
 
 ```js
 import { createEffect } from "effector";
@@ -479,11 +479,11 @@ fetchApiFx({ time: 100, ok: false });
 [Запустить пример](https://share.effector.dev/Oqvy2x35)
 
 
-## `pending` {#effect-pending}
+## `pending` {#pending}
 
 [Стор](/ru/api/effector/Store), который показывает, что эффект находится в процессе выполнения
 
-### Формула {#effect-pending-formulae}
+### Формула {#pending-formulae}
 
 ```ts
 declare const fx: Effect<any, any>
@@ -509,9 +509,9 @@ const $isRequestPending = createStore(false)
 Это свойство управляется самим эффектом
 :::
 
-### Пример {#effect-pending-example}
+### Пример {#pending-example}
 
-#### Отображение индикатора загрузки с React {#effect-pending-example-react}
+#### Отображение индикатора загрузки с React {#pending-example-react}
 
 ```jsx
 import React from "react";
@@ -540,7 +540,7 @@ fetchApiFx(1000);
 
 [Запустить пример](https://share.effector.dev/e9y5uETf)
 
-## `inFlight` {#effect-inFlight}
+## `inFlight` {#inFlight}
 
 :::info
 Добавлено в effector 20.11.0
@@ -548,7 +548,7 @@ fetchApiFx(1000);
 
 [Стор](/ru/api/effector/Store), который показывает число запущенных эффектов, которые находятся в процессе выполнения. Используется для ограничения числа одновременных запросов
 
-### Формула {#effect-inFlight-formulae}
+### Формула {#inFlight-formulae}
 
 ```ts
 declare const fx: Effect<any, any>
@@ -574,7 +574,7 @@ const $requestsInFlight = createStore(0)
 Это свойство управляется самим эффектом
 :::
 
-### Пример {#effect-inFlight-example}
+### Пример {#inFlight-example}
 
 ```js
 import { createEffect } from "effector";
@@ -602,11 +602,11 @@ await Promise.all([req1, req2]);
 
 [Запустить пример](https://share.effector.dev/ADD0M4NV)
 
-## `shortName` {#effect-shortName}
+## `shortName` {#shortName}
 
 Имя эффекта. Задаётся либо явно, через поле `name` в [createEffect](/ru/api/effector/createEffect), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEffect)
 
-### Формула {#effect-shortName-formulae}
+### Формула {#shortName-formulae}
 
 ```ts
 declare const fx: Effect<any, any>
@@ -615,11 +615,11 @@ fx.shortName
 -> string
 ```
 
-## `sid` {#effect-sid}
+## `sid` {#sid}
 
 Стабильный идентификатор эффекта. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
-### Формула {#effect-sid-formulae}
+### Формула {#sid-formulae}
 
 ```ts
 declare const fx: Effect<any, any>

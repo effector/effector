@@ -15,14 +15,14 @@ createEffect(handler?)
 
 ### Arguments {#createEffect-handler-arguments}
 
-1. `handler` (_Function_): function to handle effect calls, also can be set with [use(handler)](/en/api/effector/Effect#effect-use-handler)
+1. `handler` (_Function_): function to handle effect calls, also can be set with [use(handler)](/en/api/effector/Effect#use-handler)
 
 ### Returns {#createEffect-handler-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
 :::tip{title="Reminder"}
-You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [.use](/en/api/effector/Effect#effect-use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
+You must provide a handler either in [createEffect](/en/api/effector/createEffect) or in [.use](/en/api/effector/Effect#use-handler) method later, otherwise effect will throw with `no handler used in _%effect name%_` error.
 :::
 
 :::info{title="since"}
