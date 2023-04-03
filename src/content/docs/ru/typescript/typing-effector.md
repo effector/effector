@@ -74,7 +74,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 
 ## `event.prepend`
 
-Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event#event-prepend-fn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
+Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event#prepend-fn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
 
 ```typescript
 const message = createEvent<string>();

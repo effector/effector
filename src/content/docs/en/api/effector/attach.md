@@ -344,7 +344,7 @@ const attachedFx = attach({
 ### Arguments {#attach-effect-mapParams-arguments}
 
 - `effect` ([_Effect_](/en/api/effector/Effect)): Wrapped effect
-- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works mostly like [event.prepend](/en/api/effector/Event#event-prepend-fn). Errors happened in `mapParams` function will force attached effect to fail.
+- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works mostly like [event.prepend](/en/api/effector/Event#prepend-fn). Errors happened in `mapParams` function will force attached effect to fail.
 
 ### Returns {#attach-effect-mapParams-returns}
 
