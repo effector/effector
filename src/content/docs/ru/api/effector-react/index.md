@@ -7,23 +7,20 @@ description: Перечень основных методов API, по груп
 
 ## Хуки
 
-- [useStore(store)](./useStore)
-- [useStoreMap({ store, keys, fn })](./useStoreMap)
-- [useList(store, renderItem)](./useList)
-- [useUnit(units)](./useUnit)
+- [useStore(store)](/ru/api/effector-react/useStore)
+- [useStoreMap({ store, keys, fn })](/ru/api/effector-react/useStoreMap)
+- [useList(store, renderItem)](/ru/api/effector-react/useList)
+- [useUnit(units)](/ru/api/effector-react/useUnit)
+- [useEvent(unit)](/ru/api/effector-react/useEvent)
 
 ## Gate API
 
-- [Gate](./Gate)
-- [createGate()](./createGate)
-- [useGate(GateComponent, props)](./useGate)
+- [Gate](/ru/api/effector-react/Gate)
+- [createGate()](/ru/api/effector-react/createGate)
+- [useGate(GateComponent, props)](/ru/api/effector-react/useGate)
 
-## effector-react/ssr API
+## Higher Order Components API
 
-- [useEvent(unit)](./useEvent)
-
-## Остальные функции
-
-- [createComponent(store, render)](./createComponent)
-- [createStoreConsumer(store)](./createStoreConsumer) renders props style
-- [connect(store)(Component)](./connect) "connect" style
+- [createComponent(store, render)](/ru/api/effector-react/createComponent)
+- [createStoreConsumer(store)](/ru/api/effector-react/createStoreConsumer)
+- [connect(store)(Component)](/ru/api/effector-react/connect)

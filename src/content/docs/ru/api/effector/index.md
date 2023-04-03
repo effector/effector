@@ -6,52 +6,56 @@ lang: ru
 
 Перечень основных методов API, по группам
 
-## Создание юнитов
-
-- [createEvent](./createEvent)
-- [createStore](./createStore)
-- [createEffect](./createEffect)
-- [createDomain](./createDomain)
-
 ## Типы юнитов
 
-- [_Event_](./Event)
-- [_Effect_](./Effect)
-- [_Store_](./Store)
-- [_Domain_](./Domain)
-- [_Scope_](./Scope)
+- [Event](/ru/api/effector/Event)
+- [Effect](/ru/api/effector/Effect)
+- [Store](/ru/api/effector/Store)
+- [Domain](/ru/api/effector/Domain)
+- [Scope](/ru/api/effector/Scope)
+
+## Создание юнитов
+
+- [createEvent](/ru/api/effector/createEvent)
+- [createStore](/ru/api/effector/createStore)
+- [createEffect](/ru/api/effector/createEffect)
+- [createDomain](/ru/api/effector/createDomain)
 
 ## Основные методы библиотеки
 
-- [combine(...stores, f)](./combine)
-- [attach({effect, mapParams, source?})](./attach)
-- [createApi(store, api)](./createApi)
-- [forward({from, to})](./forward)
-- [merge([eventA, eventB])](./merge)
-- [sample({clock, source, fn, target})](./sample)
-- [guard({source, filter, target})](./guard)
-- [split(event, cases)](./split)
-- [fromObservable(observable)](./fromObservable)
+- [combine(...stores, f)](/ru/api/effector/combine)
+- [attach({effect, mapParams?, source?})](/ru/api/effector/attach)
+- [sample({clock, source, fn, target})](/ru/api/effector/sample)
+- [merge([eventA, eventB])](/ru/api/effector/merge)
+- [split(event, cases)](/ru/api/effector/split)
+- [createApi(store, api)](/ru/api/effector/createApi)
 
 ## Fork API
 
-- [fork](./fork)
-- [serialize](./serialize)
-- [hydrate](./hydrate)
-- [allSettled](./allSettled)
-- [scopeBind](./scopeBind)
+- [fork](/ru/api/effector/fork)
+- [serialize](/ru/api/effector/serialize)
+- [allSettled](/ru/api/effector/allSettled)
+- [scopeBind](/ru/api/effector/scopeBind)
+- [hydrate](/ru/api/effector/hydrate)
 
 ## Плагины для компилятора
 
-- [effector/babel-plugin](./babel-plugin)
+- [effector/babel-plugin](/ru/api/effector/babel-plugin)
 - [@effector/swc-plugin](https://github.com/effector/swc-plugin)
 
 ## Служебные функции
 
-- [is](./is)
+- [is](/ru/api/effector/is)
+- [fromObservable(observable)](/ru/api/effector/fromObservable)
 
 ## Низкоуровневый API
 
-- [clearNode](./clearNode)
-- [withRegion](./withRegion)
-- [launch](./launch)
+- [clearNode](/ru/api/effector/clearNode)
+- [withRegion](/ru/api/effector/withRegion)
+- [launch](/ru/api/effector/launch)
+- [inspect](/ru/api/effector/inspect)
+
+## Устаревшие методы
+
+- [forward({from, to})](/ru/api/effector/forward)
+- [guard({source, filter, target})](/ru/api/effector/guard)

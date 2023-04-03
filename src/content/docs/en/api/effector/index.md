@@ -4,52 +4,56 @@ title: effector
 
 List of the methods
 
-## Unit creators
-
-- [createEvent](./createEvent)
-- [createStore](./createStore)
-- [createEffect](./createEffect)
-- [createDomain](./createDomain)
-
 ## Unit definitions
 
-- [Event](./Event)
-- [Effect](./Effect)
-- [Store](./Store)
-- [Domain](./Domain)
-- [Scope](./Scope)
+- [Event](/en/api/effector/Event)
+- [Effect](/en/api/effector/Effect)
+- [Store](/en/api/effector/Store)
+- [Domain](/en/api/effector/Domain)
+- [Scope](/en/api/effector/Scope)
+
+## Unit creators
+
+- [createEvent](/en/api/effector/createEvent)
+- [createStore](/en/api/effector/createStore)
+- [createEffect](/en/api/effector/createEffect)
+- [createDomain](/en/api/effector/createDomain)
 
 ## Common methods
 
-- [combine(...stores, f)](./combine)
-- [attach({effect, mapParams, source?})](./attach)
-- [createApi(store, api)](./createApi)
-- [forward({from, to})](./forward)
-- [merge([eventA, eventB])](./merge)
-- [sample({clock, source, fn, target})](./sample)
-- [guard({source, filter, target})](./guard)
-- [split(event, cases)](./split)
-- [fromObservable(observable)](./fromObservable)
+- [combine(...stores, f)](/en/api/effector/combine)
+- [attach({effect, mapParams?, source?})](/en/api/effector/attach)
+- [sample({clock, source, fn, target})](/en/api/effector/sample)
+- [merge([eventA, eventB])](/en/api/effector/merge)
+- [split(event, cases)](/en/api/effector/split)
+- [createApi(store, api)](/en/api/effector/createApi)
 
 ## Fork API
 
-- [fork](./fork)
-- [serialize](./serialize)
-- [hydrate](./hydrate)
-- [allSettled](./allSettled)
-- [scopeBind](./scopeBind)
+- [fork](/en/api/effector/fork)
+- [serialize](/en/api/effector/serialize)
+- [allSettled](/en/api/effector/allSettled)
+- [scopeBind](/en/api/effector/scopeBind)
+- [hydrate](/en/api/effector/hydrate)
 
 ## Plugins
 
-- [effector/babel-plugin](./babel-plugin)
+- [effector/babel-plugin](/en/api/effector/babel-plugin)
 - [@effector/swc-plugin](https://github.com/effector/swc-plugin)
 
 ## Utilities
 
-- [is](./is)
+- [is](/en/api/effector/is)
+- [fromObservable(observable)](/en/api/effector/fromObservable)
 
 ## Low level api
 
-- [clearNode](./clearNode)
-- [withRegion](./withRegion)
-- [launch](./launch)
+- [clearNode](/en/api/effector/clearNode)
+- [withRegion](/en/api/effector/withRegion)
+- [launch](/en/api/effector/launch)
+- [inspect](/en/api/effector/inspect)
+
+## Deprecated methods
+
+- [forward({from, to})](/en/api/effector/forward)
+- [guard({source, filter, target})](/en/api/effector/guard)

@@ -6,28 +6,28 @@ Effector binginds for Vue.
 
 ### Top-Level Exports
 
-- [VueEffector(Vue, options?)](./VueEffector)
-- [createComponent(ComponentOptions, store?)](./createComponent)
+- [VueEffector(Vue, options?)](/en/api/effector-vue/VueEffector)
+- [createComponent(ComponentOptions, store?)](/en/api/effector-vue/createComponent)
 
 ### ComponentOptions API
 
-- [ComponentOptions\<V\>](./ComponentOptions)
-  - [effector](./ComponentOptions#effector)
+- [ComponentOptions\<V\>](/en/api/effector-vue/ComponentOptions)
+  - [effector](/en/api/effector-vue/ComponentOptions#effector)
 
 ### Vue API
 
-- [Vue](./Vue)
-- [$watchAsStore](./Vue#$watchAsStore) _(deprecated)_
-- [$store](./Vue#$store) _(deprecated)_
+- [Vue](/en/api/effector-vue/Vue)
+- [$watchAsStore](/en/api/effector-vue/Vue#$watchAsStore) _(deprecated)_
+- [$store](/en/api/effector-vue/Vue#$store) _(deprecated)_
 
 ### Hooks
 
-- [useStore(store)](./useStore)
-- [useStoreMap({store, keys, fn})](./useStoreMap)
-- [useVModel(store)](./useVModel)
+- [useStore(store)](/en/api/effector-vue/useStore)
+- [useStoreMap({store, keys, fn})](/en/api/effector-vue/useStoreMap)
+- [useVModel(store)](/en/api/effector-vue/useVModel)
 
 ### Gate API
 
-- [Gate](./Gate)
-- [createGate()](./createGate)
-- [useGate(GateComponent, props)](./useGate)
+- [Gate](/en/api/effector-vue/Gate)
+- [createGate()](/en/api/effector-vue/createGate)
+- [useGate(GateComponent, props)](/en/api/effector-vue/useGate)

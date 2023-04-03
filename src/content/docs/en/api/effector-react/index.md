@@ -6,20 +6,20 @@ Effector bindings for ReactJS.
 
 ## Hooks
 
-- [useUnit(units)](./useUnit)
-- [useList(store, renderItem)](./useList)
-- [useStoreMap({ store, keys, fn })](./useStoreMap)
-- [useStore(store)](./useStore)
-- [useEvent(unit)](./useEvent)
+- [useUnit(units)](/en/api/effector-react/useUnit)
+- [useList(store, renderItem)](/en/api/effector-react/useList)
+- [useStoreMap({ store, keys, fn })](/en/api/effector-react/useStoreMap)
+- [useStore(store)](/en/api/effector-react/useStore)
+- [useEvent(unit)](/en/api/effector-react/useEvent)
 
 ## Gate API
 
-- [Gate](./Gate)
-- [createGate()](./createGate)
-- [useGate(GateComponent, props)](./useGate)
+- [Gate](/en/api/effector-react/Gate)
+- [createGate()](/en/api/effector-react/createGate)
+- [useGate(GateComponent, props)](/en/api/effector-react/useGate)
 
-## Top-Level Exports
+## Higher Order Components API
 
-- [createComponent(store, render)](./createComponent)
-- [createStoreConsumer(store)](./createStoreConsumer) renders props style
-- [connect(store)(Component)](./connect) "connect" style
+- [createComponent(store, render)](/en/api/effector-react/createComponent)
+- [createStoreConsumer(store)](/en/api/effector-react/createStoreConsumer) renders props style
+- [connect(store)(Component)](/en/api/effector-react/connect) "connect" style
