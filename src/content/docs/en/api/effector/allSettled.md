@@ -3,7 +3,9 @@ title: allSettled
 description: Call provided unit in scope and wait for finishing all the triggered effects
 ---
 
-## Formulae {#allSettled-formulae}
+## `allSettled(unit, {scope, params?})` {#unit-scope-params}
+
+### Formulae {#unit-scope-params-formulae}
 
 ```ts
 allSettled<T>(unit: Event<T>, {scope: Scope, params?: T}): Promise<void>
@@ -16,7 +18,7 @@ allSettled<T>(unit: Store<T>, {scope: Scope, params?: T}): Promise<void>
 
 Call the provided unit within the current scope and wait for all triggered effects to complete
 
-### Arguments {#allSettled-arguments}
+### Arguments {#unit-scope-params-arguments}
 
 1. `unit`: [_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) to be called
 2. `scope`: [_Scope_](/en/api/effector/Scope)
@@ -26,13 +28,13 @@ Call the provided unit within the current scope and wait for all triggered effec
 Return value for effect is supported since [effector 21.4.0](https://changelog.effector.dev/#effector-21-4-0)
 :::
 
-### Example {#allSettled-example}
+### Example {#unit-scope-params-example}
 
 :::tip{title="Contribution"}
 Please, [open PullRequest](https://github.com/effector/effector) and contribute examples for this section via "Edit this page" link below.
 :::
 
-## allSettled(scope) {#allSettled-scope-formulae}
+## `allSettled(scope)` {#scope-formulae}
 
 ```ts
 allSettled<T>(scope): Promise<void>
@@ -40,7 +42,7 @@ allSettled<T>(scope): Promise<void>
 
 Check the provided scope for any ongoing computations and wait for their completion.
 
-### Arguments {#allSettled-scope-arguments}
+### Arguments {#scope-arguments}
 
 1. `scope`: [_Scope_](/en/api/effector/Scope)
 
@@ -48,7 +50,7 @@ Check the provided scope for any ongoing computations and wait for their complet
 Supported since effector 22.5.0
 :::
 
-### Example {#allSettled-scope-example}
+### Example {#scope-example}
 
 #### Usage in tests
 
