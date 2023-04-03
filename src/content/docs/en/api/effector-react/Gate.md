@@ -26,10 +26,10 @@ Gate can have two states:
 ## `state` {#Gate-state}
 
 :::warning{title="Important"}
-Do not modify `state` value! It is [derived store](/en/api/effector/Store#store-derived) and should be in predictable state.
+Do not modify `state` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
 :::
 
-`Store<Props>`: [DerivedStore](/en/api/effector/Store#store-derived) with current state of the given gate. The state came from the second argument of [useGate](/en/api/effector-react/useGate) and from props when rendering gate as a component
+`Store<Props>`: [DerivedStore](/en/api/effector/Store#derived) with current state of the given gate. The state came from the second argument of [useGate](/en/api/effector-react/useGate) and from props when rendering gate as a component
 
 ### Example {#Gate-state-example}
 
@@ -66,10 +66,10 @@ Do not manually call this event. It is an event that depends on a Gate state.
 ## `status` {#Gate-status}
 
 :::warning{title="Important"}
-Do not modify `status` value! It is [derived store](/en/api/effector/Store#store-derived) and should be in predictable state.
+Do not modify `status` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
 :::
 
-[Store<boolean>](/en/api/effector/Store): Boolean [DerivedStore](/en/api/effector/Store#store-derived) which show if given gate is mounted.
+[Store<boolean>](/en/api/effector/Store): Boolean [DerivedStore](/en/api/effector/Store#derived) which show if given gate is mounted.
 
 ### Example {#Gate-status-example}
 

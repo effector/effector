@@ -73,9 +73,9 @@ $loginSize.watch((size) => {
 
 [Try it](https://share.effector.dev/D5hV8C70)
 
-[store.map in docs](/en/api/effector/Store#store-map-fn)
+[store.map in docs](/en/api/effector/Store#map-fn)
 
-[store.watch in docs](/en/api/effector/Store#store-watch-watcher)
+[store.watch in docs](/en/api/effector/Store#watch-watcher)
 
 **Correct**, declarative:
 

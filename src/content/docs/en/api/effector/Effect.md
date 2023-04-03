@@ -416,10 +416,10 @@ $store = effect.pending;
 ### Returns {#effect-pending-returns}
 
 :::warning{title="Important"}
-Do not modify `$store` value! It is [derived store](/en/api/effector/Store#store-derived) and should be in predictable state.
+Do not modify `$store` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
 :::
 
-[_DerivedStore_](/en/api/effector/Store#store-derived): Store that represents current state of the effect
+[_DerivedStore_](/en/api/effector/Store#derived): Store that represents current state of the effect
 
 ### Example {#effect-pending-example}
 
@@ -478,12 +478,12 @@ $count = effect.inFlight;
 - When effect resolves to any state(done or fail) state in `$count` store will be decreased
 
 :::warning{title="Important"}
-Do not modify `$count` value! It is [derived store](/en/api/effector/Store#store-derived) and should be in predictable state.
+Do not modify `$count` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
 :::
 
 ### Returns {#effect-inFlight-returns}
 
-[_DerivedStore_](/en/api/effector/Store#store-derived): Store that represents count of the running effects
+[_DerivedStore_](/en/api/effector/Store#derived): Store that represents count of the running effects
 
 ### Example {#effect-inFlight-example}
 

@@ -63,9 +63,9 @@ loginSize.watch((size) => {
 
 [Запустить пример](https://share.effector.dev/D5hV8C70)
 
-`store.map` [в документации](/ru/api/effector/Store#store-map-fn)
+`store.map` [в документации](/ru/api/effector/Store#map-fn)
 
-`store.watch` [в документации](/ru/api/effector/Store#store-watch-watcher)
+`store.watch` [в документации](/ru/api/effector/Store#watch-watcher)
 
 **Правильно**, декларативно:
 
