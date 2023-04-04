@@ -72,7 +72,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 
 ## `event.prepend`
 
-To add types to events, created by [event.prepend](/en/api/effector/Event#event-prepend-fn), you need to add a type either by prepending function argument or as generic type
+To add types to events, created by [event.prepend](/en/api/effector/Event#prepend-fn), you need to add a type either by prepending function argument or as generic type
 
 ```typescript
 const message = createEvent<string>();

@@ -9,13 +9,13 @@ _Store (стор)_ – это объект, который хранит знач
 <br />
 <br />
 
-# Методы {#store-methods}
+# Методы {#methods}
 
-## `map(fn)` {#store-map-fn}
+## `map(fn)` {#map-fn}
 
 Создает производный стор на основе данных из исходного
 
-### Формула {#store-map-fn-formulae}
+### Формула {#map-fn-formulae}
 
 ```ts
 declare const $first: Store<T>; // исходный стор
@@ -32,7 +32,7 @@ $second = $first.map(/*fn*/ (state: T, lastState?: S) => S);
 С версии [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) второй аргумент функции `fn` и `firstState` были депрекейтнуты, вместо этого используйте [updateFilter](/ru/api/effector/createStore) или создание нового стора с помощью `createStore`.
 :::
 
-### Аргументы {#store-map-fn-arguments}
+### Аргументы {#map-fn-arguments}
 
 1.  **`fn`**: `(state: T, lastState?: S) => S`
 
@@ -47,11 +47,11 @@ $second = $first.map(/*fn*/ (state: T, lastState?: S) => S);
 
     Новое значение для хранения в производном сторе `$second`. Если функция возвращает undefined или текущее состояние производного стора, то обновления не будет
 
-### Возвращает {#store-map-fn-returns}
+### Возвращает {#map-fn-returns}
 
 Новый, производный стор
 
-### Пример {#store-map-fn-example}
+### Пример {#map-fn-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -77,11 +77,11 @@ changed("hello world");
 
 [Запустить пример](https://share.effector.dev/NmQAHZny)
 
-## `on(trigger, reducer)` {#store-on-trigger-reducer}
+## `on(trigger, reducer)` {#on-trigger-reducer}
 
 Обновляет состояние стора с помощью функции-обработчика при срабатывании триггера
 
-### Формула {#store-on-trigger-reducer-formulae}
+### Формула {#on-trigger-reducer-formulae}
 
 ```ts
 declare const $store: Store<T>; // обновляемый стор
@@ -96,7 +96,7 @@ $store.on(/*clock*/ $storeB, /*fn*/ (state: T, data: S) => T);
 $store.on(/*clock*/ [event, fx, $storeB], /*fn*/ (state: T, data: S) => T);
 ```
 
-### Аргументы {#store-on-trigger-reducer-arguments}
+### Аргументы {#on-trigger-reducer-arguments}
 
 1. **`trigger`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
 
@@ -127,7 +127,7 @@ $store.on(/*clock*/ [event, fx, $storeB], /*fn*/ (state: T, data: S) => T);
 
    Новое значение для хранения в `$store`. Если функция возвращает undefined или текущее состояние стора, то обновления не будет
 
-### Возвращает {#store-on-trigger-reducer-returns}
+### Возвращает {#on-trigger-reducer-returns}
 
 Текущий стор
 
@@ -135,7 +135,7 @@ $store.on(/*clock*/ [event, fx, $storeB], /*fn*/ (state: T, data: S) => T);
 Поддержка массивов в `trigger` добавлена в effector 20.15.0
 :::
 
-### Пример {#store-on-trigger-reducer-example}
+### Пример {#on-trigger-reducer-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -159,7 +159,7 @@ trigger(2);
 
 [Запустить пример](https://share.effector.dev/HLeTYPlO)
 
-##### Использование массива юнитов в `trigger` {#store-on-trigger-reducer-example-trigger-array}
+##### Использование массива юнитов в `trigger` {#on-trigger-reducer-example-trigger-array}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -184,7 +184,7 @@ triggerB(2);
 
 [Запустить пример](https://share.effector.dev/KDmGet6T)
 
-## `watch(watcher)` {#store-watch-watcher}
+## `watch(watcher)` {#watch-watcher}
 
 Вызывает функцию с сайд-эффектами при каждом обновлении стора. В первый раз вызывается сразу же при создании, с текущим значением стора
 
@@ -192,7 +192,7 @@ triggerB(2);
 По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [sample](/ru/api/effector/sample)
 :::
 
-### Формула {#store-watch-watcher-formulae}
+### Формула {#watch-watcher-formulae}
 
 ```ts
 declare const $store: Store<T>
@@ -201,17 +201,17 @@ $store.watch(/*watcher*/ (state: T) => any)
 -> Subscription
 ```
 
-### Аргументы {#store-watch-watcher-arguments}
+### Аргументы {#watch-watcher-arguments}
 
 - **`watcher`**: `(state: T) => any`
 
   Функция с сайд-эффектами, получает текущее состояние стора в качестве первого аргумента. Возвращаемое значение не используется
 
-### Возвращает {#store-watch-watcher-returns}
+### Возвращает {#watch-watcher-returns}
 
 [_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
 
-### Пример {#store-watch-watcher-example}
+### Пример {#watch-watcher-example}
 
 ```js
 const add = createEvent();
@@ -231,11 +231,11 @@ add(3);
 
 [Запустить пример](https://share.effector.dev/AJzyxwnx)
 
-## `reset(...triggers)` {#store-reset-triggers}
+## `reset(...triggers)` {#reset-triggers}
 
 Сбрасывает состояние стора к [исходному значению](#defaultState) при срабатывании триггера
 
-### Формула {#store-reset-triggers-formulae}
+### Формула {#reset-triggers-formulae}
 
 ```ts
 declare const $store: Store<T>; // обновляемый стор
@@ -251,7 +251,7 @@ $store.reset(/*clock*/ [event, fx, $storeB]);
 $store.reset(/*clock*/ ...[event, fx, $storeB]);
 ```
 
-### Аргументы {#store-reset-triggers-arguments}
+### Аргументы {#reset-triggers-arguments}
 
 - **`trigger`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
 
@@ -263,7 +263,7 @@ $store.reset(/*clock*/ ...[event, fx, $storeB]);
   - **стор**: обновление этого стора будет запускать обновление `$store`
   - **массив юнитов**: срабатывание любого из юнитов будет запускать обновление `$store`
 
-### Возвращает {#store-reset-triggers-returns}
+### Возвращает {#reset-triggers-returns}
 
 Текущий стор
 
@@ -271,7 +271,7 @@ $store.reset(/*clock*/ ...[event, fx, $storeB]);
 Поддержка массивов в `trigger` добавлена в effector 20.15.0
 :::
 
-### Пример {#store-reset-triggers-example}
+### Пример {#reset-triggers-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -303,7 +303,7 @@ resetTrigger();
 
 [Запустить пример](https://share.effector.dev/Ms4nlZiJ)
 
-##### Использование массива юнитов в `trigger` {#store-reset-triggers-example-triggers-array}
+##### Использование массива юнитов в `trigger` {#reset-triggers-example-triggers-array}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -336,7 +336,7 @@ triggerB();
 
 [Запустить пример](https://share.effector.dev/4pJEOFiM)
 
-## `off(trigger)` {#store-off-trigger}
+## `off(trigger)` {#off-trigger}
 
 Удаляет обработчик для данного триггера, который был установлен через [.on](#on) или [.reset](#reset). Если для данного триггера не было обработчика, этот метод ничего не делает
 
@@ -352,15 +352,15 @@ $store.off(/*clock*/ fx);
 $store.off(/*clock*/ $storeB);
 ```
 
-### Аргументы {#store-off-trigger-arguments}
+### Аргументы {#off-trigger-arguments}
 
 - **`trigger`**: [Юнит](/ru/explanation/glossary#common-unit)-триггер
 
-### Возвращает {#store-off-trigger-returns}
+### Возвращает {#off-trigger-returns}
 
 Текущий стор
 
-### Пример {#store-off-trigger-example}
+### Пример {#off-trigger-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -386,11 +386,11 @@ click();
 
 [Запустить пример](https://share.effector.dev/FeMrtQn3)
 
-## `thru(fn)` {#store-thru-fn}
+## `thru(fn)` {#thru-fn}
 
 Вызывает функцию с заданным стором и возвращает результат как есть. Используется для последовательных трансформаций заранее описанными функциями пока в javascript не добавлен [pipeline proposal](https://github.com/tc39/proposal-pipeline-operator)
 
-### Формула {#store-thru-fn-formulae}
+### Формула {#thru-fn-formulae}
 
 ```ts
 declare const $store: Store<T>;
@@ -398,17 +398,17 @@ declare const $store: Store<T>;
 const result: S = $store.thru(/*fn*/ (store: Store<T>) => S);
 ```
 
-### Аргументы {#store-thru-fn-arguments}
+### Аргументы {#thru-fn-arguments}
 
 - **`fn`**: `(store: Store<T>) => S`
 
   Функция, которая получает сам стор в аргументы и возвращает некоторое значение, [должна быть **чистой**](/ru/explanation/glossary#purity)
 
-### Возвращает {#store-thru-fn-returns}
+### Возвращает {#thru-fn-returns}
 
 Любое значение, которое вернёт `fn`
 
-### Пример {#store-thru-fn-example}
+### Пример {#thru-fn-example}
 
 ```js
 import { createStore, createEvent } from "effector";
@@ -442,9 +442,9 @@ inc();
 
 [Запустить пример](https://share.effector.dev/RRSyqVus)
 
-# Свойства {#store-properties}
+# Свойства {#properties}
 
-## `updates` {#store-updates}
+## `updates` {#updates}
 
 Дочернее событие стора, будет вызвано при каждом обновлении стора. Используется только для определения сайд-эффектов через _store.updates.watch_, где будут срабатывать начиная с первого обновления, в отличие от [_store.watch_](#watch), обработчики в котором запускаются при создании немедленно
 
@@ -456,7 +456,7 @@ inc();
 По мере усложнения логики проекта оптимальнее заменить на комбинацию эффекта и [sample](/ru/api/effector/sample)
 :::
 
-### Формула {#store-updates-formulae}
+### Формула {#updates-formulae}
 
 ```ts
 declare const $store: Store<T>
@@ -465,9 +465,9 @@ $store.updates
 -> Event<T>
 ```
 
-### Пример {#store-updates-example}
+### Пример {#updates-example}
 
-##### Вызов сайд-эффектов начиная с первого обновления {#store-updates-skip-init-example}
+##### Вызов сайд-эффектов начиная с первого обновления {#updates-skip-init-example}
 
 ```js
 import { createStore, createEvent } from "effector";
@@ -496,11 +496,11 @@ click();
 
 [Запустить пример](https://share.effector.dev/X6E8sJqo)
 
-## `shortName` {#store-shortName}
+## `shortName` {#shortName}
 
 Имя стора. Задаётся либо явно, через поле `name` в [createStore](/ru/api/effector/createStore), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateStore)
 
-### Формула {#store-shortName-formulae}
+### Формула {#shortName-formulae}
 
 ```ts
 declare const $store: Store<any>
@@ -509,7 +509,7 @@ $store.shortName
 -> string
 ```
 
-### Пример {#store-shortName-example}
+### Пример {#shortName-example}
 
 ```js
 import { createDomain, createEvent } from "effector";
@@ -539,11 +539,11 @@ increment();
 
 [Запустить пример](https://share.effector.dev/CspgMvEI)
 
-## `defaultState` {#store-defaultState}
+## `defaultState` {#defaultState}
 
-Начальное состояние стора, то, с которым он создавался. К этому состоянию будет возвращать метод [reset](#store-reset-triggers)
+Начальное состояние стора, то, с которым он создавался. К этому состоянию будет возвращать метод [reset](#reset-triggers)
 
-### Формула {#store-defaultState-formulae}
+### Формула {#defaultState-formulae}
 
 ```ts
 declare const $store: Store<T>
@@ -552,7 +552,7 @@ $store.defaultState
 -> T
 ```
 
-### Пример {#store-defaultState-example}
+### Пример {#defaultState-example}
 
 ```ts
 const $store = createStore("DEFAULT");
@@ -561,11 +561,11 @@ console.log($store.defaultState === "DEFAULT");
 // => true
 ```
 
-## `sid` {#store-sid}
+## `sid` {#sid}
 
 Стабильный идентификатор стора. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
-### Формула {#store-sid-formulae}
+### Формула {#sid-formulae}
 
 ```ts
 declare const $store: Store<any>
@@ -576,7 +576,7 @@ $store.sid
 
 # Дополнительные методы
 
-## `getState()` {#store-getState}
+## `getState()` {#getState}
 
 Возвращает текущее значение стора
 
@@ -591,7 +591,7 @@ $store.sid
 
 :::
 
-### Формула {#store-getState-formulae}
+### Формула {#getState-formulae}
 
 ```ts
 declare const $store: Store<T>;
@@ -599,7 +599,7 @@ declare const $store: Store<T>;
 const currentValue: T = $store.getState();
 ```
 
-### Пример {#store-getState-example}
+### Пример {#getState-example}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -624,7 +624,7 @@ add(3);
 
 [Запустить пример](https://share.effector.dev/YrnlMuRj)
 
-## `watch(trigger, watcher)` {#store-watch-trigger-watcher}
+## `watch(trigger, watcher)` {#watch-trigger-watcher}
 
 Сокращённая запись для описания сайд-эффекта, который необходимо запускать только при срабатывании определённого триггера и в котором необходимо как состояние стора так и данные из триггера
 
@@ -632,7 +632,7 @@ add(3);
 По мере усложнения логики проекта оптимальнее заменить на [attach](/ru/api/effector/attach)
 :::
 
-### Формула {#store-watch-trigger-watcher-formulae}
+### Формула {#watch-trigger-watcher-formulae}
 
 ```ts
 declare const $store: Store<T>
@@ -645,7 +645,7 @@ $store.watch(
 -> Subscription
 ```
 
-### Аргументы {#store-watch-trigger-watcher-arguments}
+### Аргументы {#watch-trigger-watcher-arguments}
 
 1. **`trigger`**: [Юнит](/ru/explanation/glossary#common-unit)-триггер
 2. **`fn`**: `(state: T, data: S) => any`
@@ -657,11 +657,11 @@ $store.watch(
    - **`state`**: Текущее состояние стора на момент начала работы `fn`
    - **`data`**: Данные, принятые от сработавшего `trigger`
 
-### Возвращает {#store-watch-trigger-watcher-returns}
+### Возвращает {#watch-trigger-watcher-returns}
 
 [_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки
 
-### Пример {#store-watch-trigger-watcher-example}
+### Пример {#watch-trigger-watcher-example}
 
 ```js
 import { createEvent, createStore } from "effector";

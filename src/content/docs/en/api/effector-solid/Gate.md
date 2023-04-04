@@ -18,10 +18,10 @@ Gate can have two states:
 ## `state` {#Gate-state}
 
 :::warning{title="Important"}
-Do not modify `state` value! It is [derived store](/en/api/effector/Store#store-derived) and should be in predictable state.
+Do not modify `state` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
 :::
 
-`Store<Props>`: [DerivedStore](/en/api/effector/Store#store-derived) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-solid/useGate) and from props when rendering gate as a component
+`Store<Props>`: [DerivedStore](/en/api/effector/Store#derived) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-solid/useGate) and from props when rendering gate as a component
 
 ## `open` {#Gate-open}
 
@@ -42,7 +42,7 @@ Do not manually call this event. It is an event that depends on a Gate state.
 ## `status` {#Gate-status}
 
 :::warning{title="Important"}
-Do not modify `status` value! It is [derived store](/en/api/effector/Store#store-derived) and should be in predictable state.
+Do not modify `status` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
 :::
 
-`Store<boolean>`: Boolean [DerivedStore](/en/api/effector/Store#store-derived), which show if given gate is mounted.
+`Store<boolean>`: Boolean [DerivedStore](/en/api/effector/Store#derived), which show if given gate is mounted.
