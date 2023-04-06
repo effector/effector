@@ -23,7 +23,7 @@ specifiers:
   mdast: ^3.0.0
   nanoid: ^4.0.1
   preact: ^10.13.1
-  prettier: ^2.8.4
+  prettier: ^2.8.7
   prettier-plugin-astro: ^0.8.0
   prettier-plugin-organize-attributes: ^0.0.5
   prettier-plugin-tailwindcss: ^0.2.4
@@ -63,10 +63,10 @@ dependencies:
   mdast: 3.0.0
   nanoid: 4.0.1
   preact: 10.13.1
-  prettier: 2.8.4
+  prettier: 2.8.7
   prettier-plugin-astro: 0.8.0
-  prettier-plugin-organize-attributes: 0.0.5_prettier@2.8.4
-  prettier-plugin-tailwindcss: 0.2.4_kv6v57ydu5b7xwrfrtx2gikbn4
+  prettier-plugin-organize-attributes: 0.0.5_prettier@2.8.7
+  prettier-plugin-tailwindcss: 0.2.4_7whqbxwn5ab7pglzcr5kb2ftdq
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   rehype-autolink-headings: 6.1.1
@@ -254,7 +254,7 @@ packages:
     dependencies:
       '@vscode/emmet-helper': 2.8.6
       events: 3.3.0
-      prettier: 2.8.4
+      prettier: 2.8.7
       prettier-plugin-astro: 0.7.2
       source-map: 0.7.4
       vscode-css-languageservice: 6.2.3
@@ -3950,7 +3950,7 @@ packages:
     engines: {node: ^14.15.0 || >=16.0.0, pnpm: '>=7.14.0'}
     dependencies:
       '@astrojs/compiler': 0.31.4
-      prettier: 2.8.4
+      prettier: 2.8.7
       sass-formatter: 0.7.6
       synckit: 0.8.5
     dev: false
@@ -3960,21 +3960,21 @@ packages:
     engines: {node: ^14.15.0 || >=16.0.0, pnpm: '>=7.14.0'}
     dependencies:
       '@astrojs/compiler': 1.1.1
-      prettier: 2.8.4
+      prettier: 2.8.7
       sass-formatter: 0.7.6
       synckit: 0.8.5
     dev: false
 
-  /prettier-plugin-organize-attributes/0.0.5_prettier@2.8.4:
+  /prettier-plugin-organize-attributes/0.0.5_prettier@2.8.7:
     resolution: {integrity: sha512-dSts16q8wd+oq8Zwk5mwmYXo1aN3B+ZkEJqx/ar5fedNHdOvx7S4XDMH/pNK7rmBW0bPXkp/kJX5gAANsWzh3A==}
     engines: {node: '>=11.0.0'}
     peerDependencies:
       prettier: ^2.0.0
     dependencies:
-      prettier: 2.8.4
+      prettier: 2.8.7
     dev: false
 
-  /prettier-plugin-tailwindcss/0.2.4_kv6v57ydu5b7xwrfrtx2gikbn4:
+  /prettier-plugin-tailwindcss/0.2.4_7whqbxwn5ab7pglzcr5kb2ftdq:
     resolution: {integrity: sha512-wMyugRI2yD8gqmMpZSS8kTA0gGeKozX/R+w8iWE+yiCZL09zY0SvfiHfHabNhjGhzxlQ2S2VuTxPE3T72vppCQ==}
     engines: {node: '>=12.17.0'}
     peerDependencies:
@@ -4026,13 +4026,13 @@ packages:
       prettier-plugin-twig-melody:
         optional: true
     dependencies:
-      prettier: 2.8.4
+      prettier: 2.8.7
       prettier-plugin-astro: 0.8.0
-      prettier-plugin-organize-attributes: 0.0.5_prettier@2.8.4
+      prettier-plugin-organize-attributes: 0.0.5_prettier@2.8.7
     dev: false
 
-  /prettier/2.8.4:
-    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
+  /prettier/2.8.7:
+    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: false

@@ -38,7 +38,7 @@
     "mdast": "^3.0.0",
     "nanoid": "^4.0.1",
     "preact": "^10.13.1",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.7",
     "prettier-plugin-astro": "^0.8.0",
     "prettier-plugin-organize-attributes": "^0.0.5",
     "prettier-plugin-tailwindcss": "^0.2.4",
