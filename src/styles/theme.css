@@ -106,7 +106,7 @@
   --theme-code-bg: hsla(217, 19%, 27%, 1);
   --theme-code-text: hsla(var(--color-gray-95), 1);
 
-  --theme-navbar-bg: rgba(255, 255, 255, 0.90);
+  --theme-navbar-bg: rgba(255, 255, 255, 0.9);
   --theme-navbar-height: 4rem;
 
   --theme-selection-color: hsla(var(--color-blue), 1);

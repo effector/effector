@@ -1,5 +1,5 @@
 .theme-toggle {
-  @apply flex gap-1 items-center rounded-full px-2 py-1;
+  @apply flex items-center gap-1 rounded-full px-2 py-1;
   background-color: var(--theme-code-inline-bg);
 }
 
@@ -10,7 +10,7 @@
 }
 
 .theme-toggle > label {
-  @apply flex relative justify-center items-center rounded-full opacity-50 cursor-pointer;
+  @apply relative flex cursor-pointer items-center justify-center rounded-full opacity-50;
   color: var(--theme-code-inline-text);
 }
 

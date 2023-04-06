@@ -1,6 +1,5 @@
-
 .title {
-  @apply p-0 border-0 m-0 mb-2 uppercase;
+  @apply m-0 mb-2 border-0 p-0 uppercase;
   font-weight: 700;
   font-size: 1rem;
   text-transform: uppercase;
@@ -8,11 +7,11 @@
 }
 
 .contents {
-  @apply text-sm pr-3;
+  @apply pr-3 text-sm;
 }
 
 .link {
-  @apply m-0 max-w-full relative;
+  @apply relative m-0 max-w-full;
 }
 
 .link a {
@@ -25,7 +24,7 @@ ul.contents {
 }
 
 .link::before {
-  content: '';
+  content: "";
   @apply absolute top-0 bottom-0 right-0 w-8;
   background: linear-gradient(90deg, transparent, var(--theme-bg, white));
 }
@@ -62,7 +61,7 @@ ul.contents {
 
 .level2 a {
   @apply font-medium;
-  color: var(--theme-text)
+  color: var(--theme-text);
 }
 
 .level3 {
@@ -71,7 +70,7 @@ ul.contents {
 
 .level3 a {
   @apply font-normal;
-  color: var(--theme-text-light)
+  color: var(--theme-text-light);
 }
 
 .expandDetails {
@@ -92,7 +91,7 @@ ul.contents {
 .expandDetails summary span {
   background-color: var(--theme-code-inline-bg);
   color: var(--theme-code-inline-text);
-  @apply inline-block px-3 py-1 rounded-2xl cursor-pointer text-base uppercase;
+  @apply inline-block cursor-pointer rounded-2xl px-3 py-1 text-base uppercase;
 }
 
 .expandDetails[open] summary span {

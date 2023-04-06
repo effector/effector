@@ -1,5 +1,5 @@
 button.search-input {
-  @apply flex cursor-pointer m-0 outline-0 rounded-2xl px-2 py-1 box-border;
+  @apply m-0 box-border flex cursor-pointer rounded-2xl px-2 py-1 outline-0;
 
   transition-property: border-color, color, background-color;
   transition-duration: 0.2s;
