@@ -19,7 +19,7 @@ export function serialize(
   }
   const ignoredStores = config.ignore ? config.ignore.map(({sid}) => sid) : []
   const result = {} as Record<string, any>
-  forIn(scope.sidValuesMap, (value, sid) => {
+  forIn(scope.values.sidMap, (value, sid) => {
     if (includes(ignoredStores, sid)) return
     const id = scope.sidIdMap[sid]
     const serializeSettings = scope.sidSerializeSettings.get(sid) ?? {

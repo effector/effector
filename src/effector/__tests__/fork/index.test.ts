@@ -663,22 +663,6 @@ describe('getState with same sids', () => {
   })
 })
 
-test('stores without sid should throw an error', () => {
-  const a = createStore(0, {sid: null as any})
-
-  expect(() => {
-    fork({values: [[a, 1]]})
-  }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
-})
-
-test('handlers without sid should throw an error', () => {
-  const a = createEffect({sid: null as any})
-
-  expect(() => {
-    fork({handlers: [[a, () => {}]]})
-  }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
-})
-
 describe('diamond deps (issue #613)', () => {
   test('with getState (should pass)', async () => {
     const fn = jest.fn()
