@@ -262,7 +262,7 @@ listReceived(["redux", "mobx"])
 
 [Запустить пример](https://share.effector.dev/ARDanMAM)
 
-#### Использование c nullable React ref  {#filterMap-fn-example-usage-with-nullable-ref}
+#### Использование c nullable React ref {#filterMap-fn-example-usage-with-nullable-ref}
 
 :::info
 Методы _modal.showModal_ и _modal.close_ – стандартные возможности dom-элемента `<dialog>`
@@ -334,9 +334,9 @@ const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
 
 1. **`config`**: Объект конфигурации
 
-    - **`fn`**: `(data: T) => boolean`
+   - **`fn`**: `(data: T) => boolean`
 
-      Функция-предикат, которая определяет необходимость вызова производного события `eventB` возвращая [истинное значение](https://developer.mozilla.org/ru/docs/Glossary/Truthy),[должна быть **чистой**](/ru/explanation/glossary#purity)
+     Функция-предикат, которая определяет необходимость вызова производного события `eventB` возвращая [истинное значение](https://developer.mozilla.org/ru/docs/Glossary/Truthy),[должна быть **чистой**](/ru/explanation/glossary#purity)
 
 ### Возвращает {#filter-fn-returns}
 

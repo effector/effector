@@ -36,7 +36,7 @@ You must provide a handler either through [.use](/en/api/effector/Effect#use-han
 
 1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
-### Returns {#use-handler-returns} 
+### Returns {#use-handler-returns}
 
 ([_Effect_](/en/api/effector/Effect)): The same effect
 

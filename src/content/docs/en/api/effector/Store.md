@@ -13,6 +13,7 @@ _Store_ is an object that holds the state value. Store is getting updates when r
 # Methods {#methods}
 
 ## `map(fn)` {#map-fn}
+
 :::info
 Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn` and `firstState` are deprecated, use [updateFilter](/en/api/effector/createStore) or explicit `createStore` instead.
 :::
@@ -124,7 +125,7 @@ changed(2);
 :::
 Updates state when any from `triggers` is triggered by using [reducer](/en/explanation/glossary#reducer).
 
-### Formulae  {#on-triggers-reducer-formulae}
+### Formulae {#on-triggers-reducer-formulae}
 
 ```ts
 $store.on([triggerA, triggerB, ...], reducer)

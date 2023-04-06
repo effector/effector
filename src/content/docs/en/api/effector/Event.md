@@ -52,7 +52,6 @@ const unwatch = event.watch(fn);
 
 ### Example {#watch-watcher-example}
 
-
 ```js
 import { createEvent } from "effector";
 
