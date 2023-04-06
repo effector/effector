@@ -8,6 +8,7 @@ import { SITE } from "../../consts";
 
 import MainLayout from "../../layouts/MainLayout.astro";
 import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
+import TranslationDisclaimer from "../../components/TranslationDisclaimer.astro";
 
 export async function getStaticPaths() {
   const { sourceSlugs, docs } = await getTranslatedDocsIndex();
@@ -60,4 +61,5 @@ const postData = (post ?? defaultLanguagePost).data;
 >
   {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
+  {lang !== SITE.defaultLanguage ? <TranslationDisclaimer lang={lang} /> : null}
 </MainLayout>

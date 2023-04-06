@@ -494,6 +494,10 @@ h2.heading {
   color: var(--admonition-text);
 }
 
+.admonition-content p + p {
+  margin-top: 1em;
+}
+
 .admonition-tip {
   --admonition-bg: var(--theme-admonition-tip-bg);
   --admonition-border: var(--theme-admonition-tip-border);
