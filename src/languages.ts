@@ -116,4 +116,10 @@ export const translations = {
       ru: "Дополнительно",
     },
   },
+  Contributors: {
+    text: {
+      en: "Contributors",
+      ru: "Соавторы",
+    },
+  },
 };

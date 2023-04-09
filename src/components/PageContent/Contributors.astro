@@ -6,12 +6,14 @@ import {
   GITHUB_DOCS_ROOT,
   GITHUB_REPO,
 } from "../../consts";
+import { getPathParamsFromId, getTextLocalized, translations } from "src/languages";
 
 // fetch all commits for just this page's path
 type Props = {
   documentId: string;
 };
 const { documentId } = Astro.props;
+const { lang } = getPathParamsFromId(Astro.url.pathname);
 
 const fullFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].join("");
 const commitsURL = [GITHUB_COMMITS_URL, fullFilePath].join("");
@@ -81,6 +83,10 @@ const recentContributors = contributors.slice(0, 5).sort((a, b) => a.commits - b
 const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
 ---
 
+<div class="title">
+  {getTextLocalized(translations.Contributors, lang)}
+</div>
+
 <!-- Thanks to @5t3ph for https://smolcss.dev/#smol-avatar-list! -->
 <div class="contributors">
   {
@@ -115,6 +121,14 @@ const additionalContributors = contributors.length - recentContributors.length; 
 </div>
 
 <style>
+  .title {
+    @apply m-0 mb-2 border-0 p-0 uppercase;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-family: Lexend Deca, sans-serif;
+  }
+
   .avatar-list {
     --avatar-size: 2.5rem;
     --avatar-count: 3;
