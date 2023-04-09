@@ -104,6 +104,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     gap: 1rem;
     margin: 0;
     list-style-type: none;
+    color: var(--theme-text);
   }
 
   .breadcrumbs li {
@@ -116,13 +117,18 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 
   .breadcrumbs li::after {
     content: " ";
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><g><g><polygon points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>')
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="black" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
       center;
     display: inline-block;
     height: 1ch;
     width: 1ch;
     margin-left: 0.5rem;
     opacity: 0.5;
+  }
+
+  :root.theme-dark .breadcrumbs li::after {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="white" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+      center;
   }
 
   .breadcrumbs li a svg {

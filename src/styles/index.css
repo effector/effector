@@ -333,11 +333,9 @@ blockquote code {
 }
 
 blockquote {
-  margin: 2rem 0;
-  border-left: 3px solid var(--theme-text-light);
-  border-radius: 0 0.25rem 0.25rem 0;
+  @apply my-8 py-4 px-5 border-l-4 rounded-md rounded-l-none;
+  border-color: var(--theme-text-light);
   background-color: var(--theme-bg-offset);
-  padding: 1.25em 1.5rem;
   line-height: 1.7;
 }
 
@@ -478,23 +476,21 @@ h2.heading {
 }
 
 .admonition {
+  @apply gap-2 mb-2 p-4 rounded-xl rounded-l-none;
+  /* Strange behavior: tw adds `items-center` when `flex` is applied */
+  display: flex;
+  flex-direction: column;
+
   --admonition-bg: gray;
   --admonition-border: black;
   --admonition-text: white;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  margin-bottom: 0.5em;
-  border-left: 0.8em solid hsla(var(--color-green));
-  border-color: var(--admonition-border);
+  border-left: 0.8rem solid var(--admonition-border);
   background-color: var(--admonition-bg);
-  padding: 1em;
   color: var(--admonition-text);
 }
 
 .admonition-title {
-  font-weight: 600;
-  text-transform: uppercase;
+  @apply font-medium uppercase;
 }
 
 .admonition a {
@@ -507,7 +503,7 @@ h2.heading {
 }
 
 .admonition-content p + p {
-  margin-top: 1em;
+  @apply mt-4;
 }
 
 .admonition-tip {

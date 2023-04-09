@@ -126,7 +126,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     background-color: transparent;
     overflow: visible;
     pointer-events: auto;
-    color: var(--theme-text-light);
+    color: var(--theme-text);
   }
 
   .menu :global(svg) {
@@ -162,8 +162,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .items {
-    @apply rounded-xl p-3;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+    @apply rounded-xl p-3 shadow-xl;
     border: 1px solid var(--theme-divider);
     background-color: var(--theme-bg);
     min-width: 8rem;

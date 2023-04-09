@@ -91,7 +91,7 @@ ul.contents {
 .expandDetails summary span {
   background-color: var(--theme-code-inline-bg);
   color: var(--theme-code-inline-text);
-  @apply inline-block cursor-pointer rounded-2xl px-3 py-1 text-base uppercase;
+  @apply inline-block cursor-pointer rounded-xl px-5 py-2 text-base uppercase;
 }
 
 .expandDetails[open] summary span {
