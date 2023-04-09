@@ -207,6 +207,18 @@ article > section iframe {
   height: auto;
 }
 
+article > section ol {
+  list-style-type: decimal;
+}
+
+article > section ol ::marker {
+  font-weight: 500;
+}
+
+article > section ol li {
+  line-height: 2;
+}
+
 a > code {
   position: relative;
   background: transparent;
