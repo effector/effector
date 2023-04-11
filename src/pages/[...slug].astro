@@ -9,17 +9,27 @@ interface Path {
 }
 
 export async function getStaticPaths() {
+  const alreadyUsedPaths = new Set<string>();
   const paths: Path[] = [];
   const pagesWithRedirect = await getCollection("docs", (page) => page.data.redirectFrom);
 
-  pagesWithRedirect.forEach((page) => {
-    page.data.redirectFrom!.forEach((slug) => {
+  for (const page of pagesWithRedirect) {
+    for (const slug of page.data.redirectFrom!) {
+      const actualPath = slug.startsWith("/") ? slug.slice(1) : slug;
+      if (alreadyUsedPaths.has(actualPath)) {
+        throw new Error(
+          `'redirectFrom' path "${actualPath}" already claimed. Cannot use for "${page.id}"`,
+        );
+      }
+
       paths.push({
-        params: { slug: slug.startsWith("/") ? slug.slice(1) : slug },
+        params: { slug: actualPath },
         props: { redirectTo: page },
       });
-    });
-  });
+
+      alreadyUsedPaths.add(actualPath);
+    }
+  }
 
   return paths;
 }
