@@ -1,6 +1,9 @@
 ---
 title: createGate
 description: Creates a gate to consume data from view
+redirectFrom:
+  - /api/effector-solid/createGate
+  - /docs/api/effector-solid/createGate
 ---
 
 ## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}

@@ -1,6 +1,9 @@
 ---
 title: useGate
 description: Function for passing data to Gate
+redirectFrom:
+  - /api/effector-solid/useGate
+  - /docs/api/effector-solid/useGate
 ---
 
 ## `useGate(GateComponent, props)` {#useGate-props}

@@ -1,5 +1,8 @@
 ---
 title: effector-solid
+redirectFrom:
+  - /api/effector-solid
+  - /docs/api/effector-solid
 ---
 
 Effector bindings for SolidJS.

@@ -1,5 +1,9 @@
 ---
 title: useUnit
+description: Effector Solid
+redirectFrom:
+  - /api/effector-solid/useUnit
+  - /docs/api/effector-solid/useUnit
 ---
 
 Binds effector stores to the Solid reactivity system or, in the case of events/effects – binds to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
