@@ -16,6 +16,7 @@ export type Props = CollectionEntry<"docs">["data"] & {
   breadcrumbs: { title: string; path: string }[];
   lang: string;
   documentId: string;
+  redirectTo?: string;
 };
 
 const { headings, translations, breadcrumbs, lang, documentId, ...data } = Astro.props;

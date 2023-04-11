@@ -1,0 +1,45 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import type { InferGetStaticPropsType, InferGetStaticParamsType } from "astro";
+import MainLayout from "src/layouts/MainLayout.astro";
+
+interface Path {
+  params: { slug: string };
+  props: { redirectTo: CollectionEntry<"docs"> };
+}
+
+export async function getStaticPaths() {
+  const paths: Path[] = [];
+  const pagesWithRedirect = await getCollection("docs", (page) => page.data.redirectFrom);
+
+  pagesWithRedirect.forEach((page) => {
+    page.data.redirectFrom!.forEach((slug) => {
+      paths.push({
+        params: { slug: slug.startsWith("/") ? slug.slice(1) : slug },
+        props: { redirectTo: page },
+      });
+    });
+  });
+
+  return paths;
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+const { redirectTo } = Astro.props;
+const { slug } = Astro.params as Params;
+---
+
+<MainLayout
+  documentId={slug}
+  headings={[]}
+  translations={[]}
+  breadcrumbs={[]}
+  redirectTo={`/${redirectTo.slug}`}
+  {...redirectTo.data}
+>
+  <div class="admonition admonition-info">
+    Redirecting to: {redirectTo.data.title}.
+    <a href={`/${redirectTo.slug}`}>Click here if not redirected automatically.</a>
+  </div>
+</MainLayout>

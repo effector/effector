@@ -1,6 +1,8 @@
 ---
 title: attach
 description: Wrapper for effect, which allows to map effect arguments and use data from stores.
+redirectFrom:
+  - /api/effector/attach
 ---
 
 :::info{title="since"}

@@ -6,9 +6,12 @@ import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
 import { SITE } from "../consts";
 
-export type Props = CollectionEntry<"docs">["data"];
+type DocsEntry = CollectionEntry<"docs">["data"];
+export interface Props extends DocsEntry {
+  redirectTo?: string;
+}
 
-const data = Astro.props;
+const { redirectTo, ...data } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const currentPage = Astro.url.pathname;
 ---
@@ -17,6 +20,7 @@ const currentPage = Astro.url.pathname;
   <head>
     <HeadCommon />
     <HeadSEO {...data} canonicalUrl={canonicalURL} />
+    {redirectTo ? <meta http-equiv="refresh" content={`0;URL=${redirectTo}`} /> : null}
     <title>
       {`${data.title} | ${SITE.title}`}
     </title>
