@@ -31,14 +31,6 @@ const instanceId = nanoid(5);
         return (
           <li>
             <div class="line">
-              <a
-                class:list={{ active: item.active }}
-                href={createLink(item, lang)}
-                target={external ? "_blank" : undefined}
-              >
-                {text}
-                {external ? <IconExternal /> : null}
-              </a>
               {isExpandable ? (
                 <button
                   type="button"
@@ -49,6 +41,14 @@ const instanceId = nanoid(5);
                   <IconChevronRight size={18} />
                 </button>
               ) : null}
+              <a
+                class:list={{ active: item.active }}
+                href={createLink(item, lang)}
+                target={external ? "_blank" : undefined}
+              >
+                {text}
+                {external ? <IconExternal /> : null}
+              </a>
             </div>
             {isExpandable ? (
               <div
@@ -135,7 +135,7 @@ const instanceId = nanoid(5);
   }
 
   li > .line {
-    @apply flex items-center justify-between gap-2;
+    @apply flex items-center justify-between gap-1;
   }
 
   .line span {
@@ -174,12 +174,12 @@ const instanceId = nanoid(5);
   }
 
   button.standalone {
-    background-color: var(--theme-divider-light);
-    @apply box-content flex h-6 w-6 items-center justify-center;
+    background-color: var(--theme-divider);
+    @apply -ml-1 box-content flex h-6 w-6 items-center justify-center;
   }
 
   button.standalone:hover {
-    background-color: var(--theme-divider);
+    background-color: var(--theme-divider-light);
   }
 
   .expander :global(svg) {

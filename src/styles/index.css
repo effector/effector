@@ -261,7 +261,7 @@ strong {
   background-color: var(--theme-code-inline-bg);
   padding: var(--padding-block) var(--padding-inline);
   color: inherit;
-  font-size: 0.85em;
+  font-size: 0.95em;
 
   font-family: var(--font-mono);
   word-break: break-word;
@@ -480,7 +480,7 @@ h2.heading {
 }
 
 .admonition {
-  @apply gap-2 mb-2 p-4 rounded-xl rounded-l-none;
+  @apply gap-2 mb-2 -mx-8 box-border p-4;
   /* Strange behavior: tw adds `items-center` when `flex` is applied */
   display: flex;
   flex-direction: column;
@@ -493,11 +493,18 @@ h2.heading {
   color: var(--admonition-text);
 }
 
+@media (min-width: 37.75em) {
+  :root .admonition {
+    @apply mx-0 rounded-xl rounded-l-none;
+  }
+}
+
 .admonition-title {
   @apply font-medium uppercase;
 }
 
 .admonition a {
+  text-decoration: underline;
   color: var(--admonition-text);
 }
 
