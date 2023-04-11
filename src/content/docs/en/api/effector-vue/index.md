@@ -1,5 +1,8 @@
 ---
 title: effector-vue
+redirectFrom:
+  - /api/effector-vue
+  - /docs/api/effector-vue
 ---
 
 Effector binginds for Vue.

@@ -1,5 +1,8 @@
 ---
 title: Vue
+redirectFrom:
+  - /api/effector-vue/Vue
+  - /docs/api/effector-vue/vue
 ---
 
 Methods available on `Vue` prototype after you enable this plugin.

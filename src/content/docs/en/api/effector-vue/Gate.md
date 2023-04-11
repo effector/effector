@@ -1,5 +1,9 @@
 ---
-title: Gate
+title: Effector Vue Gate
+description: Effector Vue
+redirectFrom:
+  - /api/effector-vue/Gate
+  - /docs/api/effector-vue/gate
 ---
 
 _Gate_ is a hook for conditional rendering, based on current value (or values) in props. An example of a problem that Gate can solve – you can put together all required data, when component was mounted.

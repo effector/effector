@@ -1,6 +1,9 @@
 ---
 title: VueEffector
 description: effector-vue plugin for vue 2
+redirectFrom:
+  - /api/effector-vue/VueEffector
+  - /docs/api/effector-vue/vue-effector
 ---
 
 `effector-vue` plugin for vue 2

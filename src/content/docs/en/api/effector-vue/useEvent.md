@@ -1,5 +1,8 @@
 ---
 title: useEvent
+redirectFrom:
+  - /api/effector-vue/useEvent
+  - /docs/api/effector-vue/useEvent
 ---
 
 Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing

@@ -1,6 +1,9 @@
 ---
 title: useStore
 description: Hook function, which subscribes to watcher, that observes changes in store. Designed for vue 3
+redirectFrom:
+  - /api/effector-vue/useStore
+  - /docs/api/effector-vue/useStore
 ---
 
 ## `useStore(store)` {#useStore-store}

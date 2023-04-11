@@ -1,6 +1,9 @@
 ---
 title: useGate
 description: Using a gate to consume data from view. Designed for vue 3
+redirectFrom:
+  - /api/effector-vue/useGate
+  - /docs/api/effector-vue/useGate
 ---
 
 ## `useGate(GateComponent, props)` {#useGate-props}

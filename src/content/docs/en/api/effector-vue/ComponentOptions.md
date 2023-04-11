@@ -1,5 +1,8 @@
 ---
 title: ComponentOptions
+redirectFrom:
+  - /api/effector-vue/ComponentOptions
+  - /docs/api/effector-vue/component-options
 ---
 
 ## `effector`

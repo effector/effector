@@ -1,6 +1,9 @@
 ---
 title: useVModel
 description: hook function, which subscribes to watcher, that observes changes in the current store. Designed for vue 3
+redirectFrom:
+  - /api/effector-vue/useVModel
+  - /docs/api/effector-vue/useVModel
 ---
 
 ## useVModel(store) {#useVModel-store}

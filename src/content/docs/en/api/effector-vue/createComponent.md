@@ -1,5 +1,7 @@
 ---
 title: createComponent
+redirectFrom:
+  - /api/effector-vue/createComponent
 ---
 
 ## `createComponent(componentOptions, store?)` {#createComponent-options}

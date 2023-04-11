@@ -1,6 +1,9 @@
 ---
 title: createGate
 description: Creates a gate to consume data from view. Designed for vue 3
+redirectFrom:
+  - /api/effector-vue/createGate
+  - /docs/api/effector-vue/createGate
 ---
 
 ## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}

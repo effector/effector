@@ -1,5 +1,8 @@
 ---
 title: useStoreMap
+redirectFrom:
+  - /api/effector-vue/useStoreMap
+  - /docs/api/effector-vue/useStoreMap
 ---
 
 Function, which subscribes to [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change

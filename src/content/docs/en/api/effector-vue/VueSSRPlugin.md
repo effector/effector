@@ -1,5 +1,8 @@
 ---
 title: VueSSRPlugin
+redirectFrom:
+  - /api/effector-vue/VueSSRPlugin
+  - /docs/api/effector-vue/VueSSRPlugin
 ---
 
 The Plugin provides a general scope which needs for read and update effector's stores, call effector's events. Required for SSR.
