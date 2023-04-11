@@ -40,6 +40,18 @@ code .token.class-name {
   color: var(--code-class);
 }
 
+code .token.inserted {
+  color: var(--code-function);
+}
+
+code .token.deleted.prefix, code .token.inserted.prefix {
+  user-select: none;
+}
+
+code .token.deleted {
+  color: var(--code-class);
+}
+
 code .token.attr-name {
   color: var(--code-attr);
 }

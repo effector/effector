@@ -27,6 +27,10 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Examples", ru: "Примеры" },
         link: "/introduction/examples",
       },
+      {
+        text: { en: "FAQ", ru: "Частые вопросы" },
+        link: "/FAQ",
+      },
     ],
   },
   {
