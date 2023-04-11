@@ -102,7 +102,7 @@
 
   --theme-card: hsla(0, 0%, 100%, 1);
 
-  --theme-code-inline-bg: hsla(var(--color-gray-95), 1);
+  --theme-code-inline-bg: hsla(var(--color-gray-90), 1);
   --theme-code-inline-text: var(--theme-text);
   --theme-code-bg: hsla(var(--color-stone-40), 1);
   --theme-code-text: hsla(var(--color-gray-95), 1);

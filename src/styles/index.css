@@ -73,7 +73,7 @@ h6 {
 h1 {
   max-width: 40ch;
   font-size: 2rem;
-  line-height: 40px;
+  line-height: 1.3;
   letter-spacing: -0.02em;
 }
 
@@ -82,7 +82,7 @@ h2 {
   border-top: 1px solid var(--theme-divider);
   padding-top: 24px;
   font-size: 1.8rem;
-  line-height: 32px;
+  line-height: 1.3;
   letter-spacing: -0.02em;
 }
 
@@ -97,16 +97,18 @@ h2 {
 h3 {
   margin: 32px 0 0;
   font-size: 1.5rem;
-  line-height: 28px;
+  line-height: 1.3;
   letter-spacing: -0.01em;
 }
 
 h4 {
   font-size: 1.3rem;
+  line-height: 1.3;
 }
 
 h5 {
   font-size: 1rem;
+  line-height: 1.3;
 }
 
 :is(h1, h2, h3, h4, h5, h6) > code {
