@@ -1,6 +1,9 @@
 ---
 title: Effect
 description: Effect, its methods and properties
+redirectFrom:
+  - /api/effector/Effect
+  - /docs/api/effector/effect
 ---
 
 **Effect** is a container for async function.

@@ -1,5 +1,8 @@
 ---
 title: restore
+redirectFrom:
+  - /api/effector/restore
+  - /docs/api/effector/restore
 ---
 
 ## `restore(event, defaultState)`

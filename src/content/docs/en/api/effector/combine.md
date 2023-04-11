@@ -1,5 +1,8 @@
 ---
 title: combine
+redirectFrom:
+  - /api/effector/combine
+  - /docs/api/effector/combine
 ---
 
 This method allows you to get state from each passed store and **combine** it to a single value and save into a single store, that updates every time like each passed store.

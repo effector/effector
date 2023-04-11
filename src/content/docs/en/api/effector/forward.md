@@ -1,6 +1,9 @@
 ---
 title: forward
 description: Method to create connection between units in a declarative way. Send updates from one set of units to another
+redirectFrom:
+  - /api/effector/forward
+  - /docs/api/effector/forward
 ---
 
 :::info{title="since"}

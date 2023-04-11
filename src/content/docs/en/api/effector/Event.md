@@ -4,6 +4,9 @@ keywords:
   - event
   - unit
 description: Event, its methods and properties
+redirectFrom:
+  - /api/effector/Event
+  - /docs/api/effector/event
 ---
 
 _Event_ is an intention to change the state. Let's imagine a life situation, you enter a shop and, according to etiquette, you have to say "hello" – **intention**, then you say "hello" – **event**.

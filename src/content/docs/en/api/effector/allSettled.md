@@ -1,6 +1,9 @@
 ---
 title: allSettled
 description: Call provided unit in scope and wait for finishing all the triggered effects
+redirectFrom:
+  - /api/effector/allSettled
+  - /docs/api/effector/allsettled
 ---
 
 ## `allSettled(unit, {scope, params?})` {#unit-scope-params}

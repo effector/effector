@@ -1,6 +1,9 @@
 ---
 title: createEvent
 description: createEvent is a method for creating an event
+redirectFrom:
+  - /api/effector/createEvent
+  - /docs/api/effector/createEvent
 ---
 
 Method for creating an [event](/en/api/effector/Event).

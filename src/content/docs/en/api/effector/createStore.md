@@ -1,6 +1,9 @@
 ---
 title: createStore
 description: createStore is a method for creating a store
+redirectFrom:
+  - /api/effector/createStore
+  - /docs/api/effector/createStore
 ---
 
 Method for creating a [store](/en/api/effector/Store).

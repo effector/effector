@@ -1,5 +1,8 @@
 ---
 title: split
+redirectFrom:
+  - /api/effector/split
+  - /docs/api/effector/split
 ---
 
 Choose one of cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions. Works like pattern matching for payload values and external stores

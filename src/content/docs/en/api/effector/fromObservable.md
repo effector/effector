@@ -1,6 +1,8 @@
 ---
-id: fromObservable
 title: fromObservable
+redirectFrom:
+  - /api/effector/fromObservable
+  - /docs/api/effector/fromObservable
 ---
 
 Creates an event containing all items from an Observable.

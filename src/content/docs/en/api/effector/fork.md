@@ -1,5 +1,8 @@
 ---
 title: fork
+redirectFrom:
+  - /api/effector/fork
+  - /docs/api/effector/fork
 ---
 
 :::info{title="since"}

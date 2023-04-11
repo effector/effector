@@ -1,6 +1,9 @@
 ---
 title: Domain
 description: Domain, its methods and properties
+redirectFrom:
+  - /api/effector/Domain
+  - /docs/api/effector/domain
 ---
 
 Domain is a namespace for your events, stores and effects.

@@ -1,5 +1,8 @@
 ---
 title: hydrate
+redirectFrom:
+  - /api/effector/hydrate
+  - /docs/api/effector/hydrate
 ---
 
 A companion method for [_serialize_](/en/api/effector/serialize). Hydrates provided values into corresponding stores within a provided domain or scope. The main purpose is an application state hydration on the client side after SSR.

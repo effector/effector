@@ -1,12 +1,15 @@
 ---
 title: withRegion
+redirectFrom:
+  - /api/effector/withRegion
+  - /docs/api/effector/withRegion
 ---
 
 :::info{title="since"}
 [effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::
 
-## Formulae {#withRegion-formulae}
+## Formulae {#unit-cb-formulae}
 
 ```ts
 withRegion(unit: Unit<T> | Step, cb: () => void)
@@ -16,12 +19,12 @@ The method allows to explicitly transfer ownership of all units (including links
 
 The method based on the idea of region-based memory management (see [Region-based memory management](https://en.wikipedia.org/wiki/Region-based_memory_management) for reference)
 
-### Arguments {#withRegion-arguments}
+### Arguments {#unit-cb-arguments}
 
 1. `unit`: Unit | Step which will serve as "local area" or "region" owned all the units created within provided callback `cb`
 2. `cb`: () => void Callback where all the relevant units should be defined
 
-## Example {#withRegion-example}
+## Example {#unit-cb-example}
 
 ```js
 import { createDomain, createEvent, restore, withRegion, clearNode } from "effector";

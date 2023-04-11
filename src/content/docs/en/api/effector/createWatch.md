@@ -1,6 +1,7 @@
 ---
-id: createWatch
 title: createWatch
+redirectFrom:
+  - /docs/api/effector/createwatch
 ---
 
 Creates a subscription on unit (store, event or effect).

@@ -1,5 +1,8 @@
 ---
 title: Scope
+redirectFrom:
+  - /api/effector/Scope
+  - /docs/api/effector/scope
 ---
 
 `Scope` is a fully isolated instance of application.

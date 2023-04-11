@@ -1,6 +1,9 @@
 ---
 title: clearNode
 description: Method for destroying stores, events, effects, subscriptions and domains
+redirectFrom:
+  - /api/effector/clearNode
+  - /docs/api/effector/clearnode
 ---
 
 ## Formulae {#clearNode-formulae}

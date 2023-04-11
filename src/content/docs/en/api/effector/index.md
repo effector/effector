@@ -1,5 +1,7 @@
 ---
 title: effector
+redirectFrom:
+  - /api/effector
 ---
 
 List of the methods

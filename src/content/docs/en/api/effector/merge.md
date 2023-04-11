@@ -1,6 +1,9 @@
 ---
 title: merge
 description: merge is a method for creating an event triggered by given units
+redirectFrom:
+  - /api/effector/merge
+  - /docs/api/effector/merge
 ---
 
 :::info{title="since"}

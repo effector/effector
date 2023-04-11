@@ -1,5 +1,8 @@
 ---
 title: sample
+redirectFrom:
+  - /api/effector/sample
+  - /docs/api/effector/sample
 ---
 
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.

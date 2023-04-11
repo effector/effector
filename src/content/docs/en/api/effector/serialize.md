@@ -1,6 +1,9 @@
 ---
 title: serialize
 description: serialize is a method for serializing application states within a scope
+redirectFrom:
+  - /api/effector/serialize
+  - /docs/api/effector/serialize
 ---
 
 ## Formulae

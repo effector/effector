@@ -1,5 +1,8 @@
 ---
 title: launch
+redirectFrom:
+  - /api/effector/launch
+  - /docs/api/effector/launch
 ---
 
 :::info{title="since"}

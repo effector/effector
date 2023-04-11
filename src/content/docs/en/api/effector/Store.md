@@ -4,6 +4,9 @@ keywords:
   - store
   - unit
 description: Store, its methods and properties
+redirectFrom:
+  - /api/effector/Store
+  - /docs/api/effector/store
 ---
 
 _Store_ is an object that holds the state value. Store is getting updates when receives a value that is not equal (`!==`) to current one and to `undefined`. Store is [Unit](/en/explanation/glossary#common-unit). Some stores can be [derived](#store-derived).

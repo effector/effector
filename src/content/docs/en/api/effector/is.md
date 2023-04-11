@@ -1,5 +1,8 @@
 ---
 title: is
+redirectFrom:
+  - /api/effector/is
+  - /docs/api/effector/is
 ---
 
 Namespace for unit validators

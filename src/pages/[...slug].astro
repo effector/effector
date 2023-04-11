@@ -40,6 +40,8 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 const { redirectTo } = Astro.props;
 const { slug } = Astro.params as Params;
 
+// It is important to use .id instead of .slug, because .slug loses case from url
+// we need /api/effector/Event instead of /api/effector/event
 const pageParams = getPathParamsFromId(redirectTo.id.replace(/\.(md|mdx)$/, ""));
 const url = `/${pageParams.lang}/${pageParams.slug}`;
 ---

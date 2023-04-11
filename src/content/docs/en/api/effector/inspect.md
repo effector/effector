@@ -1,5 +1,8 @@
 ---
 title: inspect
+redirectFrom:
+  - /api/effector/inspect
+  - /docs/api/effector/inspect
 ---
 
 Special API methods designed to handle debugging and monitoring use cases without giving too much access to internals of your actual app.

@@ -1,6 +1,9 @@
 ---
 title: createEffect
 description: Method for creating an effect
+redirectFrom:
+  - /api/effector/createEffect
+  - /docs/api/effector/createEffect
 ---
 
 Method for creating an [effect](/en/api/effector/Effect)

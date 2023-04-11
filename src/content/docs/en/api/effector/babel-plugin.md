@@ -1,5 +1,8 @@
 ---
 title: Babel plugin
+redirectFrom:
+  - /api/effector/babel-plugin
+  - /docs/api/effector/babel-plugin
 ---
 
 Built-in plugin for babel can be used for ssr and debugging. It inserts a name a [Unit](/en/explanation/glossary#unit),

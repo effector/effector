@@ -1,15 +1,17 @@
 ---
 title: guard
 description: Method for conditional event routing.
+redirectFrom:
+  - /api/effector/guard
+  - /docs/api/effector/guard
 ---
 
 :::info{title="since"}
+Method introduced in [effector 20.4.0](https://changelog.effector.dev/#effector-20-4-0).
+
 The core team recommends using [sample](/en/api/effector/sample) instead of `guard` since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
-:::info{title="since"}
-[effector 20.4.0](https://changelog.effector.dev/#effector-20-4-0)
-:::
 
 Method for conditional event routing.
 It provides a way to control one dataflow with the help of another: when the condition and the data are in different places, we can use `guard` with stores as filters to trigger events when condition state is true, thereby modulate signals without mixing them.

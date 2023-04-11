@@ -1,6 +1,9 @@
 ---
 title: scopeBind
 description: scopeBind is a method to bind unit to scope
+redirectFrom:
+  - /api/effector/scopeBind
+  - /docs/api/effector/scopeBind
 ---
 
 ## Formulae {#scopeBind-formulae}
