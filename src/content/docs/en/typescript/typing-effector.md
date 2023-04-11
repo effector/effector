@@ -1,7 +1,9 @@
 ---
-id: typing-effector
 title: Typing effector
 description: Best practices for writing well-typed code
+redirectFrom:
+  - /docs/typescript/typing-effector
+  - /typescript/typing-effector
 ---
 
 Best practices for writing well-typed code

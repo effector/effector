@@ -1,6 +1,11 @@
 ---
 title: Glossary
 description: Glossary of basic terms in effector
+redirectFrom:
+  - /docs/glossary
+  - /docs/explanation/glossary
+  - /explanation/glossary
+  - /en/glossary
 ---
 
 Glossary of basic terms in effector

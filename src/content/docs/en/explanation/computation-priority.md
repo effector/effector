@@ -1,6 +1,11 @@
 ---
 title: Computation priority
 description: How effector calculates units
+redirectFrom:
+  - /en/advanced-guide/computation-priority
+  - /explanation/computation-priority
+  - /docs/advanced-guide/computation-priority
+  - /docs/explanation/computation-priority
 ---
 
 For sure, you've noticed that function [should be pure](/en/explanation/glossary#purity)... or watch if there is a place

@@ -1,6 +1,11 @@
 ---
 id: prior-art
 title: Prior Art
+redirectFrom:
+  - /en/advanced-guide/prior-art
+  - /explanation/prior-art
+  - /docs/explanation/computation-priority
+  - /advanced-guide/prior-art
 ---
 
 ## Papers

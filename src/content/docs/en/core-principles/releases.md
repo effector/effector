@@ -1,5 +1,7 @@
 ---
 title: Releases policy
+redirectFrom:
+  - /core-principles/releases
 ---
 
 The main goal of effector is to **make developer experience better**, as a part of this strategy we are committing to some rules of effector releases.

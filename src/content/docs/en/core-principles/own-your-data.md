@@ -1,5 +1,7 @@
 ---
 title: Own your data principle
+redirectFrom:
+  - /core-principles/own-your-data
 ---
 
 Effector will not force you to turn your data into abstract or custom entities – your data are your data and effector only provides infrastructure to handle it.

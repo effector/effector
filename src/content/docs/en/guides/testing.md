@@ -1,5 +1,7 @@
 ---
 title: Testing guide
+redirectFrom:
+  - /guides/testing
 ---
 
 # Testing effector

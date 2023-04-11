@@ -1,5 +1,8 @@
 ---
 title: Utility Types
+redirectFrom:
+  - /docs/typescript/utility-types
+  - /typescript/utility-types
 ---
 
 Effector provides several utility types to facilitate getting a type of value from the unit.

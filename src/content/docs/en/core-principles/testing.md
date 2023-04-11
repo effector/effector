@@ -1,5 +1,7 @@
 ---
 title: Testing
+redirectFrom:
+  - /core-principles/testing
 ---
 
 We believe that the only way to write good code is to test it.

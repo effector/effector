@@ -1,6 +1,9 @@
 ---
 id: usage-with-effector-react
 title: Usage with effector-react
+redirectFrom:
+  - /docs/typescript/usage-with-effector-react
+  - /typescript/usage-with-effector-react
 ---
 
 **TypeScript** is a typed superset of JavaScript. It became popular

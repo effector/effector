@@ -1,7 +1,9 @@
 ---
-id: unit-shape-protocol
 title: Protocol @@unitShape
 description: Re-use UI-library bindings for your own effector-based libraries
+redirectFrom:
+  - /docs/ecosystem-development/unit-shape-protocol
+  - /ecosystem-development/unit-shape-protocol
 ---
 
 :::info

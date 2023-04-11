@@ -1,5 +1,7 @@
 ---
 title: Typings
+redirectFrom:
+  - /core-principles/typing
 ---
 
 We believe that good type support is a necessary part of good DX.
