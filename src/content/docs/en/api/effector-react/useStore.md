@@ -1,5 +1,8 @@
 ---
 title: useStore
+redirectFrom:
+  - /api/effector-react/useStore
+  - /docs/api/effector-react/useStore
 ---
 
 React hook, which subscribes to a [store](/en/api/effector/Store) and returns its current value, so when the store is updated, the component will update automatically.

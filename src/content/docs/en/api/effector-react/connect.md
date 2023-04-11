@@ -1,5 +1,8 @@
 ---
 title: connect
+redirectFrom:
+  - /api/effector-react/connect
+  - /docs/api/effector-react/connect
 ---
 
 :::info{title="since"}

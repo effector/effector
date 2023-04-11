@@ -1,6 +1,9 @@
 ---
 title: useGate
 description: Hook for passing data to Gate
+redirectFrom:
+  - /api/effector-react/useGate
+  - /docs/api/effector-react/useGate
 ---
 
 ## `useGate(GateComponent, props)` {#useGate-props}

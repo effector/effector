@@ -1,5 +1,8 @@
 ---
 title: useList
+redirectFrom:
+  - /api/effector-react/useList
+  - /docs/api/effector-react/useList
 ---
 
 :::info{title="since"}

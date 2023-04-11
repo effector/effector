@@ -1,5 +1,8 @@
 ---
-title: Gate
+title: Effector React Gate
+redirectFrom:
+  - /api/effector-react/Gate
+  - /docs/api/effector-react/Gate
 ---
 
 _Gate_ is a hook for conditional rendering, based on current value (or values) in props. An example of a problem that Gate can solve – you can put together all required data, when component was mounted. Or show another component if there is not enough data in props. Gate also looks good for Routing or animation, like ReactTransitionGroup.

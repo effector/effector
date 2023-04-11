@@ -1,6 +1,9 @@
 ---
 title: createComponent
 description: Creates a store-based React component
+redirectFrom:
+  - /api/effector-react/createComponent
+  - /docs/api/effector-react/createComponent
 ---
 
 ## `createComponent(store, render)` {#createComponent}

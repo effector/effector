@@ -1,5 +1,8 @@
 ---
 title: useStoreMap
+redirectFrom:
+  - /api/effector-react/useStoreMap
+  - /docs/api/effector-react/useStoreMap
 ---
 
 :::info{title="since"}

@@ -1,5 +1,8 @@
 ---
 title: useEvent
+redirectFrom:
+  - /api/effector-react/useEvent
+  - /docs/api/effector-react/useEvent
 ---
 
 :::info{title="since"}

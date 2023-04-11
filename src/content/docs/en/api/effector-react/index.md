@@ -1,5 +1,8 @@
 ---
 title: effector-react
+redirectFrom:
+  - /api/effector-react
+  - /docs/api/effector-react
 ---
 
 Effector bindings for ReactJS.

@@ -1,5 +1,9 @@
 ---
 title: useUnit
+description: Effector React
+redirectFrom:
+  - /api/effector-react/useUnit
+  - /docs/api/effector-react/useUnit
 ---
 
 :::info{title="since"}

@@ -1,6 +1,9 @@
 ---
 title: createStoreConsumer
 description: Creates store-based component with render-props
+redirectFrom:
+  - /api/effector-react/createStoreConsumer
+  - /docs/api/effector-react/createStoreConsumer
 ---
 
 ## `createStoreConsumer(store)` {#createStoreConsumer-store}
