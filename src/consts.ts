@@ -1,3 +1,5 @@
+import type { LText } from "./languages";
+
 export const SITE = {
   title: "effector",
   description: "Business logic with ease.",
@@ -65,3 +67,25 @@ export const ALGOLIA = {
   appId: "XXXXXXXXXX",
   apiKey: "XXXXXXXXXX",
 };
+
+export const ANNOUNCEMENT: Announcement | null = {
+  title: { en: "Pay attention", ru: "Обратите внимание" },
+  text: {
+    en: "This documentation is for the as yet unreleased version of effector Spacewatch 23.0.",
+    ru: "Эта версия документации предназначена для еще не вышедшего релиза effector Spacewatch 23.0.",
+  },
+  button: {
+    text: { en: "View actual documentation", ru: "Посмотреть актуальную документацию" },
+    link: "https://effector.dev",
+  },
+};
+
+export interface Announcement {
+  title: LText;
+  text: LText;
+  button?: {
+    text: LText;
+    // Slug without language or the absolute URL.
+    link: string;
+  };
+}

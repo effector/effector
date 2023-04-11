@@ -4,10 +4,11 @@ import type { CollectionEntry } from "astro:content";
 
 import CommonLayout from "./CommonLayout.astro";
 
-import PageContent from "../components/PageContent/PageContent.astro";
-import Contributors from "../components/PageContent/Contributors.astro";
-import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
-import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
+import PageContent from "@components/PageContent/PageContent.astro";
+import Contributors from "@components/PageContent/Contributors.astro";
+import LeftSidebar from "@components/LeftSidebar/LeftSidebar.astro";
+import RightSidebar from "@components/RightSidebar/RightSidebar.astro";
+import Announcement from "@components/PageContent/Announcement.astro";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
@@ -142,6 +143,7 @@ const currentPage = Astro.url.pathname;
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
     <div id="grid-main">
+      <Announcement />
       <PageContent
         title={data.title}
         headings={headings}

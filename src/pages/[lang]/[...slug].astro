@@ -61,5 +61,5 @@ const postData = (post ?? defaultLanguagePost).data;
 >
   {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
-  {lang !== SITE.defaultLanguage ? <TranslationDisclaimer lang={lang} /> : null}
+  {lang !== SITE.defaultLanguage ? <TranslationDisclaimer lang={lang!} /> : null}
 </MainLayout>
