@@ -198,15 +198,7 @@ Adds a file path and variable name of a unit definition to a sid. Useful for deb
 
 ### noDefaults
 
-:::tip{title="DEMO"}
-[effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
-:::
-
 :::info{title="since"}
-[effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
-:::
-
-:::warning{title="DEMO"}
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 

@@ -339,6 +339,10 @@ blockquote {
   line-height: 1.7;
 }
 
+blockquote p, blockquote li {
+  color: var(--theme-text);
+}
+
 img {
   max-width: 100%;
 }
