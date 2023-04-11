@@ -1,7 +1,9 @@
 ---
-id: ecosystem
 title: Ecosystem
 description: Packages and templates of effector ecosystem
+redirectFrom:
+  - /docs/ecosystem
+  - /introduction/ecosystem
 ---
 
 Packages and templates of effector ecosystem

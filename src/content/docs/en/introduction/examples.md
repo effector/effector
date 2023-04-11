@@ -1,6 +1,8 @@
 ---
-id: examples
 title: Examples
+redirectFrom:
+  - /docs/introduction/examples
+  - /introduction/examples
 ---
 
 It's difficult to overestimate the learning curve for any technology.

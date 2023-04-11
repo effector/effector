@@ -1,6 +1,9 @@
 ---
 title: Installation
 description: How to install and setup effector
+redirectFrom:
+  - /docs/introduction/installation
+  - /introduction/installation
 ---
 
 ## Via package manager

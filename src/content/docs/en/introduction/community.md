@@ -1,6 +1,9 @@
 ---
 title: Community
 description: Articles and the team behind the project
+redirectFrom:
+  - /docs/introduction/community
+  - /introduction/community
 ---
 
 ## Articles
