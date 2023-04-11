@@ -1,5 +1,8 @@
 ---
 title: Countdown timer on setTimeout
+redirectFrom:
+  - /docs/recipes/countdown
+  - /recipes/common/countdown
 ---
 
 Sometimes we need a simple countdown. The next example allows us to handle each tick and abort the timer.

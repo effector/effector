@@ -1,5 +1,8 @@
 ---
 title: TODO list with input validation
+redirectFrom:
+  - /docs/recipes/react/todo-with-validation
+  - /recipes/react/todo-with-validation
 ---
 
 # ToDo list with input validation

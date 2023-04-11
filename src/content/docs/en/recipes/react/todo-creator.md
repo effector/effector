@@ -1,6 +1,8 @@
 ---
-id: todo-creator
 title: ToDo creator
+redirectFrom:
+  - /docs/recipes/react/todo-creator
+  - /recipes/react/todo-creator
 ---
 
 # ToDo Creator

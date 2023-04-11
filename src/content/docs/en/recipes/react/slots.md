@@ -1,5 +1,8 @@
 ---
 title: Slots
+redirectFrom:
+  - /docs/recipes/react/slots
+  - /recipes/react/slots
 ---
 
 A slot is a place in a component where you can insert any unknown component. It's a well-known abstraction used by frameworks

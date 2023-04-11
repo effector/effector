@@ -1,6 +1,9 @@
 ---
 title: Gate
 description: Gate – a bridge between props and store
+redirectFrom:
+  - /docs/recipes/react/gate
+  - /recipes/react/gate
 ---
 
 Gate is a bridge between props and stores.

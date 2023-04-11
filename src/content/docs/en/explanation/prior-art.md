@@ -4,7 +4,7 @@ title: Prior Art
 redirectFrom:
   - /en/advanced-guide/prior-art
   - /explanation/prior-art
-  - /docs/explanation/computation-priority
+  - /docs/explanation/prior-art
   - /advanced-guide/prior-art
 ---
 

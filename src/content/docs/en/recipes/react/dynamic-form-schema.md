@@ -1,5 +1,8 @@
 ---
 title: Dynamic form schema
+redirectFrom:
+  - /docs/recipes/react/dynamic-form-schema
+  - /recipes/react/dynamic-form-schema
 ---
 
 # Dynamic form schema

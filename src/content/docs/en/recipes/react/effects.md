@@ -1,5 +1,8 @@
 ---
-title: Effects
+title: Effects with React
+redirectFrom:
+  - /docs/recipes/react/example-effects
+  - /recipes/react/effects
 ---
 
 ```js

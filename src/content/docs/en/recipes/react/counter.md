@@ -1,6 +1,8 @@
 ---
-id: counter
-title: Counter
+title: React Counter
+redirectFrom:
+  - /docs/recipes/react/counter
+  - /recipes/react/counter
 ---
 
 ```js

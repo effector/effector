@@ -1,5 +1,8 @@
 ---
 title: Forms
+redirectFrom:
+  - /docs/recipes/react/example-forms
+  - /recipes/react/forms
 ---
 
 ## Example 1
