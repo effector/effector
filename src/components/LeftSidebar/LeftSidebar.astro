@@ -60,13 +60,12 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 
 <style>
   nav {
-    margin-right: 1rem;
     width: 100%;
   }
 
   .nav-groups {
     position: sticky;
-    top: var(--theme-navbar-height);
+    top: calc(var(--theme-navbar-height) + 2rem);
     padding: 2rem 0;
     height: 100%;
     max-height: 100vh;
@@ -84,6 +83,9 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 
   .nav-groups > :first-child h2 {
     margin-top: 0;
+  }
+
+  .nav-groups h2 {
     border-top: none;
   }
 
@@ -97,8 +99,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
   }
 
   .nav-group-title {
-    @apply m-0;
-    padding: 0.1rem 1rem;
+    @apply m-0 px-4 pt-2;
     font-weight: 700;
     font-size: 1rem;
     text-transform: uppercase;
