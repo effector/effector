@@ -1,6 +1,9 @@
 ---
 title: FAQ
 description: Frequent questions and answers about effector
+redirectFrom:
+  - /FAQ
+  - /docs/faq
 ---
 
 ## Why do we need to give names to events, effects etc. ?
