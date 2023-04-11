@@ -1,6 +1,7 @@
 ---
-id: core-concepts
 title: Core Concepts
+redirectFrom:
+  - /docs/introduction/core-concepts
 ---
 
 # Core Concepts
