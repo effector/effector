@@ -1,5 +1,8 @@
 ---
 title: AsyncStorage Counter
+redirectFrom:
+  - /docs/recipes/react-native/asyncstorage-counter
+  - /recipes/react-native/asyncstorage-counter
 ---
 
 # AsyncStorage Counter on React Native

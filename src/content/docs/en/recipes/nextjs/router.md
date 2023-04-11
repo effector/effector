@@ -1,6 +1,7 @@
 ---
-id: nextjs-router
 title: Integrate with Next.js router
+redirectFrom:
+  - /recipes/nextjs/router
 ---
 
 # Integrate with Next.js router

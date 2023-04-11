@@ -1,5 +1,7 @@
 ---
 title: Use scopeBind in Next.js
+redirectFrom:
+  - /recipes/nextjs/scope-bind
 ---
 
 There are situations when we need to get values from external libraries through callbacks.

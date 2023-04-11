@@ -1,5 +1,7 @@
 ---
 title: Integrate Next.js with effector
+redirectFrom:
+  - /recipes/nextjs/integrate
 ---
 
 To do this, we will use the native [fork](/en/api/effector/fork) method to create a [scope](/en/api/effector/Scope)
