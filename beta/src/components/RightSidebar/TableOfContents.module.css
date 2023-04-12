@@ -1,0 +1,106 @@
+.title {
+  @apply m-0 mb-2 border-0 p-0 uppercase;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-family: Lexend Deca, sans-serif;
+}
+
+.contents {
+  @apply pr-3 text-sm;
+}
+
+.link {
+  @apply relative m-0 max-w-full;
+}
+
+.link a {
+  @apply scroll-py-6 py-1;
+}
+
+ul.contents {
+  list-style-type: none;
+  @apply text-base;
+}
+
+.link::before {
+  content: "";
+  @apply absolute top-0 bottom-0 right-0 w-8;
+  background: linear-gradient(90deg, transparent, var(--theme-bg, white));
+}
+
+.link a {
+  @apply flex overflow-clip whitespace-nowrap;
+}
+
+.link a:hover {
+  color: var(--theme-text-dark);
+  text-decoration: underline;
+}
+
+.link.active a {
+  color: var(--theme-text-accent);
+}
+
+.level1:not(:first-child) a {
+  @apply pt-6;
+}
+
+.level1 a {
+  @apply font-bold;
+  color: var(--theme-text);
+}
+
+.level2 {
+  @apply pl-3;
+}
+
+.level2:not(:first-of-type) a {
+  @apply pt-3;
+}
+
+.level2 a {
+  @apply font-medium;
+  color: var(--theme-text);
+}
+
+.level3 {
+  @apply pl-7;
+}
+
+.level3 a {
+  @apply font-normal;
+  color: var(--theme-text-light);
+}
+
+.expandDetails {
+  @apply block select-none flex-nowrap overflow-hidden text-ellipsis;
+}
+
+.expandDetails summary {
+  display: inline-block;
+  -webkit-tap-highlight-color: transparent;
+  list-style: none;
+}
+
+.expandDetails summary::-webkit-details-marker /* Safari */,
+.expandDetails summary::marker /* Latest Chrome, Edge, Firefox */ {
+  display: none;
+}
+
+.expandDetails summary span {
+  background-color: var(--theme-code-inline-bg);
+  color: var(--theme-code-inline-text);
+  @apply inline-block cursor-pointer rounded-xl px-5 py-2 text-base uppercase;
+}
+
+.expandDetails[open] summary span {
+  @apply rounded-b-none;
+}
+
+.expandContent {
+  background-color: var(--theme-code-inline-bg);
+  --theme-bg: var(--theme-code-inline-bg);
+  max-width: 46ch;
+  @apply rounded-2xl rounded-tl-none px-1 py-3;
+}

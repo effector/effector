@@ -1,0 +1,76 @@
+button.search-input {
+  @apply m-0 box-border flex cursor-pointer rounded-2xl px-2 py-1 outline-0;
+
+  transition-property: border-color, color, background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+
+  background-color: var(--theme-divider);
+  color: var(--theme-text-light);
+  overflow: visible;
+
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+}
+
+button.search-input:focus {
+  box-shadow: 0 0 0 2px var(--theme-text-accent);
+  color: var(--theme-text);
+}
+
+button.search-input:hover::placeholder,
+button.search-input:focus::placeholder {
+  color: var(--theme-text-light);
+}
+
+button.search-input::placeholder {
+  color: var(--theme-text-light);
+}
+
+button.search-input svg {
+  margin-right: 0.25rem;
+}
+
+.search-text {
+  margin-right: 1em;
+}
+
+.search-hint {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--theme-text-lighter);
+  border-radius: 0.5rem;
+  padding: 3px 5px;
+  pointer-events: none;
+  color: var(--theme-text-light);
+  font-size: 13px;
+  line-height: 14px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.125em;
+}
+
+@media (min-width: 50em) {
+  .search-hint {
+    display: flex;
+  }
+}
+
+/* ------------------------------------------------------------ *\
+	DocSearch (Algolia)
+\* ------------------------------------------------------------ */
+
+:root {
+  --docsearch-primary-color: var(--theme-accent);
+  --docsearch-logo-color: var(--theme-text);
+}
+
+.DocSearch-Modal .DocSearch-Hit a {
+  box-shadow: none;
+  border: 1px solid var(--theme-accent);
+}

@@ -1,0 +1,108 @@
+---
+import IconChevron from "@icons/Chevron.astro";
+import Hero from "@components/Landing/Hero.astro";
+import FeaturesGrid from "@components/Landing/FeaturesGrid.astro";
+import Feature from "@components/Landing/Feature.astro";
+
+import Landing from "../layouts/Landing.astro";
+import { SITE } from "../consts";
+
+const features = [
+  {
+    emoji: "☄️",
+    kind: "major",
+    title: "Effector Spacewatch",
+    description:
+      "Experience the power of effector v23.0, featuring refined typings, universal hooks support.",
+  },
+  {
+    emoji: "🛡️",
+    title: "Type safe",
+    description:
+      "Excellent TypeScript support out of the box. With the type testing in the repository.",
+  },
+  {
+    emoji: "⚙️",
+    title: "Framework agnostic",
+    description: "Works with any UI or server framework. Tested with React, Solid, Vue.",
+  },
+  {
+    emoji: "⚡️",
+    title: "Performant",
+    description:
+      "Initialization of the whole logic at the app start provides a boost at the runtime.",
+  },
+  {
+    emoji: "📦",
+    title: "10Kb",
+    description:
+      "Effector supports tree-shaking and provides maximum opportunities with the small size.",
+  },
+  {
+    emoji: "🫂",
+    title: "Just JavaScript",
+    description:
+      "There is no Proxies, classes and some magic inside. Just JavaScript code that works.",
+  },
+  {
+    emoji: "🧑‍💻",
+    kind: "minor",
+    title: "Developer-friendly",
+    description:
+      "Simple API surface with helpful community. Core-team reduces amount of methods to be simple.",
+  },
+] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
+
+const logos = [
+  "/logo/docsvision.png",
+  "/logo/automationhero.svg",
+  "/logo/aviasales.png",
+  "/logo/avito.svg",
+  "/logo/codengage.png",
+  "/logo/express24.svg",
+  "/logo/foxford.svg",
+  "/logo/globalCtoForum.png",
+  "/logo/healthSamurai.svg",
+  "/logo/intouchHealth.png",
+  "/logo/joom.svg",
+  "/logo/junto.png",
+  "/logo/lunatask.png",
+  "/logo/mts.svg",
+  "/logo/okoo.png",
+  "/logo/radity.png",
+  "/logo/raiffeisen.svg",
+  "/logo/redmadrobot.png",
+  "/logo/sber.png",
+  "/logo/semrush.png",
+  "/logo/smartomato.svg",
+  "/logo/space307.svg",
+  "/logo/stellarX.svg",
+  "/logo/stmLabs.png",
+  "/logo/tenpixls.png",
+  "/logo/travelpayouts.svg",
+  "/logo/unicef.svg",
+  "/logo/uptarget.png",
+];
+---
+
+<Landing title="Welcome" lang={SITE.defaultLanguage} dir="ltr" description={SITE.description}>
+  <Hero subtitle="Write business logic with ease">
+    Meet the new standard for modern TypeScript development.
+    <br />
+    Type safe, reactive, framework agnostic.
+
+    <a slot="links" class="primary" href="/en/introduction/installation">
+      <span>Getting started</span>
+      <IconChevron />
+    </a>
+  </Hero>
+  <FeaturesGrid>
+    {
+      features.map((feat) => (
+        <Feature title={feat.title} emoji={feat.emoji} kind={feat.kind}>
+          {feat.description}
+        </Feature>
+      ))
+    }
+  </FeaturesGrid>
+</Landing>

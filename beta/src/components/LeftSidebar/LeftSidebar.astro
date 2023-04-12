@@ -1,0 +1,160 @@
+---
+import type { MarkdownHeading } from "astro";
+import { getPathParamsFromId } from "../../languages";
+import {
+  getLocalizedSidebar,
+  getSidebarForSlug,
+  markActiveNavigation,
+  MOBILE_NAVIGATION,
+} from "../../navigation";
+import NestedLinks from "../NestedLinks.astro";
+
+type Props = {
+  currentPage: string;
+  headings: MarkdownHeading[];
+};
+
+const { currentPage } = Astro.props;
+const currentPageMatch = currentPage.endsWith("/") ? currentPage.slice(0, -1) : currentPage;
+
+const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
+const baseSidebar = await getLocalizedSidebar(slug, lang);
+// TODO: add collapsible groups
+---
+
+<nav aria-labelledby="grid-left">
+  <ul class="nav-groups">
+    {
+      baseSidebar.map((group) => (
+        <li>
+          <div class="nav-group">
+            <h2 class="nav-group-title">{group.title}</h2>
+            <ul>
+              {group.items.map((item) => (
+                <li class="nav-link">
+                  <a
+                    href={item.link}
+                    aria-current={currentPageMatch === item.link ? "page" : false}
+                    target={item.link.startsWith("/") ? undefined : "_blank"}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    var target = document.querySelector('[aria-current="page"]');
+    if (target && target.offsetTop > window.innerHeight - 100) {
+      document.querySelector(".nav-groups").scrollTop = target.offsetTop;
+    }
+  });
+</script>
+
+<style>
+  nav {
+    width: 100%;
+  }
+
+  .nav-groups {
+    position: sticky;
+    top: calc(var(--theme-navbar-height) + 2rem);
+    padding: 2rem 0;
+    height: 100%;
+    max-height: 100vh;
+    overflow-x: visible;
+    overflow-y: auto;
+  }
+
+  .nav-groups > li + li {
+    margin-top: 2rem;
+  }
+
+  .nav-groups > :first-child {
+    padding-top: var(--doc-padding);
+  }
+
+  .nav-groups > :first-child h2 {
+    margin-top: 0;
+  }
+
+  .nav-groups h2 {
+    border-top: none;
+  }
+
+  .nav-groups > :last-child {
+    margin-bottom: var(--theme-navbar-height);
+    padding-bottom: 2rem;
+  }
+
+  .nav-group {
+    @apply flex flex-col gap-1;
+  }
+
+  .nav-group-title {
+    @apply m-0 px-4 pt-2;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .nav-group ul {
+    @apply flex flex-col gap-0.5;
+  }
+
+  .nav-link a {
+    @apply flex items-center rounded-md px-4 py-1.5 text-base;
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+  }
+
+  .nav-link a:hover,
+  .nav-link a:focus {
+    background-color: var(--theme-bg-hover);
+  }
+
+  .nav-link a[aria-current="page"] {
+    background-color: var(--theme-accent);
+    color: var(--theme-bg);
+    font-weight: 600;
+  }
+
+  .nav-link a[href^="http://"]::after,
+  .nav-link a[href^="https://"]::after
+  {
+    display: inline-block;
+    background-image: url("/external.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 1em;
+    height: 1em;
+    content: "";
+  }
+
+  :global(.theme-dark) .nav-link a[href^="http://"]::after,
+  :global(.theme-dark) .nav-link a[href^="https://"]::after
+  {
+    filter: invert();
+  }
+
+  @media (min-width: 50em) {
+    .nav-groups {
+      padding: 0;
+    }
+  }
+</style>
+
+<style is:global>
+  :root.theme-dark .nav-link a[aria-current="page"] {
+    color: hsla(var(--color-base-white), 100%, 1);
+  }
+</style>
