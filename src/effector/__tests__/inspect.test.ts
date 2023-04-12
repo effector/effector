@@ -440,6 +440,48 @@ describe('inspectGraph API', () => {
       `)
     })
   })
+  test('node family is available', () => {
+    const familyDeclared = jest.fn()
+    const familyCalled = jest.fn()
+
+    inspectGraph({
+      fn: d => {
+        if (d.family) {
+          familyDeclared()
+        }
+      },
+    })
+
+    const event = createEvent()
+    const prep = event.prepend(() => 1)
+    const map = event.map(() => 1)
+
+    /**
+     * 2 times, because at the moment of declaration
+     * first `event` family is not yet created
+     */
+    expect(familyDeclared).toHaveBeenCalledTimes(2)
+
+    const scope = fork()
+
+    inspect({
+      scope,
+      fn: m => {
+        if (m.family) {
+          familyCalled(m.family)
+        }
+      },
+    })
+
+    allSettled(prep, {scope})
+
+    /**
+     * 3 times, because at the moment of call all 3 events have family
+     */
+    expect(familyCalled).toHaveBeenCalledTimes(3)
+
+    expect(argumentHistory(familyCalled)).toMatchInlineSnapshot()
+  })
 })
 
 describe('real use cases', () => {
