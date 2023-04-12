@@ -14,7 +14,7 @@
     "type": "git",
     "url": "https://github.com/effector/new-docs"
   },
-  "packageManager": "pnpm@7.29.3",
+  "packageManager": "pnpm@8.2.0",
   "dependencies": {
     "@algolia/client-search": "^4.15.0",
     "@astrojs/mdx": "^0.16.2",
