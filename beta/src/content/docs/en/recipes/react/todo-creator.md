@@ -5,8 +5,6 @@ redirectFrom:
   - /recipes/react/todo-creator
 ---
 
-# ToDo Creator
-
 [Try it](https://share.effector.dev/AeiP1Jeb)
 
 ```tsx

@@ -5,8 +5,6 @@ redirectFrom:
   - /recipes/react/dynamic-form-schema
 ---
 
-# Dynamic form schema
-
 [Try it](https://share.effector.dev/fow5fA0A)
 
 ```js

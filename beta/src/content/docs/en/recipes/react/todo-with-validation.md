@@ -5,8 +5,6 @@ redirectFrom:
   - /recipes/react/todo-with-validation
 ---
 
-# ToDo list with input validation
-
 [Try it](https://share.effector.dev/QTvCCXEg)
 
 ```js

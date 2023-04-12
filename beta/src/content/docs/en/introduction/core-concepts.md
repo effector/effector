@@ -4,8 +4,6 @@ redirectFrom:
   - /docs/introduction/core-concepts
 ---
 
-# Core Concepts
-
 ## Event
 
 [_Event_] is an intention to do something: start a computation, send a message to another application section or update states.

@@ -1,11 +1,9 @@
 ---
-title: AsyncStorage Counter
+title: AsyncStorage Counter on React Native
 redirectFrom:
   - /docs/recipes/react-native/asyncstorage-counter
   - /recipes/react-native/asyncstorage-counter
 ---
-
-# AsyncStorage Counter on React Native
 
 The following example is a React Native counter that stores data to AsyncStorage. It uses store, events and effects.
 

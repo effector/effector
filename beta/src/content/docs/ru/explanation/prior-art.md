@@ -3,8 +3,6 @@ title: Prior Art
 lang: ru
 ---
 
-# Prior Art
-
 ## Пейперы
 
 - **Functional Pearl. Weaving a Web** [[pdf]](https://zero-bias-papers.s3-eu-west-1.amazonaws.com/weaver+zipper.pdf) _Ralf Hinze and Johan Jeuring_

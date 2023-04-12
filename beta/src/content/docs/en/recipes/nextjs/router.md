@@ -4,8 +4,6 @@ redirectFrom:
   - /recipes/nextjs/router
 ---
 
-# Integrate with Next.js router
-
 This is a simplified example of integration with the Next.js router.
 We create a similar model for storing the router instance:
 
