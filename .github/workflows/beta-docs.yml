@@ -32,6 +32,7 @@ jobs:
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
+        working-directory: ./beta
 
       - name: 🐧 Use Node.js v18.x
         uses: actions/setup-node@v3
