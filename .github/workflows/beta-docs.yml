@@ -50,7 +50,7 @@ jobs:
         run: pnpm build
         working-directory: ./beta
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ALGOLIA_API_KEY: ${{ secrets.BETA_ALGOLIA_API_KEY }}
 
       - name: 📑 Setup Pages
