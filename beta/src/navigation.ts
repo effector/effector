@@ -552,10 +552,10 @@ export const SIDEBARS: LSidebar = {
 const sidebarEntries = Object.entries(SIDEBARS);
 
 export const DOCS_VERSIONS = [
-  { text: { en: "beta (current)", ru: "beta (текущая)" }, link: "/" },
+  { text: { en: "v23.x (beta)", ru: "v23.x (бета)" }, link: "/" },
   { text: { en: "v22.x (actual)", ru: "v22.x (актуальная)" }, link: "https://effector.dev" },
-  { text: { en: "v21.x" }, link: "https://v21.effector.dev" },
-  { text: { en: "v20.x" }, link: "https://v20.effector.dev" },
+  { text: { en: "v21.8.12" }, link: "https://v21.effector.dev" },
+  { text: { en: "v20.17.2" }, link: "https://v20.effector.dev" },
 ];
 
 type SocialIcon = "github" | "twitter" | "discord" | "youtube";
