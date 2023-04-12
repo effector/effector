@@ -1,10 +1,6 @@
 import {Scope, Subscription, Show, ID} from 'effector'
 
-export type Message = {
-  type: 'update' | 'error'
-  error?: unknown
-  value: unknown
-  stack: Record<string, unknown>
+type NodeCommonMeta = Show<{
   kind: string
   sid?: string
   id: string
@@ -15,8 +11,19 @@ export type Message = {
     column: number
   }
   meta: Record<string, unknown>
+  family?: {
+    links: NodeCommonMeta[]
+    owners: NodeCommonMeta[]
+  }
+}>
+
+export type Message = {
+  type: 'update' | 'error'
+  error?: unknown
+  value: unknown
+  stack: Record<string, unknown>
   trace?: Message[]
-}
+} & NodeCommonMeta
 
 export function inspect(config: {
   scope?: Scope
@@ -45,25 +52,15 @@ type Region =
     }
 
 export type Declaration =
-  | {
+  | ({
       type: 'unit'
-      kind: string
-      name?: string
-      id: string
-      sid?: string
-      loc?: {
-        file: string
-        line: number
-        column: number
-      }
-      meta: Record<string, unknown>
       region?: Show<Region>
       // for derived units - stores or events
       derived?: boolean
-    }
+    } & NodeCommonMeta)
   | {
       type: 'factory'
-      id: ID,
+      id: ID
       meta: Record<string, unknown>
       region?: Region
       sid?: string
@@ -80,10 +77,11 @@ export type Declaration =
       // they are explictily set to undefined
       kind?: undefined
       derived?: undefined
+      family?: undefined
     }
   | {
       type: 'region'
-      id: ID,
+      id: ID
       region?: Region
       meta: Record<string, unknown>
       // these fields are not provided to regions
@@ -96,6 +94,7 @@ export type Declaration =
       name?: undefined
       method?: undefined
       loc?: undefined
+      family?: undefined
     }
 
 export function inspectGraph(config: {
