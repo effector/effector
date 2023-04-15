@@ -181,7 +181,7 @@ module.exports = {
           editLocalizedFiles: true,
           versions: {
             current: {
-              label: 'v22.x.x',
+              label: 'v22.x',
             },
           },
         },
