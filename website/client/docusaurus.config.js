@@ -57,17 +57,17 @@ module.exports = {
           dropdownActiveClassDisabled: true,
           dropdownItemsAfter: [
             {
-              label: 'v21.x.x',
+              label: 'v21.8.12',
               href: 'https://v21.effector.dev'
             },
             {
-              label: 'v20.x.x',
+              label: 'v20.17.2',
               href: 'https://v20.effector.dev'
             },
           ],
           dropdownItemsBefore: [
             {
-              label: 'beta',
+              label: 'v23.x (beta)',
               href: 'https://beta.effector.dev'
             },
           ],
