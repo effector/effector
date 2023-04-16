@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.8.1
+
+- Internal state refs now also see meta, if owned by store. [PR #899](https://github.com/effector/effector/pull/889)
+
 ## effector 22.8.0
 
 - Sids are no longer required for `fork({ values, handlers })`, which allows to run tests without `effector/babel-plugin`. Note, that plugin and sids are still required for SSR. ([PR #855](https://github.com/effector/effector/pull/855))
