@@ -347,18 +347,10 @@ export function createStore<State>(
   const serializeMeta = getMeta(store, 'serialize')
   const derived = getMeta(store, 'derived')
   const ignored = serializeMeta === 'ignore'
-  const customSerialize = !serializeMeta || ignored ? false : serializeMeta
   const sid: string | null = getMeta(store, 'sid')
   if (sid) {
     setMeta(store, 'storeChange', true)
     plainState.sid = sid
-
-    if (customSerialize) {
-      plainState.meta = {
-        ...plainState?.meta,
-        serialize: customSerialize,
-      }
-    }
   }
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)
@@ -378,6 +370,8 @@ export function createStore<State>(
     })
     store.reset(store.reinit)
   }
+
+  plainState.meta = store.graphite.meta
 
   reportDeclaration(store.graphite)
 
