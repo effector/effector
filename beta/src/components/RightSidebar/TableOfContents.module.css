@@ -18,7 +18,7 @@
   @apply scroll-py-6 py-1;
 }
 
-ul.contents {
+:global(.content) ul.contents {
   list-style-type: none;
   @apply text-base;
 }
