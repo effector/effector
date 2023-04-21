@@ -85,7 +85,7 @@ requestReceived({ id: 1, title: "example" })
 
 This rule also contributes to the clarity of each argument's meaning, both at the call site and subscription site. It promotes clean and organized code, making it easier to understand and maintain
 
-## Typing the argument
+## Declaring types
 
 Event carriers some data, in TypeScript ecosystem each data should have defined type.
 When event is explicitly created by [`createEvent`](/en/api/effector/createEvent) type of the argument must be provided as a Generic type argument:
@@ -126,6 +126,21 @@ To specify the argument type for an event, it is essential to first determine th
 - If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `ReadonlyEvent<T>` type.
 
 _Where `T` represents the type of the event's argument._
+
+```ts
+import { type Event, createStore, createEvent } from 'effector'
+
+function createCounter(counterChanged: Event<number>) {
+  const $counter = createStore(0)
+  sample({
+    clock: $counter,
+    target: counterChanged,
+  })
+}
+
+const whenCounterChanged = createEvent<number>()
+createCounter(whenCounterChanged)
+```
 
 ## Watching the event {#event-watch}
 
@@ -172,11 +187,9 @@ firstTriggered();
 ```
 
 :::tip{title="Keep in mind"}
-
 The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
 
 Its primary intended use is for short-term debugging and logging purposes.
-
 :::
 
 ## Formulae {#event-formulae}
@@ -195,14 +208,19 @@ event(argument: T): T
 
 ### `prepend(fn)` {#event-prepend-fn}
 
+<br/><br/>
+
 # ReadonlyEvent instance {#readonlyEvent}
 
-A **ReadonlyEvent** is a more common type of event with different approach Firstly, invoking a ReadonlyEvent is not allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
+A **ReadonlyEvent** is a super type of `Event` with different approach. Firstly, invoking a ReadonlyEvent is not allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
 
 The primary purpose of a ReadonlyEvent is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a ReadonlyEvent, which is subsequently called by the `.map()` method itself.
 
 :::info
 There is no need for user code to directly invoke such a ReadonlyEvent.
+
+
+If you find yourself needing to call a ReadonlyEvent, it may be necessary to reevaluate and restructure your application's logic.
 :::
 
 All the functionalities provided by ReadonlyEvent are also supported in a regular Event.
@@ -216,6 +234,32 @@ There is no way to manually create ReadonlyEvent, but some methods and operators
 - Effect's [methods](/en/api/effector/Effect#effect) and [properties](/en/api/effector/Effect#properties)
 - operators like: [`sample`](/en/api/effector/sample), [`merge`](/en/api/effector/merge)
 
+## Declaring types
+
+It becomes necessary in cases where a factory or library requires an event to subscribe to its updates, ensuring proper integration and interaction with the provided functionality:
+
+```ts
+ReadonlyEvent<T>;
+```
+
+_Where `T` represents the type of the event's argument._
+
+To utilize the `ReadonlyEvent` type, simply import it from the `"effector"` package and integrate it into your code as needed:
+
+```ts
+import { type ReadonlyEvent, createStore, createEvent } from 'effector'
+
+function createCounter(increment: ReadonlyEvent<void>) {
+  const $counter = createStore(0)
+
+  $counter.on(increment, (count) => count + 1)
+}
+
+const incrementCounter = createEvent<number>()
+createCounter(incrementCounter)
+incrementCounter()
+```
+
 ## Methods {#readonlyEvent-methods}
 
 ### `map(fn)` {#readonlyEvent-map-fn}
@@ -226,6 +270,12 @@ There is no way to manually create ReadonlyEvent, but some methods and operators
 
 ### `watch(watcher)` {#readonlyEvent-watch-watcher}
 
+:::tip{title="Keep in mind"}
+The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
+
+Its primary intended use is for short-term debugging and logging purposes.
+:::
+
 ### `subscribe(observer)` {#readonlyEvent-subscribe-observer}
 
 ## Properties {#readonlyEvent-properties}
@@ -235,16 +285,3 @@ There is no way to manually create ReadonlyEvent, but some methods and operators
 ### `compositeName` {#readonlyEvent-compositeName}
 
 ### `shortName` {#readonlyEvent-shortName}
-
----
-
-- event methods
-  - map: DerivedEvent
-  - filter: DerivedEvent
-  - filterMap: DerivedEvent
-  - prepend: Event
-  - watch:
-- properties
-  - sid
-  - shortName
-  - compositeName
