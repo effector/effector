@@ -78,9 +78,9 @@ Read more in the explanation section.
 If multiple arguments need to be passed, encapsulate them within an object:
 
 ```ts
-import { createEvent } from 'effector'
-const requestReceived = createEvent<{ id: number; title: string }>()
-requestReceived({ id: 1, title: "example" })
+import { createEvent } from "effector";
+const requestReceived = createEvent<{ id: number; title: string }>();
+requestReceived({ id: 1, title: "example" });
 ```
 
 This rule also contributes to the clarity of each argument's meaning, both at the call site and subscription site. It promotes clean and organized code, making it easier to understand and maintain
@@ -106,40 +106,40 @@ When an event is invoked, TypeScript will verify that the type of the argument p
 This is also works for operators like `sample` or `split`:
 
 ```ts
-import { sample, createEvent } from 'effector'
+import { sample, createEvent } from "effector";
 
-const someHappened = createEvent<number>()
-const anotherHappened = createEvent<string>()
+const someHappened = createEvent<number>();
+const anotherHappened = createEvent<string>();
 
 sample({
   // @ts-expect-error error: "clock should extend target type"; targets: { clockType: number; targetType: string; }
   clock: someHappened,
   target: anotherHappened,
-})
+});
 ```
 
 [Try it](https://tsplay.dev/WyoPKN)
 
-
 To specify the argument type for an event, it is essential to first determine the intended purpose, what do you want to do with this event:
+
 - If you intend to **invoke** an event or use it as a target, you should utilize the `Event<T>` type.
 - If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `ReadonlyEvent<T>` type.
 
 _Where `T` represents the type of the event's argument._
 
 ```ts
-import { type Event, createStore, createEvent } from 'effector'
+import { type Event, createStore, createEvent } from "effector";
 
 function createCounter(counterChanged: Event<number>) {
-  const $counter = createStore(0)
+  const $counter = createStore(0);
   sample({
     clock: $counter,
     target: counterChanged,
-  })
+  });
 }
 
-const whenCounterChanged = createEvent<number>()
-createCounter(whenCounterChanged)
+const whenCounterChanged = createEvent<number>();
+createCounter(whenCounterChanged);
 ```
 
 ## Watching the event {#event-watch}
@@ -219,7 +219,6 @@ The primary purpose of a ReadonlyEvent is to be triggered by internal code withi
 :::info
 There is no need for user code to directly invoke such a ReadonlyEvent.
 
-
 If you find yourself needing to call a ReadonlyEvent, it may be necessary to reevaluate and restructure your application's logic.
 :::
 
@@ -247,22 +246,83 @@ _Where `T` represents the type of the event's argument._
 To utilize the `ReadonlyEvent` type, simply import it from the `"effector"` package and integrate it into your code as needed:
 
 ```ts
-import { type ReadonlyEvent, createStore, createEvent } from 'effector'
+import { type ReadonlyEvent, createStore, createEvent } from "effector";
 
 function createCounter(increment: ReadonlyEvent<void>) {
-  const $counter = createStore(0)
+  const $counter = createStore(0);
 
-  $counter.on(increment, (count) => count + 1)
+  $counter.on(increment, (count) => count + 1);
 }
 
-const incrementCounter = createEvent<number>()
-createCounter(incrementCounter)
-incrementCounter()
+const incrementCounter = createEvent<number>();
+createCounter(incrementCounter);
+incrementCounter();
 ```
 
 ## Methods {#readonlyEvent-methods}
 
 ### `map(fn)` {#readonlyEvent-map-fn}
+
+Creates a new derived ReadonlyEvent, which will be called after the original event is called, using the result of the fn function as its argument. This special function enables you to break down and manage data flow, as well as extract or transform data within your business logic model.
+
+#### Formulae {#readonlyEvent-map-fn-formulae}
+
+```ts
+const second = first.map(fn);
+```
+
+- When `first` is triggered, pass payload from `first` to `fn`.
+- Trigger `second` with the result of the `fn()` call as payload.
+- The function `fn` is invoked each time the `first` event is triggered.
+- Also, the `second` event triggered each time the `first` is triggered.
+
+#### Arguments {#readonlyEvent-map-fn-arguments}
+
+1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
+
+#### Types {#readonlyEvent-map-fn-types}
+
+The resulting type of the `fn` function will be utilized to define the type of the derived event.
+
+```ts
+import { createEvent } from "effector";
+
+const first = createEvent<number>();
+// first: Event<number>
+
+const second = first.map((count) => count.toString());
+// second: ReadonlyEvent<string>
+```
+
+The `first` event can be represented as either `Event<T>` or `ReadonlyEvent<T>`. <br/>
+The `second` event will always be represented as `ReadonlyEvent<T>`.
+
+#### Returns {#readonlyEvent-map-fn-returns}
+
+[_ReadonlyEvent_](/en/api/effector/Event#readonlyEvent): New event.
+
+#### Example {#readonlyEvent-map-fn-example}
+
+```js
+import { createEvent } from "effector";
+
+const userUpdated = createEvent();
+
+// you may decompose dataflow with .map() method
+const userNameUpdated = userUpdated.map(({ user }) => name);
+
+// either way you can transform data
+const userRoleUpdated = userUpdated.map((user) => user.role.toUpperCase());
+
+userNameUpdated.watch((name) => console.log(`User's name is [${name}] now`));
+userRoleUpdated.watch((role) => console.log(`User's role is [${role}] now`));
+
+userUpdated({ name: "john", role: "admin" });
+// => User's name is [john] now
+// => User's role is [ADMIN] now
+```
+
+[Try it](https://share.effector.dev/duDut6nR)
 
 ### `filter({ fn })` {#readonlyEvent-filter-fn}
 
