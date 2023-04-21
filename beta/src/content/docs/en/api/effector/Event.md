@@ -142,6 +142,25 @@ const whenCounterChanged = createEvent<number>();
 createCounter(whenCounterChanged);
 ```
 
+In the most cases there is no reason to use `void` with the another type (~~`Event<void | number>`~~). Use `void` only to declare the Event or ReadonlyEvent without the argument at all.
+That's why it is possible to send data from event with argument into event without argument.
+
+```ts
+sample({
+  clock: withData, // Event<number>
+  target: withoutData, // Event<void>
+});
+```
+
+We're strongly recommends to use `null` for empty values when intended:
+
+```ts
+import { createEvent } from "effector";
+
+const maybeDataReceived = createEvent<Data | null>();
+// maybeDataReceived: Event<Data | null>
+```
+
 ## Watching the event {#event-watch}
 
 To ascertain when an event is called, effector and its ecosystem offer various methods with distinct capabilities. Debugging is the primary use case for this purpose, and we highly recommend using [`patronum/debug`](https://patronum.effector.dev/methods/debug/) to display when an event is triggered and the argument it carries.
@@ -206,7 +225,19 @@ event(argument: T): T
 
 ## Methods {#event-methods}
 
+All the methods and properties from [ReadonlyEvent](#readonlyEvent-methods) is also available on `Event` instance.
+
+:::tip
+You can think of the Event and ReadonlyEvent as type and its super type:
+
+`Event<T> extends ReadonlyEvent<T>`
+:::
+
 ### `prepend(fn)` {#event-prepend-fn}
+
+---
+
+Check all other methods on [ReadonlyEvent](#readonlyEvent-methods).
 
 <br/><br/>
 
@@ -299,7 +330,7 @@ The `second` event will always be represented as `ReadonlyEvent<T>`.
 
 #### Returns {#readonlyEvent-map-fn-returns}
 
-[_ReadonlyEvent_](/en/api/effector/Event#readonlyEvent): New event.
+[_ReadonlyEvent_](#readonlyEvent): The new event.
 
 #### Example {#readonlyEvent-map-fn-example}
 
@@ -352,6 +383,10 @@ Here, due to legacy restrictions `fn` is required to use object form because `ev
 
 Use it always like this `.filter({ fn })`.
 :::
+
+#### Returns {#readonlyEvent-filter-fn-returns}
+
+[_ReadonlyEvent_](#readonlyEvent): The new event
 
 #### Types {#readonlyEvent-filter-fn-types}
 
@@ -415,6 +450,91 @@ const uniqueSizeReceived = sneackersReceived.filter({
 ```
 
 ### `filterMap(fn)` {#readonlyEvent-filterMap-fn}
+
+:::info{title="since"}
+[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
+:::
+
+This methods generates a new derived ReadonlyEvent that **may be invoked** after the original event, but with the transformed argument. This special method enabled you to simultaneously transform data and filter out trigger of the event.
+
+This method looks like the `.filter()` and `.map()` merged in the one. That's it. The reason for creating was an impossibility for event filtering.
+
+This method is mostly useful with JavaScript APIs whose returns `undefined` sometimes.
+
+#### Formulae {#readonlyEvent-filterMap-formulae}
+
+```ts
+const second = first.filterMap(fn);
+```
+
+- When `first` is triggered, call `fn` with payload from `first`
+- If `fn()` returned `undefined` do not trigger `second`
+- If `fn()` returned some data, trigger `second` with data from `fn()`
+
+#### Arguments {#readonlyEvent-filterMap-arguments}
+
+1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
+
+The `fn` function should return some data. When `undefined` is returned, the update of derived event will be skipped.
+
+#### Returns {#readonlyEvent-filterMap-returns}
+
+[_ReadonlyEvent_](#readonlyEvent): The new event
+
+#### Types {#readonlyEvent-filterMap-types}
+
+The type for the derived event is automatically inferred from the `fn` declaration.
+No need to explicitly set type for variable or generic type argument:
+
+```ts
+import { createEvent } from "effector";
+
+const first = createEvent<number>();
+// first: Event<number>
+
+const second = first.filterMap((count) => {
+  if (count === 0) return;
+  return count.toString();
+});
+// second: ReadonlyEvent<string>
+```
+
+The `first` event can be represented as either `Event<T>` or `ReadonlyEvent<T>`. <br/>
+The `second` event will always be represented as `ReadonlyEvent<T>`.
+
+#### Example {#readonlyEvent-filterMap-example}
+
+```tsx
+import { createEvent } from "effector";
+
+const listReceived = createEvent<string[]>();
+
+// Array.prototype.find() returns `undefined` when no item is found
+const effectorFound = listReceived.filterMap((list) => list.find((name) => name === "effector"));
+
+effectorFound.watch((name) => console.info("found", name));
+
+listReceived(["redux", "effector", "mobx"]); // => found effector
+listReceived(["redux", "mobx"]);
+```
+
+[Try it](https://share.effector.dev/ARDanMAM)
+
+#### Meaningful example
+
+Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only if they're red. If they're not red, you're out of luck.
+Let's consider by steps:
+
+1. Take one apple;
+2. Have a look, is it red(put in a pack) or not(take another).
+
+And you repeat this until you complete the task. Now think about it in the effector terms, and we consider the positive case:
+
+1. Take an apple – event;
+2. Have a look, red or no – filter;
+3. You keep it – map;
+4. Put in pack – event.
+5. Pack – store
 
 ### `watch(watcher)` {#readonlyEvent-watch-watcher}
 
