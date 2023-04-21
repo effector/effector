@@ -235,6 +235,104 @@ You can think of the Event and ReadonlyEvent as type and its super type:
 
 ### `prepend(fn)` {#event-prepend-fn}
 
+Creates a new NOT derived event, that should be called, upon trigger it sends transformed data into the original event.
+
+Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+
+If the original event belongs to some [domain](/en/api/effector/Domain), then a new event will belong to it as well.
+
+#### Formulae {#event-prepend-fn-formulae}
+
+```ts
+const second = first.prepend(fn);
+```
+
+- When `second` event is triggered
+- Call `fn` with argument from the `second` event
+- Trigger `first` event with the result of `fn()`
+
+#### Arguments {#event-prepend-fn-arguments}
+
+1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
+
+#### Returns {#event-prepend-fn-arguments}
+
+[_Event_](/en/api/effector/Event): New event.
+
+#### Types {#event-prepend-fn-arguments}
+
+There TypeScript requires explicitly setting type of the argument of `fn` function:
+
+```ts
+import { createEvent } from "effector";
+
+const original = createEvent<{ input: string }>();
+
+const prepended = original.prepend((input: string) => ({ input }));
+//                                         ^^^^^^ here
+```
+
+Type of the `original` event argument and the resulting type of the `fn` must be the same.
+
+#### Example {#event-prepend-fn-arguments}
+
+```js
+import { createEvent } from "effector";
+
+const userPropertyChanged = createEvent();
+
+userPropertyChanged.watch(({ field, value }) => {
+  console.log(`User property "${field}" changed to ${value}`);
+});
+
+const changeName = userPropertyChanged.prepend((name) => ({
+  field: "name",
+  value: name,
+}));
+const changeRole = userPropertyChanged.prepend((role) => ({
+  field: "role",
+  value: role.toUpperCase(),
+}));
+
+changeName("john");
+// => User property "name" changed to john
+
+changeRole("admin");
+// => User property "role" changed to ADMIN
+
+changeName("alice");
+// => User property "name" changed to alice
+```
+
+[Try it](https://share.effector.dev/XGxlG4LD)
+
+#### Meaningful example {#event-prepend-fn-example-meaningful}
+
+You can think of this method like a wrapper function. Let's assume we have function with not ideal API, but we want to call it frequently:
+
+```ts
+import { sendAnalytics } from "./analytics";
+
+export function reportClick(item: string) {
+  const argument = { type: "click", container: { items: [arg] } };
+  return sendAnalytics(argument);
+}
+```
+
+This is exactly how `.prepend()` works:
+
+```ts
+import { sendAnalytics } from "./analytics";
+
+export const reportClick = sendAnalytics.prepend((item: string) => {
+  return { type: "click", container: { items: [arg] } };
+});
+
+reportClick("example");
+// reportClick triggered "example"
+// sendAnalytics triggered { type: "click", container: { items: ["example"] } }
+```
+
 ---
 
 Check all other methods on [ReadonlyEvent](#readonlyEvent-methods).
@@ -438,7 +536,7 @@ numbers({ x: 10 });
 
 [Try it](https://share.effector.dev/H2Iu4iJH)
 
-#### Meaningful example
+#### Meaningful example {#readonlyEvent-filter-fn-example-meaningful}
 
 Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If `filter` returns `true`, the event will be called.
 
@@ -461,7 +559,7 @@ This method looks like the `.filter()` and `.map()` merged in the one. That's it
 
 This method is mostly useful with JavaScript APIs whose returns `undefined` sometimes.
 
-#### Formulae {#readonlyEvent-filterMap-formulae}
+#### Formulae {#readonlyEvent-filterMap-fn-formulae}
 
 ```ts
 const second = first.filterMap(fn);
@@ -471,17 +569,17 @@ const second = first.filterMap(fn);
 - If `fn()` returned `undefined` do not trigger `second`
 - If `fn()` returned some data, trigger `second` with data from `fn()`
 
-#### Arguments {#readonlyEvent-filterMap-arguments}
+#### Arguments {#readonlyEvent-filterMap-fn-arguments}
 
 1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
 
 The `fn` function should return some data. When `undefined` is returned, the update of derived event will be skipped.
 
-#### Returns {#readonlyEvent-filterMap-returns}
+#### Returns {#readonlyEvent-filterMap-fn-returns}
 
 [_ReadonlyEvent_](#readonlyEvent): The new event
 
-#### Types {#readonlyEvent-filterMap-types}
+#### Types {#readonlyEvent-filterMap-fn-types}
 
 The type for the derived event is automatically inferred from the `fn` declaration.
 No need to explicitly set type for variable or generic type argument:
@@ -502,7 +600,7 @@ const second = first.filterMap((count) => {
 The `first` event can be represented as either `Event<T>` or `ReadonlyEvent<T>`. <br/>
 The `second` event will always be represented as `ReadonlyEvent<T>`.
 
-#### Example {#readonlyEvent-filterMap-example}
+#### Example {#readonlyEvent-filterMap-fn-example}
 
 ```tsx
 import { createEvent } from "effector";
@@ -520,7 +618,7 @@ listReceived(["redux", "mobx"]);
 
 [Try it](https://share.effector.dev/ARDanMAM)
 
-#### Meaningful example
+#### Meaningful example {#readonlyEvent-filterMap-fn-example-meaningful}
 
 Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only if they're red. If they're not red, you're out of luck.
 Let's consider by steps:
