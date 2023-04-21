@@ -326,6 +326,94 @@ userUpdated({ name: "john", role: "admin" });
 
 ### `filter({ fn })` {#readonlyEvent-filter-fn}
 
+This method generates a new derived ReadonlyEvent that will be invoked after the original event, but only if the `fn` function returns a value of `true`. This special function enables you to break down data flow into a branches and subscribe on them within the business logic model.
+
+:::tip
+[sample](/en/api/effector/sample) operator with `filter` argument is the preferred filtering method.
+:::
+
+#### Formulae {#readonlyEvent-filter-fn-formulae}
+
+```ts
+const second = first.filter({ fn });
+```
+
+- When `first` is triggered, pass payload from `first` to `fn`.
+- The `second` event will be triggered only if `fn` returns `true`, with the argument from `first` event.
+- The function `fn` is invoked each time the `first` event is triggered.
+- Also, the `second` event triggered each time the `first` is triggered, **and** the `fn` returned `true`.
+
+#### Arguments {#readonlyEvent-filter-fn-arguments}
+
+1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
+
+:::info{title="Note"}
+Here, due to legacy restrictions `fn` is required to use object form because `event.filter(fn)` was an alias for [Event filterMap](/en/api/effector/Event#readonlyEvent-filterMap-fn).
+
+Use it always like this `.filter({ fn })`.
+:::
+
+#### Types {#readonlyEvent-filter-fn-types}
+
+Method `.filter()` always returns ReadonlyEvent. Also this event will have the same type as the original type:
+
+```ts
+import { createEvent } from "effector";
+
+const numberReceived = createEvent<number>();
+// numberReceived: Event<number>
+
+const evenReceived = numberReceived.filter({
+  fn: (number) => number % 2 === 0,
+});
+// evenReceived: ReadonlyEvent<number>
+
+evenReceived.watch(console.info);
+numberReceived(5); // nothing
+numberReceived(2); // => 2
+```
+
+#### Example {#readonlyEvent-filter-fn-example}
+
+```js
+import { createEvent, createStore } from "effector";
+
+const numbers = createEvent();
+const positiveNumbers = numbers.filter({
+  fn: ({ x }) => x > 0,
+});
+
+const $lastPositive = createStore(0).on(positiveNumbers, (n, { x }) => x);
+
+$lastPositive.watch((x) => {
+  console.log("last positive:", x);
+});
+
+// => last positive: 0
+
+numbers({ x: 0 });
+// no reaction
+
+numbers({ x: -10 });
+// no reaction
+
+numbers({ x: 10 });
+// => last positive: 10
+```
+
+[Try it](https://share.effector.dev/H2Iu4iJH)
+
+#### Meaningful example
+
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If `filter` returns `true`, the event will be called.
+
+```ts
+const sneackersReceived = createEvent<Sneakers>();
+const uniqueSizeReceived = sneackersReceived.filter({
+  fn: (sneackers) => sneackers.size === 48,
+});
+```
+
 ### `filterMap(fn)` {#readonlyEvent-filterMap-fn}
 
 ### `watch(watcher)` {#readonlyEvent-watch-watcher}
