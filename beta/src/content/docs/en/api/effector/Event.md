@@ -11,7 +11,7 @@ redirectFrom:
 
 The **Event** in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things. This unit is designed to be a carrier of information/intention/state within the application, not the holder of a state.
 
-There are two type of events provided by effector: [`Event`](#event) and [`ListenEvent`](#listenEvent).
+There are two type of events provided by effector: [`Event`](#event) and [`ReadonlyEvent`](#readonlyEvent).
 
 # Event instance {#event}
 
@@ -29,15 +29,15 @@ There are many ways to create event:
 
 - the most common [`createEvent`](/en/api/effector/createEvent)
 - using [Domain createEvent](/en/api/effector/Domain#createeventname)
-- via [Event's methods](#event-methods) and it's supertype [ListenEvent's methods](#listenEvent-methods)
-- some [Effect's methods](/en/api/effector/Effect#methods) return new Events
+- via [Event's methods](#event-methods) and it's supertype [ReadonlyEvent's methods](#readonlyEvent-methods)
+- some [Effect's methods](/en/api/effector/Effect#methods) return new events and readonly events
 - operators such as: [`createApi`](/en/api/effector/createApi)
 
 ## Calling the event {#event-calling}
 
 There are two ways to trigger event: imperative and declarative.
 
-The imperative method involves invoking the event as if it were a function:
+The **imperative** method involves invoking the event as if it were a function:
 
 ```ts
 import { createEvent } from "effector";
@@ -47,7 +47,7 @@ const callHappened = createEvent<void>();
 callHappened(); // event triggered
 ```
 
-The declarative approach utilizes the event as a target for operators, such as sample, or as an argument when passed into factory functions:
+The **declarative** approach utilizes the event as a target for operators, such as sample, or as an argument when passed into factory functions:
 
 ```ts
 import { createEvent, sample } from "effector";
@@ -72,6 +72,7 @@ It is not possible to call an event with two or more arguments, as in `someEvent
 
 All arguments beyond the first will be disregarded.
 The core team has implemented this rule for specific reasons related to the design and functionality.
+Read more in the explanation section.
 :::
 
 If multiple arguments need to be passed, encapsulate them within an object:
@@ -122,7 +123,7 @@ sample({
 
 To specify the argument type for an event, it is essential to first determine the intended purpose, what do you want to do with this event:
 - If you intend to **invoke** an event or use it as a target, you should utilize the `Event<T>` type.
-- If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `ListenEvent<T>` type.
+- If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `ReadonlyEvent<T>` type.
 
 _Where `T` represents the type of the event's argument._
 
@@ -149,7 +150,7 @@ firstTriggered();
 // => [event] secondTriggered undefined
 ```
 
-However, if your environment does not permit the addition of further dependencies, you may use the [`.watch()`](#listenEvent-watch-watcher) method with caution.
+However, if your environment does not permit the addition of further dependencies, you may use the [`.watch()`](#readonlyEvent-watch-watcher) method with caution.
 
 ```ts
 import { createEvent, sample } from "effector";
@@ -170,6 +171,14 @@ firstTriggered();
 // => [event] secondTriggered
 ```
 
+:::tip{title="Keep in mind"}
+
+The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
+
+Its primary intended use is for short-term debugging and logging purposes.
+
+:::
+
 ## Formulae {#event-formulae}
 
 ```ts
@@ -186,46 +195,46 @@ event(argument: T): T
 
 ### `prepend(fn)` {#event-prepend-fn}
 
-# ListenEvent instance {#listenEvent}
+# ReadonlyEvent instance {#readonlyEvent}
 
-A **ListenEvent** is a more common type of event with different approach Firstly, invoking a ListenEvent is not allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
+A **ReadonlyEvent** is a more common type of event with different approach Firstly, invoking a ReadonlyEvent is not allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
 
-The primary purpose of a ListenEvent is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a ListenEvent, which is subsequently called by the `.map()` method itself.
+The primary purpose of a ReadonlyEvent is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a ReadonlyEvent, which is subsequently called by the `.map()` method itself.
 
 :::info
-There is no need for user code to directly invoke such a ListenEvent.
+There is no need for user code to directly invoke such a ReadonlyEvent.
 :::
 
-All the functionalities provided by ListenEvent are also supported in a regular Event.
+All the functionalities provided by ReadonlyEvent are also supported in a regular Event.
 
-## Construction {#listenEvent-construction}
+## Construction {#readonlyEvent-construction}
 
-There is no way to manually create ListenEvent, but some methods and operators returns derived events:
+There is no way to manually create ReadonlyEvent, but some methods and operators returns derived events, they are have `ReadonlyEvent<T>` type:
 
 - Event's methods like: [`.map(fn)`](#event-map-fn), [`.filter({fn})`](#event-filterMap-fn), and so on
 - Store's property: ['.updates'](/en/api/effector/Store#updates)
 - Effect's [methods](/en/api/effector/Effect#effect) and [properties](/en/api/effector/Effect#properties)
 - operators like: [`sample`](/en/api/effector/sample), [`merge`](/en/api/effector/merge)
 
-## Methods {#listenEvent-methods}
+## Methods {#readonlyEvent-methods}
 
-### `map(fn)` {#listenEvent-map-fn}
+### `map(fn)` {#readonlyEvent-map-fn}
 
-### `filter({ fn })` {#listenEvent-filter-fn}
+### `filter({ fn })` {#readonlyEvent-filter-fn}
 
-### `filterMap(fn)` {#listenEvent-filterMap-fn}
+### `filterMap(fn)` {#readonlyEvent-filterMap-fn}
 
-### `watch(watcher)` {#listenEvent-watch-watcher}
+### `watch(watcher)` {#readonlyEvent-watch-watcher}
 
-### `subscribe(observer)` {#listenEvent-subscribe-observer}
+### `subscribe(observer)` {#readonlyEvent-subscribe-observer}
 
-## Properties {#listenEvent-properties}
+## Properties {#readonlyEvent-properties}
 
-### `sid` {#listenEvent-sid}
+### `sid` {#readonlyEvent-sid}
 
-### `compositeName` {#listenEvent-compositeName}
+### `compositeName` {#readonlyEvent-compositeName}
 
-### `shortName` {#listenEvent-shortName}
+### `shortName` {#readonlyEvent-shortName}
 
 ---
 
