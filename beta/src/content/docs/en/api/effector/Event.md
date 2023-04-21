@@ -594,8 +594,50 @@ Read more:
 
 ## Properties {#readonlyEvent-properties}
 
+These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin) or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
+
 ### `sid` {#readonlyEvent-sid}
+
+It is an unique identifier for each event.
+
+It is important to note, SID is not changes on each app start, it is statically written inside your app bundle to absolutely identify units.
+
+It can be useful to send events between workers or server/browser: [examples/worker-rpc](https://github.com/effector/effector/tree/master/examples/worker-rpc).
+
+It has the `string | null` type.
+
+### `shortName` {#readonlyEvent-shortName}
+
+It is a `string` type property, contains the name of the variable event declared at.
+
+```ts
+import { createEvent } from "effector";
+
+const demo = createEvent();
+// demo.shortName === 'demo'
+```
+
+But reassign event to another variable changes nothing:
+
+```ts
+const another = demo;
+// another.shortName === 'demo'
+```
 
 ### `compositeName` {#readonlyEvent-compositeName}
 
-### `shortName` {#readonlyEvent-shortName}
+This property contains the full internal chain of units. For example, event can be created by the domain, so the composite name will contain a domain name inside it.
+
+```ts
+import { createEvent, createDomain } from "effector";
+
+const first = createEvent();
+const domain = createDomain();
+const second = domain.createEvent();
+
+console.log(first);
+// => { shortName: "first", fullName: "first", path: ["first"] }
+
+console.log(second);
+// => { shortName: "second", fullName: "domain/second", path: ["domain", "second"] }
+```
