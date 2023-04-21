@@ -546,6 +546,39 @@ The `watch` method neither handles nor reports exceptions, manages the completio
 Its primary intended use is for short-term debugging and logging purposes.
 :::
 
+#### Formulae {#readonlyEvent-watch-watcher-formulae}
+
+```ts
+const unwatch = event.watch(fn);
+```
+
+- The `fn` will be called on each `event` trigger, passed argument of the `event` to the `fn`.
+- When `unwatch` is called, stop calling `fn` on each `event` trigger.
+
+#### Arguments {#readonlyEvent-watch-watcher-arguments}
+
+1. `watcher` ([_Watcher_](/en/explanation/glossary#watcher)): A function that receives `argument` from the event.
+
+#### Returns {#readonlyEvent-watch-watcher-returns}
+
+[_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
+
+#### Example {#readonlyEvent-watch-watcher-example}
+
+```js
+import { createEvent } from "effector";
+
+const sayHi = createEvent();
+const unwatch = sayHi.watch((name) => console.log(`${name}, hi there!`));
+
+sayHi("Peter"); // => Peter, hi there!
+unwatch();
+
+sayHi("Drew"); // => nothing happened
+```
+
+[Try it](https://share.effector.dev/9YVgCl4C)
+
 ### `subscribe(observer)` {#readonlyEvent-subscribe-observer}
 
 This is the low-level method to integrate event with the standard `Observable` pattern.
