@@ -9,274 +9,233 @@ redirectFrom:
   - /docs/api/effector/event
 ---
 
-_Event_ is an intention to change the state. Let's imagine a life situation, you enter a shop and, according to etiquette, you have to say "hello" – **intention**, then you say "hello" – **event**.
+The **Event** in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things. This unit is designed to be a carrier of information/intention/state within the application, not the holder of a state.
 
-Event calls always return its payload:
+There are two type of events provided by effector: [`Event`](#event) and [`ListenEvent`](#listenEvent).
 
-```js
-import { createEvent } from "effector";
+# Event instance {#event}
 
-const event = createEvent();
-
-console.log(event(1));
-// => 1
-console.log(event());
-// => undefined
-```
-
-[Try it](https://share.effector.dev/iVBYDJjf)
-
-<br/><br/>
-
-# Methods {#methods}
-
-## `watch(watcher)` {#watch-watcher}
-
-It is a function which allows you to watch the event or to create side effects.
-
-### Formulae {#watch-watcher-formulae}
-
-```ts
-const unwatch = event.watch(fn);
-```
-
-- Call `fn` on each `event` trigger, pass payload of `event` as argument to `fn`
-- When `unwatch` is called, stop calling `fn` on each `event` trigger
-
-<!--If you want to know, when watch is called, welcome to the advanced section-->
-
-### Arguments {#watch-watcher-arguments}
-
-1. `watcher` ([_Watcher_](/en/explanation/glossary#watcher)): A function that receives `payload`.
-
-### Returns {#watch-watcher-returns}
-
-[_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
-
-### Example {#watch-watcher-example}
-
-```js
-import { createEvent } from "effector";
-
-const sayHi = createEvent();
-const unwatch = sayHi.watch((name) => console.log(`${name}, hi there!`));
-
-sayHi("Peter"); // => Peter, hi there!
-unwatch();
-
-sayHi("Drew"); // => nothing happened
-```
-
-[Try it](https://share.effector.dev/9YVgCl4C)
-
-## `map(fn)` {#map-fn}
-
-Creates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is a special function which allows you to decompose dataflow, extract or transform data.
-
-### Formulae {#map-fn-formulae}
-
-```ts
-const second = first.map(fn);
-```
-
-- When `first` is triggered, pass payload from `first` to `fn`
-- Trigger `second` with the result of the `fn()` call as payload
-
-### Arguments {#map-fn-arguments}
-
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
-
-### Returns {#map-fn-returns}
-
-[_Event_](/en/api/effector/Event): New event.
-
-### Example {#map-fn-example}
-
-```js
-import { createEvent } from "effector";
-
-const userUpdated = createEvent();
-const userNameUpdated = userUpdated.map(({ name }) => name); // you may decompose dataflow with .map() method
-const userRoleUpdated = userUpdated.map(({ role }) => role.toUpperCase()); // either way you can transform data
-
-userNameUpdated.watch((name) => console.log(`User's name is [${name}] now`));
-userRoleUpdated.watch((role) => console.log(`User's role is [${role}] now`));
-
-userUpdated({ name: "john", role: "admin" });
-// => User's name is [john] now
-// => User's role is [ADMIN] now
-```
-
-[Try it](https://share.effector.dev/duDut6nR)
-
-## `prepend(fn)` {#prepend-fn}
-
-Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
-
-If the original event belongs to some [domain](/en/api/effector/Domain), then a new event will belong to it as well
-
-### Formulae {#prepend-fn-formulae}
-
-```ts
-const second = first.prepend(fn);
-```
-
-- When `second` event is triggered
-- Call `fn` with payload from `second`
-- Trigger `first` with the result of `fn()`
-
-### Arguments {#prepend-fn-arguments}
-
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
-
-### Returns {#prepend-fn-returns}
-
-[_Event_](/en/api/effector/Event): New event.
-
-### Example {#prepend-fn-example}
-
-```js
-import { createEvent } from "effector";
-
-const userPropertyChanged = createEvent();
-
-userPropertyChanged.watch(({ field, value }) => {
-  console.log(`User property "${field}" changed to ${value}`);
-});
-
-const changeName = userPropertyChanged.prepend((name) => ({
-  field: "name",
-  value: name,
-}));
-const changeRole = userPropertyChanged.prepend((role) => ({
-  field: "role",
-  value: role.toUpperCase(),
-}));
-
-changeName("john");
-// => User property "name" changed to john
-
-changeRole("admin");
-// => User property "role" changed to ADMIN
-
-changeName("alice");
-// => User property "name" changed to alice
-```
-
-[Try it](https://share.effector.dev/XGxlG4LD)
-
-## `filterMap(fn)` {#filterMap-fn}
-
-:::info{title="since"}
-[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
-:::
-
-Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.
-Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only if they're red. If they're not red, you're out of luck.
-Let's consider by steps:
-
-1. Take one apple;
-2. Have a look, is it red(put in a pack) or not(take another).
-
-And you repeat this until you complete the task. Now think about it in the effector terms, and we consider the positive case:
-
-1. Take an apple – event;
-2. Have a look, red or no – filter;
-3. You keep it – map;
-4. Put in pack – event.
-5. Pack – store
-
-You may see that we united `filter()` and `map()` methods, the reason for creating was an impossibility to event filtering.
-The method is useful with JavaScript APIs those returns `undefined`.
-
-### Formulae {#filterMa-formulae}
-
-```ts
-const second = first.filterMap(fn);
-```
-
-- When `first` is triggered, call `fn` with payload from `first`
-  - If `fn()` returned `undefined` do not trigger `second`
-  - If `fn()` returned some data, trigger `second` with data from `fn()`
-
-### Arguments {#filterMap-fn-arguments}
-
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
-
-### Returns {#filterMap-fn-returns}
-
-[_Event_](/en/api/effector/Event): New event.
-
-### Example {#filterMap-fn-example}
-
-```tsx
-const listReceived = createEvent<string[]>();
-const effectorFound = listReceived.filterMap((list) => list.find((name) => name === "effector"));
-
-effectorFound.watch((name) => console.info("found", name));
-listReceived(["redux", "effector", "mobx"]); // found effector
-listReceived(["redux", "mobx"]);
-```
-
-[Try it](https://share.effector.dev/ARDanMAM)
-
-## `filter({fn})` {#filter-fn}
-
-Creates a new event, which will be called after the original event is called if `fn` returns `true`.
-
-Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If `filter` returns `true`, the event will be called.
-
-### Formulae {#filter-fn-formulae}
-
-```ts
-const second = first.filter({ fn });
-```
-
-- When `first` is triggered, pass payload from `first` to `fn`
-- If `fn()` returns `true`, `second` will be triggered with payload from `first`
-
-### Arguments {#filter-fn-arguments}
-
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](/en/explanation/glossary#purity).
-
-### Returns {#filter-fn-returns}
-
-[_Event_](/en/api/effector/Event): New event.
+In most situations, it is recommended to create events directly within the module, rather than placing them within conditional statements or classes, in order to maintain simplicity and readability. An exception to this recommendation is the use of factory functions; however, these should also be invoked at the root level of the module.
 
 :::info
-Object form is used because `event.filter(fn)` was an alias for [event.filterMap](/en/api/effector/Event#event-filterMap-fn)
+Event instances persist throughout the entire runtime of the application and inherently represent a portion of the business logic.
+
+Attempting to delete instances and clear memory for the purpose of saving resources is not advised, as it may adversely impact the functionality and performance of the application.
 :::
 
-:::tip
-[sample](/en/api/effector/sample) method with `filter` is the preferred filtering method
-:::
+## Construction {#event-construction}
 
-### Example {#filter-fn-example}
+There are many ways to create event:
 
-```js
-import { createEvent, createStore } from "effector";
+- the most common [`createEvent`](/en/api/effector/createEvent)
+- using [Domain createEvent](/en/api/effector/Domain#createeventname)
+- via [Event's methods](#event-methods) and it's supertype [ListenEvent's methods](#listenEvent-methods)
+- some [Effect's methods](/en/api/effector/Effect#methods) return new Events
+- operators such as: [`createApi`](/en/api/effector/createApi)
 
-const numbers = createEvent();
-const positiveNumbers = numbers.filter({
-  fn: ({ x }) => x > 0,
-});
+## Calling the event {#event-calling}
 
-const $lastPositive = createStore(0).on(positiveNumbers, (n, { x }) => x);
+There are two ways to trigger event: imperative and declarative.
 
-$lastPositive.watch((x) => {
-  console.log("last positive:", x);
-});
+The imperative method involves invoking the event as if it were a function:
 
-// => last positive: 0
+```ts
+import { createEvent } from "effector";
 
-numbers({ x: 0 });
-// no reaction
+const callHappened = createEvent<void>();
 
-numbers({ x: -10 });
-// no reaction
-
-numbers({ x: 10 });
-// => last positive: 10
+callHappened(); // event triggered
 ```
 
-[Try it](https://share.effector.dev/H2Iu4iJH)
+The declarative approach utilizes the event as a target for operators, such as sample, or as an argument when passed into factory functions:
+
+```ts
+import { createEvent, sample } from "effector";
+
+const firstTriggered = createEvent<void>();
+const secondTriggered = createEvent<void>();
+
+sample({
+  clock: firstTriggered,
+  target: secondTriggered,
+});
+```
+
+> When the `firstTriggered` event is invoked, the `secondTriggered` event will be subsequently called, creating a sequence of events.
+
+This method is employed to link various units within a single event chain. In most cases, the chain will have multiple branches, allowing for diverse interactions and processes within the application logic.
+
+:::warning{title="Important"}
+
+In Effector, any event supports only **a single argument**.
+It is not possible to call an event with two or more arguments, as in `someEvent(first, second)`.
+
+All arguments beyond the first will be disregarded.
+The core team has implemented this rule for specific reasons related to the design and functionality.
+:::
+
+If multiple arguments need to be passed, encapsulate them within an object:
+
+```ts
+import { createEvent } from 'effector'
+const requestReceived = createEvent<{ id: number; title: string }>()
+requestReceived({ id: 1, title: "example" })
+```
+
+This rule also contributes to the clarity of each argument's meaning, both at the call site and subscription site. It promotes clean and organized code, making it easier to understand and maintain
+
+## Typing the argument
+
+Event carriers some data, in TypeScript ecosystem each data should have defined type.
+When event is explicitly created by [`createEvent`](/en/api/effector/createEvent) type of the argument must be provided as a Generic type argument:
+
+```ts
+import { ItemAdded } from "effector";
+
+interface ItemAdded {
+  id: string;
+  title: string;
+}
+
+const itemAdded = createEvent<ItemAdded>();
+```
+
+When an event is invoked, TypeScript will verify that the type of the argument passed matches the type defined in the event, ensuring consistency and type safety within the code.
+
+This is also works for operators like `sample` or `split`:
+
+```ts
+import { sample, createEvent } from 'effector'
+
+const someHappened = createEvent<number>()
+const anotherHappened = createEvent<string>()
+
+sample({
+  // @ts-expect-error error: "clock should extend target type"; targets: { clockType: number; targetType: string; }
+  clock: someHappened,
+  target: anotherHappened,
+})
+```
+
+[Try it](https://tsplay.dev/WyoPKN)
+
+
+To specify the argument type for an event, it is essential to first determine the intended purpose, what do you want to do with this event:
+- If you intend to **invoke** an event or use it as a target, you should utilize the `Event<T>` type.
+- If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `ListenEvent<T>` type.
+
+_Where `T` represents the type of the event's argument._
+
+## Watching the event {#event-watch}
+
+To ascertain when an event is called, effector and its ecosystem offer various methods with distinct capabilities. Debugging is the primary use case for this purpose, and we highly recommend using [`patronum/debug`](https://patronum.effector.dev/methods/debug/) to display when an event is triggered and the argument it carries.
+
+```ts
+import { createEvent, sample } from "effector";
+import { debug } from "patronum";
+
+const firstTriggered = createEvent<void>();
+const secondTriggered = createEvent<void>();
+
+sample({
+  clock: firstTriggered,
+  target: secondTriggered,
+});
+
+debug(firstTriggered, secondTriggered);
+
+firstTriggered();
+// => [event] firstTriggered undefined
+// => [event] secondTriggered undefined
+```
+
+However, if your environment does not permit the addition of further dependencies, you may use the [`.watch()`](#listenEvent-watch-watcher) method with caution.
+
+```ts
+import { createEvent, sample } from "effector";
+
+const firstTriggered = createEvent<void>();
+const secondTriggered = createEvent<void>();
+
+sample({
+  clock: firstTriggered,
+  target: secondTriggered,
+});
+
+firstTriggered.watch(() => console.info("[event] firstTriggered"));
+secondTriggered.watch(() => console.info("[event] secondTriggered"));
+
+firstTriggered();
+// => [event] firstTriggered
+// => [event] secondTriggered
+```
+
+## Formulae {#event-formulae}
+
+```ts
+const event = createEvent<T>()
+event(argument: T): T
+```
+
+- `event` called as a function always returns its argument as is
+- all subscribers of event receives the `argument` passed into
+- when `T` is `void`, `event` can be called without arguments
+- `T` by default is `void`, so generic type argument can be omitted
+
+## Methods {#event-methods}
+
+### `prepend(fn)` {#event-prepend-fn}
+
+# ListenEvent instance {#listenEvent}
+
+A **ListenEvent** is a more common type of event with different approach Firstly, invoking a ListenEvent is not allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
+
+The primary purpose of a ListenEvent is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a ListenEvent, which is subsequently called by the `.map()` method itself.
+
+:::info
+There is no need for user code to directly invoke such a ListenEvent.
+:::
+
+All the functionalities provided by ListenEvent are also supported in a regular Event.
+
+## Construction {#listenEvent-construction}
+
+There is no way to manually create ListenEvent, but some methods and operators returns derived events:
+
+- Event's methods like: [`.map(fn)`](#event-map-fn), [`.filter({fn})`](#event-filterMap-fn), and so on
+- Store's property: ['.updates'](/en/api/effector/Store#updates)
+- Effect's [methods](/en/api/effector/Effect#effect) and [properties](/en/api/effector/Effect#properties)
+- operators like: [`sample`](/en/api/effector/sample), [`merge`](/en/api/effector/merge)
+
+## Methods {#listenEvent-methods}
+
+### `map(fn)` {#listenEvent-map-fn}
+
+### `filter({ fn })` {#listenEvent-filter-fn}
+
+### `filterMap(fn)` {#listenEvent-filterMap-fn}
+
+### `watch(watcher)` {#listenEvent-watch-watcher}
+
+### `subscribe(observer)` {#listenEvent-subscribe-observer}
+
+## Properties {#listenEvent-properties}
+
+### `sid` {#listenEvent-sid}
+
+### `compositeName` {#listenEvent-compositeName}
+
+### `shortName` {#listenEvent-shortName}
+
+---
+
+- event methods
+  - map: DerivedEvent
+  - filter: DerivedEvent
+  - filterMap: DerivedEvent
+  - prepend: Event
+  - watch:
+- properties
+  - sid
+  - shortName
+  - compositeName
