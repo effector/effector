@@ -538,6 +538,8 @@ And you repeat this until you complete the task. Now think about it in the effec
 
 ### `watch(watcher)` {#readonlyEvent-watch-watcher}
 
+This method enables you to call callback on each event trigger with the argument of the event.
+
 :::tip{title="Keep in mind"}
 The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
 
@@ -545,6 +547,17 @@ Its primary intended use is for short-term debugging and logging purposes.
 :::
 
 ### `subscribe(observer)` {#readonlyEvent-subscribe-observer}
+
+This is the low-level method to integrate event with the standard `Observable` pattern.
+
+:::tip{title="Keep in mind"}
+You don't need to use this method on your own. It is used under the hood by rendering engines or so on.
+:::
+
+Read more:
+
+- https://rxjs.dev/guide/observable
+- https://github.com/tc39/proposal-observable
 
 ## Properties {#readonlyEvent-properties}
 
