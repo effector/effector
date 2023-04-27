@@ -90,6 +90,19 @@ describe('combine cases', () => {
     const store = combine(Color)
     expect(store.getState()).toEqual(['#e95801'])
   })
+  test('combine(...primitives)', () => {
+    const store = combine(1, [false], {value: 'a'})
+    expect(store.getState()).toEqual([1, [false], {value: 'a'}])
+  })
+  test('combine([primitives])', () => {
+    const store = combine([1, [false], {value: 'a'}])
+    expect(store.getState()).toEqual([1, [false], {value: 'a'}])
+  })
+  test('combine(Store, primitive)', () => {
+    const Color = createStore('#e95801')
+    const store = combine(Color, '#e95801')
+    expect(store.getState()).toEqual(['#e95801', '#e95801'])
+  })
 })
 
 it('deduplicate outputs', async () => {
