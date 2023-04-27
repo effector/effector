@@ -2,9 +2,14 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.8.2
+
+- `combine` types now allow primitive values, just like it was stated in the docs. Thanks to @faustienf [PR #884](https://github.com/effector/effector/pull/884)
+- Events, created from split with match-object shape and internal inFlight counters of Effects now have proper metadata to use in the Inspect API. [PR #892](https://github.com/effector/effector/pull/892)
+
 ## effector 22.8.1
 
-- Internal state refs now also see meta, if owned by store. [PR #899](https://github.com/effector/effector/pull/889)
+- Internal state refs now also see meta, if owned by store. [PR #889](https://github.com/effector/effector/pull/889)
 
 ## effector 22.8.0
 
