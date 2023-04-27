@@ -55,10 +55,15 @@ export function split(...args: any[]) {
       (_, key) =>
         (targets[key] = createEvent({
           derived: true,
+          named: `cases.${key}`,
           and: metadata,
         })),
     )
-    targets.__ = createEvent({derived: true, and: metadata})
+    targets.__ = createEvent({
+      derived: true,
+      named: 'cases.__',
+      and: metadata,
+    })
   } else {
     forIn(targets, (target, field) =>
       assertTarget(METHOD, target, `cases.${field}`),

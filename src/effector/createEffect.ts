@@ -203,6 +203,7 @@ export function createEffect<Params, Done, Fail = Error>(
 
   const inFlight = (instance.inFlight = createStore(0, {
     serialize: 'ignore',
+    named: (instance.graphite.meta.name || instance.graphite.id) + '.inFlight',
   })
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1)
