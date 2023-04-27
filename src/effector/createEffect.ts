@@ -1,7 +1,7 @@
 import type {Unit, Stack} from './index.h'
 import type {Effect, Scope} from './unit.h'
 import {calc, run} from './step'
-import {getForkPage, getGraph, getParent, setMeta} from './getter'
+import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage, isWatch} from './kernel'
@@ -203,6 +203,7 @@ export function createEffect<Params, Done, Fail = Error>(
 
   const inFlight = (instance.inFlight = createStore(0, {
     serialize: 'ignore',
+    named: (getMeta(instance, 'name') || instance.graphite.id) + '.inFlight',
   })
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1)

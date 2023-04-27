@@ -9,6 +9,10 @@ import {
   combine,
   withRegion,
   createNode,
+  split,
+  attach,
+  guard,
+  forward,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
@@ -21,10 +25,22 @@ function compactMessage(m: Message) {
 }
 
 describe('inspect API', () => {
-  test('should be possible to track chain of events', () => {
+  test('should be possible to track chain of events', async () => {
     const start = createEvent()
     const $a = createStore(0).on(start, s => s + 1)
     const $b = $a.map(s => s + 1)
+    const myFx = createEffect(async () => {
+      // ok
+    })
+    const attachedFx = attach({
+      effect: myFx,
+    })
+    const attachedFnFx = attach({
+      source: $a,
+      effect: async () => {
+        // ok
+      },
+    })
 
     const end = createEvent()
 
@@ -32,7 +48,21 @@ describe('inspect API', () => {
       source: [$a, $b],
       clock: start,
       fn: ([a, b]) => a + b,
+      target: [end, myFx, attachedFx, attachedFnFx],
+    })
+
+    const evs = split(myFx.doneData, {
+      a: () => true,
+    })
+
+    guard({
+      clock: attachedFnFx.doneData,
+      filter: () => true,
       target: end,
+    })
+    forward({
+      from: attachedFnFx.done,
+      to: end,
     })
 
     const trackMock = jest.fn()
@@ -41,6 +71,8 @@ describe('inspect API', () => {
     })
 
     start()
+
+    await new Promise(r => setTimeout(r))
 
     expect(argumentHistory(trackMock).length).toBeGreaterThan(0)
     expect(argumentHistory(trackMock)).toMatchInlineSnapshot(`
@@ -57,6 +89,121 @@ describe('inspect API', () => {
         "update of 'updates' [event] to value of '1,2' (id:string, sid:object, loc:undefined, meta:object)",
         "update of 'undefined' [sample] to value of '3' (id:string, sid:string, loc:object, meta:object)",
         "update of 'end' [event] to value of '3' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'myFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'myFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'attachedFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'attachedFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'attachedFnFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'attachedFnFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of '[object Object]' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'myFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [on] to value of '2' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'myFx.inFlight' [store] to value of '2' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '2' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '2' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '2' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '2' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'finally' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of '[object Object]' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'done' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [split] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'cases.a' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'myFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'finally' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of '[object Object]' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'done' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [forward] to value of '[object Object]' (id:string, sid:undefined, loc:object, meta:object)",
+        "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'end' [event] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [guard] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [on] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'attachedFnFx.inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'false' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'false' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of 'false' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [guard] to value of 'undefined' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'end' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'finally' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of '[object Object]' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'done' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [split] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'cases.a' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object)",
+        "update of 'undefined' [on] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'myFx.inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'false' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'false' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of 'false' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'finally' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of '[object Object]' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'undefined' [filterMap] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'done' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [on] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'attachedFx.inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [map] to value of 'false' (id:string, sid:undefined, loc:undefined, meta:object)",
+        "update of 'pending' [store] to value of 'false' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'updates' [event] to value of 'false' (id:string, sid:object, loc:undefined, meta:object)",
+        "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object)",
       ]
     `)
   })
@@ -233,7 +380,7 @@ describe('inspectGraph API', () => {
         "derived unit failData (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
         "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
         "unit reinit (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
-        "unit 43 (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
+        "unit effectFx.inFlight (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
         "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
         "derived unit inFlight (store) created (sid object, parent region: undefined, id: string, loc: undefined)",
         "derived unit updates (event) created (sid object, parent region: undefined, id: string, loc: undefined)",
