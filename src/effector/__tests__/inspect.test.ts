@@ -21,7 +21,9 @@ import {withFactory} from '../region'
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
     m.value
-  }' (id:${typeof m.id}, sid:${typeof m.sid}, loc:${typeof m.loc}, meta:${typeof m.meta})`
+  }' (id:${typeof m.id}, sid:${typeof m.sid}, loc:${typeof m.loc}, meta:${typeof m.meta}, meta.id:${
+    typeof m.meta.id
+  }, meta.rootStateRefId:${typeof m.meta.rootStateRefId})`
 }
 
 describe('inspect API', () => {
@@ -346,7 +348,9 @@ function compactDeclaration(d: Declaration) {
 
   return `${d.derived ? 'derived ' : ''}${d.type} ${d.name} (${
     d.kind
-  }) created (sid ${typeof d.sid}, parent region: ${typeof d.region}, id: ${typeof d.id}, loc: ${typeof d.loc})`
+  }) created (sid ${typeof d.sid}, parent region: ${typeof d.region}, id: ${typeof d.id}, loc: ${typeof d.loc}, meta.id:${
+    typeof d.meta.id
+  }, meta.rootStateRefId:${typeof d.meta.rootStateRefId})`
 }
 
 describe('inspectGraph API', () => {
