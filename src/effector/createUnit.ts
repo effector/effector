@@ -191,6 +191,7 @@ export function createEvent<Payload = any>(
   if (config?.domain) {
     config.domain.hooks.event(finalEvent)
   }
+  setMeta(finalEvent, 'id', finalEvent.graphite.id)
   reportDeclaration(finalEvent.graphite)
   return finalEvent
 }
@@ -344,6 +345,8 @@ export function createStore<State>(
     },
     regional: true,
   })
+  setMeta(store, 'id', store.graphite.id)
+  setMeta(store, 'rootStateRefId', plainStateId)
   const serializeMeta = getMeta(store, 'serialize')
   const derived = getMeta(store, 'derived')
   const ignored = serializeMeta === 'ignore'
