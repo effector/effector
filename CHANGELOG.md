@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.8.3
+
+- Added missing node and stateRef ids to meta-objects. These are internal changes which are not covered by the types or docs yet.
+
 ## effector 22.8.2
 
 - `combine` types now allow primitive values, just like it was stated in the docs. Thanks to @faustienf [PR #884](https://github.com/effector/effector/pull/884)
