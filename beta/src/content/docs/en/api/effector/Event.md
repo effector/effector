@@ -25,7 +25,7 @@ There are many ways to create event:
 
 ## Declaring types
 
-Event carriers some data, in TypeScript ecosystem each data should have defined type.
+Event carries some data and in TypeScript ecosystem each data should have defined type.
 When event is explicitly created by [`createEvent`](/en/api/effector/createEvent) type of the argument must be provided as a Generic type argument:
 
 ```ts
