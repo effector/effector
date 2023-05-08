@@ -58,6 +58,8 @@ const maybeDataReceived = createEvent<Data | null>();
 // maybeDataReceived: Event<Data | null>
 ```
 
+[Read more in the explanation section](/en/explanation/events#typescript).
+
 ## Methods {#event-methods}
 
 All the methods and properties from [ReadonlyEvent](#readonlyEvent-methods) is also available on `Event` instance.
@@ -72,6 +74,8 @@ You can think of the Event and ReadonlyEvent as type and its super type:
 
 Initiates an event with the provided argument, which in turn activates any registered subscribers.
 
+[Read more in the explanation section](/en/explanation/events#event-calling).
+
 #### Formulae {#event-argument-formulae}
 
 ```ts
@@ -83,6 +87,15 @@ event(argument: T): T
 - all subscribers of event receives the `argument` passed into
 - when `T` is `void`, `event` can be called without arguments
 - `T` by default is `void`, so generic type argument can be omitted
+
+:::warning{title="Important"}
+
+In Effector, any event supports only **a single argument**.
+It is not possible to call an event with two or more arguments, as in `someEvent(first, second)`.
+
+All arguments beyond the first will be ignored.
+The core team has implemented this rule for specific reasons related to the design and functionality.
+:::
 
 #### Arguments {#event-argument-arguments}
 
@@ -247,6 +260,8 @@ ReadonlyEvent<T>;
 ```
 
 _Where `T` represents the type of the event's argument._
+
+[Read more in the explanation section](/en/explanation/events#readonlyEvent-using).
 
 ## Methods {#readonlyEvent-methods}
 
@@ -503,6 +518,8 @@ The `watch` method neither handles nor reports exceptions, manages the completio
 
 Its primary intended use is for short-term debugging and logging purposes.
 :::
+
+[Read more in the explanation section](/en/explanation/events#event-watch).
 
 #### Formulae {#readonlyEvent-watch-watcher-formulae}
 
