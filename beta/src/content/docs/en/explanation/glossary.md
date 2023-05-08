@@ -48,7 +48,7 @@ It is useful for logging or other side effects.
 
 [Domain](/en/api/effector/Domain) in api documentation
 
-## Unit
+## Unit {#unit}
 
 Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
 There are five unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) and [Scope](/en/api/effector/Scope)

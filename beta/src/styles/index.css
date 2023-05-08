@@ -221,24 +221,10 @@ article > section ol li {
   line-height: 2;
 }
 
-a > code {
-  position: relative;
-  background: transparent;
+body a > code {
   color: var(--theme-text-accent);
   text-underline-offset: var(--padding-block);
-}
-
-a > code::before {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  opacity: var(--theme-accent-opacity);
-  border-radius: var(--border-radius);
-  background: var(--theme-accent);
-  content: "";
+  background-color: hsla(var(--theme-accent-color), 0.1);
 }
 
 a:focus {

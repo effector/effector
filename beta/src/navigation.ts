@@ -108,6 +108,10 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/explanation/glossary",
       },
       {
+        text: { en: "Events", ru: "События" },
+        link: "/explanation/events",
+      },
+      {
         text: { en: "Computation Priority" },
         link: "/explanation/computation-priority",
       },
