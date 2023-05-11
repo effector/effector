@@ -161,6 +161,7 @@ Create effect which will call async function with values from `source` stores
 let resultFx: Effect<Params, Result>
 resultFx = attach({
   source: Store<Source>,
+  domain?: Domain,
   async effect(source: Source, params: Params): Result
 })
 ```
@@ -168,6 +169,7 @@ resultFx = attach({
 **Arguments**
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
+- `domain` ([_Domain_](Domain.md)): An optional Domain that the effect will be a part of
 - `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
 
 **Returns**

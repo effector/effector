@@ -11,16 +11,23 @@ import {
   getCompositeName,
 } from './getter'
 import {own} from './own'
-import {is} from './is'
+import {is, isVoid} from './is'
 import {read, calc} from './step'
 import {launch} from './kernel'
 import {EFFECT} from './tag'
 import {createName} from './naming'
+import {assert} from './throw'
 
 export function attach(config: any) {
   let injected
   ;[config, injected] = processArgsToConfig(config, true)
-  let {source, effect, mapParams} = config
+  let {source, effect, mapParams, domain} = config
+  if (is.effect(effect)) {
+    assert(
+      isVoid(domain),
+      '`domain` can only be used with a plain function',
+    )
+  }
   const attached = createEffect(config, injected)
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope
