@@ -2,6 +2,11 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.8.4
+
+- Fixed an edge case for `fork` calls without sid (function from release `22.8.0`). Some libraries provide built-in sid's in the code, which led to the `duplicated sid found` exception when calling `fork` when trying to use two instances of the same factory in a test and running it without `effector/babel-plugin`.
+The exception on `fork` calls is no longer thrown, and all sid-related checks and assertions have been moved to `serialize` calls, since sid's are actually only required for `serialize` to work. [PR #897](https://github.com/effector/effector/pull/897)
+
 ## effector 22.8.3
 
 - Added missing node and stateRef ids to meta-objects. These are internal changes which are not covered by the types or docs yet.
