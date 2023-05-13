@@ -470,6 +470,30 @@ describe('fork handlers support', () => {
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
+  test('handlers as a tuple list, but with sid doubles', async () => {
+    const h1 = jest.fn()
+    const h2 = jest.fn()
+    const fx1 = createEffect({
+      sid: 'fx',
+      handler: () => {},
+    })
+    const fx2 = createEffect({
+      sid: 'fx',
+      handler: () => {},
+    })
+
+    const scope = fork({
+      handlers: [
+        [fx1, h1],
+        [fx2, h2],
+      ],
+    })
+
+    await Promise.all([allSettled(fx1, {scope}), allSettled(fx2, {scope})])
+
+    expect(h1).toBeCalledTimes(1)
+    expect(h2).toBeCalledTimes(1)
+  })
 })
 
 describe('handlers validation', () => {
