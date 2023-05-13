@@ -17,6 +17,7 @@ export function serialize(
       'There is a store without sid in this scope, its value is omitted',
     )
   }
+  assert(!scope.hasSidDoubles, 'duplicate sid found in this scope')
   const ignoredStores = config.ignore ? config.ignore.map(({sid}) => sid) : []
   const result = {} as Record<string, any>
   forIn(scope.values.sidMap, (value, sid) => {

@@ -648,21 +648,6 @@ describe('getState with same sids', () => {
 
     expect(scope.getState($convenientValue)).toEqual(false)
   })
-  test('sending values to stores with same sid is an error', async () => {
-    const a = createStore(0, {sid: 'sameSid'})
-    const b = createStore(0, {sid: 'sameSid'})
-
-    const spy = jest.spyOn(console, 'error')
-
-    fork({
-      values: [
-        [a, 1],
-        [b, 1],
-      ],
-    })
-
-    expect(spy).toHaveBeenCalledWith(`duplicate sid found`)
-  })
 })
 
 describe('diamond deps (issue #613)', () => {

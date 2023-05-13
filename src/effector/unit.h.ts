@@ -165,6 +165,7 @@ export interface Domain extends Unit {
 
 export interface Scope extends Unit {
   fromSerialize?: boolean
+  hasSidDoubles?: boolean
   kind: Kind
   graphite: Node
   reg: Record<string, StateRef>
