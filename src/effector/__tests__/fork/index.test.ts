@@ -652,14 +652,16 @@ describe('getState with same sids', () => {
     const a = createStore(0, {sid: 'sameSid'})
     const b = createStore(0, {sid: 'sameSid'})
 
-    expect(() => {
-      fork({
-        values: [
-          [a, 1],
-          [b, 1],
-        ],
-      })
-    }).toThrowErrorMatchingInlineSnapshot(`"duplicate sid found"`)
+    const spy = jest.spyOn(console, 'error')
+
+    fork({
+      values: [
+        [a, 1],
+        [b, 1],
+      ],
+    })
+
+    expect(spy).toHaveBeenCalledWith(`duplicate sid found`)
   })
 })
 
