@@ -53,7 +53,7 @@ export function normalizeValues(
       )
       if (assertEach) assertEach(key, value)
       if (key.sid) {
-        // assert(!(key.sid in sidMap), 'duplicate sid found')
+        if (key.sid in sidMap) console.error('duplicate sid found')
         sidMap[key.sid!] = value
       }
       unitMap.set(key, value)
