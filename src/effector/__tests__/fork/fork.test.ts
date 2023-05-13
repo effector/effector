@@ -85,6 +85,51 @@ describe('units without sids support', () => {
     await allSettled(fooFx, {scope})
     expect(fn).toBeCalled()
   })
+  test('mixed sid and no-sid case should work for tests', async () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = $foo.map(x => x * 2)
+
+    const $sid = createStore(0, {sid: '$sid'})
+    const $sidBar = $sid.map(x => x * 2)
+
+    const scope = fork({
+      values: [
+        [$foo, 1],
+        [$sid, 2],
+      ],
+    })
+
+    expect(scope.getState($bar)).toBe(2)
+    expect(scope.getState($sidBar)).toBe(4)
+  })
+  test('edge-case: mixed sid and no-sid case should work for tests, even there are build-in sids in factory', async () => {
+    const libFactory = () => {
+      return createStore(0, {sid: '$sid'})
+    }
+
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = $foo.map(x => x * 2)
+
+    const $sid = libFactory()
+    const $sidBar = $sid.map(x => x * 2)
+
+    const $sidOther = libFactory()
+    const $sidBarOther = $sidOther.map(x => x * 2)
+
+    const scope = fork({
+      values: [
+        [$foo, 1],
+        [$sid, 2],
+        [$sidOther, 4],
+      ],
+    })
+
+    expect(scope.getState($bar)).toBe(2)
+    expect(scope.getState($sidBar)).toBe(4)
+    expect(scope.getState($sidBarOther)).toBe(8)
+  })
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {

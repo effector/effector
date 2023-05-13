@@ -496,10 +496,10 @@ export const initRefInScope = (
     meta: sourceRef.meta,
   }
 
-  if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
-    ref.current = parser(scope.values.sidMap[sid])
-  } else if (ref.id in scope.values.idMap) {
+  if (ref.id in scope.values.idMap) {
     ref.current = scope.values.idMap[ref.id]
+  } else if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
+    ref.current = parser(scope.values.sidMap[sid])
   } else {
     if (sourceRef.before && !softRead) {
       let isFresh = false

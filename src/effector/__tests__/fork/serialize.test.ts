@@ -77,7 +77,7 @@ test('serialize: ignore with fork(values)', async () => {
   $b.on(inc, x => x + 1)
 
   const scope = fork({
-    values: [[$a, 100]]
+    values: [[$a, 100]],
   })
 
   await allSettled(inc, {scope})
@@ -619,6 +619,21 @@ describe('serialize: missing sids', () => {
     expect(scope.getState($store)).toEqual('scope value')
     expect(console.error).toHaveBeenCalledWith(
       'There is a store without sid in this scope, its value is omitted',
+    )
+  })
+  test('serialize: throws if duplicated sids', () => {
+    const a = createStore(0, {sid: 'sameSid'})
+    const b = createStore(0, {sid: 'sameSid'})
+
+    const scope = fork({
+      values: [
+        [a, 1],
+        [b, 1],
+      ],
+    })
+
+    expect(() => serialize(scope)).toThrowErrorMatchingInlineSnapshot(
+      `"duplicate sid found in this scope"`,
     )
   })
   test('serialize: doesn not warn, if no sid is missing', () => {

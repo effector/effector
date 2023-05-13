@@ -648,19 +648,6 @@ describe('getState with same sids', () => {
 
     expect(scope.getState($convenientValue)).toEqual(false)
   })
-  test('sending values to stores with same sid is an error', async () => {
-    const a = createStore(0, {sid: 'sameSid'})
-    const b = createStore(0, {sid: 'sameSid'})
-
-    expect(() => {
-      fork({
-        values: [
-          [a, 1],
-          [b, 1],
-        ],
-      })
-    }).toThrowErrorMatchingInlineSnapshot(`"duplicate sid found"`)
-  })
 })
 
 describe('diamond deps (issue #613)', () => {

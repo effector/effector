@@ -44,6 +44,7 @@ export function normalizeValues(
   const mapOrRecordValues: Map<StoreOrEffect, any> | Record<string, any> =
     Array.isArray(values) ? new Map(values as [StoreOrEffect, any][]) : values
   const unitMap = new Map<Unit<any>, any>()
+  let hasSidDoubles = false
   if (mapOrRecordValues instanceof Map) {
     const sidMap = {} as Record<string, any>
     forEach(mapOrRecordValues, (value, key) => {
@@ -53,13 +54,12 @@ export function normalizeValues(
       )
       if (assertEach) assertEach(key, value)
       if (key.sid) {
-        assert(!(key.sid in sidMap), 'duplicate sid found')
+        if (key.sid in sidMap) hasSidDoubles = true
         sidMap[key.sid!] = value
-      } else {
-        unitMap.set(key, value)
       }
+      unitMap.set(key, value)
     })
-    return {sidMap, unitMap}
+    return {sidMap, unitMap, hasSidDoubles}
   }
   return {sidMap: mapOrRecordValues, unitMap}
 }

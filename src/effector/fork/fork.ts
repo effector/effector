@@ -33,7 +33,7 @@ export function fork(
       forEach(activeEffects, scopeRef => (scopeRef.ref = scope))
     }
     if (config.values) {
-      const {sidMap, unitMap} = normalizeValues(config.values, unit =>
+      const {sidMap, unitMap, hasSidDoubles} = normalizeValues(config.values, unit =>
         assert(is.store(unit), 'Values map can contain only stores as keys'),
       )
       Object.assign(scope.values.sidMap, sidMap)
@@ -42,6 +42,7 @@ export function fork(
       })
       scope.fromSerialize =
         !Array.isArray(config.values) && !(config.values instanceof Map)
+      scope.hasSidDoubles = hasSidDoubles
     }
     if (config.handlers) {
       scope.handlers = normalizeValues(config.handlers, unit =>
