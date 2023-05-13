@@ -122,7 +122,7 @@ describe('units without sids support', () => {
       values: [
         [$foo, 1],
         [$sid, 2],
-        [$sidBarOther, 4],
+        [$sidOther, 4],
       ],
     })
 
