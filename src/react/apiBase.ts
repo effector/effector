@@ -65,25 +65,40 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     justSubscribed: false,
     scope,
   })
-  const [eventsShape, storeKeys, storeValues] = React.useMemo(() => {
-    flagsRef.current.stale = true
-    const shape = Array.isArray(normShape) ? [] : ({} as any)
-    const storeKeys: string[] = []
-    const storeValues: Array<Store<any>> = []
-    for (const key in normShape) {
-      const unit = normShape[key]
-      if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
-      if (is.event(unit) || is.effect(unit)) {
-        shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
-      } else {
-        shape[key] = null
-        storeKeys.push(key)
-        storeValues.push(unit as Store<any>)
+  const [eventsShape, storeKeys, storeValues, eventKeys, eventValues] =
+    React.useMemo(() => {
+      flagsRef.current.stale = true
+      const shape = Array.isArray(normShape) ? [] : ({} as any)
+      const storeKeys: string[] = []
+      const storeValues: Array<Store<any>> = []
+      const eventKeys: string[] = []
+      const eventValues: Array<Unit<any>> = []
+      for (const key in normShape) {
+        const unit = normShape[key]
+        if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
+        if (is.event(unit) || is.effect(unit)) {
+          shape[key] = null
+          eventKeys.push(key)
+          eventValues.push(unit)
+        } else {
+          shape[key] = null
+          storeKeys.push(key)
+          storeValues.push(unit as Store<any>)
+        }
       }
-    }
-    return [shape, storeKeys, storeValues]
-  }, [flagsRef, scope, ...Object.keys(normShape), ...Object.values(normShape)])
-  const stateRef = React.useRef({value: eventsShape, storeKeys})
+      return [shape, storeKeys, storeValues, eventKeys, eventValues]
+    }, [
+      flagsRef,
+      scope,
+      ...Object.keys(normShape),
+      ...Object.values(normShape),
+    ])
+  const stateRef = React.useRef({
+    value: eventsShape,
+    storeKeys,
+    eventKeys,
+    eventValues,
+  })
   const subscribe = React.useCallback(
     (cb: () => void) => {
       const flags = flagsRef.current
@@ -110,19 +125,24 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     let resultValue
     let changed = false
     const oldVal = state.value
-    const oldKeys = state.storeKeys
+    const oldStoreKeys = state.storeKeys
+    const oldEventKeys = state.eventKeys
+    const oldEventValues = state.eventValues
     const scopeChanged = scope !== flags.scope
     if (flags.stale || flags.justSubscribed || scopeChanged) {
       changed = !flags.justSubscribed || scopeChanged
       resultValue = isList ? [...eventsShape] : {...eventsShape}
-      if (oldKeys.length !== storeKeys.length) {
+      if (
+        oldStoreKeys.length !== storeKeys.length ||
+        oldEventKeys.length !== eventKeys.length
+      ) {
         changed = true
       }
       for (let i = 0; i < storeKeys.length; i++) {
         const updatedValue = stateReader(storeValues[i], scope)
         const key = storeKeys[i]
         if (!changed) {
-          if (!oldKeys.includes(key)) {
+          if (!oldStoreKeys.includes(key)) {
             changed = true
           } else {
             changed = oldVal[key] !== updatedValue
@@ -130,16 +150,32 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
         }
         resultValue[key] = updatedValue
       }
+      for (let i = 0; i < eventKeys.length; i++) {
+        const updatedValue = eventValues[i]
+        const key = eventKeys[i]
+        if (!changed) {
+          if (!oldEventKeys.includes(key)) {
+            changed = true
+          } else {
+            changed = oldEventValues[oldEventKeys.indexOf(key)] !== updatedValue
+          }
+        }
+        resultValue[key] = scope
+          ? scopeBind(updatedValue as Event<any>, {scope})
+          : updatedValue
+      }
     }
     if (changed) {
       state.value = resultValue
     }
     state.storeKeys = storeKeys
+    state.eventKeys = eventKeys
+    state.eventValues = eventValues
     flags.stale = false
     flags.justSubscribed = !changed
     flags.scope = scope
     return isSingleUnit ? state.value.unit : state.value
-  }, [subscribe, storeValues, scope, stateRef, flagsRef])
+  }, [subscribe, storeValues, eventValues, scope, stateRef, flagsRef])
   return useSyncExternalStore(subscribe, read, read)
 }
 
