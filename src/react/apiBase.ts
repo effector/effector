@@ -77,7 +77,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
         const unit = normShape[key]
         if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
         if (is.event(unit) || is.effect(unit)) {
-          shape[key] = null
+          shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
           eventKeys.push(key)
           eventValues.push(unit)
         } else {
@@ -160,9 +160,6 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
             changed = oldEventValues[oldEventKeys.indexOf(key)] !== updatedValue
           }
         }
-        resultValue[key] = scope
-          ? scopeBind(updatedValue as Event<any>, {scope})
-          : updatedValue
       }
     }
     if (changed) {
