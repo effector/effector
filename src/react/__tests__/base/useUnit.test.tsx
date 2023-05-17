@@ -1187,4 +1187,42 @@ describe('useUnit', () => {
       })
     })
   })
+  it('should not trigger too often', async () => {
+    const $value = createStore('initial')
+    const change = createEvent<string>()
+
+    $value.on(change, (_, next) => next)
+
+    const shape = {
+      '@@unitShape': () => ({
+        value: $value,
+        onChange: change,
+      }),
+    }
+    let failed = false
+    let count = 0
+    const App = () => {
+      const {onChange, value} = useUnit(shape)
+      React.useEffect(() => {
+        count += 1
+        if (count >= 100) {
+          failed = true
+          return
+        }
+        onChange('test')
+
+        return () => {
+          onChange('')
+        }
+      }, [onChange])
+      return <div>{value}</div>
+    }
+    const scope = fork()
+    await render(
+      <Provider value={scope}>
+        <App />
+      </Provider>,
+    )
+    expect(failed).toBe(false)
+  })
 })
