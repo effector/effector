@@ -4,6 +4,7 @@ import type {Domain, ValuesMap, HandlersMap, Scope, Store} from '../unit.h'
 import {normalizeValues} from './util'
 import {createScope} from './createScope'
 import {forEach} from '../collection'
+import {getMeta} from '../getter'
 
 type ForkConfig = {
   values?: ValuesMap
@@ -39,6 +40,12 @@ export function fork(
       Object.assign(scope.values.sidMap, sidMap)
       forEach(unitMap, (value, unit) => {
         scope.values.idMap[(unit as Store<any>).stateRef.id] = value
+
+        const serialize = getMeta(unit, 'serialize')
+        const sid = getMeta(unit, 'sid')
+        if (serialize === 'ignore') {
+          scope.sidSerializeSettings.set(sid, {ignore: true})
+        }
       })
       scope.fromSerialize =
         !Array.isArray(config.values) && !(config.values instanceof Map)
