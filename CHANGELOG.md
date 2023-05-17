@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.5.3
+
+- Fix too frequent `useUnit` updates
+
 ## effector 22.8.6
 
 - Follow-up fix for `22.8.2`: now `combine` in tuple-form handles compelx edge-cases with mapped stores correctly. ([PR #902](https://github.com/effector/effector/pull/902))
