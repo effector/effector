@@ -2779,6 +2779,11 @@ type CombineState<State> = State[keyof State] extends Store<any>
 export function withRegion<T = void>(unit: Unit<any> | Node, cb: () => T): T
 
 /**
+ * Helper type for combine
+ */
+type CombVal<T> = T extends Store<any> ? StoreValue<T> : T
+
+/**
  * Convert given stores to store with array which values updated upon changes in given ones
  * @returns derived store
  */
@@ -2844,9 +2849,9 @@ export function combine<State, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  fn: (a: A, b: B) => R,
+  a: A,
+  b: B,
+  fn: (a: CombVal<A>, b: CombVal<B>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2854,10 +2859,10 @@ export function combine<A, B, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  fn: (a: A, b: B, c: C) => R,
+  a: A,
+  b: B,
+  c: C,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2865,11 +2870,11 @@ export function combine<A, B, C, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  fn: (a: A, b: B, c: C, d: D) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2877,12 +2882,12 @@ export function combine<A, B, C, D, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  fn: (a: A, b: B, c: C, d: D, e: E) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2890,13 +2895,13 @@ export function combine<A, B, C, D, E, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  f: F | Store<F>,
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  f: F,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2904,14 +2909,14 @@ export function combine<A, B, C, D, E, F, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  f: F | Store<F>,
-  g: G | Store<G>,
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  f: F,
+  g: G,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2922,15 +2927,15 @@ export function combine<A, B, C, D, E, F, G, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  f: F | Store<F>,
-  g: G | Store<G>,
-  h: H | Store<H>,
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  f: F,
+  g: G,
+  h: H,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2941,16 +2946,16 @@ export function combine<A, B, C, D, E, F, G, H, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, I, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  f: F | Store<F>,
-  g: G | Store<G>,
-  h: H | Store<H>,
-  i: I | Store<I>,
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  f: F,
+  g: G,
+  h: H,
+  i: I,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2961,17 +2966,17 @@ export function combine<A, B, C, D, E, F, G, H, I, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, I, J, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  f: F | Store<F>,
-  g: G | Store<G>,
-  h: H | Store<H>,
-  i: I | Store<I>,
-  j: J | Store<J>,
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  f: F,
+  g: G,
+  h: H,
+  i: I,
+  j: J,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>, j: CombVal<J>) => R,
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2982,18 +2987,18 @@ export function combine<A, B, C, D, E, F, G, H, I, J, R>(
  * @returns derived store updated upon changes in given ones
  */
 export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
-  a: A | Store<A>,
-  b: B | Store<B>,
-  c: C | Store<C>,
-  d: D | Store<D>,
-  e: E | Store<E>,
-  f: F | Store<F>,
-  g: G | Store<G>,
-  h: H | Store<H>,
-  i: I | Store<I>,
-  j: J | Store<J>,
-  k: K | Store<K>,
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
+  a: A,
+  b: B,
+  c: C,
+  d: D,
+  e: E,
+  f: F,
+  g: G,
+  h: H,
+  i: I,
+  j: J,
+  k: K,
+  fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>, j: CombVal<J>, k: CombVal<K>) => R,
 ): Store<R>
 /**
  * Convert given stores to store with array which values updated upon changes in given ones
