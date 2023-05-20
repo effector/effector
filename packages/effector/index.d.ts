@@ -704,13 +704,6 @@ export function createStore<State, SerializedState extends Json = Json>(
 export function setStoreName<State>(store: Store<State>, name: string): void
 
 /**
- * @deprecated use combine() instead
- */
-export function createStoreObject<State>(
-  defaultState: State,
-): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
-
-/**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
  * Works like pattern matching for payload values and external stores
  * @param source unit which will trigger computation in split
