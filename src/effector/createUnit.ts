@@ -145,12 +145,14 @@ export function createEvent<Payload = any>(
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
   const event = ((payload: Payload, ...args: unknown[]) => {
-    deprecate(
+    assert(
       !getMeta(event, 'derived'),
-      'call of derived event',
-      'createEvent',
+      'call of derived event is not supported, use createEvent instead',
     )
-    deprecate(!isPure, 'unit call from pure function', 'operators like sample')
+    assert(
+      !isPure,
+      'unit call from pure function is not supported, use operators like sample instead',
+    )
     if (currentPage) {
       return callCreate(event, template, payload, args)
     }
