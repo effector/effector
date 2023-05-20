@@ -21,7 +21,7 @@ describe('store', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('.map', () => {
@@ -34,7 +34,7 @@ describe('store', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('updateFilter', () => {
@@ -48,7 +48,7 @@ describe('store', () => {
     }).on(trigger, x => x + 1)
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
 })
@@ -62,7 +62,7 @@ describe('event', () => {
     })
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('.prepend', () => {
@@ -73,7 +73,7 @@ describe('event', () => {
     })
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('.filterMap', () => {
@@ -84,7 +84,7 @@ describe('event', () => {
     })
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
 })
@@ -99,7 +99,7 @@ test('combine', () => {
   })
   trigger()
   expect(getWarning()).toMatchInlineSnapshot(
-    `"unit call from pure function is deprecated, use operators like sample instead"`,
+    `[Error: unit call from pure function is not supported, use operators like sample instead]`,
   )
 })
 
@@ -115,7 +115,7 @@ describe('sample', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('filter', () => {
@@ -130,7 +130,7 @@ describe('sample', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `"unit call from pure function is deprecated, use operators like sample instead"`,
+      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
 })
