@@ -11,6 +11,19 @@ import {
   Event,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 describe('sidless stores support', () => {
   test('with scope', () => {
     //@ts-expect-error

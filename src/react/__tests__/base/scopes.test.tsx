@@ -28,6 +28,19 @@ import {
   useUnit,
 } from 'effector-react/scope'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
     alice: {
@@ -727,12 +740,12 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           Alex
-          : 
+          :
           20
         </li>
         <li>
           John
-          : 
+          :
           30
         </li>
       </ul>
@@ -748,12 +761,12 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           Alex
-          : 
+          :
           21
         </li>
         <li>
           John
-          : 
+          :
           30
         </li>
       </ul>
@@ -765,7 +778,7 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           John
-          : 
+          :
           30
         </li>
       </ul>

@@ -16,6 +16,19 @@ import {
   serialize,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('plain gate', async () => {
   const Gate = createGate('plain gate')
   expect(Gate.status.getState()).toBe(false)
