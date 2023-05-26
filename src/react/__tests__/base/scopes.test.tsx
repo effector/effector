@@ -740,12 +740,12 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           Alex
-          :
+          : 
           20
         </li>
         <li>
           John
-          :
+          : 
           30
         </li>
       </ul>
@@ -761,12 +761,12 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           Alex
-          :
+          : 
           21
         </li>
         <li>
           John
-          :
+          : 
           30
         </li>
       </ul>
@@ -778,7 +778,7 @@ describe('useStoreMap', () => {
       <ul>
         <li>
           John
-          :
+          : 
           30
         </li>
       </ul>
