@@ -1,7 +1,9 @@
 import {processArgsToConfig} from './config'
 import {validateSampleConfig, createSampling} from './sample'
+import {deprecate} from './throw'
 
 export function guard(...args: any[]) {
+  deprecate(false, 'guard', 'sample')
   let [[source, config], metadata] = processArgsToConfig(args)
   if (!config) {
     config = source
