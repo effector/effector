@@ -56,7 +56,33 @@ type UnitDeclaration = {
   region?: Region
 } & NodeCommonMeta
 
-export type Declaration = (UnitDeclaration | Region) &
+type OperationDeclaration = {
+  type: 'operation'
+  meta: Record<string, unknown>
+  region?: Region
+  kind: string
+  config: {
+    // Common config shape for most of operators
+    // sample, combine, guard, forward, etc - all can be expressed this way
+    source?:
+      | UnitDeclaration
+      | UnitDeclaration[]
+      | Record<string, UnitDeclaration>
+    clock?: UnitDeclaration | UnitDeclaration[]
+    filter?: UnitDeclaration | {type: 'function'}
+    target?: UnitDeclaration | UnitDeclaration[]
+    fn?: {type: 'function'}
+    // Special fields for split operator only
+    match?:
+      | UnitDeclaration
+      | {type: 'function'}
+      | Record<string, UnitDeclaration>
+      | Record<string, {type: 'function'}>
+    cases?: Record<string, UnitDeclaration>
+  }
+}
+
+export type Declaration = (UnitDeclaration | OperationDeclaration | Region) &
   // these fields are not provided to regions or factories
   // however, to make it easier to work with it in Typescript
   // and to avoid annoying `some prop does not exist` errors
