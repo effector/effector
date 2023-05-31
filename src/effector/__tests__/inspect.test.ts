@@ -589,6 +589,29 @@ describe('inspectGraph API', () => {
       `)
     })
   })
+  describe('operators', () => {
+    test('sample and sample-like', () => {
+      /**
+       * guard, forward, merge, etc - their configs are subsets of sample's config
+       */
+    })
+    test('split', () => {
+      /**
+       * split is a bit special and is not a subset of sample (yet?)
+       */
+    })
+    test('store.on', () => {
+      /**
+       * store.on is a shorthand for sample
+       */
+    })
+    test('createApi', () => {
+      /**
+       * It is not clear, how it should look or work, as it is a shortand for store.on,
+       * which currently is a shorthand for sample
+       */
+    })
+  })
 })
 
 describe('real use cases', () => {
@@ -875,4 +898,5 @@ describe('real use cases', () => {
       ],
     })
   })
+  test('trail')
 })
