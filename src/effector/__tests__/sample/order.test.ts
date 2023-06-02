@@ -10,8 +10,11 @@ import {
   Store,
   Event,
   Effect,
+  fork,
+  allSettled,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+import {inspect} from 'effector/inspect'
 
 test('store update will always performs before sampling', () => {
   const fn = jest.fn()
@@ -42,6 +45,77 @@ test('store combination will always updates before sampling', () => {
   int.on(trigger, x => x + 1)
   trigger()
   expect(argumentHistory(fn)).toEqual([{int: 1}])
+})
+
+test.only('mapped store leaking old value edge-case', async () => {
+  const trigger = createEffect(async () => {})
+  const inited = trigger.done
+  const $params = createStore({a: 'a', b: 'b'})
+  const parsed = createEvent<{a: string; b: string}>()
+  sample({
+    clock: [inited],
+    source: $params,
+    filter: createStore(true),
+    target: parsed,
+  })
+  const aParsed = createEvent<string>()
+  const bParsed = createEvent<string>()
+  sample({
+    clock: parsed,
+    fn: p => p.a,
+    target: aParsed,
+  })
+  const $b = createStore('')
+  sample({
+    clock: bParsed,
+    fn: x => x,
+    target: $b,
+  })
+  sample({
+    clock: parsed,
+    fn: p => p.b,
+    target: bParsed,
+  })
+  const $a = createStore('')
+  sample({
+    clock: aParsed,
+    filter: () => true,
+    fn: x => x,
+    target: $a,
+  })
+  const $isA = combine($a, a => a === 'a')
+  const $paramsFinal = combine({isA: $isA, b: $b})
+  const $mapped = $paramsFinal.map(({isA, b}) => isA && b === 'b')
+
+  // @ts-expect-error
+  $mapped.graphite.meta.name = '$mapped'
+
+  const log = jest.fn()
+  const scope = fork()
+  inspect({
+    scope,
+    trace: true,
+    fn: m => {
+      if (
+        [
+          $b.graphite.id,
+          $isA.graphite.id,
+          $paramsFinal.graphite.id,
+          $mapped.graphite.id,
+        ].includes(m.id)
+      ) {
+        log(`${m.kind},${m.name},${m.value}`)
+
+        m.trace?.forEach(e => {
+          log(`<--${e.kind},${e.name},${e.value}`)
+        })
+      }
+    },
+  })
+  await allSettled(trigger, {scope})
+  expect(scope.getState($mapped)).toBe(true)
+
+  expect(argumentHistory(log)).toMatchInlineSnapshot()
 })
 
 describe('clock should use the last update', () => {
@@ -313,40 +387,40 @@ describe('clock should use the last update', () => {
       `)
     })
   })
+})
 
-  function watchAll(
-    fn: jest.Mock<any, any>,
-    units: Array<Store<any> | Event<any> | Effect<any, any>>,
-  ) {
-    for (const unit of units) {
-      const tag = unit.shortName
-      unitWatch(`${tag}`, unit, fn)
-      if (is.effect(unit)) {
-        unitWatch(`${tag}.done`, unit.doneData, fn)
-        unitWatch(`${tag}.fail`, unit.failData, fn)
-      }
+function watchAll(
+  fn: jest.Mock<any, any>,
+  units: Array<Store<any> | Event<any> | Effect<any, any>>,
+) {
+  for (const unit of units) {
+    const tag = unit.shortName
+    unitWatch(`${tag}`, unit, fn)
+    if (is.effect(unit)) {
+      unitWatch(`${tag}.done`, unit.doneData, fn)
+      unitWatch(`${tag}.fail`, unit.failData, fn)
     }
   }
+}
 
-  function unitWatch<T>(
-    tag: string,
-    unit: Store<T> | Event<T> | Effect<T, any, any>,
-    fn: jest.Mock<any, any>,
-    log: boolean = false,
-  ) {
-    unit.watch(value => {
-      let text: string
-      if (typeof value === 'object' && value !== null) {
-        text = JSON.stringify(value).replace(/"/gi, '')
-      } else if (value === undefined) {
-        text = 'void'
-      } else {
-        text = `${value}`
-      }
-      fn(`${tag}: ${text}`)
-      if (log) {
-        console.log(tag, text)
-      }
-    })
-  }
-})
+function unitWatch<T>(
+  tag: string,
+  unit: Store<T> | Event<T> | Effect<T, any, any>,
+  fn: jest.Mock<any, any>,
+  log: boolean = false,
+) {
+  unit.watch(value => {
+    let text: string
+    if (typeof value === 'object' && value !== null) {
+      text = JSON.stringify(value).replace(/"/gi, '')
+    } else if (value === undefined) {
+      text = 'void'
+    } else {
+      text = `${value}`
+    }
+    fn(`${tag}: ${text}`)
+    if (log) {
+      console.log(tag, text)
+    }
+  })
+}
