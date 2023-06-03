@@ -48,8 +48,11 @@ test('store combination will always updates before sampling', () => {
 })
 
 test.only('mapped store leaking old value edge-case', async () => {
-  const trigger = createEffect(async () => {})
-  const inited = trigger.done
+  const trigger = createEffect(async () => {
+    inited()
+  })
+  const inited = createEvent()
+  const $flag = createStore(false)
   const $params = createStore({a: 'a', b: 'b'})
   const parsed = createEvent<{a: string; b: string}>()
   sample({
@@ -65,16 +68,16 @@ test.only('mapped store leaking old value edge-case', async () => {
     fn: p => p.a,
     target: aParsed,
   })
+  sample({
+    clock: parsed,
+    fn: p => p.b,
+    target: bParsed,
+  })
   const $b = createStore('')
   sample({
     clock: bParsed,
     fn: x => x,
     target: $b,
-  })
-  sample({
-    clock: parsed,
-    fn: p => p.b,
-    target: bParsed,
   })
   const $a = createStore('')
   sample({
@@ -84,14 +87,19 @@ test.only('mapped store leaking old value edge-case', async () => {
     target: $a,
   })
   const $isA = combine($a, a => a === 'a')
-  const $paramsFinal = combine({isA: $isA, b: $b})
-  const $mapped = $paramsFinal.map(({isA, b}) => isA && b === 'b')
+
+  const $paramsFinal = combine({isA: $isA, b: $b, flag: $flag})
+  const $mapped = $paramsFinal.map(({isA, b, flag}) => {
+    return isA && b === 'b' && flag
+  })
 
   // @ts-expect-error
   $mapped.graphite.meta.name = '$mapped'
 
   const log = jest.fn()
-  const scope = fork()
+  const scope = fork({
+    values: [[$flag, true]],
+  })
   inspect({
     scope,
     trace: true,
@@ -115,7 +123,82 @@ test.only('mapped store leaking old value edge-case', async () => {
   await allSettled(trigger, {scope})
   expect(scope.getState($mapped)).toBe(true)
 
-  expect(argumentHistory(log)).toMatchInlineSnapshot()
+  expect(argumentHistory(log)).toMatchInlineSnapshot(`
+    Array [
+      "store,$b,b",
+      "<--sample,undefined,b",
+      "<--event,bParsed,b",
+      "<--sample,undefined,b",
+      "<--event,parsed,[object Object]",
+      "<--sample,undefined,[object Object]",
+      "<--event,merge(inited),undefined",
+      "<--merge,undefined,undefined",
+      "<--event,inited,undefined",
+      "store,$paramsFinal,[object Object]",
+      "<--combine,undefined,[object Object]",
+      "<--store,$b,b",
+      "<--sample,undefined,b",
+      "<--event,bParsed,b",
+      "<--sample,undefined,b",
+      "<--event,parsed,[object Object]",
+      "<--sample,undefined,[object Object]",
+      "<--event,merge(inited),undefined",
+      "<--merge,undefined,undefined",
+      "<--event,inited,undefined",
+      "store,$mapped,false",
+      "<--map,undefined,false",
+      "<--store,$paramsFinal,[object Object]",
+      "<--combine,undefined,[object Object]",
+      "<--store,$b,b",
+      "<--sample,undefined,b",
+      "<--event,bParsed,b",
+      "<--sample,undefined,b",
+      "<--event,parsed,[object Object]",
+      "<--sample,undefined,[object Object]",
+      "<--event,merge(inited),undefined",
+      "<--merge,undefined,undefined",
+      "<--event,inited,undefined",
+      "store,$isA,true",
+      "<--combine,undefined,true",
+      "<--store,$a,a",
+      "<--sample,undefined,a",
+      "<--event,aParsed,a",
+      "<--sample,undefined,a",
+      "<--event,parsed,[object Object]",
+      "<--sample,undefined,[object Object]",
+      "<--event,merge(inited),undefined",
+      "<--merge,undefined,undefined",
+      "<--event,inited,undefined",
+      "store,$paramsFinal,[object Object]",
+      "<--combine,undefined,[object Object]",
+      "<--store,$isA,true",
+      "<--combine,undefined,true",
+      "<--store,$a,a",
+      "<--sample,undefined,a",
+      "<--event,aParsed,a",
+      "<--sample,undefined,a",
+      "<--event,parsed,[object Object]",
+      "<--sample,undefined,[object Object]",
+      "<--event,merge(inited),undefined",
+      "<--merge,undefined,undefined",
+      "<--event,inited,undefined",
+      "store,$mapped,true",
+      "<--map,undefined,true",
+      "<--store,$paramsFinal,[object Object]",
+      "<--combine,undefined,[object Object]",
+      "<--store,$isA,true",
+      "<--combine,undefined,true",
+      "<--store,$a,a",
+      "<--sample,undefined,a",
+      "<--event,aParsed,a",
+      "<--sample,undefined,a",
+      "<--event,parsed,[object Object]",
+      "<--sample,undefined,[object Object]",
+      "<--event,merge(inited),undefined",
+      "<--merge,undefined,undefined",
+      "<--event,inited,undefined",
+    ]
+  `)
 })
 
 describe('clock should use the last update', () => {
