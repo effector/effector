@@ -898,5 +898,84 @@ describe('real use cases', () => {
       ],
     })
   })
-  test('trail')
+  test('trail', () => {
+    const snapshot: Record<string, any> = {
+      samples: [],
+      stores: [],
+      effects: [],
+      domains: [],
+      events: [],
+      attaches: [],
+      storeOns: [],
+    }
+    function parseUnitDeclaration(d: Declaration) {
+      return {
+        id: d.id,
+        name: d.name,
+        kind: d.kind,
+        sid: d.sid,
+        derived: d.derived,
+        createdBy: 'TODO',
+        inDomain: 'TODO',
+        loc: d.loc,
+      }
+    }
+    function parseSampleDeclaration(d: Declaration) {
+      if (d.type !== 'operation' || d.kind !== 'sample') {
+        throw Error('sample should be operation')
+      }
+
+      return {
+        ...d.config,
+        isCombinedSource:
+          d.config.source &&
+          (Array.isArray(d.config.source) || d.config.source.type !== 'unit'), // source is present, but is a array or object shape
+        isImplicitClock: !!(d.config.source && !d.config.clock),
+        isImplicitSource: !!(d.config.clock && !d.config.source),
+        // sample always have target
+        // if not provided in config, it is created implicitly
+        isImplicitTarget: 'TODO', // need to add more meta to unit declarations to track "parent" operators
+      }
+    }
+    function parseStoreOnDeclaration(d: Declaration) {
+      if (d.type !== 'operation' || d.kind !== 'on') {
+        throw Error('storeOn should be operation')
+      }
+      // because $store.on(event, handler)
+      // is basically a shorthand for sample({source: $store, clock: event, greedy: true, fn: handler, target: $store})
+      return {
+        source: d.config.source, // $store
+        clock: d.config.clock, // event
+        target: d.config.target, // $store again
+      }
+    }
+    inspectGraph({
+      fn: d => {
+        if (d.kind === 'store') {
+          snapshot.stores.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'event') {
+          snapshot.events.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'effect') {
+          snapshot.effects.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'domain') {
+          snapshot.domains.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'sample') {
+          snapshot.samples.push(parseSampleDeclaration(d))
+          return
+        }
+        if (d.kind === 'on') {
+          snapshot.storeOns.push(parseStoreOnDeclaration(d))
+          return
+        }
+      },
+    })
+  })
 })
