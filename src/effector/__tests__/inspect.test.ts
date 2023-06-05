@@ -920,6 +920,22 @@ describe('real use cases', () => {
         loc: d.loc,
       }
     }
+    function unwrapFactory(
+      region: Declaration['region'],
+      mode: 'first' | 'last',
+    ): null | Declaration['region'] {
+      if (!region) {
+        return null
+      }
+      if (mode === 'first' && region.type === 'factory') {
+        return region
+      }
+      if (mode === 'last' && region.type === 'factory' && !region.region) {
+        return region
+      }
+
+      return unwrapFactory(region.region, mode)
+    }
     function parseSampleDeclaration(d: Declaration) {
       if (d.type !== 'operation' || d.kind !== 'sample') {
         throw Error('sample should be operation')
@@ -935,6 +951,8 @@ describe('real use cases', () => {
         // sample always have target
         // if not provided in config, it is created implicitly
         isImplicitTarget: 'TODO', // need to add more meta to unit declarations to track "parent" operators
+        parentFactory: unwrapFactory(d.region, 'first'),
+        rootParentFactory: unwrapFactory(d.region, 'last'),
       }
     }
     function parseStoreOnDeclaration(d: Declaration) {
