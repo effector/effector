@@ -4,7 +4,29 @@ import {getParent, getGraph} from './getter'
 import {createNode} from './createNode'
 
 type DeclarationSourceReporter = (
-  node: Node | 'region',
+  node:
+    | Node
+    | 'region'
+    | {
+        // operator declaration
+        // source of operatior metadata
+        kind?: string
+        rootNode?: Node
+        // Common config shape for most of operators
+        // sample, combine, guard, forward, etc - all can be expressed this way
+        source?: Node | Node[] | Record<string, Node>
+        clock?: Node | Node[]
+        filter?: Node | 'fn'
+        target?: Node | Node[]
+        fn?: 'fn'
+        // Special fields for split operator only
+        match?:
+          | Node
+          | 'fn'
+          | Record<string, Node>
+          | Record<string, 'fn'>
+        cases?: Record<string, Node>
+      },
   regionStack: RegionStack | null,
 ) => void
 
@@ -33,9 +55,11 @@ type RegionStack = {
 
 export let regionStack: RegionStack | null = null
 
-export const reportDeclaration = (node: Node | 'region') => {
+export const reportDeclaration = (
+  nodeOrShape: Parameters<DeclarationSourceReporter>[0],
+) => {
   if (reporter) {
-    reporter(node, regionStack)
+    reporter(nodeOrShape, regionStack)
   }
 }
 
