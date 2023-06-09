@@ -1,11 +1,11 @@
-import type {Cmd, StateRef} from './index.h'
+import type {Cmd, StateRef, Node} from './index.h'
 import type {CommonUnit, DataCarrier} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg} from './caller'
 import {processArgsToConfig} from './config'
-import {getStoreState, getGraph} from './getter'
+import {getStoreState, getGraph, getGraphShape} from './getter'
 import {
   assertNodeSet,
   assertTarget,
@@ -24,6 +24,7 @@ import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
+import {reportDeclaration} from './region'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -94,6 +95,16 @@ export const createSampling = (
   filterRequired: boolean,
   sid?: string | undefined,
 ) => {
+  const d = {
+    kind: method,
+    source: getGraphShape(source),
+    clock: getGraphShape(clock),
+  } as Exclude<Parameters<typeof reportDeclaration>[0], Node | 'region'>
+
+  if (fn) {
+    d.fn = 'fn'
+  }
+
   const isUpward = !!target
   assert(
     !isVoid(source) || !isVoid(clock),
@@ -123,9 +134,11 @@ export const createSampling = (
   if (filterRequired || filter) {
     if (is.unit(filter)) {
       filterType = 'unit'
+      d.filter = getGraph(filter)
     } else {
       assert(isFunction(filter), '`filter` should be function or unit')
       filterType = 'fn'
+      d.filter = filterType
     }
   }
   if (target) {
@@ -192,6 +205,9 @@ export const createSampling = (
   // @ts-expect-error
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true})
+  d.target = getGraphShape(target) as any
+  d.rootNode = jointNode
+  reportDeclaration(d)
   return target
 }
 
