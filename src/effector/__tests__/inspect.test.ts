@@ -927,14 +927,24 @@ describe('real use cases', () => {
       if (!region) {
         return null
       }
-      if (mode === 'first' && region.type === 'factory') {
-        return region
-      }
-      if (mode === 'last' && region.type === 'factory' && !region.region) {
-        return region
+      /**
+       * Goes up the region tree until it finds a needed factory
+       */
+
+      let targetFactory
+      let currentRegion = region
+      while (currentRegion) {
+        if (currentRegion.type === 'factory') {
+          if (mode === 'first') {
+            return currentRegion
+          }
+          targetFactory = currentRegion
+        }
+
+        currentRegion = currentRegion.region!
       }
 
-      return unwrapFactory(region.region, mode)
+      return currentRegion
     }
     function parseSampleDeclaration(d: Declaration) {
       if (d.type !== 'operation' || d.kind !== 'sample') {
