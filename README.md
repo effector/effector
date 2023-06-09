@@ -240,9 +240,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/mg901>
-            <img src=https://avatars.githubusercontent.com/u/7874664?v=4 width="100;"  alt=Maxim/>
+            <img src=https://avatars.githubusercontent.com/u/7874664?v=4 width="100;"  alt=mg901/>
             <br />
-            <sub style="font-size:14px"><b>Maxim</b></sub>
+            <sub style="font-size:14px"><b>mg901</b></sub>
         </a>
     </td>
 </tr>
@@ -571,9 +571,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/hyposlasher>
-            <img src=https://avatars.githubusercontent.com/u/13961762?v=4 width="100;"  alt=Denis Maushov/>
+            <img src=https://avatars.githubusercontent.com/u/13961762?v=4 width="100;"  alt=Dinislam Maushov/>
             <br />
-            <sub style="font-size:14px"><b>Denis Maushov</b></sub>
+            <sub style="font-size:14px"><b>Dinislam Maushov</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
