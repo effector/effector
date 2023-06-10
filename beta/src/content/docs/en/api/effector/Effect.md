@@ -201,7 +201,7 @@ await userUpdate({ name: "john", role: "admin" });
 
 # Properties {#properties}
 
-You are not supposed to use parts of effect (like `.done` and `.pending`) as a `target` in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
+You are not supposed to use parts of effect (like `.done` and `.pending`) as a `target` in [sample](/en/api/effector/sample) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
 ## `done` {#done}
 

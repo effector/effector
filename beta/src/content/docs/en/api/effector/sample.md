@@ -138,7 +138,7 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Example
 
 ```js
-import { createStore, createEvent, createEffect, sample, forward } from "effector";
+import { createStore, createEvent, createEffect, sample } from "effector";
 
 const submitForm = createEvent();
 
@@ -153,10 +153,10 @@ const sampleUnit = sample(
   submitForm /* 1 */,
   (name, password) => ({ name, password }) /* 3 */,
 );
-/* 5 */
-forward({
-  from: sampleUnit,
-  to: signInFx,
+/* 4 */
+sample({
+  clock: sampleUnit,
+  target: signInFx,
 });
 
 submitForm(12345678);
@@ -231,7 +231,9 @@ trigger();
 :::
 `sample` can be called with an array of [_Store_](/en/api/effector/Store) as `source`:
 
-```js
+> Note: Typescript requires adding `as const` after the array is entered.
+
+```ts
 import { createStore, createEvent, sample } from "effector";
 
 const trigger = createEvent();
@@ -242,7 +244,7 @@ const $b = createStore(1);
 // Target has type `Event<[string, number]>`
 const target = sample({
   clock: trigger,
-  source: [$a, $b],
+  source: [$a, $b] as const,
 });
 
 target.watch((obj) => {

@@ -103,13 +103,14 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 ### Create two instances with independent counter state
 
 ```js
-import { createStore, createEvent, forward, fork, allSettled } from "effector";
+import { createStore, createEvent, fork, allSettled } from "effector";
 
 const inc = createEvent();
 const dec = createEvent();
-const $counter = createStore(0)
-  .on(inc, (value) => value + 1)
-  .on(dec, (value) => value - 1);
+const $counter = createStore(0);
+
+$counter.on(inc, (value) => value + 1);
+$counter.on(dec, (value) => value - 1);
 
 const scopeA = fork();
 const scopeB = fork();
@@ -136,7 +137,9 @@ const fetchFriendsFx = createEffect<{ limit: number }, string[]>(async ({ limit 
   return [];
 });
 const $user = createStore("guest");
-const $friends = createStore([]).on(fetchFriendsFx.doneData, (_, result) => result);
+const $friends = createStore([]);
+
+$friends.on(fetchFriendsFx.doneData, (_, result) => result);
 
 const testScope = fork({
   values: [[$user, "alice"]],

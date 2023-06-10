@@ -110,7 +110,7 @@ clearTodoList();
 ## Example with `updateFilter`
 
 ```js
-import { createEvent, createStore, forward } from "effector";
+import { createEvent, createStore, sample } from "effector";
 
 const punch = createEvent();
 const veryStrongHit = createEvent();
@@ -124,7 +124,7 @@ const $lastPunchStrength = createStore(0, {
 $lastPunchStrength.on(punch, (_, strength) => strength);
 
 // Each store update should trigger event `veryStrongHit`
-forward({ from: $lastPunchStrength, to: veryStrongHit });
+sample({ clock: $lastPunchStrength, target: veryStrongHit });
 
 // Watch on store prints initial state
 $lastPunchStrength.watch((strength) => console.log("Strength: %skg", strength));
@@ -147,7 +147,7 @@ punch(100); // Also nothing
 ## Example with `serialize: ignore`
 
 ```js
-import { createEvent, createStore, forward, serialize, fork, allSettled } from "effector";
+import { createEvent, createStore, serialize, fork, allSettled } from "effector";
 
 const readPackage = createEvent();
 

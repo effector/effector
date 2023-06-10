@@ -25,7 +25,7 @@ When effect calls other effects, then it should call only effects, not common as
 **Correct**, effect without inner effects:
 
 ```js
-const delayFx = app.createEffect(async () => {
+const delayFx = createEffect(async () => {
   await new Promise((rs) => setTimeout(rs, 80));
 });
 ```
@@ -33,10 +33,10 @@ const delayFx = app.createEffect(async () => {
 **Correct**, effect with inner effects:
 
 ```js
-const authUserFx = app.createEffect();
-const sendMessageFx = app.createEffect();
+const authUserFx = createEffect();
+const sendMessageFx = createEffect();
 
-const sendWithAuthFx = app.createEffect(async () => {
+const sendWithAuthFx = createEffect(async () => {
   await authUserFx();
   await delayFx();
   await sendMessageFx();
@@ -46,11 +46,13 @@ const sendWithAuthFx = app.createEffect(async () => {
 **Incorrect**, effect with inner effects:
 
 ```js
-const sendWithAuthFx = app.createEffect(async () => {
+const sendWithAuthFx = createEffect(async () => {
   await authUserFx();
-  //WRONG! wrap that in effect
+
+  // WRONG! wrap that in effect
   await new Promise((rs) => setTimeout(rs, 80));
-  //context lost
+
+  // context lost
   await sendMessageFx();
 });
 ```
@@ -74,19 +76,17 @@ Returns store value in given scope
 Create two instances of application, call events in them and test `$counter` store value in both
 
 ```js
-import { createStore, createEvent, createDomain, forward, fork, allSettled } from "effector";
+import { createStore, createEvent, fork, allSettled } from "effector";
 
-const domain = createDomain();
-const inc = domain.createEvent();
-const dec = domain.createEvent();
+const inc = createEvent();
+const dec = createEvent();
+const $counter = createStore(0);
 
-const $counter = domain
-  .createStore(0)
-  .on(inc, (value) => value + 1)
-  .on(dec, (value) => value - 1);
+$counter.on(inc, (value) => value + 1);
+$counter.on(dec, (value) => value - 1);
 
-const scopeA = fork(domain);
-const scopeB = fork(domain);
+const scopeA = fork();
+const scopeB = fork();
 
 await allSettled(inc, { scope: scopeA });
 await allSettled(dec, { scope: scopeB });
