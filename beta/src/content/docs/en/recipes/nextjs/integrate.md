@@ -85,9 +85,9 @@ You also need to add an alias to _next.config.js_ to avoid build errors, when un
 
 ```js
 config.resolve.alias.effector = path.resolve(__dirname, "./node_modules/effector/effector.cjs.js");
-config.resolve.alias["effector-react/ssr"] = path.resolve(
+config.resolve.alias["effector-react/scope"] = path.resolve(
   __dirname,
-  "./node_modules/effector-react/ssr.js",
+  "./node_modules/effector-react/scope.js",
 );
 config.resolve.alias["effector-react/scope"] = path.resolve(
   __dirname,
@@ -95,7 +95,7 @@ config.resolve.alias["effector-react/scope"] = path.resolve(
 );
 config.resolve.alias["effector-react"] = path.resolve(
   __dirname,
-  "./node_modules/effector-react/ssr.js",
+  "./node_modules/effector-react/scope.js",
 );
 ```
 

@@ -498,31 +498,13 @@ $store.off(changed);
 
 ## `thru(fn)` {#thru-fn}
 
-:::warning{title="deprecated"}
-since 22.0.0
+:::warning{title="Removed"}
+Since 23.0.0.
+
+Please, review the previous documentation to [learn more](https://v22.effector.dev/docs/api/effector/store#thrufn).
 :::
 
 Call function with the given store and return result as it is.
-
-### Formulae {#thru-fn-formulae}
-
-```ts
-const result = $store.thru(fn);
-```
-
-- Call `fn` with `$store` as argument
-- Return result of the `fn()` call
-
-### Arguments {#thru-fn-arguments}
-
-1. `fn` (_Function_): Function that receives `Store` and returns some value, [should be **pure
-   **](/en/explanation/glossary#purity)
-
-### Returns {#thru-fn-returns}
-
-(_any_): Value, returned by `fn`
-
-### Example {#thru-fn-example}
 
 ```js
 import { createStore, createEvent } from "effector";
@@ -554,8 +536,6 @@ inc();
 // => result 30
 ```
 
-[Try it](https://share.effector.dev/RRSyqVus)
-
 # Properties {#properties}
 
 ## `updates` {#updates}
@@ -570,7 +550,7 @@ $store.updates;
 
 ### Returns {#updates-returns}
 
-[_Event_](/en/api/effector/Event): Event that represents updates of the given store.
+[_ReadonlyEvent_](/en/api/effector/Event#readonlyEvent): Event that represents updates of the given store.
 
 :::warning{title="Important"}
 Do not manually call this event. It is an event that depends on a store.
