@@ -19,7 +19,14 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 export default defineConfig({
   site:
     process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://next.effector.dev`,
-  integrations: [tailwind(), preact(), react(), mdx(), prefetch(), compress()],
+  integrations: [
+    tailwind({ config: { applyBaseStyles: false } }),
+    preact(),
+    react(),
+    mdx(),
+    prefetch(),
+    compress(),
+  ],
   base: "/",
   build: {
     assets: "assets",

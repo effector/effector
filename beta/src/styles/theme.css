@@ -87,6 +87,7 @@
   --theme-accent-color: var(--color-primary-50);
   --theme-accent: hsl(var(--theme-accent-color));
   --theme-text-accent: hsl(var(--color-primary-50));
+
   --theme-divider: hsla(var(--color-gray-90), 1);
   --theme-divider-light: hsla(var(--color-gray-95), 0.6);
   --theme-divider-dark: hsla(var(--color-gray-70), 0.6);
@@ -151,6 +152,7 @@ body {
   --theme-accent-color: var(--color-primary-50);
   --theme-accent: hsla(var(--theme-accent-color), 1);
   --theme-text-accent: hsla(var(--color-primary-40), 1);
+
   --theme-divider: hsla(var(--color-zinc-70), 1);
   --theme-divider-light: hsla(var(--color-gray-30), 0.6);
   --theme-divider-dark: hsla(var(--color-gray-40), 1);
