@@ -566,12 +566,14 @@ To allow factory works correct, add a path to a `./api/authorized` into `factori
 ### `name` {#attach-name}
 
 ```ts
-name?: string
+name?: string;
 ```
 
 It allows us to explicitly set the name of the created attached effect:
 
 ```ts
+import { attach } from "effector";
+
 const attachedFx = attach({
   name: "anotherUsefulName",
   source: $store,
@@ -584,3 +586,28 @@ attachedFx.shortName; // "anotherUsefulName"
 ```
 
 This parameter exists in **any variant** of the `attach`.
+
+### `domain` {#attach-domain}
+
+```ts
+domain?: Domain;
+```
+
+> Note: this property can only be used with a plain function `effect`.
+
+It allows to create effect inside specified domain:
+
+```ts
+import { createDomain, createStore, attach } from "effector";
+
+const reportErrors = createDomain();
+const $counter = createStore(0);
+
+const attachedFx = attach({
+  domain: reportErrors,
+  source: $counter,
+  async effect(counter) {
+    // ...
+  },
+});
+```
