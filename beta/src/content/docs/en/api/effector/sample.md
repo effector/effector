@@ -79,6 +79,12 @@ const event = sample({ clock: event, source: $store });
 - `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](/en/explanation/glossary#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to `clock`, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
 
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) property `greedy` is deprecated.
+
+Use `batch` instead of `greedy`.
+:::
+
 :::info{title="since"}
 Array of units in `target` are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
