@@ -83,7 +83,7 @@ sample({
 
 ### Returns {#map-fn-returns}
 
-[_DerivedStore_](/en/api/effector/Store#derived): New derived store
+[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
 
 ### Example {#map-fn-example}
 
@@ -660,9 +660,9 @@ add(3);
 
 <br/><br/>
 
-# Derived store {#derived}
+# Readonly store {#readonly}
 
-_DerivedStore_ has no specific interface in TypeScript, but it has different implementation in the effector kernel.
+_ReadonlyStore_ has no specific interface in TypeScript, but it has different implementation in the effector kernel.
 
 Some methods
 like [combine](/en/api/effector/combine), [.map](#mapfn-state-state-laststate-t--t-firststate-t), [sample](/en/api/effector/sample), [.pending](/en/api/effector/Effect#pending)
@@ -670,7 +670,7 @@ returns `Store` instance.
 The store updates by specific rules defined in the method above. That's why we have different types of stores.
 
 Derived stores are not allowed to be modified from the outside. For example, you shall not add new triggers on the
-derived store:
+readonly store:
 
 ```ts
 const update = createEvent();
@@ -679,10 +679,10 @@ const $b = createStore(2);
 
 const $derived = combine({ a: $a, b: $b });
 $derived.on(update, (_, value) => ({ a: value, b: value }));
-// => .on in derived store is deprecated, use createStore instead
+// => .on in readonly store is deprecated, use createStore instead
 ```
 
-Derived store only allows methods that do not modify state. It means that DerivedStore cannot be used as `target`
+Readonly store only allows methods that do not modify state. It means that ReadonlyStore cannot be used as `target`
 in `sample`:
 
 ```ts
@@ -697,24 +697,24 @@ sample({
   fn: (value) => ({ a: value, b: value }),
   target: $derived,
 });
-// => sample: derived unit in "target" is deprecated, use createEvent/createStore instead
+// => sample: readonly unit in "target" is deprecated, use createEvent/createStore instead
 ```
 
-These methods are <u>allowed</u> for DerivedStore:
+These methods are <u>allowed</u> for ReadonlyStore:
 
 - `.map`
 - `.watch`
-- using DerivedStore as a `source` and/or `clock` in `sample` and so on
-- using DerivedStore in `combine` sources
+- using ReadonlyStore as a `source` and/or `clock` in `sample` and so on
+- using ReadonlyStore in `combine` sources
 
 :::warning{title="deprecation"}
 since 23.0.0 banned methods will throw an exception
 :::
 
-These methods are _banned_ for DerivedStore:
+These methods are _banned_ for ReadonlyStore:
 
 - `.on`
 - `.reset`
-- using DerivedStore as a `target` in `sample`, `guard` and so on
+- using ReadonlyStore as a `target` in `sample`, `guard` and so on
 
 Any kind of store can be used as a `clock` or `source` in methods like [sample](/en/api/effector/sample).
