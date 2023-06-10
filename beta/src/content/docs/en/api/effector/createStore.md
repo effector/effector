@@ -29,6 +29,43 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
    - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/en/api/effector/serialize) is called _(since `effector 22.0.0`)_
    - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` – called on [serialize](/en/api/effector/serialize), transforms value to JSON value – primitive type or plain object/array. `read` – parse store state from JSON value, called on [fork](/en/api/effector/fork), if provided `values` is the result of `serialize` call.
 
+**Throws**
+
+<details>
+<summary><b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like updateFilter:
+
+```ts
+const someHappened = createEvent<number>();
+const $counter = createStore(0, {
+  updateFilter(a, b) {
+    someHappened(a); // THROWS!
+    return a < b;
+  },
+});
+```
+
+To fix this, use `sample`:
+
+```ts
+const someHappened = createEvent<number>();
+const $counter = createStore(0, {
+  updateFilter(a, b) {
+    return a < b;
+  },
+});
+
+sample({
+  clock: $counter,
+  target: someHappened,
+});
+```
+
+</details>
+
 **Returns**
 
 [_Store_](/en/api/effector/Store): New store

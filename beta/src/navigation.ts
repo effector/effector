@@ -400,12 +400,12 @@ const effector = [
     text: { en: "Methods", ru: "Методы" },
     items: [
       {
-        text: { en: "createStore" },
-        link: "/api/effector/createStore",
-      },
-      {
         text: { en: "createEvent" },
         link: "/api/effector/createEvent",
+      },
+      {
+        text: { en: "createStore" },
+        link: "/api/effector/createStore",
       },
       {
         text: { en: "createEffect" },
@@ -414,10 +414,6 @@ const effector = [
       {
         text: { en: "createDomain" },
         link: "/api/effector/createDomain",
-      },
-      {
-        text: { en: "createApi" },
-        link: "/api/effector/createApi",
       },
       {
         text: { en: "attach" },
@@ -438,6 +434,10 @@ const effector = [
       {
         text: { en: "split" },
         link: "/api/effector/split",
+      },
+      {
+        text: { en: "createApi" },
+        link: "/api/effector/createApi",
       },
       {
         text: { en: "restore" },
@@ -538,6 +538,7 @@ const api = [
       { text: { en: "effector-react" }, link: "/api/effector-react" },
       { text: { en: "effector-solid" }, link: "/api/effector-solid" },
       { text: { en: "effector-vue" }, link: "/api/effector-vue" },
+      { text: { en: "@effector/next" }, link: "/api/effector-next" },
     ],
   },
 ];
