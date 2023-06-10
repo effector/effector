@@ -20,6 +20,10 @@ A companion method for [_fork_](/en/api/effector/fork). It allows us to get a se
 2. `ignore` Optional array of [_Store_](/en/api/effector/Store) to be omitted during serialization (added 20.14.0)
 3. `onlyChanges` Optional boolean flag to ignore stores which didn't change in fork (prevent default values from being carried over network)
 
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) property `onlyChanges` is deprecated.
+:::
+
 ### Returns {#serialize-returns}
 
 An object with store values using sids as a keys
