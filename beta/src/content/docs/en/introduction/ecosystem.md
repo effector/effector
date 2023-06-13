@@ -25,10 +25,11 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [farfetched](https://farfetched.pages.dev) 🛠 — The advanced data fetching tool for web applications.
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Module for effector that sync stores with localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
-- [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router on top of effector.
-- [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality for effector.
-- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework for effector which is based on i18next.
-- [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — UI engine for web based on effector.
+- [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router.
+- [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality.
+- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework bindings.
+- [@withease/web-api](https://withease.pages.dev/web-api/) ☢️ — Web API bindings — network status, tab visibility, and more.
+- [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — Reactive UI engine for web.
 - [effector-next](https://github.com/effector/nextjs) 🧨 — Effector wrappers for Next.js.
 - [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Effector utilities library.
 
