@@ -10,6 +10,7 @@ import {
   Store,
   Event,
   Effect,
+  StoreValue,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -438,6 +439,212 @@ describe('combine+sample cases', () => {
         "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
+      ]
+    `)
+  })
+})
+
+describe('sample+combine+effects edge-cases', () => {
+  test('sample(combine,fx) + late samples', async () => {
+    const run = createEvent()
+
+    const $a = createStore(0)
+    const $b = createStore(0)
+
+    const refetch = createEvent()
+    const fetchFx = createEffect(() => null)
+
+    const $combine = combine({a: $a, b: $b})
+
+    const intermediateEvent = createEvent()
+
+    sample({
+      clock: run,
+      target: refetch,
+    })
+
+    sample({
+      clock: refetch,
+      source: $combine,
+      target: [intermediateEvent, fetchFx],
+    })
+
+    sample({
+      clock: run,
+      fn: () => 5,
+      target: $a,
+    })
+
+    sample({
+      clock: run,
+      fn: () => 10,
+      target: $b,
+    })
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine, intermediateEvent, fetchFx, refetch])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: {a:0,b:0}",
+        "## init complete",
+        "run: void",
+        "refetch: void",
+        "intermediateEvent: {a:0,b:0}",
+        "$a: 5",
+        "$combine: {a:5,b:0}",
+        "$b: 10",
+        "$combine: {a:5,b:10}",
+        "fetchFx: {a:5,b:10}",
+        "fetchFx.done: null",
+      ]
+    `)
+  })
+
+  test('sample(combine,fx) + late samples + intermediate', async () => {
+    const run = createEvent()
+
+    const $a = createStore(0)
+    const $b = createStore(0)
+
+    const refetch = createEvent()
+    const fetchFx = createEffect(() => null)
+
+    const $combine = combine({a: $a, b: $b})
+
+    const intermediateEvent = createEvent<StoreValue<typeof $combine>>()
+
+    sample({
+      clock: run,
+      target: refetch,
+    })
+
+    sample({
+      clock: refetch,
+      source: $combine,
+      target: [intermediateEvent, fetchFx],
+    })
+
+    sample({
+      clock: run,
+      fn: () => 5,
+      target: $a,
+    })
+
+    sample({
+      clock: run,
+      fn: () => 10,
+      target: $b,
+    })
+
+    sample({
+      clock: intermediateEvent,
+      fn: ({a, b}) => a + b,
+      target: $a,
+    })
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine, intermediateEvent, fetchFx, refetch])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: {a:0,b:0}",
+        "## init complete",
+        "run: void",
+        "refetch: void",
+        "intermediateEvent: {a:0,b:0}",
+        "$a: 5",
+        "$combine: {a:5,b:0}",
+        "$b: 10",
+        "$combine: {a:5,b:10}",
+        "$a: 0",
+        "$combine: {a:0,b:10}",
+        "fetchFx: {a:0,b:10}",
+        "fetchFx.done: null",
+      ]
+    `)
+  })
+
+  test('greedy: sample(combine,fx) + late samples + intermediate', async () => {
+    const run = createEvent()
+
+    const $a = createStore(0)
+    const $b = createStore(0)
+
+    const refetch = createEvent()
+    const fetchFx = createEffect(() => null)
+
+    const $combine = combine({a: $a, b: $b})
+
+    const intermediateEvent = createEvent<StoreValue<typeof $combine>>()
+
+    sample({
+      clock: run,
+      target: refetch,
+    })
+
+    sample({
+      clock: refetch,
+      source: $combine,
+      target: [intermediateEvent, fetchFx],
+    })
+
+    sample({
+      clock: run,
+      fn: () => 5,
+      target: $a,
+      greedy: true,
+    })
+
+    sample({
+      clock: run,
+      fn: () => 10,
+      target: $b,
+      greedy: true,
+    })
+
+    sample({
+      clock: intermediateEvent,
+      fn: ({a, b}) => a + b,
+      target: $a,
+      greedy: true,
+    })
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine, intermediateEvent, fetchFx, refetch])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: {a:0,b:0}",
+        "## init complete",
+        "run: void",
+        "$a: 5",
+        "$b: 10",
+        "$combine: {a:5,b:10}",
+        "refetch: void",
+        "intermediateEvent: {a:5,b:10}",
+        "$a: 15",
+        "$combine: {a:15,b:10}",
+        "fetchFx: {a:15,b:10}",
+        "fetchFx.done: null",
       ]
     `)
   })
