@@ -171,27 +171,60 @@ export const createSampling = (
     clockState,
     method,
   )
-  const jointNode = createLinkNode(
+
+  const sharedSeq = () => [
+    applyTemplate('sampleSourceLoader'),
+    mov({from: STACK, target: clockState}),
+    ...readAndFilter(hasSource),
+    read(sourceRef, true, batched),
+    ...filterNodes,
+    read(clockState),
+    filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),
+  ]
+
+  const [units, effects] = splitTargetGroups(target)
+
+  if (units.length > 0) {
+    const jointNode = createLinkNode(
+      // @ts-expect-error
+      clock,
+      units,
+      [
+        ...sharedSeq(),
+        fn && userFnCall(callStackAReg),
+        applyTemplate('sampleSourceUpward', isUpward),
+      ],
+      method,
+      fn,
+    )
     // @ts-expect-error
-    clock,
-    target,
-    [
-      applyTemplate('sampleSourceLoader'),
-      mov({from: STACK, target: clockState}),
-      ...readAndFilter(hasSource),
-      read(sourceRef, true, batched),
-      ...filterNodes,
-      read(clockState),
-      filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),
-      fn && userFnCall(callStackAReg),
-      applyTemplate('sampleSourceUpward', isUpward),
-    ],
-    method,
-    fn,
-  )
-  // @ts-expect-error
-  own(source, [jointNode])
-  Object.assign(jointNode.meta, metadata, {joint: true})
+    own(source, [jointNode])
+    Object.assign(jointNode.meta, metadata, {joint: true})
+  }
+
+  if (effects.length > 0) {
+    const sourceReader = read(sourceRef, true)
+
+    sourceReader.order = {priority: 'effect'}
+
+    const jointNode = createLinkNode(
+      // @ts-expect-error
+      clock,
+      effects,
+      [
+        ...sharedSeq(),
+        // effect-targets should read sourceRef at their own
+        sourceReader,
+        fn && userFnCall(callStackAReg),
+        applyTemplate('sampleSourceUpward', isUpward),
+      ],
+      method,
+      fn,
+    )
+    // @ts-expect-error
+    own(source, [jointNode])
+    Object.assign(jointNode.meta, metadata, {joint: true})
+  }
   return target
 }
 
@@ -224,4 +257,19 @@ const syncSourceState = (
   }
   applyTemplate('sampleSource', hasSource, sourceRef, clockState)
   return [sourceRef, hasSource] as const
+}
+
+const splitTargetGroups = (target: DataCarrier | DataCarrier[]) => {
+  const units: DataCarrier[] = []
+  const effects: DataCarrier[] = []
+
+  ;(Array.isArray(target) ? target : [target]).forEach(t => {
+    if (is.effect(t)) {
+      effects.push(t)
+    } else {
+      units.push(t)
+    }
+  })
+
+  return [units, effects] as const
 }
