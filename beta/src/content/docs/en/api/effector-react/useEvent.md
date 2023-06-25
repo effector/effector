@@ -31,13 +31,13 @@ Useful only if you have server-side rendering or writing tests for React-compone
 ```jsx
 import ReactDOM from "react-dom";
 import { createEvent, createStore, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const inc = createEvent();
 const $count = createStore(0).on(inc, (x) => x + 1);
 
 const App = () => {
-  const count = useStore($count);
+  const count = useStore($count);å
   const incFn = useEvent(inc);
 
   return (
@@ -75,7 +75,7 @@ ReactDOM.render(
 ```jsx
 import ReactDOM from "react-dom";
 import { createStore, createEvent, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const inc = createEvent();
 const dec = createEvent();
