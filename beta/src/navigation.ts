@@ -119,6 +119,10 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Prior Art", ru: "Prior Art" },
         link: "/explanation/prior-art",
       },
+      {
+        text: { en: "SIDs" },
+        link: "/explanation/sids",
+      },
     ],
   },
 ];
