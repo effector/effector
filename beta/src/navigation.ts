@@ -225,6 +225,15 @@ const effectorReact = [
     ],
   },
   {
+    text: { en: "Components" },
+    items: [
+      {
+        text: { en: "Provider" },
+        link: "/api/effector-react/Provider",
+      }
+    ]
+  },
+  {
     text: { en: "Gates" },
     items: [
       {

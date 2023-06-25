@@ -15,6 +15,10 @@ Effector bindings for ReactJS.
 - [useStore(store)](/en/api/effector-react/useStore)
 - [useEvent(unit)](/en/api/effector-react/useEvent)
 
+## Components
+
+- [Provider](/en/api/effector-react/Provider)
+
 ## Gate API
 
 - [Gate](/en/api/effector-react/Gate)
