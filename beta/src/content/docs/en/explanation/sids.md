@@ -28,7 +28,7 @@ export const $myStore = createStore(42, { sid: "my-stable-id" });
 
 It is important, that all sids are also **unique**. If you are usign the manual way, you have to guarantee that yourself.
 
-**Automatic way**
+### Automatic way {#how-to-add-sids-automatic}
 
 For sure, manually creating unique ids is a quite boring job.
 
