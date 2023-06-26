@@ -42,9 +42,13 @@ It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or
 
 ## Why do we need Stable Identifiers {#why-do-we-need-sids}
 
-Because of multi-store architecture, Effector code in the applications is written in atomic and distributed way, there is no central "store" or "controller".
+Because of **multi-store** architecture, Effector code in the applications is written in **atomic** and **distributed** way and there is no single central "root store" or "controller", which needs to be notified about all stores/reducers/etc, created anywhere in the app.
+
+And since there is no central "root store" - no additional setup (like Reducer Manager, etc) is required to support micro-frontends and code-splitting, everything works out of the box.
 
 **Code example**
+
+Notice, that there is no central point at all - any event of any "feature" can be triggered from anywhere and the rest of them will react accordingly.
 
 ```tsx
 // src/features/first-name/model.ts
@@ -60,12 +64,17 @@ export const lastNameChanged = createEvent();
 export const $lastName = createStore("").on(lastNameChanged, (_, x) => x);
 
 // src/features/form/model.ts
-import { createEvent, sample } from "effector";
+import { createEvent, sample, combine } from "effector";
 
 import { fistNameModel } from "#src/features/first-name";
 import { lastNameModel } from "#src/features/last-name";
 
 export const formValuesFilled = createEvent();
+export const $fullName = combine(
+  firstNameModel.$firstName,
+  lastNameModel.$lastName,
+  (first, last) => `${first} ${last}`,
+);
 
 sample({
   clock: formValuesFilled,
@@ -80,21 +89,26 @@ sample({
 });
 ```
 
-There is no central point, where all these stores and other units are collected.
+If this application was a SPA or any other kind of client-only app - this would be the end of the article.
 
 ### Serialization boundary {#serialization-boundary}
 
+But in case of Server Side Rendering there is always a **serialization boundary** - a point, where all state is stringified, added to a server response and sent to a client browser.
+
 #### Problem {#serialization-boundary-problem}
 
-But at the **serialization boundary** (this is a point, where state is stringified and added to the server response) we **still need to collect states of all these stores**, serialize them and add them to the server response.
+And at this point we **still need to collect states of all stores of the app** somehow!
 
-And then we need to unpack these values at the client and add this "server-calucalted" state to a client-side instances of all these stores!
+Also, after client browser have received a page - we need to "hydrate" everything back: unpack these values at the client and add this "server-calucalted" state to a client-side instances of all stores.
 
 #### Solution {#serialization-boundary-solution}
 
 This is a hard problem and to solve this, `effector` needs a way to connect "server-calculated" state of some store with its client-side instance.
 
-This where SIDs are required. Because SID is the same for the same store in any environment, `effector` can easily connect server-side values with client-side stores.
+While **it could be** done by introducing "root store" or something like that, which would manage store instances and their state for us, it would also bring to us all the downsides of this approach, e.g. much more complicated code-splitting - so this is still undesirable.
+
+This where SIDs will help us a lot.
+Because SID is, by definition, the same for the same store in any environment, `effector` can simply rely on it to handle state serializing and hydration.
 
 #### Example {#serialization-boundary-example}
 
@@ -107,7 +121,7 @@ import { fork, allSettled, serialize } from "effector";
 import { formModel } from "#src/features/form";
 
 async function handleServerRequest(req) {
-  const scope = fork(); // creates isolated instance of the app
+  const scope = fork(); // creates isolated container for application state
 
   // calculates the state of the app in this scope
   await allSettled(formModel.formValuesFilled, {
@@ -135,10 +149,10 @@ async function handleServerRequest(req) {
 }
 ```
 
-Notice, that there is no direct imports of any stores of the application here - state is collected automatically and its serialized version already has all the information, which will be needed for hydration.
+Notice, that there is no direct imports of any stores of the application here.
+State is collected automatically and its serialized version already has all the information, which will be needed for hydration.
 
 When generated response arrives to a client browser, server state must be hydrated to the client stores.
-
 Thanks to SIDs, state hydration also works automatically:
 
 ```tsx
@@ -298,7 +312,7 @@ const personTwo = withFactory({
 });
 ```
 
-Thanks to that `sid`-s of inner units are also unique, and we can safely serialize and deserialize them.
+Thanks to that `sid`-s of inner units of a factory are also unique, and we can safely serialize and deserialize them.
 
 ```ts
 personOne.$name.sid; // gre24f|ffds2
