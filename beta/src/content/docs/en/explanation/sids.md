@@ -123,7 +123,7 @@ async function handleServerRequest(req) {
 
   const serializedState = JSON.stringify(values);
 
-  return renderHtmlString({
+  return renderHtmlToString({
     scripts: [
       `
         <script>
