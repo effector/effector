@@ -18,7 +18,7 @@ The SIDs have two important properties:
 
 The SIDs can be added both manually and automatically, but it is important, that SIDs are set before any bundling happened - otherwise there is no way to guarantee stability.
 
-**Manual way**
+### Manual way {#how-to-add-sids-manual}
 
 ```tsx
 import { createStore } from "effector";
