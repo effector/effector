@@ -9,7 +9,7 @@ redirectFrom:
 
 The SID is a Stable IDentifier of effector unit. It can be used for different purposes, but the main use-case is a Server Side Rendering.
 
-The SIDs have to important properites:
+The SIDs have two important properties:
 
 1. They are **unique** - each sid for each unit should be unique
 2. They are **stable** between different environments - each sid of each unit in some environment (e.g. server code) should be equal to a sid of this unit in any other environment (e.g. client code)
