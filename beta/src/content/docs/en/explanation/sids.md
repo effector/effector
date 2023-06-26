@@ -96,7 +96,7 @@ This is a hard problem and to solve this, `effector` needs a way to connect "ser
 
 This where SIDs are required. Because SID is the same for the same store in any environment, `effector` can easily connect server-side values with client-side stores.
 
-**Example**
+#### Example {#serialization-boundary-example}
 
 This is a generic server side rendering handler. The `renderHtmlString` function is an implementation detail, which will depend on the framework you use.
 
