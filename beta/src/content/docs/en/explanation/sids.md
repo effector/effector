@@ -98,7 +98,7 @@ This where SIDs are required. Because SID is the same for the same store in any 
 
 #### Example {#serialization-boundary-example}
 
-This is a generic server side rendering handler. The `renderHtmlString` function is an implementation detail, which will depend on the framework you use.
+This is a generic server side rendering handler. The `renderHtmlToString` function is an implementation detail, which will depend on the framework you use.
 
 ```tsx
 // src/server/handler.ts
