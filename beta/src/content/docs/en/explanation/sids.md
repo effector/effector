@@ -40,7 +40,7 @@ Because code-transpilation tools are working at the file-level and are run befor
 It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin) instead of adding sids manually.
 :::
 
-## Why we need Stable Identifiers {#why-we-need-sids}
+## Why do we need Stable Identifiers {#why-do-we-need-sids}
 
 Because of multi-store architecture, Effector code in the applications is written in atomic and distributed way, there is no central "store" or "controller".
 
