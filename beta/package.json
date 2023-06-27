@@ -25,6 +25,7 @@
     "@docsearch/css": "^3.5.1",
     "@docsearch/react": "^3.5.1",
     "@octokit/rest": "^19.0.13",
+    "@pagefind/default-ui": "^0.12.0",
     "@tailwindcss/typography": "^0.5.9",
     "@types/html-escaper": "^3.0.0",
     "@types/node": "^18.16.18",
@@ -55,6 +56,7 @@
   "devDependencies": {
     "@types/mdast": "^3.0.11",
     "@types/unist": "^2.0.6",
-    "cssnano": "^6.0.1"
+    "cssnano": "^6.0.1",
+    "pagefind": "^0.12.0"
   }
 }

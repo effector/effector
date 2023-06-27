@@ -92,6 +92,8 @@
   --theme-divider-light: hsla(var(--color-gray-95), 0.6);
   --theme-divider-dark: hsla(var(--color-gray-70), 0.6);
 
+  --theme-backgrop-color: rgba(255,255,255,0.3);
+
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-dark: hsla(var(--color-base-black), 1);
   --theme-text-light: hsla(var(--color-gray-30), 1);
@@ -156,6 +158,8 @@ body {
   --theme-divider: hsla(var(--color-zinc-70), 1);
   --theme-divider-light: hsla(var(--color-gray-30), 0.6);
   --theme-divider-dark: hsla(var(--color-gray-40), 1);
+
+  --theme-backgrop-color: rgba(0, 0, 0, 0.3);
 
   --theme-text: hsla(var(--color-gray-90), 1);
   --theme-text-light: hsla(var(--color-gray-80), 1);
