@@ -9,7 +9,7 @@ This hook does that and memoize our data. It also merges server and client state
 
 ```js
 import { fork, Scope, serialize } from "effector";
-import { useMemo } from "react";
+import { useMemo } from "effector-react";
 
 let scope;
 
