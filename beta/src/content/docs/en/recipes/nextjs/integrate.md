@@ -45,12 +45,12 @@ export function useScope(initialState): Scope {
 }
 ```
 
-In the `app.tsx` file, we used our `useScope` and wrap the application in a provider from `effector-react/scope`.
+In the `app.tsx` file, we used our `useScope` and wrap the application in a provider from `effector-react`.
 
 ```js
 import { AppProps } from "next/app";
 import { FC } from "react";
-import { Provider } from "effector-react/scope";
+import { Provider } from "effector-react";
 import { fork, Scope, serialize } from "effector";
 import { useScope } from "../useScope"; // use your path to file
 
@@ -85,11 +85,11 @@ You also need to add an alias to _next.config.js_ to avoid build errors, when un
 
 ```js
 config.resolve.alias.effector = path.resolve(__dirname, "./node_modules/effector/effector.cjs.js");
-config.resolve.alias["effector-react/scope"] = path.resolve(
+config.resolve.alias["effector-react"] = path.resolve(
   __dirname,
   "./node_modules/effector-react/scope.js",
 );
-config.resolve.alias["effector-react/scope"] = path.resolve(
+config.resolve.alias["effector-react"] = path.resolve(
   __dirname,
   "./node_modules/effector-react/scope.js",
 );
@@ -119,7 +119,7 @@ module.exports = {
         paths: [
           {
             name: "effector-react",
-            message: "Please import from 'effector-react/scope' instead.",
+            message: "Please import from 'effector-react' instead.",
           },
         ],
       },
