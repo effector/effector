@@ -60,6 +60,7 @@ List of the methods
 Package `effector` provides couple different entry points for different purposes:
 
 - [effector/compat](/en/api/effector/module/compat)
+- [effector/inspect](/en/api/effector/module/inspect)
 
 ## Deprecated methods
 
