@@ -55,6 +55,12 @@ List of the methods
 - [launch](/en/api/effector/launch)
 - [inspect](/en/api/effector/inspect)
 
+## Import map
+
+Package `effector` provides couple different entry points for different purposes:
+
+- [effector/compat](/en/api/effector/module/compat)
+
 ## Deprecated methods
 
 - [forward({from, to})](/en/api/effector/forward)
