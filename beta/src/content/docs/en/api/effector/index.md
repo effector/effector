@@ -59,7 +59,7 @@ List of the methods
 
 Package `effector` provides couple different entry points for different purposes:
 
-- [effector/compat](/en/api/effector/moduleCompat)
+- [effector/compat](/en/api/effector/module/compat)
 
 ## Deprecated methods
 

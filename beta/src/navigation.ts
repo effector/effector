@@ -529,7 +529,7 @@ const effector = [
     items: [
       {
         text: { en: "effector/compat" },
-        link: "/api/effector/moduleCompat",
+        link: "/api/effector/module/сompat",
       },
     ],
   },
