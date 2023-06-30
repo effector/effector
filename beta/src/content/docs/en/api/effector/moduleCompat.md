@@ -1,5 +1,6 @@
 ---
 title: effector/compat
+description: Separate module of Effector with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices)
 ---
 
 The library provides separate module with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices).
