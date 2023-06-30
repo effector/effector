@@ -61,6 +61,7 @@ Package `effector` provides couple different entry points for different purposes
 
 - [effector/compat](/en/api/effector/module/compat)
 - [effector/inspect](/en/api/effector/module/inspect)
+- [effector/babel-plugin](/en/api/effector/module/babel-plugin)
 
 ## Deprecated methods
 

@@ -535,6 +535,10 @@ const effector = [
         text: { en: "effector/inspect" },
         link: "/api/effector/module/inspect",
       },
+      {
+        text: { en: "effector/babel-plugin" },
+        link: "/api/effector/module/babel-plugin",
+      },
     ],
   },
   {
