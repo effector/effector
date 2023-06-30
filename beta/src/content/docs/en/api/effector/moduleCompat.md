@@ -82,5 +82,7 @@ export default defineConfig({
 </details>
 
 :::warning{title="Bundler, not transpiler"}
-Since third-party libraries can import `effector` directly, you should not use transpilers like Babel to replace `effector` with `effector/compat` in your code, because by default Babel will not transform third-party code. Use bundler instead, it will replace `effector` with `effector/compat` in all modules, including third-party ones.
+Since third-party libraries can import `effector` directly, you **should not** use transpilers like Babel to replace `effector` with `effector/compat` in your code, because by default Babel will not transform third-party code.
+
+**Use bundler instead**, as it will replace `effector` with `effector/compat` in all modules, including third-party ones.
 :::
