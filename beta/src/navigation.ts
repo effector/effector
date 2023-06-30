@@ -531,6 +531,10 @@ const effector = [
         text: { en: "effector/compat" },
         link: "/api/effector/module/сompat",
       },
+      {
+        text: { en: "effector/inspect" },
+        link: "/api/effector/module/inspect",
+      },
     ],
   },
   {
