@@ -5,6 +5,12 @@ import {
   step,
   createNode,
   createEffect,
+  launch,
+  Event,
+  Node,
+  fork,
+  split,
+  allSettled,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -147,4 +153,66 @@ test('stale reads', async () => {
       "a, true, a/end, false, b, true, b/end, false",
     ]
   `)
+})
+
+test('experimental stack meta', async () => {
+  /**
+   * Private thing to experiment with, not a public API, not production ready
+   */
+  function withStackMeta<T>(unit: Event<T>): Event<{params: T; meta: unknown}> {
+    const result = unit.map(x => x)
+
+    const node = (result as any).graphite as Node
+
+    node.seq.push(
+      step.compute({
+        fn: (params, _, stack) => ({params, meta: stack.meta}),
+      }),
+    )
+
+    return result as any
+  }
+
+  const event = createEvent()
+  const $store = createStore(0).on(event, x => x + 1)
+  const fx = createEffect(() => Promise.resolve(0))
+  const $store2 = createStore(0).on(fx.done, x => x + 1)
+
+  sample({
+    clock: $store,
+    filter: () => true,
+    target: fx,
+  })
+
+  const metaRead = withStackMeta($store2.updates)
+
+  const metaUpdated = createEvent<any>()
+
+  split({
+    // @ts-expect-error
+    source: metaRead,
+    match: $store2.map(() => 'match_by_store' as const),
+    cases: {
+      match_by_store: metaUpdated.prepend(({meta}: any) => meta),
+    },
+  })
+
+  const $meta = createStore<any>(null).on(metaUpdated, (_, x) => x)
+
+  const testMeta = {
+    foo: 'bar',
+  } as const
+
+  const scope = fork()
+
+  launch({
+    target: event,
+    params: null,
+    meta: testMeta,
+    scope: scope,
+  })
+
+  await allSettled(scope)
+
+  expect(scope.getState($meta)).toEqual(testMeta)
 })
