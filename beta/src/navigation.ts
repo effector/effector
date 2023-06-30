@@ -556,7 +556,7 @@ const api = [
       { text: { en: "effector-react" }, link: "/api/effector-react" },
       { text: { en: "effector-solid" }, link: "/api/effector-solid" },
       { text: { en: "effector-vue" }, link: "/api/effector-vue" },
-      { text: { en: "@effector/next" }, link: "/api/effector-next" },
+      { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
     ],
   },
 ];
