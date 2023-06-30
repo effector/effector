@@ -230,8 +230,8 @@ const effectorReact = [
       {
         text: { en: "Provider" },
         link: "/api/effector-react/Provider",
-      }
-    ]
+      },
+    ],
   },
   {
     text: { en: "Gates" },
@@ -521,6 +521,15 @@ const effector = [
       {
         text: { en: "inspect" },
         link: "/api/effector/inspect",
+      },
+    ],
+  },
+  {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector/compat" },
+        link: "/api/effector/moduleCompat",
       },
     ],
   },
