@@ -27,6 +27,7 @@ const launchCase = (
       params: Array.isArray(target) ? target.map(() => data) : data,
       defer: true,
       stack,
+      meta: stack.meta,
     })
   }
 }

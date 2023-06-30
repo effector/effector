@@ -422,7 +422,15 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
       forEach(node.next, nextNode => {
-        pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
+        pushFirstHeapItem(
+          'child',
+          page,
+          nextNode,
+          stack,
+          finalValue,
+          forkPage,
+          meta,
+        )
       })
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
@@ -462,6 +470,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               stack,
               finalValue,
               forkPage,
+              meta,
             )
           })
         }
