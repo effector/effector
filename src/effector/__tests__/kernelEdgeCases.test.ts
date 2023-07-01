@@ -12,6 +12,8 @@ import {
   split,
   allSettled,
   Store,
+  // @ts-expect-error
+  getSharedStackMeta,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -173,21 +175,8 @@ describe('experimental stack meta', () => {
 
     return result as any
   }
-  const reader = createEvent()
-  let meta: unknown
-  const node = (reader as any).graphite as Node
-  node.seq.push(
-    step.compute({
-      fn(_, __, stack) {
-        meta = stack.meta
-      },
-    }),
-  )
   function getStackMeta(): unknown {
-    reader()
-    const r = meta
-    meta = undefined
-    return r
+    return getSharedStackMeta()
   }
 
   test('basics', async () => {
@@ -197,11 +186,16 @@ describe('experimental stack meta', () => {
     const fx = createEffect(() => Promise.resolve(0))
     const $store2 = createStore(0).on(fx.done, x => x + 1)
 
+    const up = createEvent()
+    const $count = createStore(0).on(up, x => x + 1)
+
     const delayFx = createEffect(async () => Promise.resolve())
 
     let fromImperativeCall: any
     const wrapFx = createEffect(async () => {
+      up()
       await delayFx()
+      up()
       fromImperativeCall = getStackMeta()
       return await fx()
     })
@@ -261,6 +255,7 @@ describe('experimental stack meta', () => {
 
     /** no meta should left */
     expect(getStackMeta()).toEqual(undefined)
+    expect(scope.getState($count)).toEqual(4)
   })
 
   test('attach-like bridge for any events', async () => {
@@ -318,8 +313,6 @@ describe('experimental stack meta', () => {
       const meta = getStackMeta() as any as any
 
       const controller = meta?.controller
-
-      console.log(p, meta?.controller?.watch)
 
       return await new Promise<number>((rs, rj) => {
         if (controller) {
