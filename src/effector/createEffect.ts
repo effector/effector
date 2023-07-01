@@ -10,8 +10,8 @@ import {
   forkPage,
   isWatch,
   setSharedStackMeta,
-  isImperativeCallInEffect,
-  setIsImperativeCall,
+  isEffectBody,
+  setIsEffectBody,
 } from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
@@ -131,7 +131,10 @@ export function createEffect<Params, Done, Fail = Error>(
           stack,
         ) => {
           const scopeRef = createScopeRef(stack)
-          const lastIsImperativeCall = isImperativeCallInEffect
+
+          /** `true` for imperative effect call inside another effect */
+          const lastIsEffectBody = isEffectBody
+
           const onResolve = onSettled(
             params,
             req,
@@ -139,7 +142,7 @@ export function createEffect<Params, Done, Fail = Error>(
             anyway,
             stack,
             scopeRef,
-            lastIsImperativeCall,
+            lastIsEffectBody,
           )
           const onReject = onSettled(
             params,
@@ -148,13 +151,30 @@ export function createEffect<Params, Done, Fail = Error>(
             anyway,
             stack,
             scopeRef,
-            lastIsImperativeCall,
+            lastIsEffectBody,
           )
-          setIsImperativeCall(true)
+          setIsEffectBody(true)
+
+          /** make stack.meta available for effect's body */
+          setSharedStackMeta(stack.meta)
+
+          if (params === 11) {
+            console.log(stack.meta)
+          }
+
           const [ok, result] = runFn(handler, onReject, args)
+
+          setIsEffectBody(false)
+
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
               result.then(onResolve, onReject)
+              /**
+               * Clean up shared stack meta,
+               * so it won't interfere with other calls during async resolution
+               * of this effect
+               */
+              setSharedStackMeta()
             } else {
               onResolve(result)
             }
@@ -179,9 +199,6 @@ export function createEffect<Params, Done, Fail = Error>(
         const fxID = nextEffectID()
 
         stack.meta = {...stack.meta, fxID}
-
-        /** make stack.meta available for effect's body */
-        setSharedStackMeta(stack.meta)
 
         launch({
           target: runner,
@@ -274,16 +291,20 @@ export const onSettled =
     anyway: Unit,
     stack: Stack,
     scopeRef: {ref: Scope | void},
-    lastIsImperative: boolean,
+    lastIsEffectBody: boolean,
   ) =>
   (data: any) => {
     if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
-    /**
-     * set stack.meta after effect is settled,
-     * so next imperative call will also catch it
-     */
-    setSharedStackMeta(stack.meta)
-    setIsImperativeCall(lastIsImperative)
+    setIsEffectBody(lastIsEffectBody)
+    if (isEffectBody) {
+      /**
+       * set stack.meta after effect is settled,
+       * so next imperative call will also catch it
+       */
+      setSharedStackMeta(stack.meta)
+    } else {
+      setSharedStackMeta()
+    }
     launch({
       target: [anyway, sidechain],
       params: [

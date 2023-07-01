@@ -194,9 +194,9 @@ const barriers = new Set<string | number>()
 let isRoot = true
 export let isWatch = false
 export let isPure = false
-export let isImperativeCallInEffect = false
-export const setIsImperativeCall = (isImperative: boolean) => {
-  isImperativeCallInEffect = isImperative
+export let isEffectBody = false
+export const setIsEffectBody = (isImperative: boolean) => {
+  isEffectBody = isImperative
 }
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
@@ -208,6 +208,7 @@ export const setCurrentPage = (newPage: Leaf | null) => {
 }
 
 let sharedStackMeta: Record<string, any> | void
+export const getSharedStackMeta = () => sharedStackMeta
 export const setSharedStackMeta = (meta: Record<string, any> | void) => {
   sharedStackMeta = meta
 }
@@ -489,7 +490,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
-  if (!isImperativeCallInEffect) {
+  if (!isEffectBody) {
     setSharedStackMeta()
   }
 }
