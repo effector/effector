@@ -194,6 +194,10 @@ const barriers = new Set<string | number>()
 let isRoot = true
 export let isWatch = false
 export let isPure = false
+export let isImperativeCallInEffect = false
+export const setIsImperativeCall = (isImperative: boolean) => {
+  isImperativeCallInEffect = isImperative
+}
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
 export const setForkPage = (newForkPage: Scope | void | null) => {
@@ -485,7 +489,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
-  setSharedStackMeta()
+  if (!isImperativeCallInEffect) {
+    setSharedStackMeta()
+  }
 }
 
 const noopParser = (x: any) => x

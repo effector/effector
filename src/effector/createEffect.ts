@@ -10,6 +10,8 @@ import {
   forkPage,
   isWatch,
   setSharedStackMeta,
+  isImperativeCallInEffect,
+  setIsImperativeCall,
 } from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
@@ -129,6 +131,7 @@ export function createEffect<Params, Done, Fail = Error>(
           stack,
         ) => {
           const scopeRef = createScopeRef(stack)
+          const lastIsImperativeCall = isImperativeCallInEffect
           const onResolve = onSettled(
             params,
             req,
@@ -136,6 +139,7 @@ export function createEffect<Params, Done, Fail = Error>(
             anyway,
             stack,
             scopeRef,
+            lastIsImperativeCall,
           )
           const onReject = onSettled(
             params,
@@ -144,7 +148,9 @@ export function createEffect<Params, Done, Fail = Error>(
             anyway,
             stack,
             scopeRef,
+            lastIsImperativeCall,
           )
+          setIsImperativeCall(true)
           const [ok, result] = runFn(handler, onReject, args)
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
@@ -268,9 +274,16 @@ export const onSettled =
     anyway: Unit,
     stack: Stack,
     scopeRef: {ref: Scope | void},
+    lastIsImperative: boolean,
   ) =>
   (data: any) => {
     if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
+    /**
+     * set stack.meta after effect is settled,
+     * so next imperative call will also catch it
+     */
+    setSharedStackMeta(stack.meta)
+    setIsImperativeCall(lastIsImperative)
     launch({
       target: [anyway, sidechain],
       params: [
@@ -285,11 +298,6 @@ export const onSettled =
       scope: scopeRef.ref,
       meta: stack.meta,
     })
-    /**
-     * set stack.meta after effect is settled,
-     * so next imperative call will also catch it
-     */
-    setSharedStackMeta(stack.meta)
   }
 const sidechain = createNode({
   node: [run({fn: ({fn, value}) => fn(value)})],
