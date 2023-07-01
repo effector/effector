@@ -178,10 +178,17 @@ test('experimental stack meta', async () => {
   const fx = createEffect(() => Promise.resolve(0))
   const $store2 = createStore(0).on(fx.done, x => x + 1)
 
+  const delayFx = createEffect(async () => Promise.resolve());
+
+  const wrapFx = createEffect(async () => {
+    await delayFx()
+    return await fx()
+  })
+
   sample({
     clock: $store,
     filter: () => true,
-    target: fx,
+    target: wrapFx,
   })
 
   const metaRead = withStackMeta($store2.updates)
