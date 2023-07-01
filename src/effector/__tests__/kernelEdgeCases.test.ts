@@ -197,7 +197,7 @@ test('experimental stack meta', async () => {
 
   const delayFx = createEffect(async () => Promise.resolve())
 
-  let fromImperativeCall: unknown
+  let fromImperativeCall: any
   const wrapFx = createEffect(async () => {
     await delayFx()
     fromImperativeCall = getStackMeta()
@@ -246,8 +246,17 @@ test('experimental stack meta', async () => {
   expect(scope.getState($meta)).toMatchObject({
     foo: 'bar',
   })
-  
-  /** no meta start */
+
+  /** no meta should left */
+  expect(getStackMeta()).toEqual(undefined)
+
+  /** no meta start of effect,
+   * only own effect's fxID meta visible,
+   * no previous meta
+   */
   await allSettled(wrapFx, {scope})
-  expect(fromImperativeCall).toEqual(undefined)
+  expect(fromImperativeCall?.foo).toEqual(undefined)
+
+  /** no meta should left */
+  expect(getStackMeta()).toEqual(undefined)
 })
