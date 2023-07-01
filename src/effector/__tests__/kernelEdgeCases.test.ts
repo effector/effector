@@ -11,6 +11,7 @@ import {
   fork,
   split,
   allSettled,
+  Store,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -155,7 +156,7 @@ test('stale reads', async () => {
   `)
 })
 
-test('experimental stack meta', async () => {
+describe('experimental stack meta', () => {
   /**
    * Private thing to experiment with, not a public API, not production ready
    */
@@ -189,74 +190,210 @@ test('experimental stack meta', async () => {
     return r
   }
 
-  // app code
-  const event = createEvent()
-  const $store = createStore(0).on(event, x => x + 1)
-  const fx = createEffect(() => Promise.resolve(0))
-  const $store2 = createStore(0).on(fx.done, x => x + 1)
+  test('basics', async () => {
+    // app code
+    const event = createEvent()
+    const $store = createStore(0).on(event, x => x + 1)
+    const fx = createEffect(() => Promise.resolve(0))
+    const $store2 = createStore(0).on(fx.done, x => x + 1)
 
-  const delayFx = createEffect(async () => Promise.resolve())
+    const delayFx = createEffect(async () => Promise.resolve())
 
-  let fromImperativeCall: any
-  const wrapFx = createEffect(async () => {
-    await delayFx()
-    fromImperativeCall = getStackMeta()
-    return await fx()
+    let fromImperativeCall: any
+    const wrapFx = createEffect(async () => {
+      await delayFx()
+      fromImperativeCall = getStackMeta()
+      return await fx()
+    })
+
+    sample({
+      clock: $store,
+      filter: () => true,
+      target: wrapFx,
+    })
+
+    const metaRead = withStackMeta($store2.updates)
+
+    const metaUpdated = createEvent<any>()
+
+    split({
+      // @ts-expect-error
+      source: metaRead,
+      match: $store2.map(() => 'match_by_store' as const),
+      cases: {
+        match_by_store: metaUpdated.prepend(({meta}: any) => meta),
+      },
+    })
+
+    const $meta = createStore<any>(null).on(metaUpdated, (_, x) => x)
+
+    const testMeta = {
+      foo: 'bar',
+    } as const
+
+    const scope = fork()
+
+    launch({
+      target: event,
+      params: null,
+      meta: testMeta,
+      scope: scope,
+    })
+
+    await allSettled(scope)
+
+    expect(fromImperativeCall).toMatchObject({
+      foo: 'bar',
+    })
+    expect(scope.getState($meta)).toMatchObject({
+      foo: 'bar',
+    })
+
+    /** no meta should left */
+    expect(getStackMeta()).toEqual(undefined)
+
+    /** no meta start of effect,
+     * only own effect's fxID meta visible,
+     * no previous meta
+     */
+    await allSettled(wrapFx, {scope})
+    expect(fromImperativeCall?.foo).toEqual(undefined)
+
+    /** no meta should left */
+    expect(getStackMeta()).toEqual(undefined)
   })
 
-  sample({
-    clock: $store,
-    filter: () => true,
-    target: wrapFx,
+  test('attach-like bridge for any events', async () => {
+    const a = createEvent()
+    const b = createEvent()
+
+    sample({
+      clock: a,
+      target: b,
+    })
+
+    const bWithMeta = withStackMeta(b)
+
+    const bLocal = sample({
+      clock: bWithMeta,
+      filter: ({meta}) => (meta as any)?.local === true,
+      fn: ({params}) => params,
+    })
+
+    const awatcher = jest.fn()
+    const bwatcher = jest.fn()
+    const blocalwatcher = jest.fn()
+    a.watch(awatcher)
+    b.watch(bwatcher)
+    bLocal.watch(blocalwatcher)
+
+    const scope = fork()
+
+    allSettled(a, {scope})
+
+    expect(awatcher).toBeCalledTimes(1)
+    expect(bwatcher).toBeCalledTimes(1)
+    expect(blocalwatcher).toBeCalledTimes(0)
+
+    launch({
+      target: a,
+      params: null,
+      scope,
+      meta: {
+        local: true,
+      },
+    })
+    expect(awatcher).toBeCalledTimes(2)
+    expect(bwatcher).toBeCalledTimes(2)
+    expect(blocalwatcher).toBeCalledTimes(1)
   })
 
-  const metaRead = withStackMeta($store2.updates)
+  test('shared controller', async () => {
+    const start = createEvent()
+    const otherStart = createEvent()
 
-  const metaUpdated = createEvent<any>()
+    const $fails = createStore<number[]>([])
 
-  split({
-    // @ts-expect-error
-    source: metaRead,
-    match: $store2.map(() => 'match_by_store' as const),
-    cases: {
-      match_by_store: metaUpdated.prepend(({meta}: any) => meta),
-    },
+    const fetchFx = createEffect(async (p: number) => {
+      const meta = getStackMeta() as any as any
+
+      const controller = meta?.controller
+
+      console.log(p, meta?.controller?.watch)
+
+      return await new Promise<number>((rs, rj) => {
+        if (controller) {
+          const un = controller.watch(() => {
+            rj(p)
+            un()
+          })
+        }
+        setTimeout(() => rs(p), p)
+      })
+    })
+
+    const ex1Fx = createEffect(async () => {
+      return await fetchFx(1)
+    })
+    const ex2Fx = createEffect(async () => {
+      return await fetchFx(12)
+    })
+    const ex3Fx = createEffect(async () => {
+      return await fetchFx(13)
+    })
+    const ex4Fx = createEffect(async () => {
+      return await fetchFx(5)
+    })
+
+    sample({
+      // @ts-expect-error
+      clock: [ex1Fx.failData, ex2Fx.failData, ex3Fx.failData, ex4Fx.failData],
+      source: $fails,
+      fn: (fails, fail) => [...fails, fail],
+      target: $fails,
+    })
+
+    const cancel = createEvent()
+
+    const nested = createEvent()
+
+    sample({
+      clock: start,
+      target: [ex1Fx],
+    })
+    sample({
+      clock: [ex1Fx.done],
+      target: [ex2Fx, nested],
+    })
+    sample({
+      clock: nested,
+      target: [ex3Fx],
+    })
+
+    sample({
+      clock: otherStart,
+      target: [ex4Fx],
+    })
+
+    sample({
+      clock: ex4Fx.done,
+      target: cancel,
+    })
+
+    const scope = fork()
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+      meta: {
+        controller: cancel,
+      },
+    })
+    allSettled(otherStart, {scope})
+
+    await allSettled(scope)
+
+    expect(scope.getState($fails)).toEqual([12, 13])
   })
-
-  const $meta = createStore<any>(null).on(metaUpdated, (_, x) => x)
-
-  const testMeta = {
-    foo: 'bar',
-  } as const
-
-  const scope = fork()
-
-  launch({
-    target: event,
-    params: null,
-    meta: testMeta,
-    scope: scope,
-  })
-
-  await allSettled(scope)
-
-  expect(fromImperativeCall).toMatchObject({
-    foo: 'bar',
-  })
-  expect(scope.getState($meta)).toMatchObject({
-    foo: 'bar',
-  })
-
-  /** no meta should left */
-  expect(getStackMeta()).toEqual(undefined)
-
-  /** no meta start of effect,
-   * only own effect's fxID meta visible,
-   * no previous meta
-   */
-  await allSettled(wrapFx, {scope})
-  expect(fromImperativeCall?.foo).toEqual(undefined)
-
-  /** no meta should left */
-  expect(getStackMeta()).toEqual(undefined)
 })
