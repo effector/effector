@@ -4,7 +4,13 @@ import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, setForkPage, forkPage, isWatch} from './kernel'
+import {
+  launch,
+  setForkPage,
+  forkPage,
+  isWatch,
+  setSharedStackMeta,
+} from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
@@ -168,6 +174,9 @@ export function createEffect<Params, Done, Fail = Error>(
 
         stack.meta = {...stack.meta, fxID}
 
+        /** make stack.meta available for effect's body */
+        setSharedStackMeta(stack.meta)
+
         launch({
           target: runner,
           params: upd,
@@ -276,6 +285,11 @@ export const onSettled =
       scope: scopeRef.ref,
       meta: stack.meta,
     })
+    /**
+     * set stack.meta after effect is settled,
+     * so next imperative call will also catch it
+     */
+    setSharedStackMeta(stack.meta)
   }
 const sidechain = createNode({
   node: [run({fn: ({fn, value}) => fn(value)})],

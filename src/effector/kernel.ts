@@ -203,6 +203,11 @@ export const setCurrentPage = (newPage: Leaf | null) => {
   currentPage = newPage
 }
 
+let sharedStackMeta: Record<string, any> | void
+export const setSharedStackMeta = (meta: Record<string, any> | void) => {
+  sharedStackMeta = meta
+}
+
 const getPageForRef = (page: Leaf | null, id: string) => {
   if (page) {
     while (page && !page.reg[id]) {
@@ -249,11 +254,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
-  let meta: Record<string, any> | void
+  let meta: Record<string, any> | void = sharedStackMeta
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
-    meta = unit.meta
+    meta = unit.meta || sharedStackMeta
     pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
     if (unit[STACK]) stackForLaunch = unit[STACK]
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
@@ -480,6 +485,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
+  setSharedStackMeta()
 }
 
 const noopParser = (x: any) => x
