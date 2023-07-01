@@ -166,11 +166,7 @@ export function createEffect<Params, Done, Fail = Error>(
 
         const fxID = nextEffectID()
 
-        if (stack.meta) {
-          stack.meta.fxID = fxID
-        } else {
-          stack.meta = {fxID}
-        }
+        stack.meta = {...stack.meta, fxID}
 
         launch({
           target: runner,
