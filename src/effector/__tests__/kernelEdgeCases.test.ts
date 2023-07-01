@@ -172,7 +172,24 @@ test('experimental stack meta', async () => {
 
     return result as any
   }
+  const reader = createEvent()
+  let meta: unknown
+  const node = (reader as any).graphite as Node
+  node.seq.push(
+    step.compute({
+      fn(_, __, stack) {
+        meta = stack.meta
+      },
+    }),
+  )
+  function getStackMeta(): unknown {
+    reader()
+    const r = meta
+    meta = undefined
+    return r
+  }
 
+  // app code
   const event = createEvent()
   const $store = createStore(0).on(event, x => x + 1)
   const fx = createEffect(() => Promise.resolve(0))
@@ -180,8 +197,10 @@ test('experimental stack meta', async () => {
 
   const delayFx = createEffect(async () => Promise.resolve())
 
+  let fromImperativeCall: unknown
   const wrapFx = createEffect(async () => {
     await delayFx()
+    fromImperativeCall = getStackMeta()
     return await fx()
   })
 
@@ -221,7 +240,14 @@ test('experimental stack meta', async () => {
 
   await allSettled(scope)
 
+  expect(fromImperativeCall).toMatchObject({
+    foo: 'bar',
+  })
   expect(scope.getState($meta)).toMatchObject({
     foo: 'bar',
   })
+  
+  /** no meta start */
+  await allSettled(wrapFx, {scope})
+  expect(fromImperativeCall).toEqual(undefined)
 })
