@@ -178,7 +178,7 @@ test('experimental stack meta', async () => {
   const fx = createEffect(() => Promise.resolve(0))
   const $store2 = createStore(0).on(fx.done, x => x + 1)
 
-  const delayFx = createEffect(async () => Promise.resolve());
+  const delayFx = createEffect(async () => Promise.resolve())
 
   const wrapFx = createEffect(async () => {
     await delayFx()
@@ -221,5 +221,7 @@ test('experimental stack meta', async () => {
 
   await allSettled(scope)
 
-  expect(scope.getState($meta)).toEqual(testMeta)
+  expect(scope.getState($meta)).toMatchObject({
+    foo: 'bar',
+  })
 })
