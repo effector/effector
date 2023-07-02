@@ -3,9 +3,19 @@ title: Server Side Rendering
 redirectFrom:
   - /guides/ssr
   - /guides/server-side-rendering
+  - /en/guides/ssr
+  - /en/guides/server-side-rendering
 ---
 
 Server-side rendering (SSR) means that the content of your site is generated on the server and then sent to the browser - which these days is achieved in very different ways and forms.
+
+:::info
+Generally, if the rendering happens at the runtime - it is called SSR. If the rendering happens at the build-time - it is usually called Server Side Generation (SSG), which in fact is basically a subset of SSR
+
+This difference it is not important for this guide, everything said applies both to SSR and SSG.
+:::
+
+In this guide we will cover two main kinds of Server Side Rendering patterns and how `effector` should be used in these cases.
 
 ## Non-Isomorphic SSR
 
@@ -24,13 +34,13 @@ If you have non-isomorphic SSR - just use `effector` the way you would for an SP
 
 When you have an isomorphic SSR application, most of the frontend code is **shared with server** and used to generate the response html.
 
-You can also think of it as a an approach, where your app starts at the server - and then gets transfered over the network to the client browser, where it **continues** the work.
+You can also think of it as a an approach, where your app starts at the server - and then gets transfered over the network to the client browser, where it **continues** the work it started doing at the server.
 
 That's where the name comes from - despite the fact, that the code is bundled for and run in different enviroments, its output remains (mostly) the same, if given the same input.
 
 There are a lot of different frameworks, which are built upon this approach - e.g. `Next.js`, `Remix.run`, `Razzle.js`, `Nuxt.js`, `Astro`, etc
 
-:::tip
+:::tip{title="Next.js"}
 `Next.js` does SSR/SSG in the special way, which requires a bit of custom handling on the `effector` side.
 
 This is done via dedicated [`@effector/next`](https://github.com/effector/next) package - use it, if you want to use `effector` with `Next.js`.
@@ -38,4 +48,242 @@ This is done via dedicated [`@effector/next`](https://github.com/effector/next) 
 
 For this guide we will not focus on any specific framework or server implementation - these details will be abstracted away.
 
+### SIDs
 
+To handle isomorphic SSR with `effector` we need a reliable way to [`serialize`](/en/api/effector/serialize/) state, to pass it over the network. This where we need to have Stable IDentifiers for each store in our app.
+
+:::info
+Deep-dive explanation about SIDs [can be found here](/en/explanation/sids)
+:::
+
+To add SIDs - [just use one of `effector`'s plugins](/en/explanation/sids#how-to-add-sids-automatic).
+
+### Common application code
+
+The main feature of isomorphic SSR - the same code is used to both server render and client app.
+
+For sake of example we will use a very simple React app example - all of it will be contained in one module:
+
+```tsx
+// app.tsx
+import React from "react";
+import { createEvent, createStore, createEffect, sample, combine } from "effector";
+import { useUnit } from "effector-react";
+
+// model
+export const appStarted = createEvent();
+export const $pathname = createStore<string | null>(null);
+
+const notifyUserFx;
+
+const $counter = createStore<number | null>(null);
+
+const fetchUserCounterFx = createEffect(async () => {
+  await sleep(100); // in real life it would be some api request
+
+  return Math.floor(Math.random() * 100);
+});
+
+const buttonClicked = createEvent();
+const saveUserCounterFx = createEffect(async (count: number) => {
+  await sleep(100); // in real life it would be some api request
+});
+
+sample({
+  clock: appStarted,
+  source: $counter,
+  filter: (count) => count === null, // i.e. only, if we don't have the count yer
+  target: fetchUserCounterFx,
+});
+
+sample({
+  clock: fetchUserCounterFx.doneData,
+  target: $counter,
+});
+
+sample({
+  clock: buttonClicked,
+  source: $counter,
+  fn: (count) => count + 1,
+  target: [$counter, saveUserCounterFx],
+});
+
+const $countUpdatePending = combine(
+  [fetchUserCounterFx.pending, saveUserCounterFx.pending],
+  (updates) => updates.some((upd) => upd === true),
+);
+
+const $isClient = createStore(typeof document !== "undefined", { serialize: "ignore" });
+
+const notifyFx = createEffect((message: string) => {
+  alert(message);
+});
+
+sample({
+  clock: [
+    saveUserCounterFx.done.map(() => "Counter update is saved successfuly"),
+    saveUserCounterFx.fail.map(() => "Could not save the counter update :("),
+  ],
+  // It is totally ok to have some splits in the app's logic based on current environment
+  //
+  // Here we want to trigger notification alert only at the client
+  filter: $isClient,
+  target: notifyFx,
+});
+
+// ui
+export function App() {
+  const clickButton = useUnit(buttonClicked);
+  const { count, updatePending } = useUnit({
+    count: $counter,
+    updatePending: $countUpdatePending,
+  });
+
+  return (
+    <div>
+      <h1>Counter App</h1>
+      <h2>{updatePending ? "Counter is updating" : `Current count is ${count ?? "unknown"}`}</h2>
+      <button onClick={() => clickButton()}>Update counter</button>
+    </div>
+  );
+}
+```
+
+This is our app's code which will be used to both server-side render and to handle client's needs.
+
+## Server entrypoint
+
+The way of the `<App />` to the client browsers starts at the server. For this we need to create **separate entrypoint** for the specific server-related code, which will also handle the server-side render part.
+
+In this example we're not going to dive deep into various possible server impelementations - we will focus on the request handler itself instead.
+
+:::info
+Alongside with basic SSR needs, like calculating the final state of the app and serializing it, `effector` also handles **the isolation of user's data between requests**
+
+It is very important feature, as `Node.js` servers usually handle more than one user request at the same moment of time.
+
+Since JS-based platforms , including `Node.js`, usually have single "main" thread - all logical computaions are happening in the same context, with the same memory available.
+So, if state is not properly isolated, one user may receive the data, prepared for another, which is very undesirable.
+
+`effector` handles this problem automatically inside the `fork` feature. Read [the relevant docs for details](/en/api/effector/fork)
+:::
+
+This is the code for server request handler, which contains all server-specific stuff, which needs to be done.
+Notice, that for meaningful parts of our app we are still using the "shared" `app.tsx` code.
+
+```tsx
+// server.tsx
+import { renderToString } from "react-dom/server";
+import { Provider } from "effector-react";
+import { fork, allSettled, serialize } from "effector";
+
+import { appStarted, App, $pathname } from "./app";
+
+export async function handleRequest(req) {
+  // 1. create separate instance of `effector`'s state - special `Scope` object
+  const scope = fork({
+    values: [
+      // some parts of app's state can be immideatly set to relevant states,
+      // before any computations started
+      [$pathname, req.pathname],
+    ],
+  });
+
+  // 2. start app's logic - all computations will be performed according to the model's logic,
+  // as well as any required effects
+  await allSettled(appStarted, {
+    scope,
+  });
+
+  // 3. Serialize the calculated state, so it can be passed over the network
+  const storesValues = serialize(scope);
+
+  // 4. Render the app - also into some serializable version
+  const app = renderToString(
+    // by using Provider with the scope we tell the <App />, which state of the stores it should use
+    <Provider value={scope}>
+      <App />
+    </Provider>,
+  );
+
+  // 5. prepare serialized html response
+  //
+  // This is serialization (or network) boundary
+  // The point, where all state is stringified to be sent over the network
+  //
+  // `effector`s state is stored as a `<script>`, which will set the state into global object
+  // `react`'s state is stored as a part of the DOM tree.
+  return `
+    <html>
+      <head>
+        <script>
+          self._SERVER_STATE_ = ${JSON.stringify(storesValues)}
+        </script>
+        <link rel="stylesheet" href="styles.css" />
+        <script defer src="app.js" />
+      </head>
+      <body>
+        <div id="app">
+          ${app}
+        </div>
+      </body>
+    </html>
+  `;
+}
+```
+
+☝️ In this code we have created the `html` string, which user will receive over the network and which contains serialized state of the whole app.
+
+## Client entrypoint
+
+When the generated html string reaches the client browser, has been processed by the parser and all the required assemblies have been loaded - our application code starts working on the client.
+
+At this point `<App />` needs to restore its past state (which was computed on the server), so that it doesn't start from scratch, but starts from the same point the work reached on the server.
+
+The process of restoring the server state at the client is usually called **hydration** and this is what client entrypoint should actually do:
+
+```tsx
+// client.tsx
+import React from "react";
+import { hydrateRoot } from "react-dom/client";
+import { fork, allSettled } from "effector";
+import { Provider } from "effector-react";
+import { App, appStarted } from "effector";
+
+/**
+ * 1. Find, where the server state is stored and retreive it
+ *
+ * See the server handler code to find out, where it was saved in the html
+ */
+const effectorState = globalThis._SERVER_STATE_;
+const reactRoot = document.querySelector("#app");
+
+/**
+ * 2. Initiate the client scope of `effector` with server-calculated values
+ */
+const clientScope = fork({
+  values: effectorState,
+});
+
+allSettled(appStarted, { scope: clientScope });
+
+/**
+ * 3. "Hydrate" React state in the DOM tree
+ */
+hydrateRoot(
+  reactRoot,
+  <Provider value={clientScope}>
+    <App />
+  </Provider>,
+);
+```
+
+☝️ At this point the App is ready to use!
+
+## Recap
+
+1. You don't need to do anything special for **non-isomorphic** SSR, all SPA-like patterns will work.
+2. Isomorphic SSR requires a bit of special preparation - you will need [SIDs for stores](/en/explanation/sids)
+3. Common code of the **isomorphic** SSR app handles all meaningful parts - how the UI should look, how state should be calculated, when and which effects should be run.
+4. Server-specific code calculates and **serializes** all of the app's state into the `html` string
+5. Client-specific code retreives this state and uses it to **"hydrate"** the app on the client.
