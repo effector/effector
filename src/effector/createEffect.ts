@@ -158,23 +158,19 @@ export function createEffect<Params, Done, Fail = Error>(
           /** make stack.meta available for effect's body */
           setSharedStackMeta(stack.meta)
 
-          if (params === 11) {
-            console.log(stack.meta)
-          }
-
           const [ok, result] = runFn(handler, onReject, args)
 
           setIsEffectBody(false)
+          /**
+           * Clean up shared stack meta,
+           * so it won't interfere with other calls during async resolution
+           * of this effect
+           */
+          setSharedStackMeta()
 
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
               result.then(onResolve, onReject)
-              /**
-               * Clean up shared stack meta,
-               * so it won't interfere with other calls during async resolution
-               * of this effect
-               */
-              setSharedStackMeta()
             } else {
               onResolve(result)
             }
