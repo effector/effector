@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "search:serve": "pagefind --source ./dist --bundle-dir ./dist/_pagefind --serve"
   },
   "repository": {
     "type": "git",

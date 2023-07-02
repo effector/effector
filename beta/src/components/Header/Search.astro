@@ -41,8 +41,8 @@ const pagefindTranslations = Object.fromEntries(
   <dialog aria-label={t(translations.Search.label, lang)}>
     <div class="dialog-frame">
       {
-        false && import.meta.env.DEV ? (
-          <div style="margin: auto; text-align: center; white-space: pre-line;" dir="ltr">
+        import.meta.env.DEV ? (
+          <div class="m-auto whitespace-pre-line text-center" dir="ltr">
             <p>{t(translations.Search.devWarning, lang)}</p>
           </div>
         ) : (

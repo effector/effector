@@ -7,7 +7,7 @@ import { LINKS } from "../../consts";
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
-<footer>
+<footer data-pagefind-ignore>
   <div class="collection">
     {
       FOOTER_LINKS.map((group) => {

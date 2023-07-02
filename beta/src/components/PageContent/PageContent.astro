@@ -16,9 +16,9 @@ const { title, headings, documentId, translations = [], breadcrumbs = [] } = Ast
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
-<article id="article" class="content">
+<article id="article" class="content" data-pagefind-body data-pagefind-meta={`lang:${lang}`}>
   <section class="main-section">
-    <nav>
+    <nav data-pagefind-ignore>
       <ul class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li itemscope itemtype="https://schema.org/ListItem">
           <a itemprop="item" href={`/${lang}`}>
@@ -56,7 +56,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
         ) : null
       }
     </div>
-    <nav class="block xl:hidden">
+    <nav class="block xl:hidden" data-pagefind-ignore>
       <TableOfContents
         lang={lang}
         collapsed
@@ -66,7 +66,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     </nav>
     <slot />
   </section>
-  <nav class="mb-8 block xl:hidden">
+  <nav class="mb-8 block xl:hidden" data-pagefind-ignore>
     <MoreMenu documentId={documentId} />
   </nav>
 </article>
