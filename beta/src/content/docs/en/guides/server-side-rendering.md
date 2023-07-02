@@ -92,7 +92,7 @@ const saveUserCounterFx = createEffect(async (count: number) => {
 sample({
   clock: appStarted,
   source: $counter,
-  filter: (count) => count === null, // i.e. only, if we don't have the count yer
+  filter: (count) => count === null, // if count is already fetched - do not fetch it again
   target: fetchUserCounterFx,
 });
 
