@@ -3,6 +3,7 @@ import IconChevron from "@icons/Chevron.astro";
 import Hero from "@components/Landing/Hero.astro";
 import FeaturesGrid from "@components/Landing/FeaturesGrid.astro";
 import Feature from "@components/Landing/Feature.astro";
+import Stats from "@components/Stats.astro";
 
 import Landing from "../layouts/Landing.astro";
 import { SITE } from "../consts";
@@ -96,6 +97,7 @@ const logos = [
       <IconChevron />
     </a>
   </Hero>
+  <Stats />
   <FeaturesGrid>
     {
       features.map((feat) => (
