@@ -66,6 +66,10 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Writing tests" },
         link: "/guides/testing",
       },
+      {
+        text: { en: "Server Side Rendering" },
+        link: "/guides/server-side-rendering",
+      },
     ],
   },
   {
