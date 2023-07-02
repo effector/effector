@@ -24,7 +24,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 
 ## Schema
 
-![](/en/api/effector/images/sample-visualization.gif)
+![](/images/sample-visualization.gif)
 
 ## Type of the created `target`
 

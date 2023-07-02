@@ -4,8 +4,8 @@ description: Метод для создания связи между юнита
 lang: ru
 ---
 
-:::info{title="since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)"}
-Рекомендуется использовать [sample](/ru/api/effector/sample) вместо `forward`.
+:::info{title="since"}
+С версии [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0) рекомендуется использовать [sample](/ru/api/effector/sample) вместо `forward`.
 :::
 
 Метод для создания связи между юнитами в декларативной форме. Отправляет обновления из одного набора юнитов в другой

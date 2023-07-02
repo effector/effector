@@ -41,7 +41,7 @@ const pagefindTranslations = Object.fromEntries(
   <dialog aria-label={t(translations.Search.label, lang)}>
     <div class="dialog-frame">
       {
-        import.meta.env.DEV ? (
+        import.meta.env.DEV && !import.meta.env.PUBLIC_SEARCH ? (
           <div class="m-auto whitespace-pre-line text-center" dir="ltr">
             <p>{t(translations.Search.devWarning, lang)}</p>
           </div>
@@ -88,7 +88,6 @@ const pagefindTranslations = Object.fromEntries(
 
       const closeModal = () => {
         this.dialog.close();
-        window.removeEventListener("click", onWindowClick);
       };
 
       this.openBtn.addEventListener("click", openModal);
@@ -96,6 +95,7 @@ const pagefindTranslations = Object.fromEntries(
 
       const onDialogClose = () => {
         document.body.classList.remove("search-dialog-open");
+        window.removeEventListener("click", onWindowClick);
       };
       this.dialog.addEventListener("close", onDialogClose);
       this.dialog.addEventListener("cancel", onDialogClose);
@@ -117,7 +117,8 @@ const pagefindTranslations = Object.fromEntries(
       } catch {}
 
       window.addEventListener("DOMContentLoaded", () => {
-        // if (import.meta.env.DEV) return;
+        if (import.meta.env.DEV && !import.meta.env.PUBLIC_SEARCH) return;
+
         const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
         onIdle(async () => {
           const { PagefindUI } = await import("@pagefind/default-ui");

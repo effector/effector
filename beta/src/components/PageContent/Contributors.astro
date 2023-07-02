@@ -23,6 +23,9 @@ const [owner, repo] = GITHUB_REPO.split("/");
 const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
 
 async function loadContributors() {
+  if (!import.meta.env.GITHUB_TOKEN) {
+    return [];
+  }
   const filePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].join("");
   const { data: commits } = await octokit.repos.listCommits({
     owner,
@@ -83,12 +86,12 @@ const recentContributors = contributors.slice(0, 5).sort((a, b) => a.commits - b
 const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
 ---
 
-<div class="title">
+<div class="title" data-pagefind-ignore>
   {getTextLocalized(translations.Contributors, lang)}
 </div>
 
 <!-- Thanks to @5t3ph for https://smolcss.dev/#smol-avatar-list! -->
-<div class="contributors">
+<div class="contributors" data-pagefind-ignore>
   {
     recentContributors.length > 0 && (
       <ul class="avatar-list" style={`--avatar-count: ${recentContributors.length}`}>

@@ -10,13 +10,27 @@ type Props = {
   translations: { lang: string; slug: string }[];
   breadcrumbs?: { title: string; path: string }[];
   documentId: string;
+  pagefindWeight?: number;
 };
 
-const { title, headings, documentId, translations = [], breadcrumbs = [] } = Astro.props;
+const {
+  title,
+  headings,
+  documentId,
+  translations = [],
+  breadcrumbs = [],
+  pagefindWeight = 0,
+} = Astro.props;
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
-<article id="article" class="content" data-pagefind-body data-pagefind-meta={`lang:${lang}`}>
+<article
+  id="article"
+  class="content"
+  data-pagefind-body
+  data-pagefind-sort="weight[data-weight]"
+  data-weight={pagefindWeight}
+>
   <section class="main-section">
     <nav data-pagefind-ignore>
       <ul class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -46,7 +60,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
       <h1 class="content-title" id="overview">{title}</h1>
       {
         translations.length ? (
-          <span class="translations">
+          <span class="translations" data-pagefind-ignore>
             [
             {translations.map((tr) => (
               <a href={`/${tr.lang}/${tr.slug}`}>{tr.lang}</a>

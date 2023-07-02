@@ -32,3 +32,13 @@ To fetch commits history, you need Github Personal Access Token. Just add it:
 ```shell
 GITHUB_TOKEN=github_pat_REDACTED_TOKEN pnpm start
 ```
+
+### Search
+
+By default search disabled on the local machine due to index requirements. But you can enable it by following steps:
+
+1. Build the docs — `COMPRESS=false pnpm build`
+2. Start search serve server — `pnpm search:dev`
+3. Start astro with env parameter `PUBLIC_SEARCH=true pnpm dev`
+
+`COMPRESS=false` disables compressing, to speed up build.

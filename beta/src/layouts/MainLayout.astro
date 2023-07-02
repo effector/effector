@@ -17,9 +17,11 @@ export type Props = CollectionEntry<"docs">["data"] & {
   lang: string;
   documentId: string;
   redirectTo?: string;
+  pagefindWeight?: number;
 };
 
-const { headings, translations, breadcrumbs, lang, documentId, ...data } = Astro.props;
+const { headings, translations, breadcrumbs, lang, documentId, pagefindWeight, ...data } =
+  Astro.props;
 const currentPage = Astro.url.pathname;
 ---
 
@@ -140,7 +142,7 @@ const currentPage = Astro.url.pathname;
   </style>
 
   <main class="layout">
-    <aside id="grid-left" title="Site Navigation">
+    <aside id="grid-left" title="Site Navigation" data-pagefind-ignore>
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
     <div id="grid-main">
@@ -151,12 +153,13 @@ const currentPage = Astro.url.pathname;
         documentId={documentId}
         translations={translations}
         breadcrumbs={breadcrumbs}
+        pagefindWeight={pagefindWeight}
       >
         <slot />
       </PageContent>
       <Contributors documentId={documentId} />
     </div>
-    <aside id="grid-right" title="Table of Contents">
+    <aside id="grid-right" title="Table of Contents" data-pagefind-ignore>
       <RightSidebar lang={lang} headings={headings} documentId={documentId} />
     </aside>
   </main>

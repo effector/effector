@@ -9,11 +9,12 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "search:serve": "pagefind --source ./dist --bundle-dir ./dist/_pagefind --serve"
+    "search:dev": "pagefind --serve",
+    "search:build": "pagefind"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/effector/new-docs"
+    "url": "https://github.com/effector/effector"
   },
   "packageManager": "pnpm@8.2.0",
   "dependencies": {
@@ -58,6 +59,7 @@
     "@types/mdast": "^3.0.11",
     "@types/unist": "^2.0.6",
     "cssnano": "^6.0.1",
+    "dotenv": "^16.3.1",
     "pagefind": "^0.12.0"
   }
 }
