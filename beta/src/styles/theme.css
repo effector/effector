@@ -39,6 +39,8 @@
 
   --color-zink-5: 210, 20%, 98.04%;
   --color-zinc-10: 240deg, 5%, 96%;
+  --color-zinc-40: 240deg, 5%, 65%;
+  --color-zinc-60: 215deg, 14%, 34%;
   --color-zinc-70: 240deg, 5%, 26%;
   --color-zinc-80: 240deg, 4%, 16%;
   --color-zinc-90: 240deg, 6%, 10%;
@@ -92,7 +94,7 @@
   --theme-divider-light: hsla(var(--color-gray-95), 0.6);
   --theme-divider-dark: hsla(var(--color-gray-70), 0.6);
 
-  --theme-backgrop-color: rgba(255,255,255,0.3);
+  --theme-backdrop-color: rgba(255,255,255,0.3);
 
   --theme-text: hsla(var(--color-gray-10), 1);
   --theme-text-dark: hsla(var(--color-base-black), 1);
@@ -105,6 +107,8 @@
   --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
 
   --theme-card: hsla(0, 0%, 100%, 1);
+  --theme-card-hover: hsla(0, 0%, 98%, 1);
+  --theme-card-divider: hsla(0, 0%, 0%, 0.1);
 
   --theme-code-inline-bg: hsla(var(--color-gray-90), 1);
   --theme-code-inline-text: var(--theme-text);
@@ -159,7 +163,7 @@ body {
   --theme-divider-light: hsla(var(--color-gray-30), 0.6);
   --theme-divider-dark: hsla(var(--color-gray-40), 1);
 
-  --theme-backgrop-color: rgba(0, 0, 0, 0.3);
+  --theme-backdrop-color: rgba(0, 0, 0, 0.3);
 
   --theme-text: hsla(var(--color-gray-90), 1);
   --theme-text-light: hsla(var(--color-gray-80), 1);
@@ -171,6 +175,8 @@ body {
   --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
 
   --theme-card: hsla(var(--color-zinc-70), 1);
+  --theme-card-hover: hsla(var(--color-zinc-60), 1);
+  --theme-card-divider: hsla(0, 0%, 0%, 0.2);
 
   --theme-code-inline-bg: hsla(var(--color-zinc-70), 1);
   --theme-code-inline-text: hsla(var(--color-zinc-10), 1);
