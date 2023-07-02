@@ -22,7 +22,7 @@ In this guide we will cover two main kinds of Server Side Rendering patterns and
 You don't need to do anything special to support non-isomorphic SSR/SSG workflow.
 
 This way initial html is usually generated separately, by using some sort of template engine, which is quite often run with different (not JS) programming language.
-The frontend code in this case starts only at the client and usually starts with typical `document.querySelector('.my-anchor-class-for-js-code')` - and it is not used in any way to generate the server response.
+The frontend code in this case works only at the client browser and **is not used in any way** to generate the server response.
 
 This approach works for `effector`, as well as any javascript code. Any SPA application is basically an edge-case of it, as its html template does not contain any content, except for `<script src="my-app.js" />` link.
 
