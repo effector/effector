@@ -175,7 +175,7 @@ describe('experimental stack meta', () => {
 
     return result as any
   }
-  function getStackMeta(): unknown {
+  function getStackMeta(): any {
     return getSharedStackMeta()
   }
 
@@ -388,5 +388,73 @@ describe('experimental stack meta', () => {
     await allSettled(scope)
 
     expect(scope.getState($fails)).toEqual([12, 13])
+  })
+
+  test('effects cases', async () => {
+    const metas: any[] = []
+
+    const saveCurrentMeta = () => metas.push(getStackMeta().testKey)
+    const event = createEvent()
+
+    const fx1 = createEffect(async () => {
+      await Promise.resolve()
+    })
+    const fx2 = createEffect(async () => {
+      await Promise.resolve()
+    })
+    const fx3 = createEffect(async () => {
+      await Promise.resolve()
+    })
+    const controller1Fx = createEffect(async () => {
+      saveCurrentMeta()
+      fx1()
+      saveCurrentMeta()
+      fx2()
+      saveCurrentMeta()
+      fx3()
+      saveCurrentMeta()
+    })
+    const controller2Fx = createEffect(async () => {
+      saveCurrentMeta()
+      await fx1()
+      saveCurrentMeta()
+      await fx2()
+      saveCurrentMeta()
+      await fx3()
+      saveCurrentMeta()
+    })
+    const controller3Fx = createEffect(async () => {
+      saveCurrentMeta()
+      await Promise.all([fx1(), fx2(), fx3()])
+      saveCurrentMeta()
+    })
+    const controller4Fx = createEffect(async () => {
+      saveCurrentMeta()
+      event()
+      saveCurrentMeta()
+      await fx2()
+      saveCurrentMeta()
+    })
+
+    const start = createEvent()
+    sample({
+      clock: start,
+      target: [controller1Fx, controller2Fx, controller3Fx, controller4Fx],
+    })
+
+    const scope = fork()
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+      meta: {
+        testKey: 'testValue',
+      },
+    })
+
+    await allSettled(scope)
+
+    expect(metas.every(v => v === 'testValue')).toEqual(true)
   })
 })
