@@ -747,9 +747,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/satyarohith>
-            <img src=https://avatars.githubusercontent.com/u/29819102?v=4 width="100;"  alt=Satya/>
+            <img src=https://avatars.githubusercontent.com/u/29819102?v=4 width="100;"  alt=Satya Rohith/>
             <br />
-            <sub style="font-size:14px"><b>Satya</b></sub>
+            <sub style="font-size:14px"><b>Satya Rohith</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
