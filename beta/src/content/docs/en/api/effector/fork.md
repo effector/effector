@@ -24,10 +24,6 @@ fork(options: { values?, handlers? }): Scope
 fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
-:::warning{title="Requirements"}
-[_Babel plugin_](/en/api/effector/babel-plugin) or [_SWC plugin_](https://github.com/effector/swc-plugin) is required for using this method
-:::
-
 ### Arguments {#fork-args}
 
 1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork
