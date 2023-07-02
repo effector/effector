@@ -18,4 +18,8 @@ This approach works for `effector`, as well as any javascript code. Any SPA appl
 
 ## Isomorphic SSR
 
+When you have an isomorphic SSR application, most of the frontend code is **shared with server** and used to generate the response html.
 
+You can also think of it as a an approach, where your app starts at the server - and then gets transfered over the network to the client browser, where it **continues** the work.
+
+That's where the name comes from. The Greek word “isos,” which means equal, and “morph,” which means shape and despite the fact, that the code might be bundled for and run in different enviroments, its output remains (mostly) the same. 
