@@ -32,9 +32,9 @@ If you have non-isomorphic SSR - just use `effector` the way you would for an SP
 
 ## Isomorphic SSR
 
-When you have an isomorphic SSR application, most of the frontend code is **shared with server** and used to generate the response html.
+When you have an isomorphic SSR application, **most of the frontend code is shared with server** and **is used to generate the response** html.
 
-You can also think of it as a an approach, where your app starts at the server - and then gets transfered over the network to the client browser, where it **continues** the work it started doing at the server.
+You can also think of it as a an approach, where your app **starts at the server** - and then gets transfered over the network to the client browser, where it **continues** the work it started doing at the server.
 
 That's where the name comes from - despite the fact, that the code is bundled for and run in different enviroments, its output remains (mostly) the same, if given the same input.
 
@@ -62,7 +62,7 @@ To add SIDs - [just use one of `effector`'s plugins](/en/explanation/sids#how-to
 
 The main feature of isomorphic SSR - the same code is used to both server render and client app.
 
-For sake of example we will use a very simple React app example - all of it will be contained in one module:
+For sake of example we will use a very simple React-based counter app - all of it will be contained in one module:
 
 ```tsx
 // app.tsx
