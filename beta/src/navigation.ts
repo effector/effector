@@ -268,6 +268,15 @@ const effectorReact = [
       },
     ],
   },
+  {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector-react/scope" },
+        link: "/api/effector-react/module/scope",
+      },
+    ],
+  },
 ];
 
 const effectorSolid = [
