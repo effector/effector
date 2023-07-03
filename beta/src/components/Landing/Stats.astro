@@ -1,0 +1,212 @@
+---
+import { Octokit } from "@octokit/rest";
+import { promisify } from "node:util";
+import * as childProcess from "node:child_process";
+
+import { GITHUB_REPO } from "../../consts";
+import IconCopy from "../../icons/Copy.astro";
+import { getPathParamsFromId, getTextLocalized } from "../../languages";
+import { translations } from "src/languages";
+
+const exec = promisify(childProcess.exec);
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+
+const [owner, repo] = GITHUB_REPO.split("/");
+const repoInfo = { owner, repo };
+
+const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
+
+const formatDate = (date: Date) => {
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${date.getUTCFullYear()}-${month}-${day}`;
+};
+
+async function getNpmStats() {
+  const to = new Date();
+  const from = new Date("2018-01-17T03:17:09.763Z");
+  const fromDateString = formatDate(from);
+  const toDateString = formatDate(to);
+
+  console.log(
+    `https://npm-stat.com/api/download-counts?package=effector&from=${fromDateString}&until=${toDateString}`,
+  );
+
+  const downloadCounts = await fetch(
+    `https://npm-stat.com/api/download-counts?package=effector&from=${fromDateString}&until=${toDateString}`,
+  ).then((r) => r.json());
+
+  const result = await exec("npm info effector --json");
+  const npm = JSON.parse(result.stdout);
+  const latest = npm["dist-tags"].latest;
+
+  const totalDownloads =
+    Object.values<number>(downloadCounts.effector)
+      .slice(-30)
+      .reduce((total, count) => total + count) / 1000;
+
+  return {
+    latest,
+    downloads: `${totalDownloads.toFixed(0)}K`,
+  };
+}
+
+async function getRepoStats() {
+  const { data: repo } = await octokit.repos.get(repoInfo);
+
+  let contributorsCount = 0;
+  let page = 1;
+  while (true) {
+    const { data: pageContributors } = await octokit.repos.listContributors({
+      ...repoInfo,
+      per_page: 100,
+      page,
+    });
+    contributorsCount += pageContributors.length;
+
+    if (pageContributors.length < 100) {
+      break;
+    }
+    page++;
+  }
+
+  return {
+    stars: repo.stargazers_count.toLocaleString("en-US"),
+    contributors: contributorsCount,
+    license: repo.license?.spdx_id,
+  };
+}
+
+async function getGzipSize() {
+  try {
+    const response = await fetch("https://bundlephobia.com/api/size?package=effector@latest");
+
+    if (response.ok) {
+      const { gzip } = await response.json();
+
+      if (!gzip) {
+        throw new Error("No gzip size in the bundlephobia answer");
+      }
+
+      return {
+        size: `${(gzip / 1024).toFixed(1)} kB`,
+      };
+    } else {
+      throw new Error(`Bundlephobia answer is not OK: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error("Failed to fetch gzip size:", error);
+  }
+}
+
+const labelMapper = {
+  size: getTextLocalized(translations.Landing.Stats.size, lang),
+  contributors: getTextLocalized(translations.Landing.Stats.contributors, lang),
+  stars: getTextLocalized(translations.Landing.Stats.stars, lang),
+  downloads: getTextLocalized(translations.Landing.Stats.downloads, lang),
+  latest: getTextLocalized(translations.Landing.Stats.latest, lang),
+  license: getTextLocalized(translations.Landing.Stats.license, lang),
+};
+const gettingStartedText = getTextLocalized(
+  translations.Landing.Stats.StartByAddingEffectorAsDependency,
+  lang,
+);
+
+const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).then(
+  ([repo, npm, size]) => ({ ...repo, ...npm, ...size }),
+);
+---
+
+<div class="wrapper">
+  <div class="stats">
+    <div class="counts">
+      {
+        Object.entries(stats).map(([label, counter]) => {
+          return (
+            <div class="stats-card">
+              <div class="text-4xl">{counter}</div>
+              <div class="label">{labelMapper[label]}</div>
+            </div>
+          );
+        })
+      }
+    </div>
+    <div class="stats-bar">
+      <span>{gettingStartedText}:</span>
+      <div class="install-command clear-both">
+        <span class="inline-block clear-both">
+          <span class="text-slate-400 select-none">$&nbsp;</span>npm add <span
+            class="text-orange-600">effector</span
+          >
+        </span>
+        <copy-button class="copy-button" data-value="npm add effector" aria-role="button">
+          <IconCopy />
+        </copy-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .wrapper {
+    @apply mx-auto max-w-6xl p-3 sm:p-6;
+  }
+
+  .stats {
+    @apply min-h-[4rem] rounded-2xl border-gray-300 bg-[var(--theme-card)] p-2.5 pt-3 shadow-lg;
+  }
+
+  .counts {
+    @apply mb-6 grid grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6;
+  }
+
+  .stats-card {
+    @apply flex min-w-[8rem] flex-col items-center rounded-md p-2.5;
+    @apply transition-all hover:bg-orange-500 hover:text-white hover:shadow-xl;
+  }
+
+  .stats-bar {
+    @apply flex flex-wrap items-center justify-between gap-6 pl-2;
+  }
+
+  .install-command {
+    @apply flex max-w-xl flex-1 items-center justify-between rounded-md bg-gray-200 p-1.5 pl-2.5 font-mono;
+    @apply dark:bg-gray-600;
+  }
+
+  .copy-button {
+    @apply flex items-center justify-center rounded-md bg-gray-300 p-1;
+    @apply transition-none hover:bg-orange-500 hover:text-white hover:shadow-md;
+    @apply dark:bg-gray-500 dark:hover:bg-orange-500 dark:hover:text-white;
+  }
+
+  .copy-button:global(.copied) {
+    @apply animate-ping;
+    animation-iteration-count: 1;
+    animation-duration: 400ms;
+  }
+</style>
+
+<script>
+  class CopyButton extends HTMLElement {
+    constructor() {
+      super();
+
+      const copyValue = async () => {
+        try {
+          await navigator.clipboard.writeText(this.dataset.value!);
+          this.classList.add("copied");
+          setTimeout(() => {
+            this.classList.remove("copied");
+          }, 300);
+        } catch (error) {
+          console.error("Failed to copy text:", error);
+        }
+      };
+
+      this.addEventListener("click", copyValue);
+    }
+  }
+  customElements.define("copy-button", CopyButton);
+</script>

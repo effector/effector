@@ -122,6 +122,22 @@ export const translations = {
       ru: "Соавторы",
     },
   },
+  Landing: {
+    Stats: {
+      size: { text: { en: "gzipped size", ru: "размер gzip" } },
+      contributors: { text: { en: "contributors", ru: "соавторы" } },
+      stars: { text: { en: "stars", ru: "звёзды" } },
+      downloads: { text: { en: "downloads", ru: "установки" } },
+      latest: { text: { en: "latest version", ru: "актуальная версия" } },
+      license: { text: { en: "license", ru: "лицензия" } },
+      StartByAddingEffectorAsDependency: {
+        text: {
+          en: "Start by adding effector as a dependency",
+          ru: "Начните с установки effector",
+        },
+      },
+    },
+  },
   Pagefind: {
     placeholder: { text: { en: "Search", ru: "Поиск" } },
     clear_search: { text: { en: "Clear" } },
