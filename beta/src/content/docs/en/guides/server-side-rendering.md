@@ -252,7 +252,7 @@ export async function handleRequest(req) {
 
 ## Client entrypoint
 
-When the generated HTML string reaches the client browser, has been processed by the parser and all the required assemblies have been loaded - our application code starts working on the client.
+When the generated HTML string reaches the client browser, has been processed by the parser and all the required assets have been loaded - our application code starts working on the client.
 
 At this point `<App />` needs to restore its past state (which was computed on the server), so that it doesn't start from scratch, but starts from the same point the work reached on the server.
 
