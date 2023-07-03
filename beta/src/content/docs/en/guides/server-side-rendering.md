@@ -21,10 +21,10 @@ In this guide we will cover two main kinds of Server Side Rendering patterns and
 
 You don't need to do anything special to support non-isomorphic SSR/SSG workflow.
 
-This way initial html is usually generated separately, by using some sort of template engine, which is quite often run with different (not JS) programming language.
+This way initial HTML is usually generated separately, by using some sort of template engine, which is quite often run with different (not JS) programming language.
 The frontend code in this case works only at the client browser and **is not used in any way** to generate the server response.
 
-This approach works for `effector`, as well as any javascript code. Any SPA application is basically an edge-case of it, as its html template does not contain any content, except for `<script src="my-app.js" />` link.
+This approach works for `effector`, as well as any javascript code. Any SPA application is basically an edge-case of it, as its HTML template does not contain any content, except for `<script src="my-app.js" />` link.
 
 :::tip
 If you have non-isomorphic SSR - just use `effector` the way you would for an SPA app.
@@ -32,7 +32,7 @@ If you have non-isomorphic SSR - just use `effector` the way you would for an SP
 
 ## Isomorphic SSR
 
-When you have an isomorphic SSR application, **most of the frontend code is shared with server** and **is used to generate the response** html.
+When you have an isomorphic SSR application, **most of the frontend code is shared with server** and **is used to generate the response** HTML.
 
 You can also think of it as a an approach, where your app **starts at the server** - and then gets transfered over the network to the client browser, where it **continues** the work it started doing at the server.
 
@@ -213,7 +213,7 @@ export async function handleRequest(req) {
     </Provider>,
   );
 
-  // 5. prepare serialized html response
+  // 5. prepare serialized HTML response
   //
   // This is serialization (or network) boundary
   // The point, where all state is stringified to be sent over the network
@@ -239,11 +239,11 @@ export async function handleRequest(req) {
 }
 ```
 
-☝️ In this code we have created the `html` string, which user will receive over the network and which contains serialized state of the whole app.
+☝️ In this code we have created the HTML string, which user will receive over the network and which contains serialized state of the whole app.
 
 ## Client entrypoint
 
-When the generated html string reaches the client browser, has been processed by the parser and all the required assemblies have been loaded - our application code starts working on the client.
+When the generated HTML string reaches the client browser, has been processed by the parser and all the required assemblies have been loaded - our application code starts working on the client.
 
 At this point `<App />` needs to restore its past state (which was computed on the server), so that it doesn't start from scratch, but starts from the same point the work reached on the server.
 
@@ -261,7 +261,7 @@ import { App, appStarted } from "./app";
 /**
  * 1. Find, where the server state is stored and retreive it
  *
- * See the server handler code to find out, where it was saved in the html
+ * See the server handler code to find out, where it was saved in the HTML
  */
 const effectorState = globalThis._SERVER_STATE_;
 const reactRoot = document.querySelector("#app");
@@ -298,5 +298,5 @@ allSettled(appStarted, { scope: clientScope });
 1. You don't need to do anything special for **non-isomorphic** SSR, all SPA-like patterns will work.
 2. Isomorphic SSR requires a bit of special preparation - you will need [SIDs for stores](/en/explanation/sids)
 3. Common code of the **isomorphic** SSR app handles all meaningful parts - how the UI should look, how state should be calculated, when and which effects should be run.
-4. Server-specific code calculates and **serializes** all of the app's state into the `html` string
+4. Server-specific code calculates and **serializes** all of the app's state into the HTML string
 5. Client-specific code retreives this state and uses it to **"hydrate"** the app on the client.
