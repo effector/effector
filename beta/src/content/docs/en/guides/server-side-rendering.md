@@ -111,7 +111,16 @@ const $countUpdatePending = combine(
   (updates) => updates.some((upd) => upd === true),
 );
 
-const $isClient = createStore(typeof document !== "undefined", { serialize: "ignore" });
+const $isClient = createStore(typeof document !== "undefined", {
+  /**
+   * Here we're explicitly telling `effector`, that this store, which depends on the environment,
+   * should be never included in serialization - as it's should be always calculated based on actual current env
+   * 
+   * This is not actually necessary, because only diff of state changes is included into serialization - and this store is not going to be changed.
+   * But it is good to add this setting to highlight the intention
+  */
+  serialize: "ignore"
+});
 
 const notifyFx = createEffect((message: string) => {
   alert(message);
