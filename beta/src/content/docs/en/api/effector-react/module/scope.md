@@ -38,6 +38,10 @@ Since `effector-react/scope` is deprecated, it is better to migrate to [effector
 - import { Provider } from "effector-react/scope";
 ```
 
+:::warning{title="Continues migration"}
+`effector-react` and `effector-react/scope` do not share any code, so you have to migrate all your code to `effector-react` in the same time, because otherwise you will get runtime errors. These errors will be thrown because `effector-react` and `effector-react/scope` will use different instances `Provider` and do not have access to each other's `Provider`.
+:::
+
 If you use [Babel](https://babeljs.io/), you need to remove parameter [`reactSsr`](/en/api/effector/babel-plugin#reactssr) from `babel-plugin` configuration.
 
 ```diff
