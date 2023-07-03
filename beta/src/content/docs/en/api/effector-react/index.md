@@ -30,3 +30,9 @@ Effector bindings for ReactJS.
 - [createComponent(store, render)](/en/api/effector-react/createComponent)
 - [createStoreConsumer(store)](/en/api/effector-react/createStoreConsumer) renders props style
 - [connect(store)(Component)](/en/api/effector-react/connect) "connect" style
+
+## Import map
+
+Package `effector-react` provides couple different entry points for different purposes:
+
+- [effector-react/scope](/en/api/effector-react/module/scope)

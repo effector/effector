@@ -41,7 +41,7 @@ export default defineConfig({
 
 You can use it instead of `effector` package if you need to support old browsers.
 
-```js
+```diff
 - import {createStore} from 'effector'
 + import {createStore} from 'effector/compat'
 ```
