@@ -74,8 +74,6 @@ import { useUnit } from "effector-react";
 export const appStarted = createEvent();
 export const $pathname = createStore<string | null>(null);
 
-const notifyUserFx;
-
 const $counter = createStore<number | null>(null);
 
 const fetchUserCounterFx = createEffect(async () => {
@@ -248,7 +246,8 @@ import React from "react";
 import { hydrateRoot } from "react-dom/client";
 import { fork, allSettled } from "effector";
 import { Provider } from "effector-react";
-import { App, appStarted } from "effector";
+
+import { App, appStarted } from "./app";
 
 /**
  * 1. Find, where the server state is stored and retreive it
@@ -265,8 +264,6 @@ const clientScope = fork({
   values: effectorState,
 });
 
-allSettled(appStarted, { scope: clientScope });
-
 /**
  * 3. "Hydrate" React state in the DOM tree
  */
@@ -276,6 +273,13 @@ hydrateRoot(
     <App />
   </Provider>,
 );
+
+/**
+ * 4. Call the same starting event at the client
+ *
+ * This is optional and actually depeneds on your app's logic is organized
+ */
+allSettled(appStarted, { scope: clientScope });
 ```
 
 ☝️ At this point the App is ready to use!
