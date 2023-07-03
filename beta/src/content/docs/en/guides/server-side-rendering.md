@@ -162,7 +162,7 @@ Alongside with basic SSR needs, like calculating the final state of the app and 
 
 It is very important feature, as `Node.js` servers usually handle more than one user request at the same moment of time.
 
-Since JS-based platforms , including `Node.js`, usually have single "main" thread - all logical computaions are happening in the same context, with the same memory available.
+Since JS-based platforms, including `Node.js`, usually have single "main" thread - all logical computaions are happening in the same context, with the same memory available.
 So, if state is not properly isolated, one user may receive the data, prepared for another, which is very undesirable.
 
 `effector` handles this problem automatically inside the `fork` feature. Read [the relevant docs for details](/en/api/effector/fork)
