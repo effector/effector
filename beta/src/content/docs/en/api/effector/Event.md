@@ -83,12 +83,8 @@ Initiates an event with the provided argument, which in turn activates any regis
 #### Formulae {#event-argument-formulae}
 
 ```ts
-const event: Event<T>
-event(argument
-:
-T
-):
-T
+const event: Event<T>;
+event(argument: T): T;
 ```
 
 - `event` called as a function always returns its argument as is
