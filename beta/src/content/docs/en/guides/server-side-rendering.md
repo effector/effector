@@ -15,7 +15,7 @@ Generally, if the rendering happens at the runtime - it is called SSR. If the re
 This difference it is not important for this guide, everything said applies both to SSR and SSG.
 :::
 
-In this guide we will cover two main kinds of Server Side Rendering patterns and how `effector` should be used in these cases.
+In this guide we will cover two main kinds of Server Side Rendering patterns and how effector should be used in these cases.
 
 ## Non-Isomorphic SSR
 
@@ -24,10 +24,10 @@ You don't need to do anything special to support non-isomorphic SSR/SSG workflow
 This way initial HTML is usually generated separately, by using some sort of template engine, which is quite often run with different (not JS) programming language.
 The frontend code in this case works only at the client browser and **is not used in any way** to generate the server response.
 
-This approach works for `effector`, as well as any javascript code. Any SPA application is basically an edge-case of it, as its HTML template does not contain any content, except for `<script src="my-app.js" />` link.
+This approach works for effector, as well as any javascript code. Any SPA application is basically an edge-case of it, as its HTML template does not contain any content, except for `<script src="my-app.js" />` link.
 
 :::tip
-If you have non-isomorphic SSR - just use `effector` the way you would for an SPA app.
+If you have non-isomorphic SSR - just use effector the way you would for an SPA app.
 :::
 
 ## Isomorphic SSR
@@ -38,25 +38,25 @@ You can also think of it as a an approach, where your app **starts at the server
 
 That's where the name comes from - despite the fact, that the code is bundled for and run in different enviroments, its output remains (mostly) the same, if given the same input.
 
-There are a lot of different frameworks, which are built upon this approach - e.g. `Next.js`, `Remix.run`, `Razzle.js`, `Nuxt.js`, `Astro`, etc
+There are a lot of different frameworks, which are built upon this approach - e.g. Next.js, Remix.run, Razzle.js,Nuxt.js, Astro, etc
 
 :::tip{title="Next.js"}
-`Next.js` does SSR/SSG in the special way, which requires a bit of custom handling on the `effector` side.
+Next.js does SSR/SSG in the special way, which requires a bit of custom handling on the effector side.
 
-This is done via dedicated [`@effector/next`](https://github.com/effector/next) package - use it, if you want to use `effector` with `Next.js`.
+This is done via dedicated [`@effector/next`](https://github.com/effector/next) package - use it, if you want to use effector with Next.js.
 :::
 
 For this guide we will not focus on any specific framework or server implementation - these details will be abstracted away.
 
 ### SIDs
 
-To handle isomorphic SSR with `effector` we need a reliable way to [`serialize`](/en/api/effector/serialize/) state, to pass it over the network. This where we need to have Stable IDentifiers for each store in our app.
+To handle isomorphic SSR with effector we need a reliable way to [`serialize`](/en/api/effector/serialize/) state, to pass it over the network. This where we need to have Stable IDentifiers for each store in our app.
 
 :::info
 Deep-dive explanation about SIDs [can be found here](/en/explanation/sids)
 :::
 
-To add SIDs - [just use one of `effector`'s plugins](/en/explanation/sids#how-to-add-sids-automatic).
+To add SIDs - [just use one of effector's plugins](/en/explanation/sids#how-to-add-sids-automatic).
 
 ### Common application code
 
@@ -113,11 +113,14 @@ const $countUpdatePending = combine(
 
 const $isClient = createStore(typeof document !== "undefined", {
   /**
-   * Here we're explicitly telling `effector`, that this store, which depends on the environment,
-   * should be never included in serialization - as it's should be always calculated based on actual current env
+   * Here we're explicitly telling effector, that this store, which depends on the environment,
+   * should be never included in serialization
+   * as it's should be always calculated based on actual current env
    * 
-   * This is not actually necessary, because only diff of state changes is included into serialization - and this store is not going to be changed.
-   * But it is good to add this setting to highlight the intention
+   * This is not actually necessary, because only diff of state changes is included into serialization
+   * and this store is not going to be changed.
+   * 
+   * But it is good to add this setting anyway - to highlight the intention
   */
   serialize: "ignore"
 });
@@ -165,14 +168,14 @@ The way of the `<App />` to the client browsers starts at the server. For this w
 In this example we're not going to dive deep into various possible server impelementations - we will focus on the request handler itself instead.
 
 :::info
-Alongside with basic SSR needs, like calculating the final state of the app and serializing it, `effector` also handles **the isolation of user's data between requests**
+Alongside with basic SSR needs, like calculating the final state of the app and serializing it, effector also handles **the isolation of user's data between requests**
 
-It is very important feature, as `Node.js` servers usually handle more than one user request at the same moment of time.
+It is very important feature, as Node.js servers usually handle more than one user request at the same moment of time.
 
-Since JS-based platforms, including `Node.js`, usually have single "main" thread - all logical computaions are happening in the same context, with the same memory available.
+Since JS-based platforms, including Node.js, usually have single "main" thread - all logical computaions are happening in the same context, with the same memory available.
 So, if state is not properly isolated, one user may receive the data, prepared for another, which is very undesirable.
 
-`effector` handles this problem automatically inside the `fork` feature. Read [the relevant docs for details](/en/api/effector/fork)
+effector handles this problem automatically inside the `fork` feature. Read [the relevant docs for details](/en/api/effector/fork)
 :::
 
 This is the code for server request handler, which contains all server-specific stuff, which needs to be done.
@@ -187,7 +190,7 @@ import { fork, allSettled, serialize } from "effector";
 import { appStarted, App, $pathname } from "./app";
 
 export async function handleRequest(req) {
-  // 1. create separate instance of `effector`'s state - special `Scope` object
+  // 1. create separate instance of effector's state - special `Scope` object
   const scope = fork({
     values: [
       // some parts of app's state can be immideatly set to relevant states,
@@ -218,7 +221,7 @@ export async function handleRequest(req) {
   // This is serialization (or network) boundary
   // The point, where all state is stringified to be sent over the network
   //
-  // `effector`s state is stored as a `<script>`, which will set the state into global object
+  // effectors state is stored as a `<script>`, which will set the state into global object
   // `react`'s state is stored as a part of the DOM tree.
   return `
     <html>
@@ -267,7 +270,7 @@ const effectorState = globalThis._SERVER_STATE_;
 const reactRoot = document.querySelector("#app");
 
 /**
- * 2. Initiate the client scope of `effector` with server-calculated values
+ * 2. Initiate the client scope of effector with server-calculated values
  */
 const clientScope = fork({
   values: effectorState,
