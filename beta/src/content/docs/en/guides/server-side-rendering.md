@@ -161,6 +161,12 @@ export function App() {
 
 This is our app's code which will be used to both server-side render and to handle client's needs.
 
+:::tip
+Notice, that it is important, that all of effector units - stores, events, etc - are "bound" to the react component via `useUnit` hook.
+
+You can use the official eslint plugin of effector to validate that and to follow other best practices - checkout the [eslint.effector.dev](https://eslint.effector.dev/) website
+:::
+
 ## Server entrypoint
 
 The way of the `<App />` to the client browsers starts at the server. For this we need to create **separate entrypoint** for the specific server-related code, which will also handle the server-side render part.
