@@ -29,10 +29,6 @@ async function getNpmStats() {
   const fromDateString = formatDate(from);
   const toDateString = formatDate(to);
 
-  console.log(
-    `https://npm-stat.com/api/download-counts?package=effector&from=${fromDateString}&until=${toDateString}`,
-  );
-
   const downloadCounts = await fetch(
     `https://npm-stat.com/api/download-counts?package=effector&from=${fromDateString}&until=${toDateString}`,
   ).then((r) => r.json());
@@ -133,7 +129,7 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
       }
     </div>
     <div class="stats-bar">
-      <span>{gettingStartedText}:</span>
+      <span class="hidden md:inline">{gettingStartedText}:</span>
       <div class="install-command clear-both">
         <span class="inline-block clear-both">
           <span class="text-slate-400 select-none">$&nbsp;</span>npm add <span
@@ -167,11 +163,11 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .stats-bar {
-    @apply flex flex-wrap items-center justify-between gap-6 pl-2;
+    @apply flex flex-wrap items-center justify-between gap-6 md:pl-2;
   }
 
   .install-command {
-    @apply flex max-w-xl flex-1 items-center justify-between rounded-md bg-gray-200 p-1.5 pl-2.5 font-mono;
+    @apply flex flex-1 items-center justify-between rounded-md bg-gray-200 p-1.5 pl-2.5 font-mono md:max-w-xl ;
     @apply dark:bg-gray-600;
   }
 
