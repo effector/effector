@@ -587,7 +587,7 @@ Supported since effector 22.4.0
 ### Formulae {#reinit-formulae}
 
 ```ts
-$store.reinit;
+$store.reinit; // Event<void>
 ```
 
 - Trigger `reinit` to set default value as a current value in the `$store`
