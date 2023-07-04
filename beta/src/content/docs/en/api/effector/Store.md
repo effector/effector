@@ -580,6 +580,10 @@ $clicksAmount.updates.watch((amount) => {
 
 ## `reinit` {#reinit}
 
+:::info{title="since"}
+Supported since effector 22.4.0
+:::
+
 ### Formulae {#reinit-formulae}
 
 ```ts
