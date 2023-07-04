@@ -578,7 +578,7 @@ $clicksAmount.updates.watch((amount) => {
 
 [Try it](https://share.effector.dev/F5L5kLTE)
 
-## `reinit` {#reinit}
+## `reinit` {#store-reinit}
 
 :::info{title="since"}
 Supported since effector 22.4.0
