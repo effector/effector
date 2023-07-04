@@ -592,11 +592,11 @@ $store.reinit; // Event<void>
 
 - Trigger `reinit` to set default value as a current value in the `$store`
 
-### Returns {#updates-returns}
+### Returns {#store-reinit-returns}
 
 [_Event_](/en/api/effector/Event): Event that can reinitialize a store with a default value.
 
-### Example {#reinit-example}
+### Example {#store-reinit-example}
 
 Use case: reset counter to default value
 
