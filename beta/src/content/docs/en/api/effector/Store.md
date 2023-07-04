@@ -741,7 +741,7 @@ These methods are _banned_ for ReadonlyStore:
 - `.reset`
 - using ReadonlyStore as a `target` in `sample`, `guard` and so on
 
-Moveorver, ReadonlyStore _does not have_ the following properties:
+Moreover, ReadonlyStore _does not have_ the following properties:
 
 - `.reinit`, because it is not possible to reinitialize read-only store
 
