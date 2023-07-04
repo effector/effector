@@ -584,7 +584,7 @@ $clicksAmount.updates.watch((amount) => {
 Supported since effector 22.4.0
 :::
 
-### Formulae {#reinit-formulae}
+### Formulae {#store-reinit-formulae}
 
 ```ts
 $store.reinit; // Event<void>
