@@ -578,6 +578,54 @@ $clicksAmount.updates.watch((amount) => {
 
 [Try it](https://share.effector.dev/F5L5kLTE)
 
+## `reinit` {#store-reinit}
+
+:::info{title="since"}
+Supported since effector 22.4.0
+:::
+
+### Formulae {#store-reinit-formulae}
+
+```ts
+$store.reinit; // Event<void>
+```
+
+- Trigger `reinit` to set default value as a current value in the `$store`
+
+### Returns {#store-reinit-returns}
+
+[_Event_](/en/api/effector/Event): Event that can reinitialize a store with a default value.
+
+### Example {#store-reinit-example}
+
+Use case: reset counter to default value
+
+```js
+import { createStore, createEvent, sample, is } from "effector";
+
+const $counter = createStore(0);
+is.event($counter.reinit); // => true
+
+const increment = createEvent();
+
+sample({
+  clock: increment,
+  source: $counter,
+  fn: (counter) => counter + 1,
+  target: $counter,
+});
+
+console.log("Initial value: ", $counter.getState()); // => Initial value: 0
+
+increment();
+console.log("Incremented value: ", $counter.getState()); // => Incremented value: 1
+
+$counter.reinit();
+console.log("Reinitialized value: ", $counter.getState()); // => Reinitialized value: 0
+```
+
+[Try it](https://share.effector.dev/vtJncyYn)
+
 ## `shortName` {#shortName}
 
 ### Returns {#shortName-returns}
@@ -696,5 +744,9 @@ These methods are _banned_ for ReadonlyStore:
 - `.on`
 - `.reset`
 - using ReadonlyStore as a `target` in `sample`, `guard` and so on
+
+Moreover, ReadonlyStore _does not have_ the following properties:
+
+- `.reinit`, because it is not possible to reinitialize read-only store
 
 Any kind of store can be used as a `clock` or `source` in methods like [sample](/en/api/effector/sample).
