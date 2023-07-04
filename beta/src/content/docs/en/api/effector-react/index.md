@@ -35,4 +35,5 @@ Effector bindings for ReactJS.
 
 Package `effector-react` provides couple different entry points for different purposes:
 
+- [effector-react/compat](/en/api/effector-react/module/сompat)
 - [effector-react/scope](/en/api/effector-react/module/scope)
