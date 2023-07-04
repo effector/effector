@@ -496,46 +496,6 @@ $store.off(changed);
 
 [Try it](https://share.effector.dev/bzdoyLHm)
 
-## `thru(fn)` {#thru-fn}
-
-:::warning{title="Removed"}
-Since 23.0.0.
-
-Please, review the previous documentation to [learn more](https://v22.effector.dev/docs/api/effector/store#thrufn).
-:::
-
-Call function with the given store and return result as it is.
-
-```js
-import { createStore, createEvent } from "effector";
-
-const enhance = (fn) => (store) => store.map(fn);
-
-const inc = createEvent();
-const $num = createStore(1);
-
-$num.on(inc, (n) => n + 1);
-
-//prettier-ignore
-const $result = $num
-    .thru(enhance(x => x + 1))
-    .thru(enhance(x => x * 10))
-
-$num.watch((n) => {
-  console.log("num", n);
-});
-// => num 1
-
-$result.watch((n) => {
-  console.log("result", n);
-});
-// => result 20
-
-inc();
-// => num 2
-// => result 30
-```
-
 # Properties {#properties}
 
 ## `updates` {#updates}
