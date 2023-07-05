@@ -37,15 +37,15 @@ test('wide union (should fail)', () => {
     "
     Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: ReadonlyEvent<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'ReadonlyEvent<{ a: 1; } | { a: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; } | { a: 2; } | { a: 3; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; } | { a: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+    Type 'ReadonlyEvent<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'ReadonlyEvent<{ a: 1; } | { a: 2; }>'.
+      Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+        Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+          Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
+            Types of property 'a' are incompatible.
+              Type '3' is not assignable to type '2'.
     Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: ReadonlyEvent<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[ReadonlyEvent<{ a: 1; } | { a: 2; }>]'.
+    Type 'ReadonlyEvent<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[ReadonlyEvent<{ a: 1; } | { a: 2; }>]'.
     "
   `)
 })
@@ -109,10 +109,11 @@ test('unknown type in source (should fail)', () => {
     "
     Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: ReadonlyEvent<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
-    Type 'Event<unknown>' is not assignable to type 'Event<string>'.
+    Type 'ReadonlyEvent<unknown>' is not assignable to type 'ReadonlyEvent<string>'.
+      Type 'unknown' is not assignable to type 'string'.
     Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: ReadonlyEvent<string>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
-    Type 'Event<unknown>' is not assignable to type '[ReadonlyEvent<string>]'.
+    Type 'ReadonlyEvent<unknown>' is not assignable to type '[ReadonlyEvent<string>]'.
     "
   `)
 })
@@ -176,15 +177,14 @@ test('optional props (should fail)', () => {
     "
     Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: ReadonlyEvent<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'ReadonlyEvent<{ a: 1; b: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b?: 2 | undefined; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
+    Type 'ReadonlyEvent<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'ReadonlyEvent<{ a: 1; b: 2; }>'.
+      Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
+        Types of property 'b' are incompatible.
+          Type '2 | undefined' is not assignable to type '2'.
+            Type 'undefined' is not assignable to type '2'.
     Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: ReadonlyEvent<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[ReadonlyEvent<{ a: 1; b: 2; }>]'.
+    Type 'ReadonlyEvent<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[ReadonlyEvent<{ a: 1; b: 2; }>]'.
     "
   `)
 })
@@ -248,15 +248,11 @@ test('narrow object (should fail)', () => {
     "
     Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: ReadonlyEvent<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; c: 3; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b: 2; }' is not assignable to type '{ a: 1; b: 2; c: 3; }'.
+    Type 'ReadonlyEvent<{ a: 1; b: 2; }>' is not assignable to type 'ReadonlyEvent<{ a: 1; b: 2; c: 3; }>'.
+      Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
     Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: ReadonlyEvent<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[ReadonlyEvent<{ a: 1; b: 2; c: 3; }>]'.
+    Type 'ReadonlyEvent<{ a: 1; b: 2; }>' is not assignable to type '[ReadonlyEvent<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
 })
@@ -368,10 +364,11 @@ test('wide union in array (should fail)', () => {
     "
     Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: ReadonlyEvent<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type 'ReadonlyEvent<(string | number)[]>'.
+    Type 'ReadonlyEvent<(string | number | boolean)[]>' is not assignable to type 'ReadonlyEvent<(string | number)[]>'.
+      Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
     Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: ReadonlyEvent<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type '[ReadonlyEvent<(string | number)[]>]'.
+    Type 'ReadonlyEvent<(string | number | boolean)[]>' is not assignable to type '[ReadonlyEvent<(string | number)[]>]'.
     "
   `)
 })

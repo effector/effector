@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample, Event} from 'effector'
+import {createStore, createEvent, sample, Event, ReadonlyEvent} from 'effector'
 
 const typecheck = '{global}'
 
@@ -311,7 +311,7 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
-    const target: Event<{a: string; b: string}> = sample({
+    const target: ReadonlyEvent<{a: string; b: string}> = sample({
       source,
       clock: [clockA, clockB, clockC],
     })
@@ -330,7 +330,7 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
-    const target: Event<{a: string; b: string}> = sample({
+    const target: ReadonlyEvent<{a: string; b: string}> = sample({
       source: {a, b},
       clock: [clockA, clockB, clockC],
     })
@@ -353,12 +353,12 @@ describe('without target', () => {
       clock: [clockA, clockB, clockC],
       fn: ({a, b}, clock) => ({a, b, clock}),
     })
-    const target2: Event<{a: string; b: string; clock: any}> = sample({
+    const target2: ReadonlyEvent<{a: string; b: string; clock: any}> = sample({
       source,
       clock: [clockA, clockB, clockC],
       fn: ({a, b}, clock) => ({a, b, clock}),
     })
-    const target3: Event<{a: string; b: string; clock: any}> = sample({
+    const target3: ReadonlyEvent<{a: string; b: string; clock: any}> = sample({
       source,
       clock: [clockA, clockB, clockC],
       fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
@@ -382,12 +382,12 @@ describe('without target', () => {
       clock: [clockA, clockB, clockC],
       fn: ({a, b}, clock) => ({a, b, clock}),
     })
-    const target2: Event<{a: string; b: string; clock: any}> = sample({
+    const target2: ReadonlyEvent<{a: string; b: string; clock: any}> = sample({
       source: {a, b},
       clock: [clockA, clockB, clockC],
       fn: ({a, b}, clock) => ({a, b, clock}),
     })
-    const target3: Event<{a: string; b: string; clock: any}> = sample({
+    const target3: ReadonlyEvent<{a: string; b: string; clock: any}> = sample({
       source: {a, b},
       clock: [clockA, clockB, clockC],
       fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
@@ -406,7 +406,7 @@ describe('without target', () => {
     const clockB = createEvent<any>()
     const clockC = createEvent<string>()
 
-    const target: Event<{a: string; clock: any}> = sample({
+    const target: ReadonlyEvent<{a: string; clock: any}> = sample({
       source: {a},
       clock: [clockA, clockB, clockC],
       //@ts-expect-error
@@ -430,12 +430,14 @@ describe('without target', () => {
     const clockA = createEvent()
     const clockC = createEvent<string>()
 
-    const target: Event<{a: string; b: string; clock: string}> = sample({
-      source,
-      clock: [clockA, clockC],
-      //@ts-expect-error
-      fn: ({a, b}: any, clock: string) => ({a, b, clock}),
-    })
+    const target: ReadonlyEvent<{a: string; b: string; clock: string}> = sample(
+      {
+        source,
+        clock: [clockA, clockC],
+        //@ts-expect-error
+        fn: ({a, b}: any, clock: string) => ({a, b, clock}),
+      },
+    )
 
     expect(typecheck).toMatchInlineSnapshot(`
       "

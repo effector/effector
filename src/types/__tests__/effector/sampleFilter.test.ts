@@ -1,5 +1,12 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample, Store, Event} from 'effector'
+import {
+  createStore,
+  createEvent,
+  sample,
+  Store,
+  Event,
+  ReadonlyEvent,
+} from 'effector'
 const typecheck = '{global}'
 
 describe('sample(config)', () => {
@@ -8,7 +15,7 @@ describe('sample(config)', () => {
       const trigger = createEvent<number>()
       const allow = createStore<boolean>(false)
 
-      const result: Event<number> = sample({
+      const result: ReadonlyEvent<number> = sample({
         source: trigger,
         filter: allow,
       })
@@ -23,7 +30,7 @@ describe('sample(config)', () => {
       const trigger = createStore<number[]>([1])
       const allow = createStore<boolean>(false)
 
-      const result: Event<number[]> = sample({
+      const result: ReadonlyEvent<number[]> = sample({
         source: trigger,
         filter: allow,
       })
@@ -108,7 +115,7 @@ describe('sample(config)', () => {
   describe('sample({source, filter: fn})', () => {
     it('returns new event (should pass)', () => {
       const trigger = createEvent<number>()
-      const result: Event<number> = sample({
+      const result: ReadonlyEvent<number> = sample({
         source: trigger,
         filter: n => n > 0,
       })
@@ -123,14 +130,15 @@ describe('sample(config)', () => {
       const trigger = createEvent<number>()
 
       //@ts-expect-error
-      const result: Event<string> = sample({
+      const result: ReadonlyEvent<string> = sample({
         source: trigger,
         filter: n => n > 0,
       })
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'ReadonlyEvent<number>' is not assignable to type 'ReadonlyEvent<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -206,7 +214,7 @@ describe('sample(config)', () => {
     it('returns new event (should pass)', () => {
       const clock = createEvent<string>()
       const source = createEvent<number>()
-      const result: Event<number> = sample({
+      const result: ReadonlyEvent<number> = sample({
         clock,
         source,
         filter: (src, clk) => src + clk.length > 0,
@@ -223,7 +231,7 @@ describe('sample(config)', () => {
       const source = createEvent<number>()
 
       //@ts-expect-error
-      const result: Event<string> = sample({
+      const result: ReadonlyEvent<string> = sample({
         clock,
         source,
         filter: (src, clk) => src + clk.length > 0,
@@ -231,7 +239,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'ReadonlyEvent<number>' is not assignable to type 'ReadonlyEvent<string>'.
         "
       `)
     })
@@ -352,7 +360,7 @@ describe('sample(config)', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
       const trigger = createEvent<User | null>()
-      const result: Event<User> = sample({
+      const result: ReadonlyEvent<User> = sample({
         source: trigger,
         filter: Boolean,
       })
@@ -368,19 +376,15 @@ describe('sample(config)', () => {
       const trigger = createEvent<User>()
 
       //@ts-expect-error
-      const result: Event<string> = sample({
+      const result: ReadonlyEvent<string> = sample({
         source: trigger,
         filter: Boolean,
       })
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+        Type 'ReadonlyEvent<User>' is not assignable to type 'ReadonlyEvent<string>'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
@@ -388,11 +392,11 @@ describe('sample(config)', () => {
       type User = {name: string}
       type FalsyValues = null | undefined | false | 0 | 0n | ''
       const trigger = createEvent<User | FalsyValues>()
-      const result: Event<User> = sample({
+      const result: ReadonlyEvent<User> = sample({
         source: trigger,
         filter: Boolean,
       })
-      const resultFn: Event<User> = sample({
+      const resultFn: ReadonlyEvent<User> = sample({
         source: trigger,
         filter: Boolean,
         fn: (arg: User) => arg,
@@ -459,7 +463,7 @@ describe('sample(config)', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
       const trigger = createEvent<User | null>()
-      const result: Event<User> = sample({
+      const result: ReadonlyEvent<User> = sample({
         clock: trigger,
         filter: Boolean,
       })
@@ -475,19 +479,15 @@ describe('sample(config)', () => {
       const trigger = createEvent<User>()
 
       //@ts-expect-error
-      const result: Event<string> = sample({
+      const result: ReadonlyEvent<string> = sample({
         clock: trigger,
         filter: Boolean,
       })
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+        Type 'ReadonlyEvent<User>' is not assignable to type 'ReadonlyEvent<string>'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
@@ -730,7 +730,7 @@ test('sample return type supports union types (should pass)', () => {
   const trigger = createEvent<{a: 1} | {a: 2}>()
   const allow = createStore<boolean>(false)
 
-  const result: Event<{a: 1} | {a: 2}> = sample({
+  const result: ReadonlyEvent<{a: 1} | {a: 2}> = sample({
     source: trigger,
     filter: allow,
   })

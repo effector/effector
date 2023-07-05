@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, Event, CompositeName, kind} from 'effector'
+import {createEvent, Event, CompositeName, kind, ReadonlyEvent} from 'effector'
 
 const typecheck = '{global}'
 
@@ -37,17 +37,25 @@ test('#map', () => {
 
   //const check1: Event<string> = computed
   //@ts-expect-error
-  const event_map_check2: Event<number> = computed
+  const event_map_check2: ReadonlyEvent<number> = computed
   event(2)
-  computed('')
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<string>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+    Type 'ReadonlyEvent<string>' is not assignable to type 'ReadonlyEvent<number>'.
+      Type 'string' is not assignable to type 'number'.
+    "
+  `)
+})
+test('#map cannot call readonly event (should fail)', () => {
+  const event: Event<number> = createEvent()
+  const computed = event.map(() => 'bar')
+
+  //@ts-expect-error
+  computed('foo')
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    This expression is not callable.
+      Type 'ReadonlyEvent<string>' has no call signatures.
     "
   `)
 })
@@ -69,7 +77,7 @@ test('#watch', () => {
 describe('#filterMap', () => {
   test('#filterMap ok', () => {
     const event: Event<number> = createEvent()
-    const filteredEvent_ok: Event<string> = event.filterMap(n => {
+    const filteredEvent_ok: ReadonlyEvent<string> = event.filterMap(n => {
       if (n % 2) return n.toString()
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -81,12 +89,12 @@ describe('#filterMap', () => {
   test('#filterMap incorrect', () => {
     const event: Event<number> = createEvent()
     //@ts-expect-error
-    const filteredEvent_error: Event<number> = event.filterMap(n => {
+    const filteredEvent_error: ReadonlyEvent<number> = event.filterMap(n => {
       if (n % 2) return n.toString()
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<string>' is not assignable to type 'Event<number>'.
+      Type 'ReadonlyEvent<string>' is not assignable to type 'ReadonlyEvent<number>'.
       "
     `)
   })

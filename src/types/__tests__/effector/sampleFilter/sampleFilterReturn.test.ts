@@ -1,5 +1,12 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample, Event, Store} from 'effector'
+import {
+  createStore,
+  createEvent,
+  sample,
+  Event,
+  ReadonlyEvent,
+  Store,
+} from 'effector'
 const typecheck = '{global}'
 type AN = {a: number}
 const $num = createStore(0)
@@ -16,9 +23,9 @@ describe('no target', () => {
   test('no target, none clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({filter: () => true, source:aNum    })}
-      {const result: Event<AN> = sample({filter: () => true, source:a       })}
-      {const result: Event<AN> = sample({filter: () => true, source:{a:$num}})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:aNum    })}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:a       })}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:{a:$num}})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -29,9 +36,9 @@ describe('no target', () => {
   test('no target, event clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({filter: () => true, source:aNum    , clock:num})}
-      {const result: Event<AN> = sample({filter: () => true, source:a       , clock:num})}
-      {const result: Event<AN> = sample({filter: () => true, source:{a:$num}, clock:num})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:aNum    , clock:num})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:a       , clock:num})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:{a:$num}, clock:num})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -42,9 +49,9 @@ describe('no target', () => {
   test('no target, store clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({filter: () => true, source:aNum    , clock:$num})}
-      {const result: Event<AN> = sample({filter: () => true, source:a       , clock:$num})}
-      {const result: Event<AN> = sample({filter: () => true, source:{a:$num}, clock:$num})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:aNum    , clock:$num})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:a       , clock:$num})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:{a:$num}, clock:$num})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -55,9 +62,9 @@ describe('no target', () => {
   test('no target, tuple clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: Event<AN> = sample({filter: () => true, source:aNum    , clock:[num,$num]})}
-      {const result: Event<AN> = sample({filter: () => true, source:a       , clock:[num,$num]})}
-      {const result: Event<AN> = sample({filter: () => true, source:{a:$num}, clock:[num,$num]})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:aNum    , clock:[num,$num]})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:a       , clock:[num,$num]})}
+      {const result: ReadonlyEvent<AN> = sample({filter: () => true, source:{a:$num}, clock:[num,$num]})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
