@@ -2005,6 +2005,14 @@ const q = _withFactory({
 "
 `;
 
+exports[`babel-plugin should destructure 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/destructure.js'
+import {myCustomService} from '@farfetched/core'
+const {createQuery} = myCustomService.factory
+const q = createQuery()
+"
+`;
+
 exports[`babel-plugin should factories 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/factories.js'
 import {withFactory as _withFactory2} from 'effector'
