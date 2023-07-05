@@ -3109,6 +3109,13 @@ const c = merge(...args, {
 "
 `;
 
+exports[`babel-plugin should nested 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/nested.js'
+import {myCustomService} from '@farfetched/core'
+const q = myCustomService.factory.createQuery()
+"
+`;
+
 exports[`babel-plugin should references 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/references.js'
 
