@@ -122,18 +122,18 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
           return (
             <div class="stats-card">
               <div class="text-4xl">{counter}</div>
-              <div class="label">{labelMapper[label]}</div>
+              <div>{labelMapper[label]}</div>
             </div>
           );
         })
       }
     </div>
     <div class="stats-bar">
-      <span class="hidden md:inline">{gettingStartedText}:</span>
-      <div class="install-command clear-both">
-        <span class="inline-block clear-both">
-          <span class="text-slate-400 select-none">$&nbsp;</span>npm add <span
-            class="text-orange-600">effector</span
+      <span class="getting-started-message">{gettingStartedText}:</span>
+      <div class="install-command">
+        <span class="inline-block">
+          <span class="command-line-sign">$&nbsp;</span>npm add <span
+            class="package-name">effector</span
           >
         </span>
         <copy-button class="copy-button" data-value="npm add effector" aria-role="button">
@@ -150,7 +150,7 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .stats {
-    @apply min-h-[4rem] rounded-2xl border-gray-300 bg-[var(--theme-card)] p-2.5 pt-3 shadow-lg;
+    @apply min-h-[4rem] rounded-2xl bg-[var(--theme-card)] p-2.5 pt-3 shadow-lg;
   }
 
   .counts {
@@ -159,22 +159,32 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
 
   .stats-card {
     @apply flex min-w-[8rem] flex-col items-center rounded-md p-2.5;
-    @apply transition-all hover:bg-orange-500 hover:text-white hover:shadow-xl;
+    @apply transition-all hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-xl;
   }
 
   .stats-bar {
     @apply flex flex-wrap items-center justify-between gap-6 md:pl-2;
   }
 
+  .getting-started-message {
+      @apply hidden md:inline;
+  }
+
+  .command-line-sign {
+      @apply text-[color:var(--theme-text-light)] select-none;
+  }
+
+  .package-name {
+      color: var(--theme-text-accent)
+  }
+
   .install-command {
-    @apply flex flex-1 items-center justify-between rounded-md bg-gray-200 p-1.5 pl-2.5 font-mono md:max-w-xl ;
-    @apply dark:bg-gray-600;
+    @apply flex flex-1 items-center justify-between rounded-md p-1.5 pl-2.5 font-mono md:max-w-xl bg-[var(--theme-bg)];
   }
 
   .copy-button {
-    @apply flex items-center justify-center rounded-md bg-gray-300 p-1;
-    @apply transition-none hover:bg-orange-500 hover:text-white hover:shadow-md;
-    @apply dark:bg-gray-500 dark:hover:bg-orange-500 dark:hover:text-white;
+    @apply flex items-center justify-center rounded-md p-1 bg-[var(--theme-divider)] cursor-pointer;
+    @apply transition-all hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-md;
   }
 
   .copy-button:global(.copied) {
