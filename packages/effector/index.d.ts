@@ -121,31 +121,36 @@ export type CompositeName = {
  * as the return type we won't see any problems.
  */
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
+type ReadonlyEventAsReturnType<Payload> = any extends Payload ? ReadonlyEvent<Payload> : never
 
 /**
- * Function you can subscribe to.
- * It can be an intention to change the store, indication of something happening in the application, a command to be executed, aggregated analytics trigger and so on
+ * The primary purpose of a ReadonlyEvent is to be triggered by internal code withing the effector library or ecosystem.
  */
-export interface Event<Payload> extends Unit<Payload> {
-  (payload: Payload): Payload
-   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
+export interface ReadonlyEvent<Payload> extends Unit<Payload> {
+  map<T>(fn: (payload: Payload) => T): ReadonlyEventAsReturnType<T>
+  filter<T extends Payload>(config: { fn(payload: Payload): payload is T }): ReadonlyEventAsReturnType<T>
+  filter(config: {fn(payload: Payload): boolean}): ReadonlyEventAsReturnType<Payload>
+  filterMap<T>(fn: (payload: Payload) => T | undefined): ReadonlyEventAsReturnType<T>
+
   watch(watcher: (payload: Payload) => any): Subscription
-  map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
-  filter<T extends Payload>(config: {
-    fn(payload: Payload): payload is T
-  }): EventAsReturnType<T>
-  filter(config: {fn(payload: Payload): boolean}): EventAsReturnType<Payload>
-  filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
-  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
   /**
-   * @deprecated use js pipe instead
+   * @deprecated use .compositeName.fullName instead
    */
-  thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
+
   compositeName: CompositeName
   sid: string | null
   shortName: string
+}
+
+/**
+ * The Event in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things.
+ */
+export interface Event<Payload> extends ReadonlyEvent<Payload> {
+  (payload: Payload): Payload
+   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
+  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
 }
 
 /**
@@ -153,11 +158,11 @@ export interface Event<Payload> extends Unit<Payload> {
  */
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (params: Params): Promise<Done>
-  readonly done: Event<{params: Params; result: Done}>
-  readonly doneData: Event<Done>
-  readonly fail: Event<{params: Params; error: Fail}>
-  readonly failData: Event<Fail>
-  readonly finally: Event<
+  readonly done: ReadonlyEvent<{params: Params; result: Done}>
+  readonly doneData: ReadonlyEvent<Done>
+  readonly fail: ReadonlyEvent<{params: Params; error: Fail}>
+  readonly failData: ReadonlyEvent<Fail>
+  readonly finally: ReadonlyEvent<
     | {
         status: 'done'
         params: Params
@@ -169,30 +174,31 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
         error: Fail
       }
   >
+
   readonly use: {
-    (handler: (params: Params) => Promise<Done> | Done): Effect<
-      Params,
-      Done,
-      Fail
-    >
+    (handler: (params: Params) => Promise<Done> | Done): Effect<Params, Done, Fail>
     getCurrent(): (params: Params) => Promise<Done>
   }
+
   pending: Store<boolean>
   inFlight: Store<number>
-  watch(watcher: (payload: Params) => any): Subscription
-  filter<T extends Params>(config: {
-    fn(payload: Params): payload is T
-  }): EventAsReturnType<T>
-  filter(config: {fn(payload: Params): boolean}): EventAsReturnType<Params>
-  filterMap<T>(fn: (payload: Params) => T | undefined): EventAsReturnType<T>
-  map<T>(fn: (params: Params) => T): EventAsReturnType<T>
+
+  filter<T extends Params>(config: { fn(payload: Params): payload is T }): ReadonlyEventAsReturnType<T>
+  filter(config: {fn(payload: Params): boolean}): ReadonlyEventAsReturnType<Params>
+  filterMap<T>(fn: (payload: Params) => T | undefined): ReadonlyEventAsReturnType<T>
+  map<T>(fn: (params: Params) => T): ReadonlyEventAsReturnType<T>
+
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
+
+  watch(watcher: (payload: Params) => any): Subscription
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
+
   compositeName: CompositeName
   sid: string | null
   shortName: string
 }
+
 type InferValueFromTupleOfUnits<T extends Tuple<Unit<any>>> =
   T[number] extends Unit<infer R> ? R : never
 
@@ -200,6 +206,7 @@ export interface Store<State> extends Unit<State> {
   reset(...triggers: Array<Unit<any>>): this
   reset(triggers: Array<Unit<any>>): this
   getState(): State
+
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
   /**
    * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
@@ -218,8 +225,10 @@ export interface Store<State> extends Unit<State> {
     reducer: (state: State, payload: InferValueFromTupleOfUnits<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
+
+  updates: ReadonlyEvent<State>
+
   subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
-  updates: Event<State>
   watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
   watch<E>(
     trigger: Unit<E>,
@@ -547,14 +556,14 @@ export function forward<To, From extends To>(opts: {
  * Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
  * @param units array of units to be merged
  */
-export function merge<T>(units: ReadonlyArray<Unit<T>>): EventAsReturnType<T>
+export function merge<T>(units: ReadonlyArray<Unit<T>>): ReadonlyEventAsReturnType<T>
 /**
  * Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
  * @param units array of units to be merged
  */
 export function merge<T extends ReadonlyArray<Unit<any>>>(
   units: T,
-): T[number] extends Unit<infer R> ? Event<R> : never
+): T[number] extends Unit<infer R> ? ReadonlyEvent<R> : never
 /**
  * Method for destroying units and graph nodes. Low level tool, usually absent in common applications
  * @param unit unit to be erased
@@ -612,7 +621,8 @@ export function launch(config: {
  * Method to create an event subscribed to given observable
  * @param observable object with `subscribe` method, e.g. rxjs stream or redux store
  */
-export function fromObservable<T>(observable: unknown): Event<T>
+export function fromObservable<T>(observable: unknown): ReadonlyEvent<T>
+
 /**
  * Creates an event
  */
@@ -724,9 +734,9 @@ export function split<
   match: Match,
 ): Show<{
   [K in keyof Match]: Match[K] extends (p: any) => p is infer R
-    ? Event<R>
-    : Event<S>
-} & {__: Event<S>}>
+    ? ReadonlyEvent<R>
+    : ReadonlyEvent<S>
+} & {__: ReadonlyEvent<S>}>
 
 type SplitType<
   Cases extends CaseRecord,
@@ -869,11 +879,11 @@ export function createApi<
   api: Api,
 ): {
   [K in keyof Api]: ((store: S, e: void) => (S | void)) extends Api[K]
-    ? Event<void>
+    ? ReadonlyEvent<void>
     : Api[K] extends ((store: S) => (S | void))
-    ? Event<void>
+    ? ReadonlyEvent<void>
     : Api[K] extends ((store: S, e: infer E) => (S | void))
-    ? Event<E extends void ? Exclude<E, undefined> | void : E>
+    ? ReadonlyEvent<E extends void ? Exclude<E, undefined> | void : E>
     : any
 }
 
@@ -903,15 +913,15 @@ export function restore<Done>(
  * @param event source event
  * @param defaultState initial state of new store
  */
-export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+export function restore<E>(event: ReadonlyEvent<E>, defaultState: E): Store<E>
 /**
  * Creates a Store from Event.
  * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
  * @param event source event
  * @param defaultState initial state of new store
  */
-export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
-export function restore<T extends Event<any>>(event: T): never
+export function restore<E>(event: ReadonlyEvent<E>, defaultState: null): Store<E | null>
+export function restore<T extends ReadonlyEvent<any>>(event: T): never
 export function restore<T extends Effect<any, any, any>>(effect: T): never
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
@@ -1213,56 +1223,56 @@ type SampleRet<
           ? unknown extends SomeFN
             ? FLUnit extends Unit<any>
               ? FN extends (src: TypeOfSource<Source>) => any
-                ? EventAsReturnType<ReturnType<FN>>
+                ? ReadonlyEventAsReturnType<ReturnType<FN>>
                 : never
               : FLBool extends BooleanConstructor
                 ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
-                  ? EventAsReturnType<ReturnType<FNAltArg>>
+                  ? ReadonlyEventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
                   ? FNInf extends (src: FNInfSource) => any
-                    ? EventAsReturnType<ReturnType<FNInf>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FNInf>>
                     : never
                   : FN extends (src: TypeOfSource<Source>) => any
-                    ? EventAsReturnType<ReturnType<FN>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FN>>
                     : never
             // has filter, has fn
             : SomeFN extends {filter: any; fn: any}
               ? FLUnit extends Unit<any>
                 ? FN extends (src: TypeOfSource<Source>) => any
-                  ? EventAsReturnType<ReturnType<FN>>
+                  ? ReadonlyEventAsReturnType<ReturnType<FN>>
                   : never
                 : FLBool extends BooleanConstructor
                   ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
-                    ? EventAsReturnType<ReturnType<FNAltArg>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
                     ? FNInf extends (src: FNInfSource) => any
-                      ? EventAsReturnType<ReturnType<FNInf>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FNInf>>
                       : never
                     : FN extends (src: TypeOfSource<Source>) => any
-                      ? EventAsReturnType<ReturnType<FN>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FN>>
                       : never
               // no filter, has fn
               : SomeFN extends {fn: any}
                 ? FN extends (src: TypeOfSource<Source>) => any
                   ? Source extends Store<any> | SourceRecord
                     ? Store<ReturnType<FN>>
-                    : EventAsReturnType<ReturnType<FN>>
+                    : ReadonlyEventAsReturnType<ReturnType<FN>>
                   : never
                 // has filter, no fn
                 : SomeFN extends {filter: any}
                   ? FLUnit extends Unit<any>
-                    ? EventAsReturnType<TypeOfSource<Source>>
+                    ? ReadonlyEventAsReturnType<TypeOfSource<Source>>
                     : FLBool extends BooleanConstructor
-                      ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
+                      ? ReadonlyEventAsReturnType<NonFalsy<TypeOfSource<Source>>>
                       : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
-                        ? EventAsReturnType<FNInfSource>
-                        : EventAsReturnType<TypeOfSource<Source>>
+                        ? ReadonlyEventAsReturnType<FNInfSource>
+                        : ReadonlyEventAsReturnType<TypeOfSource<Source>>
                   // no filter, no fn
                   : Source extends Store<any> | SourceRecord
                     ? Store<TypeOfSource<Source>>
-                    : EventAsReturnType<TypeOfSource<Source>>
+                    : ReadonlyEventAsReturnType<TypeOfSource<Source>>
           : never
       : unknown extends Source
         ? Clock extends Units
@@ -1270,56 +1280,56 @@ type SampleRet<
           ? unknown extends SomeFN
             ? FLUnit extends Unit<any>
               ? FN extends (clk: TypeOfClock<Clock>) => any
-                ? EventAsReturnType<ReturnType<FN>>
+                ? ReadonlyEventAsReturnType<ReturnType<FN>>
                 : never
               : FLBool extends BooleanConstructor
                 ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
-                  ? EventAsReturnType<ReturnType<FNAltArg>>
+                  ? ReadonlyEventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
                   ? FNInf extends (clk: FNInfClock) => any
-                    ? EventAsReturnType<ReturnType<FNInf>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FNInf>>
                     : never
                   : FN extends (clk: TypeOfClock<Clock>) => any
-                    ? EventAsReturnType<ReturnType<FN>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FN>>
                     : never
             // has filter, has fn
             : SomeFN extends {filter: any; fn: any}
               ? FLUnit extends Unit<any>
                 ? FN extends (clk: TypeOfClock<Clock>) => any
-                  ? EventAsReturnType<ReturnType<FN>>
+                  ? ReadonlyEventAsReturnType<ReturnType<FN>>
                   : never
                 : FLBool extends BooleanConstructor
                   ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
-                    ? EventAsReturnType<ReturnType<FNAltArg>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
                     ? FNInf extends (src: FNInfClock) => any
-                      ? EventAsReturnType<ReturnType<FNInf>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FNInf>>
                       : never
                     : FN extends (clk: TypeOfClock<Clock>) => any
-                      ? EventAsReturnType<ReturnType<FN>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FN>>
                       : never
               // no filter, has fn
               : SomeFN extends {fn: any}
                 ? FN extends (clk: TypeOfClock<Clock>) => any
                   ? Clock extends Store<any>
                     ? Store<ReturnType<FN>>
-                    : EventAsReturnType<ReturnType<FN>>
+                    : ReadonlyEventAsReturnType<ReturnType<FN>>
                   : never
                 // has filter, no fn
                 : SomeFN extends {filter: any}
                   ? FLUnit extends Unit<any>
-                    ? EventAsReturnType<TypeOfClock<Clock>>
+                    ? ReadonlyEventAsReturnType<TypeOfClock<Clock>>
                     : FLBool extends BooleanConstructor
-                      ? EventAsReturnType<NonFalsy<TypeOfClock<Clock>>>
+                      ? ReadonlyEventAsReturnType<NonFalsy<TypeOfClock<Clock>>>
                       : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
-                        ? EventAsReturnType<FNInfClock>
-                        : EventAsReturnType<TypeOfClock<Clock>>
+                        ? ReadonlyEventAsReturnType<FNInfClock>
+                        : ReadonlyEventAsReturnType<TypeOfClock<Clock>>
                   // no filter, no fn
                   : Clock extends Store<any>
                     ? Store<TypeOfClock<Clock>>
-                    : EventAsReturnType<TypeOfClock<Clock>>
+                    : ReadonlyEventAsReturnType<TypeOfClock<Clock>>
           : never
         : Clock extends Units
           ? Source extends Unit<any> | SourceRecord
@@ -1327,56 +1337,56 @@ type SampleRet<
             ? unknown extends SomeFN
               ? FLUnit extends Unit<any>
                 ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
-                  ? EventAsReturnType<ReturnType<FN>>
+                  ? ReadonlyEventAsReturnType<ReturnType<FN>>
                   : never
                 : FLBool extends BooleanConstructor
                   ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
-                    ? EventAsReturnType<ReturnType<FNAltArg>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
                     ? FNInf extends (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                      ? EventAsReturnType<ReturnType<FNInf>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FNInf>>
                       : never
                     : FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
-                      ? EventAsReturnType<ReturnType<FN>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FN>>
                       : never
               // has filter, has fn
               : SomeFN extends {filter: any; fn: any}
                 ? FLUnit extends Unit<any>
                   ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
-                    ? EventAsReturnType<ReturnType<FN>>
+                    ? ReadonlyEventAsReturnType<ReturnType<FN>>
                     : never
                   : FLBool extends BooleanConstructor
                     ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
-                      ? EventAsReturnType<ReturnType<FNAltArg>>
+                      ? ReadonlyEventAsReturnType<ReturnType<FNAltArg>>
                       : never
                     : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
                       ? FNInf extends (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                        ? EventAsReturnType<ReturnType<FNInf>>
+                        ? ReadonlyEventAsReturnType<ReturnType<FNInf>>
                         : never
                       : FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
-                        ? EventAsReturnType<ReturnType<FN>>
+                        ? ReadonlyEventAsReturnType<ReturnType<FN>>
                         : never
                 // no filter, has fn
                 : SomeFN extends {fn: any}
                   ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
                     ? [Clock, Source] extends [Store<any>, Store<any> | SourceRecord]
                       ? Store<ReturnType<FN>>
-                      : EventAsReturnType<ReturnType<FN>>
+                      : ReadonlyEventAsReturnType<ReturnType<FN>>
                     : never
                   // has filter, no fn
                   : SomeFN extends {filter: any}
                     ? FLUnit extends Unit<any>
-                      ? EventAsReturnType<TypeOfSource<Source>>
+                      ? ReadonlyEventAsReturnType<TypeOfSource<Source>>
                       : FLBool extends BooleanConstructor
-                        ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
+                        ? ReadonlyEventAsReturnType<NonFalsy<TypeOfSource<Source>>>
                         : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
-                          ? EventAsReturnType<FNInfSource>
-                          : EventAsReturnType<TypeOfSource<Source>>
+                          ? ReadonlyEventAsReturnType<FNInfSource>
+                          : ReadonlyEventAsReturnType<TypeOfSource<Source>>
                     // no filter, no fn
                     : [Clock, Source] extends [Store<any>, Store<any> | SourceRecord]
                       ? Store<TypeOfSource<Source>>
-                      : EventAsReturnType<TypeOfSource<Source>>
+                      : ReadonlyEventAsReturnType<TypeOfSource<Source>>
             : never
           : never
     : Target & ForceTargetInference
@@ -1508,23 +1518,23 @@ export function sample<
       ? SourceNoConf extends Store<any>
         ? ClockNoConf extends Store<any>
           ? Store<ReturnType<FNBothNoConf>>
-          : EventAsReturnType<ReturnType<FNBothNoConf>>
-        : EventAsReturnType<ReturnType<FNBothNoConf>>
+          : ReadonlyEventAsReturnType<ReturnType<FNBothNoConf>>
+        : ReadonlyEventAsReturnType<ReturnType<FNBothNoConf>>
       : [any, any] extends Args
         ? SourceNoConf extends Store<any>
           ? ClockNoConf extends Store<any>
             ? Store<TypeOfSource<SourceNoConf>>
-            : EventAsReturnType<TypeOfSource<SourceNoConf>>
-          : EventAsReturnType<TypeOfSource<SourceNoConf>>
+            : ReadonlyEventAsReturnType<TypeOfSource<SourceNoConf>>
+          : ReadonlyEventAsReturnType<TypeOfSource<SourceNoConf>>
         : never
     : [any, any] extends Args
       ? SourceNoConf extends Store<any>
         ? Store<ReturnType<FNSrcNoConf>>
-        : EventAsReturnType<ReturnType<FNSrcNoConf>>
+        : ReadonlyEventAsReturnType<ReturnType<FNSrcNoConf>>
       : Args extends [Unit<any>]
         ? SourceNoConf extends Store<any>
           ? Store<TypeOfSource<SourceNoConf>>
-          : EventAsReturnType<TypeOfSource<SourceNoConf>>
+          : ReadonlyEventAsReturnType<TypeOfSource<SourceNoConf>>
         : NoInfer<SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>>
   : NoInfer<SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>>
 
@@ -3035,7 +3045,7 @@ export function serialize(
  * Bind event to a scope to be called later.
  *
  * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
- * @param unit event to bind
+ * @param unit callable event to bind
  * @returns function which will trigger an event in a given scope
  */
 export function scopeBind<T>(unit: Event<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
