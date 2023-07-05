@@ -3,6 +3,7 @@ import {
   createEvent,
   createStore,
   Event,
+  ReadonlyEvent,
   guard,
   split,
   attach,
@@ -16,7 +17,7 @@ it('infer type by given predicate (should pass)', () => {
   const {onlyNumbers} = split(event, {
     onlyNumbers: (value): value is number => typeof value === 'number',
   })
-  const shouldBeOk: Event<number> = onlyNumbers
+  const shouldBeOk: ReadonlyEvent<number> = onlyNumbers
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors

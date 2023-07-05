@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
-import {step, createNode, createEvent, Event, launch, split} from 'effector'
+import {
+  step,
+  createNode,
+  createEvent,
+  Event,
+  launch,
+  split,
+  ReadonlyEvent,
+} from 'effector'
 
 const typecheck = '{global}'
 
@@ -35,7 +43,8 @@ describe('split', () => {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
         })
-        const split_result__nofneg__user_defined: Event<string[]> = emptyList
+        const split_result__nofneg__user_defined: ReadonlyEvent<string[]> =
+          emptyList
         expect(typecheck).toMatchInlineSnapshot(`
           "
           no errors
@@ -48,7 +57,7 @@ describe('split', () => {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
         })
-        const split_result__nofneg__defaults: Event<string[]> = __
+        const split_result__nofneg__defaults: ReadonlyEvent<string[]> = __
         expect(typecheck).toMatchInlineSnapshot(`
           "
           no errors
@@ -64,18 +73,19 @@ describe('split', () => {
           oneElement: list => list.length === 1,
         })
         //@ts-expect-error
-        const split_result__nofpos__user_defined_1: Event<number> = emptyList
+        const split_result__nofpos__user_defined_1: ReadonlyEvent<number> =
+          emptyList
         //@ts-expect-error
         const split_result__nofpos__user_defined_2: null = oneElement
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+          Type 'ReadonlyEvent<string[]>' is not assignable to type 'ReadonlyEvent<number>'.
             Types of property 'watch' are incompatible.
               Type '(watcher: (payload: string[]) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
                 Types of parameters 'watcher' and 'watcher' are incompatible.
                   Types of parameters 'payload' and 'payload' are incompatible.
                     Type 'string[]' is not assignable to type 'number'.
-          Type 'Event<string[]>' is not assignable to type 'null'.
+          Type 'ReadonlyEvent<string[]>' is not assignable to type 'null'.
           "
         `)
       })
@@ -86,10 +96,10 @@ describe('split', () => {
           oneElement: list => list.length === 1,
         })
         //@ts-expect-error
-        const split_result__nofpos__defaults_1: Event<number> = __
+        const split_result__nofpos__defaults_1: ReadonlyEvent<number> = __
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+          Type 'ReadonlyEvent<string[]>' is not assignable to type 'ReadonlyEvent<number>'.
           "
         `)
       })
@@ -103,7 +113,7 @@ describe('split', () => {
         const split_result__nofpos__defaults_2: null = __
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Type 'Event<string[]>' is not assignable to type 'null'.
+          Type 'ReadonlyEvent<string[]>' is not assignable to type 'null'.
           "
         `)
       })

@@ -6,7 +6,6 @@
 .publish
 *.sublime-workspace
 .vscode
-*.*~
 *.swp
 
 src/types/type-report.json
