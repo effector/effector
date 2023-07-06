@@ -35,16 +35,16 @@ test('wide union (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
+    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>; }'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; } | { a: 2; } | { a: 3; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; } | { a: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: Store<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
+      Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+        Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+          Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
+            Types of property 'a' are incompatible.
+              Type '3' is not assignable to type '2'.
+    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>[]; }'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[Event<{ a: 1; } | { a: 2; }>]'.
     "
   `)
@@ -69,7 +69,10 @@ test('narrow union (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; }'.
+    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; } | { a: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>[]; }'.
     "
   `)
 })
@@ -107,11 +110,11 @@ test('unknown type in source (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
+    Argument of type '{ clock: Event<unknown>; filter: StoreWritable<boolean>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<string>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<string>; }'.
     Type 'Event<unknown>' is not assignable to type 'Event<string>'.
-    Argument of type '{ clock: Event<unknown>; filter: Store<boolean>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
+    Argument of type '{ clock: Event<unknown>; filter: StoreWritable<boolean>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<string>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<string>[]; }'.
     Type 'Event<unknown>' is not assignable to type '[Event<string>]'.
     "
   `)
@@ -136,7 +139,10 @@ test('unknown type in target (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Argument of type '{ clock: Event<string>; filter: StoreWritable<boolean>; target: Event<unknown>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>; }'.
+    Argument of type '{ clock: Event<string>; filter: StoreWritable<boolean>; target: Event<unknown>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>[]; }'.
     "
   `)
 })
@@ -174,16 +180,15 @@ test('optional props (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
+    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>; }'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b?: 2 | undefined; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
-    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
+      Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
+        Types of property 'b' are incompatible.
+          Type '2 | undefined' is not assignable to type '2'.
+            Type 'undefined' is not assignable to type '2'.
+    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>[]; }'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[Event<{ a: 1; b: 2; }>]'.
     "
   `)
@@ -208,7 +213,10 @@ test('wide object (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>; }'.
+    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>[]; }'.
     "
   `)
 })
@@ -246,16 +254,12 @@ test('narrow object (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
+    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>; }'.
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; c: 3; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b: 2; }' is not assignable to type '{ a: 1; b: 2; c: 3; }'.
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: Store<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
+      Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
+    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>[]; }'.
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[Event<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
@@ -274,7 +278,7 @@ test('narrow object combined (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: { foo: Store<string>; }; filter: () => boolean; target: Event<{ foo: string; bar: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
+    Argument of type '{ source: { foo: StoreWritable<string>; }; filter: () => boolean; target: EventCallable<{ foo: string; bar: string; }>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
     "
   `)
@@ -299,7 +303,10 @@ test('wide tuple (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Argument of type '{ source: Event<[1, 2, 3]>; filter: StoreWritable<boolean>; target: Event<[1, 2]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>; }'.
+    Argument of type '{ source: Event<[1, 2, 3]>; filter: StoreWritable<boolean>; target: Event<[1, 2]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>[]; }'.
     "
   `)
 })
@@ -325,10 +332,10 @@ test('narrow tuple (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
-    Argument of type '{ source: Event<[1, 2]>; filter: Store<boolean>; target: Event<[1, 2, 3]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
+    Argument of type '{ source: Event<[1, 2]>; filter: StoreWritable<boolean>; target: Event<[1, 2, 3]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>; }'.
+    Argument of type '{ source: Event<[1, 2]>; filter: StoreWritable<boolean>; target: Event<[1, 2, 3]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>[]; }'.
     "
   `)
 })
@@ -366,11 +373,11 @@ test('wide union in array (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
+    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: Event<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>; }'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
-    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: Store<boolean>; target: Event<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
+    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: Event<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>[]; }'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type '[Event<(string | number)[]>]'.
     "
   `)
@@ -395,7 +402,10 @@ test('narrow union in array (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Argument of type '{ clock: Event<(string | number)[]>; filter: StoreWritable<boolean>; target: Event<(string | number | boolean)[]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>; }'.
+    Argument of type '{ clock: Event<(string | number)[]>; filter: StoreWritable<boolean>; target: Event<(string | number | boolean)[]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>[]; }'.
     "
   `)
 })
