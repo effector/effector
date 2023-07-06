@@ -1891,7 +1891,7 @@ type SampleFilterTargetDef<
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>,
   ResultConfig
 > = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
     ? [config: ResultConfig]
