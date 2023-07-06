@@ -186,8 +186,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<{ R: number; G: number; B: number; }>' is not assignable to type 'Store<{ R: string; G: string; B: string; }>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
+        Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
+          Types of property 'R' are incompatible.
+            Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -200,8 +201,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '[number, number, number]' is not assignable to type '[string, string, string]'.
+        Type '[number, number, number]' is not assignable to type '[string, string, string]'.
+          Type at position 0 in source is not compatible with type at position 0 in target.
+            Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -212,8 +214,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<{ Color: string; }>' is not assignable to type 'Store<{ Color: number; }>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
+        Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
+          Types of property 'Color' are incompatible.
+            Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -224,8 +227,8 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[string]>' is not assignable to type 'Store<[number]>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '[string]' is not assignable to type '[number]'.
+        Type '[string]' is not assignable to type '[number]'.
+          Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -245,8 +248,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -339,8 +341,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[string]>' is not assignable to type 'Store<number>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '[string]' is not assignable to type 'number'.
+        Type '[string]' is not assignable to type 'number'.
       "
     `)
   })
@@ -440,10 +441,10 @@ describe('support optional parameters of explicit generic type', () => {
       "
       No overload matches this call.
         Overload 1 of 18, '(shape: { foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }): Store<I>', gave the following error.
-          Argument of type '{ foo: number; bar: Store<number>; baz: Store<number>; }' is not assignable to parameter of type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
+          Argument of type '{ foo: number; bar: StoreWritable<number>; baz: StoreWritable<number>; }' is not assignable to parameter of type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
             Object literal may only specify known properties, and 'baz' does not exist in type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
         Overload 2 of 18, '(shape: I): Store<{ foo?: string | number | undefined; bar: number; }>', gave the following error.
-          Type 'Store<number>' is not assignable to type 'number'.
+          Type 'StoreWritable<number>' is not assignable to type 'number'.
       "
     `)
   })
@@ -562,8 +563,10 @@ describe("#531 large unions doesn't brake combine", () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<{ currency: Currency; }>' is not assignable to type 'Store<{ currency: number; }>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '{ currency: Currency; }' is not assignable to type '{ currency: number; }'.
+        Type '{ currency: Currency; }' is not assignable to type '{ currency: number; }'.
+          Types of property 'currency' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
       "
     `)
   })

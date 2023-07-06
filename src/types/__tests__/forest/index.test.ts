@@ -148,6 +148,7 @@ describe('remap', () => {
         "
         Type 'Store<string>' is not assignable to type 'Store<number>'.
         Type 'Store<number>' is not assignable to type 'Store<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })

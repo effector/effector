@@ -88,14 +88,25 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (string | number | boolean)[], clk: { a: number; }) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (string | number | boolean)[], clk: { a: number; }) => any'.
-        Types of parameters '__0' and 'src' are incompatible.
-          Type '(string | number | boolean)[]' is not assignable to type '[any, any]'.
-            Target requires 2 element(s) but source may have fewer.
-    Binding element 'isAble' implicitly has an 'any' type.
-    Binding element 'field' implicitly has an 'any' type.
-    Parameter 'data' implicitly has an 'any' type.
+    A type predicate's type must be assignable to its parameter's type.
+      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
+        Types of property 'data' are incompatible.
+          Type 'number' is not assignable to type '{ a: number; }'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+          Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+          Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+          Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -141,13 +152,25 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (string | number | boolean)[], clk: { a: number; }) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (string | number | boolean)[], clk: { a: number; }) => any'.
-        Types of parameters '__0' and 'src' are incompatible.
-          Type '(string | number | boolean)[]' is not assignable to type '[any, any]'.
-    Binding element 'isAble' implicitly has an 'any' type.
-    Binding element 'field' implicitly has an 'any' type.
-    Parameter 'data' implicitly has an 'any' type.
+    A type predicate's type must be assignable to its parameter's type.
+      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
+        Types of property 'data' are incompatible.
+          Type 'number' is not assignable to type '{ a: number; }'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+          Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+          Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+          Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -166,7 +189,7 @@ test('generic support', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<number>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'EventCallable<number>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })

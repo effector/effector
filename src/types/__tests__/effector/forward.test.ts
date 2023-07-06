@@ -1,5 +1,12 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, createEffect, Event, forward} from 'effector'
+import {
+  createStore,
+  createEvent,
+  createEffect,
+  Event,
+  forward,
+  EventCallable,
+} from 'effector'
 
 const typecheck = '{global}'
 
@@ -67,16 +74,16 @@ test('from unknown to known type (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<unknown>' is not assignable to type 'Unit<number>'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
     "
   `)
 })
 describe('forward with subtyping', () => {
-  const str: Event<string> = createEvent()
-  const strOrNum: Event<string | number> = createEvent()
-  const num: Event<number> = createEvent()
+  const str: EventCallable<string> = createEvent()
+  const strOrNum: EventCallable<string | number> = createEvent()
+  const num: EventCallable<number> = createEvent()
   it('incompatible (should fail)', () => {
     //@ts-expect-error
     forward({from: str, to: num})
@@ -84,7 +91,7 @@ describe('forward with subtyping', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type 'Unit<number>'.
+          Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'number'.
       "
@@ -113,18 +120,23 @@ describe('forward with subtyping', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+          Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
             Types of property '__' are incompatible.
               Type 'string | number' is not assignable to type 'string'.
                 Type 'number' is not assignable to type 'string'.
       "
     `)
   })
-  it('generic from (?)', () => {
+  it('cannot narrow type from string|number to string (should fail)', () => {
+    //@ts-expect-error
     forward<string | number>({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Type 'EventCallable<string>' is not assignable to type 'UnitTarget<string | number> | readonly UnitTarget<string | number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'EventCallable<string | number>'.
+          Types of parameters 'payload' and 'payload' are incompatible.
+            Type 'string | number' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -133,7 +145,7 @@ describe('forward with subtyping', () => {
     forward<string>({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
       "
     `)
   })
@@ -204,16 +216,24 @@ describe('any to void support', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          Type 'EventCallable<string>' is not assignable to type 'Unit<void>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'void'.
-                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+                Type 'EventCallable<string>' is not assignable to type 'UnitTarget<void>'.
+                  Type 'EventCallable<string>' is not assignable to type 'EventCallable<void>'.
+                    Types of property 'prepend' are incompatible.
+                      Types of parameters 'fn' and 'fn' are incompatible.
+                        Type 'void' is not assignable to type 'string'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          Type 'EventCallable<string>' is not assignable to type 'Unit<void>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'void'.
-                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+                Type 'EventCallable<string>' is not assignable to type 'UnitTarget<void>'.
+                  Type 'EventCallable<string>' is not assignable to type 'EventCallable<void>'.
+                    Types of property 'prepend' are incompatible.
+                      Types of parameters 'fn' and 'fn' are incompatible.
+                        Type 'void' is not assignable to type 'string'.
       "
     `)
   })
@@ -270,6 +290,7 @@ test('edge case #1 (should fail)', () => {
   forward({
     //@ts-expect-error
     from: event1,
+    //@ts-expect-error
     to: event2.map(value => ({value})),
   })
 
@@ -277,9 +298,18 @@ test('edge case #1 (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type '{ value: { value: string; }; }'.
+              Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'UnitTarget<{ value: { value: string; }; }> | readonly UnitTarget<{ value: { value: string; }; }>[]'.
+                Property 'prepend' is missing in type 'Event<{ value: { value: string; }; }>' but required in type 'EventCallable<{ value: { value: string; }; }>'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type '{ value: { value: string; }; }'.
+              Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'UnitTarget<{ value: { value: string; }; }> | readonly UnitTarget<{ value: { value: string; }; }>[]'.
+                Property 'prepend' is missing in type 'Event<{ value: { value: string; }; }>' but required in type 'EventCallable<{ value: { value: string; }; }>'.
     "
   `)
 })
@@ -314,7 +344,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Event<number>' is not assignable to type 'Unit<string>'.
+              Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
                 Types of property '__' are incompatible.
                   Type 'number' is not assignable to type 'string'.
           "
@@ -325,7 +355,6 @@ describe('array support', () => {
         const t1 = createEvent<string>()
         const t2 = createEvent<number>()
         forward({
-          //@ts-expect-error
           from: s1,
           //@ts-expect-error
           to: [t1, t2],
@@ -334,7 +363,20 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Event<number>' is not assignable to type 'Unit<string>'.
+              Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+                Type 'EventCallable<string>' is not assignable to type 'UnitTarget<number>'.
+                  Type 'EventCallable<string>' is not assignable to type 'EventCallable<number>'.
+                    Types of property 'prepend' are incompatible.
+                      Types of parameters 'fn' and 'fn' are incompatible.
+                        Type 'number' is not assignable to type 'string'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+                Type 'EventCallable<string>' is not assignable to type 'UnitTarget<number>'.
+                  Type 'EventCallable<string>' is not assignable to type 'EventCallable<number>'.
+                    Types of property 'prepend' are incompatible.
+                      Types of parameters 'fn' and 'fn' are incompatible.
+                        Type 'number' is not assignable to type 'string'.
           "
         `)
       })
@@ -369,7 +411,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Event<string>[]' is missing the following properties from type 'Unit<number>': kind, __
+              Type 'EventCallable<string>[]' is missing the following properties from type 'Unit<number>': kind, __
           "
         `)
       })
@@ -386,7 +428,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<string>': kind, __
+              Type '(EventCallable<number> | EventCallable<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
           "
         `)
       })

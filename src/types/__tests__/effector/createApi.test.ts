@@ -1,14 +1,21 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createApi, Store, Event} from 'effector'
+import {
+  createStore,
+  createApi,
+  Store,
+  Event,
+  StoreWritable,
+  EventCallable,
+} from 'effector'
 
 const typecheck = '{global}'
 
 test('check1', () => {
-  const store: Store<number> = createStore(0)
+  const store: StoreWritable<number> = createStore(0)
   const {event} = createApi(store, {
     event: (n, x: number) => x,
   })
-  const createApi_check1: Event<number> = event
+  const createApi_check1: EventCallable<number> = event
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -16,36 +23,34 @@ test('check1', () => {
   `)
 })
 test('check2', () => {
-  const store: Store<number> = createStore(0)
+  const store: StoreWritable<number> = createStore(0)
   const {event} = createApi(store, {
     event: (n, x: number) => x,
   })
   //@ts-expect-error
-  const createApi_check2: Event<string> = event
+  const createApi_check2: EventCallable<string> = event
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<number>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<number>' is not assignable to type 'EventCallable<string>'.
+      Types of property 'prepend' are incompatible.
+        Types of parameters 'fn' and 'fn' are incompatible.
+          Type 'string' is not assignable to type 'number'.
     "
   `)
 })
 test('check3', () => {
-  const store: Store<number> = createStore(0)
+  const store: StoreWritable<number> = createStore(0)
   const {event} = createApi(store, {
     event: (n, x) => x,
   })
   //@ts-expect-error
-  const createApi_check3: Event<string> = event
+  const createApi_check3: EventCallable<string> = event
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<void>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: void) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
+    Type 'EventCallable<void>' is not assignable to type 'EventCallable<string>'.
+      Types of property 'map' are incompatible.
+        Type '<T>(fn: (payload: void) => T) => EventAsReturnType<T>' is not assignable to type '<T>(fn: (payload: string) => T) => EventAsReturnType<T>'.
+          Types of parameters 'fn' and 'fn' are incompatible.
             Types of parameters 'payload' and 'payload' are incompatible.
               Type 'void' is not assignable to type 'string'.
     "
@@ -75,9 +80,9 @@ test('createApi unknown/void support', () => {
     bar: (_, __: unknown) => 0,
     baz: (_, __) => 0,
   })
-  const unknownEvent: Event<unknown> = bar
-  const explicitVoid: Event<void> = foo
-  const implicitVoid: Event<void> = baz
+  const unknownEvent: EventCallable<unknown> = bar
+  const explicitVoid: EventCallable<void> = foo
+  const implicitVoid: EventCallable<void> = baz
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -199,12 +204,12 @@ test('optional return false-positive check (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    The 'this' context of type '{ moveRight: Event<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+    The 'this' context of type '{ moveRight: EventCallable<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
     No overload matches this call.
       Overload 1 of 2, '(payload: number): number', gave the following error.
         Argument of type 'string' is not assignable to parameter of type 'number'.
       Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
-        The 'this' context of type '{ moveRight: Event<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+        The 'this' context of type '{ moveRight: EventCallable<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
     "
   `)
 })

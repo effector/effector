@@ -200,7 +200,7 @@ test('useUnit should not allow non-unit values', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'string' is not assignable to type 'Store<any> | Effect<any, any, any> | Event<any>'.
+        Type 'string' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
     "
   `)
 })

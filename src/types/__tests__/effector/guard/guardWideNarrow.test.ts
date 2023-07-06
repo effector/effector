@@ -37,16 +37,17 @@ test('wide union (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<{ a: 1; } | { a: 2; }>' but required in type 'EventCallable<any>'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; } | { a: 2; } | { a: 3; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; } | { a: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+      Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+        Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+          Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
+            Types of property 'a' are incompatible.
+              Type '3' is not assignable to type '2'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"non-unit item in target\\"'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[Event<{ a: 1; } | { a: 2; }>]'.
     "
   `)
@@ -71,7 +72,13 @@ test('narrow union (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' but required in type 'EventCallable<any>'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '\\"non-unit item in target\\"'.
     "
   `)
 })
@@ -111,16 +118,13 @@ test('unknown type in source (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<string>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<string>' but required in type 'EventCallable<any>'.
     Type 'Event<unknown>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: unknown) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'unknown' is not assignable to type 'string'.
+      Type 'unknown' is not assignable to type 'string'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<string>' is not assignable to type '\\"non-unit item in target\\"'.
     Type 'Event<unknown>' is not assignable to type '[Event<string>]'.
     "
   `)
@@ -145,7 +149,13 @@ test('unknown type in target (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<unknown>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<unknown>' but required in type 'EventCallable<any>'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<unknown>' is not assignable to type '\\"non-unit item in target\\"'.
     "
   `)
 })
@@ -185,16 +195,16 @@ test('optional props (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<{ a: 1; b: 2; }>' but required in type 'EventCallable<any>'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b?: 2 | undefined; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
+      Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
+        Types of property 'b' are incompatible.
+          Type '2 | undefined' is not assignable to type '2'.
+            Type 'undefined' is not assignable to type '2'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '\\"non-unit item in target\\"'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[Event<{ a: 1; b: 2; }>]'.
     "
   `)
@@ -219,7 +229,13 @@ test('wide object (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<{ a: 1; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<{ a: 1; }>' but required in type 'EventCallable<any>'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<{ a: 1; }>' is not assignable to type '\\"non-unit item in target\\"'.
     "
   `)
 })
@@ -259,16 +275,13 @@ test('narrow object (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<{ a: 1; b: 2; c: 3; }>' but required in type 'EventCallable<any>'.
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: { a: 1; b: 2; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { a: 1; b: 2; c: 3; }) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '{ a: 1; b: 2; }' is not assignable to type '{ a: 1; b: 2; c: 3; }'.
+      Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"non-unit item in target\\"'.
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[Event<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
@@ -289,7 +302,7 @@ test('narrow object combined (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ foo: string; bar: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'EventCallable<{ foo: string; bar: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -313,7 +326,13 @@ test('wide tuple (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<[1, 2]>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<[1, 2]>' but required in type 'EventCallable<any>'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<[1, 2]>' is not assignable to type '\\"non-unit item in target\\"'.
     "
   `)
 })
@@ -341,10 +360,11 @@ test('narrow tuple (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<[1, 2, 3]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<[1, 2, 3]>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<[1, 2, 3]>' but required in type 'EventCallable<any>'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<[1, 2, 3]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<[1, 2, 3]>' is not assignable to type '\\"non-unit item in target\\"'.
     "
   `)
 })
@@ -384,16 +404,15 @@ test('wide union in array (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<(string | number)[]>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<(string | number)[]>' but required in type 'EventCallable<any>'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: (string | number | boolean)[]) => any) => Subscription' is not assignable to type '(watcher: (payload: (string | number)[]) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
+      Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
+        Type 'string | number | boolean' is not assignable to type 'string | number'.
+          Type 'boolean' is not assignable to type 'string | number'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'Event<(string | number)[]>' is not assignable to type '\\"non-unit item in target\\"'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type '[Event<(string | number)[]>]'.
     "
   `)
@@ -418,7 +437,13 @@ test('narrow union in array (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<(string | number | boolean)[]>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
+          Property 'prepend' is missing in type 'Event<(string | number | boolean)[]>' but required in type 'EventCallable<any>'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Event<(string | number | boolean)[]>' is not assignable to type '\\"non-unit item in target\\"'.
     "
   `)
 })

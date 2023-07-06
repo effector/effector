@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, Event, CompositeName, kind} from 'effector'
+import {createEvent, Event, CompositeName, kind, EventCallable} from 'effector'
 
 const typecheck = '{global}'
 
@@ -43,11 +43,11 @@ test('#map', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<string>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
+    This expression is not callable.
+      Type 'Event<number>' has no call signatures.
+    This expression is not callable.
+      Type 'Event<string>' has no call signatures.
     "
   `)
 })
@@ -178,7 +178,7 @@ describe('#prepend', () => {
     `)
   })
   test('void target event edge case', () => {
-    const event: Event<void> = createEvent()
+    const event: EventCallable<void> = createEvent()
     const prepended = event.prepend((arg: number) => 'foo') // returns string
     prepended(1)
     expect(typecheck).toMatchInlineSnapshot(`
@@ -259,7 +259,7 @@ test('assign event to a function (should fail)', () => {
   const fn1: (event: number) => unknown = createEvent<string>()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<string>' is not assignable to type '(event: number) => unknown'.
+    Type 'EventCallable<string>' is not assignable to type '(event: number) => unknown'.
       Types of parameters 'payload' and 'event' are incompatible.
         Type 'number' is not assignable to type 'string'.
     "
@@ -273,7 +273,7 @@ describe('event as function argument', () => {
     fn(event)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'Event<string>' is not assignable to parameter of type '(_: number) => number'.
+      Argument of type 'EventCallable<string>' is not assignable to parameter of type '(_: number) => number'.
         Types of parameters 'payload' and '_' are incompatible.
           Type 'number' is not assignable to type 'string'.
       "
