@@ -211,8 +211,6 @@ type InferValueFromTupleOfUnitTargets<T extends Tuple<UnitTarget<any>>> =
   T[number] extends UnitTarget<infer R>? R : never
 
 export interface Store<State> extends Unit<State> {
-  reset(...triggers: Array<Unit<any>>): this
-  reset(triggers: Array<Unit<any>>): this
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
   /**
    * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
@@ -253,6 +251,8 @@ export interface StoreWritable<State> extends Store<State> {
     reducer: (state: State, payload: InferValueFromTupleOfUnitTargets<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
+  reset(...triggers: Array<Unit<any>>): this
+  reset(triggers: Array<Unit<any>>): this
 
   reinit: EventCallable<void>
 }
