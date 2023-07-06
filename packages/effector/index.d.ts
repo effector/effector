@@ -220,7 +220,6 @@ export interface Store<State> extends Unit<State> {
   map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
 
   updates: Event<State>
-  reinit?: EventCallable<void>
 
   getState(): State
   subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
@@ -254,6 +253,8 @@ export interface StoreWritable<State> extends Store<State> {
     reducer: (state: State, payload: InferValueFromTupleOfUnitTargets<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
+
+  reinit: EventCallable<void>
 }
 
 interface InternalStore<State> extends StoreWritable<State> {
