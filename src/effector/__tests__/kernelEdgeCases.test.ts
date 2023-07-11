@@ -520,6 +520,8 @@ describe('experimental stack meta', () => {
       testKey1: 'testValue1',
       testKey2: 'testValue2',
     })
+    /** no meta should left */
+    expect(getSharedStackMeta()).toEqual(undefined)
   })
 
   test.skip('inject meta from step', async () => {
