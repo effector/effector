@@ -506,10 +506,20 @@ describe('experimental stack meta', () => {
     const fn = jest.fn()
     endMeta.watch(fn)
 
-    await allSettled(start, {scope})
+    launch({
+      target: start,
+      params: null,
+      scope,
+      meta: {
+        testKey: 'testValue',
+      },
+    })
+
+    await allSettled(scope)
 
     expect(fn).toBeCalledTimes(1)
     expect(fn).toBeCalledWith({
+      testKey: 'testValue',
       testKey1: 'testValue1',
       testKey2: 'testValue2',
     })
