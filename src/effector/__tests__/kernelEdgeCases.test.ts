@@ -460,30 +460,27 @@ describe('experimental stack meta', () => {
     expect(getSharedStackMeta()).toEqual(undefined)
   })
 
+  function attachMeta<T>(ev: Event<T>, key: string, value: unknown): Event<T> {
+    const node = (ev as any).graphite as Node
+
+    node.seq.unshift(
+      step.compute({
+        fn: (params, _scope, stack) => {
+          if (stack.meta) {
+            stack.meta[key] = value
+          } else {
+            console.error('Unsupported case yet')
+          }
+          return params
+        },
+      }),
+    )
+
+    return ev
+  }
+
   test('batching edge case', async () => {
     const scope = fork()
-    function attachMeta<T>(
-      ev: Event<T>,
-      key: string,
-      value: unknown,
-    ): Event<T> {
-      const node = (ev as any).graphite as Node
-
-      node.seq.unshift(
-        step.compute({
-          fn: (params, _scope, stack) => {
-            stack.meta = {
-              ...stack.meta,
-              [key]: value,
-            }
-
-            return params
-          },
-        }),
-      )
-
-      return ev
-    }
 
     const start = createEvent()
     const ev1 = createEvent()
@@ -520,6 +517,48 @@ describe('experimental stack meta', () => {
     expect(fn).toBeCalledTimes(1)
     expect(fn).toBeCalledWith({
       testKey: 'testValue',
+      testKey1: 'testValue1',
+      testKey2: 'testValue2',
+    })
+  })
+
+  test.skip('inject meta from step', async () => {
+    /**
+     * Unsupported case yet
+     */
+    const scope = fork()
+
+    const start = createEvent()
+    const ev1 = createEvent()
+    const ev2 = createEvent()
+
+    attachMeta(ev1, 'testKey1', 'testValue1')
+    attachMeta(ev2, 'testKey2', 'testValue2')
+
+    sample({
+      clock: start,
+      target: [ev1, ev2],
+    })
+
+    const end = sample({
+      clock: [ev1, ev2],
+    })
+
+    const endMeta = withStackMeta(end).map(({meta}) => meta)
+
+    const fn = jest.fn()
+    endMeta.watch(fn)
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+    })
+
+    await allSettled(scope)
+
+    expect(fn).toBeCalledTimes(1)
+    expect(fn).toBeCalledWith({
       testKey1: 'testValue1',
       testKey2: 'testValue2',
     })
