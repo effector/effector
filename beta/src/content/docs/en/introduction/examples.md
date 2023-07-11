@@ -57,5 +57,6 @@ To connect a custom range input component with state
 - [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
 - [Recent users projects](https://github.com/effector/effector/network/dependents)
 - [BallSort game](https://ballsort.sova.dev/) with [source code](https://github.com/sergeysova/ballsort)
+- [Sudoku game](https://sudoku-effector.pages.dev/) with [source code](https://github.com/Shiyan7/sudoku-effector)
 
 <!-- - [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld)) -->
