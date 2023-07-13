@@ -37,7 +37,7 @@ describe('text', () => {
           Type 'Store<{ value: string; } | null>' is not assignable to type 'DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined'.
             Type 'Store<{ value: string; } | null>' is not assignable to type 'AttributeStoreInput'.
               Types of property 'map' are incompatible.
-                Type '{ <T>(fn: (state: { value: string; } | null, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: { value: string; } | null, lastState: T) => T, firstState: T): Store<...>; }' is not assignable to type '{ <T>(fn: (state: string | number | boolean | null, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string | number | boolean | null, lastState: T) => T, firstState: T): Store<...>; }'.
+                Type '{ <T>(fn: (state: { value: string; } | null) => T): Store<T>; <T>(fn: (state: { value: string; } | null) => T, firstState: T): Store<...>; }' is not assignable to type '{ <T>(fn: (state: string | number | boolean | null) => T): Store<T>; <T>(fn: (state: string | number | boolean | null) => T, firstState: T): Store<...>; }'.
                   Types of parameters 'fn' and 'fn' are incompatible.
                     Types of parameters 'state' and 'state' are incompatible.
                       Type '{ value: string; } | null' is not assignable to type 'string | number | boolean | null'.
