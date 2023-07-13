@@ -272,24 +272,19 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: (value: any, prevArg?: any) => any, firstState?: any) {
+    map(fn: (value: any) => any) {
       let config
       if (isObject(fn)) {
         config = fn
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
-      deprecate(
-        isVoid(firstState),
-        'second argument of store.map',
-        'updateFilter',
-      )
       let lastResult
       const storeState = store.getState()
       const template = readTemplate()
       if (template) {
         lastResult = null
       } else if (!isVoid(storeState)) {
-        lastResult = fn(storeState, firstState)
+        lastResult = fn(storeState)
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
