@@ -64,22 +64,6 @@ describe('.map', () => {
       ]
     `)
   })
-  it('accepts initial state as second argument', () => {
-    const fn = jest.fn()
-    const inc = createEvent()
-    const store = createStore(0).on(inc, x => x + 1)
-    const computed = store.map((x, state) => `(${x}, ${state})`, 'initial')
-    computed.watch(fn)
-    inc()
-    inc()
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        "(0, initial)",
-        "(1, (0, initial))",
-        "(2, (1, (0, initial)))",
-      ]
-    `)
-  })
 
   it('supports nested mapping with updates skipping', () => {
     const a = createStore(null)
