@@ -16,53 +16,28 @@ describe('.map', () => {
     warn.mockRestore()
   })
   it('supports basic mapping', () => {
-    const fn = jest.fn()
     const newWord = createEvent<string>()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
 
-    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
-
-    sum.watch(fn)
-
     expect(a.getState()).toBe('word')
     expect(b.getState()).toBe(4)
-    expect(sum.getState()).toBe(4)
 
     newWord('lol')
 
     expect(a.getState()).toBe('lol')
     expect(b.getState()).toBe(3)
-    expect(sum.getState()).toBe(7)
 
     newWord('long word')
 
     expect(a.getState()).toBe('long word')
     expect(b.getState()).toBe(9)
-    expect(sum.getState()).toBe(16)
-
-    expect(fn).toHaveBeenCalledTimes(3)
 
     newWord('')
 
-    expect(fn).toHaveBeenCalledTimes(3)
-  })
-  it('calls given handler with current state as second argument', () => {
-    const fn = jest.fn()
-    const inc = createEvent()
-    const store = createStore(0).on(inc, x => x + 1)
-    const computed = store.map((x, state) => `(${x}, ${state})`)
-    computed.watch(fn)
-    inc()
-    inc()
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        "(0, undefined)",
-        "(1, (0, undefined))",
-        "(2, (1, (0, undefined)))",
-      ]
-    `)
+    expect(a.getState()).toBe('')
+    expect(b.getState()).toBe(0)
   })
 
   it('supports nested mapping with updates skipping', () => {
