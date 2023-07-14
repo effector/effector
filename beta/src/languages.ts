@@ -26,7 +26,7 @@ export function getPathParamsFromId(pathname: string) {
 
 export function getTextLocalized(item: { text: LText }, lang: string): string {
   if (lang in item.text) {
-    return item.text[lang as "en" | "ru"]!;
+    return item.text[lang as "en" | "ru" | "uz"]!;
   }
   return item.text.en;
 }
@@ -52,6 +52,7 @@ export const translations = {
     text: {
       en: "This page is not translated yet",
       ru: "Эта страница еще не переведена",
+      uz: "Bu sahifani hali tarjimasi yo'q"
     },
   },
   TranslationDisclaimer: {
@@ -59,18 +60,21 @@ export const translations = {
       text: {
         en: "",
         ru: "Перевод поддерживается сообществом",
+        uz: "Tarjima jamiyat tomonidan qollanilyapti"
       },
     },
     firstLine: {
       text: {
         en: "",
         ru: "Документация на английском языке - самая актуальная, поскольку её пишет и обновляет команда effector. Перевод документации на другие языки осуществляется сообществом по мере наличия сил и желания.",
+        uz: "Ingliz tilidagi hujjatlar eng dolzarb hisoblanadi, chunki u effektor guruhi tomonidan yozilgan va yangilanadi. Hujjatlarni boshqa tillarga tarjima qilish jamiyat tomonidan kuch va istaklar mavjud bo'lganda amalga oshiriladi."
       },
     },
     secondLine: {
       text: {
         en: "",
         ru: "Помните, что переведенные статьи могут быть неактуальными, поэтому для получения наиболее точной и актуальной информации рекомендуем использовать оригинальную англоязычную версию документации.",
+        uz: "Esda tutingki, tarjima qilingan maqolalar yangilanmasligi mumkin, shuning uchun eng aniq va dolzarb ma'lumot uchun hujjatlarning asl inglizcha versiyasidan foydalanishni tavsiya etamiz.\n"
       },
     },
   },
@@ -78,93 +82,104 @@ export const translations = {
     text: {
       en: "To add new translation open Pull Request",
       ru: "Чтобы добавить перевод, откройте Pull Request",
+      uz: "Tarjima qoshish uchun Pull Request oching"
     },
   },
   usingThisLink: {
     text: {
       en: "using this link",
       ru: "по этой ссылке",
+      uz: "havola boyicha"
     },
   },
   ShowingContentForDefaultLanguage: {
     text: {
       en: "Showing content for default language",
       ru: "Отображается содержимое для языка по умолчанию",
+      uz: "Standart til uchun tarkibni ko'rsatadi"
     },
   },
   OnThisPage: {
     text: {
       en: "On this page",
       ru: "Оглавление",
+      uz: "Mundarija"
     },
   },
   EditThisPage: {
     text: {
       en: "Edit this page",
       ru: "Внести правки",
+      uz: "Sahifani tahrirlash"
     },
   },
   JoinOurCommunity: {
     text: {
       en: "Join our community",
       ru: "Войти в чат",
+      uz: "Chatga kirish"
     },
   },
   More: {
     text: {
       en: "More",
       ru: "Дополнительно",
+      uz: "Qoshimcha"
     },
   },
   Contributors: {
     text: {
       en: "Contributors",
       ru: "Соавторы",
+      uz: "Hammualliflar"
     },
   },
   Landing: {
     Stats: {
-      size: { text: { en: "gzipped size", ru: "размер gzip" } },
-      contributors: { text: { en: "contributors", ru: "соавторы" } },
-      stars: { text: { en: "stars", ru: "звёзды" } },
-      downloads: { text: { en: "downloads", ru: "установки" } },
-      latest: { text: { en: "latest version", ru: "актуальная версия" } },
-      license: { text: { en: "license", ru: "лицензия" } },
+      size: { text: { en: "gzipped size", ru: "размер gzip", uz: "gzip hajmi" } },
+      contributors: { text: { en: "contributors", ru: "соавторы", uz: "hammualliflar" } },
+      stars: { text: { en: "stars", ru: "звёзды", uz: "yulduzchalar" } },
+      downloads: { text: { en: "downloads", ru: "установки", uz: "ornatmalar" } },
+      latest: { text: { en: "latest version", ru: "актуальная версия", uz: "joriy versiya" } },
+      license: { text: { en: "license", ru: "лицензия", uz: "litsenziya" } },
       StartByAddingEffectorAsDependency: {
         text: {
           en: "Start by adding effector as a dependency",
           ru: "Начните с установки effector",
+          uz: "Effectorni ornatishdan boshlang"
         },
       },
     },
   },
   Pagefind: {
-    placeholder: { text: { en: "Search", ru: "Поиск" } },
-    clear_search: { text: { en: "Clear" } },
-    load_more: { text: { en: "Load more results" } },
-    search_label: { text: { en: "Search this site" } },
-    filters_label: { text: { en: "Filters" } },
-    zero_results: { text: { en: "No results for [SEARCH_TERM]" } },
-    many_results: { text: { en: "[COUNT] results for [SEARCH_TERM]" } },
-    one_result: { text: { en: "[COUNT] result for [SEARCH_TERM]" } },
+    placeholder: { text: { en: "Search", ru: "Поиск", uz: "Qidiruv" } },
+    clear_search: { text: { en: "Clear", uz: "Tozalash" } },
+    load_more: { text: { en: "Load more results", uz: "Ko'proq natijalarni yuklash" } },
+    search_label: { text: { en: "Search this site", uz: "Sayt boyisha qidiruv" } },
+    filters_label: { text: { en: "Filters", uz: "Filterlar" } },
+    zero_results: { text: { en: "No results for [SEARCH_TERM]", uz: "[SEARCH_TERM] bo‘yicha hech narsa yoq" } },
+    many_results: { text: { en: "[COUNT] results for [SEARCH_TERM]", uz: "[SEARCH_TERM] uchun [COUNT] ta natija" } },
+    one_result: { text: { en: "[COUNT] result for [SEARCH_TERM]", uz: "[SEARCH_TERM] uchun [COUNT] ta natija" } },
     alt_search: {
       text: {
         en: "No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead",
+        uz: "[SEARCH_TERM] boʻyicha hech narsa topilmadi. Oʻrniga [DIFFERENT TERM] boyicha natijalar koʻrsatilmoqda"
       },
     },
     search_suggestion: {
-      text: { en: "No results for [SEARCH_TERM]. Try one of the following searches:" },
+      text: { en: "No results for [SEARCH_TERM]. Try one of the following searches:", uz: "[SEARCH_TERM] boʻyicha hech narsa topilmadi. Quyidagi qidiruvlardan birini sinab ko'ring:" },
     },
-    searching: { text: { en: "Searching for [SEARCH_TERM]..." } },
+    searching: { text: { en: "Searching for [SEARCH_TERM]...", uz: "[SEARCH_TERM] qidirilmoqda..." } },
   },
   Search: {
-    label: { text: { en: "Search", ru: "Поиск" } },
-    shortcutLabel: { text: { en: "(Press / to Search)", ru: "(Нажмите / для поиска)" } },
-    cancelLabel: { text: { en: "Cancel", ru: "Отмена" } },
+    label: { text: { en: "Search", ru: "Поиск", uz: "Qidiruv" } },
+    shortcutLabel: { text: { en: "(Press / to Search)", ru: "(Нажмите / для поиска)", uz: "(Qidirish uchun / tugmasini bosing)" } },
+    cancelLabel: { text: { en: "Cancel", ru: "Отмена", uz: "Bekor qilish" } },
     devWarning: {
       text: {
         en: "Search is only available in production builds. \nTry building and previewing the site to test it out locally.",
         ru: "Поиск недоступен в сборке для разработки. \nСоберите и включите preview для проверки поиска локально.",
+        uz: "Qidiruv ishlanma tuzilmasida mavjud emas. \nLokal qidiruvingizni sinab ko'rish uchun preview ni bosib yoqing."
       },
     },
   },
