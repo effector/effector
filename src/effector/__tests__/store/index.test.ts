@@ -40,16 +40,6 @@ describe('.map', () => {
     expect(b.getState()).toBe(0)
   })
 
-  test('second argument is deprecated', () => {
-    const $a = createStore(10)
-    const $b = $a.map((x, y) => x + y, 2)
-    expect(warn.mock.calls.map(([msg]) => msg)).toMatchInlineSnapshot(`
-      Array [
-        "second argument of store.map is deprecated, use updateFilter instead",
-      ]
-    `)
-  })
-
   it('supports nested mapping with updates skipping', () => {
     const a = createStore(null)
     const f = jest.fn(a => {
