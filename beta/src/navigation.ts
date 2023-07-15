@@ -318,6 +318,15 @@ const effectorSolid = [
       },
     ],
   },
+  {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector-solid/scope" },
+        link: "/api/effector-solid/module/scope",
+      },
+    ],
+  },
 ];
 
 const effectorVue = [
