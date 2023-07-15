@@ -168,8 +168,8 @@ independently, although without `factories` they will share the same `sid`.
 
 ### reactSsr
 
-:::info{title="since"}
-[effector 21.5.0](https://changelog.effector.dev/#effector-21-5-0)
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends deleting this option from `babel-plugin` configuration because [effector-react](/en/api/effector-react) supports SSR by default.
 :::
 
 - Type: `boolean`
