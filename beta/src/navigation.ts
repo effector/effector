@@ -109,7 +109,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/explanation/glossary",
       },
       {
-        text: { en: "Events", ru: "События", uz: "Event" },
+        text: { en: "Events", ru: "События", uz: "Events" },
         link: "/explanation/events",
       },
       {
@@ -615,7 +615,7 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
 ];
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
-  { text: { en: "Learn", ru: "Изучение" }, link: "/introduction/installation" },
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
   { text: { en: "API" }, link: "/api" },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },

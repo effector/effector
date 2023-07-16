@@ -139,7 +139,7 @@ export const translations = {
       size: { text: { en: "gzipped size", ru: "размер gzip", uz: "gzip hajmi" } },
       contributors: { text: { en: "contributors", ru: "соавторы", uz: "hammualliflar" } },
       stars: { text: { en: "stars", ru: "звёзды", uz: "yulduzchalar" } },
-      downloads: { text: { en: "downloads", ru: "установки", uz: "ornatmalar" } },
+      downloads: { text: { en: "downloads", ru: "установки", uz: "yuklanmalar" } },
       latest: { text: { en: "latest version", ru: "актуальная версия", uz: "joriy versiya" } },
       license: { text: { en: "license", ru: "лицензия", uz: "litsenziya" } },
       StartByAddingEffectorAsDependency: {
