@@ -162,15 +162,15 @@ const recipes = [
         link: "/recipes/react/todo-creator",
       },
       {
-        text: { en: "Dynamic Form Sxemasi" },
+        text: { en: "Dynamic Form Schema", uz: "Dinamik shakl sxemasi" },
         link: "/recipes/react/dynamic-form-schema",
       },
       {
-        text: { en: "ToDo List va Validation" },
+        text: { en: "ToDo List with Validation", uz: "Validation bilan tasdiqlangan ishlar ro'yxati" },
         link: "/recipes/react/todo-with-validation",
       },
       {
-        text: { en: "Slots" },
+        text: { en: "Slots", uz: "Slotlar"},
         link: "/recipes/react/slots",
       },
     ],
@@ -653,7 +653,7 @@ export const FOOTER_LINKS = [
     text: { en: "Docs", ru: "Документация", uz: "Hujjatlar" },
     items: [
       { text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" }, link: "/introduction/installation" },
-      { text: { en: "API Reference" }, link: "/api" },
+      { text: { en: "API Reference", uz: "API Havolasi" }, link: "/api" },
       { text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" }, link: "/guides/testing" },
       { text: { en: "Release policy", ru: "Политика релизов", uz: "Relizlar siyosati" }, link: "/core-principles/releases" },
       { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
