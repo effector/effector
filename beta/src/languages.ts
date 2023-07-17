@@ -52,7 +52,7 @@ export const translations = {
     text: {
       en: "This page is not translated yet",
       ru: "Эта страница еще не переведена",
-      uz: "Bu sahifani hali tarjimasi yo'q"
+      uz: "Bu sahifa hali tarjima qilinmagan"
     },
   },
   TranslationDisclaimer: {
@@ -110,7 +110,7 @@ export const translations = {
     text: {
       en: "Edit this page",
       ru: "Внести правки",
-      uz: "Sahifani tahrirlash"
+      uz: "O'zgartirish kiritish"
     },
   },
   JoinOurCommunity: {
