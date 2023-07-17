@@ -67,7 +67,7 @@ export const translations = {
       text: {
         en: "",
         ru: "Документация на английском языке - самая актуальная, поскольку её пишет и обновляет команда effector. Перевод документации на другие языки осуществляется сообществом по мере наличия сил и желания.",
-        uz: "Ingliz tilidagi hujjatlar eng dolzarb hisoblanadi, chunki u effektor guruhi tomonidan yozilgan va yangilanadi. Hujjatlarni boshqa tillarga tarjima qilish jamiyat tomonidan kuch va istaklar mavjud bo'lganda amalga oshiriladi."
+        uz: "Ingliz tilidagi hujjatlar eng dolzarb hisoblanadi, chunki u effector guruhi tomonidan yozilgan va yangilanadi. Hujjatlarni boshqa tillarga tarjima qilish jamiyat tomonidan kuch va istaklar mavjud bo'lganda amalga oshiriladi."
       },
     },
     secondLine: {
