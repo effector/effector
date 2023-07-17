@@ -20,7 +20,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/introduction/installation",
       },
       {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistema" },
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
         link: "/introduction/ecosystem",
       },
       {
@@ -105,7 +105,7 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Explanation", ru: "Погружение", uz: "Tushuntirish" },
     items: [
       {
-        text: { en: "Glossary", ru: "Глоссарий", uz: "Glossary" },
+        text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
         link: "/explanation/glossary",
       },
       {
@@ -239,10 +239,10 @@ const effectorReact = [
     ],
   },
   {
-    text: { en: "Gates", uz: "Geyts" },
+    text: { en: "Gates" },
     items: [
       {
-        text: { en: "Gate", uz: "Geyts" },
+        text: { en: "Gate" },
         link: "/api/effector-react/Gate",
       },
       {
