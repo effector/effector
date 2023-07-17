@@ -5,65 +5,65 @@ import { getTextLocalized, createLink, type LText } from "./languages";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Начало работы" },
+    text: { en: "Introduction", ru: "Начало работы", uz: "Kirish" },
     items: [
       {
-        text: { en: "Motivation", ru: "Мотивация" },
+        text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
       },
       {
-        text: { en: "Community", ru: "Сообщество" },
+        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
         link: "/introduction/community",
       },
       {
-        text: { en: "Installation", ru: "Установка" },
+        text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
         link: "/introduction/installation",
       },
       {
-        text: { en: "Ecosystem", ru: "Экосистема effector" },
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistema" },
         link: "/introduction/ecosystem",
       },
       {
-        text: { en: "Examples", ru: "Примеры" },
+        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
         link: "/introduction/examples",
       },
       {
-        text: { en: "FAQ", ru: "Частые вопросы" },
+        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
       },
     ],
   },
   {
-    text: { en: "Conventions", ru: "Соглашения" },
+    text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
-        text: { en: "Naming", ru: "Именование" },
+        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
         link: "/conventions/naming",
       },
     ],
   },
   {
-    text: { en: "TypeScript Guide", ru: "Использование с TypeScript" },
+    text: { en: "TypeScript Guide", ru: "Использование с TypeScript", uz: "Typescript bilan ishlash" },
     items: [
       {
-        text: { en: "Typing effector", ru: "Типизация effector" },
+        text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
         link: "/typescript/typing-effector",
       },
       {
-        text: { en: "Usage with `effector-react`" },
+        text: { en: "Usage with `effector-react`", uz: "`effector-react` dan foydalaning" },
         link: "/typescript/usage-with-effector-react",
       },
       {
-        text: { en: "Utility Types", ru: "Служебные типы" },
+        text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
         link: "/typescript/utility-types",
       },
     ],
   },
   {
-    text: { en: "Guides", ru: "Руководства" },
+    text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
       {
-        text: { en: "Writing tests" },
+        text: { en: "Writing tests", uz: "Testlar yozish" },
         link: "/guides/testing",
       },
       {
@@ -73,7 +73,7 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Core principles", ru: "Основные принципы" },
+    text: { en: "Core principles", ru: "Основные принципы", uz: "Asosiy tamoyillar" },
     items: [
       {
         text: { en: "Releases policy" },
@@ -92,6 +92,7 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: {
       en: "For library developers",
+      uz: "Biblioteka dasturchilari uchun"
     },
     items: [
       {
@@ -101,22 +102,22 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Explanation", ru: "Погружение" },
+    text: { en: "Explanation", ru: "Погружение", uz: "Tushuntirish" },
     items: [
       {
-        text: { en: "Glossary", ru: "Глоссарий" },
+        text: { en: "Glossary", ru: "Глоссарий", uz: "Glossary" },
         link: "/explanation/glossary",
       },
       {
-        text: { en: "Events", ru: "События" },
+        text: { en: "Events", ru: "События", uz: "Events" },
         link: "/explanation/events",
       },
       {
-        text: { en: "Computation Priority" },
+        text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
         link: "/explanation/computation-priority",
       },
       {
-        text: { en: "Prior Art", ru: "Prior Art" },
+        text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art"},
         link: "/explanation/prior-art",
       },
       {
@@ -129,10 +130,10 @@ const defaultSidebar: LSidebarGroup[] = [
 
 const recipes = [
   {
-    text: { en: "Common" },
+    text: { en: "Common", uz: "Umumiy" },
     items: [
       {
-        text: { en: "Countdown Timer" },
+        text: { en: "Countdown Timer", uz: "Hisob taymeri" },
         link: "/recipes/common/countdown",
       },
     ],
@@ -161,15 +162,15 @@ const recipes = [
         link: "/recipes/react/todo-creator",
       },
       {
-        text: { en: "Dynamic Form Schema" },
+        text: { en: "Dynamic Form Schema", uz: "Dinamik shakl sxemasi" },
         link: "/recipes/react/dynamic-form-schema",
       },
       {
-        text: { en: "ToDo List with Validation" },
+        text: { en: "ToDo List with Validation", uz: "Validation bilan tasdiqlangan ishlar ro'yxati" },
         link: "/recipes/react/todo-with-validation",
       },
       {
-        text: { en: "Slots" },
+        text: { en: "Slots", uz: "Slotlar"},
         link: "/recipes/react/slots",
       },
     ],
@@ -187,15 +188,15 @@ const recipes = [
     text: { en: "Next.js" },
     items: [
       {
-        text: { en: "Integrate Next.js with effector" },
+        text: { en: "Integrate Next.js with effector", uz: "Next.js effector bilan integratsiyasi" },
         link: "/recipes/nextjs/integrate",
       },
       {
-        text: { en: "Integrate with Next.js router" },
+        text: { en: "Integrate with Next.js router", uz: "Next.js router bilan integratsiyasi" },
         link: "/recipes/nextjs/router",
       },
       {
-        text: { en: "Use scopeBind in Next.js" },
+        text: { en: "Use scopeBind in Next.js", uz: "Next.js da scopeBind dan foydalaning" },
         link: "/recipes/nextjs/scope-bind",
       },
     ],
@@ -207,55 +208,55 @@ const effectorReact = [
     text: { en: "Hooks" },
     items: [
       {
-        text: { en: "useUnit", ru: "useUnit" },
+        text: { en: "useUnit", ru: "useUnit", uz: "useUnit" },
         link: "/api/effector-react/useUnit",
       },
       {
-        text: { en: "useList", ru: "useList" },
+        text: { en: "useList", ru: "useList", uz: "useList" },
         link: "/api/effector-react/useList",
       },
       {
-        text: { en: "useStoreMap", ru: "useStoreMap" },
+        text: { en: "useStoreMap", ru: "useStoreMap", uz: "useStoreMap" },
         link: "/api/effector-react/useStoreMap",
       },
       {
-        text: { en: "useStore", ru: "useStore" },
+        text: { en: "useStore", ru: "useStore", uz: "useStore" },
         link: "/api/effector-react/useStore",
       },
       {
-        text: { en: "useEvent", ru: "useEvent" },
+        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
         link: "/api/effector-react/useEvent",
       },
     ],
   },
   {
-    text: { en: "Components" },
+    text: { en: "Components", uz: "Komponentlar" },
     items: [
       {
-        text: { en: "Provider" },
+        text: { en: "Provider", uz: "Provayderlar" },
         link: "/api/effector-react/Provider",
       },
     ],
   },
   {
-    text: { en: "Gates" },
+    text: { en: "Gates", uz: "Geyts" },
     items: [
       {
-        text: { en: "Gate" },
+        text: { en: "Gate", uz: "Geyts" },
         link: "/api/effector-react/Gate",
       },
       {
-        text: { en: "createGate" },
+        text: { en: "createGate", uz: "createGate" },
         link: "/api/effector-react/createGate",
       },
       {
-        text: { en: "useGate" },
+        text: { en: "useGate", uz: "useGate" },
         link: "/api/effector-react/useGate",
       },
     ],
   },
   {
-    text: { en: "HOC-like APIs" },
+    text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
     collapsed: true,
     items: [
       {
@@ -335,7 +336,7 @@ const effectorVue = [
     ],
   },
   {
-    text: { en: "Options and properties" },
+    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
     items: [
       {
         text: { en: "ComponentOptions" },
@@ -398,7 +399,7 @@ const effectorVue = [
 
 const effector = [
   {
-    text: { en: "Unit Types", ru: "Юниты" },
+    text: { en: "Unit Types", ru: "Юниты", uz: "Yunitlar" },
     items: [
       {
         text: { en: "Event" },
@@ -423,7 +424,7 @@ const effector = [
     ],
   },
   {
-    text: { en: "Methods", ru: "Методы" },
+    text: { en: "Methods", ru: "Методы", uz: "Usullar" },
     items: [
       {
         text: { en: "createEvent" },
@@ -506,7 +507,7 @@ const effector = [
     ],
   },
   {
-    text: { en: "Utilities", ru: "Служебные функции" },
+    text: { en: "Utilities", ru: "Служебные функции", uz: "Utility funktsiyalari" },
     collapsed: true,
     items: [
       {
@@ -575,7 +576,7 @@ const effector = [
 
 const api = [
   {
-    text: { en: "Packages", ru: "Пакеты" },
+    text: { en: "Packages", ru: "Пакеты", uz: "Paketlar" },
     items: [
       { text: { en: "effector" }, link: "/api/effector" },
       { text: { en: "effector-react" }, link: "/api/effector-react" },
@@ -601,7 +602,7 @@ const sidebarEntries = Object.entries(SIDEBARS);
 
 export const DOCS_VERSIONS = [
   { text: { en: "v23.x (beta)", ru: "v23.x (бета)" }, link: "/" },
-  { text: { en: "v22.x (actual)", ru: "v22.x (актуальная)" }, link: "https://effector.dev" },
+  { text: { en: "v22.x (actual)", ru: "v22.x (актуальная)", uz: "v22.x (dolzarb)" }, link: "https://effector.dev" },
   { text: { en: "v21.8.12" }, link: "https://v21.effector.dev" },
   { text: { en: "v20.17.2" }, link: "https://v20.effector.dev" },
 ];
@@ -614,17 +615,17 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
 ];
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
-  { text: { en: "Learn", ru: "Изучение" }, link: "/introduction/installation" },
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
   { text: { en: "API" }, link: "/api" },
-  { text: { en: "Recipes", ru: "Рецепты" }, link: "/recipes" },
-  { text: { en: "Blog", ru: "Блог" }, link: LINKS.blog },
-  { text: { en: "Playground", ru: "Песочница" }, link: LINKS.repl },
-  { text: { en: "Changelog", ru: "Изменения" }, link: LINKS.changelog },
+  { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
+  { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
+  { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
+  { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
 ];
 
 export const MOBILE_NAVIGATION = createMobileNavigation([
   {
-    text: { en: "Documentation", ru: "Документация" },
+    text: { en: "Documentation", ru: "Документация", uz: "Hujjat" },
     items: defaultSidebar,
   },
   {
@@ -638,31 +639,31 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
     ],
   },
   {
-    text: { en: "Recipes", ru: "Рецепты" },
+    text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" },
     link: "/recipes",
     items: recipes,
   },
-  { text: { en: "Blog", ru: "Блог" }, link: LINKS.blog },
-  { text: { en: "Playground", ru: "Песочница" }, link: LINKS.repl },
-  { text: { en: "Changelog", ru: "Изменения" }, link: LINKS.changelog },
+  { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
+  { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
+  { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
 ] satisfies LMobileNavItem[]);
 
 export const FOOTER_LINKS = [
   {
-    text: { en: "Docs", ru: "Документация" },
+    text: { en: "Docs", ru: "Документация", uz: "Hujjatlar" },
     items: [
-      { text: { en: "Getting started", ru: "С чего начать" }, link: "/introduction/installation" },
-      { text: { en: "API Reference" }, link: "/api" },
-      { text: { en: "Writings tests", ru: "Тестирование кода" }, link: "/guides/testing" },
-      { text: { en: "Release policy", ru: "Политика релизов" }, link: "/core-principles/releases" },
-      { text: { en: "What's new", ru: "Что нового" }, link: LINKS.changelog },
-      { text: { en: "Blog", ru: "Блог" }, link: LINKS.blog },
+      { text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" }, link: "/introduction/installation" },
+      { text: { en: "API Reference", uz: "API Havolasi" }, link: "/api" },
+      { text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" }, link: "/guides/testing" },
+      { text: { en: "Release policy", ru: "Политика релизов", uz: "Relizlar siyosati" }, link: "/core-principles/releases" },
+      { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
+      { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
     ],
   },
   {
-    text: { en: "Community", ru: "Сообщество" },
+    text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
     items: [
-      { text: { en: "Official", ru: "Официальное" }, link: LINKS.community },
+      { text: { en: "Official", ru: "Официальное", uz: "Rasmiy" }, link: LINKS.community },
       { text: { en: "Discord" }, link: LINKS.discord },
       { text: { en: "dev.to" }, link: LINKS.devTo },
       { text: { en: "Twitter" }, link: LINKS.twitter },
@@ -671,7 +672,7 @@ export const FOOTER_LINKS = [
     ],
   },
   {
-    text: { en: "More", ru: "Больше" },
+    text: { en: "More", ru: "Больше", uz: "Ko'proq" },
     items: [
       { text: { en: "Github" }, link: LINKS.github },
       { text: { en: "Reddit" }, link: LINKS.reddit },
