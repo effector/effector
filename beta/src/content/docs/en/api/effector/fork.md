@@ -7,7 +7,7 @@ redirectFrom:
 
 :::info{title="since"}
 
-- `fork()` introduced in [effector `22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+- `fork()` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 - `fork(domain)` introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 - support for array of tuples in `values` and `handlers` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 
@@ -67,7 +67,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
 
 3. `handlers`: Option to provide handlers for effects
 
-   Can be used in two ways:
+   Can be used in different ways:
 
    1. Array of tuples with effects and handlers:
 
@@ -89,6 +89,19 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
           .set(getUserFx, async (params) => ({ name: "alice", age: 21 })),
       });
       ```
+
+4. Plain object: `{[sid: string]: handler}`
+      ```ts
+      fork({
+        handlers: {
+          [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
+          [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
+        }
+      });
+      ```
+      :::warning{title="deprecation"}
+      Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
+      :::
 
 ### Returns {#fork-return}
 
