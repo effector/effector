@@ -176,7 +176,7 @@ sample({
 
 // userMessage has type Event<string>
 ```
-Otherwise Typescrit will fallback to `any`.
+Otherwise, Typescript will fall back to `any`.
 
 However, Typescript will not allow you to set incorrect filter type
 ```typescript

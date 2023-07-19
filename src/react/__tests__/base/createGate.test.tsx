@@ -1,18 +1,33 @@
 import * as React from 'react'
 //@ts-expect-error
 import {render, cleanup, container, act} from 'effector/fixtures/react'
-import {createGate, useGate, useStore} from 'effector-react'
+import {createGate, useGate, useStore, Provider} from 'effector-react'
 import {createGate as createGateScope} from 'effector-react/scope'
 
 import {argumentHistory} from 'effector/fixtures'
 import {
   allSettled,
+  createEffect,
   createEvent,
   createStore,
   fork,
   forward,
+  sample,
   serialize,
 } from 'effector'
+
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 test('plain gate', async () => {
   const Gate = createGate('plain gate')
@@ -218,6 +233,30 @@ test('gate should be correctly serialized via fork #672', async () => {
   expect(states[Gate.state.sid!]).toBe('another')
 })
 
+test('gate component should be isomorphic to scope', async () => {
+  const Gate = createGate('default')
+  const logged = jest.fn()
+  const logFx = createEffect(() => {})
+
+  sample({
+    clock: Gate.open,
+    target: logFx,
+  })
+
+  const scope = fork({
+    handlers: [[logFx, () => logged('scoped')]],
+  })
+
+  await render(
+    <Provider value={scope}>
+      <Gate />
+    </Provider>,
+  )
+
+  expect(logged).toBeCalledTimes(1)
+  expect(logged).toBeCalledWith('scoped')
+})
+
 test('gate properties hook', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
@@ -283,7 +322,11 @@ test('setState warning', async () => {
     container.querySelector('#button').click()
   })
   console.error = oldConsoleError
-  expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "",
+    ]
+  `)
 })
 
 describe('createGate without arguments', () => {

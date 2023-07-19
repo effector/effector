@@ -5,6 +5,8 @@ import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/wit
 import {throwError} from './throw'
 import {createWatch} from './createWatch'
 import {withDisplayName} from './withDisplayName'
+import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
+import {Gate} from './index.h'
 
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
@@ -63,25 +65,40 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     justSubscribed: false,
     scope,
   })
-  const [eventsShape, storeKeys, storeValues] = React.useMemo(() => {
-    flagsRef.current.stale = true
-    const shape = Array.isArray(normShape) ? [] : ({} as any)
-    const storeKeys: string[] = []
-    const storeValues: Array<Store<any>> = []
-    for (const key in normShape) {
-      const unit = normShape[key]
-      if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
-      if (is.event(unit) || is.effect(unit)) {
-        shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
-      } else {
-        shape[key] = null
-        storeKeys.push(key)
-        storeValues.push(unit as Store<any>)
+  const [eventsShape, storeKeys, storeValues, eventKeys, eventValues] =
+    React.useMemo(() => {
+      flagsRef.current.stale = true
+      const shape = Array.isArray(normShape) ? [] : ({} as any)
+      const storeKeys: string[] = []
+      const storeValues: Array<Store<any>> = []
+      const eventKeys: string[] = []
+      const eventValues: Array<Unit<any>> = []
+      for (const key in normShape) {
+        const unit = normShape[key]
+        if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
+        if (is.event(unit) || is.effect(unit)) {
+          shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
+          eventKeys.push(key)
+          eventValues.push(unit)
+        } else {
+          shape[key] = null
+          storeKeys.push(key)
+          storeValues.push(unit as Store<any>)
+        }
       }
-    }
-    return [shape, storeKeys, storeValues]
-  }, [flagsRef, scope, ...Object.keys(normShape), ...Object.values(normShape)])
-  const stateRef = React.useRef({value: eventsShape, storeKeys})
+      return [shape, storeKeys, storeValues, eventKeys, eventValues]
+    }, [
+      flagsRef,
+      scope,
+      ...Object.keys(normShape),
+      ...Object.values(normShape),
+    ])
+  const stateRef = React.useRef({
+    value: eventsShape,
+    storeKeys,
+    eventKeys,
+    eventValues,
+  })
   const subscribe = React.useCallback(
     (cb: () => void) => {
       const flags = flagsRef.current
@@ -108,22 +125,24 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     let resultValue
     let changed = false
     const oldVal = state.value
-    const oldKeys = state.storeKeys
+    const oldStoreKeys = state.storeKeys
+    const oldEventKeys = state.eventKeys
+    const oldEventValues = state.eventValues
     const scopeChanged = scope !== flags.scope
-    if (
-      (storeKeys.length > 0 || oldKeys.length > 0) &&
-      (flags.stale || flags.justSubscribed || scopeChanged)
-    ) {
+    if (flags.stale || flags.justSubscribed || scopeChanged) {
       changed = !flags.justSubscribed || scopeChanged
       resultValue = isList ? [...eventsShape] : {...eventsShape}
-      if (oldKeys.length !== storeKeys.length) {
+      if (
+        oldStoreKeys.length !== storeKeys.length ||
+        oldEventKeys.length !== eventKeys.length
+      ) {
         changed = true
       }
       for (let i = 0; i < storeKeys.length; i++) {
         const updatedValue = stateReader(storeValues[i], scope)
         const key = storeKeys[i]
         if (!changed) {
-          if (!oldKeys.includes(key)) {
+          if (!oldStoreKeys.includes(key)) {
             changed = true
           } else {
             changed = oldVal[key] !== updatedValue
@@ -131,16 +150,29 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
         }
         resultValue[key] = updatedValue
       }
+      for (let i = 0; i < eventKeys.length; i++) {
+        const updatedValue = eventValues[i]
+        const key = eventKeys[i]
+        if (!changed) {
+          if (!oldEventKeys.includes(key)) {
+            changed = true
+          } else {
+            changed = oldEventValues[oldEventKeys.indexOf(key)] !== updatedValue
+          }
+        }
+      }
     }
     if (changed) {
       state.value = resultValue
     }
     state.storeKeys = storeKeys
+    state.eventKeys = eventKeys
+    state.eventValues = eventValues
     flags.stale = false
     flags.justSubscribed = !changed
     flags.scope = scope
     return isSingleUnit ? state.value.unit : state.value
-  }, [subscribe, storeValues, scope, stateRef, flagsRef])
+  }, [subscribe, storeValues, eventValues, scope, stateRef, flagsRef])
   return useSyncExternalStore(subscribe, read, read)
 }
 
@@ -333,4 +365,64 @@ export function useEventBase(eventObject: any, scope?: Scope) {
     }
     return shape
   }, [scope, ...Object.keys(events), ...Object.values(events)])
+}
+
+export function useGateBase<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+  scope?: Scope,
+) {
+  const {open, close, set} = useUnitBase(
+    {
+      open: GateComponent.open,
+      close: GateComponent.close,
+      set: GateComponent.set,
+    },
+    scope,
+  )
+  const ForkedGate = React.useMemo(
+    () =>
+      ({
+        open,
+        close,
+        set,
+      } as Gate<Props>),
+    [GateComponent, open],
+  )
+
+  const propsRef = React.useRef<{value: any; count: number}>({
+    value: null,
+    count: 0,
+  })
+  useIsomorphicLayoutEffect(() => {
+    ForkedGate.open(propsRef.current.value)
+    return () => ForkedGate.close(propsRef.current.value) as any
+  }, [ForkedGate])
+  if (!shallowCompare(propsRef.current.value, props)) {
+    propsRef.current.value = props
+    propsRef.current.count += 1
+  }
+  useIsomorphicLayoutEffect(() => {
+    ForkedGate.set(propsRef.current.value)
+  }, [propsRef.current.count])
+}
+
+function shallowCompare(a: any, b: any) {
+  if (a === b) return true
+  if (
+    typeof a === 'object' &&
+    a !== null &&
+    typeof b === 'object' &&
+    b !== null
+  ) {
+    const aKeys = Object.keys(a)
+    const bKeys = Object.keys(b)
+    if (aKeys.length !== bKeys.length) return false
+    for (let i = 0; i < aKeys.length; i++) {
+      const key = aKeys[i]
+      if (a[key] !== b[key]) return false
+    }
+    return true
+  }
+  return false
 }

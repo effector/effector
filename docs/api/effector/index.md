@@ -47,3 +47,4 @@ title: API Reference
 
 - [clearNode](./clearNode.md)
 - [withRegion](./withRegion.md)
+- [Inspect API](./inspectApi.md)

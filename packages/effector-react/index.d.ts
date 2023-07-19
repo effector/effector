@@ -85,10 +85,16 @@ export function createGate<Props>(
   defaultState: Props,
 ): Gate<Props>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createComponent<Props, Shape extends object>(
   store: Shape,
   view: (
@@ -100,15 +106,24 @@ export function createComponent<Props, Shape extends object>(
   Props
 >
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>,
 >(store: Store<State>): (Component: Com) => React.ComponentType<State>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>,
 >(Component: Com): (store: Store<State>) => React.ComponentType<State>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>

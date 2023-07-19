@@ -60,8 +60,8 @@ const keywords = [
 ]
 
 const version = {
-  effector: '22.5.0',
-  'effector-react': '22.4.0',
+  effector: '22.8.6',
+  'effector-react': '22.5.3',
   'effector-vue': '22.2.0',
   'effector-solid': '0.22.7',
   forest: '0.21.2',
@@ -97,6 +97,7 @@ export default {
       },
       './fork': extensionlessExport('./fork'),
       './compat': compatExport,
+      './inspect': extensionlessExport('./inspect'),
       './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
       './babel-plugin-react': './babel-plugin-react.js',
@@ -107,6 +108,9 @@ export default {
       ...compiledFile('fork'),
       ...esmFile('fork'),
       'fork.d.ts',
+      ...compiledFile('inspect'),
+      ...esmFile('inspect'),
+      'inspect.d.ts',
       'babel-plugin.js',
       'babel-plugin-react.js',
     ],

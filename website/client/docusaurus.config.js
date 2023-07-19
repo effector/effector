@@ -52,6 +52,27 @@ module.exports = {
           position: 'right',
         },
         {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClassDisabled: true,
+          dropdownItemsAfter: [
+            {
+              label: 'v21.8.12',
+              href: 'https://v21.effector.dev'
+            },
+            {
+              label: 'v20.17.2',
+              href: 'https://v20.effector.dev'
+            },
+          ],
+          dropdownItemsBefore: [
+            {
+              label: 'v23.x (beta)',
+              href: 'https://beta.effector.dev'
+            },
+          ],
+        },
+        {
           type: 'localeDropdown',
           position: 'right',
         },
@@ -84,6 +105,14 @@ module.exports = {
         {
           title: 'Community',
           items: [
+            {
+              label: 'Official',
+              href: 'https://community.effector.dev',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discord.gg/yHcMcuRWeC',
+            },
             {
               label: 'dev.to',
               href: 'https://dev.to/effector',
@@ -150,6 +179,11 @@ module.exports = {
             'https://github.com/effector/effector/tree/master/website/client/',
           remarkPlugins: [],
           editLocalizedFiles: true,
+          versions: {
+            current: {
+              label: 'v22.x',
+            },
+          },
         },
         blog: {
           showReadingTime: true,

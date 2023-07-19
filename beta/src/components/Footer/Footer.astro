@@ -1,0 +1,92 @@
+---
+import { createLink, getPathParamsFromId, getTextLocalized } from "../../languages";
+import { FOOTER_LINKS } from "../../navigation";
+import IconExternal from "../../icons/External.astro";
+import { LINKS } from "../../consts";
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<footer data-pagefind-ignore>
+  <div class="collection">
+    {
+      FOOTER_LINKS.map((group) => {
+        const text = getTextLocalized(group, lang);
+
+        return (
+          <div class="group">
+            <h3 class="title">{text}</h3>
+            {group.items.map((link) => {
+              const text = getTextLocalized(link, lang);
+              const external = link.link.startsWith("https://") || link.link.startsWith("http://");
+              const href = external ? link.link : createLink(link, lang);
+
+              if (external) {
+                return (
+                  <div>
+                    <a href={href} target="_blank" class="link">
+                      <span>{text}</span>
+                      <IconExternal />
+                    </a>
+                  </div>
+                );
+              }
+
+              return (
+                <div>
+                  <a href={href} class="link">
+                    {text}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })
+    }
+    <div class="rights group">
+      <span class="text-xs sm:text-sm md:text-base lg:text-lg">
+        <a href={LINKS.zerobias} target="_blank">zerobias</a> & Effector Core team
+      </span>
+      <span> © 2018-{new Date().getFullYear()}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: 3rem;
+    border-top: 3px solid var(--theme-divider);
+    padding: 2rem;
+    color: var(--theme-text);
+  }
+
+  .collection {
+    @apply mx-auto grid max-w-5xl grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-3 md:gap-x-12;
+  }
+
+  .group {
+    @apply flex flex-col;
+  }
+
+  .group .title {
+    @apply my-2 text-base font-bold;
+  }
+
+  .link {
+    @apply flex w-fit gap-0 py-1 text-sm lg:text-base;
+    color: var(--theme-text-light);
+  }
+
+  .link:hover {
+    color: var(--theme-text-accent);
+  }
+
+  .rights {
+    @apply text-sm;
+  }
+
+  .rights :global(a:hover) {
+    @apply underline;
+  }
+</style>
