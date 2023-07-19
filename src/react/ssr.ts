@@ -36,25 +36,7 @@ export function createStoreConsumer(store: any) {
   }
 }
 
-export const createContextComponent = (
-  store: any,
-  context: any,
-  renderProp: any,
-) => {
-  deprecate('createContextComponent')
-  return (props: any) => {
-    const ctx = React.useContext(context)
-    const state = useStore(store)
-    return renderProp(props, state, ctx)
-  }
-}
-
 export const createComponent = (shape: any) => throwError('not implemented')
-
-export const createReactState = (store: any, Component: any) => {
-  deprecate('createReactState')
-  return connect(Component)(store)
-}
 
 export const connect = (Component: any) => {
   deprecate('connect', 'useUnit')
