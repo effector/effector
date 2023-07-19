@@ -122,4 +122,50 @@ export const translations = {
       ru: "Соавторы",
     },
   },
+  Landing: {
+    Stats: {
+      size: { text: { en: "gzipped size", ru: "размер gzip" } },
+      contributors: { text: { en: "contributors", ru: "соавторы" } },
+      stars: { text: { en: "stars", ru: "звёзды" } },
+      downloads: { text: { en: "downloads", ru: "установки" } },
+      latest: { text: { en: "latest version", ru: "актуальная версия" } },
+      license: { text: { en: "license", ru: "лицензия" } },
+      StartByAddingEffectorAsDependency: {
+        text: {
+          en: "Start by adding effector as a dependency",
+          ru: "Начните с установки effector",
+        },
+      },
+    },
+  },
+  Pagefind: {
+    placeholder: { text: { en: "Search", ru: "Поиск" } },
+    clear_search: { text: { en: "Clear" } },
+    load_more: { text: { en: "Load more results" } },
+    search_label: { text: { en: "Search this site" } },
+    filters_label: { text: { en: "Filters" } },
+    zero_results: { text: { en: "No results for [SEARCH_TERM]" } },
+    many_results: { text: { en: "[COUNT] results for [SEARCH_TERM]" } },
+    one_result: { text: { en: "[COUNT] result for [SEARCH_TERM]" } },
+    alt_search: {
+      text: {
+        en: "No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead",
+      },
+    },
+    search_suggestion: {
+      text: { en: "No results for [SEARCH_TERM]. Try one of the following searches:" },
+    },
+    searching: { text: { en: "Searching for [SEARCH_TERM]..." } },
+  },
+  Search: {
+    label: { text: { en: "Search", ru: "Поиск" } },
+    shortcutLabel: { text: { en: "(Press / to Search)", ru: "(Нажмите / для поиска)" } },
+    cancelLabel: { text: { en: "Cancel", ru: "Отмена" } },
+    devWarning: {
+      text: {
+        en: "Search is only available in production builds. \nTry building and previewing the site to test it out locally.",
+        ru: "Поиск недоступен в сборке для разработки. \nСоберите и включите preview для проверки поиска локально.",
+      },
+    },
+  },
 };

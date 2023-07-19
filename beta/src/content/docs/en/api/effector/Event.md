@@ -9,7 +9,9 @@ redirectFrom:
   - /docs/api/effector/event
 ---
 
-The **Event** in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things. This unit is designed to be a carrier of information/intention/state within the application, not the holder of a state.
+The **Event** in effector represents a user action, a step in the application process, a command to execute, or an
+intention to make modifications, among other things. This unit is designed to be a carrier of
+information/intention/state within the application, not the holder of a state.
 
 There are two type of events provided by effector: [`Event`](#event) and [`ReadonlyEvent`](#readonlyEvent).
 
@@ -26,7 +28,8 @@ There are many ways to create event:
 ## Declaring types
 
 Event carries some data and in TypeScript ecosystem each data should have defined type.
-When event is explicitly created by [`createEvent`](/en/api/effector/createEvent) type of the argument must be provided as a Generic type argument:
+When event is explicitly created by [`createEvent`](/en/api/effector/createEvent) type of the argument must be provided
+as a Generic type argument:
 
 ```ts
 import { ItemAdded } from "effector";
@@ -39,7 +42,8 @@ interface ItemAdded {
 const itemAdded = createEvent<ItemAdded>();
 ```
 
-In the most cases there is no reason to use `void` with the another type (~~`Event<void | number>`~~). Use `void` only to declare the Event or ReadonlyEvent without the argument at all.
+In the most cases there is no reason to use `void` with the another type (~~`Event<void | number>`~~). Use `void` only
+to declare the Event or ReadonlyEvent without the argument at all.
 That's why it is possible to send data from event with argument into event without argument.
 
 ```ts
@@ -79,8 +83,8 @@ Initiates an event with the provided argument, which in turn activates any regis
 #### Formulae {#event-argument-formulae}
 
 ```ts
-const event: Event<T>
-event(argument: T): T
+const event: Event<T>;
+event(argument: T): T;
 ```
 
 - `event` called as a function always returns its argument as is
@@ -102,6 +106,80 @@ The core team has implemented this rule for specific reasons related to the desi
 1. `event` is an instance of `Event<T>`
 2. `argument` is a value of `T`. It is optional, if event is defined as `Event<void>`.
 
+#### Throws {#event-argument-throws}
+
+<details>
+<summary> <b>call of readonly event is not supported, use createEvent instead</b></summary>
+
+> Since: effector 23.0.0
+
+When user tried to call `ReadonlyEvent`. In the most cases it happens when you tried to call derived event:
+
+```ts
+const numberReceived = createEvent<number>();
+const stringifiedReceived = numberReceived.map((number) => String(number));
+
+stringifiedReceived("123"); // THROWS!
+```
+
+The same for all methods returning `ReadonlyEvent`.
+
+To fix it create separate event via `createEvent`, and connect them by `sample`:
+
+```ts
+const numberReceived = createEvent<number>();
+const stringifiedReceived = createEvent<string>();
+
+sample({
+  clock: numberReceived,
+  fn: (number) => String(number),
+  target: stringifiedReceived,
+});
+
+stringifiedReceived("123"); // OK
+```
+
+</details>
+
+<details>
+<summary> <b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
+
+```ts
+const someHappened = createEvent<number>();
+const another = createEvent();
+
+const derived = someHappened.map((number) => {
+  another(); // THROWS!
+  return String(number);
+});
+```
+
+To fix this, use `sample`:
+
+```ts
+const someHappened = createEvent<number>();
+const another = createEvent();
+const derived = createEvent<string>();
+
+sample({
+  clock: someHappened,
+  target: another,
+});
+
+// The same as .map(), but using `target`
+sample({
+  clock: someHappened,
+  fn: (number) => String(number),
+  target: derived,
+});
+```
+
+</details>
+
 #### Returns {#event-argument-returns}
 
 _`T`_: Represents the same value that is passed into the `event`.
@@ -120,13 +198,15 @@ const anotherHappened = createEvent();
 anotherHappened();
 ```
 
-An event can be specified with a single generic type argument. By default, this argument is set to void, indicating that the event does not accept any parameters.
+An event can be specified with a single generic type argument. By default, this argument is set to void, indicating that
+the event does not accept any parameters.
 
 ### `prepend(fn)` {#event-prepend-fn}
 
 Creates a new NOT derived event, that should be called, upon trigger it sends transformed data into the original event.
 
-Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the
+case of `.map`, data transforms **after original event occurred**.
 
 If the original event belongs to some [domain](/en/api/effector/Domain), then a new event will belong to it as well.
 
@@ -143,6 +223,47 @@ const second = first.prepend(fn);
 #### Arguments {#event-prepend-fn-arguments}
 
 1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
+
+#### Throws {#event-prepend-fn-arguments}
+
+<details>
+<summary> <b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
+
+```ts
+const someHappened = createEvent<string>();
+const another = createEvent<number>();
+
+const reversed = someHappened.prepend((input: number) => {
+  another(input); // THROWS!
+  return String(input);
+});
+```
+
+To fix this, use `sample`:
+
+```ts
+const someHappened = createEvent<string>();
+const another = createEvent<number>();
+const reversed = createEvent<number>();
+
+// The same as .prepend(), but using `sample`
+sample({
+  clock: reversed,
+  fn: (input) => String(input),
+  target: someHappened,
+});
+
+sample({
+  clock: reversed,
+  target: another,
+});
+```
+
+</details>
 
 #### Returns {#event-prepend-fn-arguments}
 
@@ -197,7 +318,8 @@ changeName("alice");
 
 #### Meaningful example {#event-prepend-fn-example-meaningful}
 
-You can think of this method like a wrapper function. Let's assume we have function with not ideal API, but we want to call it frequently:
+You can think of this method like a wrapper function. Let's assume we have function with not ideal API, but we want to
+call it frequently:
 
 ```ts
 import { sendAnalytics } from "./analytics";
@@ -230,30 +352,39 @@ Check all other methods on [ReadonlyEvent](#readonlyEvent-methods).
 
 # ReadonlyEvent instance {#readonlyEvent}
 
-A **ReadonlyEvent** is a super type of `Event` with different approach. Firstly, invoking a ReadonlyEvent is not allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
+A **ReadonlyEvent** is a super type of `Event` with different approach. Firstly, invoking a ReadonlyEvent is not
+allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
 
-The primary purpose of a ReadonlyEvent is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a ReadonlyEvent, which is subsequently called by the `.map()` method itself.
+The primary purpose of a ReadonlyEvent is to be triggered by internal code withing the effector library or ecosystem.
+For instance, the `.map()` method returns a ReadonlyEvent, which is subsequently called by the `.map()` method itself.
 
 :::info
 There is no need for user code to directly invoke such a ReadonlyEvent.
 
-If you find yourself needing to call a ReadonlyEvent, it may be necessary to reevaluate and restructure your application's logic.
+If you find yourself needing to call a ReadonlyEvent, it may be necessary to reevaluate and restructure your
+application's logic.
 :::
 
 All the functionalities provided by ReadonlyEvent are also supported in a regular Event.
 
 ## Construction {#readonlyEvent-construction}
 
-There is no way to manually create ReadonlyEvent, but some methods and operators returns derived events, they are have `ReadonlyEvent<T>` type:
+There is no way to manually create ReadonlyEvent, but some methods and operators returns derived events, they are
+have `ReadonlyEvent<T>` type:
 
 - Event's methods like: [`.map(fn)`](#event-map-fn), [`.filter({fn})`](#event-filterMap-fn), and so on
 - Store's property: ['.updates'](/en/api/effector/Store#updates)
 - Effect's [methods](/en/api/effector/Effect#effect) and [properties](/en/api/effector/Effect#properties)
 - operators like: [`sample`](/en/api/effector/sample), [`merge`](/en/api/effector/merge)
 
-## Declaring types
+## Throws {#readonlyEvent-throws}
 
-It becomes necessary in cases where a factory or library requires an event to subscribe to its updates, ensuring proper integration and interaction with the provided functionality:
+It can throw some errors if used in surprising way: [More on this](#event-argument-throws)
+
+## Declaring types {#readonlyEvent-types}
+
+It becomes necessary in cases where a factory or library requires an event to subscribe to its updates, ensuring proper
+integration and interaction with the provided functionality:
 
 ```ts
 ReadonlyEvent<T>;
@@ -267,7 +398,9 @@ _Where `T` represents the type of the event's argument._
 
 ### `map(fn)` {#readonlyEvent-map-fn}
 
-Creates a new derived ReadonlyEvent, which will be called after the original event is called, using the result of the fn function as its argument. This special function enables you to break down and manage data flow, as well as extract or transform data within your business logic model.
+Creates a new derived ReadonlyEvent, which will be called after the original event is called, using the result of the fn
+function as its argument. This special function enables you to break down and manage data flow, as well as extract or
+transform data within your business logic model.
 
 #### Formulae {#readonlyEvent-map-fn-formulae}
 
@@ -283,6 +416,51 @@ const second = first.map(fn);
 #### Arguments {#readonlyEvent-map-fn-arguments}
 
 1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
+
+#### Throws {#readonlyEvent-map-fn-throws}
+
+<details>
+<summary> <b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
+
+```ts
+const someHappened = createEvent<number>();
+const another = createEvent();
+
+const derived = someHappened.map((number) => {
+  another(); // THROWS!
+  return String(number);
+});
+```
+
+To fix this, use `sample`:
+
+```ts
+const someHappened = createEvent<number>();
+const another = createEvent();
+const derived = createEvent<string>();
+
+sample({
+  clock: someHappened,
+  target: another,
+});
+
+// The same as .map(), but using `target`
+sample({
+  clock: someHappened,
+  fn: (number) => String(number),
+  target: derived,
+});
+```
+
+</details>
+
+#### Returns {#readonlyEvent-map-fn-returns}
+
+[_ReadonlyEvent_](#readonlyEvent): The new event.
 
 #### Types {#readonlyEvent-map-fn-types}
 
@@ -300,10 +478,6 @@ const second = first.map((count) => count.toString());
 
 The `first` event can be represented as either `Event<T>` or `ReadonlyEvent<T>`. <br/>
 The `second` event will always be represented as `ReadonlyEvent<T>`.
-
-#### Returns {#readonlyEvent-map-fn-returns}
-
-[_ReadonlyEvent_](#readonlyEvent): The new event.
 
 #### Example {#readonlyEvent-map-fn-example}
 
@@ -330,7 +504,9 @@ userUpdated({ name: "john", role: "admin" });
 
 ### `filter({ fn })` {#readonlyEvent-filter-fn}
 
-This method generates a new derived ReadonlyEvent that will be invoked after the original event, but only if the `fn` function returns a value of `true`. This special function enables you to break down data flow into a branches and subscribe on them within the business logic model.
+This method generates a new derived ReadonlyEvent that will be invoked after the original event, but only if the `fn`
+function returns a value of `true`. This special function enables you to break down data flow into a branches and
+subscribe on them within the business logic model.
 
 :::tip
 [sample](/en/api/effector/sample) operator with `filter` argument is the preferred filtering method.
@@ -352,10 +528,52 @@ const second = first.filter({ fn });
 1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
 
 :::info{title="Note"}
-Here, due to legacy restrictions `fn` is required to use object form because `event.filter(fn)` was an alias for [Event filterMap](/en/api/effector/Event#readonlyEvent-filterMap-fn).
+Here, due to legacy restrictions `fn` is required to use object form because `event.filter(fn)` was an alias
+for [Event filterMap](/en/api/effector/Event#readonlyEvent-filterMap-fn).
 
 Use it always like this `.filter({ fn })`.
 :::
+
+#### Throws {#readonlyEvent-filter-fn-throws}
+
+<details>
+<summary> <b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like guards:
+
+```ts
+const countReceived = createEvent<number>();
+const eachReceived = createEvent<number>();
+
+const receivedEven = someHappened.filter({
+  fn(count) {
+    eachReceived(count); // THROWS!
+    return count % 2 === 0;
+  },
+});
+```
+
+To fix this, use `sample` to call `eachReceived`:
+
+```ts
+const countReceived = createEvent<number>();
+const eachReceived = createEvent<number>();
+
+const receivedEven = someHappened.filter({
+  fn(count) {
+    return count % 2 === 0;
+  },
+});
+
+sample({
+  clock: someHappened,
+  target: eachReceived,
+});
+```
+
+</details>
 
 #### Returns {#readonlyEvent-filter-fn-returns}
 
@@ -413,7 +631,10 @@ numbers({ x: 10 });
 
 #### Meaningful example {#readonlyEvent-filter-fn-example-meaningful}
 
-Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If `filter` returns `true`, the event will be called.
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the
+particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore
+any other notification. Therefore, filtering can be helpful for that. Event filtering works in the same way. If `filter`
+returns `true`, the event will be called.
 
 ```ts
 const sneackersReceived = createEvent<Sneakers>();
@@ -428,9 +649,12 @@ const uniqueSizeReceived = sneackersReceived.filter({
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
-This methods generates a new derived ReadonlyEvent that **may be invoked** after the original event, but with the transformed argument. This special method enabled you to simultaneously transform data and filter out trigger of the event.
+This methods generates a new derived ReadonlyEvent that **may be invoked** after the original event, but with the
+transformed argument. This special method enabled you to simultaneously transform data and filter out trigger of the
+event.
 
-This method looks like the `.filter()` and `.map()` merged in the one. That's it. The reason for creating was an impossibility for event filtering.
+This method looks like the `.filter()` and `.map()` merged in the one. That's it. The reason for creating was an
+impossibility for event filtering.
 
 This method is mostly useful with JavaScript APIs whose returns `undefined` sometimes.
 
@@ -449,6 +673,43 @@ const second = first.filterMap(fn);
 1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
 
 The `fn` function should return some data. When `undefined` is returned, the update of derived event will be skipped.
+
+#### Throws {#readonlyEvent-filterMap-fn-throws}
+
+<details>
+<summary> <b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
+
+```ts
+const countReceived = createEvent<number>();
+const eachReceived = createEvent<number>();
+
+const receivedEven = someHappened.filterMap((count) => {
+  eachReceived(count); // THROWS!
+  return count % 2 === 0 ? Math.abs(count) : undefined;
+});
+```
+
+To fix this, use `sample` to call `eachReceived`:
+
+```ts
+const countReceived = createEvent<number>();
+const eachReceived = createEvent<number>();
+
+const receivedEven = someHappened.filterMap((count) => {
+  return count % 2 === 0 ? Math.abs(count) : undefined;
+});
+
+sample({
+  clock: someHappened,
+  target: eachReceived,
+});
+```
+
+</details>
 
 #### Returns {#readonlyEvent-filterMap-fn-returns}
 
@@ -495,13 +756,15 @@ listReceived(["redux", "mobx"]);
 
 #### Meaningful example {#readonlyEvent-filterMap-fn-example-meaningful}
 
-Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only if they're red. If they're not red, you're out of luck.
+Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only
+if they're red. If they're not red, you're out of luck.
 Let's consider by steps:
 
 1. Take one apple;
 2. Have a look, is it red(put in a pack) or not(take another).
 
-And you repeat this until you complete the task. Now think about it in the effector terms, and we consider the positive case:
+And you repeat this until you complete the task. Now think about it in the effector terms, and we consider the positive
+case:
 
 1. Take an apple – event;
 2. Have a look, red or no – filter;
@@ -514,7 +777,8 @@ And you repeat this until you complete the task. Now think about it in the effec
 This method enables you to call callback on each event trigger with the argument of the event.
 
 :::tip{title="Keep in mind"}
-The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
+The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor
+addresses data race issues.
 
 Its primary intended use is for short-term debugging and logging purposes.
 :::
@@ -569,15 +833,18 @@ Read more:
 
 ## Properties {#readonlyEvent-properties}
 
-These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin) or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
+These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin)
+or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
 
 ### `sid` {#readonlyEvent-sid}
 
 It is an unique identifier for each event.
 
-It is important to note, SID is not changes on each app start, it is statically written inside your app bundle to absolutely identify units.
+It is important to note, SID is not changes on each app start, it is statically written inside your app bundle to
+absolutely identify units.
 
-It can be useful to send events between workers or server/browser: [examples/worker-rpc](https://github.com/effector/effector/tree/master/examples/worker-rpc).
+It can be useful to send events between workers or
+server/browser: [examples/worker-rpc](https://github.com/effector/effector/tree/master/examples/worker-rpc).
 
 It has the `string | null` type.
 
@@ -601,7 +868,8 @@ const another = demo;
 
 ### `compositeName` {#readonlyEvent-compositeName}
 
-This property contains the full internal chain of units. For example, event can be created by the domain, so the composite name will contain a domain name inside it.
+This property contains the full internal chain of units. For example, event can be created by the domain, so the
+composite name will contain a domain name inside it.
 
 ```ts
 import { createEvent, createDomain } from "effector";

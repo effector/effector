@@ -4,7 +4,7 @@ import {
   createEffect,
   createEvent,
   createStore,
-  forward,
+  sample,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -355,9 +355,9 @@ test('interaction with watch and parallel updates', async () => {
     mapParams: (tag: string, n) => ({tag, n}),
   })
 
-  forward({
-    from: trigger,
-    to: [fx, fx],
+  sample({
+    clock: trigger,
+    target: [fx, fx],
   })
 
   trigger.watch(() => {

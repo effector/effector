@@ -11,6 +11,19 @@ import {
 
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('sid support', () => {
   const source = createStore(null)
   const sampled = sample({source, sid: 'foo'})

@@ -24,7 +24,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 
 ## Schema
 
-![](/en/api/effector/images/sample-visualization.gif)
+![](/images/sample-visualization.gif)
 
 ## Type of the created `target`
 
@@ -78,6 +78,12 @@ const event = sample({ clock: event, source: $store });
 - `filter?` _(Function or [Store](/en/api/effector/Store))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
 - `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](/en/explanation/glossary#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to `clock`, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
+
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) property `greedy` is deprecated.
+
+Use `batch` instead of `greedy`.
+:::
 
 :::info{title="since"}
 Array of units in `target` are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
@@ -138,7 +144,7 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Example
 
 ```js
-import { createStore, createEvent, createEffect, sample, forward } from "effector";
+import { createStore, createEvent, createEffect, sample } from "effector";
 
 const submitForm = createEvent();
 
@@ -153,10 +159,10 @@ const sampleUnit = sample(
   submitForm /* 1 */,
   (name, password) => ({ name, password }) /* 3 */,
 );
-/* 5 */
-forward({
-  from: sampleUnit,
-  to: signInFx,
+/* 4 */
+sample({
+  clock: sampleUnit,
+  target: signInFx,
 });
 
 submitForm(12345678);
@@ -231,7 +237,9 @@ trigger();
 :::
 `sample` can be called with an array of [_Store_](/en/api/effector/Store) as `source`:
 
-```js
+> Note: Typescript requires adding `as const` after the array is entered.
+
+```ts
 import { createStore, createEvent, sample } from "effector";
 
 const trigger = createEvent();
@@ -242,7 +250,7 @@ const $b = createStore(1);
 // Target has type `Event<[string, number]>`
 const target = sample({
   clock: trigger,
-  source: [$a, $b],
+  source: [$a, $b] as const,
 });
 
 target.watch((obj) => {

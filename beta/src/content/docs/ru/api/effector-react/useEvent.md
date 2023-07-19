@@ -37,7 +37,7 @@ const fxFn = useEvent(/*unit*/ fx)
 ```jsx
 import ReactDOM from "react-dom";
 import { createEvent, createStore, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const inc = createEvent();
 const $count = createStore(0).on(inc, (x) => x + 1);
@@ -92,7 +92,7 @@ const [aFn, bFn] = useEvent(/*list*/ [a, bFx])
 ```jsx
 import ReactDOM from "react-dom";
 import { createEvent, createStore, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const inc = createEvent();
 const dec = createEvent();
@@ -151,7 +151,7 @@ const {a: aFn, b: bFn} = useEvent(/*shape*/ {a, b: bFx})
 ```jsx
 import ReactDOM from "react-dom";
 import { createEvent, createStore, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const inc = createEvent();
 const dec = createEvent();

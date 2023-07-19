@@ -201,7 +201,7 @@ await userUpdate({ name: "john", role: "admin" });
 
 # Properties {#properties}
 
-You are not supposed to use parts of effect (like `.done` and `.pending`) as a `target` in [sample](/en/api/effector/sample) or [forward](/en/api/effector/forward) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
+You are not supposed to use parts of effect (like `.done` and `.pending`) as a `target` in [sample](/en/api/effector/sample) (even though they are events and stores), since effect is a complete entity on its own. This behavior will not be supported.
 
 ## `done` {#done}
 
@@ -419,10 +419,10 @@ $store = effect.pending;
 ### Returns {#pending-returns}
 
 :::warning{title="Important"}
-Do not modify `$store` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
+Do not modify `$store` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
 :::
 
-[_DerivedStore_](/en/api/effector/Store#derived): Store that represents current state of the effect
+[_DerivedStore_](/en/api/effector/Store#readonly): Store that represents current state of the effect
 
 ### Example {#pending-example}
 
@@ -481,12 +481,12 @@ $count = effect.inFlight;
 - When effect resolves to any state(done or fail) state in `$count` store will be decreased
 
 :::warning{title="Important"}
-Do not modify `$count` value! It is [derived store](/en/api/effector/Store#derived) and should be in predictable state.
+Do not modify `$count` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
 :::
 
 ### Returns {#inFlight-returns}
 
-[_DerivedStore_](/en/api/effector/Store#derived): Store that represents count of the running effects
+[_DerivedStore_](/en/api/effector/Store#readonly): Store that represents count of the running effects
 
 ### Example {#inFlight-example}
 

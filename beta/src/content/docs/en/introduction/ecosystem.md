@@ -21,22 +21,25 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 ## Packages
 
 - [patronum](https://github.com/effector/patronum) 💚 — Effector utility library delivering modularity and convenience.
-- [reflect](https://github.com/effector/reflect) 💚 — Attach effector stores to react components without hooks.
+- [@effector/reflect](https://github.com/effector/reflect) 💚 — Classic HOCs redesigned to connect React components to Effector units in an efficient, composable and (sort of) "fine-grained reactive" way.
+- [effector-storage](https://github.com/yumauri/effector-storage) 💚 - Small module to sync stores with all kinds of storages (local/session storage, IndexedDB, cookies, server side storage, etc)
 - [farfetched](https://farfetched.pages.dev) 🛠 — The advanced data fetching tool for web applications.
+- [@effector/next](https://github.com/effector/next) 🛠 - Official bindings for Next.js
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Module for effector that sync stores with localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
-- [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router on top of effector.
-- [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality for effector.
-- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework for effector which is based on i18next.
-- [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — UI engine for web based on effector.
-- [effector-next](https://github.com/effector/nextjs) 🧨 — Effector wrappers for Next.js.
+- [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router.
+- [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality.
+- [@withease/i18next](https://withease.pages.dev/i18next) ☢️ — A powerful internationalization framework bindings.
+- [@withease/web-api](https://withease.pages.dev/web-api/) ☢️ — Web API bindings — network status, tab visibility, and more.
+- [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — Reactive UI engine for web.
 - [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Effector utilities library.
 
 ## DX
 
 - [eslint-plugin-effector](https://eslint.effector.dev) 🛠 — Enforcing best practices.
 - [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — SWC plugin to efficiently work with effector.
-- [effector-logger](https://github.com/effector/logger) 🧨 — Simple logger for stores, events, effects and domains.
+- [effector-logger](https://github.com/effector/logger) 🛠 — Simple logger for stores, events, effects and domains.
+- [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Simple adapter, which logs updates to Redux DevTools.
 
 ## Form management
 

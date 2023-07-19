@@ -10,7 +10,7 @@ function isRemote(link: string) {
 
 {
   ANNOUNCEMENT ? (
-    <div class="announcement">
+    <div class="announcement" data-pagefind-ignore>
       <div class="title">{getTextLocalized({ text: ANNOUNCEMENT.title }, lang)}</div>
       <div class="text">{getTextLocalized(ANNOUNCEMENT, lang)}</div>
       {ANNOUNCEMENT.button ? (

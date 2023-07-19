@@ -15,7 +15,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: v18.x
-          cache: "pnpm"
+          cache: 'pnpm'
           cache-dependency-path: 'beta/pnpm-lock.yaml'
 
       - name: 🔍 Installation
@@ -53,13 +53,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           ALGOLIA_API_KEY: ${{ secrets.BETA_ALGOLIA_API_KEY }}
 
+      - name: 🔎 Build search index
+        run: pnpm search:build
+        working-directory: ./beta
+
       - name: 📑 Setup Pages
         uses: actions/configure-pages@v3
 
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: "./beta/dist"
+          path: './beta/dist'
 
       - name: 🚀 Deploy to GitHub Pages
         id: deployment

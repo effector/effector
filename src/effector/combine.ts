@@ -170,8 +170,3 @@ const storeCombination = (
   }
   return store
 }
-
-export function createStoreObject(...args: any[]) {
-  deprecate(false, 'createStoreObject', 'combine')
-  return combine(...args)
-}

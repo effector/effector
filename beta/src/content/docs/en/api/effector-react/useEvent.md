@@ -10,7 +10,7 @@ redirectFrom:
 :::
 
 Bind event to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.<br/>
-Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is no-op and does not require `Provider` with scope.
+Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is a no-op and does not require `Provider` with scope.
 
 :::info{title="Note"}
 Useful only if you have server-side rendering or writing tests for React-components.
@@ -24,26 +24,28 @@ Useful only if you have server-side rendering or writing tests for React-compone
 
 ### Returns {#useEvent-unit-returns}
 
-(Function): Function to pass to event handlers. Will trigger a given unit in current scope
+(Function): Function to pass to event handlers. Will trigger a given unit in the current scope.
 
 ### Example {#useEvent-unit-example}
 
 ```jsx
 import ReactDOM from "react-dom";
-import { createEvent, createStore, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import {createEvent, createStore, fork} from "effector";
+import {useStore, useEvent, Provider} from "effector-react";
 
-const inc = createEvent();
-const $count = createStore(0).on(inc, (x) => x + 1);
+const incremented = createEvent();
+const $count = createStore(0);
+
+$count.on(incremented, (counter) => counter + 1);
 
 const App = () => {
   const count = useStore($count);
-  const incFn = useEvent(inc);
+  const handleIncrement = useEvent(incremented);
 
   return (
     <>
       <p>Count: {count}</p>
-      <button onClick={() => incFn()}>increment</button>
+      <button onClick={() => handleIncrement()}>increment</button>
     </>
   );
 };
@@ -68,33 +70,34 @@ ReactDOM.render(
 
 ### Returns {#useEvent-shape-returns}
 
-(Object or Array): List of functions with the same names or keys as argument to pass to event handlers. Will trigger a given unit in current scope
+(Object or Array): List of functions with the same names or keys as an argument to pass to event handlers. Will trigger a given unit in the current scope.
 
 ### Example {#useEvent-shape-example}
 
 ```jsx
 import ReactDOM from "react-dom";
-import { createStore, createEvent, fork } from "effector";
-import { useStore, useEvent, Provider } from "effector-react/scope";
+import {createStore, createEvent, fork} from "effector";
+import {useStore, useEvent, Provider} from "effector-react";
 
-const inc = createEvent();
-const dec = createEvent();
+const incremented = createEvent();
+const decremented = createEvent();
 
-const $count = createStore(0)
-  .on(inc, (x) => x + 1)
-  .on(dec, (x) => x - 1);
+const $count = createStore(0);
+
+$count.on(incremented, (counter) => counter + 1);
+$count.on(decremented, (counter) => counter - 1);
 
 const App = () => {
-  const count = useStore($count);
-  const handler = useEvent({ inc, dec });
+  const counter = useStore($count);
+  const handler = useEvent({ incremented, decremented });
   // or
-  const [a, b] = useEvent([inc, dec]);
+  const [handleIncrement, handleDecrement] = useEvent([incremented, decremented]);
 
   return (
     <>
-      <p>Count: {count}</p>
-      <button onClick={() => handler.inc()}>increment</button>
-      <button onClick={() => handler.dec()}>decrement</button>
+      <p>Count: {counter}</p>
+      <button onClick={() => handler.incremented()}>increment</button>
+      <button onClick={() => handler.decremented()}>decrement</button>
     </>
   );
 };
