@@ -24,111 +24,97 @@ function getWarning() {
 }
 
 describe('call of derived events', () => {
-  test('usage with .map is deprecated', () => {
+  test('usage with .map throw error', () => {
     const a = createEvent()
     const b = a.map(() => {})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with .filterMap is deprecated', () => {
+  test('usage with .filterMap throw error', () => {
     const a = createEvent()
     const b = a.filterMap(() => {})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with .filter is deprecated', () => {
+  test('usage with .filter throw error', () => {
     const a = createEvent()
     const b = a.filter({fn: () => false})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with merge is deprecated', () => {
+  test('usage with merge throw error', () => {
     const a = createEvent()
     const b = merge([a])
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with split is deprecated', () => {
+  test('usage with split throw error', () => {
     const trigger = createEvent<number>()
     const {derived} = split(trigger, {derived: x => x > 0})
-    derived(0)
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(() => derived(0)).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with sample is deprecated', () => {
+  test('usage with sample throw error', () => {
     const a = createEvent()
     const b = sample({clock: a, source: a})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with guard is deprecated', () => {
+  test('usage with guard throw error', () => {
     const a = createEvent()
     const b = guard({source: a, filter: () => true})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"guard is deprecated, use sample instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
   describe('interal events', () => {
-    test('usage with effect.finally is warned', () => {
+    test('usage with effect.finally throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.finally({
-        status: 'done',
-        params: null,
-        result: null,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(() =>
+        // @ts-expect-error
+        fx.finally({
+          status: 'done',
+          params: null,
+          result: null,
+        }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.done is warned', () => {
+    test('usage with effect.done throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.done()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.done).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.fail is warned', () => {
+    test('usage with effect.fail throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.fail()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.fail).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.doneData is warned', () => {
+    test('usage with effect.doneData throw error', () => {
       const fx = createEffect(() => {})
-      fx.doneData()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.doneData).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.failData is warned', () => {
+    test('usage with effect.failData throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.failData()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.failData).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with store.updates is warned', () => {
+    test('usage with store.updates throw error', () => {
       const $store = createStore(0)
-      $store.updates(0)
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(() => $store.updates(0)).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
   })

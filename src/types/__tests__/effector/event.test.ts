@@ -39,7 +39,6 @@ test('#map', () => {
   //@ts-expect-error
   const event_map_check2: Event<number> = computed
   event(2)
-  computed('')
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<string>' is not assignable to type 'Event<number>'.
