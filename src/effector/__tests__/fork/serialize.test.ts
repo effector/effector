@@ -13,6 +13,19 @@ import {
   attach,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('onlyChanges')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
   const $b = createStore([], {sid: 'b'})
