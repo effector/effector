@@ -58,6 +58,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   } else {
     normShape = shape
   }
+  const isList = Array.isArray(normShape)
   const flagsRef = React.useRef({
     stale: true,
     justSubscribed: false,
