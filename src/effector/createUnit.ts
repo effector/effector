@@ -78,10 +78,7 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     deprecate(false, 'thru', 'js pipe')
     return fn(unit)
   }
-  unit.getType = () => {
-    deprecate(false, 'getType', 'compositeName.fullName')
-    return compositeName.fullName
-  }
+  unit.getType = () => compositeName.fullName
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
       assertObject(observer)
