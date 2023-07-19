@@ -37,6 +37,7 @@ redirectFrom:
   - How aviasales migrate on effector — [youtube.com/watch?v=HYaSnVEZiFk](https://www.youtube.com/watch?v=HYaSnVEZiFk)
   - Let’s write a game — [youtube.com/watch?v=tjjxIQd0E8c](https://www.youtube.com/watch?v=tjjxIQd0E8c)
   - Effector 22.2.0 Halley — [youtube.com/watch?v=pTq9AbmS0FI](https://www.youtube.com/watch?v=pTq9AbmS0FI)
+  - Effector 22.4.0 Encke — [youtube.com/watch?v=9UjgcNn0K_o](https://www.youtube.com/watch?v=9UjgcNn0K_o)
 
 ## Support and sponsor
 

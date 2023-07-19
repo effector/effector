@@ -31,7 +31,7 @@ Only `effector-react/scope` version works this way, `useUnit` of `effector-react
 
 ```jsx
 import { createEvent, createStore, fork } from "effector";
-import { useUnit, Provider } from "effector-react/scope";
+import { useUnit, Provider } from "effector-react";
 
 const inc = createEvent();
 const $count = createStore(0).on(inc, (x) => x + 1);
@@ -112,7 +112,7 @@ const App = () => {
 
 ```jsx
 import { createStore, createEvent, fork } from "effector";
-import { useUnit, Provider } from "effector-react/scope";
+import { useUnit, Provider } from "effector-react";
 
 const inc = createEvent();
 const dec = createEvent();

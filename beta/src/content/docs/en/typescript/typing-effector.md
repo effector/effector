@@ -118,23 +118,6 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage has type Event<WarnMessage>
 ```
 
-## `guard`
-
-[TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) can be used to infer a result type by `filter` function
-
-```typescript
-type UserMessage = { kind: "user"; text: string };
-type WarnMessage = { kind: "warn"; warn: string };
-
-const message = createEvent<UserMessage | WarnMessage>();
-
-const userMessage = guard(message, {
-  filter: (msg): msg is UserMessage => msg.kind === "user",
-});
-
-// userMessage has type Event<UserMessage>
-```
-
 ## `sample`
 
 Since `effector@22.2.0` update `sample` also supports a `filter` field, which can also be a [TypeScript type predicate](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates).

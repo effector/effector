@@ -136,7 +136,13 @@ const storeCombination = (
       priority: BARRIER,
       batch: true,
     }),
-    read(rawShape, true),
+    /**
+     * `read` with `sampler` priority is used to prevent cases,
+     *  where `combine` triggers are duplicated
+     * 
+     *  basically, this makes `sample` and `combine` priorities equal
+     */
+    read(rawShape, true, true),
     fn && userFnCall(),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
@@ -164,14 +170,14 @@ const storeCombination = (
     fn,
   })
   if (!readTemplate()) {
-    store.defaultState = fn
-      ? (storeStateRef.current = fn(stateNew))
-      : defaultState
+    if (fn) {
+      const computedValue = fn(stateNew)
+      storeStateRef.current = computedValue
+      storeStateRef.initial = computedValue
+      store.defaultState = computedValue
+    } else {
+      store.defaultState = defaultState
+    }
   }
   return store
-}
-
-export function createStoreObject(...args: any[]) {
-  deprecate(false, 'createStoreObject', 'combine')
-  return combine(...args)
 }

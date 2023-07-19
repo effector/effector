@@ -4,6 +4,11 @@ redirectFrom:
   - /recipes/nextjs/router
 ---
 
+:::tip
+There is the official Next.js bindings package - [`@effector/next`](https://github.com/effector/next). Follow its documentation to find out, how to integrate Next.js with effector.
+:::
+
+
 This is a simplified example of integration with the Next.js router.
 We create a similar model for storing the router instance:
 
@@ -37,7 +42,7 @@ export { $router, attachRouterEv, goToRouteFx };
 We take the router instance from \__app.tsx_:
 
 ```js
-import { useEvent } from 'effector-react/scope';
+import { useUnit } from 'effector-react';
 import { useRouter } from 'next/router';
 
     ...

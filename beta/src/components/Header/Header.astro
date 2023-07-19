@@ -6,7 +6,7 @@ import {
   getTextLocalized,
   translations,
 } from "../../languages";
-import { KNOWN_LANGUAGES, SITE } from "../../consts";
+import { SITE } from "../../consts";
 import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS } from "../../navigation";
 
 import MobileNavigation from "../MobileNavigation.astro";
@@ -14,7 +14,7 @@ import DropDownMenu from "../DropDownMenu.astro";
 
 import EffectorLogo from "./EffectorLogo.astro";
 import MobileMenuButton from "./MobileMenuButton.astro";
-import Search from "./Search";
+import Search from "./Search.astro";
 import SkipToContent from "./SkipToContent.astro";
 import ThemeToggle from "./ThemeToggleButton";
 
@@ -43,7 +43,7 @@ const languageLinks = createChangeLangLinks({ slug });
 const homeLink = lang === "en" ? "/" : `/${lang}`;
 ---
 
-<header>
+<header data-pagefind-ignore>
   <SkipToContent />
 
   <nav>
@@ -52,7 +52,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
       <span>{SITE.title ?? getTextLocalized(translations.Documentation, lang)}</span>
     </a>
     <div class="mr-auto">
-      <Search client:idle />
+      <Search />
     </div>
     {
       DESKTOP_NAVIGATION.map((navLink) => {
@@ -129,7 +129,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
 
 <style>
   header {
-    @apply fixed top-0 left-0 right-0 flex w-full items-center justify-center overflow-visible shadow;
+    @apply fixed left-0 right-0 top-0 flex w-full items-center justify-center overflow-visible shadow;
 
     z-index: 110;
     height: var(--theme-navbar-height);

@@ -8,3 +8,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare module "@pagefind/default-ui" {
+  export class PagefindUI {
+    constructor(options: {});
+  }
+}

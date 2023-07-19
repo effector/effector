@@ -6,6 +6,12 @@ redirectFrom:
   - /docs/api/effector-react/createStoreConsumer
 ---
 
+:::warning{title="Deprecated"}
+since [effector-react 23.0.0](https://changelog.effector.dev/#effector-react-23-0-0).
+
+Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
+:::
+
 ## `createStoreConsumer(store)` {#createStoreConsumer-store}
 
 Creates a store-based React component which is watching for changes in the store. Based on _Render Props_ technique.

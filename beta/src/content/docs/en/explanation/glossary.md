@@ -26,7 +26,7 @@ There can be multiple stores.
 ## Effect
 
 _Effect_ is a container for (possibly async) side effects.
-It exposes special events and stores, such as `pending`, `done`, `fail`, `finally`, etc...
+It exposes special events and stores, such as `.pending`, `.done`, `.fail`, `.finally`, etc...
 
 It can be safely used in place of the original async function.
 
@@ -42,7 +42,7 @@ The only requirement for the function:
 
 _Domain_ is a namespace for your events, stores and effects.
 
-Domains are notified when events, stores, effects, or nested domains are created via `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
+Domains are notified when events, stores, effects, or nested domains are created via `.onCreateEvent`, `.onCreateStore`, `.onCreateEffect`, `.onCreateDomain` methods.
 
 It is useful for logging or other side effects.
 
@@ -78,40 +78,38 @@ $loginSize.watch((size) => {
 
 [Try it](https://share.effector.dev/D5hV8C70)
 
-[store.map in docs](/en/api/effector/Store#map-fn)
+Reference: [Store.map](/en/api/effector/Store#map-fn), [Store.watch](/en/api/effector/Store#watch-watcher)
 
-[store.watch in docs](/en/api/effector/Store#watch-watcher)
-
-**Correct**, declarative:
+**Better**, declarative:
 
 ```js
-import { createStore, createEvent, forward } from "effector";
+import { createStore, createEvent, sample } from "effector";
 
 const submitLoginSize = createEvent();
 
 const $login = createStore("guest");
 const $loginSize = $login.map((login) => login.length);
 
-forward({
-  from: $loginSize,
-  to: submitLoginSize,
+sample({
+  clock: $loginSize,
+  target: submitLoginSize,
 });
 ```
 
 [Try it](https://share.effector.dev/it0gXQLI)
 
-[forward in docs](/en/api/effector/forward)
+Reference: [sample](/en/api/effector/sample)
 
 **Incorrect**:
 
 ```js
-import { createStore, createEvent, forward } from "effector";
+import { createStore, createEvent } from "effector";
 
 const submitLoginSize = createEvent();
 
 const $login = createStore("guest");
 const $loginSize = $login.map((login) => {
-  // no! use forward or watch instead
+  // no! use `sample` instead
   submitLoginSize(login.length);
   return login.length;
 });
@@ -124,7 +122,7 @@ type StoreReducer<State, E> = (state: State, payload: E) => State | void;
 type EventOrEffectReducer<T, E> = (state: T, payload: E) => T;
 ```
 
-_Reducer_ calculates a new state given the previous state and an event's payload. For stores, if reducer returns undefined or the same state (===), then there will be no update for a given store.
+_Reducer_ calculates a new state given the previous state and an event's payload. For stores, if reducer returns undefined or the same state (`===`), then there will be no update for a given store.
 
 ## Watcher
 
@@ -132,7 +130,7 @@ _Reducer_ calculates a new state given the previous state and an event's payload
 type Watcher<T> = (update: T) => any;
 ```
 
-_Watcher_ is used for **side effects**. Accepted by [event.watch](/en/api/effector/Event#watch-watcher), [store.watch](/en/api/effector/Store#watchwatcher) and [domain.onCreate\* hooks](/en/api/effector/Domain#oncreateeventhook). Return value of a watcher is ignored.
+_Watcher_ is used for **side effects**. Accepted by [Event.watch](/en/api/effector/Event#watch-watcher), [Store.watch](/en/api/effector/Store#watchwatcher) and [Domain.onCreate\* hooks](/en/api/effector/Domain#oncreateeventhook). Return value of a watcher is ignored.
 
 ## Subscription
 
@@ -143,7 +141,7 @@ type Subscription = {
 };
 ```
 
-Function, returned by [forward](/en/api/effector/forward), [event.watch](/en/api/effector/Event#watch-watcher), [store.watch](/en/api/effector/Store#watchwatcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing
+**Function**, returned by [forward](/en/api/effector/forward), [Event.watch](/en/api/effector/Event#watch-watcher), [Store.watch](/en/api/effector/Store#watchwatcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing
 
 :::warning
 **Managing subscriptions manually distracts from business logic improvements.**

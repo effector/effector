@@ -46,6 +46,11 @@ module.exports = function (babel, options = {}) {
     importReactNames,
     reactSsr,
   } = normalizeOptions(options)
+  if (reactSsr) {
+    console.error(
+      '[effector/babel-plugin]: reactSsr option is deprecated, use imports from "effector-react" without aliases or /scope',
+    )
+  }
   const factoriesUsed = factories.length > 0
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),

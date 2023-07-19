@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
@@ -18,8 +19,15 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 // https://astro.build/config
 export default defineConfig({
   site:
-    process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://next.effector.dev`,
-  integrations: [tailwind(), preact(), react(), mdx(), prefetch(), compress()],
+    process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://beta.effector.dev`,
+  integrations: [
+    tailwind({ config: { applyBaseStyles: false } }),
+    preact(),
+    react(),
+    mdx(),
+    prefetch(),
+    process.env.COMPRESS !== "false" && compress(),
+  ],
   base: "/",
   build: {
     assets: "assets",
@@ -28,5 +36,15 @@ export default defineConfig({
     syntaxHighlight: "prism",
     remarkPlugins: [directive, admonitions, github, remarkHeadingId],
     rehypePlugins: [[rehypeAutolinkHeadings, { behavior: "prepend" }]],
+  },
+  vite: {
+    server: {
+      proxy: {
+        "/_pagefind": {
+          target: "http://127.0.0.1:1414",
+          rewrite: (path) => path.replace(/^\/dist/, ""),
+        },
+      },
+    },
   },
 });

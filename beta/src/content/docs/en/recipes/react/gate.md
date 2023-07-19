@@ -13,7 +13,7 @@ Suppose you pass the history object from the react-router to the store, or pass 
 In a such situation [Gate](/en/api/effector-react/Gate) will help.
 
 ```js
-import { createStore, createEffect, forward } from "effector";
+import { createStore, createEffect, sample } from "effector";
 import { useUnit, createGate } from "effector-react";
 
 // Effect for api request
@@ -24,13 +24,12 @@ const getTodoFx = createEffect(async ({ id }) => {
 
 // Our main store
 const $todo = createStore(null);
+const TodoGate = createGate();
 
 $todo.on(getTodoFx.doneData, (_, todo) => todo);
 
-const TodoGate = createGate();
-
 // We callgetTodoFx effect every time Gate updates its state.
-forward({ from: TodoGate.state, to: getTodoFx });
+sample({ clock: TodoGate.state, target: getTodoFx });
 
 TodoGate.open.watch(() => {
   //called each time when TodoGate is mounted
