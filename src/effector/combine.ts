@@ -136,7 +136,13 @@ const storeCombination = (
       priority: BARRIER,
       batch: true,
     }),
-    read(rawShape, true),
+    /**
+     * `read` with `sampler` priority is used to prevent cases,
+     *  where `combine` triggers are duplicated
+     * 
+     *  basically, this makes `sample` and `combine` priorities equal
+     */
+    read(rawShape, true, true),
     fn && userFnCall(),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
