@@ -325,6 +325,8 @@ test('setState warning', async () => {
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
       "",
+      "",
+      "",
     ]
   `)
 })
