@@ -6,8 +6,10 @@ redirectFrom:
   - /docs/api/effector/forward
 ---
 
-:::info{title="since"}
-The core team recommends using [sample](/en/api/effector/sample) instead of `forward` since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
+
+The core team recommends using [sample](/en/api/effector/sample) instead of `forward`.
 :::
 
 Method to create connection between units in a declarative way. Send updates from one set of units to another

@@ -28,6 +28,44 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
    - `updateFilter` (_Function_): Function that prevents store from updating when it returns `false`. Accepts updated state as the first argument and current state as the second argument. Redundant for most cases since store already ensures that update is not `undefined` and not equal (`!==`) to current state _(since `effector 21.8.0`)_
    - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/en/api/effector/serialize) is called _(since `effector 22.0.0`)_
    - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` – called on [serialize](/en/api/effector/serialize), transforms value to JSON value – primitive type or plain object/array. `read` – parse store state from JSON value, called on [fork](/en/api/effector/fork), if provided `values` is the result of `serialize` call.
+   - `domain`: (_Domain_): Domain to attach store to after creation.
+
+**Throws**
+
+<details>
+<summary><b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+
+> Since: effector 23.0.0
+
+Happens when events or effects called from [pure functions](/en/glossary#purity), like updateFilter:
+
+```ts
+const someHappened = createEvent<number>();
+const $counter = createStore(0, {
+  updateFilter(a, b) {
+    someHappened(a); // THROWS!
+    return a < b;
+  },
+});
+```
+
+To fix this, use `sample`:
+
+```ts
+const someHappened = createEvent<number>();
+const $counter = createStore(0, {
+  updateFilter(a, b) {
+    return a < b;
+  },
+});
+
+sample({
+  clock: $counter,
+  target: someHappened,
+});
+```
+
+</details>
 
 **Returns**
 
@@ -73,7 +111,7 @@ clearTodoList();
 ## Example with `updateFilter`
 
 ```js
-import { createEvent, createStore, forward } from "effector";
+import { createEvent, createStore, sample } from "effector";
 
 const punch = createEvent();
 const veryStrongHit = createEvent();
@@ -87,7 +125,7 @@ const $lastPunchStrength = createStore(0, {
 $lastPunchStrength.on(punch, (_, strength) => strength);
 
 // Each store update should trigger event `veryStrongHit`
-forward({ from: $lastPunchStrength, to: veryStrongHit });
+sample({ clock: $lastPunchStrength, target: veryStrongHit });
 
 // Watch on store prints initial state
 $lastPunchStrength.watch((strength) => console.log("Strength: %skg", strength));
@@ -110,7 +148,7 @@ punch(100); // Also nothing
 ## Example with `serialize: ignore`
 
 ```js
-import { createEvent, createStore, forward, serialize, fork, allSettled } from "effector";
+import { createEvent, createStore, serialize, fork, allSettled } from "effector";
 
 const readPackage = createEvent();
 

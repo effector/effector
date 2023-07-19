@@ -66,6 +66,10 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Writing tests" },
         link: "/guides/testing",
       },
+      {
+        text: { en: "Server Side Rendering" },
+        link: "/guides/server-side-rendering",
+      },
     ],
   },
   {
@@ -82,10 +86,6 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "Typings" },
         link: "/core-principles/typings",
-      },
-      {
-        text: { en: "Own your data [DRAFT]" },
-        link: "/core-principles/own-your-data",
       },
     ],
   },
@@ -118,6 +118,10 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "Prior Art", ru: "Prior Art" },
         link: "/explanation/prior-art",
+      },
+      {
+        text: { en: "SIDs" },
+        link: "/explanation/sids",
       },
     ],
   },
@@ -225,6 +229,15 @@ const effectorReact = [
     ],
   },
   {
+    text: { en: "Components" },
+    items: [
+      {
+        text: { en: "Provider" },
+        link: "/api/effector-react/Provider",
+      },
+    ],
+  },
+  {
     text: { en: "Gates" },
     items: [
       {
@@ -256,6 +269,19 @@ const effectorReact = [
       {
         text: { en: "createStoreConsumer" },
         link: "/api/effector-react/createStoreConsumer",
+      },
+    ],
+  },
+  {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector-react/compat" },
+        link: "/api/effector-react/module/сompat",
+      },
+      {
+        text: { en: "effector-react/scope" },
+        link: "/api/effector-react/module/scope",
       },
     ],
   },
@@ -400,12 +426,12 @@ const effector = [
     text: { en: "Methods", ru: "Методы" },
     items: [
       {
-        text: { en: "createStore" },
-        link: "/api/effector/createStore",
-      },
-      {
         text: { en: "createEvent" },
         link: "/api/effector/createEvent",
+      },
+      {
+        text: { en: "createStore" },
+        link: "/api/effector/createStore",
       },
       {
         text: { en: "createEffect" },
@@ -414,10 +440,6 @@ const effector = [
       {
         text: { en: "createDomain" },
         link: "/api/effector/createDomain",
-      },
-      {
-        text: { en: "createApi" },
-        link: "/api/effector/createApi",
       },
       {
         text: { en: "attach" },
@@ -438,6 +460,10 @@ const effector = [
       {
         text: { en: "split" },
         link: "/api/effector/split",
+      },
+      {
+        text: { en: "createApi" },
+        link: "/api/effector/createApi",
       },
       {
         text: { en: "restore" },
@@ -516,6 +542,23 @@ const effector = [
     ],
   },
   {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector/compat" },
+        link: "/api/effector/module/сompat",
+      },
+      {
+        text: { en: "effector/inspect" },
+        link: "/api/effector/module/inspect",
+      },
+      {
+        text: { en: "effector/babel-plugin" },
+        link: "/api/effector/module/babel-plugin",
+      },
+    ],
+  },
+  {
     text: { en: "Compiler Plugins" },
     items: [
       {
@@ -538,6 +581,7 @@ const api = [
       { text: { en: "effector-react" }, link: "/api/effector-react" },
       { text: { en: "effector-solid" }, link: "/api/effector-solid" },
       { text: { en: "effector-vue" }, link: "/api/effector-vue" },
+      { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
     ],
   },
 ];

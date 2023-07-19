@@ -5,15 +5,13 @@ redirectFrom:
   - /docs/api/effector-react/connect
 ---
 
-:::info{title="since"}
-[effector-react 21.0.6](https://changelog.effector.dev/#effector-21-0-6)
+:::warning{title="Deprecated"}
+since [effector-react 23.0.0](https://changelog.effector.dev/#effector-react-23-0-0).
+
+Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
 :::
 
 Wrapper for [useStore](/en/api/effector-react/useStore) to use during migration from redux and class-based projects. Will merge store value fields to component props.
-
-:::warning{title="Recommendation"}
-Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
-:::
 
 ## `connect(Store)(Component)` {#connect-store-component}
 

@@ -2120,6 +2120,18 @@ const g1_val = _withFactory2({
 })
 
 const g2_val = g2(0)
+
+const {foo, bar} = _withFactory2({
+  sid: '-bpn650',
+  fn: () => a(0),
+  name: 'none',
+  method: 'a',
+  loc: {
+    file: _effectorFileName,
+    line: 25,
+    column: 19,
+  },
+})
 "
 `;
 

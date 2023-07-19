@@ -18,6 +18,23 @@ import {argumentHistory} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (
+      String(message).includes('forward') ||
+      String(message).includes('guard')
+    )
+      return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
     m.value
@@ -91,32 +108,32 @@ describe('inspect API', () => {
         "update of 'undefined' [sample] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'end' [event] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'myFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'attachedFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'attachedFnFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'myFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'attachedFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'attachedFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'attachedFnFx' [effect] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'attachedFnFx.inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [map] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'inFlight' [store] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [map] to value of 'true' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'pending' [store] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of 'true' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
@@ -247,18 +264,18 @@ describe('inspect API', () => {
     expect(argumentHistory(trackMock)).toMatchInlineSnapshot(`
       Array [
         "update of 'start' [event] to value of 'MUST_BE_TRACKED' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [on] to value of '2' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of '$a' [store] to value of '2' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of '$a' [store] to value of '1' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [undefined] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [map] to value of '3' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of '$a → *' [store] to value of '3' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '3' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [combine] to value of '2,3' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'combine($a, $a → *)' [store] to value of '2,3' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '2,3' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [sample] to value of '5' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'end' [event] to value of '5' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [map] to value of '2' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of '$a → *' [store] to value of '2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of '2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [combine] to value of '1,2' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'combine($a, $a → *)' [store] to value of '1,2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
+        "update of 'updates' [event] to value of '1,2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [sample] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'end' [event] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [undefined] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
       ]
     `)

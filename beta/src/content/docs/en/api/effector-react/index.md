@@ -15,6 +15,10 @@ Effector bindings for ReactJS.
 - [useStore(store)](/en/api/effector-react/useStore)
 - [useEvent(unit)](/en/api/effector-react/useEvent)
 
+## Components
+
+- [Provider](/en/api/effector-react/Provider)
+
 ## Gate API
 
 - [Gate](/en/api/effector-react/Gate)
@@ -26,3 +30,10 @@ Effector bindings for ReactJS.
 - [createComponent(store, render)](/en/api/effector-react/createComponent)
 - [createStoreConsumer(store)](/en/api/effector-react/createStoreConsumer) renders props style
 - [connect(store)(Component)](/en/api/effector-react/connect) "connect" style
+
+## Import map
+
+Package `effector-react` provides couple different entry points for different purposes:
+
+- [effector-react/compat](/en/api/effector-react/module/сompat)
+- [effector-react/scope](/en/api/effector-react/module/scope)

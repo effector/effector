@@ -28,12 +28,6 @@
       "require": "./scope.js",
       "default": "./scope.mjs"
     },
-    "./ssr": {
-      "types": "./ssr.d.ts",
-      "import": "./ssr.mjs",
-      "require": "./ssr.js",
-      "default": "./ssr.mjs"
-    },
     "./compat": {
       "types": "./compat.d.ts",
       "require": "./compat.js",
@@ -75,12 +69,7 @@
     "scope.js.map",
     "scope.mjs",
     "scope.mjs.map",
-    "ssr.js",
-    "ssr.js.map",
-    "ssr.mjs",
-    "ssr.mjs.map",
-    "scope.d.ts",
-    "ssr.d.ts"
+    "scope.d.ts"
   ],
   "keywords": [
     "react",

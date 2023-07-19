@@ -15,6 +15,7 @@ export type StateRefOp =
 export type StateRef = {
   id: ID
   current: any
+  initial?: any
   type?: 'list' | 'shape'
   before?: StateRefOp[]
   noInit?: boolean

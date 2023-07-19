@@ -1,6 +1,19 @@
 import {createStore, createEvent, forward} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('support spread of units', () => {
   const fn = jest.fn()
   const set = createEvent<number>()
