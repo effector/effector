@@ -1,5 +1,5 @@
 import {is} from '../is'
-import {assert} from '../throw'
+import {assert, deprecate} from '../throw'
 import type {Domain, ValuesMap, HandlersMap, Scope, Store} from '../unit.h'
 import {normalizeValues} from './util'
 import {createScope} from './createScope'
@@ -19,6 +19,7 @@ export function fork(
   let config: ForkConfig | void = domainOrConfig as any
   let domain: Domain
   if (is.domain(domainOrConfig)) {
+    deprecate(false, 'fork(domain)', 'fork()')
     domain = domainOrConfig
     config = optionalConfig
   }

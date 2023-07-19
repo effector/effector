@@ -796,7 +796,9 @@ describe(`fork(domain) and related api's are deprecated`, () => {
     fork(d)
 
     expect(getWarning().length > 0).toBe(true)
-    expect(getWarning()).toMatchInlineSnapshot()
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"fork(domain) is deprecated, use fork() instead"`,
+    )
   })
 
   test('hydrate(domain) is deprecated', () => {
