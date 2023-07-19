@@ -3,7 +3,6 @@ import {
   createStore,
   createEvent,
   createEffect,
-  createStoreObject,
   restore,
   combine,
   Store,
@@ -24,20 +23,6 @@ test('createStore', () => {
     Type 'Store<number>' is not assignable to type 'Store<string>'.
       The types returned by 'getState()' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    "
-  `)
-})
-test('createStoreObject', () => {
-  const ev = createEvent()
-  const a = createStore('')
-  const b = createStore(0)
-  const c = createStoreObject({a, b})
-  c.on(ev, (state, payload) => state)
-  c.reset(ev)
-  c.off(ev)
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
     "
   `)
 })
