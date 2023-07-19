@@ -30,6 +30,7 @@ export default {
           ],
         ],
         'package.json',
+        'inspect.d.ts',
         [
           'index.js.flow',
           [
@@ -67,7 +68,7 @@ export default {
         ],
         'README.md',
         'package.json',
-        ['scope.d.ts', ['scope.d.ts', 'ssr.d.ts']],
+        ['scope.d.ts', ['scope.d.ts']],
         [
           'index.js.flow',
           [

@@ -1,0 +1,529 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+  src: local("Lexend Deca Regular"), local("Lexend Deca"),
+    url("/fonts/LexendDeca-Regular.woff2") format("woff2"),
+    url("/fonts/LexendDeca-Regular.ttf") format("ttf");
+  font-family: "Lexend Deca";
+  font-display: swap;
+}
+
+@font-face {
+  font-style: normal;
+  font-weight: 300;
+  src: local("Lexend Deca Light"), local("Lexend Deca"),
+    url("/fonts/LexendDeca-Light.ttf") format("ttf");
+  font-family: "Lexend Deca";
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Global focus outline reset */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:root {
+  --user-font-scale: 1rem - 16px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  max-width: 100vw;
+  min-height: 100vh;
+  font-size: 1rem;
+  font-size: clamp(0.9rem, 0.75rem + 0.375vw + var(--user-font-scale), 1rem);
+  line-height: 1.5;
+  font-family: var(--font-body);
+}
+
+nav ul {
+  padding: 0;
+  list-style: none;
+}
+
+.content > section > * + * {
+  margin-top: 1.25rem;
+}
+
+.content > section > :first-child {
+  margin-top: 0;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  position: relative;
+  margin-bottom: 1rem;
+  outline: none;
+  font-weight: 600;
+  line-height: 1;
+  font-family: Lexend Deca, sans-serif;
+}
+
+h1 {
+  max-width: 40ch;
+  font-size: 2rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 48px 0 16px;
+  border-top: 1px solid var(--theme-divider);
+  padding-top: 24px;
+  font-size: 1.8rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+:is(h2, h3):not(:first-child) {
+  margin-top: 3rem;
+}
+
+:is(h4, h5, h6):not(:first-child) {
+  margin-top: 2rem;
+}
+
+h3 {
+  margin: 32px 0 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-size: 1.3rem;
+  line-height: 1.3;
+}
+
+h5 {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+:is(h1, h2, h3, h4, h5, h6) > code {
+  font-size: 0.8em;
+}
+
+p {
+  line-height: 1.65em;
+}
+
+/**
+ * Avoid 300ms click delay on touch devices that support the `touch-action`
+ * CSS property.
+ *
+ * In particular, unlike most other browsers, IE11+Edge on Windows 10 on
+ * touch devices and IE Mobile 10-11 DON'T remove the click delay when
+ * `<meta name="viewport" content="width=device-width">` is present.
+ * However, they DO support removing the click delay via
+ * `touch-action: manipulation`.
+ *
+ * See:
+ * - http://v4-alpha.getbootstrap.com/content/reboot/#click-delay-optimization-for-touch
+ * - http://caniuse.com/#feat=css-touch-action
+ * - http://patrickhlauke.github.io/touch/tests/results/#suppressing-300ms-delay
+ */
+a,
+area,
+button,
+[role="button"],
+input,
+label,
+select,
+summary,
+textarea {
+  touch-action: manipulation;
+}
+
+.content ul {
+  line-height: 1.1em;
+}
+
+p,
+.content ul {
+  color: var(--theme-text-light);
+}
+
+small,
+.text_small {
+  font-size: 0.833rem;
+}
+
+a {
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--theme-text-accent);
+  font-weight: 400;
+  text-underline-offset: 0.08em;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.content ul {
+  list-style: disc;
+  line-height: 2;
+}
+
+article > section nav :is(ul, ol) > * + * {
+  margin-top: inherit;
+}
+
+article > section li > :is(p, pre, blockquote):not(:first-child) {
+  margin-top: 1rem;
+}
+
+article > section :is(ul, ol) {
+  padding-left: 1em;
+}
+
+article > section nav :is(ul, ol) {
+  padding-left: inherit;
+}
+
+article > section nav {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+article > section ::marker {
+  color: var(--theme-text-light);
+  font-weight: bold;
+}
+
+article > section iframe {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+}
+
+article > section ol {
+  list-style-type: decimal;
+}
+
+article > section ol ::marker {
+  font-weight: 500;
+}
+
+article > section ol li {
+  line-height: 2;
+}
+
+body a > code {
+  color: var(--theme-text-accent);
+  text-underline-offset: var(--padding-block);
+  background-color: hsla(var(--theme-accent-color), 0.1);
+}
+
+a:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 0.25em;
+  text-decoration: underline;
+}
+
+strong {
+  color: inherit;
+  font-weight: 600;
+}
+
+/* Supporting Content */
+
+:not(pre) > code {
+  --border-radius: 3px;
+  --padding-block: 0.2rem;
+  --padding-inline: 0.33rem;
+  margin: calc(var(--padding-block) * -1) 0;
+  border-radius: var(--border-radius);
+  background-color: var(--theme-code-inline-bg);
+  padding: var(--padding-block) var(--padding-inline);
+  color: inherit;
+  font-size: 0.95em;
+
+  font-family: var(--font-mono);
+  word-break: break-word;
+}
+
+pre.astro-code > code {
+  all: unset;
+}
+
+pre > code {
+  font-size: 1em;
+}
+
+table,
+pre {
+  --padding-block: 1rem;
+  --padding-inline: 2rem;
+  position: relative;
+  margin-right: calc(var(--padding-inline) * -1);
+  margin-left: calc(var(--padding-inline) * -1);
+  padding: var(--padding-block) var(--padding-inline);
+  padding-right: calc(var(--padding-inline) * 2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 0.85em;
+
+  line-height: 1.5;
+  font-family: var(--font-mono);
+}
+
+table {
+  margin: 0;
+  border-collapse: collapse;
+  padding: var(--padding-block) 0;
+  width: 100%;
+}
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: var(--theme-bg-hover);
+}
+th {
+  background: var(--color-black);
+  color: var(--theme-color);
+  font-weight: bold;
+}
+td,
+th {
+  padding: 6px;
+  text-align: left;
+}
+
+pre {
+  background-color: var(--theme-code-bg);
+  color: var(--theme-code-text);
+}
+
+blockquote code {
+  background-color: var(--theme-bg);
+}
+
+@media (min-width: 37.75em) {
+  pre {
+    --padding-inline: 1.25rem;
+    margin-right: 0;
+    margin-left: 0;
+    border-radius: 8px;
+  }
+}
+
+blockquote {
+  @apply my-8 py-4 px-5 border-l-4 rounded-md rounded-l-none;
+  border-color: var(--theme-text-light);
+  background-color: var(--theme-bg-offset);
+  line-height: 1.7;
+}
+
+blockquote p, blockquote li {
+  color: var(--theme-text);
+}
+
+img {
+  max-width: 100%;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  display: flex;
+  display: flex;
+  align-items: center;
+  align-items: center;
+  justify-items: center;
+  gap: 0.25em;
+  gap: 0.25em;
+  border: 0;
+  border-radius: 99em;
+  background: var(--theme-bg);
+  background-color: var(--theme-bg);
+  padding: 0.33em 0.67em;
+  color: var(--theme-text);
+  font-size: 1rem;
+}
+
+h2.heading {
+  margin-bottom: 0.5rem;
+  padding: 0.1rem 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.header-link {
+  transition: border-inline-start-color 100ms ease-out, background-color 200ms ease-out;
+  border-left: 4px solid var(--theme-divider);
+  font-size: 0.9em;
+}
+
+.header-link a {
+  display: inline-flex;
+  gap: 0.5em;
+  padding: 0.4rem 0;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+  font: inherit;
+  line-height: 1.3;
+  unicode-bidi: plaintext;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 50em) {
+  .header-link a {
+    padding: 0.275rem 0;
+  }
+}
+
+.header-link:hover,
+.header-link:focus,
+.header-link:focus-within {
+  border-inline-start-color: var(--theme-accent-secondary);
+}
+
+.header-link:hover a,
+.header-link a:focus {
+  color: var(--theme-text);
+  text-decoration: underline;
+}
+.header-link svg {
+  opacity: 0.6;
+}
+.header-link:hover svg {
+  opacity: 0.8;
+}
+
+/* Add line and padding on the left side */
+.header-link {
+  padding-inline-start: 1rem;
+}
+.header-link.depth-3 {
+  padding-inline-start: 2rem;
+}
+.header-link.depth-4 {
+  padding-inline-start: 3rem;
+}
+
+/* Screenreader Only Text */
+.sr-only {
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+  margin: -1px;
+  border-width: 0;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.focus\:not-sr-only:focus,
+.focus\:not-sr-only:focus-visible {
+  clip: auto;
+  position: static;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  white-space: normal;
+}
+
+:target {
+  scroll-margin: calc(var(--theme-sidebar-offset, 5rem) + 2rem) 0 2rem;
+}
+
+/* Highlight TOC header link matching the current scroll position */
+.current-header-link {
+  /* Indicates the current heading for forced colors users in older browsers */
+  outline: 1px solid transparent;
+  background-color: var(--theme-bg-accent);
+}
+
+@media (forced-colors: active) {
+  .current-header-link {
+    border: 1px solid CanvasText;
+  }
+}
+
+.current-header-link a {
+  color: var(--theme-text);
+}
+
+.admonition {
+  @apply gap-2 mb-2 -mx-8 box-border p-4;
+  /* Strange behavior: tw adds `items-center` when `flex` is applied */
+  display: flex;
+  flex-direction: column;
+
+  --admonition-bg: gray;
+  --admonition-border: black;
+  --admonition-text: white;
+  border-left: 0.8rem solid var(--admonition-border);
+  background-color: var(--admonition-bg);
+  color: var(--admonition-text);
+}
+
+@media (min-width: 37.75em) {
+  :root .admonition {
+    @apply mx-0 rounded-xl rounded-l-none;
+  }
+}
+
+.admonition-title {
+  @apply font-medium uppercase;
+}
+
+.admonition a {
+  text-decoration: underline;
+  color: var(--admonition-text);
+}
+
+.admonition code {
+  background-color: var(--admonition-bg);
+  color: var(--admonition-text);
+}
+
+.admonition-content p + p {
+  @apply mt-4;
+}
+
+.admonition-tip {
+  --admonition-bg: var(--theme-admonition-tip-bg);
+  --admonition-border: var(--theme-admonition-tip-border);
+  --admonition-text: var(--theme-admonition-tip-text);
+}
+
+.admonition-warning {
+  --admonition-bg: var(--theme-admonition-warning-bg);
+  --admonition-border: var(--theme-admonition-warning-border);
+  --admonition-text: var(--theme-admonition-warning-text);
+}
+
+.admonition-info {
+  --admonition-bg: var(--theme-admonition-info-bg);
+  --admonition-border: var(--theme-admonition-info-border);
+  --admonition-text: var(--theme-admonition-info-text);
+}

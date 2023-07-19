@@ -1,0 +1,21 @@
+---
+import { getTextLocalized, translations } from "../languages";
+
+type Props = {
+  lang: string;
+};
+
+const { lang } = Astro.props;
+---
+
+<div class="admonition admonition-warning" data-pagefind-ignore>
+  <div class="admonition-heading">
+    <span class="admonition-title">
+      {getTextLocalized(translations.TranslationDisclaimer.title, lang)}
+    </span>
+  </div>
+  <div class="admonition-content">
+    <p>{getTextLocalized(translations.TranslationDisclaimer.firstLine, lang)}</p>
+    <p>{getTextLocalized(translations.TranslationDisclaimer.secondLine, lang)}</p>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+---
+interface Props {
+  kind?: "major" | "minor";
+  emoji?: string;
+  title: string;
+}
+
+const { kind, emoji, title } = Astro.props;
+---
+
+<article class:list={{ major: kind === "major", minor: kind === "minor" }}>
+  <div class="emoji">{emoji}<slot name="emoji" /></div>
+  <div class="title">{title}</div>
+  <p><slot /></p>
+</article>
+
+<style>
+  article {
+    @apply z-10 flex flex-col gap-3 rounded-2xl p-3 text-center shadow-lg transition-shadow duration-500 hover:shadow-xl sm:gap-4 sm:rounded-3xl sm:p-4;
+    background-color: var(--theme-card);
+  }
+
+  article .emoji {
+    @apply flex h-16 w-16 items-center justify-center self-center text-4xl;
+  }
+
+  article .title {
+    @apply text-xl sm:text-2xl;
+  }
+
+  article p {
+    @apply text-sm sm:text-base;
+    color: var(--theme-text);
+  }
+
+  article.major {
+    @apply row-span-2;
+    /* background-image: linear-gradient(var(--theme-text-accent), var(--theme-bg)); */
+    background-image: radial-gradient(
+      circle at 50% 30%,
+      hsla(var(--color-primary-50), 0.4),
+      hsla(var(--color-primary-80), 0.3) 25%,
+      var(--theme-bg) 90%
+    );
+  }
+  article.major .emoji {
+    @apply h-[50%] w-full text-8xl md:h-[60%];
+  }
+  article.major .title {
+    @apply text-2xl md:text-3xl;
+  }
+
+  article.minor {
+    @apply md:col-span-2;
+  }
+  article.minor p {
+    @apply mx-auto max-w-[50ch];
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import { createLink, getPathParamsFromId, getTextLocalized } from "src/languages";
+import { ANNOUNCEMENT } from "../../consts";
+
+const { lang = "en" } = getPathParamsFromId(Astro.url.pathname);
+function isRemote(link: string) {
+  return link.startsWith("http://") || link.startsWith("https://");
+}
+---
+
+{
+  ANNOUNCEMENT ? (
+    <div class="announcement" data-pagefind-ignore>
+      <div class="title">{getTextLocalized({ text: ANNOUNCEMENT.title }, lang)}</div>
+      <div class="text">{getTextLocalized(ANNOUNCEMENT, lang)}</div>
+      {ANNOUNCEMENT.button ? (
+        <div>
+          <a
+            href={createLink(ANNOUNCEMENT.button, lang)}
+            target={isRemote(ANNOUNCEMENT.button.link) ? "_blank" : undefined}
+          >
+            {getTextLocalized(ANNOUNCEMENT.button, lang)}
+          </a>
+        </div>
+      ) : null}
+    </div>
+  ) : null
+}
+
+<style>
+  .announcement {
+    @apply mb-3 flex flex-col gap-1 rounded-lg px-4 py-2;
+    background-color: var(--theme-admonition-info-bg);
+    color: var(--theme-admonition-info-text);
+  }
+
+  .title {
+    @apply text-lg uppercase;
+  }
+
+  .text {
+    @apply text-base;
+  }
+
+  .announcement a {
+    @apply -mx-2 inline-block rounded-md px-2 py-1;
+    background-color: var(--theme-admonition-info-border);
+    color: white;
+  }
+</style>

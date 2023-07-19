@@ -8,7 +8,7 @@ First of all, to avoid any misconceptions and get better developer experience fo
 
 ## Stores naming
 
-Your stores should be distingueshed by a `$`. Will you make it as a prefix either postfix - doesn't really matter. This should be done to have a better search experience in your IDE.
+Your stores should be distinguished by a `$`. Will you make it as a prefix either postfix - doesn't really matter. This should be done to have a better search experience in your IDE.
 
 ```js
 const $user = createStore({})

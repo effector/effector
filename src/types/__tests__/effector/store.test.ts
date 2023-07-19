@@ -3,7 +3,6 @@ import {
   createStore,
   createEvent,
   createEffect,
-  createStoreObject,
   restore,
   combine,
   Store,
@@ -24,20 +23,6 @@ test('createStore', () => {
     Type 'Store<number>' is not assignable to type 'Store<string>'.
       The types returned by 'getState()' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    "
-  `)
-})
-test('createStoreObject', () => {
-  const ev = createEvent()
-  const a = createStore('')
-  const b = createStore(0)
-  const c = createStoreObject({a, b})
-  c.on(ev, (state, payload) => state)
-  c.reset(ev)
-  c.off(ev)
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
     "
   `)
 })
@@ -276,26 +261,6 @@ test('#watch', () => {
   computed.watch(event, (state, payload) => {
     const store_watchByComputed_check1: string = state
     const store_watchByComputed_check2: number = payload
-  })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
-test('#thru', () => {
-  const event = createEvent()
-  const store = createStore(0)
-  const result = store.thru(store => {
-    const thru_check1: Store<number> = store
-    return thru_check1
-  })
-
-  const computed = store.map(() => 'hello')
-  const result1 = computed.thru(store => {
-    const thru_computed_check1: Store<string> = store
-    return thru_computed_check1
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "

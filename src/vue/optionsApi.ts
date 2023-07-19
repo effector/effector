@@ -1,7 +1,7 @@
 import {
   is,
   Store,
-  forward,
+  sample,
   restore,
   clearNode,
   withRegion,
@@ -115,7 +115,7 @@ const mixin: ComponentOptions = {
           }
         } else {
           const updated = createEvent<unknown>()
-          forward({from: updated, to: value.value})
+          sample({clock: updated, target: value.value})
 
           watchCallback = value => {
             isSelfUpdate = true

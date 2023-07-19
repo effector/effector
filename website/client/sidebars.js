@@ -88,6 +88,7 @@ const sidebar = {
             'api/effector/clearNode',
             'api/effector/withRegion',
             'api/effector/launch',
+            'api/effector/inspect'
           ],
         },
       ],

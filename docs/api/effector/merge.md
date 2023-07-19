@@ -7,7 +7,7 @@ description: merge is a method for creating an event triggered by given units
 :::note
 Since effector 20.0.0
 :::
-Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
+Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of given units
 
 ```ts
 merge(units: Unit[]): Event

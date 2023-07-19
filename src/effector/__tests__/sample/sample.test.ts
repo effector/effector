@@ -11,6 +11,19 @@ import {
 
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('sid support', () => {
   const source = createStore(null)
   const sampled = sample({source, sid: 'foo'})
@@ -766,6 +779,35 @@ describe('event/effect sampling behavior (issue #633)', () => {
       clock: initFx,
       filter: targetFx.pending.map(val => !val),
       target: targetFx,
+    })
+
+    targetFx.watch(params => fn(params))
+
+    triggerEffect()
+    /*
+    [effect] targetFx 2
+    [effect] targetFx.done {params: 2, result: undefined}
+    */
+    expect(argumentHistory(fn)).toEqual([2])
+  })
+
+  test('non-batched effect behavior', () => {
+    const fn = jest.fn()
+    const triggerEffect = createEvent()
+
+    const targetFx = createEffect(() => {})
+    const initFx = createEffect(() => {})
+
+    sample({
+      clock: triggerEffect,
+      target: [initFx.prepend(() => 1), initFx.prepend(() => 2)],
+    })
+
+    sample({
+      clock: initFx,
+      filter: targetFx.pending.map(val => !val),
+      target: targetFx,
+      greedy: true,
     })
 
     targetFx.watch(params => fn(params))
