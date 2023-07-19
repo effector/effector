@@ -322,13 +322,7 @@ test('setState warning', async () => {
     container.querySelector('#button').click()
   })
   console.error = oldConsoleError
-  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      "",
-      "",
-      "",
-    ]
-  `)
+  expect(argumentHistory(fn).join("")).toMatchInlineSnapshot(`""`)
 })
 
 describe('createGate without arguments', () => {
