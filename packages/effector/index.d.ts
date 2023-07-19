@@ -3016,6 +3016,8 @@ export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: 
 
 /**
  * Fill stores with given values in provided scope or domain
+ * 
+ * @deprecated use `fork({values})` instead
  */
 export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
 
@@ -3047,6 +3049,9 @@ export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope?: Scope; safe?
 
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * 
+ * @deprecated use `fork({values, handlers})` instead
+ * 
  * @param domain optional root domain
  * @param config optional configuration object with initial store values and effect handlers
  * @returns new scope
