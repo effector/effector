@@ -28,6 +28,19 @@ import {
   useUnit,
 } from 'effector-react/scope'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
     alice: {

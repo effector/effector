@@ -9,6 +9,19 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('use case', () => {
   const clickRequest = createEvent()
   const fetchRequest = createEffect<number, number>(

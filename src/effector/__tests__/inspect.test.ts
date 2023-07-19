@@ -18,6 +18,23 @@ import {argumentHistory} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (
+      String(message).includes('forward') ||
+      String(message).includes('guard')
+    )
+      return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
     m.value

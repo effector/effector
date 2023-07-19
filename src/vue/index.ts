@@ -1,5 +1,5 @@
 import Vue, {VueConstructor, ComponentOptions} from 'vue'
-import {createEvent, restore, is, combine, Store, withRegion, clearNode, forward, Unit} from 'effector'
+import {createEvent, restore, is, combine, Store, withRegion, clearNode, sample, Unit} from 'effector'
 
 export interface EffectorVue extends Vue {
   $watchAsStore: typeof watchAsStore;
@@ -74,7 +74,7 @@ const effectorMixin: ComponentOptions<Vue> = {
 
       for (const key in state) {
         const updated = createEvent();
-        forward({ from: updated, to: state[key] });
+        sample({ clock: updated, target: state[key] });
 
         // @ts-ignore
         this.$options.computed[key] = {
