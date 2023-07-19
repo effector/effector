@@ -5,7 +5,9 @@ import {
   fork,
   allSettled,
   launch,
+  createDomain,
   createEffect,
+  hydrate,
   createStore,
   combine,
 } from 'effector'
@@ -691,5 +693,46 @@ describe('diamond deps (issue #613)', () => {
       },
     })
     expect(argumentHistory(fn)).toEqual(['', 'search'])
+  })
+})
+
+describe(`fork(domain) and related api's are deprecated`, () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function getWarning() {
+    return warn.mock.calls.map(([msg]) => msg)[0]
+  }
+
+  test('fork(domain) is deprecated', () => {
+    const d = createDomain()
+
+    fork(d)
+
+    expect(getWarning().length > 0).toBe(true)
+    expect(getWarning()).toMatchInlineSnapshot()
+  })
+
+  test('hydrate(domain) is deprecated', () => {
+    const d = createDomain()
+
+    hydrate(d, {values: {}})
+
+    expect(getWarning().length > 0).toBe(true)
+    expect(getWarning()).toMatchInlineSnapshot()
+  })
+
+  test('hydrate(fork(domain)) is deprecated', () => {
+    const d = createDomain()
+
+    hydrate(fork(d), {values: {}})
+
+    expect(getWarning().length > 0).toBe(true)
+    expect(getWarning()).toMatchInlineSnapshot()
   })
 })
