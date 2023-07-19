@@ -200,11 +200,7 @@ export interface Store<State> extends Unit<State> {
   reset(...triggers: Array<Unit<any>>): this
   reset(triggers: Array<Unit<any>>): this
   getState(): State
-  map<T>(fn: (state: State, lastState?: T) => T): Store<T>
-  /**
-   * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
-   */
-  map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
+  map<T>(fn: (state: State) => T): Store<T>
   on<E>(
     trigger: Unit<E>,
     reducer: (state: State, payload: E) => State | void,
