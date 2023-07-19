@@ -1,5 +1,5 @@
 import {is, isObject} from '../is'
-import {assert} from '../throw'
+import {assert, deprecate} from '../throw'
 import {launch} from '../kernel'
 import type {Domain, Scope, ValuesMap, Store} from '../unit.h'
 import type {Node} from '../index.h'
@@ -34,8 +34,10 @@ export function hydrate(domain: Domain | Scope, {values}: {values: ValuesMap}) {
     forkPage = domain
     needToAssign = true
     assert(forkPage.cloneOf, 'scope should be created from domain')
+    deprecate(false, 'hydrate(fork(domain), { values })', 'fork({ values })')
     traverseTarget = getGraph(forkPage.cloneOf)
   } else if (is.domain(domain)) {
+    deprecate(false, 'hydrate(domain, { values })', 'fork({ values })')
     traverseTarget = getGraph(domain)
   } else {
     assert(false, 'first argument of hydrate should be domain or scope')

@@ -8,6 +8,8 @@ import {
   createEffect,
   createStore,
   combine,
+  createDomain,
+  hydrate,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -740,5 +742,50 @@ describe('no-scope events should not affect scoped stores', () => {
     const scope = fork()
 
     expect(scope.getState($store)).toBe(0)
+  })
+})
+
+describe(`fork(domain) and related api's are deprecated`, () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function getWarning() {
+    return warn.mock.calls.map(([msg]) => msg).join('\n')
+  }
+
+  test('fork(domain) is deprecated', () => {
+    const d = createDomain()
+
+    fork(d)
+
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"fork(domain) is deprecated, use fork() instead"`,
+    )
+  })
+
+  test('hydrate(domain) is deprecated', () => {
+    const d = createDomain()
+
+    hydrate(d, {values: {}})
+
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"hydrate(domain, { values }) is deprecated, use fork({ values }) instead"`,
+    )
+  })
+
+  test('hydrate(fork(domain)) is deprecated', () => {
+    const d = createDomain()
+
+    hydrate(fork(d), {values: {}})
+
+    expect(getWarning()).toMatchInlineSnapshot(`
+      "fork(domain) is deprecated, use fork() instead
+      hydrate(fork(domain), { values }) is deprecated, use fork({ values }) instead"
+    `)
   })
 })
