@@ -787,7 +787,7 @@ describe(`fork(domain) and related api's are deprecated`, () => {
   })
 
   function getWarning() {
-    return warn.mock.calls.map(([msg]) => msg)[0]
+    return warn.mock.calls.map(([msg]) => msg).join('\n')
   }
 
   test('fork(domain) is deprecated', () => {
@@ -795,7 +795,6 @@ describe(`fork(domain) and related api's are deprecated`, () => {
 
     fork(d)
 
-    expect(getWarning().length > 0).toBe(true)
     expect(getWarning()).toMatchInlineSnapshot(
       `"fork(domain) is deprecated, use fork() instead"`,
     )
@@ -806,8 +805,9 @@ describe(`fork(domain) and related api's are deprecated`, () => {
 
     hydrate(d, {values: {}})
 
-    expect(getWarning().length > 0).toBe(true)
-    expect(getWarning()).toMatchInlineSnapshot()
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"hydrate(domain, { values }) is deprecated, use fork({ values }) instead"`,
+    )
   })
 
   test('hydrate(fork(domain)) is deprecated', () => {
@@ -815,7 +815,9 @@ describe(`fork(domain) and related api's are deprecated`, () => {
 
     hydrate(fork(d), {values: {}})
 
-    expect(getWarning().length > 0).toBe(true)
-    expect(getWarning()).toMatchInlineSnapshot()
+    expect(getWarning()).toMatchInlineSnapshot(`
+      "fork(domain) is deprecated, use fork() instead
+      hydrate(fork(domain), { values }) is deprecated, use fork({ values }) instead"
+    `)
   })
 })
