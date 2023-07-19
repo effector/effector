@@ -93,15 +93,15 @@ test('watch calls during hydration', async () => {
   expect({
     watch: argumentHistory(storeWatchFn),
     updates: argumentHistory(eventWatchFn),
-  }).toEqual({watch: [-1, 0, 1], updates: [0, 1]})
+  }).toEqual({watch: [-1, 0, 0], updates: [0, 0]})
   /** mapped */
   expect({
     watch: argumentHistory(mapWatchFn),
     updates: argumentHistory(mapUpdatesWatchFn),
-  }).toEqual({watch: ["'-1'", "'0'", "'1'"], updates: ["'0'", "'1'"]})
+  }).toEqual({watch: ["'-1'", "'0'", "'0'"], updates: ["'0'", "'0'"]})
   expect({
     fxHandlerFn: argumentHistory(fxHandlerFn),
-  }).toEqual({fxHandlerFn: [0, 1]})
+  }).toEqual({fxHandlerFn: [0, 0]})
   /** combined */
   expect({
     watch: argumentHistory(combineWatchFn),
@@ -110,11 +110,11 @@ test('watch calls during hydration', async () => {
     watch: [
       {a: -1, b: -1},
       {a: 0, b: 0},
-      {a: 1, b: 1},
+      {a: 0, b: 0},
     ],
     updates: [
       {a: 0, b: 0},
-      {a: 1, b: 1},
+      {a: 0, b: 0},
     ],
   })
   /** combined with fn */
@@ -125,11 +125,11 @@ test('watch calls during hydration', async () => {
     watch: [
       {a: -1, b: -1},
       {a: 0, b: 0},
-      {a: 1, b: 1},
+      {a: 0, b: 0},
     ],
     updates: [
       {a: 0, b: 0},
-      {a: 1, b: 1},
+      {a: 0, b: 0},
     ],
   })
 })

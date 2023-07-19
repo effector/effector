@@ -164,9 +164,14 @@ const storeCombination = (
     fn,
   })
   if (!readTemplate()) {
-    store.defaultState = fn
-      ? (storeStateRef.current = fn(stateNew))
-      : defaultState
+    if (fn) {
+      const computedValue = fn(stateNew)
+      storeStateRef.current = computedValue
+      storeStateRef.initial = computedValue
+      store.defaultState = computedValue
+    } else {
+      store.defaultState = defaultState
+    }
   }
   return store
 }
