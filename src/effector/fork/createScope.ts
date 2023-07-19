@@ -68,11 +68,18 @@ export function createScope(unit?: Domain): Scope {
             const id = storeNode.scope.state.id
             const sid = getMeta(storeNode, 'sid')
             forkPage.sidIdMap[sid] = id
-            forkPage.sidValuesMap[sid] = value
+            forkPage.values.sidMap[sid] = value
 
             const serialize = getMeta(storeNode, 'serialize')
-            if (serialize && serialize !== 'ignore') {
-              forkPage.sidSerializeMap[sid] = serialize.write
+            if (serialize) {
+              if (serialize === 'ignore') {
+                forkPage.sidSerializeSettings.set(sid, {ignore: true})
+              } else {
+                forkPage.sidSerializeSettings.set(sid, {
+                  ignore: false,
+                  write: serialize.write,
+                })
+              }
             }
           }
         }
@@ -102,9 +109,9 @@ export function createScope(unit?: Domain): Scope {
   const resultScope: Scope = {
     cloneOf: unit,
     reg: page,
-    sidValuesMap: {},
+    values: {sidMap: {}, idMap: {}},
     sidIdMap: {},
-    sidSerializeMap: {},
+    sidSerializeSettings: new Map(),
     getState(store: StateRef | Store<any>) {
       if ('current' in store) {
         return getPageRef(currentPage, resultScope, null, store).current
@@ -123,7 +130,7 @@ export function createScope(unit?: Domain): Scope {
       scope: {forkInFlightCounter},
     }),
     additionalLinks: {},
-    handlers: {},
+    handlers: {sidMap: {}, unitMap: new Map()},
     fxCount: forkInFlightCounter,
     storeChange,
     warnSerializeNode,

@@ -6,7 +6,7 @@ title: Slots
 A slot is a place in a component where you can insert any unknown component. It's a well-known abstraction used by frameworks
 such as Vue.js and Svelte.
 
-Slots arn't present in the React. With React you can achieve this goal using props or `React.Context`.
+Slots aren't present in the React. With React, you can achieve this goal using props or `React.Context`.
 In large projects this is not convenient, because it generates "props hell" or smears the logic.
 
 Using React with Effector we can achieve slot goals without the problems described above.

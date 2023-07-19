@@ -1,0 +1,48 @@
+---
+title: Справочник API
+---
+
+import FeatureCard from "@components/FeatureCard.astro";
+import IconReact from "@icons/React.astro";
+import IconVue from "@icons/Vue.astro";
+import IconSolid from "@icons/Solid.astro";
+import IconEffector from "@icons/Effector.astro";
+
+Effector предлагает ряд пакетов для интеграции с популярными фреймворками и библиотеками.
+Следующие пакеты поддерживаются основной командой effector.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-4 mb-50">
+
+<FeatureCard
+  title="effector"
+  description="Фундамент основного кода логики в приложениях."
+  link="/ru/api/effector"
+>
+  <IconEffector slot="icon" />
+</FeatureCard>
+
+<FeatureCard
+  title="effector-react"
+  description="Хуки для компактной и удобной интеграции с React компонентами."
+  link="/ru/api/effector-react"
+>
+  <IconReact slot="icon" />
+</FeatureCard>
+
+<FeatureCard
+  title="effector-solid"
+  description="Интеграция с сигналами фреймворка Solid."
+  link="/ru/api/effector-solid"
+>
+  <IconSolid slot="icon" />
+</FeatureCard>
+
+<FeatureCard
+  title="effector-vue"
+  description="Хуки, методы, плагины для работы в рамках Vue."
+  link="/ru/api/effector-vue"
+>
+  <IconVue slot="icon" />
+</FeatureCard>
+
+</div>

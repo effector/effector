@@ -42,6 +42,7 @@ type QueueBucket = {
 /** Dedicated local metadata */
 type Local = {
   fail: boolean
+  failReason?: unknown
   scope: {[key: string]: any}
 }
 
@@ -227,6 +228,13 @@ export const getPageRef = (
   return ref
 }
 
+/** Introspection api internals */
+type Inspector = (stack: Stack, local: Local) => void
+let inspector: Inspector
+export const setInspector = (newInspector: Inspector) => {
+  inspector = newInspector
+}
+
 export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
@@ -407,6 +415,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       }
       stop = local.fail || skip
     }
+    if (inspector) {
+      inspector(stack, local)
+    }
     if (!stop) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
@@ -465,12 +476,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
 const noopParser = (x: any) => x
 
 export const initRefInScope = (
-  scope: {
-    reg: Record<string, StateRef>
-    sidValuesMap: Record<string, any>
-    sidIdMap: Record<string, string>
-    fromSerialize?: boolean
-  },
+  scope: Scope,
   sourceRef: StateRef,
   isGetState?: boolean,
   isKernelCall?: boolean,
@@ -486,12 +492,14 @@ export const initRefInScope = (
   if (refsMap[sourceRef.id]) return
   const ref: StateRef = {
     id: sourceRef.id,
-    current: sourceRef.current,
+    current: sourceRef.initial!,
     meta: sourceRef.meta,
   }
 
-  if (sid && sid in scope.sidValuesMap && !(sid in scope.sidIdMap)) {
-    ref.current = parser(scope.sidValuesMap[sid])
+  if (ref.id in scope.values.idMap) {
+    ref.current = scope.values.idMap[ref.id]
+  } else if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
+    ref.current = parser(scope.values.sidMap[sid])
   } else {
     if (sourceRef.before && !softRead) {
       let isFresh = false
@@ -542,5 +550,6 @@ const tryRun = (local: Local, fn: Function, stack: Stack) => {
   } catch (err) {
     console.error(err)
     local.fail = true
+    local.failReason = err
   }
 }

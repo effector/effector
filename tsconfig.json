@@ -16,6 +16,7 @@
       "effector/fixtures/prettyHtml": ["src/fixtures/prettyHtml.d.ts"],
       "effector/fixtures": ["src/fixtures/index.d.ts"],
       "effector": ["packages/effector/index.d.ts"],
+      "effector/inspect": ["packages/effector/inspect.d.ts"],
       "effector-react/scope": ["packages/effector-react/scope.d.ts"],
       "effector-react/ssr": ["packages/effector-react/scope.d.ts"],
       "effector-react": ["packages/effector-react/index.d.ts"],

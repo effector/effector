@@ -22,7 +22,6 @@ export interface Event<E> extends Unit {
   filterMap<T>(fn: (_: E) => T | void): Event<T>
   prepend<Before>(fn: (_: Before) => E): Event<Before>
   subscribe(subscriber: Subscriber<E>): Subscription
-  thru<U>(fn: (event: Event<E>) => U): U
   getType(): string
   shortName: string
   graphite: Node
@@ -47,7 +46,6 @@ export interface Store<State> extends Unit {
   ): Store<State>
   off(unit: CommonUnit): void
   subscribe(listener: (upd: State) => void): Subscription
-  thru<U>(fn: (store: Store<State>) => U): U
   //prettier-ignore
   watch: (
     & (
@@ -165,18 +163,29 @@ export interface Domain extends Unit {
 
 export interface Scope extends Unit {
   fromSerialize?: boolean
+  hasSidDoubles?: boolean
   kind: Kind
   graphite: Node
   reg: Record<string, StateRef>
   cloneOf?: Domain
   getState<T>(store: Store<T>): T
   getState(ref: StateRef): unknown
-  /** value could be set only for stores with sid (they can be created by createStore, restore and combine) */
-  sidValuesMap: Record<string, any>
+  values: {
+    sidMap: Record<string, any>
+    /** map of sidless stores, ids are StateRef ids */
+    idMap: Record<string, any>
+  }
   sidIdMap: Record<string, string>
-  sidSerializeMap: Record<string, (p: any) => any>
+  sidSerializeSettings: Map<
+    string,
+    {ignore: true} | {ignore: false; write: (value: any) => any}
+  >
   additionalLinks: Record<string, Node[]>
-  handlers: Record<string, (params: unknown) => any>
+  handlers: {
+    sidMap: Record<string, (params: unknown) => any>
+    /** map of sidless effects */
+    unitMap: Map<Unit<any>, (params: unknown) => any>
+  }
   fxCount: Node
   storeChange: Node
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */

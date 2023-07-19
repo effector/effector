@@ -5,6 +5,7 @@ import {add} from './collection'
 export const createStateRef = (current?: any): StateRef => ({
   id: nextStepID(),
   current,
+  initial: current,
 })
 export const readRef = ({current}: StateRef | {current: any}) => current
 

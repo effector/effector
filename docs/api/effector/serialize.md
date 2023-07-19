@@ -14,7 +14,7 @@ A companion method for [_fork_](./fork.md). Allows to get a serialized value for
 
 1. `scope` [_Scope_](./Scope.md): a scope object (forked instance)
 2. `ignore` Optional array of [_Store_](Store.md) to be omitted during serialization (added 20.14.0)
-3. `onlyChanges` Optional boolean flag to ignore stores which didn't changed in fork (prevent default values from being carried over network)
+3. `onlyChanges` Optional boolean flag to ignore stores which didn't change in fork (prevent default values from being carried over network)
 
 **Returns**
 

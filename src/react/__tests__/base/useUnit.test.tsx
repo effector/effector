@@ -473,6 +473,43 @@ describe('useUnit', () => {
       ]
     `)
   })
+  it('should support dynamic change of event', async () => {
+    const fnL = jest.fn()
+    const fnR = jest.fn()
+    const left = createEvent()
+    const right = createEvent()
+    left.watch(() => fnL())
+    right.watch(() => fnR())
+
+    const View = () => {
+      const [which, setWhich] = React.useState(true)
+      const event = which ? left : right
+      const testUnit = useUnit(event)
+      const onSwitch = () => setWhich(!which)
+      return (
+        <div>
+          <button id="run" onClick={testUnit}>
+            run
+          </button>
+          <button id="switch" onClick={onSwitch}>
+            Switch
+          </button>
+        </div>
+      )
+    }
+    await render(<View />)
+    await act(async () => {
+      container.firstChild.querySelector('#run').click()
+    })
+    await act(async () => {
+      container.firstChild.querySelector('#switch').click()
+    })
+    await act(async () => {
+      container.firstChild.querySelector('#run').click()
+    })
+    expect(fnL).toBeCalledTimes(1)
+    expect(fnR).toBeCalledTimes(1)
+  })
   it('should support dynamic change of store positions', async () => {
     const upA = createEvent()
     const upB = createEvent()
@@ -1149,5 +1186,43 @@ describe('useUnit', () => {
           `)
       })
     })
+  })
+  it('should not trigger too often', async () => {
+    const $value = createStore('initial')
+    const change = createEvent<string>()
+
+    $value.on(change, (_, next) => next)
+
+    const shape = {
+      '@@unitShape': () => ({
+        value: $value,
+        onChange: change,
+      }),
+    }
+    let failed = false
+    let count = 0
+    const App = () => {
+      const {onChange, value} = useUnit(shape)
+      React.useEffect(() => {
+        count += 1
+        if (count >= 100) {
+          failed = true
+          return
+        }
+        onChange('test')
+
+        return () => {
+          onChange('')
+        }
+      }, [onChange])
+      return <div>{value}</div>
+    }
+    const scope = fork()
+    await render(
+      <Provider value={scope}>
+        <App />
+      </Provider>,
+    )
+    expect(failed).toBe(false)
   })
 })

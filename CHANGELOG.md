@@ -2,6 +2,78 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.5.3
+
+- Fix too frequent `useUnit` updates
+
+## effector 22.8.6
+
+- Follow-up fix for `22.8.2`: now `combine` in tuple-form handles compelx edge-cases with mapped stores correctly. ([PR #902](https://github.com/effector/effector/pull/902))
+
+## effector-react 22.5.2
+
+- Fix bug in `useUnit` during event change ([issue #900](https://github.com/effector/effector/issues/900), [PR #901](https://github.com/effector/effector/pull/901))
+
+## effector 22.8.5
+
+- Follow up fix for `22.8.4`: now fix works for `fork({ handlers })` calls too. [PR #898](https://github.com/effector/effector/pull/898)
+
+## effector 22.8.4
+
+- Fixed an edge case for `fork` calls without sid (function from release `22.8.0`). Some libraries provide built-in sid's in the code, which led to the `duplicated sid found` exception when calling `fork` when trying to use two instances of the same factory in a test and running it without `effector/babel-plugin`.
+  The exception on `fork` calls is no longer thrown, and all sid-related checks and assertions have been moved to `serialize` calls, since sid's are actually only required for `serialize` to work. [PR #897](https://github.com/effector/effector/pull/897)
+
+## effector 22.8.3
+
+- Added missing node and stateRef ids to meta-objects. These are internal changes which are not covered by the types or docs yet.
+
+## effector 22.8.2
+
+- `combine` types now allow primitive values, just like it was stated in the docs. Thanks to @faustienf [PR #884](https://github.com/effector/effector/pull/884)
+- Events, created from split with match-object shape and internal inFlight counters of Effects now have proper metadata to use in the Inspect API. [PR #892](https://github.com/effector/effector/pull/892)
+
+## effector 22.8.1
+
+- Internal state refs now also see meta, if owned by store. [PR #889](https://github.com/effector/effector/pull/889)
+
+## effector 22.8.0
+
+- Sids are no longer required for `fork({ values, handlers })`, which allows to run tests without `effector/babel-plugin`. Note, that plugin and sids are still required for SSR. ([PR #855](https://github.com/effector/effector/pull/855))
+
+## effector-react 22.5.1
+
+- Fix Gate usage as component. `<Gate />` will also be isomorphic by scope.
+
+## effector 22.7.0
+
+- Fix `Declaration` type, provide missing top-level properties for `region` and `factory` types
+- Add node's `id` to `Declaration` type
+
+## effector 22.6.2
+
+- Fix return type of `withRegion`
+
+## effector 22.6.1
+
+- Add missing `exports` definition for `effector/inspect` API
+
+## effector 22.6.0
+
+- Implemented inspect API ([PR #859](https://github.com/effector/effector/pull/859))
+
+# effector 22.5.2
+
+- Fix `serialize: "ignore"` in `fork({ values })` ([PR #862](https://github.com/effector/effector/pull/862))
+
+## effector 22.5.1
+
+- Fix default factories list in babel-plugin ([PR #857](https://github.com/effector/effector/pull/857))
+
+## effector-react 22.5.0
+
+- Make `useGate` isomorphic in `effector-react` module, so the one not needed to use `effector-react/scope` anymore ([PR #852](https://github.com/effector/effector/pull/852))
+- Fix `useUnit` hangs when scope is changed (happens when route is changed in next.js) ([PR #851](https://github.com/effector/effector/pull/851))
+
 ## effector 22.5.0
 
 - Support [`allSettled(scope)`](https://github.com/effector/effector/issues/687) feature.
@@ -40,18 +112,18 @@ Note that the one need to use "as const" in that case to got correct typecheckin
 - Add `store.reinit` event to set default value into store ([PR #797](https://github.com/effector/effector/pull/797))
 
 ```ts
-const $store = createStore<Array<number>>([]);
+const $store = createStore<Array<number>>([])
 
 sample({
   clock: someEffectFailed,
-  target: $store.reinit
-});
+  target: $store.reinit,
+})
 
 // subscribe on store reinit
 sample({
   clock: $store.reinit,
-  fn: createEffect(() => console.log("store value set to default"))
-});
+  fn: createEffect(() => console.log('store value set to default')),
+})
 ```
 
 - Add safe mode for scopeBind ([PR #688](https://github.com/effector/effector/pull/688))

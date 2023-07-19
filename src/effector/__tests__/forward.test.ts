@@ -1,5 +1,18 @@
 import {forward, createEvent, createStore, createNode} from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('should forward data from one event to another', () => {
   const fn = jest.fn()
   const source1 = createEvent<string>()

@@ -1,0 +1,29 @@
+---
+import { GITHUB_BRANCH, GITHUB_DOCS_CONTENT_DIR, GITHUB_REPO } from "../consts";
+import { getTextLocalized, translations } from "../languages";
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+
+const DOCS_LINK = `https://github.com/${GITHUB_REPO}/tree/${GITHUB_BRANCH}/${GITHUB_DOCS_CONTENT_DIR}/${lang}`;
+---
+
+<div class="admonition admonition-info" data-pagefind-ignore>
+  <div class="admonition-heading">
+    <span class="admonition-title">
+      {getTextLocalized(translations.ThisPageIsNotTranslatedYet, lang)}
+    </span>
+  </div>
+  <div class="admonition-content">
+    <p>
+      {getTextLocalized(translations.PleaseOpenPRWithTranslations, lang)}
+      <a href={DOCS_LINK} target="_blank">{getTextLocalized(translations.usingThisLink, lang)}</a>.
+    </p>
+    <p>
+      {getTextLocalized(translations.ShowingContentForDefaultLanguage, lang)}.
+    </p>
+  </div>
+</div>
