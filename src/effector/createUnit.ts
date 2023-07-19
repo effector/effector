@@ -74,7 +74,10 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.getType = () => compositeName.fullName
+  unit.getType = () => {
+    deprecate(false, 'getType', 'compositeName.fullName')
+    return compositeName.fullName
+  }
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
       assertObject(observer)
