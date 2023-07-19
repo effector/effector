@@ -54,7 +54,6 @@ async function runTypeScript(testFiles: string[]) {
       fullTestFileNames: testFiles,
       testsRoot: TESTS_DIR,
       paths: {
-        'effector/fork': '../../../packages/effector/fork.d.ts',
         effector: '../../../packages/effector/index.d.ts',
         'effector-react/scope': '../../../packages/effector-react/scope.d.ts',
         'effector-react': '../../../packages/effector-react/index.d.ts',

@@ -95,7 +95,6 @@ export default {
         import: './effector.mjs',
         default: './effector.mjs',
       },
-      './fork': extensionlessExport('./fork'),
       './compat': compatExport,
       './inspect': extensionlessExport('./inspect'),
       './effector.umd': umdExport('./effector'),
@@ -105,9 +104,6 @@ export default {
     },
     files: [
       ...getFiles('effector'),
-      ...compiledFile('fork'),
-      ...esmFile('fork'),
-      'fork.d.ts',
       ...compiledFile('inspect'),
       ...esmFile('inspect'),
       'inspect.d.ts',

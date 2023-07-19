@@ -157,14 +157,6 @@ export async function rollupEffector() {
     }),
     createEsCjs(name, {
       file: {
-        cjs: dir(`npm/${name}/fork.js`),
-        es: dir(`npm/${name}/fork.mjs`),
-      },
-      input: 'fork',
-      inputExtension: 'ts',
-    }),
-    createEsCjs(name, {
-      file: {
         cjs: dir(`npm/${name}/inspect.js`),
         es: dir(`npm/${name}/inspect.mjs`),
       },
