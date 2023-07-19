@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "22.5.0",
+  "version": "22.8.6",
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -30,6 +30,12 @@
       "types": "./compat.d.ts",
       "require": "./compat.js",
       "default": "./compat.js"
+    },
+    "./inspect": {
+      "types": "./inspect.d.ts",
+      "import": "./inspect.mjs",
+      "require": "./inspect.js",
+      "default": "./inspect.mjs"
     },
     "./effector.umd": {
       "types": "./effector.umd.d.ts",
@@ -65,6 +71,11 @@
     "fork.mjs",
     "fork.mjs.map",
     "fork.d.ts",
+    "inspect.js",
+    "inspect.js.map",
+    "inspect.mjs",
+    "inspect.mjs.map",
+    "inspect.d.ts",
     "babel-plugin.js",
     "babel-plugin-react.js"
   ],

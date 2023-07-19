@@ -31,7 +31,7 @@ import {createName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
-import {readTemplate, readSidRoot} from './region'
+import {readTemplate, readSidRoot, reportDeclaration} from './region'
 import {
   getSubscribers,
   getStoreState,
@@ -74,10 +74,6 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = (fn: Function) => {
-    deprecate(false, 'thru', 'js pipe')
-    return fn(unit)
-  }
   unit.getType = () => compositeName.fullName
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
@@ -159,7 +155,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(EVENT, event, config),
+      meta: initUnit(config.actualOp || EVENT, event, config),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -191,9 +187,16 @@ export function createEvent<Payload = any>(
   if (config?.domain) {
     config.domain.hooks.event(finalEvent)
   }
+  setMeta(finalEvent, 'id', finalEvent.graphite.id)
+  reportDeclaration(finalEvent.graphite)
   return finalEvent
 }
-function on(store: Store<State>, methodName: string, nodeSet: CommonUnit | CommonUnit[], fn: Function) {
+function on<State>(
+  store: Store<State>,
+  methodName: string,
+  nodeSet: CommonUnit | CommonUnit[],
+  fn: Function,
+) {
   assertNodeSet(nodeSet, methodName, 'first argument')
   assert(isFunction(fn), 'second argument should be a function')
   deprecate(
@@ -205,9 +208,7 @@ function on(store: Store<State>, methodName: string, nodeSet: CommonUnit | Commo
     store.off(trigger)
     getSubscribers(store).set(
       trigger,
-      createSubscription(
-        updateStore(trigger, store, 'on', callARegStack, fn),
-      ),
+      createSubscription(updateStore(trigger, store, 'on', callARegStack, fn)),
     )
   })
   return store
@@ -251,7 +252,9 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
-      forEach(units, unit => on(store, '.reset', unit, () => store.defaultState))
+      forEach(units, unit =>
+        on(store, '.reset', unit, () => store.defaultState),
+      )
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
@@ -265,24 +268,23 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: (value: any, prevArg?: any) => any, firstState?: any) {
+    map(fn: (value: any) => any, forbiddenArgument: any) {
+      assert(
+        isVoid(forbiddenArgument),
+        'second argument of store.map is not supported, use updateFilter instead'
+      )
       let config
       if (isObject(fn)) {
         config = fn
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
-      deprecate(
-        isVoid(firstState),
-        'second argument of store.map',
-        'updateFilter',
-      )
       let lastResult
       const storeState = store.getState()
       const template = readTemplate()
       if (template) {
         lastResult = null
       } else if (!isVoid(storeState)) {
-        lastResult = fn(storeState, firstState)
+        lastResult = fn(storeState)
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
@@ -291,7 +293,7 @@ export function createStore<State>(
         // @ts-expect-error some mismatch in config types
         and: config,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
+      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
@@ -302,6 +304,7 @@ export function createStore<State>(
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
+      deprecate(!fn, 'watch second argument', 'sample')
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -332,24 +335,21 @@ export function createStore<State>(
       mov({from: STACK, target: plainState}),
     ],
     child: updates,
-    meta,
+    meta: {
+      ...meta,
+      defaultState,
+    },
     regional: true,
   })
+  setMeta(store, 'id', store.graphite.id)
+  setMeta(store, 'rootStateRefId', plainStateId)
   const serializeMeta = getMeta(store, 'serialize')
   const derived = getMeta(store, 'derived')
   const ignored = serializeMeta === 'ignore'
-  const customSerialize = !serializeMeta || ignored ? false : serializeMeta
   const sid: string | null = getMeta(store, 'sid')
   if (sid) {
-    if (!ignored) setMeta(store, 'storeChange', true)
+    setMeta(store, 'storeChange', true)
     plainState.sid = sid
-
-    if (customSerialize) {
-      plainState.meta = {
-        ...plainState?.meta,
-        serialize: customSerialize,
-      }
-    }
   }
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)
@@ -364,9 +364,15 @@ export function createStore<State>(
   }
 
   if (!derived) {
-    store.reinit = createEvent<void>()
+    store.reinit = createEvent<void>({
+      named: 'reinit',
+    })
     store.reset(store.reinit)
   }
+
+  plainState.meta = store.graphite.meta
+
+  reportDeclaration(store.graphite)
 
   return store
 }
@@ -384,6 +390,11 @@ const updateStore = (
     to: REG_A,
     priority: 'read',
   })
+  /**
+   * Store reading is not needed for store.map anymore
+   * but there is a fine tuning of "wire lengths"
+   * lack of which leads to a lot of reordering and retriggering issues
+   **/
   if (op === MAP) reader.data.softRead = true
   const node = [reader, userFnCall(caller)]
   applyTemplate(

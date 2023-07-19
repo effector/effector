@@ -31,6 +31,7 @@ export default {
         ],
         'package.json',
         'fork.d.ts',
+        'inspect.d.ts',
         [
           'index.js.flow',
           [

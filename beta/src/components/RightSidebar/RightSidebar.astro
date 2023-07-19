@@ -1,0 +1,37 @@
+---
+import type { MarkdownHeading } from "astro";
+import TableOfContents from "./TableOfContents";
+import MoreMenu from "./MoreMenu.astro";
+
+type Props = {
+  headings: MarkdownHeading[];
+  documentId: string;
+  lang: string;
+};
+
+const { headings, documentId, lang } = Astro.props;
+---
+
+<nav class="sidebar-nav" aria-labelledby="grid-right">
+  <div class="sidebar-nav-inner">
+    <TableOfContents lang={lang} client:media="(min-width: 50em)" headings={headings} />
+    <MoreMenu documentId={documentId} />
+  </div>
+</nav>
+
+<style>
+  .sidebar-nav {
+    position: sticky;
+    top: var(--theme-navbar-height);
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - var(--theme-navbar-height));
+  }
+
+  .sidebar-nav-inner {
+    padding: 0;
+    padding-top: var(--doc-padding);
+    height: 100%;
+    overflow: auto;
+  }
+</style>

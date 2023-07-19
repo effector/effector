@@ -163,6 +163,14 @@ export async function rollupEffector() {
       input: 'fork',
       inputExtension: 'ts',
     }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/inspect.js`),
+        es: dir(`npm/${name}/inspect.mjs`),
+      },
+      input: 'inspect',
+      inputExtension: 'ts',
+    }),
     createUmd(name, {
       external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),

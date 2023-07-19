@@ -28,6 +28,19 @@ import {
   useUnit,
 } from 'effector-react/scope'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
     alice: {
@@ -308,11 +321,11 @@ test('computed values support', async () => {
     <section>
       <b>
         User:
-        alice
+        guest
       </b>
       <small>
         Total:
-        2
+        0
       </small>
     </section>
   `)
@@ -1003,6 +1016,53 @@ describe('behavior on scope changes', () => {
       container.firstChild.querySelector('#click').click()
     })
 
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        <p>
+          3
+        </p>
+        <button
+          id="click"
+        >
+          click
+        </button>
+      </div>
+    `)
+  })
+  test('useUnit should not stale', async () => {
+    const inc = createEvent()
+    const $store = createStore(0).on(inc, x => x + 1)
+    const Count = () => {
+      const value = useUnit($store)
+      return <p>{value}</p>
+    }
+    const Inc = () => {
+      const boundInc = useUnit(inc)
+      return (
+        <button id="click" onClick={() => boundInc()}>
+          click
+        </button>
+      )
+    }
+    const App = ({scope}: {scope: Scope}) => (
+      <Provider value={scope}>
+        <div>
+          <Count />
+          <Inc />
+        </div>
+      </Provider>
+    )
+    const firstScope = fork()
+    const secondScope = fork({values: [[$store, 2]]})
+
+    await render(<App scope={firstScope} />)
+    await render(<App scope={secondScope} />)
+
+    await act(async () => {
+      container.firstChild.querySelector('#click').click()
+    })
+
+    expect(secondScope.getState($store)).toBe(3)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         <p>

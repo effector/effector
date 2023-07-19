@@ -449,17 +449,48 @@ describe('support optional parameters of explicit generic type', () => {
   })
 })
 
-test('support plain values as well as stores', () => {
-  const $bar = createStore(0)
-  const result: Store<{foo: number; bar: number}> = combine({
-    foo: 0,
-    bar: $bar,
+describe('support plain values as well as stores', () => {
+  test('no errors in case of plain value', () => {
+    const $bar = createStore(0)
+    const result: Store<{foo: number; bar: number}> = combine({
+      foo: 0,
+      bar: $bar,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
   })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
+
+  test('edge case with mapped store', () => {
+    enum DirectionSource {
+      Country = 'country',
+      Direction = 'direction',
+    }
+
+    function getTravelInfoSource(destination: null) {
+      if (!destination) {
+        return null
+      }
+
+      if (Math.random()) {
+        return DirectionSource.Country
+      }
+    }
+
+    const $a = createStore(false)
+    const $b = createStore(null).map(getTravelInfoSource)
+
+    const $c = combine($a, $b, (a, b) => 1)
+    const $d = combine($a, 4, (a, b) => 1)
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
 })
 
 describe("#531 large unions doesn't brake combine", () => {
