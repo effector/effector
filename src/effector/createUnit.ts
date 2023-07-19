@@ -74,11 +74,10 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = (fn: Function) => {
-    deprecate(false, 'thru', 'js pipe')
-    return fn(unit)
+  unit.getType = () => {
+    deprecate(false, 'getType', 'compositeName.fullName')
+    return compositeName.fullName
   }
-  unit.getType = () => compositeName.fullName
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
       assertObject(observer)
@@ -145,12 +144,14 @@ export function createEvent<Payload = any>(
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
   const event = ((payload: Payload, ...args: unknown[]) => {
-    deprecate(
+    assert(
       !getMeta(event, 'derived'),
-      'call of derived event',
-      'createEvent',
+      'call of derived event is not supported, use createEvent instead',
     )
-    deprecate(!isPure, 'unit call from pure function', 'operators like sample')
+    assert(
+      !isPure,
+      'unit call from pure function is not supported, use operators like sample instead',
+    )
     if (currentPage) {
       return callCreate(event, template, payload, args)
     }
@@ -272,24 +273,23 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: (value: any, prevArg?: any) => any, firstState?: any) {
+    map(fn: (value: any) => any, forbiddenArgument: any) {
+      assert(
+        isVoid(forbiddenArgument),
+        'second argument of store.map is not supported, use updateFilter instead'
+      )
       let config
       if (isObject(fn)) {
         config = fn
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
-      deprecate(
-        isVoid(firstState),
-        'second argument of store.map',
-        'updateFilter',
-      )
       let lastResult
       const storeState = store.getState()
       const template = readTemplate()
       if (template) {
         lastResult = null
       } else if (!isVoid(storeState)) {
-        lastResult = fn(storeState, firstState)
+        lastResult = fn(storeState)
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
@@ -298,7 +298,7 @@ export function createStore<State>(
         // @ts-expect-error some mismatch in config types
         and: config,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
+      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
@@ -309,6 +309,7 @@ export function createStore<State>(
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
+      deprecate(!fn, 'watch second argument', 'sample')
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -394,6 +395,11 @@ const updateStore = (
     to: REG_A,
     priority: 'read',
   })
+  /**
+   * Store reading is not needed for store.map anymore
+   * but there is a fine tuning of "wire lengths"
+   * lack of which leads to a lot of reordering and retriggering issues
+   **/
   if (op === MAP) reader.data.softRead = true
   const node = [reader, userFnCall(caller)]
   applyTemplate(

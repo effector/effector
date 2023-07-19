@@ -92,7 +92,11 @@ export function createEffect<Params, Done, Fail = Error>(
     scope: {
       handler:
         instance.defaultConfig.handler ||
-        (() => assert(false, `no handler used in ${instance.getType()}`)),
+        (() =>
+          assert(
+            false,
+            `no handler used in ${instance.compositeName.fullName}`,
+          )),
     },
     node: [
       calc(
@@ -157,27 +161,23 @@ export function createEffect<Params, Done, Fail = Error>(
   node.scope.runner = runner
   add(
     node.seq,
-    calc(
-      (params, {runner}, stack) => {
-        const upd: RunnerData<Params, Done, Fail> = getParent(stack)
-          ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
-          : /** empty stack means that this node was launched directly */
-            params
-        if (!stack.meta) {
-          stack.meta = {fxID: nextEffectID()}
-        }
-        launch({
-          target: runner,
-          params: upd,
-          defer: true,
-          scope: getForkPage(stack),
-          meta: stack.meta,
-        })
-        return upd.params
-      },
-      false,
-      true,
-    ),
+    calc((params, {runner}, stack) => {
+      const upd: RunnerData<Params, Done, Fail> = getParent(stack)
+        ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
+        : /** empty stack means that this node was launched directly */
+          params
+      if (!stack.meta) {
+        stack.meta = {fxID: nextEffectID()}
+      }
+      launch({
+        target: runner,
+        params: upd,
+        defer: true,
+        scope: getForkPage(stack),
+        meta: stack.meta,
+      })
+      return upd.params
+    }),
   )
   //@ts-expect-error
   instance.create = (params: Params) => {

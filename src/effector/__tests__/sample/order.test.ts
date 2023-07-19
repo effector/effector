@@ -13,6 +13,19 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('store update will always performs before sampling', () => {
   const fn = jest.fn()
   const int = createStore(0)
@@ -167,7 +180,6 @@ describe('clock should use the last update', () => {
           "fetchCities.done: [msk,spb]",
           "$selectedCities: [msk,spb]",
           "$selectedCities → *: true",
-          "$requestData: {city:[msk,spb],filter:null}",
           "$filterValues: result",
           "$requestData: {city:[msk,spb],filter:result}",
           "bugHere: {city:[msk,spb],filter:result}",
@@ -303,7 +315,6 @@ describe('clock should use the last update', () => {
           "trigger: void",
           "trigger.done: true",
           "$selected: true",
-          "$combine: {$selected:true,$result:null}",
           "$result: result",
           "$combine: {$selected:true,$result:result}",
           "withBug: {$selected:true,$result:result}",
@@ -313,40 +324,170 @@ describe('clock should use the last update', () => {
       `)
     })
   })
+})
 
-  function watchAll(
-    fn: jest.Mock<any, any>,
-    units: Array<Store<any> | Event<any> | Effect<any, any>>,
-  ) {
-    for (const unit of units) {
-      const tag = unit.shortName
-      unitWatch(`${tag}`, unit, fn)
-      if (is.effect(unit)) {
-        unitWatch(`${tag}.done`, unit.doneData, fn)
-        unitWatch(`${tag}.fail`, unit.failData, fn)
-      }
+describe('combine+sample cases', () => {
+  test('combine-sample-sample', () => {
+    const $a = createStore(0)
+    const $b = createStore(0)
+    const run = createEvent()
+
+    const $combine = combine([$a, $b])
+
+    sample({
+      clock: run,
+      source: $a,
+      fn: s => s + 1,
+      target: $a,
+    })
+
+    sample({
+      clock: run,
+      source: $b,
+      fn: s => s + 1,
+      target: $b,
+    })
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: [0,0]",
+        "## init complete",
+        "run: void",
+        "$a: 1",
+        "$combine: [1,0]",
+        "$b: 1",
+        "$combine: [1,1]",
+      ]
+    `)
+  })
+
+  test('sample-sample-combine', () => {
+    const $a = createStore(0)
+    const $b = createStore(0)
+    const run = createEvent()
+
+    sample({
+      clock: run,
+      source: $a,
+      fn: s => s + 1,
+      target: $a,
+    })
+
+    sample({
+      clock: run,
+      source: $b,
+      fn: s => s + 1,
+      target: $b,
+    })
+
+    const $combine = combine([$a, $b])
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: [0,0]",
+        "## init complete",
+        "run: void",
+        "$a: 1",
+        "$b: 1",
+        "$combine: [1,1]",
+      ]
+    `)
+  })
+
+  test('sample-combine-sample', () => {
+    const $a = createStore(0)
+    const $b = createStore(0)
+    const run = createEvent()
+
+    sample({
+      clock: run,
+      source: $a,
+      fn: s => s + 1,
+      target: $a,
+    })
+
+    const $combine = combine([$a, $b])
+
+    sample({
+      clock: run,
+      source: $b,
+      fn: s => s + 1,
+      target: $b,
+    })
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: [0,0]",
+        "## init complete",
+        "run: void",
+        "$a: 1",
+        "$combine: [1,0]",
+        "$b: 1",
+        "$combine: [1,1]",
+      ]
+    `)
+  })
+})
+
+function watchAll(
+  fn: jest.Mock<any, any>,
+  units: Array<Store<any> | Event<any> | Effect<any, any>>,
+) {
+  for (const unit of units) {
+    const tag = unit.shortName
+    unitWatch(`${tag}`, unit, fn)
+    if (is.effect(unit)) {
+      unitWatch(`${tag}.done`, unit.doneData, fn)
+      unitWatch(`${tag}.fail`, unit.failData, fn)
     }
   }
+}
 
-  function unitWatch<T>(
-    tag: string,
-    unit: Store<T> | Event<T> | Effect<T, any, any>,
-    fn: jest.Mock<any, any>,
-    log: boolean = false,
-  ) {
-    unit.watch(value => {
-      let text: string
-      if (typeof value === 'object' && value !== null) {
-        text = JSON.stringify(value).replace(/"/gi, '')
-      } else if (value === undefined) {
-        text = 'void'
-      } else {
-        text = `${value}`
-      }
-      fn(`${tag}: ${text}`)
-      if (log) {
-        console.log(tag, text)
-      }
-    })
-  }
-})
+function unitWatch<T>(
+  tag: string,
+  unit: Store<T> | Event<T> | Effect<T, any, any>,
+  fn: jest.Mock<any, any>,
+  log: boolean = false,
+) {
+  unit.watch(value => {
+    let text: string
+    if (typeof value === 'object' && value !== null) {
+      text = JSON.stringify(value).replace(/"/gi, '')
+    } else if (value === undefined) {
+      text = 'void'
+    } else {
+      text = `${value}`
+    }
+    fn(`${tag}: ${text}`)
+    if (log) {
+      console.log(tag, text)
+    }
+  })
+}

@@ -85,10 +85,16 @@ export function createGate<Props>(
   defaultState: Props,
 ): Gate<Props>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createComponent<Props, Shape extends object>(
   store: Shape,
   view: (
@@ -101,34 +107,26 @@ export function createComponent<Props, Shape extends object>(
 >
 
 /**
- * @deprecated use useStore hook instead
+ * @deprecated use useUnit hook instead
  */
-export function createContextComponent<Props, State, Context>(
-  store: Store<State>,
-  context: React.Context<Context>,
-  view: (props: Props, state: State, context: Context) => React.ReactNode,
-): React.ComponentType<Props>
-
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>,
 >(store: Store<State>): (Component: Com) => React.ComponentType<State>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>,
 >(Component: Com): (store: Store<State>) => React.ComponentType<State>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
-
-/**
- * @deprecated use useStore hook instead
- */
-export function createReactState<
-  State extends object,
-  Com extends React.ComponentType<any>,
->(store: Store<State>, Component: Com): React.ComponentType<State>
 
 export function useEvent(
   event: Event<void>,

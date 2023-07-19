@@ -9,6 +9,19 @@ import {
   guard,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 const typecheck = '{global}'
 
 describe('explicit generics', () => {

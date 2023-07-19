@@ -13,6 +13,19 @@ import {
   attach,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('onlyChanges')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
   const $b = createStore([], {sid: 'b'})
@@ -83,6 +96,16 @@ test('serialize: ignore with fork(values)', async () => {
   await allSettled(inc, {scope})
 
   expect(serialize(scope)).toEqual({b: 1})
+})
+
+test('serialize: ignore with fork(values) for unchanged stores', async () => {
+  const $a = createStore(0, {sid: 'a', serialize: 'ignore'})
+
+  const scope = fork({
+    values: [[$a, 1]],
+  })
+
+  expect(serialize(scope)).toStrictEqual({})
 })
 
 describe('serialize: custom', () => {

@@ -13,6 +13,23 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (
+      String(message).includes('forward') ||
+      String(message).includes('guard')
+    )
+      return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
     const inc = createEvent()
@@ -693,6 +710,38 @@ describe('diamond deps (issue #613)', () => {
       },
     })
     expect(argumentHistory(fn)).toEqual(['', 'search'])
+  })
+})
+
+describe('no-scope events should not affect scoped stores', () => {
+  test('fork, get state, global call', async () => {
+    const $store = createStore(0)
+    const event = createEvent()
+    $store.on(event, v => v + 1)
+
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe(0)
+  })
+  test('fork, global call, get state', async () => {
+    const $store = createStore(0)
+    const event = createEvent()
+    $store.on(event, v => v + 1)
+
+    const scope = fork()
+    event()
+
+    expect(scope.getState($store)).toBe(0)
+  })
+  test('global call, fork, get state', async () => {
+    const $store = createStore(0)
+    const event = createEvent()
+    $store.on(event, v => v + 1)
+
+    event()
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe(0)
   })
 })
 

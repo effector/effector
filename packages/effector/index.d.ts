@@ -139,9 +139,8 @@ export interface Event<Payload> extends Unit<Payload> {
   prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
   /**
-   * @deprecated use js pipe instead
+   * @deprecated use .compositeName.fullName instead
    */
-  thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
   compositeName: CompositeName
   sid: string | null
@@ -188,6 +187,9 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   map<T>(fn: (params: Params) => T): EventAsReturnType<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
+  /**
+   * @deprecated use .compositeName.fullName instead
+   */
   getType(): string
   compositeName: CompositeName
   sid: string | null
@@ -200,11 +202,7 @@ export interface Store<State> extends Unit<State> {
   reset(...triggers: Array<Unit<any>>): this
   reset(triggers: Array<Unit<any>>): this
   getState(): State
-  map<T>(fn: (state: State, lastState?: T) => T): Store<T>
-  /**
-   * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
-   */
-  map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
+  map<T>(fn: (state: State) => T): Store<T>
   on<E>(
     trigger: Unit<E>,
     reducer: (state: State, payload: E) => State | void,
@@ -225,10 +223,6 @@ export interface Store<State> extends Unit<State> {
     trigger: Unit<E>,
     watcher: (state: State, payload: E) => any,
   ): Subscription
-  /**
-   * @deprecated use js pipe instead
-   */
-  thru<U>(fn: (store: Store<State>) => U): U
   defaultState: State
   compositeName: CompositeName
   shortName: string
@@ -344,6 +338,9 @@ export class Domain implements Unit<any> {
   sid: string | null
   compositeName: CompositeName
   shortName: string
+  /**
+   * @deprecated use .compositeName.fullName instead
+   */
   getType(): string
   history: {
     domains: Set<Domain>
@@ -482,6 +479,7 @@ export const step: {
 
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<T>(opts: {
   /**
@@ -503,6 +501,7 @@ export function forward<T>(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: Unit<any>
@@ -510,6 +509,7 @@ export function forward(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
@@ -517,6 +517,7 @@ export function forward(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
@@ -524,6 +525,7 @@ export function forward(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
@@ -532,11 +534,13 @@ export function forward<To, From extends To>(opts: {
 // Allow `* -> void` forwarding (e.g. `string -> void`).
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
@@ -702,13 +706,6 @@ export function createStore<State, SerializedState extends Json = Json>(
   },
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
-
-/**
- * @deprecated use combine() instead
- */
-export function createStoreObject<State>(
-  defaultState: State,
-): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
@@ -2174,7 +2171,7 @@ type GetGuardClock<C, F> = F extends BooleanConstructor
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2191,7 +2188,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
@@ -2206,7 +2203,7 @@ export function guard<A, X extends GetSource<S>,
 // СT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter, target})` instead
  */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>,
@@ -2223,7 +2220,7 @@ export function guard<B, X extends GetClock<C>,
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2238,7 +2235,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -2251,7 +2248,7 @@ export function guard<A, X extends GetSource<S>,
 // C
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>
@@ -2267,7 +2264,7 @@ export function guard<B, X extends GetClock<C>,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2285,7 +2282,7 @@ export function guard<A = any, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2301,7 +2298,7 @@ export function guard<A = any,
 // СT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter, target})` instead
  */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -2319,7 +2316,7 @@ export function guard<B = any,
 // SC (units: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
@@ -2331,7 +2328,7 @@ export function guard<A = any, B = any>(config: {
 // SC (units: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
@@ -2343,7 +2340,7 @@ export function guard<A = any, B = any>(config: {
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2359,7 +2356,7 @@ export function guard<A = any, B = any,
 // S (unit: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(config: {
   source: Unit<A>,
@@ -2370,7 +2367,7 @@ export function guard<A = any>(config: {
 // S (unit - boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(config: {
   source: Unit<A>,
@@ -2381,7 +2378,7 @@ export function guard<A = any>(config: {
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2395,7 +2392,7 @@ export function guard<A = any,
 // C (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any>(config: {
   clock: Unit<B>,
@@ -2406,7 +2403,7 @@ export function guard<B = any>(config: {
 // C (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any>(config: {
   clock: Unit<B>,
@@ -2417,7 +2414,7 @@ export function guard<B = any>(config: {
 // C
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -2437,7 +2434,7 @@ export function guard<B = any,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2453,7 +2450,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
@@ -2469,7 +2466,7 @@ export function guard<A, X extends GetSource<S>,
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2483,7 +2480,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -2498,7 +2495,7 @@ export function guard<A, X extends GetSource<S>,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2515,7 +2512,7 @@ export function guard<A = any, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2532,7 +2529,7 @@ export function guard<A = any,
 // SC (units: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
@@ -2543,7 +2540,7 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
 // SC (units: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
@@ -2554,7 +2551,7 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2569,7 +2566,7 @@ export function guard<A = any, B = any,
 // S (unit: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: BooleanConstructor,
@@ -2579,7 +2576,7 @@ export function guard<A = any>(source: Unit<A>, config: {
 // S (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: ((source: A) => boolean) | Store<boolean>,
@@ -2589,7 +2586,7 @@ export function guard<A = any>(source: Unit<A>, config: {
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2603,7 +2600,7 @@ export function guard<A = any,
 // guard's last overload for `guard(source, config)`
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<
   S extends Source<unknown>,
@@ -2629,7 +2626,7 @@ export function guard<
 // guard's last overload for `guard(config)`
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<
   S extends Source<unknown>,
@@ -3120,8 +3117,10 @@ export function createWatch<T>({
   unit,
   fn,
   scope,
+  batch,
 }: {
-  unit: Unit<T>
+  unit: Unit<T> | Unit<T>[]
   fn: (value: T) => any
   scope?: Scope
+  batch?: boolean
 }): Subscription

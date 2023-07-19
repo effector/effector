@@ -10,6 +10,19 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const originalConsoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('getType')) return
+    originalConsoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = originalConsoleError
+})
+
 describe('domain hooks', () => {
   test('domain.onCreateEvent(fn)', () => {
     const fn = jest.fn()

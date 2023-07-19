@@ -1,6 +1,19 @@
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, createEffect, Event, forward} from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 const typecheck = '{global}'
 
 test('forward between events', () => {

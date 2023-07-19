@@ -18,7 +18,6 @@ Computation priority allows us to have side effects, and it's one of the main re
 
 - Letting pure functions to execute first
 - Side effects can follow a consistent state of the application
-- Batching pure computations in `combine()`
 
 Actually, pure computation cannot be observed out of the scope, therefore, the definition of **_pure computation_** used
 in this library gives us an opportunity to optimize grouping.
@@ -30,9 +29,8 @@ Priority:
 ```
 1. child -> forward
 2. pure -> map, on
-3. barrier -> combine, createStoreObject
-4. sampler -> sample, guard
-5. effect -> watch, effect handler
+3. sampler -> sample, guard, combine
+4. effect -> watch, effect handler
 ```
 
 > Whenever you allow side effects in pure computations, the library will work by the worst scenario. Thereby, increasing non-consistency of application and breaking pure computations. Don't ignore that.

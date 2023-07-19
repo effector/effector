@@ -24,111 +24,97 @@ function getWarning() {
 }
 
 describe('call of derived events', () => {
-  test('usage with .map is deprecated', () => {
+  test('usage with .map throw error', () => {
     const a = createEvent()
     const b = a.map(() => {})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with .filterMap is deprecated', () => {
+  test('usage with .filterMap throw error', () => {
     const a = createEvent()
     const b = a.filterMap(() => {})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with .filter is deprecated', () => {
+  test('usage with .filter throw error', () => {
     const a = createEvent()
     const b = a.filter({fn: () => false})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with merge is deprecated', () => {
+  test('usage with merge throw error', () => {
     const a = createEvent()
     const b = merge([a])
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with split is deprecated', () => {
+  test('usage with split throw error', () => {
     const trigger = createEvent<number>()
     const {derived} = split(trigger, {derived: x => x > 0})
-    derived(0)
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(() => derived(0)).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with sample is deprecated', () => {
+  test('usage with sample throw error', () => {
     const a = createEvent()
     const b = sample({clock: a, source: a})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
-  test('usage with guard is deprecated', () => {
+  test('usage with guard throw error', () => {
     const a = createEvent()
     const b = guard({source: a, filter: () => true})
-    b()
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"call of derived event is deprecated, use createEvent instead"`,
+    expect(b).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
     )
   })
   describe('interal events', () => {
-    test('usage with effect.finally is warned', () => {
+    test('usage with effect.finally throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.finally({
-        status: "done",
-        params: null,
-        result: null,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(() =>
+        // @ts-expect-error
+        fx.finally({
+          status: 'done',
+          params: null,
+          result: null,
+        }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.done is warned', () => {
+    test('usage with effect.done throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.done()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.done).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.fail is warned', () => {
+    test('usage with effect.fail throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.fail()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.fail).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.doneData is warned', () => {
+    test('usage with effect.doneData throw error', () => {
       const fx = createEffect(() => {})
-      fx.doneData()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.doneData).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with effect.failData is warned', () => {
+    test('usage with effect.failData throw error', () => {
       const fx = createEffect(() => {})
-      // @ts-expect-error
-      fx.failData()
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(fx.failData).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
-    test('usage with store.updates is warned', () => {
+    test('usage with store.updates throw error', () => {
       const $store = createStore(0)
-      $store.updates(0)
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"call of derived event is deprecated, use createEvent instead"`,
+      expect(() => $store.updates(0)).toThrowErrorMatchingInlineSnapshot(
+        `"call of derived event is not supported, use createEvent instead"`,
       )
     })
   })
@@ -446,7 +432,7 @@ describe('guard target', () => {
       target: $derived,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      `"guard is deprecated, use sample instead"`,
     )
   })
   test('with derived event', () => {
@@ -459,7 +445,7 @@ describe('guard target', () => {
       target: derived,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      `"guard is deprecated, use sample instead"`,
     )
   })
   describe('interal events', () => {
@@ -472,7 +458,7 @@ describe('guard target', () => {
         target: fx.finally,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.done is warned', () => {
@@ -484,7 +470,7 @@ describe('guard target', () => {
         target: fx.done,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.fail is warned', () => {
@@ -496,7 +482,7 @@ describe('guard target', () => {
         target: fx.fail,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.doneData is warned', () => {
@@ -508,7 +494,7 @@ describe('guard target', () => {
         target: fx.doneData,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.failData is warned', () => {
@@ -520,7 +506,7 @@ describe('guard target', () => {
         target: fx.failData,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
     test('usage with store.updates is warned', () => {
@@ -532,7 +518,7 @@ describe('guard target', () => {
         target: $store.updates,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
   })
@@ -546,7 +532,7 @@ describe('guard target', () => {
         target: fx.inFlight,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"guard: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+        `"guard is deprecated, use sample instead"`,
       )
     })
   })
@@ -562,7 +548,7 @@ describe('forward to', () => {
       to: $derived,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+      `"forward is deprecated, use sample instead"`,
     )
   })
   test('with derived event', () => {
@@ -574,7 +560,7 @@ describe('forward to', () => {
       to: derived,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+      `"forward is deprecated, use sample instead"`,
     )
   })
   describe('interal events', () => {
@@ -586,7 +572,7 @@ describe('forward to', () => {
         to: fx.finally,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.done is warned', () => {
@@ -597,7 +583,7 @@ describe('forward to', () => {
         to: fx.done,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.fail is warned', () => {
@@ -608,7 +594,7 @@ describe('forward to', () => {
         to: fx.fail,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.doneData is warned', () => {
@@ -619,7 +605,7 @@ describe('forward to', () => {
         to: fx.doneData,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
     test('usage with effect.failData is warned', () => {
@@ -630,7 +616,7 @@ describe('forward to', () => {
         to: fx.failData,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
     test('usage with store.updates is warned', () => {
@@ -641,7 +627,7 @@ describe('forward to', () => {
         to: $store.updates,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
   })
@@ -654,7 +640,7 @@ describe('forward to', () => {
         to: fx.inFlight,
       })
       expect(getWarning()).toMatchInlineSnapshot(
-        `"forward: derived unit in \\"to\\" is deprecated, use createEvent/createStore instead"`,
+        `"forward is deprecated, use sample instead"`,
       )
     })
   })
