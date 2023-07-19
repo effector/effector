@@ -304,6 +304,7 @@ export function createStore<State>(
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
+      deprecate(!fn, 'watch second argument', 'sample')
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
