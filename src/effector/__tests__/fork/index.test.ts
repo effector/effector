@@ -745,38 +745,6 @@ describe('no-scope events should not affect scoped stores', () => {
   })
 })
 
-describe('no-scope events should not affect scoped stores', () => {
-  test('fork, get state, global call', async () => {
-    const $store = createStore(0)
-    const event = createEvent()
-    $store.on(event, v => v + 1)
-
-    const scope = fork()
-
-    expect(scope.getState($store)).toBe(0)
-  })
-  test('fork, global call, get state', async () => {
-    const $store = createStore(0)
-    const event = createEvent()
-    $store.on(event, v => v + 1)
-
-    const scope = fork()
-    event()
-
-    expect(scope.getState($store)).toBe(0)
-  })
-  test('global call, fork, get state', async () => {
-    const $store = createStore(0)
-    const event = createEvent()
-    $store.on(event, v => v + 1)
-
-    event()
-    const scope = fork()
-
-    expect(scope.getState($store)).toBe(0)
-  })
-})
-
 describe(`fork(domain) and related api's are deprecated`, () => {
   let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
   beforeEach(() => {
