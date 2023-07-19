@@ -1,0 +1,30 @@
+.theme-toggle {
+  @apply flex items-center gap-1 rounded-full px-2 py-1;
+  background-color: var(--theme-code-inline-bg);
+}
+
+.theme-toggle > label:focus-within {
+  outline: none;
+  color: var(--theme-text-accent);
+  @apply ring-1 ring-current ring-offset-2;
+}
+
+.theme-toggle > label {
+  @apply relative flex cursor-pointer items-center justify-center rounded-full opacity-50;
+  color: var(--theme-code-inline-text);
+}
+
+.theme-toggle .checked {
+  opacity: 1;
+  color: var(--theme-accent);
+}
+
+input[name="theme-toggle"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  z-index: -1;
+}

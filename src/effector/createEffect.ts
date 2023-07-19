@@ -26,7 +26,7 @@ type RunnerData<Params, Done, Fail> = {
 
 export function createEffect<Params, Done, Fail = Error>(
   nameOrConfig: any,
-  maybeConfig?: any,
+  maybeConfig: any = {},
 ): Effect<Params, Done, Fail> {
   const config = flattenConfig(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
@@ -34,7 +34,7 @@ export function createEffect<Params, Done, Fail = Error>(
   )
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
-    maybeConfig,
+    {...maybeConfig, actualOp: EFFECT},
   ) as unknown as Effect<Params, Done, Fail>
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
@@ -90,19 +90,20 @@ export function createEffect<Params, Done, Fail = Error>(
 
   const runner = createNode({
     scope: {
-      handlerId: getMeta(node, 'sid'),
       handler:
         instance.defaultConfig.handler ||
         (() => assert(false, `no handler used in ${instance.getType()}`)),
     },
     node: [
       calc(
-        (upd: RunnerData<Params, Done, Fail>, scope_, stack) => {
-          const scope: {handlerId: string; handler: Function} = scope_ as any
-          let handler = scope.handler
-          if (getForkPage(stack)) {
-            const handler_ = getForkPage(stack)!.handlers[scope.handlerId]
-            if (handler_) handler = handler_
+        (upd: RunnerData<Params, Done, Fail>, scope_: any, stack) => {
+          let handler: Function = scope_.handler
+          const scope = getForkPage(stack)
+          if (scope) {
+            const scopeHandler =
+              scope.handlers.unitMap.get(instance) ||
+              scope.handlers.sidMap[instance.sid!]
+            if (scopeHandler) handler = scopeHandler
           }
           upd.handler = handler
           return upd
@@ -156,27 +157,23 @@ export function createEffect<Params, Done, Fail = Error>(
   node.scope.runner = runner
   add(
     node.seq,
-    calc(
-      (params, {runner}, stack) => {
-        const upd: RunnerData<Params, Done, Fail> = getParent(stack)
-          ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
-          : /** empty stack means that this node was launched directly */
-            params
-        if (!stack.meta) {
-          stack.meta = {fxID: nextEffectID()}
-        }
-        launch({
-          target: runner,
-          params: upd,
-          defer: true,
-          scope: getForkPage(stack),
-          meta: stack.meta,
-        })
-        return upd.params
-      },
-      false,
-      true,
-    ),
+    calc((params, {runner}, stack) => {
+      const upd: RunnerData<Params, Done, Fail> = getParent(stack)
+        ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
+        : /** empty stack means that this node was launched directly */
+          params
+      if (!stack.meta) {
+        stack.meta = {fxID: nextEffectID()}
+      }
+      launch({
+        target: runner,
+        params: upd,
+        defer: true,
+        scope: getForkPage(stack),
+        meta: stack.meta,
+      })
+      return upd.params
+    }),
   )
   //@ts-expect-error
   instance.create = (params: Params) => {
@@ -202,6 +199,7 @@ export function createEffect<Params, Done, Fail = Error>(
 
   const inFlight = (instance.inFlight = createStore(0, {
     serialize: 'ignore',
+    named: (getMeta(instance, 'name') || instance.graphite.id) + '.inFlight',
   })
     .on(instance, x => x + 1)
     .on(anyway, x => x - 1)

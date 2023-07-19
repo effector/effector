@@ -30,17 +30,7 @@ export default {
           ],
         ],
         'package.json',
-        'fork.d.ts',
-        [
-          'index.js.flow',
-          [
-            'index.js.flow',
-            'effector.cjs.js.flow',
-            // 'effector.mjs.flow',
-            'effector.umd.js.flow',
-            'compat.js.flow',
-          ],
-        ],
+        'inspect.d.ts',
       ]),
     () =>
       massCopy('src/babel', 'npm/effector', [
@@ -68,17 +58,7 @@ export default {
         ],
         'README.md',
         'package.json',
-        ['scope.d.ts', ['scope.d.ts', 'ssr.d.ts']],
-        [
-          'index.js.flow',
-          [
-            'index.js.flow',
-            'effector-react.cjs.js.flow',
-            // 'effector-react.es.js.flow',
-            'effector-react.umd.js.flow',
-            'compat.js.flow',
-          ],
-        ],
+        ['scope.d.ts', ['scope.d.ts']],
       ]),
     rollupEffectorReact,
     publishScript('effector-react'),
@@ -129,15 +109,6 @@ export default {
         ],
         'README.md',
         'package.json',
-        [
-          'index.js.flow',
-          [
-            'index.js.flow',
-            'effector-vue.cjs.js.flow',
-            // 'effector-vue.mjs.js.flow',
-            'effector-vue.umd.js.flow',
-          ],
-        ],
       ]),
     rollupEffectorVue,
     publishScript('effector-vue'),

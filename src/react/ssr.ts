@@ -6,13 +6,10 @@ import {
   useStoreMapBase,
   useListBase,
   useEventBase,
+  useGateBase,
 } from './apiBase'
 import {withDisplayName} from './withDisplayName'
-import {
-  useGate as commonUseGate,
-  createGateImplementation,
-  processCreateGateConfig,
-} from './createGate'
+import {createGateImplementation, processCreateGateConfig} from './createGate'
 import type {Gate} from './index.h'
 import {throwError} from './throw'
 import {deprecate} from './deprecate'
@@ -28,69 +25,33 @@ export function createGate<Props>(
     | {}
   >
 ) {
-  return createGateImplementation(processCreateGateConfig(useGate, args))
-}
-
-export function useGate<Props>(
-  GateComponent: Gate<Props>,
-  props: Props = {} as any,
-) {
-  const [open, close, set] = useEvent([
-    GateComponent.open,
-    GateComponent.close,
-    GateComponent.set,
-  ])
-  const ForkedGate = React.useMemo(
-    () =>
-      ({
-        open,
-        close,
-        set,
-      } as Gate<Props>),
-    [GateComponent, open],
-  )
-  commonUseGate(ForkedGate, props)
+  return createGateImplementation(processCreateGateConfig(useGateBase, args))
 }
 
 export function createStoreConsumer(store: any) {
+  deprecate('createStoreConsumer', 'useUnit')
   return (props: any) => {
     const state = useStore(store)
     return props.children(state)
   }
 }
 
-export const createContextComponent = (
-  store: any,
-  context: any,
-  renderProp: any,
-) => {
-  deprecate('createContextComponent')
-  return (props: any) => {
-    const ctx = React.useContext(context)
-    const state = useStore(store)
-    return renderProp(props, state, ctx)
-  }
-}
-
 export const createComponent = (shape: any) => throwError('not implemented')
 
-export const createReactState = (store: any, Component: any) => {
-  deprecate('createReactState')
-  return connect(Component)(store)
-}
-
-export const connect = (Component: any) => (store: any) => {
-  let View: any = Component
-  if (typeof Component !== 'function') {
-    View = store
-    store = Component as any
+export const connect = (Component: any) => {
+  deprecate('connect', 'useUnit')
+  return (store: any) => {
+    let View: any = Component
+    if (typeof Component !== 'function') {
+      View = store
+      store = Component as any
+    }
+    const wrappedComponentName = View.displayName || View.name || 'Unknown'
+    return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
+      React.createElement(View, {...props, ...(useStore(store) as any)}),
+    )
   }
-  const wrappedComponentName = View.displayName || View.name || 'Unknown'
-  return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
-    React.createElement(View, {...props, ...(useStore(store) as any)}),
-  )
 }
-
 /** useStore wrapper for scopes */
 export function useStore<T>(store: Store<T>): T {
   return useStoreBase(store, getScope(true))
@@ -126,4 +87,12 @@ works like React.useCallback, but for scopes
 */
 export function useEvent(eventObject: any) {
   return useEventBase(eventObject, getScope(true))
+}
+
+/** useGate wrapper for scopes */
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+) {
+  return useGateBase(GateComponent, props, getScope(true))
 }

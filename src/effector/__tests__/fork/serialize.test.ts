@@ -13,6 +13,19 @@ import {
   attach,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('onlyChanges')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
   const $b = createStore([], {sid: 'b'})
@@ -67,6 +80,32 @@ test('serialize: ignore', async () => {
   await allSettled(inc, {scope})
 
   expect(serialize(scope)).toEqual({b: 1})
+})
+
+test('serialize: ignore with fork(values)', async () => {
+  const inc = createEvent()
+  const $a = createStore(0, {sid: 'a', serialize: 'ignore'})
+  const $b = createStore(0, {sid: 'b'})
+  $a.on(inc, x => x + 1)
+  $b.on(inc, x => x + 1)
+
+  const scope = fork({
+    values: [[$a, 100]],
+  })
+
+  await allSettled(inc, {scope})
+
+  expect(serialize(scope)).toEqual({b: 1})
+})
+
+test('serialize: ignore with fork(values) for unchanged stores', async () => {
+  const $a = createStore(0, {sid: 'a', serialize: 'ignore'})
+
+  const scope = fork({
+    values: [[$a, 1]],
+  })
+
+  expect(serialize(scope)).toStrictEqual({})
 })
 
 describe('serialize: custom', () => {
@@ -603,6 +642,21 @@ describe('serialize: missing sids', () => {
     expect(scope.getState($store)).toEqual('scope value')
     expect(console.error).toHaveBeenCalledWith(
       'There is a store without sid in this scope, its value is omitted',
+    )
+  })
+  test('serialize: throws if duplicated sids', () => {
+    const a = createStore(0, {sid: 'sameSid'})
+    const b = createStore(0, {sid: 'sameSid'})
+
+    const scope = fork({
+      values: [
+        [a, 1],
+        [b, 1],
+      ],
+    })
+
+    expect(() => serialize(scope)).toThrowErrorMatchingInlineSnapshot(
+      `"duplicate sid found in this scope"`,
     )
   })
   test('serialize: doesn not warn, if no sid is missing', () => {

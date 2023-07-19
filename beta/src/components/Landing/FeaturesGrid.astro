@@ -1,0 +1,14 @@
+<section class="features">
+  <div class="wrapper">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .features {
+  }
+
+  .features .wrapper {
+    @apply mx-auto grid min-h-[680px] w-full max-w-6xl grid-cols-2 gap-3 p-3 sm:gap-6 sm:p-6 md:grid-cols-3 md:grid-rows-3;
+  }
+</style>
