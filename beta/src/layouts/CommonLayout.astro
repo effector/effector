@@ -35,8 +35,6 @@ const currentPage = Astro.url.pathname;
     </style>
   </head>
 
-  <ViewTransitions fallback="swap" />
-
   <body>
     <Header currentPage={currentPage} />
     <slot />
