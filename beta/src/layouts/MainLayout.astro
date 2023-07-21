@@ -141,7 +141,7 @@ const currentPage = Astro.url.pathname;
     }
   </style>
 
-  <main class="layout">
+  <main class="layout" transition:animate="morph">
     <aside id="grid-left" title="Site Navigation" data-pagefind-ignore>
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
