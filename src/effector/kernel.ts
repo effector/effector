@@ -58,7 +58,7 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
      * if both nodes has the same PriorityType
      * and first node is created after second one
      */
-    (a.v.type === b.v.type && a.v.id > b.v.id) ||
+    // (a.v.type === b.v.type && a.v.id > b.v.id) ||
     /**
      * greater priority mean bucket of first node is executed later
      * e.g  a: "sampler", b: "barrier"
