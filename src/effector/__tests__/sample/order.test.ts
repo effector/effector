@@ -180,9 +180,7 @@ describe('clock should use the last update', () => {
           "fetchCities.done: [msk,spb]",
           "$selectedCities: [msk,spb]",
           "$selectedCities → *: true",
-          "$requestData: {city:[msk,spb],filter:null}",
           "$filterValues: result",
-          "noBugHere: {city:[msk,spb],filter:null}",
           "$requestData: {city:[msk,spb],filter:result}",
           "bugHere: {city:[msk,spb],filter:result}",
           "noBugHere: {city:[msk,spb],filter:result}",
@@ -254,8 +252,8 @@ describe('clock should use the last update', () => {
           "$result: result",
           "$combine: {$selected:true,$result:result}",
           "withBug: {$selected:true,$result:result}",
-          "bugAgain: {$selected:true,$result:result}",
           "noBug: {$selected:true,$result:result}",
+          "bugAgain: {$selected:true,$result:result}",
         ]
       `)
     })
@@ -320,8 +318,8 @@ describe('clock should use the last update', () => {
           "$result: result",
           "$combine: {$selected:true,$result:result}",
           "withBug: {$selected:true,$result:result}",
-          "bugAgain: {$selected:true,$result:result}",
           "noBug: {$selected:true,$result:result}",
+          "bugAgain: {$selected:true,$result:result}",
         ]
       `)
     })
@@ -365,6 +363,7 @@ describe('combine+sample cases', () => {
         "## init complete",
         "run: void",
         "$a: 1",
+        "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
       ]
@@ -449,6 +448,7 @@ describe('combine+sample cases', () => {
         "## init complete",
         "run: void",
         "$a: 1",
+        "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
       ]
