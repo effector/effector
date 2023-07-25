@@ -26,6 +26,42 @@ afterAll(() => {
   console.error = consoleError
 })
 
+test('sequential updates should be executed immediately', () => {
+  const fn = jest.fn()
+
+  const start = createEvent()
+
+  const $value = createStore(0)
+
+  const refetch = createEvent()
+  const fetcher = createEvent<{a: number}>()
+
+  const $params = combine({a: $value})
+
+  sample({
+    clock: start,
+    target: refetch,
+  })
+
+  sample({
+    clock: refetch,
+    source: $params,
+    target: fetcher,
+  })
+
+  sample({
+    clock: start,
+    fn: () => 5,
+    target: $value,
+  })
+
+  fetcher.watch(({a}) => fn(a))
+
+  start()
+
+  expect(argumentHistory(fn)).toEqual([5])
+})
+
 test('store update will always performs before sampling', () => {
   const fn = jest.fn()
   const int = createStore(0)
