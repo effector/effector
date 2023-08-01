@@ -150,6 +150,29 @@ export const translations = {
         },
       },
     },
+    Companies: {
+      title: {
+        text: {
+          en: "Companies using effector",
+          ru: "Компании использующие эффектор",
+          uz: "Effektordan foydalanadigan kompaniyalar"
+        }
+      },
+      wantToAppear: {
+        text: {
+          en: "Want to appear on this page?",
+          ru: "Хотите попасть в этот список?",
+          uz: "Ushbu ro'yxatga kirishni xohlaysizmi?"
+        }
+      },
+      tellUs: {
+        text: {
+          en: "Tell us",
+          ru: "Расскажите нам",
+          uz: "Bizga ayting"
+        },
+      }
+    }
   },
   Pagefind: {
     placeholder: { text: { en: "Search", ru: "Поиск", uz: "Qidiruv" } },
