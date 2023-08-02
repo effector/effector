@@ -585,7 +585,6 @@ describe('combine+sample cases', () => {
         "## init complete",
         "run: void",
         "$a: 1",
-        "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
       ]
@@ -670,7 +669,6 @@ describe('combine+sample cases', () => {
         "## init complete",
         "run: void",
         "$a: 1",
-        "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
       ]
