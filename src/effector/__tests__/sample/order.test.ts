@@ -12,6 +12,7 @@ import {
   Effect,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+import {inspect} from 'effector/inspect'
 
 const consoleError = console.error
 
@@ -430,6 +431,120 @@ describe('sample phases cases', () => {
             "fetcher: {a:5}",
           ]
       `)
+  })
+  test('phases must work with many layers', () => {
+    const fn = jest.fn()
+
+    const start = createEvent<number>()
+
+    const $value = createStore(0)
+
+    const refetch = createEvent()
+    const fetcher = createEvent<{a: number}>()
+    const fetcherB = createEvent<{a: number}>()
+    const nestedLayerA = createEvent<{a: number}>()
+    const nestedLayerB = createEvent<{a: number}>()
+    const $canNextCycleGo = $value.map(v => v < 3)
+
+    const $params = combine({a: $value})
+
+    const cycleStarted = start.map(n => `### cycle ${n} started`)
+
+    sample({
+      clock: [nestedLayerA, nestedLayerB],
+      source: $value,
+      fn: s => s + 1,
+      target: start,
+    })
+
+    sample({
+      clock: fetcher,
+      source: $params,
+      target: nestedLayerA,
+    })
+
+    sample({
+      clock: fetcherB,
+      source: $params,
+      target: nestedLayerB,
+    })
+
+    sample({
+      clock: start,
+      filter: $canNextCycleGo,
+      target: refetch,
+    })
+
+    sample({
+      clock: [refetch, $value],
+      source: $params,
+      target: fetcher,
+    })
+
+    sample({
+      clock: refetch,
+      source: $params,
+      target: fetcherB,
+    })
+
+    sample({
+      clock: start,
+      filter: $canNextCycleGo,
+      target: $value,
+    })
+
+    watchAll(fn, [
+      start,
+      $value,
+      $params,
+      refetch,
+      fetcher,
+      fetcherB,
+      nestedLayerB,
+      nestedLayerA,
+      cycleStarted,
+    ])
+
+    fn(`## init complete`)
+
+    start(1)
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$value: 0",
+        "$params: {a:0}",
+        "## init complete",
+        "start: 1",
+        "start → *: ### cycle 1 started",
+        "refetch: 1",
+        "$value: 1",
+        "$params: {a:1}",
+        "fetcherB: {a:1}",
+        "nestedLayerB: {a:1}",
+        "fetcher: {a:1}",
+        "nestedLayerA: {a:1}",
+        "start: 2",
+        "start → *: ### cycle 2 started",
+        "refetch: 2",
+        "$value: 2",
+        "$params: {a:2}",
+        "fetcherB: {a:2}",
+        "nestedLayerB: {a:2}",
+        "fetcher: {a:2}",
+        "nestedLayerA: {a:2}",
+        "start: 3",
+        "start → *: ### cycle 3 started",
+        "refetch: 3",
+        "$value: 3",
+        "$params: {a:3}",
+        "fetcherB: {a:3}",
+        "nestedLayerB: {a:3}",
+        "fetcher: {a:3}",
+        "nestedLayerA: {a:3}",
+        "start: 4",
+        "start → *: ### cycle 4 started",
+      ]
+    `)
   })
 })
 
