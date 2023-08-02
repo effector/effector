@@ -326,6 +326,57 @@ describe('clock should use the last update', () => {
   })
 })
 
+describe('sample phases cases', () => {
+  test('phases must work', () => {
+    const fn = jest.fn()
+
+    const start = createEvent()
+
+    const $value = createStore(0)
+
+    const refetch = createEvent()
+    const fetcher = createEvent<{a: number}>()
+
+    const $params = combine({a: $value})
+
+    sample({
+      clock: start,
+      target: refetch,
+    })
+
+    sample({
+      clock: refetch,
+      source: $params,
+      target: fetcher,
+    })
+
+    sample({
+      clock: start,
+      fn: () => 5,
+      target: $value,
+    })
+
+    watchAll(fn, [start, $value, $params, refetch, fetcher])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$value: 0",
+        "$params: {a:0}",
+        "## init complete",
+        "start: void",
+        "refetch: void",
+        "fetcher: {a:5}",
+        "$value: 5",
+        "$params: {a:5}",
+      ]
+    `)
+  })
+})
+
 describe('combine+sample cases', () => {
   test('combine-sample-sample', () => {
     const $a = createStore(0)
