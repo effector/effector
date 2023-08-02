@@ -22,6 +22,10 @@ type Layer = {
   stack: Stack
   type: PriorityTag
   id: number
+  /**
+   * Clock level - the number of clock layers in this computation branch
+   */
+  level: number
 }
 
 /** Queue as linked list or skew heap */
@@ -56,9 +60,14 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
   if (
     /**
      * if both nodes has the same PriorityType
+     * and first node is launched with greater clock level
+     */
+    (a.v.type === b.v.type && a.v.level > b.v.level) ||
+    /**
+     * if both nodes has the same PriorityType, the same clock level
      * and first node is created after second one
      */
-    (a.v.type === b.v.type && a.v.id > b.v.id) ||
+    (a.v.type === b.v.type && a.v.level === b.v.level && a.v.id > b.v.id) ||
     /**
      * greater priority mean bucket of first node is executed later
      * e.g  a: "sampler", b: "barrier"
@@ -140,6 +149,7 @@ const pushHeap = (
   stack: Stack,
   type: PriorityTag,
   id: number = 0,
+  level: number = 0,
 ) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
@@ -149,6 +159,7 @@ const pushHeap = (
       stack,
       type,
       id,
+      level,
     },
     l: null,
     r: null,
