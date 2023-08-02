@@ -443,6 +443,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     if (!stop) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
+      const nextLevel = value.level + 1
       forEach(node.next, nextNode => {
         pushFirstHeapItem(
           'child',
@@ -452,7 +453,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           finalValue,
           forkPage,
           undefined,
-          (value?.level || 0) + 1,
+          nextLevel,
         )
       })
       if (forkPage) {
