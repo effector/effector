@@ -350,7 +350,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                 stack,
                 priority,
                 barrierID,
-                priority === 'sampler' ? value.level : 0,
+                value.level
               )
             }
           } else {
