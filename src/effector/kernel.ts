@@ -263,7 +263,6 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
-  let clockLevel = 0
   let meta: Record<string, any> | void
   if (unit.target) {
     payload = unit.params
@@ -287,6 +286,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         payload[i],
         forkPageForLaunch,
         meta,
+        0,
       )
     }
   } else {
@@ -298,6 +298,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       payload,
       forkPageForLaunch,
       meta,
+      0,
     )
   }
   if (upsert && !isRoot) return
@@ -344,7 +345,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(stepn, stack, priority, barrierID, value.level)
+              pushHeap(
+                stepn,
+                stack,
+                priority,
+                barrierID,
+                priority === 'sampler' ? value.level : 0,
+              )
             }
           } else {
             pushHeap(stepn, stack, priority)
@@ -436,7 +443,6 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     if (!stop) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
-      clockLevel++
       forEach(node.next, nextNode => {
         pushFirstHeapItem(
           'child',
@@ -446,7 +452,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           finalValue,
           forkPage,
           undefined,
-          clockLevel,
+          (value?.level || 0) + 1,
         )
       })
       if (forkPage) {
