@@ -369,9 +369,9 @@ describe('sample phases cases', () => {
         "## init complete",
         "start: void",
         "refetch: void",
-        "fetcher: {a:0}",
         "$value: 5",
         "$params: {a:5}",
+        "fetcher: {a:5}",
       ]
     `)
   })
