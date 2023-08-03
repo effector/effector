@@ -117,8 +117,8 @@ describe('clock should use the last update', () => {
           "$selectedCities → *: true",
           "$filterValues: result",
           "$requestData: {city:[msk,spb],filter:result}",
-          "bugHere: {city:[msk,spb],filter:result}",
           "noBugHere: {city:[msk,spb],filter:result}",
+          "bugHere: {city:[msk,spb],filter:result}",
         ]
       `)
     })
@@ -182,8 +182,8 @@ describe('clock should use the last update', () => {
           "$selectedCities → *: true",
           "$filterValues: result",
           "$requestData: {city:[msk,spb],filter:result}",
-          "bugHere: {city:[msk,spb],filter:result}",
           "noBugHere: {city:[msk,spb],filter:result}",
+          "bugHere: {city:[msk,spb],filter:result}",
         ]
       `)
     })
@@ -530,29 +530,27 @@ describe('sample phases cases', () => {
         "$value: 1",
         "$params: {a:1}",
         "fetcher: {a:1}",
-        "fetcherB: {a:1}",
         "myFx: {a:1}",
         "nestedLayerA: {a:1}",
-        "nestedLayerB: {a:1}",
         "start: 2",
         "start → *: ### cycle 2 started",
         "refetch: 2",
         "$value: 2",
         "$params: {a:2}",
         "fetcher: {a:2}",
-        "fetcherB: {a:2}",
         "myFx: {a:2}",
         "nestedLayerA: {a:2}",
-        "nestedLayerB: {a:2}",
         "start: 3",
         "start → *: ### cycle 3 started",
         "refetch: 3",
         "$value: 3",
         "$params: {a:3}",
         "fetcher: {a:3}",
-        "fetcherB: {a:3}",
         "myFx: {a:3}",
         "nestedLayerA: {a:3}",
+        "start: 4",
+        "start → *: ### cycle 4 started",
+        "fetcherB: {a:3}",
         "nestedLayerB: {a:3}",
         "start: 4",
         "start → *: ### cycle 4 started",
@@ -642,6 +640,7 @@ describe('combine+sample cases', () => {
         "## init complete",
         "run: void",
         "$a: 1",
+        "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
       ]
@@ -766,6 +765,7 @@ describe('combine+sample cases', () => {
         "## init complete",
         "run: void",
         "$a: 1",
+        "$combine: [1,0]",
         "$b: 1",
         "$combine: [1,1]",
       ]
