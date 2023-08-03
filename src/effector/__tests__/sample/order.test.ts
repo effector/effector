@@ -562,6 +562,47 @@ describe('sample phases cases', () => {
       ]
     `)
   })
+  test('sample branches with different layers should still be batched', () => {
+    const start = createEvent()
+    const a = createEvent()
+    const b = createEvent()
+
+    sample({
+      clock: start,
+      target: [a, b],
+    })
+
+    const c = sample({
+      clock: sample({clock: sample({clock: sample({clock: b})})}),
+    })
+
+    const d = sample({
+      clock: [a, c],
+    })
+
+    const $count = createStore(0).on(d, s => s + 1)
+
+    const fn = jest.fn()
+    watchAll(fn, [start, a, b, c, d, $count])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect($count.getState()).toBe(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$count: 0",
+        "## init complete",
+        "start: void",
+        "a: void",
+        "b: void",
+        "c: void",
+        "d: void",
+        "$count: 1",
+      ]
+    `)
+  })
 })
 
 describe('combine+sample cases', () => {
