@@ -862,6 +862,116 @@ describe('combine+sample cases', () => {
       ]
     `)
   })
+  test('"sourced" operator edge-case', () => {
+    const fn = jest.fn()
+
+    /**
+     * This test is not about "sourced" operator itself,
+     * but about the way it is implemented - so this version of operator is really shortened
+     * to the crucial parts
+     */
+    function sourced<T>(config: {
+      source: Store<T>
+      clock: Event<any>
+    }): Store<T> {
+      const $target = createStore<T>(null as T)
+
+      sample({
+        clock: config.clock,
+        source: config.source,
+        fn: x => x,
+        target: $target,
+      })
+
+      return $target
+    }
+
+    const start = createEvent()
+    const $a = createStore(0).on(start, () => 1)
+    const $b = createStore(0).on(start, () => 2)
+    const $c = createStore(0).on(start, () => 3)
+
+    const resolve = createEvent()
+
+    const $final = createStore<null | {tA: number; tB: number; tC: number}>(
+      null,
+    )
+
+    sample({
+      clock: start,
+      target: resolve,
+    })
+
+    const $targetA = createStore(0)
+
+    sample({
+      clock: sourced({source: $a, clock: resolve}),
+      target: $targetA,
+    })
+
+    const $targetB = createStore(0)
+
+    sample({
+      clock: sourced({source: $b, clock: resolve}),
+      target: $targetB,
+    })
+
+    const $targetC = createStore(0)
+
+    sample({
+      clock: sourced({source: $c, clock: resolve}),
+      target: $targetC,
+    })
+
+    sample({
+      clock: resolve,
+      source: {
+        tA: $targetA,
+        tB: $targetB,
+        tC: $targetC,
+      },
+      fn: x => x,
+      target: $final,
+    })
+
+    watchAll(fn, [
+      $a,
+      $b,
+      $c,
+      $final,
+      start,
+      resolve,
+      $targetA,
+      $targetB,
+      $targetC,
+    ])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$c: 0",
+        "$final: null",
+        "$targetA: 0",
+        "$targetB: 0",
+        "$targetC: 0",
+        "## init complete",
+        "start: void",
+        "$a: 1",
+        "$b: 2",
+        "$c: 3",
+        "resolve: void",
+        "$targetA: 1",
+        "$targetB: 2",
+        "$targetC: 3",
+        "$final: {tA:1,tB:2,tC:3}",
+      ]
+    `)
+  })
 })
 
 function watchAll(
