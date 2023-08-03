@@ -171,6 +171,10 @@ export const createSampling = (
     clockState,
     method,
   )
+  const reader = read(sourceRef, true, batched)
+  if (!sourceIsClock && reader.order) {
+    reader.order.priority = 'sampleReader'
+  }
   const jointNode = createLinkNode(
     // @ts-expect-error
     clock,
@@ -179,7 +183,7 @@ export const createSampling = (
       applyTemplate('sampleSourceLoader'),
       mov({from: STACK, target: clockState}),
       ...readAndFilter(hasSource),
-      read(sourceRef, true, batched),
+      reader,
       ...filterNodes,
       read(clockState),
       filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),

@@ -109,6 +109,8 @@ const storeCombination = (
    * (thats why order has no "barrierID" field, which assume batching)
    **/
   rawShapeReader.order = {priority: 'barrier'}
+  const reader = read(rawShape, true, true)
+  reader.order!.priority = 'sampleReader'
   const node = [
     calc((upd, _, stack) => {
       if (stack.scope && !stack.scope.reg[rawShape.id]) {
@@ -139,10 +141,10 @@ const storeCombination = (
     /**
      * `read` with `sampler` priority is used to prevent cases,
      *  where `combine` triggers are duplicated
-     * 
+     *
      *  basically, this makes `sample` and `combine` priorities equal
      */
-    read(rawShape, true, true),
+    reader,
     fn && userFnCall(),
   ]
   forIn(obj, (child: Store<any> | any, key) => {
