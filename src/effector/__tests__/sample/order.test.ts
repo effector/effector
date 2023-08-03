@@ -923,13 +923,15 @@ describe('combine+sample cases', () => {
       target: $targetC,
     })
 
+    const $finalParams = combine({
+      tA: $targetA,
+      tB: $targetB,
+      tC: $targetC,
+    })
+
     sample({
       clock: resolve,
-      source: {
-        tA: $targetA,
-        tB: $targetB,
-        tC: $targetC,
-      },
+      source: $finalParams,
       fn: x => x,
       target: $final,
     })
