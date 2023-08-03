@@ -22,10 +22,6 @@ type Layer = {
   stack: Stack
   type: PriorityTag
   id: number
-  /**
-   * Clock level - the number of clock layers in this computation branch
-   */
-  level: number
 }
 
 /** Queue as linked list or skew heap */
@@ -60,14 +56,9 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
   if (
     /**
      * if both nodes has the same PriorityType
-     * and first node is launched with greater clock level
-     */
-    (a.v.type === b.v.type && a.v.level > b.v.level) ||
-    /**
-     * if both nodes has the same PriorityType, the same clock level
      * and first node is created after second one
      */
-    (a.v.type === b.v.type && a.v.level === b.v.level && a.v.id > b.v.id) ||
+    (a.v.type === b.v.type && a.v.id > b.v.id) ||
     /**
      * greater priority mean bucket of first node is executed later
      * e.g  a: "sampler", b: "barrier"
@@ -129,7 +120,6 @@ const pushFirstHeapItem = (
   value: any,
   scope?: Scope | null | void,
   meta?: Record<string, any> | void,
-  clockLevel: number = 0,
 ) =>
   pushHeap(
     0,
@@ -144,15 +134,12 @@ const pushFirstHeapItem = (
       meta,
     },
     type,
-    0,
-    clockLevel,
   )
 const pushHeap = (
   idx: number,
   stack: Stack,
   type: PriorityTag,
   id: number = 0,
-  level: number = 0,
 ) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
@@ -162,7 +149,6 @@ const pushHeap = (
       stack,
       type,
       id,
-      level,
     },
     l: null,
     r: null,
@@ -286,7 +272,6 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         payload[i],
         forkPageForLaunch,
         meta,
-        0,
       )
     }
   } else {
@@ -298,7 +283,6 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       payload,
       forkPageForLaunch,
       meta,
-      0,
     )
   }
   if (upsert && !isRoot) return
@@ -336,10 +320,6 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       const step = node.seq[stepn]
       if (step.order) {
         const {priority, barrierID} = step.order
-
-        const isLeveled = getPriority(priority) > 2
-        const level = isLeveled ? value.level : 0
-
         const id = barrierID
           ? page
             ? `${page.fullID}_${barrierID}`
@@ -349,10 +329,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(stepn, stack, priority, barrierID, level)
+              pushHeap(stepn, stack, priority, barrierID)
             }
           } else {
-            pushHeap(stepn, stack, priority, 0, level)
+            pushHeap(stepn, stack, priority)
           }
           continue kernelLoop
         }
@@ -441,22 +421,8 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     if (!stop) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
-      const currentLevel = value.level
-      const nextLevel = value.level + 1
-
       forEach(node.next, nextNode => {
-        const op = getMeta(nextNode, 'op')
-
-        pushFirstHeapItem(
-          'child',
-          page,
-          nextNode,
-          stack,
-          finalValue,
-          forkPage,
-          undefined,
-          op === 'sample' || op === 'combine' ? nextLevel : currentLevel,
-        )
+        pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
       })
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
