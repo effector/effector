@@ -8,9 +8,29 @@ import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
 
 /** Names of priority groups */
-type PriorityTag = 'child' | 'pure' | 'read' | 'barrier' | 'sampler' | 'effect'
+type PriorityTag =
+  | 'child'
+  | 'pure'
+  | 'read'
+  | 'barrier'
+  | 'sampler'
+  | 'sampleReader'
+  | 'effect'
 
-export type BarrierPriorityTag = 'read' | 'barrier' | 'sampler' | 'effect'
+export type BarrierPriorityTag =
+  | 'read'
+  | 'barrier'
+  | 'sampler'
+  | 'sampleReader'
+  | 'effect'
+
+/**
+ * bucket 3 is for "barrier" PriorityType (used in combine)
+ * bucket 4 is for "sampler" PriorityType (used in sample and guard)
+ * bucket 4 is for "sampleReader" PriorityType
+ */
+const isHeapBucket = (priority: number) =>
+  priority === 3 || priority === 4 || priority === 5
 
 /**
  * Position in the current branch,
@@ -79,7 +99,7 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
 /** queue buckets for each PriorityType */
 const queue: QueueBucket[] = []
 let ix = 0
-while (ix < 6) {
+while (ix < 7) {
   /**
    * although "sampler" and "barrier" are using heap instead of linked list,
    * their buckets are still useful: they maintains size of heap queue
@@ -89,14 +109,10 @@ while (ix < 6) {
 }
 
 const deleteMin = () => {
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     const list = queue[i]
     if (list.size > 0) {
-      /**
-       * bucket 3 is for "barrier" PriorityType (used in combine)
-       * bucket 4 is for "sampler" PriorityType (used in sample and guard)
-       */
-      if (i === 3 || i === 4) {
+      if (isHeapBucket(i)) {
         list.size -= 1
         const value = heap!.v
         heap = merge(heap!.l, heap!.r)
@@ -153,11 +169,8 @@ const pushHeap = (
     l: null,
     r: null,
   }
-  /**
-   * bucket 3 is for "barrier" PriorityType (used in combine)
-   * bucket 4 is for "sampler" PriorityType (used in sample and guard)
-   */
-  if (priority === 3 || priority === 4) {
+
+  if (isHeapBucket(priority)) {
     heap = merge(heap, item)
   } else {
     if (bucket.size === 0) {
@@ -182,8 +195,10 @@ const getPriority = (t: PriorityTag) => {
       return 3
     case SAMPLER:
       return 4
-    case EFFECT:
+    case 'sampleReader':
       return 5
+    case EFFECT:
+      return 6
     default:
       return -1
   }
