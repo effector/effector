@@ -446,9 +446,19 @@ describe('sample phases cases', () => {
     const nestedLayerB = createEvent<{a: number}>()
     const $canNextCycleGo = $value.map(v => v < 3)
 
+    const myFx = createEffect((params: {a: number}) => {
+      return params.a
+    })
+
     const $params = combine({a: $value})
 
     const cycleStarted = start.map(n => `### cycle ${n} started`)
+
+    sample({
+      clock: fetcher,
+      source: $params,
+      target: myFx,
+    })
 
     sample({
       clock: [nestedLayerA, nestedLayerB],
@@ -503,6 +513,7 @@ describe('sample phases cases', () => {
       nestedLayerB,
       nestedLayerA,
       cycleStarted,
+      myFx,
     ])
 
     fn(`## init complete`)
@@ -521,6 +532,7 @@ describe('sample phases cases', () => {
         "$params: {a:1}",
         "fetcher: {a:1}",
         "fetcherB: {a:1}",
+        "myFx: {a:1}",
         "nestedLayerA: {a:1}",
         "nestedLayerB: {a:1}",
         "start: 2",
@@ -530,6 +542,7 @@ describe('sample phases cases', () => {
         "$params: {a:2}",
         "fetcher: {a:2}",
         "fetcherB: {a:2}",
+        "myFx: {a:2}",
         "nestedLayerA: {a:2}",
         "nestedLayerB: {a:2}",
         "start: 3",
@@ -539,10 +552,14 @@ describe('sample phases cases', () => {
         "$params: {a:3}",
         "fetcher: {a:3}",
         "fetcherB: {a:3}",
+        "myFx: {a:3}",
         "nestedLayerA: {a:3}",
         "nestedLayerB: {a:3}",
         "start: 4",
         "start → *: ### cycle 4 started",
+        "myFx.done: 1",
+        "myFx.done: 2",
+        "myFx.done: 3",
       ]
     `)
   })
