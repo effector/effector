@@ -348,7 +348,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               pushHeap(stepn, stack, priority, barrierID, value.level)
             }
           } else {
-            pushHeap(stepn, stack, priority, 0, value.level - 1)
+            pushHeap(stepn, stack, priority, 0, value.level)
           }
           continue kernelLoop
         }
