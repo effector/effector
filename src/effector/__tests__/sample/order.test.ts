@@ -801,6 +801,67 @@ describe('combine+sample cases', () => {
       ]
     `)
   })
+  test('sample(event)-sample(sample(event))-combine', () => {
+    const $a = createStore(0)
+    const $b = createStore(0)
+    const run = createEvent()
+    const event = createEvent()
+    const eventB = createEvent()
+    const eventMap = createEvent()
+
+    /**
+     * Here we have an intermediate "sample layer",
+     * which may affet combine batching, but should not
+     */
+    sample({
+      clock: eventB,
+      target: eventMap,
+    })
+
+    sample({
+      clock: run,
+      target: [event, eventB],
+    })
+
+    sample({
+      clock: event,
+      source: $a,
+      fn: s => s + 1,
+      target: $a,
+    })
+
+    sample({
+      clock: eventMap,
+      source: $b,
+      fn: s => s + 1,
+      target: $b,
+    })
+
+    const $combine = combine([$a, $b])
+
+    const fn = jest.fn()
+    watchAll(fn, [run, event, eventB, eventMap, $a, $b, $combine])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: [0,0]",
+        "## init complete",
+        "run: void",
+        "event: void",
+        "eventB: void",
+        "eventMap: void",
+        "$a: 1",
+        "$b: 1",
+        "$combine: [1,1]",
+      ]
+    `)
+  })
 })
 
 function watchAll(
