@@ -674,6 +674,65 @@ describe('combine+sample cases', () => {
       ]
     `)
   })
+  test('sample(event)-sample(sync effect)-combine', () => {
+    const $a = createStore(0)
+    const $b = createStore(0)
+    const run = createEvent()
+    const event = createEvent()
+    const effectFx = createEffect(() => null)
+
+    sample({
+      clock: run,
+      target: [event, effectFx],
+    })
+
+    sample({
+      clock: event,
+      source: $a,
+      fn: s => s + 1,
+      target: $a,
+    })
+
+    sample({
+      clock: effectFx.done,
+      source: $b,
+      fn: s => s + 1,
+      target: $b,
+    })
+
+    const $combine = combine([$a, $b])
+
+    const fn = jest.fn()
+    watchAll(fn, [run, event, effectFx, $a, $b, $combine])
+
+    fn(`## init complete`)
+
+    run()
+
+    /**
+     * Intermediate combine trigger here is ok,
+     * because effect can be both sync and async internally,
+     * so actual effectFx.done can happen anytime
+     *
+     * This behavior is consistent with any kind of effect handler
+     */
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: [0,0]",
+        "## init complete",
+        "run: void",
+        "event: void",
+        "effectFx: void",
+        "$a: 1",
+        "$combine: [1,0]",
+        "effectFx.done: null",
+        "$b: 1",
+        "$combine: [1,1]",
+      ]
+    `)
+  })
 })
 
 function watchAll(
