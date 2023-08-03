@@ -690,6 +690,46 @@ describe('combine+sample cases', () => {
     `)
   })
 
+  test('sample-sample-combine (no source)', () => {
+    const $a = createStore(0)
+    const $b = createStore(0)
+    const run = createEvent()
+
+    sample({
+      clock: run,
+      fn: () => 1,
+      target: $a,
+    })
+
+    sample({
+      clock: run,
+      fn: () => 1,
+      target: $b,
+    })
+
+    const $combine = combine([$a, $b])
+
+    const fn = jest.fn()
+    watchAll(fn, [run, $a, $b, $combine])
+
+    fn(`## init complete`)
+
+    run()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$a: 0",
+        "$b: 0",
+        "$combine: [0,0]",
+        "## init complete",
+        "run: void",
+        "$a: 1",
+        "$b: 1",
+        "$combine: [1,1]",
+      ]
+    `)
+  })
+
   test('sample-combine-sample', () => {
     const $a = createStore(0)
     const $b = createStore(0)
