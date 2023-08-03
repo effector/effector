@@ -345,16 +345,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(
-                stepn,
-                stack,
-                priority,
-                barrierID,
-                value.level
-              )
+              pushHeap(stepn, stack, priority, barrierID, value.level)
             }
           } else {
-            pushHeap(stepn, stack, priority, 0, value.level)
+            pushHeap(stepn, stack, priority, 0, value.level - 1)
           }
           continue kernelLoop
         }
@@ -443,8 +437,12 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     if (!stop) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
+      const currentLevel = value.level
       const nextLevel = value.level + 1
+
       forEach(node.next, nextNode => {
+        const op = getMeta(nextNode, 'op')
+
         pushFirstHeapItem(
           'child',
           page,
@@ -453,7 +451,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           finalValue,
           forkPage,
           undefined,
-          nextLevel,
+          op === 'sample' || op === 'combine' ? nextLevel : currentLevel,
         )
       })
       if (forkPage) {
