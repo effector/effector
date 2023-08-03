@@ -337,7 +337,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       if (step.order) {
         const {priority, barrierID} = step.order
 
-        const isLeveled = priority === SAMPLER || priority === BARRIER || priority === EFFECT
+        const isLeveled = getPriority(priority) > 2
         const level = isLeveled ? value.level : 0
 
         const id = barrierID
