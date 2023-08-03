@@ -336,6 +336,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       const step = node.seq[stepn]
       if (step.order) {
         const {priority, barrierID} = step.order
+
+        const isLeveled = priority === SAMPLER || priority === BARRIER || priority === EFFECT
+        const level = isLeveled ? value.level : 0
+
         const id = barrierID
           ? page
             ? `${page.fullID}_${barrierID}`
@@ -345,10 +349,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(stepn, stack, priority, barrierID, value.level)
+              pushHeap(stepn, stack, priority, barrierID, level)
             }
           } else {
-            pushHeap(stepn, stack, priority, 0, value.level)
+            pushHeap(stepn, stack, priority, 0, level)
           }
           continue kernelLoop
         }
