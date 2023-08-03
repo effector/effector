@@ -12,7 +12,6 @@ import {
   Effect,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
-import {inspect} from 'effector/inspect'
 
 const consoleError = console.error
 
