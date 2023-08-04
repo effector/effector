@@ -601,6 +601,82 @@ describe('sample phases cases', () => {
       ]
     `)
   })
+  test('sample diamond branches should be batched', () => {
+    const start = createEvent()
+    const a = createEvent()
+    const b = createEvent()
+    const c = createEvent()
+
+    sample({
+      clock: start,
+      target: [a, b],
+    })
+
+    sample({
+      clock: [a, b],
+      target: c,
+    })
+
+    const $count = createStore(0).on(c, s => s + 1)
+
+    const fn = jest.fn()
+    watchAll(fn, [start, a, b, c, $count])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect($count.getState()).toBe(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$count: 0",
+        "## init complete",
+        "start: void",
+        "a: void",
+        "b: void",
+        "c: void",
+        "$count: 1",
+      ]
+    `)
+  })
+  test('sample diamond branches with reversed flow should be batched', () => {
+    const start = createEvent()
+    const a = createEvent()
+    const b = createEvent()
+    const c = createEvent()
+
+    sample({
+      clock: [a, b],
+      target: c,
+    })
+
+    sample({
+      clock: start,
+      target: [a, b],
+    })
+
+    const $count = createStore(0).on(c, s => s + 1)
+
+    const fn = jest.fn()
+    watchAll(fn, [start, a, b, c, $count])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect($count.getState()).toBe(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$count: 0",
+        "## init complete",
+        "start: void",
+        "a: void",
+        "b: void",
+        "c: void",
+        "$count: 1",
+      ]
+    `)
+  })
 })
 
 describe('combine+sample cases', () => {
