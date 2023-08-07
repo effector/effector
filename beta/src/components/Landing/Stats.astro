@@ -154,7 +154,7 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .counts {
-    @apply mb-6 grid grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6;
+    @apply mb-6 grid grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6 select-none;
   }
 
   .stats-card {
@@ -167,7 +167,7 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .getting-started-message {
-      @apply hidden md:inline;
+      @apply hidden md:inline select-none;
   }
 
   .command-line-sign {
