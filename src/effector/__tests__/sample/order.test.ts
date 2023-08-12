@@ -691,7 +691,7 @@ describe('sample phases cases', () => {
     })
 
     sample({
-      clock: up,
+      clock: start,
       filter: $count.map(x => x % 2 !== 0),
       target: a,
     })
