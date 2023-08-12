@@ -720,6 +720,51 @@ describe('sample phases cases', () => {
       ]
     `)
   })
+  test('sample split filter case with intermediate step', () => {
+    const up = createEvent()
+    const start = createEvent()
+    const a = createEvent()
+    const upReady = createEvent()
+
+    const $count = createStore(0)
+
+    sample({
+      clock: up,
+      source: $count,
+      fn: x => x + 1,
+      target: $count,
+    })
+
+    sample({
+      clock: start,
+      filter: $count.map(x => x % 2 === 0),
+      target: [up, upReady],
+    })
+
+    sample({
+      clock: upReady,
+      filter: $count.map(x => x % 2 !== 0),
+      target: a,
+    })
+
+    const fn = jest.fn()
+
+    watchAll(fn, [start, a, $count])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$count: 0",
+        "## init complete",
+        "start: void",
+        "$count: 1",
+        "a: void",
+      ]
+    `)
+  })
 })
 
 describe('combine+sample cases', () => {
