@@ -677,6 +677,43 @@ describe('sample phases cases', () => {
       ]
     `)
   })
+  test('sample split filter case', () => {
+    const up = createEvent()
+    const $count = createStore(0).on(up, x => x + 1)
+    const start = createEvent()
+    const a = createEvent()
+    const b = createEvent()
+
+    sample({
+      clock: start,
+      filter: $count.map(x => x % 2 === 0),
+      target: up,
+    })
+
+    sample({
+      clock: up,
+      filter: $count.map(x => x % 2 !== 0),
+      target: a,
+    })
+
+    const fn = jest.fn()
+
+    watchAll(fn, [start, a, b, $count])
+
+    fn(`## init complete`)
+
+    start()
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "$count: 0",
+        "## init complete",
+        "start: void",
+        "$count: 1",
+        "a: void",
+      ]
+    `)
+  })
 })
 
 describe('combine+sample cases', () => {
