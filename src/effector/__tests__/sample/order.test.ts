@@ -679,10 +679,17 @@ describe('sample phases cases', () => {
   })
   test('sample split filter case', () => {
     const up = createEvent()
-    const $count = createStore(0).on(up, x => x + 1)
     const start = createEvent()
     const a = createEvent()
-    const b = createEvent()
+
+    const $count = createStore(0)
+
+    sample({
+      clock: up,
+      source: $count,
+      fn: x => x + 1,
+      target: $count,
+    })
 
     sample({
       clock: start,
@@ -698,7 +705,7 @@ describe('sample phases cases', () => {
 
     const fn = jest.fn()
 
-    watchAll(fn, [start, a, b, $count])
+    watchAll(fn, [start, a, $count])
 
     fn(`## init complete`)
 
@@ -710,7 +717,6 @@ describe('sample phases cases', () => {
         "## init complete",
         "start: void",
         "$count: 1",
-        "a: void",
       ]
     `)
   })
