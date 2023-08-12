@@ -436,6 +436,8 @@ describe('sample phases cases', () => {
 
     const start = createEvent<number>()
 
+    const $phaseCount = createStore(0).on(start, s => s + 1)
+
     const $value = createStore(0)
 
     const refetch = createEvent()
@@ -559,6 +561,7 @@ describe('sample phases cases', () => {
         "myFx.done: 3",
       ]
     `)
+    expect($phaseCount.getState()).toBe(4)
   })
   test('sample branches with different layers should still be batched', () => {
     const start = createEvent()
