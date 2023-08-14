@@ -98,6 +98,7 @@ html[lang='ru'] .heroBanner [data-hero-controls] a {
 
 .usersSection [data-users-header] {
   color: #1c1e21;
+  text-align: center;
 }
 
 [data-theme='dark'] .usersSection {
