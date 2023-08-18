@@ -2727,6 +2727,7 @@ export function attach<
 >(config: {
   source: States
   effect: FX
+  domain?: Domain
   name?: string
 }): FX extends (source: any, ...args: infer Args) => infer Done
   ? Effect<OptionalParams<Args>, AsyncResult<Done>>

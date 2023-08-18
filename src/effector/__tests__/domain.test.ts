@@ -265,6 +265,18 @@ describe('indirect child support', () => {
       })
       expect(argumentHistory(fn)).toEqual([fx, attached])
     })
+    test('with fn and explicit domain', () => {
+      const fn = jest.fn()
+      const domain = createDomain()
+      domain.onCreateEffect(e => fn(e))
+      const source = createStore(null)
+      const attached = attach({
+        source,
+        domain,
+        effect() {},
+      })
+      expect(argumentHistory(fn)).toEqual([attached])
+    })
   })
 })
 

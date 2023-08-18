@@ -381,3 +381,33 @@ test('attached effect should got its name from parent domain', () => {
   const attached = attach({effect: fx})
   expect(attached.compositeName.fullName).toBe('app/attached')
 })
+
+it('uses passed domain for function', () => {
+  const domain = createDomain()
+  const source = createStore(null)
+
+  const attached = attach({
+    source,
+    domain,
+    effect() {},
+  })
+
+  expect(attached.compositeName.fullName).toBe('domain/attached')
+})
+
+it('should not allow domain for effects', () => {
+  const domain = createDomain()
+  const source = createStore(null)
+  const fx = createEffect(() => {})
+
+  expect(() => {
+    attach({
+      source,
+      // @ts-expect-error
+      domain,
+      effect: fx,
+    })
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"\`domain\` can only be used with a plain function"`,
+  )
+})
