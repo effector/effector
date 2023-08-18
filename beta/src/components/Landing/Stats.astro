@@ -96,14 +96,33 @@ async function getGzipSize() {
   }
 }
 
-const labelMapper = {
-  size: getTextLocalized(translations.Landing.Stats.size, lang),
-  contributors: getTextLocalized(translations.Landing.Stats.contributors, lang),
-  stars: getTextLocalized(translations.Landing.Stats.stars, lang),
-  downloads: getTextLocalized(translations.Landing.Stats.downloads, lang),
-  latest: getTextLocalized(translations.Landing.Stats.latest, lang),
-  license: getTextLocalized(translations.Landing.Stats.license, lang),
+const statsMeta = {
+  size: {
+    label: getTextLocalized(translations.Landing.Stats.size, lang),
+    link: "https://bundlephobia.com/package/effector@latest",
+  },
+  contributors: {
+    label: getTextLocalized(translations.Landing.Stats.contributors, lang),
+    link: "https://github.com/effector/effector/graphs/contributors",
+  },
+  stars: {
+    label: getTextLocalized(translations.Landing.Stats.stars, lang),
+    link: "https://star-history.com/#effector/effector&Date",
+  },
+  downloads: {
+    label: getTextLocalized(translations.Landing.Stats.downloads, lang),
+    link: "https://npmtrends.com/effector",
+  },
+  latest: {
+    label: getTextLocalized(translations.Landing.Stats.latest, lang),
+    link: "https://github.com/effector/effector/releases",
+  },
+  license: {
+    label: getTextLocalized(translations.Landing.Stats.license, lang),
+    link: "https://raw.githubusercontent.com/effector/effector/master/LICENSE",
+  },
 };
+
 const gettingStartedText = getTextLocalized(
   translations.Landing.Stats.StartByAddingEffectorAsDependency,
   lang,
@@ -118,12 +137,12 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   <div class="stats">
     <div class="counts">
       {
-        Object.entries(stats).map(([label, counter]) => {
+        Object.entries(stats).map(([name, counter]) => {
           return (
-            <div class="stats-card">
-              <div class="text-4xl">{counter}</div>
-              <div>{labelMapper[label]}</div>
-            </div>
+            <a class="stats-card" href={statsMeta[name].link} target="_blank" rel="noreferrer noopener">
+              <span class="text-4xl">{counter}</span>
+              <span>{statsMeta[name].label}</span>
+            </a>
           );
         })
       }
@@ -133,8 +152,8 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
       <div class="install-command">
         <span class="inline-block">
           <span class="command-line-sign">$&nbsp;</span>npm add <span
-            class="package-name">effector</span
-          >
+          class="package-name">effector</span
+        >
         </span>
         <copy-button class="copy-button" data-value="npm add effector" aria-role="button">
           <IconCopy />
@@ -154,12 +173,12 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .counts {
-    @apply mb-6 grid grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6;
+    @apply mb-6 grid grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6 select-none;
   }
 
   .stats-card {
-    @apply flex min-w-[8rem] flex-col items-center rounded-md p-2.5;
-    @apply transition-all hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-xl;
+    @apply flex min-w-[8rem] flex-col items-center rounded-md p-2.5 text-[color:var(--theme-text)] focus:no-underline;
+    @apply transition-all focus:bg-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-xl;
   }
 
   .stats-bar {
@@ -167,15 +186,15 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .getting-started-message {
-      @apply hidden md:inline;
+    @apply hidden md:inline select-none;
   }
 
   .command-line-sign {
-      @apply text-[color:var(--theme-text-light)] select-none;
+    @apply text-[color:var(--theme-text-light)] select-none;
   }
 
   .package-name {
-      color: var(--theme-text-accent)
+    color: var(--theme-text-accent)
   }
 
   .install-command {
@@ -214,5 +233,6 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
       this.addEventListener("click", copyValue);
     }
   }
+
   customElements.define("copy-button", CopyButton);
 </script>
