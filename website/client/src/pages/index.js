@@ -213,7 +213,7 @@ const features = [
         description: '可以使用任何 UI 或 服务器框架',
       },
       uz: {
-        title: 'Freymvoreklatdan mustaqil',
+        title: 'Freymvorklardan mustaqil',
         description: 'Har qanday UI va server freymvorklar bilan ishlay oladi'
       }
     },
