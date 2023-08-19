@@ -6,6 +6,7 @@ import {throwError} from './throw'
 import {withDisplayName} from './withDisplayName'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {Gate} from './index.h'
+import {useDeprecate} from './useDeprecate'
 
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
@@ -26,6 +27,7 @@ const keysEqual = (a?: readonly any[], b?: readonly any[]) => {
 }
 
 export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
+  useDeprecate(true, 'useStore', 'useUnit')
   if (!is.store(store)) throwError('expect useStore argument to be a store')
 
   const subscribe = React.useCallback(
@@ -341,6 +343,7 @@ export function useListBase<T>(
 }
 
 export function useEventBase(eventObject: any, scope?: Scope) {
+  useDeprecate(true, 'useEvent', 'useUnit')
   if (!scope) {
     return eventObject
   }

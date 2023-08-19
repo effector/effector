@@ -18,6 +18,9 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
   unmounted: Event<{props: Props; state: State}>
 }
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useStore<State>(
   store: Store<State>,
   opts?: {forceScope?: boolean},
@@ -128,22 +131,37 @@ export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent(
   event: Event<void>,
   opts?: {forceScope?: boolean},
 ): () => void
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<T>(
   event: Event<T>,
   opts?: {forceScope?: boolean},
 ): (payload: T) => T
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<R>(
   fx: Effect<void, R, any>,
   opts?: {forceScope?: boolean},
 ): () => Promise<R>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<T, R>(
   fx: Effect<T, R, any>,
   opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
   list: [...List],
   opts?: {forceScope?: boolean},
@@ -154,6 +172,9 @@ export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
     ? (payload: P) => Promise<D>
     : never
 }
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<
   Shape extends Record<string, Event<any> | Effect<any, any, any>>,
 >(
