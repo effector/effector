@@ -503,7 +503,7 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/45m0d3u5>
+        <a href=https://github.com/focusbytheway>
             <img src=https://avatars.githubusercontent.com/u/45828023?v=4 width="100;"  alt=Abdukerim Radjapov/>
             <br />
             <sub style="font-size:14px"><b>Abdukerim Radjapov</b></sub>
