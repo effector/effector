@@ -290,7 +290,7 @@ test('event by event', () => {
   const sample_ee_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Event<number>' is not assignable to type 'Event<string>'.
     "
   `)
 })
@@ -304,9 +304,8 @@ test('event by event with handler', () => {
   const sample_eeh_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -321,7 +320,7 @@ test('store by event', () => {
   const sample_se_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Event<number>' is not assignable to type 'Event<string>'.
     "
   `)
 })
@@ -335,9 +334,8 @@ test('store by event with handler', () => {
   const sample_seh_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -352,7 +350,7 @@ test('effect by event', () => {
   const sample_efe_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Event<string>' is not assignable to type 'Event<number>'.
     "
   `)
 })
@@ -366,9 +364,8 @@ test('effect by event with handler', () => {
   const sample_efeh_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<number>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
     "
   `)
 })
@@ -383,7 +380,8 @@ test('store by store', () => {
   const sample_ss_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Store<boolean>' is not assignable to type 'Store<string>'.
+      Type 'boolean' is not assignable to type 'string'.
     "
   `)
 })
@@ -397,9 +395,8 @@ test('store by store with handler', () => {
   const sample_ssh_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -409,8 +406,7 @@ describe('sample(Store<T>):Store<T>', () => {
     const sample_s_correct: Store<string> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'StoreWritable<string>' is not assignable to parameter of type '{ error: \\"either target, clock or source should exists\\"; }'.
-        Property 'error' is missing in type 'StoreWritable<string>' but required in type '{ error: \\"either target, clock or source should exists\\"; }'.
+      no errors
       "
     `)
   })
@@ -420,7 +416,7 @@ describe('sample(Store<T>):Store<T>', () => {
     const sample_s_incorrect: Store<number> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'StoreWritable<string>' is not assignable to parameter of type '{ error: \\"either target, clock or source should exists\\"; }'.
+      Type 'Store<string>' is not assignable to type 'Store<number>'.
       "
     `)
   })
@@ -431,7 +427,7 @@ describe('sample(Store<T>):Store<T>', () => {
       const sample_s_edge_correct: Event<string> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Expected 1 arguments, but got 2.
+        no errors
         "
       `)
     })
@@ -442,7 +438,7 @@ describe('sample(Store<T>):Store<T>', () => {
       const sample_s_edge_incorrect: Event<number> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Expected 1 arguments, but got 2.
+        Type 'Event<string>' is not assignable to type 'Event<number>'.
         "
       `)
     })
