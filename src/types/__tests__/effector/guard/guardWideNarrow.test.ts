@@ -37,8 +37,8 @@ test('wide union (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
-          Property 'prepend' is missing in type 'Event<{ a: 1; } | { a: 2; }>' but required in type 'EventCallable<any>'.
+        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
+          Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '[any?, ...any[]]'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
       Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
         Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
@@ -118,8 +118,8 @@ test('unknown type in source (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<string>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
-          Property 'prepend' is missing in type 'Event<string>' but required in type 'EventCallable<any>'.
+        Type 'Event<string>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
+          Type 'Event<string>' is not assignable to type '[any?, ...any[]]'.
     Type 'Event<unknown>' is not assignable to type 'Event<string>'.
       Type 'unknown' is not assignable to type 'string'.
     No overload matches this call.
@@ -195,8 +195,8 @@ test('optional props (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
-          Property 'prepend' is missing in type 'Event<{ a: 1; b: 2; }>' but required in type 'EventCallable<any>'.
+        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
+          Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[any?, ...any[]]'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
       Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
         Types of property 'b' are incompatible.
@@ -275,8 +275,8 @@ test('narrow object (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
-          Property 'prepend' is missing in type 'Event<{ a: 1; b: 2; c: 3; }>' but required in type 'EventCallable<any>'.
+        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
+          Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '[any?, ...any[]]'.
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
       Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
     No overload matches this call.
@@ -360,8 +360,8 @@ test('narrow tuple (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<[1, 2, 3]>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
-          Property 'prepend' is missing in type 'Event<[1, 2, 3]>' but required in type 'EventCallable<any>'.
+        Type 'Event<[1, 2, 3]>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
+          Type 'Event<[1, 2, 3]>' is not assignable to type '[any?, ...any[]]'.
     No overload matches this call.
       The last overload gave the following error.
         Type 'Event<[1, 2, 3]>' is not assignable to type '\\"non-unit item in target\\"'.
@@ -404,8 +404,8 @@ test('wide union in array (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<(string | number)[]>' is not assignable to type 'UnitTarget<any> | [any?, ...any[]]'.
-          Property 'prepend' is missing in type 'Event<(string | number)[]>' but required in type 'EventCallable<any>'.
+        Type 'Event<(string | number)[]>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
+          Type 'Event<(string | number)[]>' is not assignable to type '[any?, ...any[]]'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
       Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
         Type 'string | number | boolean' is not assignable to type 'string | number'.
