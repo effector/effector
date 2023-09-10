@@ -241,16 +241,16 @@ export interface Store<State> extends Unit<State> {
 
 export interface StoreWritable<State> extends Store<State>, UnitTargetable<State> {
   on<E>(
-    trigger: UnitTargetable<E>,
+    trigger: Unit<E>,
     reducer: (state: State, payload: E) => State | void,
   ): this
   on<E>(
-    triggers: UnitTargetable<E>[],
+    triggers: Unit<E>[],
     reducer: (state: State, payload: E) => State | void,
   ): this
-  on<E extends Tuple<UnitTargetable<any>>>(
+  on<E extends Tuple<Unit<any>>>(
     triggers: E,
-    reducer: (state: State, payload: InferValueFromTupleOfUnitTargetables<E>) => State | void,
+    reducer: (state: State, payload: InferValueFromTupleOfUnits<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
   reset(...triggers: Array<Unit<any>>): this
