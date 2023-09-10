@@ -23,7 +23,11 @@ test('createStore', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'StoreWritable<number>' is not assignable to type 'StoreWritable<string>'.
-      Type 'number' is not assignable to type 'string'.
+      Types of property 'on' are incompatible.
+        Type '{ <E>(trigger: Unit<E>, reducer: (state: number, payload: E) => number | void): StoreWritable<number>; <E>(triggers: Unit<E>[], reducer: (state: number, payload: E) => number | void): StoreWritable<...>; <E extends Tuple<...>>(triggers: E, reducer: (state: number, payload: InferValueFromTupleOfUnits<...>) => number ...' is not assignable to type '{ <E>(trigger: Unit<E>, reducer: (state: string, payload: E) => string | void): StoreWritable<string>; <E>(triggers: Unit<E>[], reducer: (state: string, payload: E) => string | void): StoreWritable<...>; <E extends Tuple<...>>(triggers: E, reducer: (state: string, payload: InferValueFromTupleOfUnits<...>) => string ...'.
+          Types of parameters 'reducer' and 'reducer' are incompatible.
+            Types of parameters 'state' and 'state' are incompatible.
+              Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -218,15 +222,7 @@ test('.on(sample()) inline (should pass)', () => {
   )
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      Overload 1 of 3, '(trigger: UnitTarget<string>, reducer: (state: string, payload: string) => string | void): StoreWritable<string>', gave the following error.
-        Argument of type 'Event<string>' is not assignable to parameter of type 'UnitTarget<string>'.
-          Property 'prepend' is missing in type 'Event<string>' but required in type 'EventCallable<string>'.
-      Overload 2 of 3, '(triggers: UnitTarget<unknown>[], reducer: (state: string, payload: unknown) => string | void): StoreWritable<string>', gave the following error.
-        Argument of type 'Event<string>' is not assignable to parameter of type 'UnitTarget<unknown>[]'.
-          Type 'Event<string>' is missing the following properties from type 'UnitTarget<unknown>[]': length, pop, push, concat, and 27 more.
-      Overload 3 of 3, '(triggers: Tuple<UnitTarget<any>>, reducer: (state: string, payload: never) => string | void): StoreWritable<string>', gave the following error.
-        Argument of type 'Event<string>' is not assignable to parameter of type 'Tuple<UnitTarget<any>>'.
+    no errors
     "
   `)
 })
@@ -318,6 +314,8 @@ test('#thru', () => {
 })
 
 test('unsafe widening (should fail)', () => {
+  const $v = createStore({page: 0, limit: 0, id: 1})
+
   //@ts-expect-error
   const $values: StoreWritable<{
     page: number
@@ -327,7 +325,11 @@ test('unsafe widening (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Type 'StoreWritable<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreWritable<{ [key: string]: any; page: number; limit: number; }>'.
+      Types of property 'x__fake_field_to_make_ts_guard_against_unsafe_widening_x' are incompatible.
+        Type 'EventCallable<{ page: number; limit: number; id: number; }>' is not assignable to type 'EventCallable<{ [key: string]: any; page: number; limit: number; }>'.
+          Types of parameters 'payload' and 'payload' are incompatible.
+            Type '{ [key: string]: any; page: number; limit: number; }' is not assignable to type '{ page: number; limit: number; id: number; }'.
     "
   `)
 })

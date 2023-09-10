@@ -256,6 +256,8 @@ export interface StoreWritable<State> extends Store<State>, UnitTargetable<State
   reset(...triggers: Array<Unit<any>>): this
   reset(triggers: Array<Unit<any>>): this
 
+  x__fake_field_to_make_ts_guard_against_unsafe_widening_x: EventCallable<State>
+
   reinit: EventCallable<void>
 }
 
