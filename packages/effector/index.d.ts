@@ -82,8 +82,6 @@ type EffectByHandler<FN extends Function, Fail> = FN extends (...args: infer Arg
   ? Effect<OptionalParams<Args>, AsyncResult<Done>, Fail>
   : never
 
-type UnitTarget<T> = EventCallable<T> | StoreWritable<T> | Effect<T, any, any>;
-
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
@@ -106,6 +104,10 @@ export type Subscription = {
 export interface Unit<T> {
   readonly kind: kind
   readonly __: T
+}
+
+export interface UnitTargetable<T> extends Unit<T> {
+  readonly ____: true
 }
 
 export type CompositeName = {
@@ -153,7 +155,7 @@ export interface Event<Payload> extends Unit<Payload> {
 /**
  * The function you can call to trigger an event.
  */
-export interface EventCallable<Payload> extends Event<Payload> {
+export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<Payload> {
   (payload: Payload): Payload
    (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
 
@@ -163,7 +165,7 @@ export interface EventCallable<Payload> extends Event<Payload> {
 /**
  * Container for (possibly async) side effects
  */
-export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
+export interface Effect<Params, Done, Fail = Error> extends UnitTargetable<Params> {
   (params: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
   readonly doneData: Event<Done>
@@ -207,8 +209,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 }
 type InferValueFromTupleOfUnits<T extends Tuple<Unit<any>>> =
   T[number] extends Unit<infer R> ? R : never
-type InferValueFromTupleOfUnitTargets<T extends Tuple<UnitTarget<any>>> =
-  T[number] extends UnitTarget<infer R>? R : never
+type InferValueFromTupleOfUnitTargetables<T extends Tuple<UnitTargetable<any>>> =
+  T[number] extends UnitTargetable<infer R>? R : never
 
 export interface Store<State> extends Unit<State> {
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
@@ -237,18 +239,18 @@ export interface Store<State> extends Unit<State> {
   sid: string | null
 }
 
-export interface StoreWritable<State> extends Store<State> {
+export interface StoreWritable<State> extends Store<State>, UnitTargetable<State> {
   on<E>(
-    trigger: UnitTarget<E>,
+    trigger: UnitTargetable<E>,
     reducer: (state: State, payload: E) => State | void,
   ): this
   on<E>(
-    triggers: UnitTarget<E>[],
+    triggers: UnitTargetable<E>[],
     reducer: (state: State, payload: E) => State | void,
   ): this
-  on<E extends Tuple<UnitTarget<any>>>(
+  on<E extends Tuple<UnitTargetable<any>>>(
     triggers: E,
-    reducer: (state: State, payload: InferValueFromTupleOfUnitTargets<E>) => State | void,
+    reducer: (state: State, payload: InferValueFromTupleOfUnitTargetables<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
   reset(...triggers: Array<Unit<any>>): this
@@ -520,48 +522,48 @@ export function forward<T>(opts: {
    * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
    */
   from: Unit<T & {}>
-  to: UnitTarget<T> | ReadonlyArray<UnitTarget<T>>
+  to: UnitTargetable<T> | ReadonlyArray<UnitTargetable<T>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
 export function forward(opts: {
   from: Unit<any>
-  to: ReadonlyArray<UnitTarget<void>>
+  to: ReadonlyArray<UnitTargetable<void>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
-  to: ReadonlyArray<UnitTarget<void>>
+  to: ReadonlyArray<UnitTargetable<void>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
-  to: UnitTarget<void>
+  to: UnitTargetable<void>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
-  to: UnitTarget<To> | ReadonlyArray<UnitTarget<To>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
 }): Subscription
 // Allow `* -> void` forwarding (e.g. `string -> void`).
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
-export function forward(opts: {from: Unit<any>; to: UnitTarget<void>}): Subscription
+export function forward(opts: {from: Unit<any>; to: UnitTargetable<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
-  to: UnitTarget<To> | ReadonlyArray<UnitTarget<To>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
 }): Subscription
 
 /**
@@ -1033,7 +1035,7 @@ type IfAssignable<T, U, Y, N> =
 
 type Source<A> = Unit<A> | Combinable
 type Clock<B> = Unit<B> | Tuple<Unit<any>>
-type Target = UnitTarget<any> | Tuple<any>
+type Target = UnitTargetable<any> | Tuple<any>
 
 type GetTupleWithoutAny<T> = T extends Array<infer U>
   ? U extends Unit<infer Value>
@@ -1058,12 +1060,12 @@ type ReplaceUnit<Target, Result, Value> = IfAssignable<Result, Value,
 
 // [...T] is used to show sample result as a tuple (not array)
 type TargetTuple<Target extends Array<unknown>, Result> = [...{
-  [Index in keyof Target]: Target[Index] extends UnitTarget<infer Value>
+  [Index in keyof Target]: Target[Index] extends UnitTargetable<infer Value>
     ? ReplaceUnit<Target[Index], Result, Value>
     : 'non-unit item in target'
 }]
 
-type MultiTarget<Target, Result> = Target extends UnitTarget<infer Value>
+type MultiTarget<Target, Result> = Target extends UnitTargetable<infer Value>
   ? ReplaceUnit<Target, Result, Value>
   : Target extends Tuple<unknown>
     ? TargetTuple<Target, Result>
@@ -1139,7 +1141,7 @@ type SampleImpl<
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
       : [message: {error: 'source should be unit or object with stores'; got: Source}]
   // has target
-  : Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>
+  : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
       // has target, no source
     ? unknown extends Source
       ? unknown extends Clock
@@ -1593,7 +1595,7 @@ type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
 
 type TargetFilterFnConfig<
   Mode extends Mode_Flt_Trg,
-  Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FilterFun,
@@ -1614,7 +1616,7 @@ type TargetFilterFnConfig<
 
 type TargetConfigCheck<
   Mode extends Mode_Trg,
-  Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FN,
@@ -1678,7 +1680,7 @@ type InferredType<Source, Clock, FilterFN> =
 
 type SampleFilterTargetDef<
   Mode extends Mode_Trg,
-  Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FLUnit,
@@ -1891,7 +1893,7 @@ type SampleFilterTargetDef<
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
-  Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   ResultConfig
 > = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
     ? [config: ResultConfig]
@@ -2064,8 +2066,8 @@ type DataSourceFunction<Source, Clock> =
     : never
 
 type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends UnitTarget<any>
-    ? Target extends UnitTarget<infer TargetType>
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
@@ -2082,7 +2084,7 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
     : {
       [
         K in keyof Target
-      ]: Target[K] extends UnitTarget<infer TargetType>
+      ]: Target[K] extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
@@ -2098,9 +2100,9 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
         : never
     }
 
-type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTarget<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends UnitTarget<any>
-    ? Target extends UnitTarget<infer TargetType>
+type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
@@ -2114,7 +2116,7 @@ type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTar
     : {
       [
         K in keyof Target
-      ]: Target[K] extends UnitTarget<infer TargetType>
+      ]: Target[K] extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
@@ -2166,7 +2168,7 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
 type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
 type Units = Unit<any> | Tuple<Unit<any>>
-type UnitsTarget = UnitTarget<any> | Tuple<UnitTarget<any>>
+type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
 
 /* guard types */
 
@@ -3119,7 +3121,7 @@ export function allSettled<FX extends Effect<void, any, any>>(
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled<T>(
-  unit: UnitTarget<T>,
+  unit: UnitTargetable<T>,
   config: {scope: Scope; params: T},
 ): Promise<void>
 /**
@@ -3128,7 +3130,7 @@ export function allSettled<T>(
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled(
-  unit: UnitTarget<void>,
+  unit: UnitTargetable<void>,
   config: {scope: Scope},
 ): Promise<void>
 /**
