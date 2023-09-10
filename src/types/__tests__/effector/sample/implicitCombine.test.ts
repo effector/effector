@@ -169,7 +169,7 @@ it('supports store objects as a source (should pass) [non-config sample overload
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    no errors
     "
   `)
 })
@@ -183,7 +183,7 @@ it('supports a list of stores as a source (should pass) [non-config sample overl
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    no errors
     "
   `)
 })
@@ -201,10 +201,7 @@ it('supports store objects as a source + mapping (should pass) [non-config sampl
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
@@ -222,10 +219,7 @@ it('supports a list of stores as a source + mapping (should pass) [non-config sa
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
