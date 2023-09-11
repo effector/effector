@@ -11,7 +11,12 @@ export function createWatch<T>(
   ]
   if (batchStep) seq.unshift(batchStep)
   if (scope) {
-    const node = createNode({node: seq})
+    const node = createNode({
+      node: seq,
+      meta: {
+        isReactWatcher: true,
+      },
+    })
     const id = (store as any).graphite.id
     const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
     const links = scopeLinks[id] || []
