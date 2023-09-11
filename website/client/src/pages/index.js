@@ -152,8 +152,8 @@ const $currentPost = createStore(1)
 const $status = combine(
   $currentPost, $postComments, getCommentsFx.pending,
   (postId, comments, isLoading) => isLoading
-    ? 'Загрузка поста...'
-    : \`Пост \${postId} имеет \${comments.length} комментариев\`
+    ? 'Post yuklanishi...'
+    : \`Post \${postId} \${comments.length} ta komentariyaga ega\`
 )
 
 sample({
@@ -166,12 +166,12 @@ sample({
 $status.watch(status => {
   console.log(status)
 })
-// => Пост 1 имеет 0 комментариев
+// => Post 1 0ta komentariyaga ega
 
 nextPost()
 
-// => Загрузка поста...
-// => Пост 2 имеет 5 комментариев
+// => Post yuklanishi...
+// => Post 2 5ta komentariyaga ega
 `,
 }
 
@@ -193,7 +193,7 @@ const features = [
       },
       uz: {
         title: 'Tipizatsiya',
-        description: 'Поддержка TypeScript в комплекте поставки'
+        description: 'TypeScript ni to`la ta`minotini qo`llaydi'
       }
     },
   },
@@ -235,7 +235,7 @@ const features = [
       },
       uz: {
         title: 'Dasturchilar uchun qulay',
-        description: 'Mantiqiy API va sezgir hamjamiyat'
+        description: 'Mantiqiy API va do`stona hamjamiyat'
       }
     },
   },
@@ -257,7 +257,7 @@ const features = [
       },
       uz: {
         title: 'Maksimal ishlash',
-        description: 'Statik ishga tushishi ish faoliyatini yaxshilaydi'
+        description: 'Statik ishga tushishi ish faoliyatini tezlashtiradi'
       }
     },
   },
@@ -278,7 +278,7 @@ const features = [
       },
       uz: {
         title: 'Kichik hajim',
-        description: "Effector ixcham biblioteka bolib tree-sharking ni qo'llab quvvatlaydi"
+        description: "Effector TREE SHAKING ni qo`llaydigan ixcham biblioteka"
       }
     },
   },
@@ -299,7 +299,7 @@ const features = [
       },
       uz: {
         title: 'Oddiy JavaScript',
-        description: 'Hichqanday proksi va klasslarsiz'
+        description: 'Hechqanday proksi va klasslarsiz'
       }
     },
   },
