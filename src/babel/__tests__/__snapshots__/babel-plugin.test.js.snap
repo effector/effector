@@ -2690,14 +2690,17 @@ import {createStore} from 'redux'
     },
   })
   const m = launchEffector(event, null)
-  const n = mergeEffector([event], {
-    loc: {
-      file: _effectorFileName,
-      line: 44,
-      column: 12,
+  const n = mergeEffector({
+    and: [event],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 44,
+        column: 12,
+      },
+      name: 'n',
+      sid: '-tu53om',
     },
-    name: 'n',
-    sid: '-tu53om',
   })
   const o = restoreEffector(event, null, {
     loc: {
@@ -2950,14 +2953,17 @@ const f = guard({
   },
 })
 const g = launch(event, null)
-const h = merge([event], {
-  loc: {
-    file: _effectorFileName,
-    line: 16,
-    column: 10,
+const h = merge({
+  and: [event],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 16,
+      column: 10,
+    },
+    name: 'h',
+    sid: '-69m0jw',
   },
-  name: 'h',
-  sid: '-69m0jw',
 })
 const i = restore(event, null, {
   loc: {
@@ -3041,50 +3047,64 @@ const foo = createEvent({
   name: 'foo',
   sid: 'wn2htt',
 })
-const a = merge([foo], {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 10,
+const a = merge({
+  and: [foo],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 5,
+      column: 10,
+    },
+    name: 'a',
+    sid: 'g0hdc6',
   },
-  name: 'a',
-  sid: 'g0hdc6',
 })
-const b = merge([foo], {
-  and: {},
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10,
+const b = merge({
+  and: [foo],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 6,
+      column: 10,
+    },
+    name: 'b',
+    sid: 'wish8k',
   },
-  name: 'b',
-  sid: 'wish8k',
 })
-const {sid} = merge([foo], {
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 14,
+const {sid} = merge({
+  and: [foo],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 7,
+      column: 14,
+    },
+    sid: '-g39k5r',
   },
-  sid: '-g39k5r',
 })
-merge([foo], {
-  loc: {
-    file: _effectorFileName,
-    line: 9,
-    column: 0,
+merge({
+  and: [foo],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 9,
+      column: 0,
+    },
+    sid: '-1h8qvs',
   },
-  sid: '-1h8qvs',
 })
 const args = [[foo]]
-const c = merge(...args, {
-  loc: {
-    file: _effectorFileName,
-    line: 13,
-    column: 10,
+const c = merge({
+  and: args[0],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 13,
+      column: 10,
+    },
+    name: 'c',
+    sid: 'er2f95',
   },
-  name: 'c',
-  sid: 'er2f95',
 })
 {
   const incorrect = merge([foo])
@@ -4119,23 +4139,28 @@ const i = guard({
     sid: '-zet0gg',
   },
 })
-const j = merge([e], {
+const j = merge({
   and: {
+    and: [e],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 26,
+        column: 10,
+      },
+      name: 'j',
+      sid: '48xswg',
+    },
+  },
+  or: {
     loc: {
-      file: _effectorFileName,
+      file: _effectorFileName2,
       line: 26,
       column: 10,
     },
     name: 'j',
     sid: '48xswg',
   },
-  loc: {
-    file: _effectorFileName2,
-    line: 26,
-    column: 10,
-  },
-  name: 'j',
-  sid: '48xswg',
 })
 const k = restore(d, null, {
   and: {

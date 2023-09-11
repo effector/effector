@@ -150,7 +150,7 @@ module.exports = function (babel, options = {}) {
       flag: merges,
       set: mergeCreators,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
     },
   ]
   const domainMethodParsers = [
@@ -849,7 +849,7 @@ function setConfigForConfMethod(
     }
     configExpr.properties.push(stableID)
     args[0] = t.objectExpression([
-      property(t, 'and', commonArgs),
+      property(t, 'and', ensureSingleArgument(t, commonArgs)),
       property(t, 'or', configExpr),
     ])
   }
@@ -964,4 +964,12 @@ function property(t, field, content) {
 
 function stringProperty(t, field, value) {
   return property(t, field, t.stringLiteral(value))
+}
+
+/**
+ * Convert ...args to args[0] for cases when single argument is required
+ */
+function ensureSingleArgument(t, arg) {
+  if (!t.isSpreadElement(arg)) return arg
+  return t.memberExpression(arg.argument, t.identifier('0'), true)
 }
