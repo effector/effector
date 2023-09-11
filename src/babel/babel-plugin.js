@@ -102,7 +102,7 @@ module.exports = function (babel, options = {}) {
       flag: restores,
       set: restoreCreators,
       fn: (path, state, name, id) =>
-        setRestoreNameAfter(path, state, id, t, smallConfig, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
     },
     {
       flag: combines,
@@ -676,62 +676,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
-function setRestoreNameAfter(
-  path,
-  state,
-  nameNodeId,
-  t,
-  {addLoc, addNames, debugSids},
-  checkBindingName,
-) {
-  const displayName = nameNodeId ? nameNodeId.name : ''
-  if (isLocalVariable(path, checkBindingName)) return
-  let args
-  let loc
-  path.find(path => {
-    if (path.isCallExpression()) {
-      args = path.node.arguments
-      loc = path.node.loc.start
-      return true
-    }
-  })
 
-  if (args) {
-    if (!args[0]) return
-    if (!args[1]) return
-    const oldConfig = args[2]
-    const configExpr = (args[2] = t.objectExpression([]))
-
-    const stableID = stringProperty(
-      t,
-      'sid',
-      generateStableID(
-        state.file.opts.root,
-        state.filename,
-        displayName,
-        loc.line,
-        loc.column,
-        debugSids,
-      ),
-    )
-
-    if (oldConfig) {
-      configExpr.properties.push(property(t, 'and', oldConfig))
-    }
-    if (addLoc) {
-      const locProp = property(
-        t,
-        'loc',
-        makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
-      )
-      configExpr.properties.push(locProp)
-    }
-    if (displayName && addNames) {
-      configExpr.properties.push(stringProperty(t, 'name', displayName))
-    }
-    configExpr.properties.push(stableID)
-  }
-}
 function setStoreNameAfter(
   path,
   state,

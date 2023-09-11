@@ -1935,49 +1935,76 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'foo',
     sid: 'b5uuw9:/src/babel/__tests__/fixtures/debug-sids.js:foo',
   })
-  const a = restore(foo, null, {
-    name: 'a',
-    sid: 'nn9or3:/src/babel/__tests__/fixtures/debug-sids.js:a',
+  const a = restore({
+    and: [foo, null],
+    or: {
+      name: 'a',
+      sid: 'nn9or3:/src/babel/__tests__/fixtures/debug-sids.js:a',
+    },
   })
-  const b = restore(foo, null, {
-    and: {},
-    name: 'b',
-    sid: 'vd3dfx:/src/babel/__tests__/fixtures/debug-sids.js:b',
+  const b = restore({
+    and: [foo, null, {}],
+    or: {
+      name: 'b',
+      sid: 'vd3dfx:/src/babel/__tests__/fixtures/debug-sids.js:b',
+    },
   })
-  const c = restore(foo, null, {
-    and: 23020,
-    name: 'c',
-    sid: '-vh5dg6:/src/babel/__tests__/fixtures/debug-sids.js:c',
+  const c = restore({
+    and: [foo, null, 23020],
+    or: {
+      name: 'c',
+      sid: '-vh5dg6:/src/babel/__tests__/fixtures/debug-sids.js:c',
+    },
   })
   const config = {
     option: 0,
   }
-  const dod = restore(foo, null, {
-    and: config,
-    name: 'dod',
-    sid: '-vclm8o:/src/babel/__tests__/fixtures/debug-sids.js:dod',
+  const dod = restore({
+    and: [foo, null, config],
+    or: {
+      name: 'dod',
+      sid: '-vclm8o:/src/babel/__tests__/fixtures/debug-sids.js:dod',
+    },
   })
 
   const f = a =>
-    restore(foo, null, {
-      name: 'f',
-      sid: '-m02imo:/src/babel/__tests__/fixtures/debug-sids.js:f',
+    restore({
+      and: [foo, null],
+      or: {
+        name: 'f',
+        sid: '-m02imo:/src/babel/__tests__/fixtures/debug-sids.js:f',
+      },
     })
 
-  const {sid} = restore(foo, null, {
-    sid: '-m6nww7:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
-  })
-  const {shortName} = restore(foo, null, {
-    and: {
-      name: 'bar',
+  const {sid} = restore({
+    and: [foo, null],
+    or: {
+      sid: '-m6nww7:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
     },
-    sid: '-lpm9ur:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
-  restore(foo, null, {
-    sid: '-hqr1z7:/src/babel/__tests__/fixtures/debug-sids.js:',
+  const {shortName} = restore({
+    and: [
+      foo,
+      null,
+      {
+        name: 'bar',
+      },
+    ],
+    or: {
+      sid: '-lpm9ur:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    },
   })
-  restore(foo, null, {
-    sid: '-he3sbw:/src/babel/__tests__/fixtures/debug-sids.js:',
+  restore({
+    and: [foo, null],
+    or: {
+      sid: '-hqr1z7:/src/babel/__tests__/fixtures/debug-sids.js:',
+    },
+  })
+  restore({
+    and: [foo, null],
+    or: {
+      sid: '-he3sbw:/src/babel/__tests__/fixtures/debug-sids.js:',
+    },
   })
 }
 "
@@ -2702,14 +2729,17 @@ import {createStore} from 'redux'
       sid: '-tu53om',
     },
   })
-  const o = restoreEffector(event, null, {
-    loc: {
-      file: _effectorFileName,
-      line: 45,
-      column: 12,
+  const o = restoreEffector({
+    and: [event, null],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 45,
+        column: 12,
+      },
+      name: 'o',
+      sid: '-amf9ty',
     },
-    name: 'o',
-    sid: '-amf9ty',
   })
   const p = sampleEffector({
     and: [
@@ -2965,14 +2995,17 @@ const h = merge({
     sid: '-69m0jw',
   },
 })
-const i = restore(event, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 17,
-    column: 10,
+const i = restore({
+  and: [event, null],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 17,
+      column: 10,
+    },
+    name: 'i',
+    sid: '-15niss',
   },
-  name: 'i',
-  sid: '-15niss',
 })
 const j = sample({
   and: [
@@ -3218,94 +3251,121 @@ const foo = createEvent({
   name: 'foo',
   sid: 'uhrqqz',
 })
-const a = restore(foo, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 10,
+const a = restore({
+  and: [foo, null],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 4,
+      column: 10,
+    },
+    name: 'a',
+    sid: '-nnytgv',
   },
-  name: 'a',
-  sid: '-nnytgv',
 })
-const b = restore(foo, null, {
-  and: {},
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 10,
+const b = restore({
+  and: [foo, null, {}],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 5,
+      column: 10,
+    },
+    name: 'b',
+    sid: '-r64t0x',
   },
-  name: 'b',
-  sid: '-r64t0x',
 })
-const c = restore(foo, null, {
-  and: 23020,
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10,
+const c = restore({
+  and: [foo, null, 23020],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 6,
+      column: 10,
+    },
+    name: 'c',
+    sid: '-uoaskz',
   },
-  name: 'c',
-  sid: '-uoaskz',
 })
 const config = {
   option: 0,
 }
-const dod = restore(foo, null, {
-  and: config,
-  loc: {
-    file: _effectorFileName,
-    line: 8,
-    column: 12,
+const dod = restore({
+  and: [foo, null, config],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 8,
+      column: 12,
+    },
+    name: 'dod',
+    sid: '-juogjx',
   },
-  name: 'dod',
-  sid: '-juogjx',
 })
 
 const f = a =>
-  restore(foo, null, {
-    loc: {
-      file: _effectorFileName,
-      line: 10,
-      column: 15,
+  restore({
+    and: [foo, null],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 10,
+        column: 15,
+      },
+      name: 'f',
+      sid: 'sesimo',
     },
-    name: 'f',
-    sid: 'sesimo',
   })
 
-const {sid} = restore(foo, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 12,
-    column: 14,
+const {sid} = restore({
+  and: [foo, null],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 12,
+      column: 14,
+    },
+    sid: 'cwg5ax',
   },
-  sid: 'cwg5ax',
 })
-const {shortName} = restore(foo, null, {
-  and: {
-    name: 'bar',
+const {shortName} = restore({
+  and: [
+    foo,
+    null,
+    {
+      name: 'bar',
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 13,
+      column: 20,
+    },
+    sid: 'ddhscd',
   },
-  loc: {
-    file: _effectorFileName,
-    line: 13,
-    column: 20,
-  },
-  sid: 'ddhscd',
 })
-restore(foo, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 15,
-    column: 0,
+restore({
+  and: [foo, null],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 15,
+      column: 0,
+    },
+    sid: '5rznc1',
   },
-  sid: '5rznc1',
 })
-restore(foo, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 17,
-    column: 0,
+restore({
+  and: [foo, null],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 17,
+      column: 0,
+    },
+    sid: '5t38ir',
   },
-  sid: '5t38ir',
 })
 {
   const incorrect = restore(foo, null)
@@ -3871,44 +3931,71 @@ exports[`babel-plugin should units without name with options 1`] = `
   const foo = createEvent({
     sid: 'pyn9i0',
   })
-  const a = restore(foo, null, {
-    sid: 'lmx1mm',
+  const a = restore({
+    and: [foo, null],
+    or: {
+      sid: 'lmx1mm',
+    },
   })
-  const b = restore(foo, null, {
-    and: {},
-    sid: '-7sds1w',
+  const b = restore({
+    and: [foo, null, {}],
+    or: {
+      sid: '-7sds1w',
+    },
   })
-  const c = restore(foo, null, {
-    and: 23020,
-    sid: 'yah2mx',
+  const c = restore({
+    and: [foo, null, 23020],
+    or: {
+      sid: 'yah2mx',
+    },
   })
   const config = {
     option: 0,
   }
-  const dod = restore(foo, null, {
-    and: config,
-    sid: '10dc0p',
+  const dod = restore({
+    and: [foo, null, config],
+    or: {
+      sid: '10dc0p',
+    },
   })
 
   const f = a =>
-    restore(foo, null, {
-      sid: '-gu50wv',
+    restore({
+      and: [foo, null],
+      or: {
+        sid: '-gu50wv',
+      },
     })
 
-  const {sid} = restore(foo, null, {
-    sid: 'zcd1uy',
-  })
-  const {shortName} = restore(foo, null, {
-    and: {
-      name: 'bar',
+  const {sid} = restore({
+    and: [foo, null],
+    or: {
+      sid: 'zcd1uy',
     },
-    sid: '-z7pd2q',
   })
-  restore(foo, null, {
-    sid: 'vif224',
+  const {shortName} = restore({
+    and: [
+      foo,
+      null,
+      {
+        name: 'bar',
+      },
+    ],
+    or: {
+      sid: '-z7pd2q',
+    },
   })
-  restore(foo, null, {
-    sid: 'vv2bpf',
+  restore({
+    and: [foo, null],
+    or: {
+      sid: 'vif224',
+    },
+  })
+  restore({
+    and: [foo, null],
+    or: {
+      sid: 'vv2bpf',
+    },
   })
 }
 "
@@ -4162,23 +4249,30 @@ const j = merge({
     sid: '48xswg',
   },
 })
-const k = restore(d, null, {
-  and: {
+const k = restore({
+  and: [
+    {
+      and: [d, null],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 27,
+          column: 10,
+        },
+        name: 'k',
+        sid: '-r4ffps',
+      },
+    },
+  ],
+  or: {
     loc: {
-      file: _effectorFileName,
+      file: _effectorFileName2,
       line: 27,
       column: 10,
     },
     name: 'k',
     sid: '-r4ffps',
   },
-  loc: {
-    file: _effectorFileName2,
-    line: 27,
-    column: 10,
-  },
-  name: 'k',
-  sid: '-r4ffps',
 })
 const m = sample({
   and: [
