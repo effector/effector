@@ -6,7 +6,9 @@ export function createWatch<T>(
   scope?: Scope,
   batchStep?: Cmd,
 ) {
-  const seq: Cmd[] = [step.run({fn: value => fn(value)})]
+  const seq: Cmd[] = [
+    step.run({fn: () => fn(scope ? scope.getState(store) : store.getState())}),
+  ]
   if (batchStep) seq.unshift(batchStep)
   if (scope) {
     const node = createNode({node: seq})
