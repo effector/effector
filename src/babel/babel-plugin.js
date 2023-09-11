@@ -78,7 +78,7 @@ module.exports = function (babel, options = {}) {
       flag: stores,
       set: storeCreators,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false, name),
+        setStoreNameAfter(path, state, id, t, smallConfig, name),
     },
     {
       flag: events,
@@ -150,7 +150,7 @@ module.exports = function (babel, options = {}) {
       flag: merges,
       set: mergeCreators,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false, name),
+        setStoreNameAfter(path, state, id, t, smallConfig, name),
     },
   ]
   const domainMethodParsers = [
@@ -158,7 +158,7 @@ module.exports = function (babel, options = {}) {
       flag: stores,
       set: domainMethods.store,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false),
+        setStoreNameAfter(path, state, id, t, smallConfig),
     },
     {
       flag: events,
@@ -738,7 +738,6 @@ function setStoreNameAfter(
   nameNodeId,
   t,
   {addLoc, addNames, debugSids},
-  fillFirstArg,
   checkBindingName,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
@@ -754,10 +753,7 @@ function setStoreNameAfter(
   })
 
   if (args) {
-    if (!args[0]) {
-      if (!fillFirstArg) return
-      args[0] = t.nullLiteral()
-    }
+    if (!args[0]) return
     const oldConfig = args[1]
     const configExpr = (args[1] = t.objectExpression([]))
 
