@@ -8,10 +8,10 @@ import {processArgsToConfig} from './config'
 export function merge<T>(
   unitsOrConfig: Array<Event<T> | Store<T> | Effect<T, any, any>>,
 ): Event<T> {
-  const [units, config]: [
-    units: Array<Event<T> | Store<T> | Effect<T, any, any>>,
+  const [[units], config]: [
+    units: Array<Array<Event<T> | Store<T> | Effect<T, any, any>>>,
     config?: object,
-  ] = processArgsToConfig(unitsOrConfig, true)
+  ] = processArgsToConfig([unitsOrConfig])
   assertNodeSet(units, 'merge', 'first argument')
   const result = createEvent({
     name: unitObjectName(units, 'merge'),

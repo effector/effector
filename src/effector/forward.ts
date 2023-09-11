@@ -28,7 +28,7 @@ export const forward = (opts: {
 }): Subscription => {
   deprecate(false, 'forward', 'sample')
   const method = 'forward'
-  const [{from, to}, config] = processArgsToConfig(opts, true)
+  const [[{from, to}], config] = processArgsToConfig([opts])
   assertNodeSet(from, method, '"from"')
   assertNodeSet(to, method, '"to"')
   assertTarget(method, to, 'to')

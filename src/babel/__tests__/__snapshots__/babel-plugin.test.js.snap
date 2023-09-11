@@ -13,10 +13,12 @@ const effect = createEffect({
   sid: 'bswcgo',
 })
 const foo1 = attach({
-  and: {
-    effect,
-    mapParams: _ => _,
-  },
+  and: [
+    {
+      effect,
+      mapParams: _ => _,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -28,10 +30,12 @@ const foo1 = attach({
   },
 })
 attach({
-  and: {
-    effect,
-    mapParams: _ => _,
-  },
+  and: [
+    {
+      effect,
+      mapParams: _ => _,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -46,7 +50,7 @@ const config = {
   mapParams: _ => _,
 }
 const foo2 = attach({
-  and: config,
+  and: [config],
   or: {
     loc: {
       file: _effectorFileName,
@@ -60,10 +64,12 @@ const foo2 = attach({
 
 const f = () =>
   attach({
-    and: {
-      effect,
-      mapParams: _ => _,
-    },
+    and: [
+      {
+        effect,
+        mapParams: _ => _,
+      },
+    ],
     or: {
       loc: {
         file: _effectorFileName,
@@ -2284,10 +2290,12 @@ const bar = createEvent({
   sid: '-tj0e4a',
 })
 const baz1 = forward({
-  and: {
-    from: foo,
-    to: bar,
-  },
+  and: [
+    {
+      from: foo,
+      to: bar,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2299,10 +2307,12 @@ const baz1 = forward({
   },
 })
 const baz2 = forward({
-  and: {
-    from: foo,
-    to: bar,
-  },
+  and: [
+    {
+      from: foo,
+      to: bar,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2314,10 +2324,12 @@ const baz2 = forward({
   },
 })
 forward({
-  and: {
-    from: foo,
-    to: bar,
-  },
+  and: [
+    {
+      from: foo,
+      to: bar,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2328,10 +2340,12 @@ forward({
   },
 })
 forward({
-  and: {
-    from: foo,
-    to: bar,
-  },
+  and: [
+    {
+      from: foo,
+      to: bar,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2346,7 +2360,7 @@ const config = {
   to: bar,
 }
 const baz5 = forward({
-  and: config,
+  and: [config],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2360,10 +2374,12 @@ const baz5 = forward({
 
 const f = () =>
   forward({
-    and: {
-      from: foo,
-      to: bar,
-    },
+    and: [
+      {
+        from: foo,
+        to: bar,
+      },
+    ],
     or: {
       loc: {
         file: _effectorFileName,
@@ -2643,9 +2659,11 @@ import {createStore} from 'redux'
   const scope = forkEffector(domain)
   const node = createNodeEffector()
   const a = attachEffector({
-    and: {
-      effect,
-    },
+    and: [
+      {
+        effect,
+      },
+    ],
     or: {
       loc: {
         file: _effectorFileName,
@@ -2685,10 +2703,12 @@ import {createStore} from 'redux'
     },
   })
   const j = forwardEffector({
-    and: {
-      from: event,
-      to: store,
-    },
+    and: [
+      {
+        from: event,
+        to: store,
+      },
+    ],
     or: {
       loc: {
         file: _effectorFileName,
@@ -2718,7 +2738,7 @@ import {createStore} from 'redux'
   })
   const m = launchEffector(event, null)
   const n = mergeEffector({
-    and: [event],
+    and: [[event]],
     or: {
       loc: {
         file: _effectorFileName,
@@ -2909,9 +2929,11 @@ const domainEvent = domain.createEvent({
 const scope = fork(domain)
 const node = createNode()
 const a = attach({
-  and: {
-    effect,
-  },
+  and: [
+    {
+      effect,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2951,10 +2973,12 @@ const d = createApi({
   },
 })
 const e = forward({
-  and: {
-    from: event,
-    to: store,
-  },
+  and: [
+    {
+      from: event,
+      to: store,
+    },
+  ],
   or: {
     loc: {
       file: _effectorFileName,
@@ -2984,7 +3008,7 @@ const f = guard({
 })
 const g = launch(event, null)
 const h = merge({
-  and: [event],
+  and: [[event]],
   or: {
     loc: {
       file: _effectorFileName,
@@ -3081,7 +3105,7 @@ const foo = createEvent({
   sid: 'wn2htt',
 })
 const a = merge({
-  and: [foo],
+  and: [[foo]],
   or: {
     loc: {
       file: _effectorFileName,
@@ -3093,7 +3117,7 @@ const a = merge({
   },
 })
 const b = merge({
-  and: [foo],
+  and: [[foo], {}],
   or: {
     loc: {
       file: _effectorFileName,
@@ -3105,7 +3129,7 @@ const b = merge({
   },
 })
 const {sid} = merge({
-  and: [foo],
+  and: [[foo]],
   or: {
     loc: {
       file: _effectorFileName,
@@ -3116,7 +3140,7 @@ const {sid} = merge({
   },
 })
 merge({
-  and: [foo],
+  and: [[foo]],
   or: {
     loc: {
       file: _effectorFileName,
@@ -3128,7 +3152,7 @@ merge({
 })
 const args = [[foo]]
 const c = merge({
-  and: args[0],
+  and: [...args],
   or: {
     loc: {
       file: _effectorFileName,
@@ -4020,20 +4044,24 @@ import {
   split,
 } from 'effector'
 const korben = attach({
-  and: {
-    and: {
-      effect() {},
-    },
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 17,
-        column: 15,
+  and: [
+    {
+      and: [
+        {
+          effect() {},
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 17,
+          column: 15,
+        },
+        name: 'korben',
+        sid: '-5ddctg',
       },
-      name: 'korben',
-      sid: '-5ddctg',
     },
-  },
+  ],
   or: {
     loc: {
       file: _effectorFileName2,
@@ -4171,21 +4199,25 @@ const g = createApi({
   },
 })
 const h = forward({
-  and: {
-    and: {
-      from: d,
-      to: e,
-    },
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 24,
-        column: 10,
+  and: [
+    {
+      and: [
+        {
+          from: d,
+          to: e,
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 24,
+          column: 10,
+        },
+        name: 'h',
+        sid: '-41fru8',
       },
-      name: 'h',
-      sid: '-41fru8',
     },
-  },
+  ],
   or: {
     loc: {
       file: _effectorFileName2,
@@ -4227,18 +4259,20 @@ const i = guard({
   },
 })
 const j = merge({
-  and: {
-    and: [e],
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 26,
-        column: 10,
+  and: [
+    {
+      and: [[e]],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 26,
+          column: 10,
+        },
+        name: 'j',
+        sid: '48xswg',
       },
-      name: 'j',
-      sid: '48xswg',
     },
-  },
+  ],
   or: {
     loc: {
       file: _effectorFileName2,

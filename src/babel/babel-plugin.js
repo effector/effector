@@ -102,55 +102,55 @@ module.exports = function (babel, options = {}) {
       flag: restores,
       set: restoreCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: combines,
       set: combineCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: samples,
       set: sampleCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: forwards,
       set: forwardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: guards,
       set: guardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: attaches,
       set: attachCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: splits,
       set: splitCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, null, t, smallConfig, name),
     },
     {
       flag: apis,
       set: apiCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, null, t, smallConfig, name),
     },
     {
       flag: merges,
       set: mergeCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
   ]
   const domainMethodParsers = [
@@ -184,16 +184,7 @@ module.exports = function (babel, options = {}) {
       flag: gates,
       set: reactMethods.createGate,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(
-          path,
-          state,
-          id,
-          t,
-          smallConfig,
-          false,
-          name,
-          true,
-        ),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name, true),
     },
   ]
   function addImport(path, method) {
@@ -744,7 +735,6 @@ function setConfigForConfMethod(
   nameNodeId,
   t,
   {addLoc, addNames, debugSids},
-  singleArgument,
   checkBindingName,
   allowEmptyArguments,
 ) {
@@ -762,9 +752,7 @@ function setConfigForConfMethod(
 
   if (args) {
     if (!args[0] && !allowEmptyArguments) return
-    const commonArgs = singleArgument
-      ? args[0]
-      : t.ArrayExpression(args.slice())
+    const commonArgs = t.ArrayExpression(args.slice())
     args.length = 0
     const configExpr = t.objectExpression([])
 
