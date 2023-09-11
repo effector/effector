@@ -16,11 +16,11 @@
     "description": "Navbar item with label Blog"
   },
   "item.label.Playground": {
-    "message": "Onlayn qollash",
+    "message": "Onlayn qo`llash",
     "description": "Navbar item with label Playground"
   },
   "item.label.Changelog": {
-    "message": "Yangiliklsr",
+    "message": "Yangiliklar",
     "description": "Navbar item with label Changelog"
   },
   "item.label.Twitter": {

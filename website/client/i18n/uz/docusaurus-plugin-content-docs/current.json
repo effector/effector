@@ -1,6 +1,6 @@
 {
   "version.label": {
-    "message": "Next",
+    "message": "v22.x",
     "description": "The label for version current"
   },
   "sidebar.docs.category.Introduction": {
@@ -60,7 +60,7 @@
     "description": "The label for category Conventions in sidebar docs"
   },
   "sidebar.docs.category.TypeScript guide": {
-    "message": "TypeScript bilan foydalanish",
+    "message": "TypeScript yordamida foydalanish",
     "description": "The label for category TypeScript guide in sidebar docs"
   },
   "sidebar.docs.category.Recipes": {
@@ -88,7 +88,7 @@
     "description": "The label for category effector in sidebar api"
   },
   "sidebar.api.category.Unit creators": {
-    "message": "Yuitlar yaratish",
+    "message": "Yunitlar yaratish",
     "description": "The label for category Unit creators in sidebar api"
   },
   "sidebar.api.category.Unit types": {
