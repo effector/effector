@@ -1231,9 +1231,10 @@ describe('useUnit', () => {
 describe('@effector/next custom hydration triggers hooks', () => {
   test('useUnit case', async () => {
     const $count = createStore(0)
+    const $mappedCount = $count.map(x => x + 2)
 
     const Component = () => {
-      const count = useUnit($count)
+      const count = useUnit($mappedCount)
       return <div>{count}</div>
     }
 
@@ -1247,7 +1248,7 @@ describe('@effector/next custom hydration triggers hooks', () => {
 
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
-        1
+        3
       </div>
     `)
 
@@ -1263,6 +1264,9 @@ describe('@effector/next custom hydration triggers hooks', () => {
     Object.values(tscope.reg).forEach((ref: any) => {
       if (ref?.meta?.id === ($count as any).graphite.id) {
         ref.current = 2
+      }
+      if (ref?.meta?.id === ($mappedCount as any).graphite.id) {
+        delete tscope.reg[ref.id]
       }
     })
     await act(() => {
@@ -1281,7 +1285,7 @@ describe('@effector/next custom hydration triggers hooks', () => {
 
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
-        2
+        4
       </div>
     `)
   })
