@@ -6,10 +6,21 @@ export function createWatch<T>(
   scope?: Scope,
   batchStep?: Cmd,
 ) {
-  const seq: Cmd[] = [step.run({fn: value => fn(value)})]
+  const seq: Cmd[] = [
+    step.mov({
+      store: (store as any).stateRef,
+      to: 'stack',
+    }),
+    step.run({fn: (v) => fn(v)}),
+  ]
   if (batchStep) seq.unshift(batchStep)
   if (scope) {
-    const node = createNode({node: seq})
+    const node = createNode({
+      node: seq,
+      meta: {
+        watchOp: "store"
+      },
+    })
     const id = (store as any).graphite.id
     const scopeLinks: {[_: string]: Node[]} = (scope as any).additionalLinks
     const links = scopeLinks[id] || []
