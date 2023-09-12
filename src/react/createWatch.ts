@@ -7,14 +7,18 @@ export function createWatch<T>(
   batchStep?: Cmd,
 ) {
   const seq: Cmd[] = [
-    step.run({fn: () => fn(scope ? scope.getState(store) : store.getState())}),
+    step.mov({
+      store: (store as any).stateRef,
+      to: 'stack',
+    }),
+    step.run({fn: (v) => fn(v)}),
   ]
   if (batchStep) seq.unshift(batchStep)
   if (scope) {
     const node = createNode({
       node: seq,
       meta: {
-        isReactWatcher: true,
+        watchOp: "store"
       },
     })
     const id = (store as any).graphite.id
