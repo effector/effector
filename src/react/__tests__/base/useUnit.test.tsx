@@ -1265,15 +1265,17 @@ describe('@effector/next custom hydration triggers hooks', () => {
         ref.current = 2
       }
     })
-    Object.values(tscope.additionalLinks).forEach(links => {
-      ;(links as any[]).forEach((link: any) => {
-        if (link.meta.watchOp === 'store') {
-          launch({
-            scope,
-            target: link,
-            params: null,
-          })
-        }
+    await act(() => {
+      Object.values(tscope.additionalLinks).forEach(links => {
+        ;(links as any[]).forEach((link: any) => {
+          if (link.meta.watchOp === 'store') {
+            launch({
+              scope,
+              target: link,
+              params: null,
+            })
+          }
+        })
       })
     })
 
