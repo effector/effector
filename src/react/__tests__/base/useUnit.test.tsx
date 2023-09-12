@@ -12,6 +12,7 @@ import {
   fork,
   allSettled,
   serialize,
+  launch,
 } from 'effector'
 import {useUnit} from 'effector-react'
 import {
@@ -1224,5 +1225,62 @@ describe('useUnit', () => {
       </Provider>,
     )
     expect(failed).toBe(false)
+  })
+})
+
+describe('@effector/next custom hydration triggers hooks', () => {
+  test('useUnit case', async () => {
+    const $count = createStore(0)
+
+    const Component = () => {
+      const count = useUnit($count)
+      return <div>{count}</div>
+    }
+
+    const scope = fork({values: [[$count, 1]]})
+
+    await render(
+      <Provider value={scope}>
+        <Component />
+      </Provider>,
+    )
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        1
+      </div>
+    `)
+
+    /**
+     * @effector/next library now uses custom implementation of `hydrate` under the hood,
+     * which relies on some internals of `Scope` object
+     *
+     * Here is the short test to check that hydration triggers hooks
+     *
+     * More details at `hydrate.test.ts` -> "@effector/next custom hydration works" test
+     */
+    const tscope = scope as any
+    Object.values(tscope.reg).forEach((ref: any) => {
+      if (ref?.meta?.id === ($count as any).graphite.id) {
+        ref.current = 2
+      }
+    })
+    Object.values(tscope.additionalLinks).forEach(links => {
+      ;(links as any[]).forEach((link: any) => {
+        if (link.meta.watchOp === 'store') {
+          launch({
+            scope,
+            target: link,
+            params: null,
+          })
+        }
+      })
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        2
+      </div>
+    `)
   })
 })
