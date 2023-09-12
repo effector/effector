@@ -20,7 +20,7 @@ import {assert} from './throw'
 
 export function attach(config: any) {
   let injected
-  ;[config, injected] = processArgsToConfig(config, true)
+  ;[[config], injected] = processArgsToConfig([config])
   let {source, effect, mapParams, domain} = config
   if (is.effect(effect)) {
     assert(

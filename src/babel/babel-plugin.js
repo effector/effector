@@ -78,7 +78,7 @@ module.exports = function (babel, options = {}) {
       flag: stores,
       set: storeCreators,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false, name),
+        setStoreNameAfter(path, state, id, t, smallConfig, name),
     },
     {
       flag: events,
@@ -102,55 +102,55 @@ module.exports = function (babel, options = {}) {
       flag: restores,
       set: restoreCreators,
       fn: (path, state, name, id) =>
-        setRestoreNameAfter(path, state, id, t, smallConfig, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: combines,
       set: combineCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: samples,
       set: sampleCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: forwards,
       set: forwardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: guards,
       set: guardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: attaches,
       set: attachCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
     {
       flag: splits,
       set: splitCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, null, t, smallConfig, name),
     },
     {
       flag: apis,
       set: apiCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, null, t, smallConfig, name),
     },
     {
       flag: merges,
       set: mergeCreators,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name),
     },
   ]
   const domainMethodParsers = [
@@ -158,7 +158,7 @@ module.exports = function (babel, options = {}) {
       flag: stores,
       set: domainMethods.store,
       fn: (path, state, name, id) =>
-        setStoreNameAfter(path, state, id, t, smallConfig, false),
+        setStoreNameAfter(path, state, id, t, smallConfig),
     },
     {
       flag: events,
@@ -184,16 +184,7 @@ module.exports = function (babel, options = {}) {
       flag: gates,
       set: reactMethods.createGate,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(
-          path,
-          state,
-          id,
-          t,
-          smallConfig,
-          false,
-          name,
-          true,
-        ),
+        setConfigForConfMethod(path, state, id, t, smallConfig, name, true),
     },
   ]
   function addImport(path, method) {
@@ -676,7 +667,8 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
-function setRestoreNameAfter(
+
+function setStoreNameAfter(
   path,
   state,
   nameNodeId,
@@ -698,66 +690,6 @@ function setRestoreNameAfter(
 
   if (args) {
     if (!args[0]) return
-    if (!args[1]) return
-    const oldConfig = args[2]
-    const configExpr = (args[2] = t.objectExpression([]))
-
-    const stableID = stringProperty(
-      t,
-      'sid',
-      generateStableID(
-        state.file.opts.root,
-        state.filename,
-        displayName,
-        loc.line,
-        loc.column,
-        debugSids,
-      ),
-    )
-
-    if (oldConfig) {
-      configExpr.properties.push(property(t, 'and', oldConfig))
-    }
-    if (addLoc) {
-      const locProp = property(
-        t,
-        'loc',
-        makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
-      )
-      configExpr.properties.push(locProp)
-    }
-    if (displayName && addNames) {
-      configExpr.properties.push(stringProperty(t, 'name', displayName))
-    }
-    configExpr.properties.push(stableID)
-  }
-}
-function setStoreNameAfter(
-  path,
-  state,
-  nameNodeId,
-  t,
-  {addLoc, addNames, debugSids},
-  fillFirstArg,
-  checkBindingName,
-) {
-  const displayName = nameNodeId ? nameNodeId.name : ''
-  if (isLocalVariable(path, checkBindingName)) return
-  let args
-  let loc
-  path.find(path => {
-    if (path.isCallExpression()) {
-      args = path.node.arguments
-      loc = path.node.loc.start
-      return true
-    }
-  })
-
-  if (args) {
-    if (!args[0]) {
-      if (!fillFirstArg) return
-      args[0] = t.nullLiteral()
-    }
     const oldConfig = args[1]
     const configExpr = (args[1] = t.objectExpression([]))
 
@@ -803,7 +735,6 @@ function setConfigForConfMethod(
   nameNodeId,
   t,
   {addLoc, addNames, debugSids},
-  singleArgument,
   checkBindingName,
   allowEmptyArguments,
 ) {
@@ -821,9 +752,7 @@ function setConfigForConfMethod(
 
   if (args) {
     if (!args[0] && !allowEmptyArguments) return
-    const commonArgs = singleArgument
-      ? args[0]
-      : t.ArrayExpression(args.slice())
+    const commonArgs = t.ArrayExpression(args.slice())
     args.length = 0
     const configExpr = t.objectExpression([])
 
@@ -853,7 +782,7 @@ function setConfigForConfMethod(
     }
     configExpr.properties.push(stableID)
     args[0] = t.objectExpression([
-      property(t, 'and', commonArgs),
+      property(t, 'and', ensureSingleArgument(t, commonArgs)),
       property(t, 'or', configExpr),
     ])
   }
@@ -968,4 +897,12 @@ function property(t, field, content) {
 
 function stringProperty(t, field, value) {
   return property(t, field, t.stringLiteral(value))
+}
+
+/**
+ * Convert ...args to args[0] for cases when single argument is required
+ */
+function ensureSingleArgument(t, arg) {
+  if (!t.isSpreadElement(arg)) return arg
+  return t.memberExpression(arg.argument, t.identifier('0'), true)
 }
