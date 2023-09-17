@@ -5,6 +5,12 @@ import {
   step,
   createNode,
   createEffect,
+  Node,
+  Event,
+  getMetaPage,
+  Unit,
+  fork,
+  allSettled
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -147,4 +153,179 @@ test('stale reads', async () => {
       "a, true, a/end, false, b, true, b/end, false",
     ]
   `)
+})
+
+describe.only('experimental metaPage approach', () => {
+  function injectMetaPageReader(e: Unit<any>, cb: () => void) {
+    ;(e as any as {graphite: Node}).graphite.seq.push(
+      step.compute({
+        fn: u => {
+          cb()
+
+          return u
+        },
+      }),
+    )
+  }
+
+  test('There should be separate instance of metaPage for each launch from start to end', () => {
+    const metaObjectsStart: any[] = []
+    const metaObjectsEnd: any[] = []
+
+    function saveMetaPageRef(t: Event<any>, saveTo: any[]) {
+      injectMetaPageReader(t, () => {
+        saveTo.push(getMetaPage())
+      })
+    }
+
+    const event = createEvent()
+
+    saveMetaPageRef(event, metaObjectsStart)
+
+    const endEvent = sample({
+      clock: event,
+    })
+
+    saveMetaPageRef(endEvent, metaObjectsEnd)
+
+    /**
+     * Before launch metaPage should be null
+     */
+    expect(getMetaPage()).toBe(null)
+
+    event()
+    event()
+    event()
+
+    /**
+     * After launch metaPage should be null too
+     */
+    expect(getMetaPage()).toBe(null)
+
+    metaObjectsStart.forEach((page, idx) => {
+      expect(page).not.toBe(null)
+      expect(page).toBe(metaObjectsEnd[idx])
+      expect(
+        metaObjectsEnd.filter((_p, endIdx) => endIdx !== idx),
+      ).not.toContain(page)
+    })
+  })
+  test('It should be possible to write some data to metaPage object and access it', () => {
+    const event = createEvent()
+    const endEvent = sample({
+      clock: event,
+    })
+
+    injectMetaPageReader(event, () => {
+      const metaPage = getMetaPage()
+      ;(metaPage as any).test = 'test'
+    })
+    let endValue: any = null
+    injectMetaPageReader(endEvent, () => {
+      const metaPage = getMetaPage()
+      endValue = metaPage?.test
+    })
+
+    event()
+
+    expect(endValue).toBe('test')
+  })
+  test('metaPage object should survive through effect calls', async () => {
+    const event = createEvent()
+    const effect = createEffect({
+      handler: () => {
+        return new Promise(r => setTimeout(r))
+      },
+    })
+
+    sample({
+      clock: event,
+      target: effect,
+    })
+
+    const endEvent = sample({
+      clock: effect.done,
+    })
+
+    injectMetaPageReader(event, () => {
+      const metaPage = getMetaPage()
+      ;(metaPage as any).test = 'test'
+    })
+    let endValue: any = null
+    injectMetaPageReader(endEvent, () => {
+      const metaPage = getMetaPage()
+      endValue = metaPage?.test
+    })
+
+    const scope = fork();
+
+    await allSettled(event, {scope})
+
+    expect(endValue).toBe('test')
+  })
+  test('metaPage object should be available inside the effect handler', async () => {
+    const event = createEvent()
+    const effect = createEffect({
+      handler: async () => {
+        const metaPage = getMetaPage()
+        metaPage!.test = 'test'
+
+        return new Promise(r => setTimeout(r))
+      },
+    })
+
+    sample({
+      clock: event,
+      target: effect,
+    })
+
+    const endEvent = sample({
+      clock: effect.done,
+    })
+
+    let endValue: any = null
+    injectMetaPageReader(endEvent, () => {
+      const metaPage = getMetaPage()
+      endValue = metaPage?.test
+    })
+
+    const scope = fork();
+
+    await allSettled(event, {scope})
+
+    expect(endValue).toBe('test')
+  })
+  test('metaPage should survive through imperative effect calls', async () => {
+    const event = createEvent()
+    const sleepFx = createEffect(async () => new Promise(r => setTimeout(r)))
+    const effect = createEffect({
+      handler: async () => {
+        await sleepFx()
+
+        const metaPage = getMetaPage()
+        metaPage!.test = 'test'
+      },
+    })
+
+    sample({
+      clock: event,
+      target: effect,
+    })
+
+    const endEvent = sample({
+      clock: effect.done,
+    })
+
+    let endValue: any = null
+    injectMetaPageReader(endEvent, () => {
+      const metaPage = getMetaPage()
+      endValue = metaPage?.test
+    })
+
+    const scope = fork();
+
+    await allSettled(event, {scope})
+
+    expect(endValue).toBe('test')
+  })
 })
