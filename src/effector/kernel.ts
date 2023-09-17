@@ -191,6 +191,12 @@ const getPriority = (t: PriorityTag) => {
 
 const barriers = new Set<string | number>()
 
+let metaPage: Record<string, unknown> | null = null
+export const getMetaPage = () => metaPage
+export const setMetaPage = (newMetaPage: Record<string, unknown> | null) => {
+  metaPage = newMetaPage
+}
+
 let isRoot = true
 export let isWatch = false
 export let isPure = false
@@ -293,6 +299,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     scope: forkPage,
     isWatch,
     isPure,
+    metaPage,
+  }
+  if (!metaPage) {
+    setMetaPage({})
   }
   isRoot = false
   let stop: boolean
@@ -470,6 +480,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   }
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
+  setMetaPage(lastStartedState.metaPage)
   forkPage = getForkPage(lastStartedState)
 }
 

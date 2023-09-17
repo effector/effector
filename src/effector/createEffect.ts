@@ -4,7 +4,14 @@ import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, setForkPage, forkPage, isWatch} from './kernel'
+import {
+  launch,
+  setForkPage,
+  forkPage,
+  isWatch,
+  getMetaPage,
+  setMetaPage,
+} from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
@@ -123,6 +130,7 @@ export function createEffect<Params, Done, Fail = Error>(
           stack,
         ) => {
           const scopeRef = createScopeRef(stack)
+          const lastMetaPage = getMetaPage()
           const onResolve = onSettled(
             params,
             req,
@@ -130,6 +138,7 @@ export function createEffect<Params, Done, Fail = Error>(
             anyway,
             stack,
             scopeRef,
+            lastMetaPage,
           )
           const onReject = onSettled(
             params,
@@ -138,6 +147,7 @@ export function createEffect<Params, Done, Fail = Error>(
             anyway,
             stack,
             scopeRef,
+            lastMetaPage,
           )
           const [ok, result] = runFn(handler, onReject, args)
           if (ok) {
@@ -166,6 +176,7 @@ export function createEffect<Params, Done, Fail = Error>(
         if (!stack.meta) {
           stack.meta = {fxID: nextEffectID()}
         }
+        console.log('meta-page', getMetaPage())
         launch({
           target: runner,
           params: upd,
@@ -173,6 +184,7 @@ export function createEffect<Params, Done, Fail = Error>(
           scope: getForkPage(stack),
           meta: stack.meta,
         })
+        console.log('meta-page', getMetaPage())
         return upd.params
       },
       false,
@@ -186,9 +198,11 @@ export function createEffect<Params, Done, Fail = Error>(
     if (forkPage) {
       if (!isWatch) {
         const savedFork = forkPage
+        const savedMeta = getMetaPage()
         req.req
           .finally(() => {
             setForkPage(savedFork)
+            setMetaPage(savedMeta)
           })
           .catch(() => {})
       }
@@ -257,9 +271,11 @@ export const onSettled =
     anyway: Unit,
     stack: Stack,
     scopeRef: {ref: Scope | void},
+    lastMetaPage: any,
   ) =>
   (data: any) => {
     if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
+    setMetaPage(lastMetaPage)
     launch({
       target: [anyway, sidechain],
       params: [

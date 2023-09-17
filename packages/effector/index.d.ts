@@ -481,6 +481,13 @@ export const step: {
 }
 
 /**
+ * Meta-page accessor
+ * 
+ * Meta-page is an object which identity is stable through every separate kernel launch
+ */
+export function getMetaPage(): null | Record<string, unknown>;
+
+/**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  */
 export function forward<T>(opts: {
