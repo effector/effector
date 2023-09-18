@@ -822,3 +822,41 @@ describe('event/effect sampling behavior (issue #633)', () => {
     expect(argumentHistory(fn)).toEqual([1, 2])
   })
 })
+
+describe('greedy deprecation', () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function getWarning() {
+    return warn.mock.calls.map(([msg]) => msg)[0]
+  }
+  test('greedy true is deprecated', () => {
+    const clock = createEvent()
+    const target = createEvent()
+    sample({
+      clock,
+      target,
+      greedy: true,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"greedy in sample is deprecated, use batch instead"`,
+    )
+  })
+  test('greedy false is deprecated', () => {
+    const clock = createEvent()
+    const target = createEvent()
+    sample({
+      clock,
+      target,
+      greedy: false,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"greedy in sample is deprecated, use batch instead"`,
+    )
+  })
+})
