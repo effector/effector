@@ -1843,8 +1843,16 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, string]>[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: (EventCallable<void> | EventCallable<[number, string]>)[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, string]>[]; filter: StoreWritable<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: (EventCallable<void> | EventCallable<[number, string]>)[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
         "
       `)
     })
@@ -1872,8 +1880,12 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, number]>[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: (EventCallable<void> | EventCallable<[number, number]>)[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, number]>[]; filter: StoreWritable<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: (EventCallable<void> | EventCallable<[number, number]>)[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
@@ -1903,10 +1915,24 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, string]>[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: (EventCallable<void> | EventCallable<...>)[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<number>; target: EventCallable<[number, string]>[]; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<number>; target: (EventCallable<void> | EventCallable<...>)[]; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, string]>[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: (EventCallable<void> | EventCallable<...>)[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
         "
       `)
     })
@@ -1934,8 +1960,12 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, number]>[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: (EventCallable<void> | EventCallable<...>)[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, number]>[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: (EventCallable<void> | EventCallable<...>)[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
@@ -1965,10 +1995,24 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, string]>[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: (EventCallable<void> | EventCallable<...>)[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: (StoreWritable<number> | EventCallable<number>)[]; target: EventCallable<...>[]; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: (StoreWritable<number> | EventCallable<number>)[]; target: (EventCallable<...> | EventCallable<...>)[]; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, string]>[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: (EventCallable<void> | EventCallable<...>)[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
         "
       `)
     })
@@ -1996,8 +2040,12 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, number]>[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: (EventCallable<void> | EventCallable<...>)[]; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, number]>[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: (EventCallable<void> | EventCallable<...>)[]; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
@@ -2031,6 +2079,9 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, string]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, string]>; filter: StoreWritable<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
         Argument of type '{ source: StoreWritable<number>[]; target: EventCallable<[number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
@@ -2064,6 +2115,7 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, number]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: readonly [StoreWritable<number>, StoreWritable<string>]; target: EventCallable<[number, number]>; filter: (val: readonly [number, string]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; target: EventCallable<[number, number]>; filter: StoreWritable<boolean>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
@@ -2115,8 +2167,14 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, string]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<number>; target: EventCallable<[number, string]>; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, string]>; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
         Argument of type '{ source: StoreWritable<number>[]; clock: EventCallable<any>; target: EventCallable<[number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
@@ -2152,6 +2210,7 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, number]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: readonly [StoreWritable<number>, StoreWritable<string>]; clock: EventCallable<any>; target: EventCallable<[number, number]>; filter: (val: readonly [...]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>; target: EventCallable<[number, number]>; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
@@ -2203,8 +2262,14 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, string]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: (StoreWritable<number> | EventCallable<number>)[]; target: EventCallable<...>; filter: (val: (string | number)[], n: number) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, string]>; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
         Argument of type '{ source: StoreWritable<number>[]; clock: EventCallable<any>[]; target: EventCallable<[number]>; filter: (val: number[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
@@ -2240,6 +2305,7 @@ describe('tuple source', () => {
         "
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, number]>; filter: (val: (string | number)[]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
+        Operator '>' cannot be applied to types 'string | number' and 'number'.
         Argument of type '{ source: readonly [StoreWritable<number>, StoreWritable<string>]; clock: EventCallable<any>[]; target: EventCallable<[number, number]>; filter: (val: readonly [...]) => boolean; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
         Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<any>[]; target: EventCallable<[number, number]>; filter: StoreWritable<...>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.

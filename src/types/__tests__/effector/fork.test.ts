@@ -144,8 +144,11 @@ describe('fork values', () => {
                       Type '[StoreWritable<number>, number] | [StoreWritable<string>, string]' is not assignable to type 'readonly [StoreWritable<number>, number]'.
                         Type '[StoreWritable<string>, string]' is not assignable to type 'readonly [StoreWritable<number>, number]'.
                           Type at position 0 in source is not compatible with type at position 0 in target.
-                            Type 'StoreWritable<string>' is not assignable to type 'StoreWritable<number>'.
-                              Type 'string' is not assignable to type 'number'.
+                            The types of 'on' are incompatible between these types.
+                              Type '{ <E>(trigger: Unit<E>, reducer: (state: string, payload: E) => string | void): StoreWritable<string>; <E>(triggers: Unit<E>[], reducer: (state: string, payload: E) => string | void): StoreWritable<...>; <E extends Tuple<...>>(triggers: E, reducer: (state: string, payload: InferValueFromTupleOfUnits<...>) => string ...' is not assignable to type '{ <E>(trigger: Unit<E>, reducer: (state: number, payload: E) => number | void): StoreWritable<number>; <E>(triggers: Unit<E>[], reducer: (state: number, payload: E) => number | void): StoreWritable<...>; <E extends Tuple<...>>(triggers: E, reducer: (state: number, payload: InferValueFromTupleOfUnits<...>) => number ...'.
+                                Types of parameters 'reducer' and 'reducer' are incompatible.
+                                  Types of parameters 'state' and 'state' are incompatible.
+                                    Type 'string' is not assignable to type 'number'.
         "
       `)
     })

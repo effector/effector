@@ -102,10 +102,7 @@ describe('explicit generics', () => {
       Type 'Target' is not assignable to type 'Unit<string | null>'.
         Type 'Tuple<any>' is not assignable to type 'Unit<string | null>'.
       Type 'Target' is not assignable to type 'Unit<string | null>'.
-      No overload matches this call.
-        The last overload gave the following error.
-          Argument of type '{ source: EventCallable<string | null>; filter: (e: string | null) => boolean; target: EventCallable<string>; }' is not assignable to parameter of type '{ clock: Clock<string | null>; filter: GuardFilterC<Clock<string | null>>; name?: string | undefined; greedy?: boolean | undefined; }'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ clock: Clock<string | null>; filter: GuardFilterC<Clock<string | null>>; name?: string | undefined; greedy?: boolean | undefined; }'.
+        Type 'Tuple<any>' is not assignable to type 'Unit<string | null>'.
       Type 'Target' is not assignable to type 'Unit<string>'.
         Type 'Tuple<any>' is not assignable to type 'Unit<string>'.
       "
@@ -144,6 +141,7 @@ describe('explicit generics', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Target' is not assignable to type 'Unit<string>'.
+        Type 'Tuple<any>' is not assignable to type 'Unit<string>'.
       "
     `)
   })
