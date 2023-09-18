@@ -53,6 +53,11 @@ export function fork(
       scope.hasSidDoubles = hasSidDoubles
     }
     if (config.handlers) {
+      deprecate(
+        config.handlers instanceof Map || Array.isArray(config.handlers),
+        'object with handlers',
+        'array',
+      )
       scope.handlers = normalizeValues(config.handlers, unit =>
         assert(
           is.effect(unit),
