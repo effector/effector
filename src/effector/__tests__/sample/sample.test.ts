@@ -229,12 +229,12 @@ describe('sample', () => {
   })
   describe('sample with event as source', () => {
     describe.each`
-      greedy   | resultDirect                | resultBacktracking
-      ${false} | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 2}, {x: 3}]}
-      ${true}  | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 1}, {x: 2}]}
+      batch    | resultDirect                | resultBacktracking
+      ${true}  | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 2}, {x: 3}]}
+      ${false} | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 1}, {x: 2}]}
     `(
-      'depended on order of execution (greedy = $greedy)',
-      ({greedy, resultDirect, resultBacktracking}) => {
+      'depended on order of execution (batch = $batch)',
+      ({batch, resultDirect, resultBacktracking}) => {
         test('direct order', () => {
           const fn = jest.fn()
           const A = createEvent<number>()
@@ -244,7 +244,7 @@ describe('sample', () => {
             source: A,
             clock: B,
             fn: (A, B) => B,
-            greedy,
+            batch,
           }).watch(e => fn(e))
 
           A(1)
@@ -262,7 +262,7 @@ describe('sample', () => {
             source: B,
             clock: A,
             fn: B => B,
-            greedy,
+            batch,
           }).watch(e => fn(e))
 
           A(1)
@@ -470,12 +470,12 @@ describe('sample', () => {
     })
     describe('event call will not break watchers', () => {
       it.each`
-        greedy
-        ${false}
+        batch
         ${true}
+        ${false}
       `(
-        'event call will not break watchers (greedy = $greedy)',
-        async ({greedy}) => {
+        'event call will not break watchers (batch = $batch)',
+        async ({batch}) => {
           const fn1 = jest.fn()
           const hello = createEvent<string>()
           const run = createEvent<string>()
@@ -484,14 +484,14 @@ describe('sample', () => {
             source: hello,
             clock: run,
             fn: (a, b) => ({a, b}),
-            greedy,
+            batch,
           }).watch(() => {})
 
           sample({
             source: hello,
             clock: run,
             fn: (a, b) => ({a, b}),
-            greedy,
+            batch,
           }).watch(e => fn1(e))
 
           run('R')
@@ -807,7 +807,7 @@ describe('event/effect sampling behavior (issue #633)', () => {
       clock: initFx,
       filter: targetFx.pending.map(val => !val),
       target: targetFx,
-      greedy: true,
+      batch: false,
     })
 
     targetFx.watch(params => fn(params))

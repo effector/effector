@@ -197,7 +197,7 @@ describe('clock should use the last update', () => {
       const $result = createStore<string | null>(null)
       sample({
         source: $selected,
-        greedy: true,
+        batch: false,
         fn: () => 'result',
         target: $result,
       })
@@ -219,7 +219,7 @@ describe('clock should use the last update', () => {
 
       const bugAgain = sample({
         source: $selected,
-        clock: sample({clock: $combine, greedy: true}),
+        clock: sample({clock: $combine, batch: false}),
         fn: (_, clockParams) => clockParams,
       })
 
@@ -286,7 +286,7 @@ describe('clock should use the last update', () => {
 
       const bugAgain = sample({
         source: $selected,
-        clock: sample({clock: $combine, greedy: true}),
+        clock: sample({clock: $combine, batch: false}),
         fn: (_, clockParams) => clockParams,
       })
       watchAll(fn, [
