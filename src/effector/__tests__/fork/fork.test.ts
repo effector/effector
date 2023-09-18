@@ -21,7 +21,8 @@ beforeAll(() => {
   console.error = (message, ...args) => {
     if (
       String(message).includes('forward') ||
-      String(message).includes('guard')
+      String(message).includes('guard') ||
+      String(message).includes('object with handlers')
     )
       return
     consoleError(message, ...args)
