@@ -127,6 +127,42 @@ describe('forward with subtyping', () => {
       "
     `)
   })
+  it('cannot narrow type from string|number to string (should fail)', () => {
+    //@ts-expect-error
+    forward<string | number>({from: strOrNum, to: str})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  it('generic to (should fail)', () => {
+    //@ts-expect-error
+    forward<string>({from: strOrNum, to: str})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+      "
+    `)
+  })
+  it('generics `to` and `from` (should pass)', () => {
+    forward<string | number, string>({to: strOrNum, from: str})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  it('generics `to` and `from` (should fail on providing generics)', () => {
+    //@ts-expect-error
+    forward<string, string | number>({to: str, from: strOrNum})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'string | number' does not satisfy the constraint 'string'.
+        Type 'number' is not assignable to type 'string'.
+      "
+    `)
+  })
 })
 
 describe('any to void support', () => {
