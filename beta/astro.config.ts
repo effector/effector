@@ -21,7 +21,7 @@ export default defineConfig({
   site:
     process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://beta.effector.dev`,
   integrations: [
-    tailwind({ config: { applyBaseStyles: false } }),
+    tailwind({ applyBaseStyles: false }),
     preact(),
     react(),
     mdx(),
@@ -36,6 +36,9 @@ export default defineConfig({
     syntaxHighlight: "prism",
     remarkPlugins: [directive, admonitions, github, remarkHeadingId],
     rehypePlugins: [[rehypeAutolinkHeadings, { behavior: "prepend" }]],
+  },
+  experimental: {
+    viewTransitions: true,
   },
   vite: {
     server: {

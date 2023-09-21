@@ -1,5 +1,4 @@
 import {createEvent, createStore, createDomain, combine, sample} from 'effector'
-import {argumentHistory} from 'effector/fixtures'
 import {unitObjectName} from '../naming'
 
 const rootDomain = createDomain('')
@@ -113,23 +112,5 @@ describe('sample support', () => {
     const clock = createEvent()
     const sampled = sample({source, clock, name: 'foo'})
     expect(sampled.shortName).toBe('foo')
-  })
-})
-
-describe('getType deprecation', () => {
-  const fn = jest.fn()
-  const originalConsoleError = console.error
-  beforeEach(() => {
-    console.error = fn
-  })
-  afterEach(() => {
-    console.error = originalConsoleError
-  })
-  test('getType deprecation', () => {
-    const event = createEvent()
-    event.getType()
-    expect(argumentHistory(fn)[0]).toMatchInlineSnapshot(
-      `"getType is deprecated, use compositeName.fullName instead"`,
-    )
   })
 })

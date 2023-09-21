@@ -5,6 +5,7 @@ import HeadSEO from "../components/HeadSEO.astro";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer/Footer.astro";
 import { SITE } from "../consts";
+import { ViewTransitions } from "astro:transitions";
 
 type DocsEntry = CollectionEntry<"docs">["data"];
 export interface Props extends DocsEntry {

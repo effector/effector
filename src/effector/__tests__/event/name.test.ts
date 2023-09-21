@@ -1,18 +1,5 @@
 import {createEvent, createDomain} from 'effector'
 
-const originalConsoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('getType')) return
-    originalConsoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = originalConsoleError
-})
-
 test("should return it's own name on event.getType()", () => {
   expect(createEvent('foo').getType()).toBe('foo')
   expect(createEvent({name: 'foo'}).getType()).toBe('foo')

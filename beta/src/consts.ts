@@ -17,6 +17,7 @@ export const OPEN_GRAPH = {
 export const KNOWN_LANGUAGES = {
   English: "en",
   Russian: "ru",
+  "O'zbekcha": "uz",
 } as const;
 export const KNOWN_LANGUAGE_CODES = Object.values(KNOWN_LANGUAGES);
 
@@ -69,13 +70,14 @@ export const ALGOLIA = {
 };
 
 export const ANNOUNCEMENT: Announcement | null = {
-  title: { en: "Pay attention", ru: "Обратите внимание" },
+  title: { en: "Pay attention", ru: "Обратите внимание", uz: "Etibor bering" },
   text: {
     en: "This documentation is for the as yet unreleased version of effector Spacewatch 23.0.",
     ru: "Эта версия документации предназначена для еще не вышедшего релиза effector Spacewatch 23.0.",
+    uz: "Bu hujjat hali chiqmagan effector Spacewatch 23.0. versiyasiga tegishli"
   },
   button: {
-    text: { en: "View actual documentation", ru: "Посмотреть актуальную документацию" },
+    text: { en: "View actual documentation", ru: "Посмотреть актуальную документацию", uz: "Aktual hujjatni ko'rish" },
     link: "https://effector.dev",
   },
 };

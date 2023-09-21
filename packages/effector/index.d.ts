@@ -187,9 +187,6 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   map<T>(fn: (params: Params) => T): EventAsReturnType<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
-  /**
-   * @deprecated use .compositeName.fullName instead
-   */
   getType(): string
   compositeName: CompositeName
   sid: string | null
@@ -338,9 +335,6 @@ export class Domain implements Unit<any> {
   sid: string | null
   compositeName: CompositeName
   shortName: string
-  /**
-   * @deprecated use .compositeName.fullName instead
-   */
   getType(): string
   history: {
     domains: Set<Domain>
