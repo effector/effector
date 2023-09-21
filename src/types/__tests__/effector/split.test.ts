@@ -9,6 +9,19 @@ import {
   sample,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 const typecheck = '{global}'
 
 it('infer type by given predicate (should pass)', () => {

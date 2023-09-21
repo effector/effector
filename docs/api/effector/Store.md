@@ -219,6 +219,10 @@ add(3)
 
 ### `watch(trigger, watcher)`
 
+:::note
+Since [effector 23.0.0](https://github.com/effector/effector/releases/tag/effector%4023.0.0) the second argument of `watch` is deprecated, use [`sample`](./sample.md) to run a function after `clock` field trigerred instead.
+:::
+
 Run `watcher` only when `trigger` event triggered. <br/>
 
 #### Formulae

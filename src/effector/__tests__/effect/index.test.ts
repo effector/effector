@@ -5,11 +5,26 @@ import {
   combine,
   forward,
   restore,
-  Unit,
   Node,
   step,
+  fork,
+  allSettled,
+  attach,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 describe('createEffect(handler) support', () => {
   test('with babel plugin', async () => {
@@ -425,4 +440,101 @@ it('should validate .use argument', () => {
   expect(() => {
     createEffect().use(null)
   }).toThrowErrorMatchingInlineSnapshot(`".use argument should be a function"`)
+})
+
+describe('@farfetched/core agreement', () => {
+  /**
+   * Tests agreement on non-breaking of internals between core effector and @farfetched/core,
+   * to implement features like:
+   * - Abortable handlers
+   *
+   * This is a temporary solution, until we will figure out the better way to implement these features into the core package
+   * For now there is a escape hatch to implement these features in the @farfetched/core package and this experience will be used during the development of the core package API
+   */
+  test('should allow patching of effect handler', async () => {
+    const fx = createEffect(() => 'default')
+    const $result = createStore('').on(fx.done, (_, {result}) => result)
+
+    const runnerNode = (
+      (fx as any as {graphite: Node}).graphite.scope as {runner: Node}
+    ).runner
+    runnerNode.seq.splice(
+      1,
+      0,
+      step.compute({
+        fn: p => {
+          p.handler = () => 'patched'
+
+          return p
+        },
+      }),
+    )
+
+    const scope = fork()
+
+    await allSettled(fx, {scope})
+
+    expect(scope.getState($result)).toBe('patched')
+  })
+
+  test('should allow patching of attached effect handler', async () => {
+    const baseFx = createEffect(() => 'default')
+    const fx = attach({
+      effect: baseFx,
+    })
+
+    const $result = createStore('').on(fx.done, (_, {result}) => result)
+
+    const runnerNode = (
+      (fx as any as {graphite: Node}).graphite.scope as {runner: Node}
+    ).runner
+    runnerNode.seq.splice(
+      1,
+      0,
+      step.compute({
+        fn: p => {
+          p.handler = () => 'patched'
+
+          return p
+        },
+      }),
+    )
+
+    const scope = fork()
+
+    await allSettled(fx, {scope})
+
+    expect(scope.getState($result)).toBe('patched')
+  })
+
+  test('should allow patching of attach-effect as a function', async () => {
+    const fx = attach({
+      source: {a: createStore(42)},
+      effect() {
+        return 'default'
+      },
+    })
+    const $result = createStore('').on(fx.done, (_, {result}) => result)
+
+    const runnerNode = (
+      (fx as any as {graphite: Node}).graphite.scope as {runner: Node}
+    ).runner
+    runnerNode.seq.splice(
+      1,
+      0,
+      step.compute({
+        fn: p => {
+          p.handler = () => 'patched'
+
+          return p
+        },
+      }),
+    )
+
+    const scope = fork()
+
+    await allSettled(fx, {scope})
+
+    expect(scope.getState($result)).toBe('patched')
+  })
 })

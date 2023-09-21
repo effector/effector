@@ -8,8 +8,27 @@ import {
   createEffect,
   createStore,
   combine,
+  createDomain,
+  hydrate,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (
+      String(message).includes('forward') ||
+      String(message).includes('guard')
+    )
+      return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -691,5 +710,82 @@ describe('diamond deps (issue #613)', () => {
       },
     })
     expect(argumentHistory(fn)).toEqual(['', 'search'])
+  })
+})
+
+describe('no-scope events should not affect scoped stores', () => {
+  test('fork, get state, global call', async () => {
+    const $store = createStore(0)
+    const event = createEvent()
+    $store.on(event, v => v + 1)
+
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe(0)
+  })
+  test('fork, global call, get state', async () => {
+    const $store = createStore(0)
+    const event = createEvent()
+    $store.on(event, v => v + 1)
+
+    const scope = fork()
+    event()
+
+    expect(scope.getState($store)).toBe(0)
+  })
+  test('global call, fork, get state', async () => {
+    const $store = createStore(0)
+    const event = createEvent()
+    $store.on(event, v => v + 1)
+
+    event()
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe(0)
+  })
+})
+
+describe(`fork(domain) and related api's are deprecated`, () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function getWarning() {
+    return warn.mock.calls.map(([msg]) => msg).join('\n')
+  }
+
+  test('fork(domain) is deprecated', () => {
+    const d = createDomain()
+
+    fork(d)
+
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"fork(domain) is deprecated, use fork() instead"`,
+    )
+  })
+
+  test('hydrate(domain) is deprecated', () => {
+    const d = createDomain()
+
+    hydrate(d, {values: {}})
+
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"hydrate(domain, { values }) is deprecated, use fork({ values }) instead"`,
+    )
+  })
+
+  test('hydrate(fork(domain)) is deprecated', () => {
+    const d = createDomain()
+
+    hydrate(fork(d), {values: {}})
+
+    expect(getWarning()).toMatchInlineSnapshot(`
+      "fork(domain) is deprecated, use fork() instead
+      hydrate(fork(domain), { values }) is deprecated, use fork({ values }) instead"
+    `)
   })
 })

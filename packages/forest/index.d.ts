@@ -31,7 +31,7 @@ export type AttributeStore = Store<string | number | boolean | null>
 
 type AttributeStoreInput = Omit<
   AttributeStore,
-  'updates' | 'reset' | 'on' | 'off' | 'thru'
+  'updates' | 'reset' | 'on' | 'off'
 >
 
 type Tuple<T = unknown> = [T] | T[]

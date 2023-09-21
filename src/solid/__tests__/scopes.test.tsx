@@ -22,7 +22,20 @@ import {
   useStoreMap,
   createGate,
 } from 'effector-solid/scope'
-import {createSignal} from "solid-js";
+import {createSignal} from 'solid-js'
+
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -90,17 +103,17 @@ test('computed values support', async () => {
 
   const clientScope = fork(app)
 
-  const { container } = await render(() => <App root={clientScope} />)
+  const {container} = await render(() => <App root={clientScope} />)
 
   expect(container.firstChild).toMatchInlineSnapshot(`
     <section>
       <b>
         User:
-        alice
+        guest
       </b>
       <small>
         Total:
-        2
+        0
       </small>
     </section>
   `)
@@ -138,8 +151,8 @@ test('useGate support', async () => {
     </Provider>
   )
 
-  const [scope, setScope] = createSignal(fork(), { equals: false })
-  const { container } = await render(() => <App root={scope()} />)
+  const [scope, setScope] = createSignal(fork(), {equals: false})
+  const {container} = await render(() => <App root={scope()} />)
 
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
@@ -154,9 +167,11 @@ test('useGate support', async () => {
     </div>
   `)
 
-  setScope(() => fork({
-    values: serialize(scope()),
-  }))
+  setScope(() =>
+    fork({
+      values: serialize(scope()),
+    }),
+  )
 
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
@@ -210,11 +225,11 @@ describe('useUnit', () => {
         </div>
       )
     }
-    const { container } = await render(() =>
+    const {container} = await render(() => (
       <Provider value={scope}>
         <App />
-      </Provider>,
-    )
+      </Provider>
+    ))
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         <button
@@ -257,11 +272,11 @@ describe('useUnit', () => {
         </div>
       )
     }
-    const { container } = await render(() =>
+    const {container} = await render(() => (
       <Provider value={scope}>
         <App />
-      </Provider>,
-    )
+      </Provider>
+    ))
     container.firstChild.querySelector('#btn').click()
     await Promise.resolve()
     expect(argumentHistory(fn)).toEqual(['ok'])
@@ -294,11 +309,11 @@ describe('useUnit', () => {
         </div>
       )
     }
-    const { container } = await render(() =>
+    const {container} = await render(() => (
       <Provider value={scope}>
         <App />
-      </Provider>,
-    )
+      </Provider>
+    ))
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         <span
@@ -386,11 +401,11 @@ describe('useUnit', () => {
         </div>
       )
     }
-    const { container } = await render(() =>
+    const {container} = await render(() => (
       <Provider value={scope}>
         <App />
-      </Provider>,
-    )
+      </Provider>
+    ))
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         <span

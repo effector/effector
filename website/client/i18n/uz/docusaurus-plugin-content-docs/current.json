@@ -1,0 +1,150 @@
+{
+  "version.label": {
+    "message": "v22.x",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Introduction": {
+    "message": "Kirish",
+    "description": "The label for category Introduction in sidebar docs"
+  },
+  "sidebar.docs.category.API": {
+    "message": "API",
+    "description": "The label for category API in sidebar docs"
+  },
+  "sidebar.docs.category.effector": {
+    "message": "effector",
+    "description": "The label for category effector in sidebar docs"
+  },
+  "sidebar.docs.category.Unit creators": {
+    "message": "Yunitlar yaratish",
+    "description": "The label for category Unit creators in sidebar docs"
+  },
+  "sidebar.docs.category.Unit types": {
+    "message": "Yunit turlari",
+    "description": "The label for category Unit types in sidebar docs"
+  },
+  "sidebar.docs.category.Fork api": {
+    "message": "Fork api",
+    "description": "The label for category Fork api in sidebar docs"
+  },
+  "sidebar.docs.category.Low level api": {
+    "message": "Past darajali api",
+    "description": "The label for category Low level api in sidebar docs"
+  },
+  "sidebar.docs.category.effector-react": {
+    "message": "effector-react",
+    "description": "The label for category effector-react in sidebar docs"
+  },
+  "sidebar.docs.category.Hooks": {
+    "message": "Hooks",
+    "description": "The label for category Hooks in sidebar docs"
+  },
+  "sidebar.docs.category.Gate API": {
+    "message": "Gate API",
+    "description": "The label for category Gate API in sidebar docs"
+  },
+  "sidebar.docs.category.Top-level exports": {
+    "message": "Qolgan funksiyalar",
+    "description": "The label for category Top-level exports in sidebar docs"
+  },
+  "sidebar.docs.category.effector-react/ssr api": {
+    "message": "effector-react/ssr api",
+    "description": "The label for category effector-react/ssr api in sidebar docs"
+  },
+  "sidebar.docs.category.effector-vue": {
+    "message": "effector-vue",
+    "description": "The label for category effector-vue in sidebar docs"
+  },
+  "sidebar.docs.category.Conventions": {
+    "message": "Standart amaliyotlar",
+    "description": "The label for category Conventions in sidebar docs"
+  },
+  "sidebar.docs.category.TypeScript guide": {
+    "message": "TypeScript yordamida foydalanish",
+    "description": "The label for category TypeScript guide in sidebar docs"
+  },
+  "sidebar.docs.category.Recipes": {
+    "message": "Namunala",
+    "description": "The label for category Recipes in sidebar docs"
+  },
+  "sidebar.docs.category.React": {
+    "message": "React",
+    "description": "The label for category React in sidebar docs"
+  },
+  "sidebar.docs.category.Advanced guide": {
+    "message": "Keng qoʻllanma",
+    "description": "The label for category Advanced guide in sidebar docs"
+  },
+  "sidebar.api.category.Introduction": {
+    "message": "Kirish",
+    "description": "The label for category Introduction in sidebar api"
+  },
+  "sidebar.api.category.API": {
+    "message": "API",
+    "description": "The label for category API in sidebar api"
+  },
+  "sidebar.api.category.effector": {
+    "message": "effector",
+    "description": "The label for category effector in sidebar api"
+  },
+  "sidebar.api.category.Unit creators": {
+    "message": "Yunitlar yaratish",
+    "description": "The label for category Unit creators in sidebar api"
+  },
+  "sidebar.api.category.Unit types": {
+    "message": "Yunitlar turi",
+    "description": "The label for category Unit types in sidebar api"
+  },
+  "sidebar.api.category.Fork api": {
+    "message": "Fork api",
+    "description": "The label for category Fork api in sidebar api"
+  },
+  "sidebar.api.category.Low level api": {
+    "message": "Past darajadagi api",
+    "description": "The label for category Low level api in sidebar api"
+  },
+  "sidebar.api.category.effector-react": {
+    "message": "effector-react",
+    "description": "The label for category effector-react in sidebar api"
+  },
+  "sidebar.api.category.Hooks": {
+    "message": "React-xuklari",
+    "description": "The label for category Hooks in sidebar api"
+  },
+  "sidebar.api.category.Gate API": {
+    "message": "Gate API",
+    "description": "The label for category Gate API in sidebar api"
+  },
+  "sidebar.api.category.Top-level exports": {
+    "message": "Qolgan funksiyalar",
+    "description": "The label for category Top-level exports in sidebar api"
+  },
+  "sidebar.api.category.effector-react/ssr api": {
+    "message": "effector-react/ssr api",
+    "description": "The label for category effector-react/ssr api in sidebar api"
+  },
+  "sidebar.api.category.effector-vue": {
+    "message": "effector-vue",
+    "description": "The label for category effector-vue in sidebar api"
+  },
+  "sidebar.api.category.Conventions": {
+    "message": "Standart amaliyotlar",
+    "description": "The label for category Conventions in sidebar api"
+  },
+  "sidebar.api.category.TypeScript guide": {
+    "message": "TypeScript yordamida",
+    "description": "The label for category TypeScript guide in sidebar api"
+  },
+  "sidebar.api.category.Recipes": {
+    "message": "Namuna",
+    "description": "The label for category Recipes in sidebar api"
+  },
+  "sidebar.api.category.React": {
+    "message": "React",
+    "description": "The label for category React in sidebar api"
+  },
+  "sidebar.api.category.Advanced guide": {
+    "message": "Keng qo'llanma",
+    "description": "The label for category Advanced guide in sidebar api"
+  }
+}

@@ -120,10 +120,7 @@ describe('restore cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      No overload matches this call.
-        The last overload gave the following error.
-          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<string>'.
-            Property 'thru' is missing in type 'Effect<any, number, Error>' but required in type 'Event<string>'.
+      no errors
       "
     `)
   })

@@ -142,9 +142,8 @@ export interface Event<Payload> extends Unit<Payload> {
   watch(watcher: (payload: Payload) => any): Subscription
   subscribe(observer: Observer<Payload>): Subscription
   /**
-   * @deprecated use js pipe instead
+   * @deprecated use .compositeName.fullName instead
    */
-  thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
 
   compositeName: CompositeName
@@ -507,6 +506,7 @@ export const step: {
 
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<T>(opts: {
   /**
@@ -528,6 +528,7 @@ export function forward<T>(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: Unit<any>
@@ -535,6 +536,7 @@ export function forward(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
@@ -542,6 +544,7 @@ export function forward(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
@@ -549,6 +552,7 @@ export function forward(opts: {
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
@@ -557,11 +561,13 @@ export function forward<To, From extends To>(opts: {
 // Allow `* -> void` forwarding (e.g. `string -> void`).
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {from: Unit<any>; to: UnitTargetable<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
@@ -727,13 +733,6 @@ export function createStore<State, SerializedState extends Json = Json>(
   },
 ): StoreWritable<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
-
-/**
- * @deprecated use combine() instead
- */
-export function createStoreObject<State>(
-  defaultState: State,
-): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
@@ -1603,17 +1602,17 @@ type TargetFilterFnConfig<
   FilterFun,
   FN,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
+  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean}
+  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
+  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean}
+  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
+  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean}
+  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
   : never
 
 type TargetConfigCheck<
@@ -1709,17 +1708,17 @@ type SampleFilterTargetDef<
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
             Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean}
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean}
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean}
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
             : never,
             SomeFN
           >
@@ -1875,17 +1874,17 @@ type SampleFilterTargetDef<
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
           Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean}
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean}
+          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
           : never,
           SomeFN
         >
@@ -1937,17 +1936,17 @@ type SampleFilterDef<
     ? boolean extends UnitValue<FLUnit>
       ? [config: (
             Mode extends 'clock | source | filter | fn |       '
-          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock | source | filter |    |       '
-          ? {clock: Clock; source: Source; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source: Source; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source | filter | fn |       '
-          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
+          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source | filter |    |       '
-          ? {source: Source; clock?: never; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
+          ? {source: Source; clock?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        | filter | fn |       '
-          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        | filter |    |       '
-          ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : never
         ) & SomeFN]
       : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
@@ -1955,20 +1954,20 @@ type SampleFilterDef<
       ? Mode extends Mode_Flt_Fn
         ? [config: (
               Mode extends 'clock | source | filter | fn |       '
-            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter | fn |       '
-            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
+            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter | fn |       '
-            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : never
           ) & SomeFN]
         : [config: (
               Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FLBool; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source: Source; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FLBool; target?: never; greedy?: boolean; name?: string}
+            ? {source: Source; clock?: never; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FLBool; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source?: never; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : never
           ) & SomeFN]
       : FilterFun extends (
@@ -1992,11 +1991,11 @@ type SampleFilterDef<
             )
             ? [config: (
                   Mode extends 'clock | source | filter | fn |       '
-                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
+                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
                 : Mode extends '      | source | filter | fn |       '
-                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
+                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
                 : Mode extends 'clock |        | filter | fn |       '
-                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
+                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
                 : never
               ) & SomeFN]
             : [message: {
@@ -2006,11 +2005,11 @@ type SampleFilterDef<
               }]
           : [config: (
               Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+            ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : never
           ) & SomeFN]
       : FilterFun extends (
@@ -2025,17 +2024,17 @@ type SampleFilterDef<
         ? ReturnType<FilterFun> extends boolean
           ? [config: (
                 Mode extends 'clock | source | filter | fn |       '
-              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends 'clock | source | filter |    |       '
-              ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends '      | source | filter | fn |       '
-              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
+              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends '      | source | filter |    |       '
-              ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+              ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends 'clock |        | filter | fn |       '
-              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends 'clock |        | filter |    |       '
-              ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : never
             ) & SomeFN]
           : [message: {error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
@@ -2043,17 +2042,17 @@ type SampleFilterDef<
   : Mode extends Mode_NoFlt
   ? [config: (
         Mode extends 'clock | source |        | fn |       '
-      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends 'clock | source |        |    |       '
-      ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends '      | source |        | fn |       '
-      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
+      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends '      | source |        |    |       '
-      ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; name?: string}
+      ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends 'clock |        |        | fn |       '
-      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends 'clock |        |        |    |       '
-      ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : never
     ) & SomeFN]
   : never
@@ -2200,7 +2199,7 @@ type GetGuardClock<C, F> = F extends BooleanConstructor
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2217,7 +2216,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
@@ -2232,7 +2231,7 @@ export function guard<A, X extends GetSource<S>,
 // СT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter, target})` instead
  */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>,
@@ -2249,7 +2248,7 @@ export function guard<B, X extends GetClock<C>,
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2264,7 +2263,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -2277,7 +2276,7 @@ export function guard<A, X extends GetSource<S>,
 // C
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>
@@ -2293,7 +2292,7 @@ export function guard<B, X extends GetClock<C>,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2311,7 +2310,7 @@ export function guard<A = any, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2327,7 +2326,7 @@ export function guard<A = any,
 // СT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter, target})` instead
  */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -2345,7 +2344,7 @@ export function guard<B = any,
 // SC (units: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
@@ -2357,7 +2356,7 @@ export function guard<A = any, B = any>(config: {
 // SC (units: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
@@ -2369,7 +2368,7 @@ export function guard<A = any, B = any>(config: {
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2385,7 +2384,7 @@ export function guard<A = any, B = any,
 // S (unit: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(config: {
   source: Unit<A>,
@@ -2396,7 +2395,7 @@ export function guard<A = any>(config: {
 // S (unit - boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(config: {
   source: Unit<A>,
@@ -2407,7 +2406,7 @@ export function guard<A = any>(config: {
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2421,7 +2420,7 @@ export function guard<A = any,
 // C (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any>(config: {
   clock: Unit<B>,
@@ -2432,7 +2431,7 @@ export function guard<B = any>(config: {
 // C (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any>(config: {
   clock: Unit<B>,
@@ -2443,7 +2442,7 @@ export function guard<B = any>(config: {
 // C
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -2463,7 +2462,7 @@ export function guard<B = any,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2479,7 +2478,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
@@ -2495,7 +2494,7 @@ export function guard<A, X extends GetSource<S>,
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2509,7 +2508,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -2524,7 +2523,7 @@ export function guard<A, X extends GetSource<S>,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2541,7 +2540,7 @@ export function guard<A = any, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2558,7 +2557,7 @@ export function guard<A = any,
 // SC (units: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
@@ -2569,7 +2568,7 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
 // SC (units: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
@@ -2580,7 +2579,7 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2595,7 +2594,7 @@ export function guard<A = any, B = any,
 // S (unit: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: BooleanConstructor,
@@ -2605,7 +2604,7 @@ export function guard<A = any>(source: Unit<A>, config: {
 // S (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: ((source: A) => boolean) | Store<boolean>,
@@ -2615,7 +2614,7 @@ export function guard<A = any>(source: Unit<A>, config: {
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2629,7 +2628,7 @@ export function guard<A = any,
 // guard's last overload for `guard(source, config)`
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<
   S extends Source<unknown>,
@@ -2655,7 +2654,7 @@ export function guard<
 // guard's last overload for `guard(config)`
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<
   S extends Source<unknown>,
@@ -2756,6 +2755,7 @@ export function attach<
 >(config: {
   source: States
   effect: FX
+  domain?: Domain
   name?: string
 }): FX extends (source: any, ...args: infer Args) => infer Done
   ? Effect<OptionalParams<Args>, AsyncResult<Done>>
@@ -3045,6 +3045,8 @@ export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: 
 
 /**
  * Fill stores with given values in provided scope or domain
+ * 
+ * @deprecated use `fork({values})` instead
  */
 export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
 
@@ -3076,6 +3078,9 @@ export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope?: Scope; safe?
 
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * 
+ * @deprecated use `fork({values, handlers})` instead
+ * 
  * @param domain optional root domain
  * @param config optional configuration object with initial store values and effect handlers
  * @returns new scope
@@ -3146,8 +3151,10 @@ export function createWatch<T>({
   unit,
   fn,
   scope,
+  batch,
 }: {
-  unit: Unit<T>
+  unit: Unit<T> | Unit<T>[]
   fn: (value: T) => any
   scope?: Scope
+  batch?: boolean
 }): Subscription

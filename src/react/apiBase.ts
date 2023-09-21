@@ -1,12 +1,12 @@
-import {Store, is, step, scopeBind, Scope, Unit, Event} from 'effector'
+import {Store, is, scopeBind, Scope, Unit, Event, createWatch} from 'effector'
 import React from 'react'
 import {useSyncExternalStore} from 'use-sync-external-store/shim'
 import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/with-selector'
 import {throwError} from './throw'
-import {createWatch} from './createWatch'
 import {withDisplayName} from './withDisplayName'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {Gate} from './index.h'
+import {useDeprecate} from './useDeprecate'
 
 const stateReader = <T>(store: Store<T>, scope?: Scope) =>
   scope ? scope.getState(store) : store.getState()
@@ -27,10 +27,11 @@ const keysEqual = (a?: readonly any[], b?: readonly any[]) => {
 }
 
 export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
+  useDeprecate(true, 'useStore', 'useUnit')
   if (!is.store(store)) throwError('expect useStore argument to be a store')
 
   const subscribe = React.useCallback(
-    (cb: () => void) => createWatch(store, cb, scope),
+    (fn: () => void) => createWatch({unit: store, fn, scope}),
     [store, scope],
   )
   const read = React.useCallback(
@@ -109,13 +110,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
           cb()
         }
       }
-      const batchStep = step.compute({priority: 'sampler', batch: true})
-      const subs = storeValues.map(store =>
-        createWatch(store, cbCaller, scope, batchStep),
-      )
-      return () => {
-        subs.forEach(fn => fn())
-      }
+      return createWatch({unit: storeValues, fn: cbCaller, scope, batch: true})
     },
     [storeValues, scope, stateRef, flagsRef],
   )
@@ -215,7 +210,7 @@ export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   if (typeof fn !== 'function') throwError('useStoreMap expects a function')
 
   const subscribe = React.useCallback(
-    (cb: () => void) => createWatch(store, cb, scope),
+    (fn: () => void) => createWatch({unit: store, fn, scope}),
     [store, scope],
   )
   const read = React.useCallback(
@@ -348,6 +343,7 @@ export function useListBase<T>(
 }
 
 export function useEventBase(eventObject: any, scope?: Scope) {
+  useDeprecate(true, 'useEvent', 'useUnit')
   if (!scope) {
     return eventObject
   }

@@ -1,6 +1,18 @@
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, guard} from 'effector'
 const typecheck = '{global}'
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 type Astr = {a: string}
 type AB = {a: number; b: string}
 type AoptB = {a: number | null; b: string}

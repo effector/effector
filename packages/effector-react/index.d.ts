@@ -18,6 +18,9 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
   unmounted: Event<{props: Props; state: State}>
 }
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useStore<State>(
   store: Store<State>,
   opts?: {forceScope?: boolean},
@@ -85,10 +88,16 @@ export function createGate<Props>(
   defaultState: Props,
 ): Gate<Props>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createComponent<Props, Shape extends object>(
   store: Shape,
   view: (
@@ -101,47 +110,51 @@ export function createComponent<Props, Shape extends object>(
 >
 
 /**
- * @deprecated use useStore hook instead
+ * @deprecated use useUnit hook instead
  */
-export function createContextComponent<Props, State, Context>(
-  store: Store<State>,
-  context: React.Context<Context>,
-  view: (props: Props, state: State, context: Context) => React.ReactNode,
-): React.ComponentType<Props>
-
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>,
 >(store: Store<State>): (Component: Com) => React.ComponentType<State>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>,
 >(Component: Com): (store: Store<State>) => React.ComponentType<State>
 
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
 
 /**
- * @deprecated use useStore hook instead
+ * @deprecated use useUnit hook instead
  */
-export function createReactState<
-  State extends object,
-  Com extends React.ComponentType<any>,
->(store: Store<State>, Component: Com): React.ComponentType<State>
-
 export function useEvent(
   event: EventCallable<void>,
   opts?: {forceScope?: boolean},
 ): () => void
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<T>(
   event: EventCallable<T>,
   opts?: {forceScope?: boolean},
 ): (payload: T) => T
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<R>(
   fx: Effect<void, R, any>,
   opts?: {forceScope?: boolean},
 ): () => Promise<R>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<T, R>(
   fx: Effect<T, R, any>,
   opts?: {forceScope?: boolean},
@@ -156,6 +169,9 @@ export function useEvent<List extends (EventCallable<any> | Effect<any, any>)[]>
     ? (payload: P) => Promise<D>
     : never
 }
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<
   Shape extends Record<string, EventCallable<any> | Effect<any, any, any>>,
 >(

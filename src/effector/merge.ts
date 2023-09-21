@@ -3,11 +3,15 @@ import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {unitObjectName} from './naming'
 import {assertNodeSet} from './is'
+import {processArgsToConfig} from './config'
 
 export function merge<T>(
-  units: Array<Event<T> | Store<T> | Effect<T, any, any>>,
-  config?: object,
+  unitsOrConfig: Array<Event<T> | Store<T> | Effect<T, any, any>>,
 ): Event<T> {
+  const [[units], config]: [
+    units: Array<Array<Event<T> | Store<T> | Effect<T, any, any>>>,
+    config?: object,
+  ] = processArgsToConfig([unitsOrConfig])
   assertNodeSet(units, 'merge', 'first argument')
   const result = createEvent({
     name: unitObjectName(units, 'merge'),

@@ -11,6 +11,19 @@ import {h, using, list, node, spec, remap} from 'forest'
 
 import prettyHtml from 'effector/fixtures/prettyHtml'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 declare const act: (cb?: () => any) => Promise<void>
 declare const initBrowser: () => Promise<void>
 declare const el: HTMLElement

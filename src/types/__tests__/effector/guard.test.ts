@@ -10,6 +10,19 @@ import {
 } from 'effector'
 const typecheck = '{global}'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 describe('explicit generics', () => {
   test('guard<A>({source, clock, filter})', () => {
     const source = createEvent<string | null>()

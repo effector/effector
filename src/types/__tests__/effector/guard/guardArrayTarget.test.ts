@@ -1,5 +1,17 @@
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, guard} from 'effector'
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 const typecheck = '{global}'
 
 /** used as valid source type */

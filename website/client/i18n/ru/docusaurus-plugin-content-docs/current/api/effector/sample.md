@@ -23,7 +23,7 @@ sample({ source?, clock?, filter?, fn?, target?}): target
 
 ## Иллюстрация принципа работы
 
-![Иллюстрация принципа работы](https://s9.gifyu.com/images/sample-visualization.gif)
+![Иллюстрация принципа работы](https://effector.dev/assets/images/sample-visualization-2c6432ad0e59fade33ed218ccb19395b.gif)
 
 ## Тип создаваемого `target`
 

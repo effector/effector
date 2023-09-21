@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.5.4
+
+- Fix for `createWatch` implementation to improve `@effector/next` updates flow
+
 ## effector-react 22.5.3
 
 - Fix too frequent `useUnit` updates

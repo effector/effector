@@ -20,6 +20,9 @@ More content in [awesome-effector repository](https://github.com/effector/awesom
 - [effector-next](https://github.com/weyheyhey/effector-next) - effector wrappers for Next.js.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) - UI engine for web based on effector.
 - [farfetched](https://farfetched.pages.dev) - the advanced data fetching tool for web applications.
+- [@withease/i18next](https://withease.pages.dev/i18next) — A powerful internationalization framework bindings.
+- [@withease/web-api](https://withease.pages.dev/web-api/) — Web API bindings — network status, tab visibility, and more.
+- [@withease/factories](https://withease.pages.dev/factories/) — Set of helpers to create factories in your application.
 - [@withease/i18next](https://withease.pages.dev/i18next) - A powerful internationalization framework for Effector which is based on i18next.
 
 ### Form management
