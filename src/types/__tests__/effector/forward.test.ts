@@ -145,7 +145,7 @@ describe('forward with subtyping', () => {
     forward<string | number>({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
       "
     `)
   })
@@ -154,7 +154,7 @@ describe('forward with subtyping', () => {
     forward<string>({from: strOrNum, to: str})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+      No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
       "
     `)
   })
