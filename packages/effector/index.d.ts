@@ -504,11 +504,37 @@ export const step: {
   }): Mov
 }
 
+/* `forward` types */
+type ForwardTarget = UnitTargetable<unknown> | ReadonlyArray<UnitTargetable<unknown>>
+
+type CleanSingleTarget<
+  Target extends UnitTargetable<unknown>,
+  Clock,
+> = Target extends UnitTargetable<infer T>
+  ? T extends void
+    ? UnitTargetable<unknown>
+    : T extends Clock
+    ? Target
+    // Needed to force typecheck
+    : UnitTargetable<T>
+  : never
+
+  type CleanTarget<
+    Target extends ForwardTarget,
+    From,
+  > = Target extends UnitTargetable<any>
+    ? CleanSingleTarget<Target, From>
+    : {
+        [K in keyof Target]: Target[K] extends UnitTargetable<unknown>
+          ? CleanSingleTarget<Target[K], From>
+          : never
+      }
+
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  * @deprecated use `sample({clock, target})` instead
  */
-export function forward<T>(opts: {
+export function forward<From, T extends ForwardTarget>(opts: {
   /**
    * By default TS picks "best common type" `T` between `from` and `to` arguments.
    * This lets us forward from `string | number` to `string` for instance, and
@@ -523,8 +549,8 @@ export function forward<T>(opts: {
    *
    * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
    */
-  from: Unit<T & {}>
-  to: UnitTargetable<T> | ReadonlyArray<UnitTargetable<T>>
+  from: Unit<From & {}>
+  to: CleanTarget<T, From>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
