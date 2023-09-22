@@ -278,7 +278,7 @@ test('forward to event.prepend (should pass)', () => {
 
   forward({
     from: event1,
-    to: event2.prepend(value => ({value})),
+    to: event2.prepend((value: string) => ({value})),
   })
 
   expect(typecheck).toMatchInlineSnapshot(`
@@ -293,7 +293,6 @@ test('edge case #1 (should fail)', () => {
   const event2 = createEvent<{value: string}>()
 
   forward({
-    //@ts-expect-error
     from: event1,
     //@ts-expect-error
     to: event2.map(value => ({value})),

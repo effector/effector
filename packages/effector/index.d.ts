@@ -514,9 +514,9 @@ type CleanSingleTarget<
   ? T extends void
     ? UnitTargetable<unknown>
     : T extends Clock
-    ? Target
+    ? UnitTargetable<T>
     // Needed to force typecheck
-    : UnitTargetable<T>
+    : UnitTargetable<Clock>
   : never
 
   type CleanTarget<
