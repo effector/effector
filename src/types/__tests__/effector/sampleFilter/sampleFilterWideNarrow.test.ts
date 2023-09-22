@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample, Event} from 'effector'
+import {createStore, createEvent, sample, Event, EventCallable} from 'effector'
 const typecheck = '{global}'
 
 test('wide union (should fail)', () => {
-  const trigger: Event<{a: 1} | {a: 2} | {a: 3}> = createEvent()
+  const trigger: EventCallable<{a: 1} | {a: 2} | {a: 3}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1} | {a: 2}> = createEvent()
+  const target: EventCallable<{a: 1} | {a: 2}> = createEvent()
 
   sample({
     //@ts-expect-error
@@ -35,25 +35,20 @@ test('wide union (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>; }'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
-      Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-        Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-          Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
-            Types of property 'a' are incompatible.
-              Type '3' is not assignable to type '2'.
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; }>[]; }'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[Event<{ a: 1; } | { a: 2; }>]'.
+    Argument of type '{ clock: EventCallable<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: StoreWritable<boolean>; target: EventCallable<{ a: 1; } | { a: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, __can_be_used_in_target__
+    Argument of type '{ clock: EventCallable<{ a: 1; } | { a: 2; } | { a: 3; }>; filter: StoreWritable<boolean>; target: EventCallable<{ a: 1; } | { a: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
     "
   `)
 })
 
 test('narrow union (should pass)', () => {
-  const trigger: Event<{a: 1} | {a: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1} | {a: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1} | {a: 2} | {a: 3}> = createEvent()
+  const target: EventCallable<{a: 1} | {a: 2} | {a: 3}> = createEvent()
 
   sample({
     clock: trigger,
@@ -69,18 +64,15 @@ test('narrow union (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>; }'.
-    Argument of type '{ clock: Event<{ a: 1; } | { a: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; } | { a: 2; } | { a: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; } | { a: 2; } | { a: 3; }>[]; }'.
+    no errors
     "
   `)
 })
 
 test('unknown type in source (should fail)', () => {
-  const trigger: Event<unknown> = createEvent()
+  const trigger: EventCallable<unknown> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<string> = createEvent()
+  const target: EventCallable<string> = createEvent()
 
   sample({
     //@ts-expect-error
@@ -110,20 +102,20 @@ test('unknown type in source (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<unknown>; filter: StoreWritable<boolean>; target: Event<string>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<string>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<string>; }'.
-    Type 'Event<unknown>' is not assignable to type 'Event<string>'.
-    Argument of type '{ clock: Event<unknown>; filter: StoreWritable<boolean>; target: Event<string>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<string>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<string>[]; }'.
-    Type 'Event<unknown>' is not assignable to type '[Event<string>]'.
+    Argument of type '{ clock: EventCallable<unknown>; filter: StoreWritable<boolean>; target: EventCallable<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
+    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, __can_be_used_in_target__
+    Argument of type '{ clock: EventCallable<unknown>; filter: StoreWritable<boolean>; target: EventCallable<string>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
+    Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
     "
   `)
 })
 
 test('unknown type in target (should pass)', () => {
-  const trigger: Event<string> = createEvent()
+  const trigger: EventCallable<string> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<unknown> = createEvent()
+  const target: EventCallable<unknown> = createEvent()
 
   sample({
     clock: trigger,
@@ -139,10 +131,7 @@ test('unknown type in target (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<string>; filter: StoreWritable<boolean>; target: Event<unknown>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>; }'.
-    Argument of type '{ clock: Event<string>; filter: StoreWritable<boolean>; target: Event<unknown>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<unknown>[]; }'.
+    no errors
     "
   `)
 })
@@ -195,9 +184,9 @@ test('optional props (should fail)', () => {
 })
 
 test('wide object (should pass)', () => {
-  const trigger: Event<{a: 1; b: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1; b: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1}> = createEvent()
+  const target: EventCallable<{a: 1}> = createEvent()
 
   sample({
     clock: trigger,
@@ -213,18 +202,15 @@ test('wide object (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>; }'.
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; }>[]; }'.
+    no errors
     "
   `)
 })
 
 test('narrow object (should fail)', () => {
-  const trigger: Event<{a: 1; b: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1; b: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1; b: 2; c: 3}> = createEvent()
+  const target: EventCallable<{a: 1; b: 2; c: 3}> = createEvent()
 
   sample({
     //@ts-expect-error
@@ -254,13 +240,12 @@ test('narrow object (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>; }'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
-      Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
-    Argument of type '{ clock: Event<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; c: 3; }>[]; }'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[Event<{ a: 1; b: 2; c: 3; }>]'.
+    Argument of type '{ clock: EventCallable<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: EventCallable<{ a: 1; b: 2; c: 3; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
+    Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, __can_be_used_in_target__
+    Argument of type '{ clock: EventCallable<{ a: 1; b: 2; }>; filter: StoreWritable<boolean>; target: EventCallable<{ a: 1; b: 2; c: 3; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
+    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
 })
@@ -285,9 +270,9 @@ test('narrow object combined (should fail)', () => {
 })
 
 test('wide tuple (should pass)', () => {
-  const trigger: Event<[1, 2, 3]> = createEvent()
+  const trigger: EventCallable<[1, 2, 3]> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<[1, 2]> = createEvent()
+  const target: EventCallable<[1, 2]> = createEvent()
 
   sample({
     source: trigger,
@@ -303,18 +288,15 @@ test('wide tuple (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<[1, 2, 3]>; filter: StoreWritable<boolean>; target: Event<[1, 2]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>; }'.
-    Argument of type '{ source: Event<[1, 2, 3]>; filter: StoreWritable<boolean>; target: Event<[1, 2]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2]>[]; }'.
+    no errors
     "
   `)
 })
 
 test('narrow tuple (should fail)', () => {
-  const trigger: Event<[1, 2]> = createEvent()
+  const trigger: EventCallable<[1, 2]> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<[1, 2, 3]> = createEvent()
+  const target: EventCallable<[1, 2, 3]> = createEvent()
 
   sample({
     //@ts-expect-error
@@ -332,18 +314,18 @@ test('narrow tuple (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<[1, 2]>; filter: StoreWritable<boolean>; target: Event<[1, 2, 3]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>; }'.
-    Argument of type '{ source: Event<[1, 2]>; filter: StoreWritable<boolean>; target: Event<[1, 2, 3]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>[]; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<[1, 2, 3]>[]; }'.
+    Argument of type '{ source: EventCallable<[1, 2]>; filter: StoreWritable<boolean>; target: EventCallable<[1, 2, 3]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
+    Argument of type '{ source: EventCallable<[1, 2]>; filter: StoreWritable<boolean>; target: EventCallable<[1, 2, 3]>[]; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
     "
   `)
 })
 
 test('wide union in array (should fail)', () => {
-  const trigger: Event<Array<number | string | boolean>> = createEvent()
+  const trigger: EventCallable<Array<number | string | boolean>> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<Array<number | string>> = createEvent()
+  const target: EventCallable<Array<number | string>> = createEvent()
 
   sample({
     //@ts-expect-error
@@ -373,20 +355,20 @@ test('wide union in array (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: Event<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>; }'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
-    Argument of type '{ clock: Event<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: Event<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number)[]>[]; }'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type '[Event<(string | number)[]>]'.
+    Argument of type '{ clock: EventCallable<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: EventCallable<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
+    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, __can_be_used_in_target__
+    Argument of type '{ clock: EventCallable<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: EventCallable<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
+    Type 'Event<(string | number | boolean)[]>' is not assignable to type '[EventCallable<(string | number)[]>]'.
     "
   `)
 })
 
 test('narrow union in array (should pass)', () => {
-  const trigger: Event<Array<number | string>> = createEvent()
+  const trigger: EventCallable<Array<number | string>> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<Array<number | string | boolean>> = createEvent()
+  const target: EventCallable<Array<number | string | boolean>> = createEvent()
 
   sample({
     clock: trigger,
@@ -402,10 +384,7 @@ test('narrow union in array (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<(string | number)[]>; filter: StoreWritable<boolean>; target: Event<(string | number | boolean)[]>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>; }'.
-    Argument of type '{ clock: Event<(string | number)[]>; filter: StoreWritable<boolean>; target: Event<(string | number | boolean)[]>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<(string | number | boolean)[]>[]; }'.
+    no errors
     "
   `)
 })
